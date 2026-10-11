@@ -1,3 +1,9 @@
+/-
+Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo,
+  Hoang Le Truong, Markus Ferdinand Dablander
+-/
 -- [curve25519_dalek]: external functions.
 module
 public import Aeneas

@@ -8,6 +8,7 @@ pp.unicode.fun = true
 autoImplicit = false
 relaxedAutoImplicit = false
 weak.linter.mathlibStandardSet = true
+weak.linter.style.header = false
 maxRecDepth = 10000
 
 # The pinned Aeneas version. Also read by `scripts/aeneas-install.sh` to download

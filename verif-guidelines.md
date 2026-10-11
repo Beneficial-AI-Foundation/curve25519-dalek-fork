@@ -48,6 +48,20 @@ How the Lean verification of curve25519-dalek is arranged. The plan and the open
 All hand-written files use the Lean module system: `module`, `public import`, and
 `@[expose] public section` for definitions that proofs must unfold.
 
+**Licence and copyright headers:** the Lean development is Apache 2.0
+(`curve25519-dalek/lean/LICENSE`); the Rust crate stays BSD-3-Clause. Every hand-written Lean
+file starts with the header below, then `module`. A file ported from the previous project
+(curve25519-dalek-lean-verify) keeps that file's header (year and authors) verbatim; a merged file
+lists the union of its sources' authors; a new file has no `Authors:` line. Root aggregation
+files (`Specs.lean`, `Subtle.lean`, …) and the Aeneas-generated files have no header, as in
+Mathlib. (Mathlib's header linter is disabled in `lakefile.toml`: it never runs with our `srcDir`.)
+```
+/-
+Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+```
+
 **External-crate libraries (`Subtle`, `Zeroize`):**
 - **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Basic.lean`. Basic holds `opaque` signatures with the template names, plus one `@[step]` spec axiom per function. Each spec axiom is conditional on any trait-instance behaviour it relies on. Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
 - **Derived part:** `<Lib>/Lemmas.lean` (generic) and `<Lib>/Instances.lean` (about instances in `Funs.lean`). They add no axioms.

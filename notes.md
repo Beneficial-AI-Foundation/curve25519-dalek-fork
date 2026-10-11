@@ -139,10 +139,6 @@ depend on the generated types and are specific to this translation.
 - Until then, leave `Subtle` and `Zeroize` as they are. Afterwards: move the trait structures
   into the libraries, and drop their `Curve25519Dalek.Types` imports.
 
-## To do: decide what to do about copyright headers
-
-Currently the Lean files have nothing. Copy across from the previous files in the original Dalek project?
-
 ## Spec campaign status
 
 - `src/backend/serial/u64/field.rs`, `scalar.rs`, `constants.rs`: all statements proved (no
