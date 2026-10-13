@@ -17,7 +17,7 @@ maxRecDepth = 10000
 name = "aeneas"
 git = "https://github.com/AeneasVerif/aeneas.git"
 subDir = "backends/lean"
-rev = "nightly-2026.10.09-d119a47"
+rev = "nightly-2026.10.13-73b7cf9"
 
 # Hand-written library for the `subtle` crate.
 [[lean_lib]]

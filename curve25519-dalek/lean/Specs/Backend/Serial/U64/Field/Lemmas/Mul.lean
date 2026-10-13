@@ -165,8 +165,6 @@ private theorem carry_add_spec (y x : U128) (hy : y.val < 2 ^ 127) (hx : x.val <
     carryAdd y x ⦃ (r : U128) => r.val = y.val + x.val / 2 ^ 51 ⦄ := by
   unfold carryAdd
   step*
-  simp only [Nat.shiftRight_eq_div_pow] at *
-  scalar_tac
 
 @[local step]
 private theorem low_limb_spec (mask : U64) (x : U128) (hmask : mask.val = 2 ^ 51 - 1) :
@@ -179,8 +177,6 @@ private theorem carry_out_spec (x : U128) (hx : x.val < 2 ^ 115) :
     carryOut x ⦃ (r : U64) => r.val = x.val / 2 ^ 51 ⦄ := by
   unfold carryOut
   step*
-  simp only [Nat.shiftRight_eq_div_pow] at *
-  scalar_tac
 
 /-- Limb 1 after folding a carry `c` into limb 0 stays below `2^52`. -/
 private theorem fold_lt {a0 a1 c : ℕ} (ha0 : a0 < 2 ^ 51) (ha1 : a1 < 2 ^ 51)
@@ -199,9 +195,6 @@ private theorem carry_fold_spec (mask carry : U64) (a : Array U64 5#usize)
       r[2]! = a[2]! ∧ r[3]! = a[3]! ∧ r[4]! = a[4]! ⦄ := by
   unfold carryFold
   step*
-  · simp (disch := simp) only [*, Nat.shiftRight_eq_div_pow]
-    exact Nat.le_of_lt ((fold_lt ha0 ha1 hcarry).trans (by rw [U64.max_eq]; norm_num))
-  · simp (disch := simp) only [*, Nat.shiftRight_eq_div_pow, and_self]
 
 /-- Folding the top carry `q` into limb 0 and carrying limb 0 into limb 1. -/
 private theorem fold_eq (x y q : ℕ) :

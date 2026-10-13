@@ -53,10 +53,11 @@ theorem invert_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2
       rw [Nat.cast_mul, hrz, ← pow_succ, invert_exponent, ZMod.pow_card_sub_one_eq_one hx',
         Nat.cast_one]
     rw [(ZMod.natCast_eq_natCast_iff' _ _ _).mp hone, Nat.mod_eq_of_lt p_prime.one_lt]
-  · have hN : (2 ^ 250 - 1) * 2 ^ 5 + 11 ≠ 0 := Nat.succ_ne_zero _
-    generalize (2 ^ 250 - 1) * 2 ^ 5 + 11 = N at h hN
+  · -- Hide the exponent behind a variable
+    obtain ⟨N, hN⟩ : ∃ N, (2 ^ 250 - 1) * 2 ^ 5 + 11 = N + 1 := ⟨_, rfl⟩
+    rw [hN] at h
     have hx0 : x ≡ 0 [MOD p] := hx
-    have h0 := Nat.ModEq.trans h (Nat.ModEq.pow N hx0)
-    rwa [zero_pow hN] at h0
+    have h0 := Nat.ModEq.trans h (Nat.ModEq.pow _ hx0)
+    rwa [zero_pow (Nat.succ_ne_zero _)] at h0
 
 end Curve25519Dalek.field.FieldElement51
