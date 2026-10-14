@@ -128,6 +128,39 @@ depend on the generated types and are specific to this translation.
 - Until then, leave `Subtle` and `Zeroize` as they are. Afterwards: move the trait structures
   into the libraries, and drop their `Curve25519Dalek.Types` imports.
 
+## To discuss: location of `Subtle` and `Zeroize`
+
+Where the `Subtle` and `Zeroize` libraries should live, now that the hand-written Lean is split
+into `Defs/`, `Specs/` and `Proofs/` (see also "project-defined traits" above).
+
+## To do: primality certificates
+
+`Curve25519/Prime.lean` proves `p` and `L` prime with Lucas certificates (Pratt trees, 22
+certificates) using only Mathlib. Replace them by the much shorter Pocklington certificates of
+`PrimeCert` (https://github.com/b-mehta/PrimeCert) once it builds with our toolchain: as of
+2026-10-14 its newest release (v4.33.0) fails against the Mathlib that Aeneas pins for Lean
+v4.35.0-rc4 (`PrimeCert/PowMod.lean`, `PrimeCert/ForMathlib.lean`). Add it to `lakefile.toml`
+after Aeneas, and check that `lake update` does not move Mathlib to PrimeCert's pin (adding the
+manifest entry by hand avoids that). Certificates for both numbers are in the old project
+(`curve25519-dalek-lean-verify/Curve25519Dalek/Math/PrimeCerts.lean`).
+
+## To do: tooling
+
+- **Prebuilt Aeneas oleans after a version bump.** Lake downloads the Aeneas release's build
+  archive only when `.lake/packages/aeneas/backends/lean/.lake/build` does not exist, so after
+  `lake update aeneas` it compiles Aeneas from source. Make `scripts/aeneas-install.sh` delete
+  `.lake/packages/aeneas/backends/lean/.lake` (or run `lake build aeneas:release`).
+- **`aeneas-translate.sh` revert.** Once (2026-10-13) the run failed while reverting its patches and
+  left all of `translation-patches/` applied to `src/`; a rerun was clean. If it recurs, look at
+  the `trap revert EXIT` step.
+- **Large exponents in the kernel.** Lean v4.35 refuses to evaluate `Nat.pow` with an exponent that
+  does not fit in 32 bits (`invert_spec` hit this with `0 ^ ((2^250-1)*2^5+11)`). `generalize` does
+  not hide such a term from the kernel; `obtain ⟨N, hN⟩ : ∃ N, … = N + 1` or an `irreducible_def`
+  does. If it recurs, name the field exponents of `invert` and `pow_p58` with `irreducible_def`.
+- **Public imports.** `lake shake Subtle Zeroize Curve25519 Defs Specs Proofs` misses `open`-only
+  namespaces and `step` specs, so some files keep public imports they may not need; trim them by
+  hand when touching a file.
+
 ## Spec campaign status
 
 - `src/backend/serial/u64/field.rs`, `scalar.rs`, `constants.rs`: all statements proved (no

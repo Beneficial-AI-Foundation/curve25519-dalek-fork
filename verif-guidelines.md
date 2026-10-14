@@ -43,24 +43,28 @@ How the Lean verification of curve25519-dalek is arranged. The plan and the open
 | `Curve25519` | `curve25519` | Curve25519 in general (`p`, `L`, `a`, `d`, `A`, later the curve models), independent of dalek | yes |
 | `Curve25519Dalek` | `Curve25519Dalek` | Generated translation + hand-written External files | External files |
 | `Subtle`, `Zeroize` | as generated | Models of external crates | `Types.lean`, `Basic.lean` |
-| `Specs` | `Curve25519Dalek` | Spec definitions, audit files (one per Rust file), proofs | `Defs.lean`, audit files |
+| `Defs` | `Curve25519Dalek` | Definitions needed to state the specs | yes |
+| `Specs` | `Curve25519Dalek` | Spec summaries, one per Rust file | yes |
+| `Proofs` | `Curve25519Dalek` | Proofs, one file per Rust item, and `Proofs/Helpers` | no |
 
 All hand-written files use the Lean module system: `module`, `public section`, and
 `@[expose] public section` for definitions that proofs must unfold.
 
 **Public vs private imports:** `public import` only what the file's public statements and definitions
 mention (types, `Defs`, `Curve25519.Basic`, …); it is re-exported downstream. Import what only proofs
-use (callees' proof files, `Lemmas`, tactics such as `Mathlib.Tactic.LinearCombination`) with plain
-`import`. `lake shake Specs Curve25519 Subtle Zeroize` reports both unused imports and public
+use (callees' proof files, `Proofs.Helpers`, tactics such as `Mathlib.Tactic.LinearCombination`)
+with plain `import`. `lake shake Subtle Zeroize Curve25519 Defs Specs Proofs` reports both unused
+imports and public
 imports that can be private; it misses namespaces used only in `open`, and `@[step]` specs that
-`step` finds through an import, so check its suggestions with `lake build`.
+`step` finds through an import, so check its suggestions with `lake build`. (Not on
+`Curve25519Dalek`: its generated files are rewritten by every translation.)
 
 **Licence and copyright headers:** the Lean development is Apache 2.0
 (`curve25519-dalek/lean/LICENSE`); the Rust crate stays BSD-3-Clause. Every hand-written Lean
 file starts with the header below, then `module`. A file ported from the previous project
 (curve25519-dalek-lean-verify) keeps that file's header (year and authors) verbatim; a merged file
 lists the union of its sources' authors; a new file has no `Authors:` line. Root aggregation
-files (`Specs.lean`, `Subtle.lean`, …) and the Aeneas-generated files have no header, as in
+files (`Specs.lean`, `Proofs.lean`, `Subtle.lean`, …) and the Aeneas-generated files have no header, as in
 Mathlib. (Mathlib's header linter is disabled in `lakefile.toml`: it never runs with our `srcDir`.)
 ```
 /-
@@ -74,39 +78,38 @@ Released under Apache 2.0 license as described in the file LICENSE.
 - **Derived part:** `<Lib>/Lemmas.lean` (generic) and `<Lib>/Instances.lean` (about instances in `Funs.lean`). They add no axioms.
 - **Imports:** `FunsExternal.lean` imports only `<Lib>.Basic`.
 
-## Specs: layout
+## Layout
 
-The `Specs` tree mirrors the Rust tree under `curve25519-dalek/src/`, with UpperCamelCase module
-names:
+Three folders hold the hand-written Lean:
 
 ```
-Specs/Defs.lean                              spec definitions used crate-wide (audited)
-Specs/Backend/Serial/U64/Defs.lean           spec definitions for this directory (audited)
-Specs/Backend/Serial/U64/Field.lean          AUDIT FILE for src/backend/serial/u64/field.rs
-Specs/Backend/Serial/U64/Field/Reduce.lean   proof of fn `reduce`
-Specs/Backend/Serial/U64/Field/Lemmas.lean   lemmas shared by several proof files of field.rs
-Specs/Lemmas/AsNat.lean                      lemmas shared crate-wide (here: about `Array.asNat`)
+Specs/Foo/Bar.lean                 spec summary of src/foo/bar.rs (audited)
+Proofs/Foo/Bar/Reduce.lean         proof of fn `reduce` in src/foo/bar.rs
+Proofs/Helpers/<Topic>.lean        further theorems used by the proofs (never inspected)
+Defs/<Topic>.lean                  definitions needed to state the specs (audited)
 ```
 
-- **Per Rust file:** one audit file `<File>.lean` and a folder `<File>/` with one proof file per Rust item.
-- **File naming:** a file named after a function means that function is in that Rust file. Two items with the same name are distinguished by a detail (`Mul.lean` / `MulAssign.lean`).
-- **What goes in a function's file:** its loops and loop bodies, inner `fn`s, local consts and closure helpers.
-- **Other files:** `Defs.lean` (definitions used in statements, audited) and `Lemmas.lean` or
-  `Lemmas/<Topic>.lean` (shared proof lemmas, not audited). No other names. (`Aux` is a reserved
-  file name on Windows, which Lean rejects.)
-- **Imports:**
-  - audit file → its folder's proof files (public), and the modules declaring the axioms in its
-    `#guard_msgs` lists;
-  - proof file → `Defs`, `Curve25519` and external libraries as needed by its statements (public);
-    callees' proof files and shared lemmas (private).
+- **`Specs/`** mirrors the Rust `src/` tree, with UpperCamelCase names: one file per Rust file,
+  holding that file's spec summary (below).
+- **`Proofs/`** mirrors it too, with a folder per Rust file and one proof file per Rust item
+  (function, trait method, inner `fn`, const), named after it. A proof file also holds that item's
+  loops, loop bodies, inner functions and closure helpers. Two items with the same name are told
+  apart by a detail (`Mul.lean` / `MulAssign.lean`).
+- **`Proofs/Helpers/`** holds every further theorem the proofs use. Nobody needs to inspect it.
+- **`Defs/`** holds the definitions needed to write the spec statements, in the minimal possible
+  way: only what a statement uses.
+- **Imports:** a spec summary imports its Rust file's proof files; a proof file imports its callees'
+  proof files, `Defs`, `Helpers` and libraries, never `Specs`. The root `Specs.lean` imports every
+  spec summary.
+  - Public: what a file's statements mention (`Defs`, `Curve25519`, external libraries), and a
+    spec summary's proof files. Private: callees' proof files and `Helpers`.
+  - A spec summary also imports the modules declaring the axioms in its `#guard_msgs` lists.
+- (`Aux` is a reserved file name on Windows, which Lean rejects.)
 
-  Proof files never import audit files.
-- **`Specs.lean`** imports every audit file.
-
-## Specs: audit file format
+## Spec summary format
 
 - **Proof file:** holds the canonical `@[step]` theorem, used by `step`.
-- **Audit file:** repeats the statement verbatim as `<name>'`, proved by that theorem, followed by its axioms:
+- **Spec summary:** repeats the statement verbatim as `<name>'`, proved by that theorem, followed by its axioms:
 
 ```lean
 /-- `square`: `r = self²` mod `p`; limbs `< 2^54` in, `< 2^52` out. -/
@@ -125,16 +128,16 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
 - **Order:** the statements appear in the order of the items in the Rust file.
 - **Same statement:** the proof term type-checks only if both statements agree, up to definitional equality.
 - **Pinned axioms:** `#guard_msgs` fixes the axioms each statement rests on.
-  - `sorryAx` while the proof is pending.
+  - `sorryAx` while the proof is pending (only on a working branch: CI rejects `sorry`).
   - Any `Subtle`/`Zeroize` spec axioms or std externals (`FunsExternal.lean`) that the proof uses.
   - Update the list when a proof lands.
-  - `#print axioms` prints an axiom by its shortest name that resolves in the audit file, so the
-    module declaring it must be visible there. A proof file importing it privately is not enough:
-    the audit file then imports it itself.
+  - `#print axioms` prints an axiom by its shortest name that resolves in the spec summary, so
+    the module declaring it must be visible there. A proof file importing it privately is not
+    enough: the spec summary then imports it itself.
 - **Not `@[step]`:** the primed theorems don't carry the attribute.
-- **Auditing:** an auditor reads `Curve25519/**`, `Specs/**/Defs.lean` and the audit files. Nothing else.
+- **Auditing:** an auditor reads `Curve25519/**`, `Defs/**` and `Specs/**`. Nothing else.
 
-## Specs: statement conventions
+## Statement conventions
 
 - **Coverage:** one statement per Rust item (function, trait method, inner `fn`, const). Not
   covered: closure `call_mut`/`call_once` wrappers, derived `Clone`/`Copy`, `Debug`, and local consts
@@ -180,9 +183,8 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
 - **Logical parts.** A long function is split into parts with `#decompose` or into helper lemmas,
   one logical fact each, rather than one long tactic script.
 - **Where helper lemmas go.** A lemma used by only one proof stays in that proof's file and is
-  `private`. A lemma with wider use moves to a central `Lemmas` file: the Rust folder's
-  `Lemmas.lean` / `Lemmas/<Topic>.lean`, or `Specs/Lemmas/<Topic>.lean` if it is not specific to
-  that folder; facts about curve25519 constants go in `Curve25519/Basic.lean`. Shared lemmas are
+  `private`. A lemma with wider use moves to `Proofs/Helpers/<Topic>.lean`; facts about curve25519
+  constants go in `Curve25519/Basic.lean`. Shared lemmas are
   stated in their natural generality (e.g. for any radix or array length, not just the instance at
   hand).
 - **Large powers (`exponent … exceeds the threshold 256`).** Lean core declines to evaluate
@@ -201,7 +203,7 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
 - **`p` and `L` stay irreducible.** Use their characterisation lemmas in `Curve25519/Basic.lean`
   (add new ones there, before the `attribute [irreducible]` line) instead of unfolding them.
 - **No** `sorry`, `native_decide` or `admit`. `bv_decide` is allowed; its certificate axioms then
-  appear in the audit file's axiom list.
+  appear in the spec summary's axiom list.
 - **Tactics Aeneas's `aeneas-lean-core` guidance bans** (`omega`, `linarith`, `nlinarith`,
   `congr N`, …) are banned only in proofs about the generated code: spec theorems, loop specs and
   their helpers, where the goals involve Aeneas scalars and containers. In pure mathematical
@@ -209,27 +211,34 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
   these.
 - **Statements are frozen.** A proof file never changes the statement text of its theorem.
 
-## Specs: workflow per Rust file
+## Workflow per Rust file
 
 1. **Inventory:** list the Rust items and their Lean names (`Funs.lean` doc comments).
-2. **Statements:** write the `Defs` additions, the proof files (theorems proved by `sorry`) and the audit file. Fill the `#guard_msgs` lines from the output of `lake env lean <audit file>`.
-3. **Review gate:** the owner reviews the audit file and `Defs`. Statements are then frozen; any change needs sign-off.
+2. **Statements:** write the `Defs` additions, the proof files (theorems proved by `sorry`) and the spec summary. Fill the `#guard_msgs` lines from the output of `lake env lean <spec summary>`.
+3. **Review gate:** the owner reviews the spec summary and `Defs`. Statements are then frozen; any change needs sign-off.
 4. **Proofs:** fill in the proofs following "Proof quality" (and the Aeneas `aeneas-lean-core`
    workflow), and update the `#guard_msgs` lines as they land.
-5. **Done:** no `sorryAx` left in the audit file. Add the audit module to the strict CI build.
+5. **Done:** no `sorryAx` left in the spec summary. Only then does the work go to `main`: CI
+   rejects any `sorry`, so steps 2–4 happen on a branch.
 
 ## Building locally (memory)
 
-The machine has 31 GB and 20 cores; `lake build` runs one Lean process per module in parallel, each
-using 1–5 GB. When several agents or builds run at once: check single files with
-`lake env lean <file>`, build one module target per `lake build` command, run at most one Lean
-process per agent, and avoid language-server tools in agents. Do full builds only when nothing else
-is running.
+The machine has 15 GB and 22 cores; each Lean process uses 1–5 GB, so memory, not cores, limits
+parallelism. `LEAN_NUM_THREADS` caps the number of Lean processes Lake runs at once, and `taskset`
+keeps them (and their own threads) on a subset of the cores. Full builds:
+
+```
+LEAN_NUM_THREADS=4 taskset -c 0-3 nice -n 10 lake build
+```
+
+When several agents or builds run at once: check single files with `lake env lean <file>`, build
+one module target per `lake build` command, run at most one Lean process per agent, and avoid
+language-server tools in agents. `lake exe runLinter` loads every library it is given into one
+process: run it on one library at a time.
 
 ## CI
 
 - **`lean-translation.yml`:** the translation is current.
 - **`lean-build.yml`:**
-  - `lake build --wfail` for `Curve25519Dalek`, `Subtle`, `Zeroize`, `Curve25519` and completed audit modules;
-  - `lake build Specs`, lenient (sorry warnings allowed);
-  - `runLinter` on `Subtle`, `Zeroize`, `Curve25519` and `Specs`.
+  - `lake build --wfail` on every default target: any warning, including `sorry`, fails the build;
+  - `runLinter` on `Subtle`, `Zeroize`, `Curve25519`, `Defs`, `Specs` and `Proofs`.

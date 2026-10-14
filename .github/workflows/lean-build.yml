@@ -34,14 +34,8 @@ jobs:
           auto-config: false
           use-mathlib-cache: true
           build: true
-          # Strict: everything except the Specs library, whose proofs may still be `sorry` during
-          # the campaign. Add completed audit modules here (see verif-guidelines.md).
-          build-args: --wfail Curve25519Dalek Subtle Zeroize Curve25519 Specs.Backend.Serial.U64.Field Specs.Backend.Serial.U64.Constants Specs.Backend.Serial.U64.Scalar Specs.Field
-
-      # Lenient: sorry warnings allowed. The `#guard_msgs` axiom lines in each audit file still
-      # fail the build if a statement's axioms change.
-      - name: Build Specs
-        run: lake build Specs
+          # Strict: warnings are errors.
+          build-args: --wfail
 
       - name: Lint hand-written libraries
-        run: lake exe runLinter Subtle Zeroize Curve25519 Specs
+        run: lake exe runLinter Subtle Zeroize Curve25519 Defs Specs Proofs

@@ -1,7 +1,7 @@
 name = "curve25519-dalek"
 version = "0.1.0"
 keywords = ["formal verification"]
-defaultTargets = ["Curve25519Dalek", "Subtle", "Zeroize", "Curve25519", "Specs"]
+defaultTargets = ["Curve25519Dalek", "Subtle", "Zeroize", "Curve25519", "Defs", "Specs", "Proofs"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -39,7 +39,17 @@ srcDir = "curve25519-dalek/lean"
 name = "Curve25519"
 srcDir = "curve25519-dalek/lean"
 
-# Spec statements (audit files, one per Rust file) and their proofs. See verif-guidelines.md.
+# Definitions needed to state the specs (audited). See verif-guidelines.md.
+[[lean_lib]]
+name = "Defs"
+srcDir = "curve25519-dalek/lean"
+
+# Spec summaries, one per Rust file (audited). See verif-guidelines.md.
 [[lean_lib]]
 name = "Specs"
+srcDir = "curve25519-dalek/lean"
+
+# Proofs, one file per Rust item, and the helper theorems they use. See verif-guidelines.md.
+[[lean_lib]]
+name = "Proofs"
 srcDir = "curve25519-dalek/lean"
