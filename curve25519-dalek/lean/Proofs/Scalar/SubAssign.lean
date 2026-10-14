@@ -1,0 +1,26 @@
+/-
+Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+module
+public import Curve25519Dalek.Funs
+public import Defs.Scalar
+public import Defs.Target
+public import Curve25519.Basic
+import Proofs.Scalar.Sub
+public section
+
+open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
+open Curve25519Dalek.scalar (Scalar HalfWidthScalar)
+
+namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubAssignSharedAScalar
+
+@[step]
+theorem sub_assign_spec (self _rhs : Scalar) (hself : self.asNat < L) (hrhs : _rhs.asNat < L)
+    (htgt : OnX86_64) :
+    sub_assign self _rhs ⦃ (r : Scalar) =>
+      (r.asNat + _rhs.asNat) % L = self.asNat % L ∧ r.asNat < L ⦄ := by
+  unfold sub_assign
+  step*
+
+end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubAssignSharedAScalar

@@ -5,6 +5,7 @@ Authors: Hoang Le Truong
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.Target
 public import Defs.Scalar
 public import Curve25519.Basic
 import Proofs.Backend.Serial.U64.Scalar.Sub
@@ -45,3 +46,30 @@ theorem sub.«x86_64-no-tables_spec» (self rhs : Scalar) (hself : self.asNat < 
   sub.«x86_64-tables_spec» self rhs hself hrhs
 
 end Curve25519Dalek.scalar.SubShared0ScalarSharedAScalarScalar
+
+namespace Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithSubSharedAScalarScalar
+
+@[step]
+theorem sub_spec (self rhs : Scalar) (hself : self.asNat < L)
+    (hrhs : rhs.asNat < L) (htgt : OnX86_64) :
+    sub self rhs ⦃ (r : Scalar) =>
+      (r.asNat + rhs.asNat) % L = self.asNat % L ∧ r.asNat < L ⦄ := by
+  unfold sub
+  unfold OnX86_64 at htgt
+  step with htgt as ⟨t, ht⟩
+  rcases ht with rfl | rfl <;> step*
+
+end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithSubSharedAScalarScalar
+
+namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubSharedBScalarScalar
+
+/-- `Sub<&Scalar> for Scalar` (from `define_sub_variants!`): forwards to `&Scalar - &Scalar`. -/
+@[step]
+theorem sub_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L)
+    (htgt : OnX86_64) :
+    sub self rhs ⦃ (r : Scalar) =>
+      (r.asNat + rhs.asNat) % L = self.asNat % L ∧ r.asNat < L ⦄ := by
+  unfold sub
+  step*
+
+end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubSharedBScalarScalar

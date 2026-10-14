@@ -5,6 +5,7 @@ Authors: Oliver Butterley, Markus Dablander, Hoang Le Truong
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.Target
 public import Defs.Scalar
 public import Curve25519.Basic
 import Proofs.Helpers.Scalar
@@ -41,5 +42,19 @@ theorem invert.«x86_64-no-tables_spec» (self : Scalar) :
       (self.asNat % L ≠ 0 → r.asNat * self.asNat % L = 1) ∧
       (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ⦄ :=
   invert.«x86_64-tables_spec» self
+
+end Curve25519Dalek.scalar.Scalar
+
+namespace Curve25519Dalek.scalar.Scalar
+
+@[step]
+theorem invert_spec (self : Scalar) (htgt : OnX86_64) :
+    invert self ⦃ (r : Scalar) =>
+      (self.asNat % L ≠ 0 → r.asNat * self.asNat % L = 1) ∧
+      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ⦄ := by
+  unfold invert
+  unfold OnX86_64 at htgt
+  step with htgt as ⟨t, ht⟩
+  rcases ht with rfl | rfl <;> step*
 
 end Curve25519Dalek.scalar.Scalar

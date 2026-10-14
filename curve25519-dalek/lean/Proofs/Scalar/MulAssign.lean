@@ -5,6 +5,7 @@ Authors: Hoang Le Truong
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.Target
 public import Defs.Scalar
 public import Curve25519.Basic
 import Proofs.Backend.Serial.U64.Scalar.Mul
@@ -43,3 +44,16 @@ theorem mul_assign.«x86_64-no-tables_spec» (self _rhs : Scalar) :
   mul_assign.«x86_64-tables_spec» self _rhs
 
 end Curve25519Dalek.scalar.MulAssignScalarSharedAScalar
+
+namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignSharedAScalar
+
+@[step]
+theorem mul_assign_spec (self _rhs : Scalar) (htgt : OnX86_64) :
+    mul_assign self _rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * _rhs.asNat % L ⦄ := by
+  unfold mul_assign
+  unfold OnX86_64 at htgt
+  step with htgt as ⟨t, ht⟩
+  rcases ht with rfl | rfl <;> step*
+
+end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignSharedAScalar

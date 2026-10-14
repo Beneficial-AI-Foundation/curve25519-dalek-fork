@@ -144,6 +144,22 @@ after Aeneas, and check that `lake update` does not move Mathlib to PrimeCert's 
 manifest entry by hand avoids that). Certificates for both numbers are in the old project
 (`curve25519-dalek-lean-verify/Curve25519Dalek/Math/PrimeCerts.lean`).
 
+## To do: u32 backend
+
+`OnX86_64` stands in for the 32-bit branches of every `get_target` dispatcher. Specifying and
+proving `src/backend/serial/u32/scalar.rs` (`Scalar29`), its constants, and the `i686` variants of
+the `scalar.rs` functions lets the hypothesis be dropped from the `scalar.rs` statements (a change
+of frozen statements: sign-off needed), and allows `Scalar29::pack`, `Scalar29::invert` and
+`Scalar29::montgomery_invert` to be specified.
+
+## To do: `native_decide` from Aeneas's `toStr`
+
+Aeneas's `toStr` discharges its length bound with `decide +native` (marked TODO in
+`Aeneas/Std/String.lean`: the kernel cannot reduce `String.toByteArray` of a literal). Every
+string literal in the generated dispatchers, and in `OnX86_64`, therefore adds
+`…_native.decide.ax_*` axioms to the statements of `scalar.rs`. Ask upstream for a kernel-checked
+bound (or a `Str` literal that carries none).
+
 ## To do: tooling
 
 - **Prebuilt Aeneas oleans after a version bump.** Lake downloads the Aeneas release's build
@@ -163,9 +179,8 @@ manifest entry by hand avoids that). Certificates for both numbers are in the ol
 
 ## Spec campaign status
 
-- `src/backend/serial/u64/field.rs`, `scalar.rs`, `constants.rs`: all statements proved (no
-  `sorryAx`); audit modules in the strict CI build. The `EdwardsPoint` constants and tables wait
-  for the curve model.
-- `src/field.rs` (u64 backend, `FieldElement51`): all statements proved; in the strict CI build.
-  `invert`, `sqrt_ratio_i`, `invsqrt` and the batch inversions use `p_prime` (a theorem).
-- Next: `src/scalar.rs` (the `Scalar` type).
+- `src/backend/serial/u64/field.rs`, `scalar.rs`, `constants.rs`: all statements proved. The
+  `EdwardsPoint` constants and tables wait for the curve model.
+- `src/field.rs` (u64 backend, `FieldElement51`): all statements proved.
+- `src/scalar.rs`: all statements proved, for 64-bit targets: the `get_target` dispatchers and the
+  functions calling them assume `OnX86_64` (`Defs/Target.lean`).

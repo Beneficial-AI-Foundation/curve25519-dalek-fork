@@ -5,6 +5,7 @@ Authors: Hoang Le Truong
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.Target
 public import Defs.Scalar
 public import Curve25519.Basic
 import Proofs.Backend.Serial.U64.Constants.R
@@ -60,3 +61,16 @@ theorem neg.«x86_64-no-tables_spec» (self : Scalar) :
   neg.«x86_64-tables_spec» self
 
 end Curve25519Dalek.scalar.NegShared0ScalarScalar
+
+namespace Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithNegScalar
+
+@[step]
+theorem neg_spec (self : Scalar) (htgt : OnX86_64) :
+    neg self ⦃ (r : Scalar) =>
+      (r.asNat + self.asNat) % L = 0 ∧ r.asNat < L ⦄ := by
+  unfold neg
+  unfold OnX86_64 at htgt
+  step with htgt as ⟨t, ht⟩
+  rcases ht with rfl | rfl <;> step*
+
+end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithNegScalar

@@ -5,6 +5,7 @@ Authors: Oliver Butterley, Markus Dablander, Hoang Le Truong
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.Target
 public import Defs.Scalar
 public import Curve25519.Basic
 import Proofs.Backend.Serial.U64.Constants.R
@@ -52,5 +53,18 @@ theorem reduce.«x86_64-no-tables_spec» (self : Scalar) :
     reduce.«x86_64-no-tables» self ⦃ (r : Scalar) =>
       r.asNat = self.asNat % L ⦄ :=
   reduce.«x86_64-tables_spec» self
+
+end Curve25519Dalek.scalar.Scalar
+
+namespace Curve25519Dalek.scalar.Scalar
+
+@[step]
+theorem reduce_spec (self : Scalar) (htgt : OnX86_64) :
+    reduce self ⦃ (r : Scalar) =>
+      r.asNat = self.asNat % L ⦄ := by
+  unfold reduce
+  unfold OnX86_64 at htgt
+  step with htgt as ⟨t, ht⟩
+  rcases ht with rfl | rfl <;> step*
 
 end Curve25519Dalek.scalar.Scalar

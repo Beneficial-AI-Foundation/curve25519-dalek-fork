@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.Target
 public import Defs.Scalar
 public import Curve25519.Basic
 import Proofs.Backend.Serial.U64.Scalar.AsMontgomery
@@ -50,5 +51,22 @@ theorem invert_batch_alloc.«x86_64-no-tables_spec» (inputs : Slice Scalar)
       ret.asNat * (∏ i ∈ Finset.range inputs.length, inputs[i]!.asNat) % L = 1 ∧
       ret.asNat < L ⦄ :=
   invert_batch_alloc.«x86_64-tables_spec» inputs hinputs
+
+end Curve25519Dalek.scalar.Scalar
+
+namespace Curve25519Dalek.scalar.Scalar
+
+@[step]
+theorem invert_batch_alloc_spec (inputs : Slice Scalar)
+    (hinputs : ∀ i < inputs.length, inputs[i]!.asNat % L ≠ 0) (htgt : OnX86_64) :
+    invert_batch_alloc inputs ⦃ (ret : Scalar) (r : Slice Scalar) =>
+      r.length = inputs.length ∧
+      (∀ i < inputs.length, r[i]!.asNat * inputs[i]!.asNat % L = 1 ∧ r[i]!.asNat < L) ∧
+      ret.asNat * (∏ i ∈ Finset.range inputs.length, inputs[i]!.asNat) % L = 1 ∧
+      ret.asNat < L ⦄ := by
+  unfold invert_batch_alloc
+  unfold OnX86_64 at htgt
+  step with htgt as ⟨t, ht⟩
+  rcases ht with rfl | rfl <;> step*
 
 end Curve25519Dalek.scalar.Scalar

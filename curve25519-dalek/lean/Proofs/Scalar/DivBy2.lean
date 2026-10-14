@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.Target
 public import Defs.Scalar
 public import Curve25519.Basic
 import Proofs.Backend.Serial.U64.Scalar.ConditionalAddL
@@ -85,5 +86,18 @@ theorem div_by_2.«x86_64-no-tables_spec» (self : Scalar) (hself : self.asNat <
     div_by_2.«x86_64-no-tables» self ⦃ (r : Scalar) =>
       2 * r.asNat % L = self.asNat ∧ r.asNat < L ⦄ :=
   div_by_2.«x86_64-tables_spec» self hself
+
+end Curve25519Dalek.scalar.Scalar
+
+namespace Curve25519Dalek.scalar.Scalar
+
+@[step]
+theorem div_by_2_spec (self : Scalar) (hself : self.asNat < L) (htgt : OnX86_64) :
+    div_by_2 self ⦃ (r : Scalar) =>
+      2 * r.asNat % L = self.asNat ∧ r.asNat < L ⦄ := by
+  unfold div_by_2
+  unfold OnX86_64 at htgt
+  step with htgt as ⟨t, ht⟩
+  rcases ht with rfl | rfl <;> step*
 
 end Curve25519Dalek.scalar.Scalar

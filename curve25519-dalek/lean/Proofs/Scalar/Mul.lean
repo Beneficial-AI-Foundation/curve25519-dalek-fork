@@ -5,6 +5,7 @@ Authors: Hoang Le Truong
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.Target
 public import Defs.Scalar
 public import Curve25519.Basic
 import Proofs.Backend.Serial.U64.Scalar.Mul
@@ -43,3 +44,28 @@ theorem mul.«x86_64-no-tables_spec» (self _rhs : Scalar) :
   mul.«x86_64-tables_spec» self _rhs
 
 end Curve25519Dalek.scalar.MulShared0ScalarSharedAScalarScalar
+
+namespace Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithMulSharedAScalarScalar
+
+@[step]
+theorem mul_spec (self _rhs : Scalar) (htgt : OnX86_64) :
+    mul self _rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * _rhs.asNat % L ⦄ := by
+  unfold mul
+  unfold OnX86_64 at htgt
+  step with htgt as ⟨t, ht⟩
+  rcases ht with rfl | rfl <;> step*
+
+end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithMulSharedAScalarScalar
+
+namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulSharedBScalarScalar
+
+/-- `Mul<&Scalar> for Scalar` (from `define_mul_variants!`): forwards to `&Scalar * &Scalar`. -/
+@[step]
+theorem mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
+    mul self rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * rhs.asNat % L ⦄ := by
+  unfold mul
+  step*
+
+end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulSharedBScalarScalar

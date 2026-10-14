@@ -27,6 +27,13 @@ namespace Curve25519Dalek.scalar
 theorem Scalar.asNat_lt (s : Scalar) : s.asNat < 2 ^ 256 :=
   Array.asNat_lt 8 s.bytes fun i _ => s.bytes[i]!.hBounds
 
+/-- Byte 31 of a `Scalar` is its value divided by `2 ^ 248`. -/
+theorem Scalar.bytes_31_val (s : Scalar) : s.bytes[31]!.val = s.asNat / 2 ^ 248 := by
+  have h := Array.asNat_div_pow_mod 8 s.bytes (fun i _ => s.bytes[i]!.hBounds) 31
+  have hlt := s.asNat_lt
+  unfold Scalar.asNat at hlt ⊢
+  rw [← h, Nat.mod_eq_of_lt (by omega)]
+
 /-- Numbers below `L` are below `2 ^ 256`, as `pack` requires. -/
 theorem lt_two_pow_256_of_lt_L {x : ℕ} (h : x < L) : x < 2 ^ 256 :=
   h.trans (L_lt.trans (Nat.pow_lt_pow_right (by decide) (by decide)))
