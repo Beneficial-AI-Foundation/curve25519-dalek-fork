@@ -3,11 +3,12 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Curve25519Dalek.Funs
-public import Defs.Target
-public import Defs.Scalar
 public import Curve25519.Basic
+public import Curve25519Dalek.Funs
+public import Defs.Scalar
+public import Defs.Target
 import Proofs.Backend.Serial.U64.Scalar.AsMontgomery
+import Proofs.Helpers.Target
 import Proofs.Scalar.InvertBatchInternal
 import Proofs.Scalar.Unpack
 public section
@@ -76,8 +77,7 @@ theorem invert_batch_spec {N : Usize} (inputs : Array Scalar N)
       ret.asNat * (∏ i ∈ Finset.range N.val, inputs[i]!.asNat) % L = 1 ∧
       ret.asNat < L ⦄ := by
   unfold invert_batch
-  unfold OnX86_64 at htgt
-  step with htgt as ⟨t, ht⟩
-  rcases ht with rfl | rfl <;> step*
+  exact dispatch_spec htgt (invert_batch.«x86_64-tables_spec» inputs hinputs)
+    (invert_batch.«x86_64-no-tables_spec» inputs hinputs)
 
 end Curve25519Dalek.scalar.Scalar

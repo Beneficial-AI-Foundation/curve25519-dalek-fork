@@ -43,13 +43,16 @@ srcDir = "curve25519-dalek/lean"
 [[lean_lib]]
 name = "Defs"
 srcDir = "curve25519-dalek/lean"
+globs = ["Defs.*"]
 
 # Spec summaries, one per Rust file (audited). See verif-guidelines.md.
 [[lean_lib]]
 name = "Specs"
 srcDir = "curve25519-dalek/lean"
+globs = ["Specs.*"]
 
 # Proofs, one file per Rust item, and the helper theorems they use. See verif-guidelines.md.
 [[lean_lib]]
 name = "Proofs"
 srcDir = "curve25519-dalek/lean"
+globs = ["Proofs.*"]

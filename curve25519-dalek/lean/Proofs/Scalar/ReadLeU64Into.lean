@@ -4,15 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Oliver Butterley, Markus Dablander, Hoang Le Truong
 -/
 module
-public import Curve25519Dalek.Funs
-import Proofs.Helpers.AsNat
-import Proofs.Helpers.Bitwise
 public import Curve25519.Basic
+public import Curve25519Dalek.Funs
 public import Defs.Scalar
 public import Defs.Scalar52
-import Subtle
-import Proofs.Helpers.Array
 import Mathlib.Tactic.ReduceModChar
+import Proofs.Helpers.Array
+import Proofs.Helpers.AsNat
+import Proofs.Helpers.Bitwise
+import Subtle
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

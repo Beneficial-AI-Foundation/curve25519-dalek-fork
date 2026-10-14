@@ -4,14 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Oliver Butterley
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Funs
+public import Defs.Scalar
+public import Defs.Scalar52
+import Mathlib.Tactic.ReduceModChar
 import Proofs.Helpers.Array
 import Proofs.Helpers.AsNat
-public import Defs.Scalar
-public import Curve25519.Basic
-public import Defs.Scalar52
 import Subtle
-import Mathlib.Tactic.ReduceModChar
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

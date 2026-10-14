@@ -42,8 +42,8 @@ How the Lean verification of curve25519-dalek is arranged. The plan and the open
 |---|---|---|---|
 | `Curve25519` | `curve25519` | Curve25519 in general (`p`, `L`, `a`, `d`, `A`, later the curve models), independent of dalek | yes |
 | `Curve25519Dalek` | `Curve25519Dalek` | Generated translation + hand-written External files | External files |
-| `Subtle`, `Zeroize` | as generated | Models of external crates | `Types.lean`, `Basic.lean` |
-| `Defs` | `Curve25519Dalek` | Definitions needed to state the specs | yes |
+| `Subtle`, `Zeroize` | as generated | Models of external crates | `Subtle/Types.lean`, `Basic.lean` |
+| `Defs` | `Curve25519Dalek` (extensions of Aeneas types: their namespace) | Definitions needed to state the specs | yes |
 | `Specs` | `Curve25519Dalek` | Spec summaries, one per Rust file | yes |
 | `Proofs` | `Curve25519Dalek` | Proofs, one file per Rust item, and `Proofs/Helpers` | no |
 
@@ -75,12 +75,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 **External-crate libraries (`Subtle`, `Zeroize`):**
 - **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Basic.lean`. Basic holds `opaque` signatures with the template names, plus one `@[step]` spec axiom per function. Each spec axiom is conditional on any trait-instance behaviour it relies on. Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
-- **Derived part:** `<Lib>/Lemmas.lean` (generic) and `<Lib>/Instances.lean` (about instances in `Funs.lean`). They add no axioms.
+- **Derived part:** `<Lib>/Lemmas.lean` (generic), `<Lib>/Instances.lean` (about instances in `Funs.lean`) and `Zeroize/Consistency.lean`. They add no axioms.
 - **Imports:** `FunsExternal.lean` imports only `<Lib>.Basic`.
 
 ## Layout
 
-Three folders hold the hand-written Lean:
+The hand-written Lean about dalek's items is in:
 
 ```
 Specs/Foo/Bar.lean                 spec summary of src/foo/bar.rs (audited)
@@ -94,15 +94,19 @@ Defs/<Topic>.lean                  definitions needed to state the specs (audite
 - **`Proofs/`** mirrors it too, with a folder per Rust file and one proof file per Rust item
   (function, trait method, inner `fn`, const), named after it. A proof file also holds that item's
   loops, loop bodies, inner functions and closure helpers. Two items with the same name are told
-  apart by a detail (`Mul.lean` / `MulAssign.lean`).
-- **`Proofs/Helpers/`** holds every further theorem the proofs use. Nobody needs to inspect it.
+  apart by a prefix for the type when it is not the file's main type (`HalfWidthEq.lean`,
+  `Scalar52Pack.lean`), or by a suffix for a by-value operator variant (`NegOwned.lean`).
+- **`Proofs/Helpers/`** holds every further theorem the proofs use, and any auxiliary definitions
+  they share. Nobody needs to inspect it.
 - **`Defs/`** holds the definitions needed to write the spec statements, in the minimal possible
-  way: only what a statement uses.
+  way: only what a statement uses, plus the unfolding lemma of an irreducible definition (proved
+  before its `attribute [irreducible]`). Other characterisations go in `Helpers`.
 - **Imports:** a spec summary imports its Rust file's proof files; a proof file imports its callees'
   proof files, `Defs`, `Helpers` and libraries, never `Specs`. The root `Specs.lean` imports every
   spec summary.
-  - Public: what a file's statements mention (`Defs`, `Curve25519`, external libraries), and a
-    spec summary's proof files. Private: callees' proof files and `Helpers`.
+  - Public: what a file's statements mention (`Curve25519Dalek.Funs`, `Defs`, `Curve25519`,
+    external libraries). Private: proof files (a spec summary's own, or a proof file's callees')
+    and `Helpers`.
   - A spec summary also imports the modules declaring the axioms in its `#guard_msgs` lists.
 - (`Aux` is a reserved file name on Windows, which Lean rejects.)
 
@@ -130,21 +134,28 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
 - **Pinned axioms:** `#guard_msgs` fixes the axioms each statement rests on.
   - `sorryAx` while the proof is pending (only on a working branch: CI rejects `sorry`).
   - Any `Subtle`/`Zeroize` spec axioms or std externals (`FunsExternal.lean`) that the proof uses.
+  - For dispatched functions: `get_target` and the `…_native.decide.ax_*` axioms of Aeneas's
+    `toStr` (the string literals of the dispatchers and of `OnX86_64`). Accepted: they only assert
+    that each literal's byte length fits a `u32` (see `notes.md`).
   - Update the list when a proof lands.
   - `#print axioms` prints an axiom by its shortest name that resolves in the spec summary, so
     the module declaring it must be visible there. A proof file importing it privately is not
     enough: the spec summary then imports it itself.
 - **Not `@[step]`:** the primed theorems don't carry the attribute.
-- **Auditing:** an auditor reads `Curve25519/**`, `Defs/**` and `Specs/**`. Nothing else.
+- **Auditing:** an auditor reads `Curve25519/**`, `Defs/**`, `Specs/**`, the External files
+  (`Curve25519Dalek/{Types,Funs}External.lean`), `Subtle/{Types,Basic}.lean` and
+  `Zeroize/Basic.lean`. Nothing else.
 
 ## Statement conventions
 
 - **Coverage:** one statement per Rust item (function, trait method, inner `fn`, const). Not
-  covered: closure `call_mut`/`call_once` wrappers, derived `Clone`/`Copy`, `Debug`, and local consts
-  inside a function body. Their helper specs may exist in proof files.
+  covered: closure `call_mut`/`call_once` wrappers, derived `Clone`/`Copy`, `Debug`, local consts
+  inside a function body, and the by-value operator variants generated by `define_*_variants!`
+  (source in `macros.rs`). Their helper specs may exist in proof files.
 - **Names:**
   - theorems are `<function>_spec`, in the function's namespace;
   - argument names are exactly the identifiers of the specified Lean/Rust function (`self`, `_rhs`, `limbs`, …);
+    trait-instance arguments, which have no Rust name, are short (`borrowInst`, `iterInst`);
   - hypothesis names follow Mathlib: `h` + the argument (`hself`, `hrhs`, `hk`);
   - spec definitions follow Mathlib conventions: lowerCamelCase for data (`asNat`), UpperCamelCase for `Prop`s. Use dot notation (`self.asNat`). When the argument has the raw underlying type (`Array U64 5#usize`, as in `reduce`), write `FieldElement51.asNat limbs`.
 - **Form:**
@@ -190,9 +201,9 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
 - **Large powers (`exponent … exceeds the threshold 256`).** Lean core declines to evaluate
   `b ^ n` when the exponent `n` exceeds `exponentiation.threshold` (256) and warns, whenever
   unification, `simp` or `omega`/`scalar_tac` merely meet such a term. Keep large powers
-  irreducible: name them like `p` and `L` (e.g. `montgomeryRadix` for `2^260`), with an
-  unfolding lemma that is exactly the definition (`montgomeryRadix_eq`) and characterisation
-  lemmas proved before `attribute [irreducible]`; state specs with the name.
+  irreducible: name them (`p`, `L`, `montgomeryRadix` for `2^260`), as an `irreducible_def` (like
+  `p`, `L`) or with `attribute [irreducible]` after an unfolding lemma that is exactly the
+  definition (`montgomeryRadix_eq`); state specs with the name.
 - **Export only the key specs.** A step lemma needed only inside its own file (loop specs,
   `#decompose` parts, closure `call_mut` specs, inner constants, variants with extra
   postconditions) is `@[local step] private theorem`. It is then neither visible nor registered
@@ -200,8 +211,9 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
   theorems are the audited specs and the few helper specs other files genuinely use.
 - **No auto-generated names.** Never refer to names a tactic invented (`h_1`, `x✝`, `a_post1`,
   `i1`). Name what you use (`step as ⟨r, hr⟩`, `obtain ⟨…⟩`, `intro`).
-- **`p` and `L` stay irreducible.** Use their characterisation lemmas in `Curve25519/Basic.lean`
-  (add new ones there, before the `attribute [irreducible]` line) instead of unfolding them.
+- **`p` and `L` cannot be unfolded.** They are `irreducible_def`s (opaque to the elaborator and the
+  kernel). Use their characterisation lemmas in `Curve25519/Basic.lean` (`p_eq`, `L_eq` give them as
+  numerals; add new lemmas there).
 - **No** `sorry`, `native_decide` or `admit`. `bv_decide` is allowed; its certificate axioms then
   appear in the spec summary's axiom list.
 - **Tactics Aeneas's `aeneas-lean-core` guidance bans** (`omega`, `linarith`, `nlinarith`,
@@ -214,7 +226,7 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
 ## Workflow per Rust file
 
 1. **Inventory:** list the Rust items and their Lean names (`Funs.lean` doc comments).
-2. **Statements:** write the `Defs` additions, the proof files (theorems proved by `sorry`) and the spec summary. Fill the `#guard_msgs` lines from the output of `lake env lean <spec summary>`.
+2. **Statements:** write the `Defs` additions, the proof files (theorems proved by `sorry`) and the spec summary. Fill the `#guard_msgs` lines with `scripts/fill-guards.py` (usage in its docstring).
 3. **Review gate:** the owner reviews the spec summary and `Defs`. Statements are then frozen; any change needs sign-off.
 4. **Proofs:** fill in the proofs following "Proof quality" (and the Aeneas `aeneas-lean-core`
    workflow), and update the `#guard_msgs` lines as they land.
@@ -233,12 +245,13 @@ LEAN_NUM_THREADS=4 taskset -c 0-3 nice -n 10 lake build
 
 When several agents or builds run at once: check single files with `lake env lean <file>`, build
 one module target per `lake build` command, run at most one Lean process per agent, and avoid
-language-server tools in agents. `lake exe runLinter` loads every library it is given into one
-process: run it on one library at a time.
+language-server tools in agents. `lake exe runLinter Specs` loads every library (the spec
+summaries import everything); run the linter on one library per command when memory is tight.
 
 ## CI
 
 - **`lean-translation.yml`:** the translation is current.
 - **`lean-build.yml`:**
   - `lake build --wfail` on every default target: any warning, including `sorry`, fails the build;
-  - `runLinter` on `Subtle`, `Zeroize`, `Curve25519`, `Defs`, `Specs` and `Proofs`.
+  - `runLinter` on `Subtle`, `Zeroize`, `Curve25519`, `Defs`, `Specs` and `Proofs`, one step each
+    (`runLinter` stops at the first failing module).

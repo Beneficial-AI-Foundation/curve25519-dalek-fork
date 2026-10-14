@@ -15,7 +15,7 @@ open Curve25519Dalek.backend.serial.u64.scalar (montgomeryRadix)
 namespace Curve25519Dalek.scalar.HalfWidthScalar
 
 theorem ZERO_spec :
-    HalfWidthScalar.asNat ZERO = 0 := by
+    ZERO.asNat = 0 := by
   simp [HalfWidthScalar.asNat, ZERO, Scalar.ZERO_spec]
 
 end Curve25519Dalek.scalar.HalfWidthScalar

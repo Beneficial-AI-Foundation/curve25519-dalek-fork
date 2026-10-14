@@ -2,10 +2,10 @@
 
 1. Add std lib models to Aeneas
 2. Incorporate all proofs
-  - Serial 64 backend (field.rs, scalar.rs)
-  - primality of p, L: currently axioms (see below)
-  - src/field.rs
-  - src/scalar.rs
+  - Serial 64 backend (field.rs, scalar.rs, constants.rs): done
+  - primality of p, L: done (Lucas certificates; PrimeCert later, see below)
+  - src/field.rs: done
+  - src/scalar.rs: done for 64-bit targets (see below)
   - Serial 32 backend
   - Elliptic curves
   - All the other files

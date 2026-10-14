@@ -10,6 +10,7 @@ import Mathlib.Tactic.ReduceModChar
 import Proofs.Helpers.Array
 import Proofs.Helpers.AsInt
 import Proofs.Helpers.AsNat
+import Proofs.Helpers.Scalar
 import Proofs.Scalar.Index
 public section
 
@@ -297,10 +298,12 @@ private theorem nibbles_val (b : ℕ) :
   omega
 
 @[step]
-theorem as_radix_16_spec (self : Scalar) (hself : self.bytes[31]!.val ≤ 127) :
+theorem as_radix_16_spec (self : Scalar) (hself : self.asNat < 2 ^ 255) :
     as_radix_16 self ⦃ (r : Array I8 64#usize) =>
       r.asInt 4 = self.asNat ∧
       (∀ i < 63, -8 ≤ r[i]!.val ∧ r[i]!.val < 8) ∧ -8 ≤ r[63]!.val ∧ r[63]!.val ≤ 8 ⦄ := by
+  have h31 : self.bytes[31]!.val ≤ 127 := Nat.lt_succ_iff.mp (Scalar.bytes_31_lt (k := 7) hself)
+  clear hself
   unfold as_radix_16
   step as ⟨b31, hb31⟩
   step
@@ -314,7 +317,7 @@ theorem as_radix_16_spec (self : Scalar) (hself : self.bytes[31]!.val ≤ 127) :
       exact nibble_bounds (self.bytes[i]!).hBounds |>.2
   have h63 : out[63]!.val ≤ 7 := by
     rw [(hout 31 (by norm_num)).2]
-    exact top_nibble_le hself
+    exact top_nibble_le h31
   step as ⟨r, hval, hlow, h63l, h63u⟩
   refine ⟨?_, hlow, h63l, h63u⟩
   rw [hval, Scalar.asNat]

@@ -3,18 +3,19 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar
 public import Defs.Target
-public import Curve25519.Basic
 public import Subtle
-import Subtle.Lemmas
+import Proofs.Helpers.Array
 import Proofs.Helpers.Scalar
 import Proofs.Scalar.IsCanonical
+import Subtle.Lemmas
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
-open Curve25519Dalek.scalar (Scalar HalfWidthScalar)
+open Curve25519Dalek.scalar (Scalar)
 
 namespace Curve25519Dalek.scalar.Scalar
 
@@ -24,24 +25,22 @@ theorem from_canonical_bytes_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) 
       r.is_some.IsValid ∧ r.value.bytes = bytes ∧
       (bytes.asNat 8 < L → r.is_some = 1#u8) ∧ (L ≤ bytes.asNat 8 → r.is_some = 0#u8) ⦄ := by
   unfold from_canonical_bytes
-  step*
-  subst r_post
-  refine ⟨c1_post, rfl, fun h => ?_, fun h => ?_⟩
-  · have hi : i.val < 2 ^ 5 := by
-      have h31 := Scalar.bytes_31_val ⟨bytes⟩
-      have hL : Scalar.asNat ⟨bytes⟩ < 2 ^ 253 := h.trans L_lt
-      simp only [Array.getElem!_Nat_eq, List.getElem!_eq_getElem?_getD] at h31
-      rw [List.getElem?_eq_getElem (by simp), Option.getD_some] at h31
-      rw [i_post]
-      omega
-    have hi1 : i1 = 0#u8 := by
+  step with Array.index_usize_getElem!_spec as ⟨i, hi⟩
+  step as ⟨i1, hi1, _⟩
+  step as ⟨hb, hbv, hbeq⟩
+  step as ⟨c, hcv, hc1, hc0⟩
+  step as ⟨c1, hc1v, hc1eq⟩
+  step as ⟨r, hr⟩
+  subst hr
+  refine ⟨hc1v, rfl, fun h => ?_, fun h => ?_⟩
+  · have hi31 : i.val < 2 ^ 5 := hi ▸ Scalar.bytes_31_lt (s := ⟨bytes⟩) (h.trans L_lt)
+    have hi10 : i1 = 0#u8 := by
       apply UScalar.eq_of_val_eq
-      rw [i1_post, Nat.shiftRight_eq_div_pow]
+      rw [hi1, Nat.shiftRight_eq_div_pow]
       simp only [UScalar.ofNatCore_val_eq]
       omega
-    rw [c1_post1, high_bit_unset_post1, ite_eq_left hi1, c_post1 h]
+    rw [hc1eq, hbeq, ite_eq_left hi10, hc1 h]
     rfl
-  · rw [c1_post1, c_post2 h]
-    rcases high_bit_unset_post with hb | hb <;> rw [hb] <;> rfl
+  · rw [hc1eq, hc0 h, hbv.and_zero]
 
 end Curve25519Dalek.scalar.Scalar

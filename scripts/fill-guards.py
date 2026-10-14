@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Fill the axiom guards of an audit file from Lean's `#print axioms` output.
+"""Fill the axiom guards of a spec summary from Lean's `#print axioms` output.
 
 Usage (from the repository root):
-  scripts/fill-guards.py --strip <audit.lean>   # turn every guard into a bare `#print axioms X`
-  lake env lean <audit.lean> > out.txt          # print every statement's axioms
-  scripts/fill-guards.py <audit.lean> out.txt   # write the guards back
+  scripts/fill-guards.py --strip <spec.lean>   # turn every guard into a bare `#print axioms X`
+  lake env lean <spec.lean> > out.txt          # print every statement's axioms
+  scripts/fill-guards.py <spec.lean> out.txt   # write the guards back
 
 Guards have the form
   /-- [ax₁, ax₂, …] -/

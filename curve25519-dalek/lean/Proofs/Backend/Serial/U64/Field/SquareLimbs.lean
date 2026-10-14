@@ -3,9 +3,10 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.FieldElement51
-public import Proofs.Helpers.FieldMul
+import Proofs.Helpers.FieldMul
 import Proofs.Helpers.Limbs
 public section
 

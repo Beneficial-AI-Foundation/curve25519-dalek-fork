@@ -1,10 +1,10 @@
 module
 public import Defs.Array
 public import Defs.FieldElement51
-public import Defs.Scalar52
 public import Defs.Iterator
-public import Defs.Target
 public import Defs.Scalar
+public import Defs.Scalar52
+public import Defs.Target
 
 /-! # Definitions for the specs of curve25519-dalek
 

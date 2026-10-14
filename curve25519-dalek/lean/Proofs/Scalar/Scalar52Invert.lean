@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Markus Dablander, Hoang Le Truong, Oliver Butterley
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar52
 import Curve25519.Prime
@@ -11,10 +12,9 @@ import Mathlib.Algebra.Field.ZMod
 import Mathlib.Tactic.LinearCombination
 import Proofs.Backend.Serial.U64.Scalar.AsMontgomery
 import Proofs.Backend.Serial.U64.Scalar.FromMontgomery
-import Proofs.Helpers.ZMod
 import Proofs.Helpers.Scalar
-import Proofs.Scalar.MontgomeryInvert
-public import Curve25519.Basic
+import Proofs.Helpers.ZMod
+import Proofs.Scalar.Scalar52MontgomeryInvert
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

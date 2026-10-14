@@ -23,10 +23,11 @@ public section
 
 /-! # Specs of `src/field.rs`
 
-Audit file: every Rust item of `field.rs` (for the u64 backend, `FieldElement = FieldElement51`)
-with its spec statement, proved by the theorem of the same name (without the prime) in `Field/`,
-and the axioms that proof depends on. Items appear in the order of `field.rs`.
-Definitions used: `FieldElement51.asNat` (`Specs/Backend/Serial/U64/Defs.lean`), `p`, `sqrtM1`
+Spec summary: every Rust item of `field.rs` (for the u64 backend,
+`FieldElement = FieldElement51`) with its spec statement, proved by the theorem of the same name
+(without the prime) in `Proofs/Field/`, and the axioms that proof depends on. Items appear in the
+order of `field.rs`.
+Definitions used: `FieldElement51.asNat` (`Defs/FieldElement51.lean`), `p`, `sqrtM1`
 (`Curve25519/Basic.lean`).
 Not translated (`digest` feature off): `from_bytes_wide`, `hash_to_field`. -/
 

@@ -3,12 +3,12 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Iterator
 public import Defs.Scalar
 public import Defs.Target
-public import Curve25519.Basic
-import Proofs.Scalar.Add
+import Proofs.Scalar.AddOwned
 import Proofs.Scalar.Zero
 public section
 
@@ -19,18 +19,16 @@ namespace Curve25519Dalek.scalar.Scalar.Insts.CoreIterTraitsAccumSum
 
 /-- The loop of `sum` adds the remaining items to the accumulator, modulo `L`. -/
 private theorem sum_loop_spec {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
-    (iterInst : core.iter.traits.iterator.Iterator I T) (htgt : OnX86_64) (iter : I) (xs : List T)
+    (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (hiter : iterInst.Yields iter xs) (ss : List Scalar)
     (hborrow : List.Forall₂ (fun x s => borrowInst.borrow x ⦃ (s' : Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < L) (acc : Scalar) (hacc : acc.asNat < L) :
+    (hss : ∀ s ∈ ss, s.asNat < L) (acc : Scalar) (hacc : acc.asNat < L) (htgt : OnX86_64) :
     sum_loop borrowInst iterInst iter acc ⦃ (r : Scalar) =>
       r.asNat = (acc.asNat + (ss.map (·.asNat)).sum) % L ⦄ := by
   induction hiter generalizing acc ss with
   | nil hnext =>
     cases hborrow
-    unfold sum_loop
-    unfold loop
-    unfold sum_loop.body
+    unfold sum_loop loop sum_loop.body
     step with hnext as ⟨p, hp⟩
     obtain ⟨o, it1⟩ := p
     simp only at hp
@@ -38,9 +36,7 @@ private theorem sum_loop_spec {T I : Type} (borrowInst : core.borrow.Borrow T Sc
     simp [Nat.mod_eq_of_lt hacc]
   | cons hnext _ ih =>
     obtain _ | ⟨hb, hrest⟩ := hborrow
-    unfold sum_loop
-    unfold loop
-    unfold sum_loop.body
+    unfold sum_loop loop sum_loop.body
     step with hnext as ⟨p, ho, hit⟩
     obtain ⟨o, it1⟩ := p
     simp only at ho hit
@@ -49,10 +45,8 @@ private theorem sum_loop_spec {T I : Type} (borrowInst : core.borrow.Borrow T Sc
     subst hs
     step with Scalar.Insts.CoreOpsArithAddSharedBScalarScalar.add_spec acc s hacc
       (hss s List.mem_cons_self) htgt as ⟨acc1, hacc1⟩
-    have := ih _ hrest (fun t ht => hss t (List.mem_cons_of_mem _ ht)) acc1
-      (hacc1 ▸ Nat.mod_lt _ L_pos)
-    unfold sum_loop sum_loop.body at this
-    apply WP.spec_mono this
+    apply WP.spec_mono (ih _ hrest (fun t ht => hss t (List.mem_cons_of_mem _ ht)) acc1
+      (hacc1 ▸ Nat.mod_lt _ L_pos))
     intro r hr
     rw [hr, hacc1, List.map_cons, List.sum_cons, Nat.mod_add_mod, Nat.add_assoc]
 
@@ -66,8 +60,8 @@ theorem sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
       r.asNat = (ss.map (·.asNat)).sum % L ⦄ := by
   unfold sum
   have hzero := ZERO_spec
-  have := sum_loop_spec borrowInst iterInst htgt iter xs hiter ss hborrow hss ZERO
-    (by rw [hzero]; exact L_pos)
+  have := sum_loop_spec borrowInst iterInst iter xs hiter ss hborrow hss ZERO
+    (by rw [hzero]; exact L_pos) htgt
   apply WP.spec_mono this
   intro r hr
   rw [hr, hzero, Nat.zero_add]

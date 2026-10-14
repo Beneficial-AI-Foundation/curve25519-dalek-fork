@@ -459,12 +459,6 @@ private theorem radix_tail_spec (w : Usize) (X : ℕ) (hX255 : X < 2 ^ 255)
   · rw [hrj]
     exact hzero j (Nat.le_of_not_lt ((hlt j).not.mpr (Nat.not_lt.mpr h.le))) hj
 
-/-- The top byte of a number below `2 ^ 255` is at most `127`. -/
-private theorem top_byte_le {S b : ℕ} (h : S + 2 ^ (8 * 31) * b < 2 ^ 255) : b ≤ 127 := by
-  have h' : 2 ^ (8 * 31) * b < 2 ^ (8 * 31) * 128 :=
-    lt_of_le_of_lt (Nat.le_add_left _ _) (h.trans_eq (by norm_num))
-  exact Nat.le_of_lt_succ (Nat.lt_of_mul_lt_mul_left h')
-
 /-- A digit of width `4` below bit `256` is below digit `63`. -/
 private theorem radix16_lt_63 {i : ℕ} (h : (i + 1) * 4 < 256) : i < 63 := by
   omega
@@ -502,14 +496,7 @@ theorem as_radix_2w_spec (self : Scalar) (w : Usize) (hw : 4 ≤ w.val ∧ w.val
   step
   split_ifs with hw4
   · have hw4v : w.val = 4 := by rw [hw4]; rfl
-    have hb31 : self.bytes[31]!.val ≤ 127 := by
-      have hsplit : self.asNat = ∑ j ∈ Finset.range 31, 2 ^ (8 * j) * self.bytes[j]!.val
-          + 2 ^ (8 * 31) * self.bytes[31]!.val := by
-        rw [Scalar.asNat, Array.asNat_eq_sum, show (32#usize).val = 31 + 1 from rfl,
-          Finset.sum_range_succ]
-      rw [hsplit] at hself
-      exact top_byte_le hself
-    step with as_radix_16_spec self hb31 as ⟨r, hval, hlow, h63l, h63u⟩
+    step with as_radix_16_spec self hself as ⟨r, hval, hlow, h63l, h63u⟩
     rw [hw4v]
     refine ⟨hval, fun i hi h => ?_, fun i hi => ?_, fun i hi h => ?_⟩
     · exact radix16_bounds (hlow i (radix16_lt_63 h))

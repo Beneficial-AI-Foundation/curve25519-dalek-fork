@@ -4,15 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Oliver Butterley, Markus Dablander, Hoang Le Truong
 -/
 module
-public import Curve25519Dalek.Funs
-public import Defs.Target
-public import Defs.Scalar
 public import Curve25519.Basic
+public import Curve25519Dalek.Funs
+public import Defs.Scalar
+public import Defs.Target
 import Proofs.Backend.Serial.U64.Constants.R
-import Proofs.Helpers.Scalar52
 import Proofs.Backend.Serial.U64.Scalar.MontgomeryReduce
 import Proofs.Backend.Serial.U64.Scalar.MulInternal
 import Proofs.Helpers.Scalar
+import Proofs.Helpers.Scalar52
+import Proofs.Helpers.Target
 import Proofs.Scalar.Scalar52Pack
 import Proofs.Scalar.Unpack
 public section
@@ -63,8 +64,7 @@ theorem reduce_spec (self : Scalar) (htgt : OnX86_64) :
     reduce self ⦃ (r : Scalar) =>
       r.asNat = self.asNat % L ⦄ := by
   unfold reduce
-  unfold OnX86_64 at htgt
-  step with htgt as ⟨t, ht⟩
-  rcases ht with rfl | rfl <;> step*
+  exact dispatch_spec htgt (reduce.«x86_64-tables_spec» self)
+    (reduce.«x86_64-no-tables_spec» self)
 
 end Curve25519Dalek.scalar.Scalar

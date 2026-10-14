@@ -37,5 +37,22 @@ jobs:
           # Strict: warnings are errors.
           build-args: --wfail
 
-      - name: Lint hand-written libraries
-        run: lake exe runLinter Subtle Zeroize Curve25519 Defs Specs Proofs
+      # One step per library: `runLinter` stops at the first failing module.
+      - name: Lint Subtle
+        if: ${{ !cancelled() }}
+        run: lake exe runLinter Subtle
+      - name: Lint Zeroize
+        if: ${{ !cancelled() }}
+        run: lake exe runLinter Zeroize
+      - name: Lint Curve25519
+        if: ${{ !cancelled() }}
+        run: lake exe runLinter Curve25519
+      - name: Lint Defs
+        if: ${{ !cancelled() }}
+        run: lake exe runLinter Defs
+      - name: Lint Specs
+        if: ${{ !cancelled() }}
+        run: lake exe runLinter Specs
+      - name: Lint Proofs
+        if: ${{ !cancelled() }}
+        run: lake exe runLinter Proofs

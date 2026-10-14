@@ -5,10 +5,10 @@ Authors: Oliver Butterley, Markus Dablander
 -/
 module
 public import Curve25519Dalek.Funs
-public import Defs.Scalar52
 public import Defs.Scalar
-import Proofs.Backend.Serial.U64.Scalar.ToBytes
+public import Defs.Scalar52
 import Curve25519.Basic
+import Proofs.Backend.Serial.U64.Scalar.ToBytes
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

@@ -13,7 +13,7 @@ revert() {
     # Undo the applied patches in reverse order (patch contexts may overlap).
     local i
     for (( i = ${#applied[@]} - 1; i >= 0; i-- )); do
-        git apply -R "${applied[i]}"
+        git apply -R "${applied[i]}" || echo "failed to revert ${applied[i]}" >&2
     done
 }
 applied=()
@@ -26,7 +26,7 @@ done
 
 mkdir -p .llbc
 # Four configurations, merged by charon's multi-target translation:
-# {64-bit, 32-bit} x {with precomputed-tables, without precomputed-tables} 
+# {64-bit, 32-bit} x {with precomputed-tables, without precomputed-tables}
 unset RUSTFLAGS CARGO_ENCODED_RUSTFLAGS
 rustc="$(.aeneas/charon toolchain-path)/bin/rustc"
 serial='--cfg curve25519_dalek_backend="serial"'

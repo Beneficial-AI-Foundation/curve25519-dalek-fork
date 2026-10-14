@@ -12,7 +12,7 @@ public import Curve25519.Basic
 import Proofs.Helpers.Montgomery
 public section
 
-/-! # Lemmas shared by the proofs of `scalar.rs`
+/-! # Lemmas shared by the proofs of `backend/serial/u64/scalar.rs`
 
 Five 52-bit limbs stay below the Montgomery radix `R = montgomeryRadix` (`Scalar52.asNat_lt`).
 Modulo `L`, `R` can be cancelled (`mod_L_of_mul_montgomeryRadix`), and a Montgomery product with

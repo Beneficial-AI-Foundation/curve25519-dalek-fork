@@ -59,6 +59,10 @@ theorem IsValid.or {a b : subtle.Choice} (ha : a.IsValid) (hb : b.IsValid) :
     subtle.Choice.IsValid (a ||| b) := by
   rcases ha with rfl | rfl <;> rcases hb with rfl | rfl <;> decide
 
+/-- `0` absorbs a valid `Choice` under `&&&`. -/
+theorem IsValid.and_zero {a : subtle.Choice} (ha : a.IsValid) : a &&& 0#u8 = 0#u8 := by
+  rcases ha with rfl | rfl <;> decide
+
 /-- The output of `Not` is valid for every input. -/
 theorem isValid_not (a : subtle.Choice) : subtle.Choice.IsValid (1#u8 &&& ~~~a) := by
   rw [isValid_iff, UScalar.val_and]

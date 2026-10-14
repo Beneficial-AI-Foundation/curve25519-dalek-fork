@@ -4,13 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Hoang Le Truong
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar
-import Proofs.Helpers.Bytes
-public import Curve25519.Basic
 public import Defs.Scalar52
-import Subtle
 import Mathlib.Tactic.ReduceModChar
+import Proofs.Helpers.Bytes
+import Subtle
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

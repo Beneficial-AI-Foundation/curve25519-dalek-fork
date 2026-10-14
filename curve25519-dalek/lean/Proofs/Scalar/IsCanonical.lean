@@ -3,10 +3,10 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar
 public import Defs.Target
-public import Curve25519.Basic
 public import Subtle
 import Proofs.Helpers.AsNat
 import Proofs.Scalar.CtEq
@@ -14,7 +14,7 @@ import Proofs.Scalar.Reduce
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
-open Curve25519Dalek.scalar (Scalar HalfWidthScalar)
+open Curve25519Dalek.scalar (Scalar)
 
 namespace Curve25519Dalek.scalar.Scalar
 
@@ -29,7 +29,7 @@ theorem is_canonical_spec (self : Scalar) (htgt : OnX86_64) :
   · rw [Nat.mod_eq_of_lt h] at hs
     have := Array.eq_of_asNat_eq (a := self.bytes) (b := s.bytes) (by
       unfold Scalar.asNat at hs; exact hs.symm)
-    cases self; cases s; simp_all
+    exact congrArg Scalar.mk this
   · rintro rfl
     have := Nat.mod_lt self.asNat L_pos
     omega

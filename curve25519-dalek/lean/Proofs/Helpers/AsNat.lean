@@ -199,6 +199,18 @@ theorem asNat_div_pow_mod {ty : UScalarTy} {n : Usize} (bits : ℕ) (a : Array (
       Option.getD_none, UScalar.default_val]
     rfl
 
+/-- The last digit of an array whose digits are below `2 ^ bits` is its value divided by
+`2 ^ (bits * (n - 1))`. -/
+theorem getElem!_last_eq_asNat_div {ty : UScalarTy} {n : Usize} (bits : ℕ)
+    (a : Array (UScalar ty) n) (ha : ∀ i < n.val, a[i]!.val < 2 ^ bits) (hn : 0 < n.val) :
+    a[n.val - 1]!.val = a.asNat bits / 2 ^ (bits * (n.val - 1)) := by
+  have hpow : bits * (n.val - 1) + bits = bits * n.val := by
+    rw [← Nat.mul_succ, Nat.succ_eq_add_one, Nat.sub_add_cancel hn]
+  rw [← asNat_div_pow_mod bits a ha (n.val - 1), Nat.mod_eq_of_lt]
+  apply Nat.div_lt_of_lt_mul
+  rw [← Nat.pow_add, hpow]
+  exact asNat_lt bits a ha
+
 /-- An array of `n`-bit scalars is determined by its value in radix `2 ^ n`. -/
 theorem eq_of_asNat_eq {ty : UScalarTy} {n : Usize} {a b : Array (UScalar ty) n}
     (h : a.asNat ty.numBits = b.asNat ty.numBits) : a = b := by

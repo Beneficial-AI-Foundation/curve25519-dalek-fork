@@ -3,7 +3,6 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import Zeroize.Instances
 public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.FieldElement51
@@ -30,15 +29,16 @@ import Proofs.Backend.Serial.U64.Field.Sub
 import Proofs.Backend.Serial.U64.Field.SubAssign
 import Proofs.Backend.Serial.U64.Field.ToBytes
 import Proofs.Backend.Serial.U64.Field.Zero
+import Zeroize.Instances
 public section
 
 /-! # Specs of `src/backend/serial/u64/field.rs`
 
-Audit file: every Rust item of `field.rs` with its spec statement, proved by the theorem of the same
-name (without the prime) in `Field/`, and the axioms that proof depends on. Items appear in the
-order of `field.rs`.
-Definitions used: `FieldElement51.asNat` (`Specs/Backend/Serial/U64/Defs.lean`),
-`Array.asNat` (`Specs/Defs.lean`; radix `2^8` for bytes), `p` (`Curve25519/Basic.lean`). -/
+Spec summary: every Rust item of `field.rs` with its spec statement, proved by the theorem of the
+same name (without the prime) in `Proofs/Backend/Serial/U64/Field/`, and the axioms that proof
+depends on. Items appear in the order of `field.rs`.
+Definitions used: `FieldElement51.asNat` (`Defs/FieldElement51.lean`), `Array.asNat`
+(`Defs/Array.lean`; radix `2^8` for bytes), `p` (`Curve25519/Basic.lean`). -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)

@@ -24,10 +24,11 @@ public section
 
 /-! # Specs of `src/backend/serial/u64/constants.rs`
 
-Audit file: every constant of `constants.rs` with its spec statement, proved by the theorem of the
-same name (without the prime) in `Constants/`, and the axioms that proof depends on.
-Definitions used: `FieldElement51.asNat`, `Scalar52.asNat` (`Specs/Backend/Serial/U64/Defs.lean`),
-`montgomeryRadix` (same file), `p`, `a`, `d`, `A`, `sqrtM1`, `curve25519.L`
+Spec summary: every constant of `constants.rs` with its spec statement, proved by the theorem of
+the same name (without the prime) in `Proofs/Backend/Serial/U64/Constants/`, and the axioms that
+proof depends on.
+Definitions used: `FieldElement51.asNat` (`Defs/FieldElement51.lean`), `Scalar52.asNat`,
+`montgomeryRadix` (`Defs/Scalar52.lean`), `p`, `a`, `d`, `A`, `sqrtM1`, `curve25519.L`
 (`Curve25519/Basic.lean`).
 
 Not yet specified (they need the curve model): `ED25519_BASEPOINT_POINT`,

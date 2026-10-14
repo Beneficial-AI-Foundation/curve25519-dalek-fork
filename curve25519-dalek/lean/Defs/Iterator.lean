@@ -3,15 +3,18 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Aeneas
-@[expose] public section
+public import Aeneas.Std.Core.Iter
+public import Aeneas.Std.WP
+public section
 
 /-! # Finite iterators (audited)
 
 Specs of functions that consume a generic iterator (`Product`, `Sum`) assume that it yields a
-given list of items and then stops. -/
+given list of items and then stops. `Yields` lives in the namespace of Aeneas's `Iterator`, so that
+it can be written `iterInst.Yields`. `Proofs/Helpers/Iterator.lean` shows that it holds for a
+concrete iterator. -/
 
-open Aeneas Aeneas.Std Result Aeneas.Std.WP
+open Aeneas Aeneas.Std Aeneas.Std.WP
 
 /-- Calling `next` repeatedly, starting from `it`, returns the items `xs` in order, then `none`. -/
 inductive Aeneas.Std.core.iter.traits.iterator.Iterator.Yields {I T : Type}

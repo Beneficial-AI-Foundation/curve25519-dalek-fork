@@ -3,7 +3,6 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-import Zeroize.Instances
 public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar52
@@ -27,17 +26,18 @@ import Proofs.Backend.Serial.U64.Scalar.SquareInternal
 import Proofs.Backend.Serial.U64.Scalar.Sub
 import Proofs.Backend.Serial.U64.Scalar.ToBytes
 import Proofs.Backend.Serial.U64.Scalar.Zero
+import Zeroize.Instances
 public section
 
 /-! # Specs of `src/backend/serial/u64/scalar.rs`
 
-Audit file: every Rust item of `scalar.rs` with its spec statement, proved by the theorem of the
-same name (without the prime) in `Scalar/`, and the axioms that proof depends on. Items appear in
-the order of `scalar.rs`.
-Definitions used: `Scalar52.asNat` (`Specs/Backend/Serial/U64/Defs.lean`), `Array.asNat`
-(`Specs/Defs.lean`; radix `2^8` for bytes, `2^52` for the nine-limb products), `L`
+Spec summary: every Rust item of `scalar.rs` with its spec statement, proved by the theorem of the
+same name (without the prime) in `Proofs/Backend/Serial/U64/Scalar/`, and the axioms that proof
+depends on. Items appear in the order of `scalar.rs`.
+Definitions used: `Scalar52.asNat`, `montgomeryRadix` (`Defs/Scalar52.lean`), `Array.asNat`
+(`Defs/Array.lean`; radix `2^8` for bytes, `2^52` for the nine-limb products), `L`
 (`Curve25519/Basic.lean`), and the constants `L`, `LFACTOR` of `constants.rs` (specified in
-`Constants.lean`). The Montgomery radix is written `montgomeryRadix`. -/
+`Specs/Backend/Serial/U64/Constants.lean`). -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
 open Curve25519Dalek.backend.serial.u64.scalar (Scalar52)

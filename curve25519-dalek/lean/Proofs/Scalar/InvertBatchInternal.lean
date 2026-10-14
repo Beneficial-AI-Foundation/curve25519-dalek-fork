@@ -4,28 +4,28 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Hoang Le Truong
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar
-public import Curve25519.Basic
 import Curve25519.Prime
 import Mathlib.Algebra.Field.ZMod
 import Mathlib.Tactic.LinearCombination
 import Proofs.Backend.Serial.U64.Scalar.AsMontgomery
 import Proofs.Backend.Serial.U64.Scalar.FromMontgomery
-import Proofs.Helpers.Scalar52
 import Proofs.Backend.Serial.U64.Scalar.MontgomeryMul
 import Proofs.Helpers.Array
+import Proofs.Helpers.Montgomery
+import Proofs.Helpers.Scalar
+import Proofs.Helpers.Scalar52
 import Proofs.Helpers.ZMod
 import Proofs.Scalar.Eq
-import Proofs.Helpers.Scalar
-import Proofs.Scalar.MontgomeryInvert
 import Proofs.Scalar.One
+import Proofs.Scalar.Scalar52MontgomeryInvert
 import Proofs.Scalar.Scalar52Pack
 import Proofs.Scalar.Unpack
 import Proofs.Scalar.Zero
 import Zeroize.Instances
 import Zeroize.Lemmas
-import Proofs.Helpers.Montgomery
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

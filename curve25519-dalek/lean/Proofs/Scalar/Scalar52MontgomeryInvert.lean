@@ -4,16 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Markus Dablander, Alessandro D'Angelo
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar52
 import Curve25519.Prime
 import Mathlib.FieldTheory.Finite.Basic
 import Proofs.Backend.Serial.U64.Scalar.MontgomeryMul
 import Proofs.Backend.Serial.U64.Scalar.MontgomerySquare
-import Proofs.Helpers.ZMod
-import Proofs.Helpers.Scalar
-public import Curve25519.Basic
 import Proofs.Helpers.Montgomery
+import Proofs.Helpers.Scalar
+import Proofs.Helpers.ZMod
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

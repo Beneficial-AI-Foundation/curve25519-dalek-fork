@@ -3,13 +3,13 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar
-public import Zeroize.Instances
-public import Curve25519.Basic
 public import Defs.Scalar52
-import Subtle
+public import Zeroize.Instances
 import Mathlib.Tactic.ReduceModChar
+import Subtle
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
@@ -21,9 +21,8 @@ namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.ZeroizeZeroize
 @[step]
 theorem zeroize_spec (self : HalfWidthScalar) :
     zeroize self ⦃ (r : HalfWidthScalar) =>
-      r.asNat = 0 ⦄ := by
+      r = { bytes := Array.repeat 32#usize 0#u8 } ⦄ := by
   unfold zeroize
   step*
-  simp [HalfWidthScalar.asNat, Scalar.asNat, Array.asNat, Nat.ofDigits, *]
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.ZeroizeZeroize

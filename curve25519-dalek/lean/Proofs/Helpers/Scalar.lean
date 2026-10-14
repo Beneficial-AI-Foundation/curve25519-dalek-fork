@@ -10,7 +10,7 @@ public import Curve25519.Basic
 import Proofs.Helpers.Montgomery
 public section
 
-/-! # Lemmas shared by the proofs of `scalar.rs`
+/-! # Lemmas shared by the proofs of `src/scalar.rs`
 
 A `Scalar` is below `2 ^ 256` (`Scalar.asNat_lt`), so the product of two of them stays below
 `R * L` (`mul_lt_montgomeryRadix_mul_L`), as the Montgomery reduction requires; values below `L`
@@ -28,11 +28,14 @@ theorem Scalar.asNat_lt (s : Scalar) : s.asNat < 2 ^ 256 :=
   Array.asNat_lt 8 s.bytes fun i _ => s.bytes[i]!.hBounds
 
 /-- Byte 31 of a `Scalar` is its value divided by `2 ^ 248`. -/
-theorem Scalar.bytes_31_val (s : Scalar) : s.bytes[31]!.val = s.asNat / 2 ^ 248 := by
-  have h := Array.asNat_div_pow_mod 8 s.bytes (fun i _ => s.bytes[i]!.hBounds) 31
-  have hlt := s.asNat_lt
-  unfold Scalar.asNat at hlt ⊢
-  rw [← h, Nat.mod_eq_of_lt (by omega)]
+theorem Scalar.bytes_31_val (s : Scalar) : s.bytes[31]!.val = s.asNat / 2 ^ 248 :=
+  Array.getElem!_last_eq_asNat_div 8 s.bytes (fun i _ => s.bytes[i]!.hBounds) (by decide)
+
+/-- A `Scalar` below `2 ^ (248 + k)` has byte 31 below `2 ^ k`. -/
+theorem Scalar.bytes_31_lt {s : Scalar} {k : ℕ} (h : s.asNat < 2 ^ (248 + k)) :
+    s.bytes[31]!.val < 2 ^ k := by
+  rw [Scalar.bytes_31_val]
+  exact Nat.div_lt_of_lt_mul (by rwa [← Nat.pow_add])
 
 /-- Numbers below `L` are below `2 ^ 256`, as `pack` requires. -/
 theorem lt_two_pow_256_of_lt_L {x : ℕ} (h : x < L) : x < 2 ^ 256 :=
