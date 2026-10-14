@@ -26,7 +26,7 @@ public import Specs.Backend.Serial.U64.Field.Neg
 public import Specs.Backend.Serial.U64.Field.ConditionalSelect
 public import Specs.Backend.Serial.U64.Field.ConditionalAssign
 public import Specs.Backend.Serial.U64.Field.ConditionalSwap
-public import Zeroize
+import Zeroize.Instances
 public section
 
 /-! # Specs of `src/backend/serial/u64/field.rs`

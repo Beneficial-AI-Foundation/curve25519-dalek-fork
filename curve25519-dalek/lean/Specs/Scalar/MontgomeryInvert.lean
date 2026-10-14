@@ -4,17 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Markus Dablander, Alessandro D'Angelo
 -/
 module
-public import Curve25519
 public import Curve25519Dalek.Funs
-public import Specs.Defs
 public import Specs.Backend.Serial.U64.Defs
-public import Subtle
-public import Specs.Backend.Serial.U64.Scalar.MontgomeryMul
-public import Specs.Backend.Serial.U64.Scalar.MontgomerySquare
-public import Specs.Scalar.Lemmas
-public import Specs.Lemmas.ZMod
-public import Mathlib.FieldTheory.Finite.Basic
-public import Mathlib.Tactic.LinearCombination
+import Curve25519.Prime
+import Mathlib.FieldTheory.Finite.Basic
+import Specs.Backend.Serial.U64.Scalar.MontgomeryMul
+import Specs.Backend.Serial.U64.Scalar.MontgomerySquare
+import Specs.Lemmas.ZMod
+import Specs.Scalar.Lemmas
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

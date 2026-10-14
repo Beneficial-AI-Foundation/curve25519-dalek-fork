@@ -4,20 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Markus Dablander, Hoang Le Truong, Alessandro D'Angelo
 -/
 module
-public import Curve25519
 public import Curve25519Dalek.Funs
 public import Specs.Backend.Serial.U64.Defs
-public import Subtle
-public import Specs.Field.PowP58
-public import Specs.Field.CtEq
-public import Specs.Field.IsNegative
-public import Specs.Backend.Serial.U64.Field.Square
-public import Specs.Backend.Serial.U64.Field.Mul
-public import Specs.Backend.Serial.U64.Field.Neg
-public import Specs.Backend.Serial.U64.Field.ConditionalAssign
-public import Specs.Backend.Serial.U64.Constants.SqrtM1
-public import Specs.Lemmas.ZMod
-public import Mathlib.FieldTheory.Finite.Basic
+import Curve25519.Prime
+import Mathlib.FieldTheory.Finite.Basic
+import Mathlib.Tactic.ReduceModChar
+import Specs.Backend.Serial.U64.Constants.SqrtM1
+import Specs.Backend.Serial.U64.Field.ConditionalAssign
+import Specs.Backend.Serial.U64.Field.Mul
+import Specs.Backend.Serial.U64.Field.Neg
+import Specs.Backend.Serial.U64.Field.Square
+import Specs.Field.CtEq
+import Specs.Field.IsNegative
+import Specs.Field.PowP58
+import Specs.Lemmas.ZMod
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

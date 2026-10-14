@@ -4,9 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Specs.Defs
-public import Mathlib.Algebra.BigOperators.Ring.Finset
-public import Mathlib.Data.Nat.Digits.Lemmas
-public import Mathlib.Tactic.Ring
 public section
 
 /-! # Lemmas about `Array.asNat`

@@ -4,16 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Markus Dablander, Hoang Le Truong, Oliver Butterley
 -/
 module
-public import Curve25519
 public import Curve25519Dalek.Funs
-public import Specs.Defs
 public import Specs.Backend.Serial.U64.Defs
-public import Subtle
-public import Specs.Backend.Serial.U64.Scalar.AsMontgomery
-public import Specs.Backend.Serial.U64.Scalar.FromMontgomery
-public import Specs.Scalar.MontgomeryInvert
-public import Specs.Scalar.Lemmas
-public import Specs.Lemmas.ZMod
+import Curve25519.Prime
+import Mathlib.Algebra.Field.ZMod
+import Mathlib.Tactic.LinearCombination
+import Specs.Backend.Serial.U64.Scalar.AsMontgomery
+import Specs.Backend.Serial.U64.Scalar.FromMontgomery
+import Specs.Lemmas.ZMod
+import Specs.Scalar.Lemmas
+import Specs.Scalar.MontgomeryInvert
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

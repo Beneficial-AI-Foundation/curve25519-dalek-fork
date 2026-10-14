@@ -4,22 +4,18 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Markus Dablander, Alessandro D'Angelo
 -/
 module
-public import Curve25519
 public import Curve25519Dalek.Funs
 public import Specs.Backend.Serial.U64.Defs
-public import Subtle
-public import Specs.Backend.Serial.U64.Scalar.Zero
-public import Specs.Backend.Serial.U64.Scalar.IndexMut
-public import Specs.Backend.Serial.U64.Scalar.MontgomeryMul
-public import Specs.Backend.Serial.U64.Scalar.Add
-public import Specs.Backend.Serial.U64.Constants.R
-public import Specs.Backend.Serial.U64.Constants.RR
-public import Specs.Lemmas.AsNat
-public import Specs.Backend.Serial.U64.Scalar.Lemmas
-public import Specs.Lemmas.StepSpecs
-public import Specs.Lemmas.Bitwise
-public import Specs.Lemmas.Bytes
-public import Mathlib.Tactic.LinearCombination
+import Mathlib.Tactic.LinearCombination
+import Specs.Backend.Serial.U64.Constants.R
+import Specs.Backend.Serial.U64.Constants.RR
+import Specs.Backend.Serial.U64.Scalar.Add
+import Specs.Backend.Serial.U64.Scalar.IndexMut
+import Specs.Backend.Serial.U64.Scalar.Lemmas
+import Specs.Backend.Serial.U64.Scalar.MontgomeryMul
+import Specs.Lemmas.AsNat
+import Specs.Lemmas.Bytes
+import Specs.Lemmas.StepSpecs
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

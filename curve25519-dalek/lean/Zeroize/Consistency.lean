@@ -3,7 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Zeroize.Basic
+public import Curve25519Dalek.Types
 @[expose] public section
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek

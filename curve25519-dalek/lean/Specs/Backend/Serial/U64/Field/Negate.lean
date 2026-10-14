@@ -4,13 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Markus Dablander, Alok Singh
 -/
 module
-public import Curve25519
 public import Curve25519Dalek.Funs
 public import Specs.Backend.Serial.U64.Defs
-public import Subtle
-public import Specs.Backend.Serial.U64.Field.Reduce
-public import Specs.Backend.Serial.U64.Field.SixteenP
-public import Specs.Lemmas.AsNat
+import Specs.Backend.Serial.U64.Field.Reduce
+import Specs.Backend.Serial.U64.Field.SixteenP
+import Specs.Lemmas.AsNat
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

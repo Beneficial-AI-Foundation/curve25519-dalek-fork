@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Oliver Butterley, Markus Dablander
 -/
 module
-public import Curve25519
 public import Curve25519Dalek.Funs
+public import Curve25519
 public import Specs.Defs
 public import Specs.Backend.Serial.U64.Defs
 public import Subtle

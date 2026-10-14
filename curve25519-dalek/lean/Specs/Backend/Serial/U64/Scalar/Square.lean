@@ -4,15 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Hoang Le Truong
 -/
 module
-public import Curve25519
 public import Curve25519Dalek.Funs
 public import Specs.Backend.Serial.U64.Defs
-public import Subtle
-public import Specs.Backend.Serial.U64.Scalar.SquareInternal
-public import Specs.Backend.Serial.U64.Scalar.MulInternal
-public import Specs.Backend.Serial.U64.Scalar.MontgomeryReduce
-public import Specs.Backend.Serial.U64.Constants.RR
-public import Specs.Backend.Serial.U64.Scalar.Lemmas
+import Specs.Backend.Serial.U64.Constants.RR
+import Specs.Backend.Serial.U64.Scalar.Lemmas
+import Specs.Backend.Serial.U64.Scalar.MontgomeryReduce
+import Specs.Backend.Serial.U64.Scalar.MulInternal
+import Specs.Backend.Serial.U64.Scalar.SquareInternal
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

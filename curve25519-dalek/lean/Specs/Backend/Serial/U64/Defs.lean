@@ -4,9 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Alessandro D'Angelo, Oliver Butterley
 -/
 module
-public import Curve25519Dalek.Types
 public import Specs.Defs
-public import Curve25519
+public import Curve25519.Basic
 @[expose] public section
 
 /-! # Spec definitions for the u64 backend (audited) -/

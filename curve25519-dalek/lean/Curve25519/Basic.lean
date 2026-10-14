@@ -5,7 +5,7 @@ Authors: Alessandro D'Angelo, Oliver Butterley
 -/
 module
 public import Mathlib.Data.ZMod.Basic
-public import Mathlib.Tactic.ReduceModChar
+import Mathlib.Tactic.ReduceModChar
 @[expose] public section
 
 /-! # Curve25519 parameters

@@ -3,9 +3,8 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Specs.Defs
 public import Specs.Backend.Serial.U64.Defs
-public import Specs.Lemmas.AsNat
+import Specs.Lemmas.AsNat
 public section
 
 /-! # Lemmas shared by the proofs of `scalar.rs`

@@ -4,13 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Oliver Butterley, Hoang Le Truong
 -/
 module
-public import Curve25519
 public import Curve25519Dalek.Funs
 public import Specs.Backend.Serial.U64.Defs
 public import Specs.Backend.Serial.U64.Lemmas
+public import Specs.Lemmas.AsNat
+public import Curve25519
 public import Subtle
 public import Specs.Lemmas.StepSpecs
-public import Specs.Lemmas.AsNat
+import Mathlib.Tactic.ReduceModChar
+import Specs.Lemmas.Array
+import Specs.Lemmas.Bitwise
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

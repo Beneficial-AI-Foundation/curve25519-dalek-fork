@@ -4,11 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Specs.Backend.Serial.U64.Defs
-public import Specs.Backend.Serial.U64.Lemmas
-public import Specs.Lemmas.AsNat
-public import Specs.Lemmas.Array
-public import Specs.Lemmas.Bitwise
-public import Mathlib.Data.Nat.ModEq
+import Specs.Backend.Serial.U64.Lemmas
+import Specs.Lemmas.Array
+import Specs.Lemmas.AsNat
+import Specs.Lemmas.Bitwise
 public section
 
 /-! # Lemmas shared by the proofs of `scalar.rs`

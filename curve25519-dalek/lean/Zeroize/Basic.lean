@@ -5,7 +5,6 @@ Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo,
   Hoang Le Truong, Markus Ferdinand Dablander
 -/
 module
-public import Aeneas
 public import Curve25519Dalek.Types
 @[expose] public section
 -- The style linter misreads `@[rust_fun "..."]` attributes.

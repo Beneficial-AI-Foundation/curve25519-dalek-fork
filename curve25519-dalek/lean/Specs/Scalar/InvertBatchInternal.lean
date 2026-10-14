@@ -4,25 +4,27 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Hoang Le Truong
 -/
 module
-public import Curve25519
 public import Curve25519Dalek.Funs
 public import Specs.Defs
-public import Specs.Backend.Serial.U64.Defs
-public import Subtle
-public import Zeroize
-public import Specs.Backend.Serial.U64.Scalar.AsMontgomery
-public import Specs.Backend.Serial.U64.Scalar.FromMontgomery
-public import Specs.Backend.Serial.U64.Scalar.MontgomeryMul
-public import Specs.Scalar.Unpack
-public import Specs.Scalar.Scalar52Pack
-public import Specs.Scalar.MontgomeryInvert
-public import Specs.Scalar.One
-public import Specs.Scalar.Zero
-public import Specs.Scalar.Eq
-public import Specs.Scalar.Lemmas
-public import Specs.Backend.Serial.U64.Scalar.Lemmas
-public import Specs.Lemmas.ZMod
-public import Specs.Lemmas.Array
+public import Curve25519.Basic
+import Curve25519.Prime
+import Mathlib.Algebra.Field.ZMod
+import Mathlib.Tactic.LinearCombination
+import Specs.Backend.Serial.U64.Scalar.AsMontgomery
+import Specs.Backend.Serial.U64.Scalar.FromMontgomery
+import Specs.Backend.Serial.U64.Scalar.Lemmas
+import Specs.Backend.Serial.U64.Scalar.MontgomeryMul
+import Specs.Lemmas.Array
+import Specs.Lemmas.ZMod
+import Specs.Scalar.Eq
+import Specs.Scalar.Lemmas
+import Specs.Scalar.MontgomeryInvert
+import Specs.Scalar.One
+import Specs.Scalar.Scalar52Pack
+import Specs.Scalar.Unpack
+import Specs.Scalar.Zero
+import Zeroize.Instances
+import Zeroize.Lemmas
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

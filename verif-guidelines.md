@@ -45,8 +45,15 @@ How the Lean verification of curve25519-dalek is arranged. The plan and the open
 | `Subtle`, `Zeroize` | as generated | Models of external crates | `Types.lean`, `Basic.lean` |
 | `Specs` | `Curve25519Dalek` | Spec definitions, audit files (one per Rust file), proofs | `Defs.lean`, audit files |
 
-All hand-written files use the Lean module system: `module`, `public import`, and
+All hand-written files use the Lean module system: `module`, `public section`, and
 `@[expose] public section` for definitions that proofs must unfold.
+
+**Public vs private imports:** `public import` only what the file's public statements and definitions
+mention (types, `Defs`, `Curve25519.Basic`, …); it is re-exported downstream. Import what only proofs
+use (callees' proof files, `Lemmas`, tactics such as `Mathlib.Tactic.LinearCombination`) with plain
+`import`. `lake shake Specs Curve25519 Subtle Zeroize` reports both unused imports and public
+imports that can be private; it misses namespaces used only in `open`, and `@[step]` specs that
+`step` finds through an import, so check its suggestions with `lake build`.
 
 **Licence and copyright headers:** the Lean development is Apache 2.0
 (`curve25519-dalek/lean/LICENSE`); the Rust crate stays BSD-3-Clause. Every hand-written Lean
@@ -88,8 +95,10 @@ Specs/Lemmas/AsNat.lean                      lemmas shared crate-wide (here: abo
   `Lemmas/<Topic>.lean` (shared proof lemmas, not audited). No other names. (`Aux` is a reserved
   file name on Windows, which Lean rejects.)
 - **Imports:**
-  - audit file → its folder's proof files;
-  - proof file → callees' proof files, `Defs`, `Curve25519`, external libraries.
+  - audit file → its folder's proof files (public), and the modules declaring the axioms in its
+    `#guard_msgs` lists;
+  - proof file → `Defs`, `Curve25519` and external libraries as needed by its statements (public);
+    callees' proof files and shared lemmas (private).
 
   Proof files never import audit files.
 - **`Specs.lean`** imports every audit file.
@@ -119,6 +128,9 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
   - `sorryAx` while the proof is pending.
   - Any `Subtle`/`Zeroize` spec axioms or std externals (`FunsExternal.lean`) that the proof uses.
   - Update the list when a proof lands.
+  - `#print axioms` shortens a name (`p_prime` for `curve25519.p_prime`) only if its module is
+    visible in the audit file. A proof file importing it privately is not enough: the audit file
+    imports it (e.g. `import Curve25519.Prime`).
 - **Not `@[step]`:** the primed theorems don't carry the attribute.
 - **Auditing:** an auditor reads `Curve25519/**`, `Specs/**/Defs.lean` and the audit files. Nothing else.
 

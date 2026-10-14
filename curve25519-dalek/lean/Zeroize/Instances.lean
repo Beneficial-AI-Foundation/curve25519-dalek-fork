@@ -5,8 +5,8 @@ Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo,
   Hoang Le Truong, Markus Ferdinand Dablander
 -/
 module
-public import Zeroize.Lemmas
 public import Curve25519Dalek.Funs
+import Zeroize.Lemmas
 @[expose] public section
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 

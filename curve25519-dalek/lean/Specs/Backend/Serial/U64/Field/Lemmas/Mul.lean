@@ -4,12 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Markus Dablander, Hoang Le Truong, Oliver Butterley
 -/
 module
+public import Curve25519.Basic
+public import Specs.Defs
+public import Mathlib.Tactic.LinearCombination
+public import Specs.Lemmas.AsNat
 public import Curve25519
 public import Aeneas
-public import Mathlib.Tactic.LinearCombination
 public import Mathlib.Tactic.IntervalCases
-public import Specs.Lemmas.AsNat
 public import Specs.Lemmas.StepSpecs
+import Specs.Lemmas.Array
+import Specs.Lemmas.Bitwise
 public section
 
 /-! # Lemmas for the multiplication and squaring of `FieldElement51`

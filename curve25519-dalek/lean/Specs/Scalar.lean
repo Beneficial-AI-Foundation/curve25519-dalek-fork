@@ -46,7 +46,7 @@ public import Specs.Scalar.SplitAt128
 public import Specs.Scalar.FromHalfWidth
 public import Specs.Scalar.HalfWidthFromUnsigned
 public import Specs.Scalar.HalfWidthZeroize
-public import Zeroize
+import Zeroize.Instances
 public section
 
 /-! # Specs of `src/scalar.rs`

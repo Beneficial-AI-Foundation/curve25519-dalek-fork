@@ -16,6 +16,7 @@ public import Specs.Field.Invert
 public import Specs.Field.PowP58
 public import Specs.Field.SqrtRatioI
 public import Specs.Field.Invsqrt
+import Curve25519.Prime
 public section
 
 /-! # Specs of `src/field.rs`

@@ -3,10 +3,11 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Aeneas
-public import Mathlib.Data.Nat.Bitwise
-public import Mathlib.Algebra.BigOperators.Group.Finset.Basic
-public import Mathlib.Tactic.LinearCombination
+public import Aeneas.Std.Scalar.Bitwise
+import Aeneas.Tactic.Conv.Bvify.Bvify
+import Aeneas.Tactic.Conv.Zify
+import Aeneas.Tactic.Step.StepStar
+import Mathlib.Tactic.LinearCombination
 public section
 
 /-! # Lemmas about bitwise operations

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Specs.Backend.Serial.U64.Defs
-public import Specs.Lemmas.AsNat
+import Specs.Lemmas.AsNat
 public section
 
 /-! # Lemmas shared by the proofs of the u64 backend

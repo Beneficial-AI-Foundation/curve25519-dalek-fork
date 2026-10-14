@@ -4,9 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Specs.Defs
-public import Specs.Lemmas.Array
-public import Mathlib.Algebra.BigOperators.Group.Finset.Basic
-public import Mathlib.Algebra.BigOperators.Ring.Finset
+import Specs.Lemmas.Array
 public section
 
 /-! # Lemmas about `Array.asInt` -/

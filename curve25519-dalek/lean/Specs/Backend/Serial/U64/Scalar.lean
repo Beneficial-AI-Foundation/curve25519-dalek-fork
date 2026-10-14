@@ -23,7 +23,7 @@ public import Specs.Backend.Serial.U64.Scalar.MontgomeryMul
 public import Specs.Backend.Serial.U64.Scalar.MontgomerySquare
 public import Specs.Backend.Serial.U64.Scalar.AsMontgomery
 public import Specs.Backend.Serial.U64.Scalar.FromMontgomery
-public import Zeroize
+import Zeroize.Instances
 public section
 
 /-! # Specs of `src/backend/serial/u64/scalar.rs`

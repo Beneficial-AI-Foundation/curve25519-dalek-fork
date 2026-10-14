@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Oliver Butterley
 -/
 module
-public import Aeneas
+public import Aeneas.Std.Scalar.Core
+import Mathlib.Data.Finset.Attr
 @[expose] public section
 -- The style linter misreads `@[rust_fun "..."]`/`@[rust_type "..."]` attributes.
 set_option linter.style.whitespace false

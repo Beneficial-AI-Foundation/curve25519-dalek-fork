@@ -3,18 +3,17 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Curve25519
 public import Curve25519Dalek.Funs
 public import Specs.Defs
-public import Specs.Backend.Serial.U64.Defs
-public import Subtle
-public import Specs.Backend.Serial.U64.Scalar.ConditionalAddL
-public import Specs.Backend.Serial.U64.Scalar.Shr1Assign
-public import Specs.Scalar.AsBytes
-public import Specs.Scalar.Unpack
-public import Specs.Scalar.Scalar52Pack
-public import Specs.Scalar.Lemmas
-public import Specs.Lemmas.AsNat
+public import Curve25519.Basic
+import Specs.Backend.Serial.U64.Scalar.ConditionalAddL
+import Specs.Backend.Serial.U64.Scalar.Shr1Assign
+import Specs.Lemmas.AsNat
+import Specs.Scalar.AsBytes
+import Specs.Scalar.Lemmas
+import Specs.Scalar.Scalar52Pack
+import Specs.Scalar.Unpack
+import Subtle.Lemmas
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
