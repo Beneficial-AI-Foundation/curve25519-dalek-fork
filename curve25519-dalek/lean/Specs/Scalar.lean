@@ -3,50 +3,54 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Specs.Scalar.FromBytesModOrderWide
-public import Specs.Scalar.Eq
-public import Specs.Scalar.CtEq
-public import Specs.Scalar.Index
-public import Specs.Scalar.MulAssign
-public import Specs.Scalar.Mul
-public import Specs.Scalar.Add
-public import Specs.Scalar.Sub
-public import Specs.Scalar.Neg
-public import Specs.Scalar.ConditionalSelect
-public import Specs.Scalar.Default
-public import Specs.Scalar.FromUnsigned
-public import Specs.Scalar.Zero
-public import Specs.Scalar.One
-public import Specs.Scalar.ToBytes
-public import Specs.Scalar.AsBytes
-public import Specs.Scalar.Invert
-public import Specs.Scalar.InvertBatch
-public import Specs.Scalar.InvertBatchAlloc
-public import Specs.Scalar.InvertBatchInternal
-public import Specs.Scalar.DivBy2
-public import Specs.Scalar.NonAdjacentForm
-public import Specs.Scalar.AsRadix16
-public import Specs.Scalar.ToRadix2wSizeHint
-public import Specs.Scalar.AsRadix2w
-public import Specs.Scalar.Unpack
-public import Specs.Scalar.Reduce
-public import Specs.Scalar.Scalar52Pack
-public import Specs.Scalar.MontgomeryInvert
-public import Specs.Scalar.Scalar52Invert
-public import Specs.Scalar.ReadLeU64Into
-public import Specs.Scalar.ClampInteger
-public import Specs.Scalar.HalfWidthTryFrom
-public import Specs.Scalar.HalfWidthZero
-public import Specs.Scalar.HalfWidthOne
-public import Specs.Scalar.HalfWidthFromBytes
-public import Specs.Scalar.HalfWidthAsScalar
-public import Specs.Scalar.HalfWidthToBytes
-public import Specs.Scalar.HalfWidthNonAdjacentForm
-public import Specs.Scalar.SplitAt128
-public import Specs.Scalar.FromHalfWidth
-public import Specs.Scalar.HalfWidthFromUnsigned
-public import Specs.Scalar.HalfWidthZeroize
 import Zeroize.Instances
+public import Curve25519.Basic
+public import Curve25519Dalek.Funs
+public import Defs.Scalar
+public import Defs.Scalar52
+import Proofs.Scalar.Add
+import Proofs.Scalar.AsBytes
+import Proofs.Scalar.AsRadix16
+import Proofs.Scalar.AsRadix2w
+import Proofs.Scalar.ClampInteger
+import Proofs.Scalar.ConditionalSelect
+import Proofs.Scalar.CtEq
+import Proofs.Scalar.Default
+import Proofs.Scalar.DivBy2
+import Proofs.Scalar.Eq
+import Proofs.Scalar.FromBytesModOrderWide
+import Proofs.Scalar.FromHalfWidth
+import Proofs.Scalar.FromUnsigned
+import Proofs.Scalar.HalfWidthAsScalar
+import Proofs.Scalar.HalfWidthFromBytes
+import Proofs.Scalar.HalfWidthFromUnsigned
+import Proofs.Scalar.HalfWidthNonAdjacentForm
+import Proofs.Scalar.HalfWidthOne
+import Proofs.Scalar.HalfWidthToBytes
+import Proofs.Scalar.HalfWidthTryFrom
+import Proofs.Scalar.HalfWidthZero
+import Proofs.Scalar.HalfWidthZeroize
+import Proofs.Scalar.Index
+import Proofs.Scalar.Invert
+import Proofs.Scalar.InvertBatch
+import Proofs.Scalar.InvertBatchAlloc
+import Proofs.Scalar.InvertBatchInternal
+import Proofs.Scalar.MontgomeryInvert
+import Proofs.Scalar.Mul
+import Proofs.Scalar.MulAssign
+import Proofs.Scalar.Neg
+import Proofs.Scalar.NonAdjacentForm
+import Proofs.Scalar.One
+import Proofs.Scalar.ReadLeU64Into
+import Proofs.Scalar.Reduce
+import Proofs.Scalar.Scalar52Invert
+import Proofs.Scalar.Scalar52Pack
+import Proofs.Scalar.SplitAt128
+import Proofs.Scalar.Sub
+import Proofs.Scalar.ToBytes
+import Proofs.Scalar.ToRadix2wSizeHint
+import Proofs.Scalar.Unpack
+import Proofs.Scalar.Zero
 public section
 
 /-! # Specs of `src/scalar.rs`

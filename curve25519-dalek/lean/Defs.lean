@@ -1,0 +1,10 @@
+module
+public import Defs.Array
+public import Defs.FieldElement51
+public import Defs.Scalar52
+public import Defs.Scalar
+
+/-! # Definitions for the specs of curve25519-dalek
+
+Root of the `Defs` library: the definitions needed to state the spec summaries (audited).
+See `verif-guidelines.md` for the layout and conventions. -/

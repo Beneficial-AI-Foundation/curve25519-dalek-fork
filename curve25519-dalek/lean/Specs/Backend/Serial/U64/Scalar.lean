@@ -3,27 +3,30 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Specs.Backend.Serial.U64.Scalar.Index
-public import Specs.Backend.Serial.U64.Scalar.IndexMut
-public import Specs.Backend.Serial.U64.Scalar.M
-public import Specs.Backend.Serial.U64.Scalar.Zero
-public import Specs.Backend.Serial.U64.Scalar.FromBytes
-public import Specs.Backend.Serial.U64.Scalar.FromBytesWide
-public import Specs.Backend.Serial.U64.Scalar.ToBytes
-public import Specs.Backend.Serial.U64.Scalar.Add
-public import Specs.Backend.Serial.U64.Scalar.Sub
-public import Specs.Backend.Serial.U64.Scalar.ConditionalAddL
-public import Specs.Backend.Serial.U64.Scalar.Shr1Assign
-public import Specs.Backend.Serial.U64.Scalar.MulInternal
-public import Specs.Backend.Serial.U64.Scalar.SquareInternal
-public import Specs.Backend.Serial.U64.Scalar.MontgomeryReduce
-public import Specs.Backend.Serial.U64.Scalar.Mul
-public import Specs.Backend.Serial.U64.Scalar.Square
-public import Specs.Backend.Serial.U64.Scalar.MontgomeryMul
-public import Specs.Backend.Serial.U64.Scalar.MontgomerySquare
-public import Specs.Backend.Serial.U64.Scalar.AsMontgomery
-public import Specs.Backend.Serial.U64.Scalar.FromMontgomery
 import Zeroize.Instances
+public import Curve25519.Basic
+public import Curve25519Dalek.Funs
+public import Defs.Scalar52
+import Proofs.Backend.Serial.U64.Scalar.Add
+import Proofs.Backend.Serial.U64.Scalar.AsMontgomery
+import Proofs.Backend.Serial.U64.Scalar.ConditionalAddL
+import Proofs.Backend.Serial.U64.Scalar.FromBytes
+import Proofs.Backend.Serial.U64.Scalar.FromBytesWide
+import Proofs.Backend.Serial.U64.Scalar.FromMontgomery
+import Proofs.Backend.Serial.U64.Scalar.Index
+import Proofs.Backend.Serial.U64.Scalar.IndexMut
+import Proofs.Backend.Serial.U64.Scalar.M
+import Proofs.Backend.Serial.U64.Scalar.MontgomeryMul
+import Proofs.Backend.Serial.U64.Scalar.MontgomeryReduce
+import Proofs.Backend.Serial.U64.Scalar.MontgomerySquare
+import Proofs.Backend.Serial.U64.Scalar.Mul
+import Proofs.Backend.Serial.U64.Scalar.MulInternal
+import Proofs.Backend.Serial.U64.Scalar.Shr1Assign
+import Proofs.Backend.Serial.U64.Scalar.Square
+import Proofs.Backend.Serial.U64.Scalar.SquareInternal
+import Proofs.Backend.Serial.U64.Scalar.Sub
+import Proofs.Backend.Serial.U64.Scalar.ToBytes
+import Proofs.Backend.Serial.U64.Scalar.Zero
 public section
 
 /-! # Specs of `src/backend/serial/u64/scalar.rs`

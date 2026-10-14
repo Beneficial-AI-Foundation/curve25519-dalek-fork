@@ -3,19 +3,22 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Specs.Field.Eq
-public import Specs.Field.CtEq
-public import Specs.Field.Default
-public import Specs.Field.IsNegative
-public import Specs.Field.IsZero
-public import Specs.Field.Pow22501
-public import Specs.Field.InvertBatch
-public import Specs.Field.InvertBatchAlloc
-public import Specs.Field.InternalInvertBatch
-public import Specs.Field.Invert
-public import Specs.Field.PowP58
-public import Specs.Field.SqrtRatioI
-public import Specs.Field.Invsqrt
+public import Curve25519.Basic
+public import Curve25519Dalek.Funs
+public import Defs.FieldElement51
+import Proofs.Field.CtEq
+import Proofs.Field.Default
+import Proofs.Field.Eq
+import Proofs.Field.InternalInvertBatch
+import Proofs.Field.Invert
+import Proofs.Field.InvertBatch
+import Proofs.Field.InvertBatchAlloc
+import Proofs.Field.Invsqrt
+import Proofs.Field.IsNegative
+import Proofs.Field.IsZero
+import Proofs.Field.Pow22501
+import Proofs.Field.PowP58
+import Proofs.Field.SqrtRatioI
 public section
 
 /-! # Specs of `src/field.rs`

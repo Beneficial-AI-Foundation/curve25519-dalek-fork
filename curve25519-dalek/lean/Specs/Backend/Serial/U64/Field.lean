@@ -3,30 +3,33 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Specs.Backend.Serial.U64.Field.SixteenP
-public import Specs.Backend.Serial.U64.Field.FromLimbs
-public import Specs.Backend.Serial.U64.Field.Zero
-public import Specs.Backend.Serial.U64.Field.One
-public import Specs.Backend.Serial.U64.Field.MinusOne
-public import Specs.Backend.Serial.U64.Field.Negate
-public import Specs.Backend.Serial.U64.Field.Reduce
-public import Specs.Backend.Serial.U64.Field.FromBytes
-public import Specs.Backend.Serial.U64.Field.ToBytes
-public import Specs.Backend.Serial.U64.Field.SquareLimbs
-public import Specs.Backend.Serial.U64.Field.Square
-public import Specs.Backend.Serial.U64.Field.Square2
-public import Specs.Backend.Serial.U64.Field.Pow2k
-public import Specs.Backend.Serial.U64.Field.AddAssign
-public import Specs.Backend.Serial.U64.Field.Add
-public import Specs.Backend.Serial.U64.Field.SubAssign
-public import Specs.Backend.Serial.U64.Field.Sub
-public import Specs.Backend.Serial.U64.Field.MulAssign
-public import Specs.Backend.Serial.U64.Field.Mul
-public import Specs.Backend.Serial.U64.Field.Neg
-public import Specs.Backend.Serial.U64.Field.ConditionalSelect
-public import Specs.Backend.Serial.U64.Field.ConditionalAssign
-public import Specs.Backend.Serial.U64.Field.ConditionalSwap
 import Zeroize.Instances
+public import Curve25519.Basic
+public import Curve25519Dalek.Funs
+public import Defs.FieldElement51
+import Proofs.Backend.Serial.U64.Field.Add
+import Proofs.Backend.Serial.U64.Field.AddAssign
+import Proofs.Backend.Serial.U64.Field.ConditionalAssign
+import Proofs.Backend.Serial.U64.Field.ConditionalSelect
+import Proofs.Backend.Serial.U64.Field.ConditionalSwap
+import Proofs.Backend.Serial.U64.Field.FromBytes
+import Proofs.Backend.Serial.U64.Field.FromLimbs
+import Proofs.Backend.Serial.U64.Field.MinusOne
+import Proofs.Backend.Serial.U64.Field.Mul
+import Proofs.Backend.Serial.U64.Field.MulAssign
+import Proofs.Backend.Serial.U64.Field.Neg
+import Proofs.Backend.Serial.U64.Field.Negate
+import Proofs.Backend.Serial.U64.Field.One
+import Proofs.Backend.Serial.U64.Field.Pow2k
+import Proofs.Backend.Serial.U64.Field.Reduce
+import Proofs.Backend.Serial.U64.Field.SixteenP
+import Proofs.Backend.Serial.U64.Field.Square
+import Proofs.Backend.Serial.U64.Field.Square2
+import Proofs.Backend.Serial.U64.Field.SquareLimbs
+import Proofs.Backend.Serial.U64.Field.Sub
+import Proofs.Backend.Serial.U64.Field.SubAssign
+import Proofs.Backend.Serial.U64.Field.ToBytes
+import Proofs.Backend.Serial.U64.Field.Zero
 public section
 
 /-! # Specs of `src/backend/serial/u64/field.rs`

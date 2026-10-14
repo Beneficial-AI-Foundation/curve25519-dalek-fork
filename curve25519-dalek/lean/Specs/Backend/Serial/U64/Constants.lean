@@ -3,19 +3,23 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Specs.Backend.Serial.U64.Constants.MinusOne
-public import Specs.Backend.Serial.U64.Constants.EdwardsD
-public import Specs.Backend.Serial.U64.Constants.EdwardsD2
-public import Specs.Backend.Serial.U64.Constants.OneMinusEdwardsDSquared
-public import Specs.Backend.Serial.U64.Constants.EdwardsDMinusOneSquared
-public import Specs.Backend.Serial.U64.Constants.SqrtAdMinusOne
-public import Specs.Backend.Serial.U64.Constants.InvsqrtAMinusD
-public import Specs.Backend.Serial.U64.Constants.SqrtM1
-public import Specs.Backend.Serial.U64.Constants.Aplus2OverFour
-public import Specs.Backend.Serial.U64.Constants.L
-public import Specs.Backend.Serial.U64.Constants.Lfactor
-public import Specs.Backend.Serial.U64.Constants.R
-public import Specs.Backend.Serial.U64.Constants.RR
+public import Curve25519.Basic
+public import Curve25519Dalek.Funs
+public import Defs.FieldElement51
+public import Defs.Scalar52
+import Proofs.Backend.Serial.U64.Constants.Aplus2OverFour
+import Proofs.Backend.Serial.U64.Constants.EdwardsD
+import Proofs.Backend.Serial.U64.Constants.EdwardsD2
+import Proofs.Backend.Serial.U64.Constants.EdwardsDMinusOneSquared
+import Proofs.Backend.Serial.U64.Constants.InvsqrtAMinusD
+import Proofs.Backend.Serial.U64.Constants.L
+import Proofs.Backend.Serial.U64.Constants.Lfactor
+import Proofs.Backend.Serial.U64.Constants.MinusOne
+import Proofs.Backend.Serial.U64.Constants.OneMinusEdwardsDSquared
+import Proofs.Backend.Serial.U64.Constants.R
+import Proofs.Backend.Serial.U64.Constants.RR
+import Proofs.Backend.Serial.U64.Constants.SqrtAdMinusOne
+import Proofs.Backend.Serial.U64.Constants.SqrtM1
 public section
 
 /-! # Specs of `src/backend/serial/u64/constants.rs`
