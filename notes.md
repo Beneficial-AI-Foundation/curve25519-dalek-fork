@@ -113,17 +113,6 @@ type, which for per-target types is the target name, so e.g. `Mul<&Scalar>` for
 name Aeneas includes the type name, so the clash does not arise. Fix upstream: build impl names
 from the type name plus the target component.
 
-## To do: primality of `p` and `L` (currently axioms)
-
-`curve25519.p_prime` and `curve25519.L_prime` in `Curve25519/Prime.lean` are axioms for now, so
-they appear in the `#print axioms` lists of every spec that uses them. Replace them with proofs by
-`PrimeCert` (https://github.com/b-mehta/PrimeCert, Pocklington certificates checked by the
-kernel) when the toolchain is updated: its releases before v4.33.0 do not use the module system,
-and Lean refuses non-module imports from our module files. Certificates for both numbers are in
-the old project (`~/Projects/curve25519-dalek-lean-verify/Curve25519Dalek/Math/PrimeCerts.lean`).
-Fallback that works today: Lucas/Pratt certificates with Mathlib's `lucas_primality` and
-`reduce_mod_char` (17 certificates, builds in ~2 s; not committed).
-
 ## To do: project-defined traits for external-crate libraries
 
 Aeneas generates every external trait used by the crate (`subtle::ConditionallySelectable`,
@@ -145,5 +134,5 @@ depend on the generated types and are specific to this translation.
   `sorryAx`); audit modules in the strict CI build. The `EdwardsPoint` constants and tables wait
   for the curve model.
 - `src/field.rs` (u64 backend, `FieldElement51`): all statements proved; in the strict CI build.
-  `invert`, `sqrt_ratio_i`, `invsqrt` and the batch inversions rest on the axiom `p_prime`.
+  `invert`, `sqrt_ratio_i`, `invsqrt` and the batch inversions use `p_prime` (a theorem).
 - Next: `src/scalar.rs` (the `Scalar` type).

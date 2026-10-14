@@ -16,7 +16,6 @@ public import Specs.Field.Invert
 public import Specs.Field.PowP58
 public import Specs.Field.SqrtRatioI
 public import Specs.Field.Invsqrt
-import Curve25519.Prime
 public section
 
 /-! # Specs of `src/field.rs`
@@ -128,7 +127,7 @@ theorem invert_batch_spec' {N : Usize} (inputs : Array FieldElement51 N)
           ∀ j < 5, (r[i]!)[j]!.val < 2 ^ 52) ⦄ :=
   invert_batch_spec inputs hinputs
 
-/-- [propext, Classical.choice, Quot.sound, p_prime, Bool.Insts.CoreConvertFromChoice.from_spec,
+/-- [propext, Classical.choice, Quot.sound, Bool.Insts.CoreConvertFromChoice.from_spec,
   Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_assign_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, subtle.Choice.Insts.CoreOpsBitNotChoice.not_spec] -/
@@ -149,7 +148,7 @@ theorem invert_batch_alloc_spec' (inputs : Slice FieldElement51)
           ∀ j < 5, (r[i]!)[j]!.val < 2 ^ 52) ⦄ :=
   invert_batch_alloc_spec inputs hinputs
 
-/-- [propext, Classical.choice, Quot.sound, p_prime, Bool.Insts.CoreConvertFromChoice.from_spec,
+/-- [propext, Classical.choice, Quot.sound, Bool.Insts.CoreConvertFromChoice.from_spec,
   Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_assign_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, subtle.Choice.Insts.CoreOpsBitNotChoice.not_spec] -/
@@ -172,7 +171,7 @@ theorem internal_invert_batch_spec' (inputs scratch : Slice FieldElement51)
           ∀ j < 5, (r[i]!)[j]!.val < 2 ^ 52) ⦄ :=
   internal_invert_batch_spec inputs scratch hlen hinputs
 
-/-- [propext, Classical.choice, Quot.sound, p_prime, Bool.Insts.CoreConvertFromChoice.from_spec,
+/-- [propext, Classical.choice, Quot.sound, Bool.Insts.CoreConvertFromChoice.from_spec,
   Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_assign_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, subtle.Choice.Insts.CoreOpsBitNotChoice.not_spec] -/
@@ -189,7 +188,7 @@ theorem invert_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
       (self.asNat % p = 0 → r.asNat % p = 0) ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
   invert_spec self hself
 
-/-- [propext, Classical.choice, Quot.sound, p_prime] -/
+/-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms invert_spec'
 
 end Curve25519Dalek.field.FieldElement51
@@ -223,7 +222,7 @@ theorem sqrt_ratio_i_spec' (u v : FieldElement51) (hu : ∀ i < 5, u[i]!.val < 2
       r.asNat % p % 2 = 0 ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
   sqrt_ratio_i_spec u v hu hv
 
-/-- [propext, Classical.choice, Quot.sound, p_prime, core.array.from_fn_spec,
+/-- [propext, Classical.choice, Quot.sound, core.array.from_fn_spec,
   Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_assign_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, subtle.Choice.Insts.CoreConvertFromU8.from_spec,
@@ -246,7 +245,7 @@ theorem invsqrt_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val <
       r.asNat % p % 2 = 0 ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
   invsqrt_spec self hself
 
-/-- [propext, Classical.choice, Quot.sound, p_prime, core.array.from_fn_spec,
+/-- [propext, Classical.choice, Quot.sound, core.array.from_fn_spec,
   Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_assign_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, subtle.Choice.Insts.CoreConvertFromU8.from_spec,

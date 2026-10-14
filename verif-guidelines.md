@@ -128,9 +128,9 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
   - `sorryAx` while the proof is pending.
   - Any `Subtle`/`Zeroize` spec axioms or std externals (`FunsExternal.lean`) that the proof uses.
   - Update the list when a proof lands.
-  - `#print axioms` shortens a name (`p_prime` for `curve25519.p_prime`) only if its module is
-    visible in the audit file. A proof file importing it privately is not enough: the audit file
-    imports it (e.g. `import Curve25519.Prime`).
+  - `#print axioms` prints an axiom by its shortest name that resolves in the audit file, so the
+    module declaring it must be visible there. A proof file importing it privately is not enough:
+    the audit file then imports it itself.
 - **Not `@[step]`:** the primed theorems don't carry the attribute.
 - **Auditing:** an auditor reads `Curve25519/**`, `Specs/**/Defs.lean` and the audit files. Nothing else.
 

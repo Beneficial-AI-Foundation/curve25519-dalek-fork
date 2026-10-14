@@ -480,7 +480,7 @@ theorem invert.«x86_64-tables_spec'» (self : Scalar) :
       (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ⦄ :=
   invert.«x86_64-tables_spec» self
 
-/-- [propext, Classical.choice, Quot.sound, L_prime,
+/-- [propext, Classical.choice, Quot.sound,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   subtle.Choice.Insts.CoreConvertFromU8.from_spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms invert.«x86_64-tables_spec'»
@@ -497,7 +497,7 @@ theorem invert.«x86_64-no-tables_spec'» (self : Scalar) :
       (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ⦄ :=
   invert.«x86_64-no-tables_spec» self
 
-/-- [propext, Classical.choice, Quot.sound, L_prime,
+/-- [propext, Classical.choice, Quot.sound,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   subtle.Choice.Insts.CoreConvertFromU8.from_spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms invert.«x86_64-no-tables_spec'»
@@ -516,7 +516,7 @@ theorem invert_batch.«x86_64-tables_spec'» {N : Usize} (inputs : Array Scalar 
       ret.asNat < L ⦄ :=
   invert_batch.«x86_64-tables_spec» inputs hinputs
 
-/-- [propext, Classical.choice, Quot.sound, L_prime, Array.Insts.ZeroizeZeroize.zeroize_spec,
+/-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
   Bool.Insts.CoreConvertFromChoice.from_spec, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, zeroize.Zeroize.Blanket.zeroize_eq,
@@ -539,7 +539,7 @@ theorem invert_batch.«x86_64-no-tables_spec'» {N : Usize} (inputs : Array Scal
       ret.asNat < L ⦄ :=
   invert_batch.«x86_64-no-tables_spec» inputs hinputs
 
-/-- [propext, Classical.choice, Quot.sound, L_prime, Array.Insts.ZeroizeZeroize.zeroize_spec,
+/-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
   Bool.Insts.CoreConvertFromChoice.from_spec, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, zeroize.Zeroize.Blanket.zeroize_eq,
@@ -563,7 +563,7 @@ theorem invert_batch_alloc.«x86_64-tables_spec'» (inputs : Slice Scalar)
       ret.asNat < L ⦄ :=
   invert_batch_alloc.«x86_64-tables_spec» inputs hinputs
 
-/-- [propext, Classical.choice, Quot.sound, L_prime, Array.Insts.ZeroizeZeroize.zeroize_spec,
+/-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
   Bool.Insts.CoreConvertFromChoice.from_spec, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, zeroize.Zeroize.Blanket.zeroize_eq,
@@ -587,7 +587,7 @@ theorem invert_batch_alloc.«x86_64-no-tables_spec'» (inputs : Slice Scalar)
       ret.asNat < L ⦄ :=
   invert_batch_alloc.«x86_64-no-tables_spec» inputs hinputs
 
-/-- [propext, Classical.choice, Quot.sound, L_prime, Array.Insts.ZeroizeZeroize.zeroize_spec,
+/-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
   Bool.Insts.CoreConvertFromChoice.from_spec, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, zeroize.Zeroize.Blanket.zeroize_eq,
@@ -614,7 +614,7 @@ theorem invert_batch_internal.«x86_64-tables_spec'» (inputs : Slice Scalar)
       ret.asNat < L ⦄ :=
   invert_batch_internal.«x86_64-tables_spec» inputs scratch hlen hinputs
 
-/-- [propext, Classical.choice, Quot.sound, L_prime, Array.Insts.ZeroizeZeroize.zeroize_spec,
+/-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
   Bool.Insts.CoreConvertFromChoice.from_spec, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, zeroize.Zeroize.Blanket.zeroize_eq,
@@ -641,7 +641,7 @@ theorem invert_batch_internal.«x86_64-no-tables_spec'» (inputs : Slice Scalar)
       ret.asNat < L ⦄ :=
   invert_batch_internal.«x86_64-no-tables_spec» inputs scratch hlen hinputs
 
-/-- [propext, Classical.choice, Quot.sound, L_prime, Array.Insts.ZeroizeZeroize.zeroize_spec,
+/-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
   Bool.Insts.CoreConvertFromChoice.from_spec, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec, zeroize.Zeroize.Blanket.zeroize_eq,
@@ -865,7 +865,7 @@ theorem square_multiply_spec' (y : backend.serial.u64.scalar.Scalar52)
       r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
   square_multiply_spec y squarings x hy hy' hx hx'
 
-/-- [propext, Classical.choice, Quot.sound, L_prime,
+/-- [propext, Classical.choice, Quot.sound,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   subtle.Choice.Insts.CoreConvertFromU8.from_spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms square_multiply_spec'
@@ -882,7 +882,7 @@ theorem montgomery_invert_spec' (self : backend.serial.u64.scalar.Scalar52)
       (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
   montgomery_invert_spec self hself hself'
 
-/-- [propext, Classical.choice, Quot.sound, L_prime,
+/-- [propext, Classical.choice, Quot.sound,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   subtle.Choice.Insts.CoreConvertFromU8.from_spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms montgomery_invert_spec'
@@ -899,7 +899,7 @@ theorem invert_spec' (self : backend.serial.u64.scalar.Scalar52)
       (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
   invert_spec self hself
 
-/-- [propext, Classical.choice, Quot.sound, L_prime,
+/-- [propext, Classical.choice, Quot.sound,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   subtle.Choice.Insts.CoreConvertFromU8.from_spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms invert_spec'
