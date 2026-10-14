@@ -96,7 +96,7 @@ private theorem loop0_body_spec (inputs ins : Slice Scalar) (sc : Slice Scalar52
   unfold invert_batch_internal.«x86_64-tables_loop0».body
   have hil : i.val < ins.length := hinl ▸ hn ▸ hlt
   have hab := ha.2.2
-  simp only [hlt, if_true]
+  simp only [hlt, ite_true]
   step as ⟨sc1, hsc1⟩
   step as ⟨x, hx'⟩
   have hx'' : x = inputs[i.val]! := by
@@ -157,7 +157,7 @@ private theorem loop0_spec (inputs : Slice Scalar) (scratch : Slice Scalar52) (a
         rw [hi1]
         exact Nat.sub_lt_sub_left hlt (Nat.lt_succ_self _)
     · unfold invert_batch_internal.«x86_64-tables_loop0».body
-      simp only [hlt, if_false, WP.spec_ok]
+      simp only [hlt, ite_false, WP.spec_ok]
       have hin : i.val = inputs.length := hn ▸ Nat.le_antisymm hi (Nat.le_of_not_lt hlt)
       rw [hin] at ha hsc hlow
       exact ⟨hinl, hscl, ha, hsc, hlow⟩
@@ -182,7 +182,7 @@ private theorem loop1_body_spec (inputs inputs1 ins : Slice Scalar) (scratch : S
         (∀ j < 5, t[j]!.val < 2 ^ 52) ∧
         (y.asNat : ZMod L) * inputs[k1.val]!.asNat = 1 ∧ y.asNat < L ⦄ := by
   unfold invert_batch_internal.«x86_64-tables_loop1».body
-  simp only [hpos, if_true]
+  simp only [hpos, ite_true]
   step as ⟨k1, hk1⟩
   have hkk : k1.val + 1 = k.val := by scalar_tac
   have hk1' : k1.val < inputs.length := lt_of_lt_of_le (hkk ▸ Nat.lt_succ_self k1.val) hk
@@ -245,7 +245,7 @@ private theorem loop1_spec (inputs inputs1 : Slice Scalar) (scratch : Slice Scal
       exact ⟨⟨Nat.le_of_lt (Nat.lt_of_lt_of_le hk1k hk), by rw [Slice.set_length, hinl], ht, htL,
         htb, fun j hj => (hl1 j hj).trans (hlow j (Nat.lt_trans hj hk1k)), hh1⟩, hk1k⟩
     · unfold invert_batch_internal.«x86_64-tables_loop1».body
-      simp only [hpos, if_false, WP.spec_ok]
+      simp only [hpos, ite_false, WP.spec_ok]
       have hk0 : k.val = 0 := by scalar_tac
       rw [hk0] at hhigh
       exact ⟨hinl, fun j hj => hhigh j hj (Nat.zero_le j)⟩

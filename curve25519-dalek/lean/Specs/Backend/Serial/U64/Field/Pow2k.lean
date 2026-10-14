@@ -33,10 +33,10 @@ private theorem pow2k_loop_spec (k : U32) (a : Array U64 5#usize) (hk : 0 < k.va
       rw [hsq, Nat.pow_mod, hmod, ← Nat.pow_mod, ← pow_mul, ← pow_succ, he]
     by_cases hz : k1 = 0#u32
     · have hk1z : k1.val = 0 := by simp [hz]
-      simp only [hz, if_true, WP.spec_ok]
+      simp only [hz, ite_true, WP.spec_ok]
       exact ⟨by simpa [hk1z] using hpow, ha1⟩
     · have hk1z : k1.val ≠ 0 := fun h => hz (by scalar_tac)
-      simp only [hz, if_false, WP.spec_ok]
+      simp only [hz, ite_false, WP.spec_ok]
       exact ⟨by scalar_tac, by scalar_tac, fun i hi => (ha1 i hi).trans (by norm_num), hpow,
         by scalar_tac⟩
   · exact ⟨hk, le_refl _, ha, by simp⟩

@@ -42,7 +42,7 @@ private theorem square2_loop_spec (iter : core.slice.iter.IterMut U64)
         rw [← hs, getElem!_pos it.slice.val it.i hlt] at this
         rw [Nat.mul_comm]
         exact this
-      rw [dif_pos hlt]
+      rw [dite_eq_left hlt]
       step as ⟨limb1, hlimb1⟩
       refine ⟨hs, by scalar_tac, by rw [← hs]; exact hlt, fun im him => ?_,
         by rw [← hs]; exact Nat.sub_lt_sub_left hlt (Nat.lt_succ_self _)⟩
@@ -52,13 +52,13 @@ private theorem square2_loop_spec (iter : core.slice.iter.IterMut U64)
       rw [hval j hj]
       by_cases hji : j = it.i
       · subst hji
-        rw [if_neg (by simp), if_pos ⟨hlo, Nat.lt_succ_self _⟩,
+        rw [ite_eq_right (by simp), ite_eq_left ⟨hlo, Nat.lt_succ_self _⟩,
           Slice.getElem!_Nat_setAtNat_eq _ _ _ (by scalar_tac), hlimb1, ← hs,
           getElem!_pos it.slice.val it.i hlt, Nat.mul_comm]
         rfl
       · rw [Slice.getElem!_Nat_setAtNat_ne _ _ _ _ (Ne.symm hji)]
         split_ifs <;> scalar_tac
-    · rw [dif_neg hlt]
+    · rw [dite_eq_right hlt]
       step*
       obtain ⟨im', hbk', hlen, hval⟩ := hbk it (by rw [hs])
       refine ⟨im', hbk', hlen, fun j hj => ?_⟩
@@ -84,7 +84,7 @@ theorem square2_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
   rintro r ⟨im, hr, hlen, hval⟩
   have hdbl : ∀ i < 5, (back im)[i]!.val = 2 * sq[i]!.val := fun i hi => by
     rw [Array.getElem!_Nat_eq, hback im (by scalar_tac), hval i (by scalar_tac), hi0,
-      if_pos (Nat.zero_le _), hit, ← Array.getElem!_Nat_eq]
+      ite_eq_left (Nat.zero_le _), hit, ← Array.getElem!_Nat_eq]
   simp only [WP.spec_ok, hr]
   refine ⟨?_, fun i hi => ?_⟩
   · have h2 : FieldElement51.asNat (back im) = 2 * FieldElement51.asNat sq := by

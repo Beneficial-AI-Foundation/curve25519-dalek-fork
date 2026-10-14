@@ -73,7 +73,7 @@ private theorem internal_invert_batch_loop0_body_spec (inputs scratch : Slice Fi
   unfold internal_invert_batch_loop0.body
   have hlt' : i.val < inputs.length := hn ▸ hlt
   have hab := hacc.2
-  simp only [hlt, if_true]
+  simp only [hlt, ite_true]
   step as ⟨s1, hs1⟩
   step as ⟨fe, hfe⟩
   have hfe' : fe = inputs[i.val]! := by
@@ -88,10 +88,10 @@ private theorem internal_invert_batch_loop0_body_spec (inputs scratch : Slice Fi
   rw [IsPre, pre_succ, ← hacc.1, fac, ← hfe']
   by_cases hz : (fe.asNat : ZMod p) = 0
   · rw [hc1 (ZMod.natCast_eq_zero_iff_mod.mp hz), not_one] at hc1'
-    rw [ha0 hc1', if_pos hz, mul_one]
+    rw [ha0 hc1', ite_eq_left hz, mul_one]
     exact ⟨rfl, hab⟩
   · rw [hc0 (fun h => hz (ZMod.natCast_eq_zero_iff_mod.mpr h)), not_zero] at hc1'
-    rw [ha1 hc1', if_neg hz, ← Nat.cast_mul, ZMod.natCast_eq_natCast_iff']
+    rw [ha1 hc1', ite_eq_right hz, ← Nat.cast_mul, ZMod.natCast_eq_natCast_iff']
     exact ⟨hfe1, fun j hj => lt_trans (hfe1b j hj) (by norm_num)⟩
 
 @[local step]
@@ -119,7 +119,7 @@ private theorem internal_invert_batch_loop0_spec (inputs scratch : Slice FieldEl
       rw [hi1]
       exact Nat.sub_lt_sub_left hlt (Nat.lt_succ_self _)
     · unfold internal_invert_batch_loop0.body
-      simp only [hlt, if_false, WP.spec_ok]
+      simp only [hlt, ite_false, WP.spec_ok]
       have hin : i'.val = inputs.length := hn ▸ Nat.le_antisymm hi' (Nat.le_of_not_lt hlt)
       rw [hin] at ha hs
       exact ⟨hsl, ha, hs⟩
@@ -149,7 +149,7 @@ private theorem internal_invert_batch_loop1_body_spec
         (acc1.asNat : ZMod p) * pre inputs0 k1.val = 1 ∧ (∀ j < 5, acc1[j]!.val < 2 ^ 54) ∧
         Done inputs0[k1.val]! fe ⦄ := by
   unfold internal_invert_batch_loop1.body
-  simp only [hpos, if_true]
+  simp only [hpos, ite_true]
   step as ⟨k1, hk1⟩
   have hkk : k1.val + 1 = k.val := by scalar_tac
   have hk1' : k1.val < inputs0.length := lt_of_lt_of_le (hkk ▸ Nat.lt_succ_self k1.val) hk
@@ -177,11 +177,11 @@ private theorem internal_invert_batch_loop1_body_spec
   by_cases hz : (fe.asNat : ZMod p) = 0
   · rw [hc1 (ZMod.natCast_eq_zero_iff_mod.mp hz), not_one] at hnz
     rw [ha0 hnz, hfe30 hnz, hfe2', ← hfe']
-    rw [if_pos hz, mul_one] at hacc
+    rw [ite_eq_left hz, mul_one] at hacc
     exact ⟨hacc, haccb, fun _ => rfl, fun h => absurd hz h⟩
   · rw [hc0 (fun h => hz (ZMod.natCast_eq_zero_iff_mod.mpr h)), not_zero] at hnz
     rw [ha1 hnz, hfe31 hnz]
-    rw [if_neg hz] at hacc
+    rw [ite_eq_right hz] at hacc
     have htmp' : (tmp.asNat : ZMod p) = acc.asNat * fe.asNat := by
       rw [← Nat.cast_mul, ZMod.natCast_eq_natCast_iff']
       exact htmp
@@ -234,7 +234,7 @@ private theorem internal_invert_batch_loop1_spec (inputs0 inputs scratch : Slice
       exact ⟨⟨Nat.le_of_lt (Nat.lt_of_lt_of_le hk1k hk'), by rw [Slice.set_length, hsl], hacc1,
         hacc1b, hl1, hh1⟩, hk1k⟩
     · unfold internal_invert_batch_loop1.body
-      simp only [hpos, if_false, WP.spec_ok]
+      simp only [hpos, ite_false, WP.spec_ok]
       have hk0 : k'.val = 0 := by scalar_tac
       rw [hk0] at hh
       exact ⟨hsl, fun j hj => hh j hj (Nat.zero_le j)⟩

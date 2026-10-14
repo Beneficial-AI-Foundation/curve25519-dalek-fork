@@ -57,21 +57,21 @@ private theorem try_from_loop_spec (value : Scalar) (i : Usize) (hi : 16 ≤ i.v
   · rintro k ⟨hk, hzk⟩
     unfold try_from_loop.body
     by_cases hlt : k.val < 32
-    · simp only [show k < 32#usize by scalar_tac, if_true]
+    · simp only [show k < 32#usize by scalar_tac, ite_true]
       step with Array.index_usize_getElem!_spec as ⟨x, hx⟩
       by_cases hx0 : x = 0#u8
-      · simp only [hx0, bne_self_eq_false, Bool.false_eq_true, if_false]
+      · simp only [hx0, bne_self_eq_false, Bool.false_eq_true, ite_false]
         step as ⟨k1, hk1⟩
         refine ⟨by scalar_tac, by scalar_tac, fun j hj hjk => ?_, by scalar_tac⟩
         by_cases hjk' : j = k.val
         · rw [hjk', ← hx, hx0]
           rfl
         · exact hzk j hj (by scalar_tac)
-      · simp only [bne_iff_ne, ne_eq, hx0, not_false_eq_true, if_true, WP.spec_ok]
+      · simp only [bne_iff_ne, ne_eq, hx0, not_false_eq_true, ite_true, WP.spec_ok]
         refine ⟨fun hall => absurd ?_ hx0, fun _ => trivial⟩
         rw [hx]
         exact UScalar.eq_of_val_eq (hall k.val hk.1 hlt)
-    · simp only [show ¬ k < 32#usize by scalar_tac, if_false, WP.spec_ok]
+    · simp only [show ¬ k < 32#usize by scalar_tac, ite_false, WP.spec_ok]
       exact ⟨fun _ => trivial, fun hn => absurd (fun j hj hj32 => hzk j hj (by scalar_tac)) hn⟩
   · exact ⟨hi, hz⟩
 

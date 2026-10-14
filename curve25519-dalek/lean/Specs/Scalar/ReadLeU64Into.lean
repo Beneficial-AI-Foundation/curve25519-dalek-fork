@@ -58,7 +58,7 @@ private theorem read_le_u64_into_loop_spec (src : Slice U8) (dst : Slice U64)
   · rintro ⟨d, k⟩ ⟨hd, hk, hdone⟩
     unfold read_le_u64_into_loop.body
     by_cases hlt : k.val < d.length
-    · simp only [show k < d.len by scalar_tac, if_true]
+    · simp only [show k < d.len by scalar_tac, ite_true]
       step as ⟨i2, hi2⟩
       step as ⟨i3, hi3⟩
       step as ⟨bytes, hbytes, hblen⟩
@@ -91,7 +91,7 @@ private theorem read_le_u64_into_loop_spec (src : Slice U8) (dst : Slice U64)
         · rw [hd1, Slice.getElem!_Nat_set_ne _ _ _ _ (Ne.symm hik)]
           exact hdone i (by scalar_tac) j hj
       · exact absurd hblen (by scalar_tac)
-    · simp only [show ¬ k < d.len by scalar_tac, if_false, WP.spec_ok]
+    · simp only [show ¬ k < d.len by scalar_tac, ite_false, WP.spec_ok]
       exact ⟨hd, fun i hi j hj => hdone i (by scalar_tac) j hj⟩
   · simp
 

@@ -64,9 +64,9 @@ theorem div_by_2.«x86_64-tables_spec» (self : Scalar) (hself : self.asNat < L)
   have hu1 : u1.asNat = if self.asNat % 2 = 0 then self.asNat else self.asNat + L := by
     rcases hvalid with h0 | h1
     · have hp : self.asNat % 2 = 0 := by rw [← hpar, h0]; rfl
-      rw [if_pos hp, hu10 (hc.trans h0), hu]
+      rw [ite_eq_left hp, hu10 (hc.trans h0), hu]
     · have hp : self.asNat % 2 ≠ 0 := by rw [← hpar, h1]; decide
-      rw [if_neg hp, hu11 (hc.trans h1), hu]
+      rw [ite_eq_right hp, hu11 (hc.trans h1), hu]
       exact Nat.mod_eq_of_lt (Nat.lt_of_lt_of_le (Nat.add_lt_add_right hself L)
         (by rw [← Nat.two_mul]; exact backend.serial.u64.scalar.two_mul_L_lt_montgomeryRadix.le))
   obtain ⟨hcarry0, hr2, hrL⟩ := half_mod_L hself hu1 hu2 hcarry

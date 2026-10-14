@@ -197,7 +197,7 @@ private theorem naf_body_spec (w : Usize) (x : Array U64 5#usize) (width mask : 
   have hw1 : 1 ≤ w.val := Nat.le_of_succ_le hw.1
   have hposw : pos.val < pos.val + w.val := Nat.lt_add_of_pos_right hw1
   unfold non_adjacent_form_loop.body
-  simp only [show pos < 256#usize by scalar_tac, if_true]
+  simp only [show pos < 256#usize by scalar_tac, ite_true]
   step as ⟨u, hu⟩
   step as ⟨b, hb⟩
   step as ⟨t, ht⟩
@@ -219,7 +219,7 @@ private theorem naf_body_spec (w : Usize) (x : Array U64 5#usize) (width mask : 
   have hwinv : win.val = carry.val + X / 2 ^ pos.val % 2 ^ w.val := by rw [hwin, hm]
   by_cases hev : win.val % 2 = 0
   · have hp0 : par = 0#u64 := UScalar.eq_of_val_eq (by rw [hpar]; simpa using hev)
-    simp only [hp0, if_true]
+    simp only [hp0, ite_true]
     step as ⟨pos1, hpos1⟩
     refine ⟨naf, pos1, carry, rfl, by rw [hpos1]; exact Nat.lt_succ_self _, ?_⟩
     rw [hpos1]
@@ -229,7 +229,7 @@ private theorem naf_body_spec (w : Usize) (x : Array U64 5#usize) (width mask : 
       have := congrArg UScalar.val h
       rw [hpar] at this
       simpa using this)
-    simp only [hp0, if_false]
+    simp only [hp0, ite_false]
     step as ⟨h2, hh2⟩
     obtain ⟨P, hPdef⟩ : ∃ P, 2 ^ (w.val - 1) = P := ⟨_, rfl⟩
     obtain ⟨hP, hPe, hP128⟩ := naf_half hw
@@ -244,7 +244,7 @@ private theorem naf_body_spec (w : Usize) (x : Array U64 5#usize) (width mask : 
     have hdig := naf_digit hPe hwin2 hodd
     have hPz : (2 : ℤ) ^ w.val = 2 * (P : ℤ) := by exact_mod_cast hP
     by_cases hlt : win.val < P
-    · simp only [show win < h2 by rw [UScalar.lt_equiv, hh2v]; exact hlt, if_true]
+    · simp only [show win < h2 by rw [UScalar.lt_equiv, hh2v]; exact hlt, ite_true]
       have hwin127 : (win.val : ℤ) ≤ IScalar.max .I8 := by
         rw [IScalar.max_IScalarTy_I8_eq, I8.max_eq]
         exact_mod_cast Nat.le_of_lt_succ (lt_of_lt_of_le hlt hP128)
@@ -258,7 +258,7 @@ private theorem naf_body_spec (w : Usize) (x : Array U64 5#usize) (width mask : 
         simp
       · rw [hd, hPz]
         exact hdig.1 hlt
-    · simp only [show ¬ win < h2 by rw [UScalar.lt_equiv, hh2v]; exact hlt, if_false]
+    · simp only [show ¬ win < h2 by rw [UScalar.lt_equiv, hh2v]; exact hlt, ite_false]
       step as ⟨d0, hd0⟩
       step as ⟨q0, hq0⟩
       step as ⟨d, hd⟩
@@ -315,7 +315,7 @@ private theorem naf_loop_spec (w : Usize) (x : Array U64 5#usize) (width mask : 
       rintro r ⟨naf', pos', carry', rfl, hlt, hinv'⟩
       exact ⟨hinv', Nat.sub_lt_sub_left hpos hlt⟩
     · unfold non_adjacent_form_loop.body
-      simp only [show ¬ pos < 256#usize from fun h => hpos h, if_false, WP.spec_ok]
+      simp only [show ¬ pos < 256#usize from fun h => hpos h, ite_false, WP.spec_ok]
       obtain ⟨-, hc0, hval, -, hnz⟩ := hinv
       have hge : 256 ≤ pos.val := Nat.le_of_not_lt hpos
       have hq : X / 2 ^ pos.val = 0 := Nat.div_eq_of_lt (lt_of_lt_of_le hX255

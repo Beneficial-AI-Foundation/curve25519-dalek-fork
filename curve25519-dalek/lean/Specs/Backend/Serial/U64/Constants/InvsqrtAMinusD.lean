@@ -26,7 +26,7 @@ theorem INVSQRT_A_MINUS_D_spec :
   unfold INVSQRT_A_MINUS_D
   step*
   subst_vars
-  haveI : NeZero p := ⟨p_pos.ne'⟩
+  have : NeZero p := ⟨p_pos.ne'⟩
   refine ⟨lt_p_iff.mpr (by decide), ?_, by decide⟩
   rw [← ZMod.val_natCast, Nat.cast_mul, ZMod.natCast_zmod_val, eq_comm]
   refine ZMod.eq_val_of_natCast_eq (lt_p_iff.mpr (by decide)) ?_

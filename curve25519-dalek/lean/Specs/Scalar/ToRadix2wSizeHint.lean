@@ -25,9 +25,9 @@ theorem to_radix_2w_size_hint_spec (w : Usize) (hw : 4 ≤ w.val ∧ w.val ≤ 8
   unfold to_radix_2w_size_hint
   step
   step
-  simp only [show 4#usize ≤ w by scalar_tac, if_true]
+  simp only [show 4#usize ≤ w by scalar_tac, ite_true]
   by_cases h7 : w.val ≤ 7
-  · simp only [show w ≤ 7#usize by scalar_tac, if_true]
+  · simp only [show w ≤ 7#usize by scalar_tac, ite_true]
     step as ⟨d, hd⟩
     have hcases : w.val = 4 ∨ w.val = 5 ∨ w.val = 6 ∨ w.val = 7 := by scalar_tac
     have hd64 : d.val ≤ 64 := by
@@ -36,7 +36,7 @@ theorem to_radix_2w_size_hint_spec (w : Usize) (hw : 4 ≤ w.val ∧ w.val ≤ 8
     step
     rcases hcases with h | h | h | h <;> simp [h, hd]
   · have h8 : w.val = 8 := by scalar_tac
-    simp only [show ¬ w ≤ 7#usize by scalar_tac, if_false, h8]
+    simp only [show ¬ w ≤ 7#usize by scalar_tac, ite_false, h8]
     step as ⟨d, hd⟩
     have hd32 : d.val = 32 := by simp [hd, h8]
     step as ⟨c, hc⟩

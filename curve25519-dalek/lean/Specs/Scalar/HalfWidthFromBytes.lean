@@ -49,7 +49,7 @@ private theorem from_bytes_loop_spec (bytes : Array U8 16#usize) (s_bytes : Arra
   · rintro ⟨s, k⟩ ⟨hk, hslo, hshi⟩
     unfold from_bytes_loop.body
     by_cases hlt : k.val < 16
-    · simp only [show k < 16#usize by scalar_tac, if_true]
+    · simp only [show k < 16#usize by scalar_tac, ite_true]
       step as ⟨x, hx⟩
       step as ⟨s1, hs1, hs1ne⟩
       step as ⟨k1, hk1⟩
@@ -60,7 +60,7 @@ private theorem from_bytes_loop_spec (bytes : Array U8 16#usize) (s_bytes : Arra
           exact hslo j (by scalar_tac)
       · rw [hs1ne j (by scalar_tac)]
         exact hshi j (by scalar_tac) hj32
-    · simp only [show ¬ k < 16#usize by scalar_tac, if_false, WP.spec_ok]
+    · simp only [show ¬ k < 16#usize by scalar_tac, ite_false, WP.spec_ok]
       exact ⟨fun j hj => hslo j (by scalar_tac), fun j hj hj32 => hshi j (by scalar_tac) hj32⟩
   · exact ⟨hi, hlo, hhi⟩
 

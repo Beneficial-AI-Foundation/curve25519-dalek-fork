@@ -32,6 +32,7 @@ value. The trait structures `zeroize.Zeroize` / `zeroize.DefaultIsZeroes` are ge
 crate's translation. Derived results are in `Zeroize/Lemmas.lean` and `Zeroize/Instances.lean`.
 -/
 
+set_option linter.dupNamespace false in
 /-- [zeroize::{impl zeroize::Zeroize for Z}::zeroize]:
     Source: 'zeroize-1.8.2/src/lib.rs', lines 301:4-301:25
     Name pattern: [zeroize::{zeroize::Zeroize<@Z>}::zeroize] -/

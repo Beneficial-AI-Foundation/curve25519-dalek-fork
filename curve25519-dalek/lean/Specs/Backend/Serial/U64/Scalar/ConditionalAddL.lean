@@ -126,8 +126,8 @@ theorem conditional_add_l_spec (self : Scalar52) (condition : subtle.Choice)
   have hself_lt := Scalar52.asNat_lt self hself
   rw [constants.L_spec.1] at hsum
   refine ⟨fun h => ?_, fun h => ?_, hr⟩
-  · rw [eq_mod_of_add_mul_eq hr_lt hsum, h, if_neg (by decide), zero_mul, add_zero,
+  · rw [eq_mod_of_add_mul_eq hr_lt hsum, h, ite_eq_right (by decide), zero_mul, add_zero,
       Nat.mod_eq_of_lt hself_lt]
-  · rw [eq_mod_of_add_mul_eq hr_lt hsum, h, if_pos rfl, one_mul]
+  · rw [eq_mod_of_add_mul_eq hr_lt hsum, h, ite_eq_left rfl, one_mul]
 
 end Curve25519Dalek.backend.serial.u64.scalar.Scalar52
