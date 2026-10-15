@@ -61,3 +61,42 @@ theorem sub_spec (self rhs : Scalar) (hself : self.asNat < L)
     (scalar.SubShared0ScalarSharedAScalarScalar.sub.«x86_64-no-tables_spec» self rhs hself hrhs)
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithSubSharedAScalarScalar
+
+namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubSharedBScalarScalar
+
+/-- `Sub<&Scalar> for Scalar` (from `define_sub_variants!`): forwards to `&Scalar - &Scalar`. -/
+@[step]
+theorem sub_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L)
+    (htgt : OnX86_64) :
+    sub self rhs ⦃ (r : Scalar) =>
+      (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄ := by
+  unfold sub
+  step*
+
+end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubSharedBScalarScalar
+
+namespace Curve25519Dalek.SharedAScalar.Insts.CoreOpsArithSubScalarScalar
+
+/-- `Sub<Scalar> for &Scalar` (from `define_sub_variants!`): forwards to `&Scalar - &Scalar`. -/
+@[step]
+theorem sub_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L)
+    (htgt : OnX86_64) :
+    sub self rhs ⦃ (r : Scalar) =>
+      (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄ := by
+  unfold sub
+  step*
+
+end Curve25519Dalek.SharedAScalar.Insts.CoreOpsArithSubScalarScalar
+
+namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubScalarScalar
+
+/-- `Sub<Scalar> for Scalar` (from `define_sub_variants!`): forwards to `&Scalar - &Scalar`. -/
+@[step]
+theorem sub_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L)
+    (htgt : OnX86_64) :
+    sub self rhs ⦃ (r : Scalar) =>
+      (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄ := by
+  unfold sub
+  step*
+
+end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubScalarScalar

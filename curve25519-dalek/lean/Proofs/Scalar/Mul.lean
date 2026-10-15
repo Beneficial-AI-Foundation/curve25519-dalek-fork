@@ -58,3 +58,39 @@ theorem mul_spec (self _rhs : Scalar) (htgt : OnX86_64) :
     (scalar.MulShared0ScalarSharedAScalarScalar.mul.«x86_64-no-tables_spec» self _rhs)
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithMulSharedAScalarScalar
+
+namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulSharedBScalarScalar
+
+/-- `Mul<&Scalar> for Scalar` (from `define_mul_variants!`): forwards to `&Scalar * &Scalar`. -/
+@[step]
+theorem mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
+    mul self rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * rhs.asNat % L ⦄ := by
+  unfold mul
+  step*
+
+end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulSharedBScalarScalar
+
+namespace Curve25519Dalek.SharedAScalar.Insts.CoreOpsArithMulScalarScalar
+
+/-- `Mul<Scalar> for &Scalar` (from `define_mul_variants!`): forwards to `&Scalar * &Scalar`. -/
+@[step]
+theorem mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
+    mul self rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * rhs.asNat % L ⦄ := by
+  unfold mul
+  step*
+
+end Curve25519Dalek.SharedAScalar.Insts.CoreOpsArithMulScalarScalar
+
+namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulScalarScalar
+
+/-- `Mul<Scalar> for Scalar` (from `define_mul_variants!`): forwards to `&Scalar * &Scalar`. -/
+@[step]
+theorem mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
+    mul self rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * rhs.asNat % L ⦄ := by
+  unfold mul
+  step*
+
+end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulScalarScalar

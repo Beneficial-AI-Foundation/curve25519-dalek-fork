@@ -8,7 +8,7 @@ public import Curve25519Dalek.Funs
 public import Defs.Iterator
 public import Defs.Scalar
 public import Defs.Target
-import Proofs.Scalar.AddOwned
+import Proofs.Scalar.Add
 import Proofs.Scalar.Zero
 public section
 

@@ -85,7 +85,6 @@ public import Proofs.Helpers.Target
 public import Proofs.Helpers.ZMod
 public import Proofs.Scalar.Add
 public import Proofs.Scalar.AddAssign
-public import Proofs.Scalar.AddOwned
 public import Proofs.Scalar.AsBytes
 public import Proofs.Scalar.AsRadix16
 public import Proofs.Scalar.AsRadix2w
@@ -119,9 +118,7 @@ public import Proofs.Scalar.InvertBatchInternal
 public import Proofs.Scalar.IsCanonical
 public import Proofs.Scalar.Mul
 public import Proofs.Scalar.MulAssign
-public import Proofs.Scalar.MulOwned
 public import Proofs.Scalar.Neg
-public import Proofs.Scalar.NegOwned
 public import Proofs.Scalar.NonAdjacentForm
 public import Proofs.Scalar.One
 public import Proofs.Scalar.Product
@@ -133,7 +130,6 @@ public import Proofs.Scalar.Scalar52Pack
 public import Proofs.Scalar.SplitAt128
 public import Proofs.Scalar.Sub
 public import Proofs.Scalar.SubAssign
-public import Proofs.Scalar.SubOwned
 public import Proofs.Scalar.Sum
 public import Proofs.Scalar.ToBytes
 public import Proofs.Scalar.ToRadix2wSizeHint

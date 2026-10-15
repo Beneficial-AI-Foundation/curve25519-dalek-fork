@@ -183,8 +183,11 @@ section` for `p` and `L` (keep `@[expose]` only for definitions that proofs must
 
 ## Spec campaign status
 
-- `src/backend/serial/u64/field.rs`, `scalar.rs`, `constants.rs`: all statements proved. The
-  `EdwardsPoint` constants and tables wait for the curve model.
-- `src/field.rs` (u64 backend, `FieldElement51`): all statements proved.
-- `src/scalar.rs`: all statements proved, for 64-bit targets: the `get_target` dispatchers and the
-  functions calling them assume `OnX86_64` (`Defs/Target.lean`).
+Spec summaries cover the crate's public API only (see `verif-guidelines.md`, "Coverage").
+
+- `src/scalar.rs`: all public items specified and proved, for 64-bit targets (`OnX86_64`).
+- Proved but not public (no spec summary): `src/backend/serial/u64/field.rs`, `scalar.rs`,
+  `constants.rs` (the `EdwardsPoint` constants and tables wait for the curve model) and
+  `src/field.rs`.
+- Next public files: `constants.rs`, `edwards.rs`, `montgomery.rs`, `ristretto.rs` (they need the
+  curve model).

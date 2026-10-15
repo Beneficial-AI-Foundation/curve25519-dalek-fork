@@ -58,3 +58,16 @@ theorem mul_assign_spec (self _rhs : Scalar) (htgt : OnX86_64) :
     (scalar.MulAssignScalarSharedAScalar.mul_assign.«x86_64-no-tables_spec» self _rhs)
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignSharedAScalar
+
+namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignScalar
+
+/-- `MulAssign<Scalar> for Scalar` (from `define_mul_assign_variants!`): forwards to the
+`&Scalar` version. -/
+@[step]
+theorem mul_assign_spec (self rhs : Scalar) (htgt : OnX86_64) :
+    mul_assign self rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * rhs.asNat % L ⦄ := by
+  unfold mul_assign
+  step*
+
+end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignScalar

@@ -74,3 +74,14 @@ theorem neg_spec (self : Scalar) (htgt : OnX86_64) :
     (scalar.NegShared0ScalarScalar.neg.«x86_64-no-tables_spec» self)
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithNegScalar
+
+namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithNegScalar
+
+@[step]
+theorem neg_spec (self : Scalar) (htgt : OnX86_64) :
+    neg self ⦃ (r : Scalar) =>
+      (r.asNat + self.asNat) % L = 0 ∧ r.asNat < L ⦄ := by
+  unfold neg
+  step*
+
+end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithNegScalar
