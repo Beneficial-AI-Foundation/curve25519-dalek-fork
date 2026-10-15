@@ -24,6 +24,7 @@ theorem APLUS2_OVER_FOUR_spec :
   unfold APLUS2_OVER_FOUR
   step*
   subst_vars
+  rw [curve25519.A_eq]
   decide
 
 end Curve25519Dalek.backend.serial.u64.constants

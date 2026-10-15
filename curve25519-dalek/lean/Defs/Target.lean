@@ -6,7 +6,7 @@ module
 public import Aeneas.Std.String
 public import Aeneas.Std.Target
 public import Aeneas.Std.WP
-@[expose] public section
+public section
 
 /-! # The compilation target (audited)
 
@@ -21,7 +21,7 @@ open Aeneas Aeneas.Std Aeneas.Std.WP
 namespace Curve25519Dalek
 
 /-- The crate is compiled for one of the two x86_64 targets (u64 backend). -/
-@[nolint defsWithUnderscore]
+@[expose, nolint defsWithUnderscore]
 def OnX86_64 : Prop :=
   get_target ⦃ (t : Str) => t = toStr "x86_64-tables" ∨ t = toStr "x86_64-no-tables" ⦄
 

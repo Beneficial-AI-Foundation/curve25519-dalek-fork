@@ -5,9 +5,8 @@ Authors: Alessandro D'Angelo, Oliver Butterley
 -/
 module
 public import Mathlib.Data.ZMod.Basic
-public import Mathlib.Tactic.IrreducibleDef
 import Mathlib.Tactic.ReduceModChar
-@[expose] public section
+public section
 
 /-! # Curve25519 parameters
 
@@ -15,22 +14,22 @@ The field prime, the prime-order subgroup's order, and the constants of the twis
 `a x² + y² = 1 + d x² y²` (RFC 8032 §5.1) and the Montgomery form `y² = x³ + A x² + x`
 (RFC 7748 §4.1).
 
-`p` and `L` are `irreducible_def`s: neither the elaborator nor the kernel unfolds them. Proofs use
-their characterisation lemmas below (`p_def`, `L_def` are the defining equations). -/
+The definitions are not exposed: importing modules cannot unfold them (neither the elaborator nor
+the kernel), and use the characterisation lemmas below instead. -/
 
 namespace curve25519
 
 /-- The field prime `p = 2^255 - 19`. -/
-irreducible_def p : ℕ := 2 ^ 255 - 19
+def p : ℕ := 2 ^ 255 - 19
 
 /-- The order of the prime-order subgroup, `L = 2^252 + 27742317777372353535851937790883648493`. -/
-irreducible_def L : ℕ := 2 ^ 252 + 27742317777372353535851937790883648493
+def L : ℕ := 2 ^ 252 + 27742317777372353535851937790883648493
 
 /-- The Edwards coefficient `a = -1`. -/
-def a : ZMod p := -1
+noncomputable def a : ZMod p := -1
 
 /-- The Edwards coefficient `d = -121665 / 121666`. -/
-def d : ZMod p := -121665 * (121666 : ZMod p)⁻¹
+noncomputable def d : ZMod p := -121665 * (121666 : ZMod p)⁻¹
 
 /-- The Montgomery coefficient `A = 486662`. -/
 def A : ℕ := 486662
@@ -44,7 +43,6 @@ def sqrtM1 : ℕ := 196811613767075059568070793049885420154460665159238901627440
 /-- `p` as a numeral. -/
 theorem p_eq :
     p = 57896044618658097711785492504343953926634992332820282019728792003956564819949 := by
-  rw [p_def]
   decide
 
 theorem p_add_nineteen : p + 19 = 2 ^ 255 := by rw [p_eq]; decide
@@ -81,6 +79,12 @@ theorem mod_p_of_lt {x : ℕ} (hx : x < 2 ^ 255) :
   · rw [Nat.mod_eq_sub_mod (by grind), Nat.mod_eq_of_lt (by grind)]
     grind
 
+/-- `A = 486662`. -/
+theorem A_eq : A = 486662 := by rfl
+
+/-- `a = -1`. -/
+theorem a_eq : a = -1 := by rfl
+
 /-- `d = -121665 / 121666` as a natural number below `p`. -/
 theorem d_eq :
     d = ((37095705934669439343138083508754565189542113879843219016388785533085940283555 : ℕ) :
@@ -99,7 +103,6 @@ theorem d_eq :
 /-- `L` as a numeral. -/
 theorem L_eq :
     L = 7237005577332262213973186563042994240857116359379907606001950938285454250989 := by
-  rw [L_def]
   decide
 
 theorem L_pos : 0 < L := by rw [L_eq]; decide
@@ -153,6 +156,5 @@ theorem sqrtM1_eq_pow : (2 : ZMod p) ^ ((p - 1) / 4) = sqrtM1 := by
   rw [p_eq, sqrtM1]
   reduce_mod_char
 
-attribute [irreducible] sqrtM1
 
 end curve25519

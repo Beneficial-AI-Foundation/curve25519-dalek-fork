@@ -160,13 +160,6 @@ string literal in the generated dispatchers, and in `OnX86_64`, therefore adds
 `…_native.decide.ax_*` axioms to the statements of `scalar.rs`. Ask upstream for a kernel-checked
 bound (or a `Str` literal that carries none).
 
-## To do: no `@[expose]` around `p` and `L`
-
-`Curve25519/Basic.lean` defines `p` and `L` with `irreducible_def` inside an `@[expose] public
-section`. Exposing the bodies contradicts making them impossible to unfold: use a plain `public
-section` for `p` and `L` (keep `@[expose]` only for definitions that proofs must unfold, if any, e.g.
-`a`, `d`, `sqrtM1`), and check that downstream proofs only use the characterisation lemmas.
-
 ## To do: tooling
 
 - **Prebuilt Aeneas oleans after a version bump.** Lake downloads the Aeneas release's build

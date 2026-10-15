@@ -47,8 +47,17 @@ How the Lean verification of curve25519-dalek is arranged. The plan and the open
 | `Specs` | `Curve25519Dalek` | Spec summaries, one per Rust file | yes |
 | `Proofs` | `Curve25519Dalek` | Proofs, one file per Rust item, and `Proofs/Helpers` | no |
 
-All hand-written files use the Lean module system: `module`, `public section`, and
-`@[expose] public section` for definitions that proofs must unfold.
+All hand-written files use the Lean module system: `module` and `public section`.
+
+**Exposing and hiding definitions:** a public definition is hidden unless marked `@[expose]`:
+importing modules cannot unfold it at all (neither `unfold`, `simp`, `rfl`, `decide` nor the
+kernel), only use the lemmas its own module proves about it. Mark `@[expose]` on each definition
+that proofs in other modules must unfold (e.g. `Scalar.asNat`, `OnX86_64`), never on a whole
+section. Hide everything else, and give it characterisation lemmas in its own module (`p_eq`,
+`a_eq`, `montgomeryRadix_eq`). Inside the defining module, such lemmas are tactic proofs (`by
+decide`, `by unfold x; rfl`): a term-mode `:= rfl` is rejected, because it would be a definitional
+lemma about a hidden body. A hidden definition whose type depends on another hidden value (`a :
+ZMod p`) is `noncomputable`.
 
 **Public vs private imports:** `public import` only what the file's public statements and definitions
 mention (types, `Defs`, `Curve25519.Basic`, …); it is re-exported downstream. Import what only proofs
@@ -104,8 +113,8 @@ Defs/<Topic>.lean                  definitions needed to state the specs (audite
 - **`Proofs/Helpers/`** holds every further theorem the proofs use, and any auxiliary definitions
   they share. Nobody needs to inspect it.
 - **`Defs/`** holds the definitions needed to write the spec statements, in the minimal possible
-  way: only what a statement uses, plus the unfolding lemma of an irreducible definition (proved
-  before its `attribute [irreducible]`). Other characterisations go in `Helpers`.
+  way: only what a statement uses, plus the unfolding lemma of a hidden definition
+  (`montgomeryRadix_eq`). Other characterisations go in `Helpers`.
 - **Imports:** a spec summary imports its Rust file's proof files; a proof file imports its callees'
   proof files, `Defs`, `Helpers` and libraries, never `Specs`. The root `Specs.lean` imports every
   spec summary.
@@ -208,10 +217,9 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   hand).
 - **Large powers (`exponent … exceeds the threshold 256`).** Lean core declines to evaluate
   `b ^ n` when the exponent `n` exceeds `exponentiation.threshold` (256) and warns, whenever
-  unification, `simp` or `omega`/`scalar_tac` merely meet such a term. Keep large powers
-  irreducible: name them (`p`, `L`, `montgomeryRadix` for `2^260`), as an `irreducible_def` (like
-  `p`, `L`) or with `attribute [irreducible]` after an unfolding lemma that is exactly the
-  definition (`montgomeryRadix_eq`); state specs with the name.
+  unification, `simp` or `omega`/`scalar_tac` merely meet such a term. Name large powers as
+  hidden (non-exposed) definitions (`p`, `L`, `montgomeryRadix` for `2^260`), with an unfolding
+  lemma that is exactly the definition (`montgomeryRadix_eq`); state specs with the name.
 - **Export only the key specs.** A step lemma needed only inside its own file (loop specs,
   `#decompose` parts, closure `call_mut` specs, inner constants, variants with extra
   postconditions) is `@[local step] private theorem`. It is then neither visible nor registered
@@ -219,9 +227,9 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   theorems are the audited specs and the few helper specs other files genuinely use.
 - **No auto-generated names.** Never refer to names a tactic invented (`h_1`, `x✝`, `a_post1`,
   `i1`). Name what you use (`step as ⟨r, hr⟩`, `obtain ⟨…⟩`, `intro`).
-- **`p` and `L` cannot be unfolded.** They are `irreducible_def`s (opaque to the elaborator and the
-  kernel). Use their characterisation lemmas in `Curve25519/Basic.lean` (`p_eq`, `L_eq` give them as
-  numerals; add new lemmas there).
+- **The curve constants cannot be unfolded.** `p`, `L`, `a`, `d`, `A` and `sqrtM1` are hidden
+  definitions. Use their characterisation lemmas in `Curve25519/Basic.lean` (`p_eq`, `L_eq` give
+  them as numerals; add new lemmas there).
 - **No** `sorry`, `native_decide` or `admit`. `bv_decide` is allowed; its certificate axioms then
   appear in the spec summary's axiom list.
 - **Tactics Aeneas's `aeneas-lean-core` guidance bans** (`omega`, `linarith`, `nlinarith`,

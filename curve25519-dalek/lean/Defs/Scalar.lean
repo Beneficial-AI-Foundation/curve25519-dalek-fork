@@ -6,7 +6,7 @@ Authors: Alessandro D'Angelo, Oliver Butterley
 module
 public import Curve25519Dalek.Types
 public import Defs.Array
-@[expose] public section
+public section
 
 /-! # The value of a `Scalar` (audited) -/
 
@@ -16,10 +16,12 @@ namespace Curve25519Dalek
 
 /-- The natural number encoded little-endian by the 32 bytes of a `Scalar` (not necessarily
 reduced modulo `L`). -/
+@[expose]
 def scalar.Scalar.asNat (self : scalar.Scalar) : ℕ :=
   self.bytes.asNat 8
 
 /-- The natural number encoded by a `HalfWidthScalar` (a `Scalar` meant to be below `2^128`). -/
+@[expose]
 def scalar.HalfWidthScalar.asNat (self : scalar.HalfWidthScalar) : ℕ :=
   scalar.Scalar.asNat self
 
