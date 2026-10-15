@@ -160,8 +160,29 @@ string literal in the generated dispatchers, and in `OnX86_64`, therefore adds
 `…_native.decide.ax_*` axioms to the statements of `scalar.rs`. Ask upstream for a kernel-checked
 bound (or a `Str` literal that carries none).
 
+## To do: `recall` in spec summaries
+
+In every spec summary, restate each statement with Mathlib's `recall` instead of a primed theorem
+(`theorem square_spec' … := square_spec …`): `recall square_spec (self …) : …` checks that the
+restated statement matches the proved one, without adding a second theorem. Check how the
+`#guard_msgs` axiom lines then refer to it (`#print axioms square_spec`), and update
+`verif-guidelines.md` ("Spec summary format") and `scripts/fill-guards.py`.
+
+## To do: no `@[expose]` around `p` and `L`
+
+`Curve25519/Basic.lean` defines `p` and `L` with `irreducible_def` inside an `@[expose] public
+section`. Exposing the bodies contradicts making them impossible to unfold: use a plain `public
+section` for `p` and `L` (keep `@[expose]` only for definitions that proofs must unfold, if any, e.g.
+`a`, `d`, `sqrtM1`), and check that downstream proofs only use the characterisation lemmas.
+
 ## To do: tooling
 
+- **Patch a copy, not the source tree.** `scripts/aeneas-translate.sh` applies
+  `translation-patches/` to `curve25519-dalek/src/` and reverts them on exit, which is fragile
+  (an interrupted or failed run leaves the tree patched; see the 2026-10-13 incident below). Instead
+  copy the crate to a scratch location (e.g. `.llbc/src-patched/`), apply the patches there and run
+  Charon on the copy: no revert step, and the working tree is never touched. Check that the source
+  paths in the generated doc comments (`Source: 'curve25519-dalek/src/…'`) stay the same.
 - **Prebuilt Aeneas oleans after a version bump.** Lake downloads the Aeneas release's build
   archive only when `.lake/packages/aeneas/backends/lean/.lake/build` does not exist, so after
   `lake update aeneas` it compiles Aeneas from source. Make `scripts/aeneas-install.sh` delete
