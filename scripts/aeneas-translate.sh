@@ -1,27 +1,25 @@
 #!/usr/bin/env bash
-# Translate curve25519-dalek to Lean: apply curve25519-dalek/translation-patches/, run charon + aeneas,
-# then revert the patches. Charon settings live in curve25519-dalek/Cargo.toml.
+# Translate curve25519-dalek to Lean: copy the Cargo workspace to .llbc/work/, apply
+# curve25519-dalek/translation-patches/ to the copy, run charon on it and aeneas on the result.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+root=$PWD
 
 TAG=$(awk -F'"' '/^\[/{name=""} /^name = /{name=$2} /^rev = / && name=="aeneas"{print $2}' lakefile.toml)
 : "${TAG:?no aeneas rev in lakefile.toml}"
 [[ "$(.aeneas/aeneas -version 2>/dev/null)" == "aeneas $TAG" ]] \
     || { echo "run ./scripts/aeneas-install.sh: .aeneas/ is not $TAG" >&2; exit 1; }
 
-revert() {
-    # Undo the applied patches in reverse order (patch contexts may overlap).
-    local i
-    for (( i = ${#applied[@]} - 1; i >= 0; i-- )); do
-        git apply -R "${applied[i]}" || echo "failed to revert ${applied[i]}" >&2
-    done
-}
-applied=()
-trap revert EXIT
+# The workspace
+work=.llbc/work
+mkdir -p "$work"
+rsync -a --delete --exclude=target/ --exclude=/curve25519-dalek/lean/ \
+    Cargo.toml Cargo.lock curve25519-dalek curve25519-dalek-derive ed25519-dalek x25519-dalek \
+    "$work/"
+
 shopt -s nullglob
 for patch in curve25519-dalek/translation-patches/*.patch; do
-    git apply "$patch"
-    applied+=("$patch")
+    (cd "$work" && GIT_CEILING_DIRECTORIES="$root/.llbc" git apply "$root/$patch")
 done
 
 mkdir -p .llbc
@@ -42,8 +40,8 @@ for arch in x86_64 i686; do
     export "CARGO_TARGET_$(tr 'a-z-' 'A-Z_' <<< "$arch-tables")_RUSTFLAGS=$serial --cfg feature=\"precomputed-tables\""
     export "CARGO_TARGET_$(tr 'a-z-' 'A-Z_' <<< "$arch-no-tables")_RUSTFLAGS=$serial"
 done
-(cd curve25519-dalek && ../.aeneas/charon cargo --preset=aeneas "${targets[@]}" \
-    --dest-file ../.llbc/curve25519_dalek.llbc \
+(cd "$work/curve25519-dalek" && "$root/.aeneas/charon" cargo --preset=aeneas "${targets[@]}" \
+    --dest-file "$root/.llbc/curve25519_dalek.llbc" \
     -- --locked --no-default-features --features alloc,zeroize \
     -Zjson-target-spec -Zbuild-std=core,alloc)
 .aeneas/aeneas -backend lean -split-files -emit-json -namespace Curve25519Dalek \

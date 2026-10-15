@@ -7,7 +7,7 @@ How the Lean verification of curve25519-dalek is arranged. The plan and the open
 
 ```
 ./scripts/aeneas-install.sh     # charon + aeneas for the release pinned in lakefile.toml
-./scripts/aeneas-translate.sh   # apply translation-patches/, run charon + aeneas, revert patches
+./scripts/aeneas-translate.sh   # patch a copy of the workspace (.llbc/work/), run charon + aeneas
 ```
 
 - **No post-translation tweaks.** `curve25519-dalek/lean/Curve25519Dalek/{Types,Funs}.lean` and
@@ -27,7 +27,7 @@ How the Lean verification of curve25519-dalek is arranged. The plan and the open
 - **Rust changes only as translation patches.** `curve25519-dalek/src/` stays upstream.
   - **One file per function,** `curve25519-dalek/translation-patches/<file-stem>-<function>.patch`. Add `-<Type>` before `<function>` only when the name alone is ambiguous.
   - **Header:** a short free-text header (Change / Why / Behaviour, plus "Relies on" if needed) before the `git diff -W` body.
-  - **Applying:** patches are applied one by one and reverted in reverse order, so each must apply on its own. If two patches touch neighbouring functions, trim the context at the boundary.
+  - **Applying:** patches are applied in file-name order to a copy of the workspace (`.llbc/work/`); `src/` is never modified. Each patch applies on top of the previous ones, with `git apply` (no fuzz). If two patches touch neighbouring functions, trim the context at the boundary.
   - **Behaviour:** must stay identical. Patches that differ say so in their header (the multiscalar `size_hint` patches, `constants-RISTRETTO_BASEPOINT_TABLE`).
 - **External files are hand-written.** `FunsExternal.lean` and `TypesExternal.lean` are never
   overwritten. After each translation, compare them against the gitignored

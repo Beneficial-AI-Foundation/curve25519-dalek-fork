@@ -169,19 +169,10 @@ section` for `p` and `L` (keep `@[expose]` only for definitions that proofs must
 
 ## To do: tooling
 
-- **Patch a copy, not the source tree.** `scripts/aeneas-translate.sh` applies
-  `translation-patches/` to `curve25519-dalek/src/` and reverts them on exit, which is fragile
-  (an interrupted or failed run leaves the tree patched; see the 2026-10-13 incident below). Instead
-  copy the crate to a scratch location (e.g. `.llbc/src-patched/`), apply the patches there and run
-  Charon on the copy: no revert step, and the working tree is never touched. Check that the source
-  paths in the generated doc comments (`Source: 'curve25519-dalek/src/…'`) stay the same.
 - **Prebuilt Aeneas oleans after a version bump.** Lake downloads the Aeneas release's build
   archive only when `.lake/packages/aeneas/backends/lean/.lake/build` does not exist, so after
   `lake update aeneas` it compiles Aeneas from source. Make `scripts/aeneas-install.sh` delete
   `.lake/packages/aeneas/backends/lean/.lake` (or run `lake build aeneas:release`).
-- **`aeneas-translate.sh` revert.** Once (2026-10-13) the run failed while reverting its patches and
-  left all of `translation-patches/` applied to `src/`; a rerun was clean. If it recurs, look at
-  the `trap revert EXIT` step.
 - **Large exponents in the kernel.** Lean v4.35 refuses to evaluate `Nat.pow` with an exponent that
   does not fit in 32 bits (`invert_spec` hit this with `0 ^ ((2^250-1)*2^5+11)`). `generalize` does
   not hide such a term from the kernel; `obtain ⟨N, hN⟩ : ∃ N, … = N + 1` or an `irreducible_def`
