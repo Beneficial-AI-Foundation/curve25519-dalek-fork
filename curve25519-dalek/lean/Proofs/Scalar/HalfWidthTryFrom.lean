@@ -83,6 +83,7 @@ theorem try_from_spec (value : Scalar) :
   step with try_from_loop_spec as ⟨r, hok, herr⟩
   have hiff := Array.asNat_lt_pow_iff 8 16 value.bytes (by simp)
     fun j _ => (value.bytes[j]!).hBounds
+  simp only [scalar.Scalar.asNat_def] at *
   refine ⟨fun hlt => hok (hiff.mp hlt), fun hge => herr fun hall => ?_⟩
   exact absurd (hiff.mpr hall) (Nat.not_lt.mpr hge)
 

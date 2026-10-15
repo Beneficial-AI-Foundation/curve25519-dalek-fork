@@ -35,7 +35,7 @@ theorem to_bytes_spec (self : HalfWidthScalar) :
   step as ⟨s, back, hs, hback⟩
   step as ⟨s1, hs1, hs1len⟩
   step as ⟨s2, hs2⟩
-  rw [HalfWidthScalar.asNat, Scalar.asNat]
+  rw [HalfWidthScalar.asNat_def, Scalar.asNat_def]
   refine (Array.asNat_mod_of_prefix 8 self.bytes _ (by simp) (fun j hj => ?_)
     (fun j _ => (self.bytes[j]!).hBounds)).symm
   have hj16 : j < 16 := by simpa using hj

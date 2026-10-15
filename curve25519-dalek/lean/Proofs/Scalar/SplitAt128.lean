@@ -43,7 +43,7 @@ theorem split_at_128_spec (self : Scalar) :
   step as ⟨hi, hhi⟩
   have hsplit := Array.asNat_eq_split 8 self.bytes (back s2) (back1 s5) (by simp)
     (fun j hj => ?_) (fun j hj => ?_)
-  · rw [hlo, hhi, Scalar.asNat, hsplit]
+  · rw [hlo, hhi, Scalar.asNat_def, hsplit]
     have hlt (a : Array U8 16#usize) : a.asNat 8 < 2 ^ 128 :=
       Array.asNat_lt 8 a fun j _ => (a[j]!).hBounds
     exact ⟨rfl, hlt _, hlt _⟩

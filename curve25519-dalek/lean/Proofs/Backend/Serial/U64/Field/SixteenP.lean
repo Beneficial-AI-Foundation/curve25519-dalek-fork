@@ -16,6 +16,7 @@ theorem SIXTEEN_P_spec :
     FieldElement51.asNat SIXTEEN_P = 16 * p ∧
       (∀ i < 5, 2 ^ 55 ≤ SIXTEEN_P[i]!.val + 304) ∧ ∀ i < 5, SIXTEEN_P[i]!.val < 2 ^ 55 := by
   unfold SIXTEEN_P
+  simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   refine ⟨?_, by decide⟩
   apply Nat.add_right_cancel (m := 16 * 19)
   rw [← Nat.mul_add, p_add_nineteen]

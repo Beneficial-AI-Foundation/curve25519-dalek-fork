@@ -201,7 +201,7 @@ private theorem from_bytes_wide.limbs_eq (w0 w1 w2 w3 w4 w5 w6 w7 : U64) :
   have hhi := from_bytes_wide.hi_eq w4 w5 w6 w7
   have d4 := Nat.div_add_mod w4.val (2 ^ 4)
   have hR : montgomeryRadix = 2 ^ 64 * (2 ^ 64 * (2 ^ 64 * (2 ^ 64 * 2 ^ 4))) :=
-    montgomeryRadix_eq.trans (by rw [← Nat.pow_add, ← Nat.pow_add, ← Nat.pow_add, ← Nat.pow_add])
+    montgomeryRadix_def.trans (by rw [← Nat.pow_add, ← Nat.pow_add, ← Nat.pow_add, ← Nat.pow_add])
   rw [from_bytes_wide.lo_eq, hR]
   generalize (2 : ℕ) ^ 64 = B at hhi ⊢
   generalize (2 : ℕ) ^ 4 = C at hhi d4 ⊢

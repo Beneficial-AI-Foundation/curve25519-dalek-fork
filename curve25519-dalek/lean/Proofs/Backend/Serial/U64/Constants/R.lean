@@ -20,6 +20,7 @@ namespace Curve25519Dalek.backend.serial.u64.constants
 theorem R_spec :
     Scalar52.asNat R = montgomeryRadix % curve25519.L ∧ ∀ i < 5, R[i]!.val < 2 ^ 52 := by
   unfold R
+  simp only [scalar.Scalar52.asNat_def, Array.asNat_def]
   rw [scalar.montgomeryRadix_mod_L]
   decide
 

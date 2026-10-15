@@ -23,6 +23,7 @@ theorem SQRT_M1_spec :
     SQRT_M1 ⦃ (r : FieldElement51) =>
       r.asNat = sqrtM1 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
   unfold SQRT_M1
+  simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*
   subst_vars
   refine ⟨?_, by decide⟩

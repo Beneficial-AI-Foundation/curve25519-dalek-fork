@@ -154,7 +154,7 @@ private theorem to_bytes.pack_spec (limbs : Array U64 5#usize)
   refine ⟨?_, ?_⟩
   · rw [FieldElement51.asNat_eq]
     simp (disch := simp) only [Array.getElem!_Nat_eq, getElem!_pos]
-    simp only [Array.asNat, Array.set_val_eq, Array.repeat_val, UScalar.ofNatCore_val_eq,
+    simp only [Array.asNat_def, Array.set_val_eq, Array.repeat_val, UScalar.ofNatCore_val_eq,
       List.replicate_succ, List.replicate_zero, List.set_cons_zero, List.set_cons_succ,
       List.map_cons, List.map_nil, Nat.ofDigits_cons, Nat.ofDigits_nil]
     simp only [*, UScalar.cast_val_eq, UScalar.val_or, UScalarTy.U8_numBits_eq]

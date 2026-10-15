@@ -49,8 +49,9 @@ private theorem square_limbs.carry_spec (a : Array U64 5#usize) (c0 c1 c2 c3 c4 
     simp only [square_limbs.carry, carryChain, carryAdd, lowLimb, carryOut, carryFold,
       Std.bind_assoc]
   rw [h]
-  exact carryChain_spec _ a c0 c1 c2 c3 c4 square_limbs.LOW_51_BIT_MASK_spec
-    hc0 hc1 hc2 hc3 hc4
+  simpa only [field.FieldElement51.asNat_def] using
+    carryChain_spec _ a c0 c1 c2 c3 c4 square_limbs.LOW_51_BIT_MASK_spec
+      hc0 hc1 hc2 hc3 hc4
 
 @[local step]
 private theorem square_limbs.m_lt_spec (x y : U64) (hx : x.val < 2 ^ 54)

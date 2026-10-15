@@ -50,7 +50,8 @@ theorem mul_internal_spec (a b : Scalar52) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52)
   have hc := mul_coeffs_lt ha0 ha1 ha2 ha3 ha4 hb0 hb1 hb2 hb3 hb4
   step*
   refine ⟨?_, fun k hk => ?_⟩
-  · rw [Array.asNat_nine, Scalar52.asNat, Scalar52.asNat, Array.asNat_five, Array.asNat_five]
+  · rw [Array.asNat_nine, Scalar52.asNat_def, Scalar52.asNat_def, Array.asNat_five,
+      Array.asNat_five]
     simp (disch := decide) only [*]
     simp only [pow_mul']
     ring

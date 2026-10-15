@@ -320,7 +320,7 @@ theorem as_radix_16_spec (self : Scalar) (hself : self.asNat < 2 ^ 255) :
     exact top_nibble_le h31
   step as ⟨r, hval, hlow, h63l, h63u⟩
   refine ⟨?_, hlow, h63l, h63u⟩
-  rw [hval, Scalar.asNat]
+  rw [hval, Scalar.asNat_def]
   exact Array.asInt_eq_asNat_of_pairs 4 out self.bytes (by simp) fun i hi => by
     rw [(hout i (by simpa using hi)).1, (hout i (by simpa using hi)).2]
     exact nibbles_val _

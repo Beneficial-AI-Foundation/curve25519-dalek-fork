@@ -201,12 +201,12 @@ private theorem prime_cert_22 : Nat.Prime
 
 /-- `p = 2^255 - 19` is prime. -/
 theorem p_prime : p.Prime := by
-  rw [p_eq]
+  rw [p_eq_numeral]
   exact prime_cert_22
 
 /-- `L = 2^252 + 27742317777372353535851937790883648493` is prime. -/
 theorem L_prime : L.Prime := by
-  rw [L_eq]
+  rw [L_eq_numeral]
   exact prime_cert_21
 
 instance : Fact p.Prime := ⟨p_prime⟩

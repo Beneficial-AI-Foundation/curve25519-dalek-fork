@@ -130,7 +130,7 @@ private theorem low_eq {l0 l1 l2 l3 l4 n0 n1 n2 n3 n4 c0 c1 c2 c3 c4 L0 L1 L2 L4
         (L0 + 2 ^ 52 * L1 + 2 ^ 104 * L2 + 2 ^ 208 * L4) =
       montgomeryRadix * (c4 + n1 * L4 + n3 * L2 + n4 * L1 + 2 ^ 52 * (n2 * L4 + n4 * L2) +
         2 ^ 104 * (n3 * L4) + 2 ^ 156 * (n4 * L4)) := by
-  rw [montgomeryRadix_eq, show (2 : ℕ) ^ 104 = (2 ^ 52) ^ 2 by rw [← pow_mul],
+  rw [montgomeryRadix_def, show (2 : ℕ) ^ 104 = (2 ^ 52) ^ 2 by rw [← pow_mul],
     show (2 : ℕ) ^ 156 = (2 ^ 52) ^ 3 by rw [← pow_mul],
     show (2 : ℕ) ^ 208 = (2 ^ 52) ^ 4 by rw [← pow_mul],
     show (2 : ℕ) ^ 260 = (2 ^ 52) ^ 5 by rw [← pow_mul]]
@@ -175,13 +175,13 @@ private theorem combine_eq (limbs : Array U128 9#usize) {n X T : ℕ}
     (hhigh : X + (limbs[5]!.val + 2 ^ 52 * limbs[6]!.val + 2 ^ 104 * limbs[7]!.val +
       2 ^ 156 * limbs[8]!.val) = T) :
     limbs.asNat 52 + n * L = montgomeryRadix * T := by
-  rw [Array.asNat_nine, montgomeryRadix_eq]
+  rw [Array.asNat_nine, montgomeryRadix_def]
   simp only [pow_mul']
   have h104 : (2 : ℕ) ^ 104 = (2 ^ 52) ^ 2 := by rw [← pow_mul]
   have h156 : (2 : ℕ) ^ 156 = (2 ^ 52) ^ 3 := by rw [← pow_mul]
   have h208 : (2 : ℕ) ^ 208 = (2 ^ 52) ^ 4 := by rw [← pow_mul]
   have h260 : (2 : ℕ) ^ 260 = (2 ^ 52) ^ 5 := by rw [← pow_mul]
-  rw [montgomeryRadix_eq, h104, h156, h208, h260] at hlow
+  rw [montgomeryRadix_def, h104, h156, h208, h260] at hlow
   rw [h104, h156] at hhigh
   rw [h260]
   generalize (2 : ℕ) ^ 52 = B at *
@@ -190,7 +190,7 @@ private theorem combine_eq (limbs : Array U128 9#usize) {n X T : ℕ}
 private theorem five_limbs_lt {a b c d e : ℕ} (ha : a < 2 ^ 52) (hb : b < 2 ^ 52)
     (hc : c < 2 ^ 52) (hd : d < 2 ^ 52) (he : e < 2 ^ 52) :
     a + 2 ^ 52 * b + 2 ^ 104 * c + 2 ^ 156 * d + 2 ^ 208 * e < montgomeryRadix := by
-  rw [montgomeryRadix_eq, show (2 : ℕ) ^ 104 = (2 ^ 52) ^ 2 by rw [← pow_mul],
+  rw [montgomeryRadix_def, show (2 : ℕ) ^ 104 = (2 ^ 52) ^ 2 by rw [← pow_mul],
     show (2 : ℕ) ^ 156 = (2 ^ 52) ^ 3 by rw [← pow_mul],
     show (2 : ℕ) ^ 208 = (2 ^ 52) ^ 4 by rw [← pow_mul],
     show (2 : ℕ) ^ 260 = (2 ^ 52) ^ 5 by rw [← pow_mul]]
@@ -257,7 +257,7 @@ theorem montgomery_reduce_spec (limbs : Array U128 9#usize)
   have hTlt := reduce_lt hT hlimbs' (five_limbs_lt hn0 hn1 hn2 hn3 hn4)
   clear hlimbs' hlow hhigh
   have hc8 : c8.val < 2 ^ 52 := by
-    have := L_lt
+    have := L_lt_two_pow_253
     scalar_tac
   step as ⟨r4, hr4⟩
   have hr4' : r4.val = c8.val := by

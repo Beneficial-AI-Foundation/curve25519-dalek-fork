@@ -20,6 +20,6 @@ namespace Curve25519Dalek.scalar.Scalar
 
 theorem ZERO_spec :
     ZERO.asNat = 0 := by
-  simp [Scalar.asNat, Array.asNat, ZERO, Nat.ofDigits]
+  simp [Scalar.asNat_def, Array.asNat_def, ZERO, Nat.ofDigits]
 
 end Curve25519Dalek.scalar.Scalar

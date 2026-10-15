@@ -50,7 +50,7 @@ theorem square_internal_spec (a : Scalar52) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52)
   have hc := square_coeffs_lt ha0 ha1 ha2 ha3 ha4
   step*
   refine ⟨?_, fun k hk => ?_⟩
-  · rw [Array.asNat_nine, Scalar52.asNat, Array.asNat_five]
+  · rw [Array.asNat_nine, Scalar52.asNat_def, Array.asNat_five]
     simp only [Array.getElem!_make, List.getElem!_cons_succ, List.getElem!_cons_zero, *]
     simp only [pow_mul']
     ring

@@ -24,6 +24,6 @@ theorem pack_spec (self : backend.serial.u64.scalar.Scalar52)
       r.asNat = self.asNat ⦄ := by
   unfold pack
   step as ⟨r, hr⟩
-  exact hr
+  simpa only [scalar.Scalar.asNat_def, backend.serial.u64.scalar.Scalar52.asNat_def] using hr
 
 end Curve25519Dalek.scalar.Scalar52

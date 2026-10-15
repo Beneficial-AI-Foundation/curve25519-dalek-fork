@@ -72,7 +72,7 @@ theorem from_bytes_spec (bytes : Array U8 16#usize) :
   step with from_bytes_loop_spec as ⟨r, hlo, hhi⟩
   · intro j _ hj
     rw [Array.getElem!_Nat_eq, Array.repeat_val, List.getElem!_replicate _ (by simpa using hj)]
-  · rw [HalfWidthScalar.asNat, Scalar.asNat]
+  · rw [HalfWidthScalar.asNat_def, Scalar.asNat_def]
     exact Array.asNat_eq_of_prefix 8 r bytes (by simp)
       (fun j hj => by rw [hlo j hj]) (fun j hj hj32 => by rw [hhi j hj hj32]; rfl)
 

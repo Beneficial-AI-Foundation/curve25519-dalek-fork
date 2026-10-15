@@ -16,6 +16,6 @@ namespace Curve25519Dalek.scalar.HalfWidthScalar
 
 theorem ONE_spec :
     ONE.asNat = 1 := by
-  simp [HalfWidthScalar.asNat, ONE, Scalar.ONE_spec]
+  simp [HalfWidthScalar.asNat_def, ONE, Scalar.ONE_spec]
 
 end Curve25519Dalek.scalar.HalfWidthScalar

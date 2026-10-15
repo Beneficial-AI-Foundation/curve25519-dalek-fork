@@ -25,8 +25,8 @@ theorem from_bytes_mod_order_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) 
   step as ⟨s, hs⟩
   have hsL : s.asNat < L := hs ▸ Nat.mod_lt _ L_pos
   step as ⟨i, hi⟩
-  have hi31 : i.val < 2 ^ 5 := hi ▸ Scalar.bytes_31_lt (hsL.trans L_lt)
+  have hi31 : i.val < 2 ^ 5 := hi ▸ Scalar.bytes_31_lt (hsL.trans L_lt_two_pow_253)
   step*
-  exact hs
+  simpa only [Scalar.asNat_def] using hs
 
 end Curve25519Dalek.scalar.Scalar

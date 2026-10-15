@@ -80,10 +80,10 @@ private theorem add_loop_spec (a b : Scalar52) (mask : U64) (ha : ∀ i < 5, a[i
     · step with core.iter.range.IteratorRange.next_Usize_none_spec as ⟨o, iter1, ho, hiter1⟩
       subst ho
       have hk : iter.start.val = 5 := by scalar_tac
-      rw [hk, show 52 * 5 = 260 from rfl, ← montgomeryRadix_eq] at hsum
+      rw [hk, show 52 * 5 = 260 from rfl, ← montgomeryRadix_def] at hsum
       simp only [WP.spec_ok]
       have hs_eq : s.asNat + montgomeryRadix * (carry.val / 2 ^ 52) = a.asNat + b.asNat := by
-        simp only [Scalar52.asNat, Array.asNat_eq_sum]
+        simp only [Scalar52.asNat_def, Array.asNat_eq_sum]
         exact hsum
       refine ⟨?_, hs⟩
       rw [← hs_eq, Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt (Scalar52.asNat_lt s hs)]

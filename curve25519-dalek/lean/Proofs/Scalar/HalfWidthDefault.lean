@@ -19,6 +19,7 @@ theorem default_spec :
       r.asNat = 0 ⦄ := by
   unfold default
   step as ⟨s, hs⟩
+  rw [scalar.HalfWidthScalar.asNat_def]
   exact hs
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreDefaultDefault

@@ -15,7 +15,7 @@ open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
 open Curve25519Dalek.backend.serial.u64.scalar (Scalar52)
 open curve25519 (p a d A)
-open curve25519 (lt_p_iff mod_p_fold mod_p_of_lt d_eq)
+open curve25519 (lt_p_iff mod_p_fold mod_p_of_lt d_eq_natCast)
 
 namespace Curve25519Dalek.backend.serial.u64.constants
 
@@ -24,10 +24,11 @@ theorem ONE_MINUS_EDWARDS_D_SQUARED_spec :
     ONE_MINUS_EDWARDS_D_SQUARED ⦃ (r : FieldElement51) =>
       r.asNat = (1 - d ^ 2).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
   unfold ONE_MINUS_EDWARDS_D_SQUARED
+  simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*
   subst_vars
   refine ⟨ZMod.eq_val_of_natCast_eq (lt_p_iff.mpr (by decide)) ?_, by decide⟩
-  rw [d_eq, eq_sub_iff_add_eq]
+  rw [d_eq_natCast, eq_sub_iff_add_eq]
   norm_cast
   rw [← Nat.cast_one]
   apply ZMod.natCast_eq_natCast_of_mod_eq

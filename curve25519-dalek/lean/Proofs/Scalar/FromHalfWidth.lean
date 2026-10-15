@@ -21,6 +21,6 @@ theorem from_spec (x : HalfWidthScalar) :
     «from» x ⦃ (r : Scalar) =>
       r.asNat = x.asNat ⦄ := by
   unfold «from»
-  simp [HalfWidthScalar.asNat]
+  simp [HalfWidthScalar.asNat_def]
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromHalfWidthScalar

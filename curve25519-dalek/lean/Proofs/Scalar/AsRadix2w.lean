@@ -526,7 +526,7 @@ theorem as_radix_2w_spec (self : Scalar) (w : Usize) (hw : 4 ≤ w.val ∧ w.val
       rw [Array.getElem!_Nat_eq, hback, List.getElem!_setSlice!_middle _ _ _ _
         ⟨Nat.zero_le _, by simp [hs2len, hs1l, hi], hlen⟩, Nat.sub_zero, Slice.getElem!_Nat_eq]
     have hXeq : (back s2).asNat 64 = self.asNat :=
-      Array.asNat_limbs_eq 8 4 (back s2) self.bytes (by simp) (by simp)
+      self.asNat_def ▸ Array.asNat_limbs_eq 8 4 (back s2) self.bytes (by simp) (by simp)
         (fun i _ => by simpa using ((back s2)[i]!).hBounds)
         (fun i hi j hj => by
           rw [hlimb i hi, hs2 i (by rw [hs1l]; exact hi) j hj, hs, Slice.getElem!_Nat_eq,

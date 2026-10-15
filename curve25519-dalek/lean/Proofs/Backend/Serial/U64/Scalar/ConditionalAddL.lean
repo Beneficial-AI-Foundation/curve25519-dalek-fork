@@ -97,10 +97,10 @@ private theorem conditional_add_l_loop_spec (self : Scalar52) (condition : subtl
     · step with core.iter.range.IteratorRange.next_Usize_none_spec as ⟨o, iter1, ho, hiter1⟩
       subst ho
       have hk : iter.start.val = 5 := by scalar_tac
-      rw [hk, show 52 * 5 = 260 by rfl, ← montgomeryRadix_eq] at hsum
+      rw [hk, show 52 * 5 = 260 by rfl, ← montgomeryRadix_def] at hsum
       simp only [WP.spec_ok]
       refine ⟨?_, ha⟩
-      simp only [Scalar52.asNat, Array.asNat_eq_sum]
+      simp only [Scalar52.asNat_def, Array.asNat_eq_sum]
       exact hsum
   · exact ⟨rfl, by simp, by simp, hself, fun _ _ _ => rfl, by simp⟩
 

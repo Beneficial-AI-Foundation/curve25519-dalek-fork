@@ -21,6 +21,6 @@ theorem as_scalar_spec (self : HalfWidthScalar) :
     as_scalar self ⦃ (r : Scalar) =>
       r.asNat = self.asNat ⦄ := by
   unfold as_scalar
-  simp [HalfWidthScalar.asNat]
+  simp [HalfWidthScalar.asNat_def]
 
 end Curve25519Dalek.scalar.HalfWidthScalar

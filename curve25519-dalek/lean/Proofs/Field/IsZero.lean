@@ -28,7 +28,7 @@ theorem is_zero_spec (self : FieldElement51) :
   step as ⟨s1, hs1⟩
   step as ⟨c, hcv, hc1, hc0⟩
   subst hs hs1
-  have hzero : (Array.repeat 32#usize 0#u8).asNat 8 = 0 := by decide
+  have hzero : (Array.repeat 32#usize 0#u8).asNat 8 = 0 := by rw [Array.asNat_def]; decide
   refine ⟨hcv, fun h => hc1 ?_, fun h => hc0 fun hss => h ?_⟩
   · exact congrArg Array.to_slice (Array.eq_of_asNat_eq (hbytes.trans (h.trans hzero.symm)))
   · rw [← hbytes, Array.eq_of_to_slice_eq hss, hzero]

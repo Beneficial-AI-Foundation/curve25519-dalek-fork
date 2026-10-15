@@ -56,7 +56,8 @@ private theorem mul.carry_spec (c0 c1 c2 c3 c4 : U128) (out : Array U64 5#usize)
     simp only [mul.carry, carryChain, carryAdd, lowLimb, carryOut, carryFold, Std.bind_assoc,
       Std.bind_pure]
   rw [h]
-  exact carryChain_spec _ out c0 c1 c2 c3 c4 mul.LOW_51_BIT_MASK_spec hc0 hc1 hc2 hc3 hc4
+  simpa only [backend.serial.u64.field.FieldElement51.asNat_def] using
+    carryChain_spec _ out c0 c1 c2 c3 c4 mul.LOW_51_BIT_MASK_spec hc0 hc1 hc2 hc3 hc4
 
 @[local step]
 private theorem mul.m_lt_spec (x y : U64) (hx : x.val < 2 ^ 54) (hy : y.val < 19 * 2 ^ 54) :

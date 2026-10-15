@@ -14,7 +14,7 @@ open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
 open Curve25519Dalek.backend.serial.u64.scalar (Scalar52)
 open curve25519 (p a d A)
-open curve25519 (lt_p_iff mod_p_fold mod_p_of_lt a_eq d_eq)
+open curve25519 (lt_p_iff mod_p_fold mod_p_of_lt a_def d_eq_natCast)
 
 namespace Curve25519Dalek.backend.serial.u64.constants
 
@@ -24,12 +24,13 @@ theorem SQRT_AD_MINUS_ONE_spec :
       r.asNat < p ∧
       r.asNat ^ 2 % p = (a * d - 1).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
   unfold SQRT_AD_MINUS_ONE
+  simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*
   subst_vars
   refine ⟨lt_p_iff.mpr (by decide), ?_, by decide⟩
   rw [← ZMod.val_natCast]
   refine congrArg ZMod.val ?_
-  rw [a_eq, neg_one_mul, ← neg_add', eq_neg_iff_add_eq_zero, d_eq]
+  rw [a_def, neg_one_mul, ← neg_add', eq_neg_iff_add_eq_zero, d_eq_natCast]
   norm_cast
   rw [ZMod.natCast_eq_zero_iff, Nat.dvd_iff_mod_eq_zero, mod_p_fold, mod_p_fold, mod_p_of_lt] <;>
     decide

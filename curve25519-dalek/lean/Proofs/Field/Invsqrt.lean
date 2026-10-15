@@ -34,7 +34,7 @@ theorem invsqrt_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
   rw [h1] at hv0 hsq hnsq
   refine ⟨hcv, fun h => hv0 one_ne_zero h, hsq, fun h hx => ?_, hpar, hrb⟩
   obtain ⟨hc, hr⟩ := hnsq h hx
-  rw [hr, hone, mul_one, Nat.mod_eq_of_lt sqrtM1_lt]
+  rw [hr, hone, mul_one, Nat.mod_eq_of_lt sqrtM1_lt_p]
   exact ⟨hc, rfl⟩
 
 end Curve25519Dalek.field.FieldElement51

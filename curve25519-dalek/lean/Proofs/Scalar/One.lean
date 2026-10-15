@@ -20,6 +20,6 @@ namespace Curve25519Dalek.scalar.Scalar
 
 theorem ONE_spec :
     ONE.asNat = 1 := by
-  simp [Scalar.asNat, Array.asNat, ONE, Nat.ofDigits]
+  simp [Scalar.asNat_def, Array.asNat_def, ONE, Nat.ofDigits]
 
 end Curve25519Dalek.scalar.Scalar

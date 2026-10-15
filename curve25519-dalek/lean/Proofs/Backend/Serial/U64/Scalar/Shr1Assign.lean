@@ -116,7 +116,7 @@ private theorem shr1_assign_loop_spec (self : Scalar52)
         rw [← hi, Nat.mul_succ, pow_add, Finset.sum_range_succ, ← hsi, ← hlimb] at hsum
         have hset := Array.asNat_set_add 52 s i v hi5
         rw [← hlimb] at hset
-        exact shr1_sum_step hset hsum hstep
+        exact shr1_sum_step (by simpa only [scalar.Scalar52.asNat_def] using hset) hsum hstep
     · step with rev_next_none_spec as ⟨o, it1, ho⟩
       subst ho
       have he : it.iter.end.val = 0 := Nat.eq_zero_of_not_pos hlt
@@ -128,7 +128,7 @@ private theorem shr1_assign_loop_spec (self : Scalar52)
     rw [hiter]
     refine ⟨rfl, by simp, by simp, hself, fun _ _ => rfl, ?_⟩
     rw [show (0#u64).val = 0 from rfl, Nat.mul_zero, Nat.add_zero, two_mul]
-    simp only [Scalar52.asNat, Array.asNat_eq_sum]
+    simp only [Scalar52.asNat_def, Array.asNat_eq_sum]
 
 @[step]
 theorem shr1_assign_spec (self : Scalar52) (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) :

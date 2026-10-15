@@ -33,14 +33,15 @@ theorem from_canonical_bytes_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) 
   step as ⟨r, hr⟩
   subst hr
   refine ⟨hc1v, rfl, fun h => ?_, fun h => ?_⟩
-  · have hi31 : i.val < 2 ^ 5 := hi ▸ Scalar.bytes_31_lt (s := ⟨bytes⟩) (h.trans L_lt)
+  · have hS : Scalar.asNat ⟨bytes⟩ < L := by rw [Scalar.asNat_def]; exact h
+    have hi31 : i.val < 2 ^ 5 := hi ▸ Scalar.bytes_31_lt (s := ⟨bytes⟩) (hS.trans L_lt_two_pow_253)
     have hi10 : i1 = 0#u8 := by
       apply UScalar.eq_of_val_eq
       rw [hi1, Nat.shiftRight_eq_div_pow]
       simp only [UScalar.ofNatCore_val_eq]
       omega
-    rw [hc1eq, hbeq, ite_eq_left hi10, hc1 h]
+    rw [hc1eq, hbeq, ite_eq_left hi10, hc1 hS]
     rfl
-  · rw [hc1eq, hc0 h, hbv.and_zero]
+  · rw [hc1eq, hc0 (by rw [Scalar.asNat_def]; exact h), hbv.and_zero]
 
 end Curve25519Dalek.scalar.Scalar

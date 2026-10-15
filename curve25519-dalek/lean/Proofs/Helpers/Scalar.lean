@@ -18,18 +18,19 @@ can be packed (`lt_two_pow_256_of_lt_L`). The Montgomery radix `R` is a unit of 
 (`montgomeryRadix_natCast_ne_zero`). -/
 
 open Aeneas Aeneas.Std curve25519
-open Curve25519Dalek.backend.serial.u64.scalar (montgomeryRadix montgomeryRadix_eq
+open Curve25519Dalek.backend.serial.u64.scalar (montgomeryRadix montgomeryRadix_def
   montgomeryRadix_coprime_L)
 
 namespace Curve25519Dalek.scalar
 
 /-- The 32 bytes of a `Scalar` represent a number below `2 ^ 256`. -/
 theorem Scalar.asNat_lt (s : Scalar) : s.asNat < 2 ^ 256 :=
-  Array.asNat_lt 8 s.bytes fun i _ => s.bytes[i]!.hBounds
+  s.asNat_def ▸ Array.asNat_lt 8 s.bytes fun i _ => s.bytes[i]!.hBounds
 
 /-- Byte 31 of a `Scalar` is its value divided by `2 ^ 248`. -/
 theorem Scalar.bytes_31_val (s : Scalar) : s.bytes[31]!.val = s.asNat / 2 ^ 248 :=
-  Array.getElem!_last_eq_asNat_div 8 s.bytes (fun i _ => s.bytes[i]!.hBounds) (by decide)
+  s.asNat_def ▸
+    Array.getElem!_last_eq_asNat_div 8 s.bytes (fun i _ => s.bytes[i]!.hBounds) (by decide)
 
 /-- A `Scalar` below `2 ^ (248 + k)` has byte 31 below `2 ^ k`. -/
 theorem Scalar.bytes_31_lt {s : Scalar} {k : ℕ} (h : s.asNat < 2 ^ (248 + k)) :
@@ -39,7 +40,7 @@ theorem Scalar.bytes_31_lt {s : Scalar} {k : ℕ} (h : s.asNat < 2 ^ (248 + k)) 
 
 /-- Numbers below `L` are below `2 ^ 256`, as `pack` requires. -/
 theorem lt_two_pow_256_of_lt_L {x : ℕ} (h : x < L) : x < 2 ^ 256 :=
-  h.trans (L_lt.trans (Nat.pow_lt_pow_right (by decide) (by decide)))
+  h.trans (L_lt_two_pow_253.trans (Nat.pow_lt_pow_right (by decide) (by decide)))
 
 /-- Two numbers below `2 ^ 256` have a product below `R * L`. -/
 theorem mul_lt_montgomeryRadix_mul_L {a b : ℕ} (ha : a < 2 ^ 256) (hb : b < 2 ^ 256) :
@@ -48,7 +49,7 @@ theorem mul_lt_montgomeryRadix_mul_L {a b : ℕ} (ha : a < 2 ^ 256) (hb : b < 2 
     rw [← Nat.pow_add, ← Nat.pow_add]
     exact Nat.pow_le_pow_right (by decide) hkm
   calc a * b < 2 ^ 256 * 2 ^ 256 := Nat.mul_lt_mul'' ha hb
-    _ ≤ montgomeryRadix * 2 ^ 252 := montgomeryRadix_eq ▸ h 256 260 252 (by decide)
+    _ ≤ montgomeryRadix * 2 ^ 252 := montgomeryRadix_def ▸ h 256 260 252 (by decide)
     _ ≤ montgomeryRadix * L := Nat.mul_le_mul_left _ two_pow_252_lt_L.le
 
 /-- The Montgomery radix is invertible modulo `L`. -/

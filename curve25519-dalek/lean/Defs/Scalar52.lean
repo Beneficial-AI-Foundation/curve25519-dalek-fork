@@ -15,15 +15,18 @@ open Aeneas.Std
 namespace Curve25519Dalek.backend.serial.u64
 
 /-- The natural number represented by the five radix-2^52 limbs. -/
-@[expose]
 def scalar.Scalar52.asNat (self : scalar.Scalar52) : ℕ :=
   Array.asNat 52 self
 
+theorem scalar.Scalar52.asNat_def (self : scalar.Scalar52) : self.asNat = Array.asNat 52 self := by
+  unfold scalar.Scalar52.asNat
+  rfl
+
 /-- The Montgomery radix `2^260` of the scalar arithmetic; also the modulus at which the five
-52-bit limbs of a `Scalar52` wrap around. Not exposed: use `montgomeryRadix_eq`. -/
+52-bit limbs of a `Scalar52` wrap around. Not exposed: use `montgomeryRadix_def`. -/
 def scalar.montgomeryRadix : ℕ := 2 ^ 260
 
-theorem scalar.montgomeryRadix_eq : scalar.montgomeryRadix = 2 ^ 260 := by
+theorem scalar.montgomeryRadix_def : scalar.montgomeryRadix = 2 ^ 260 := by
   unfold scalar.montgomeryRadix
   rfl
 

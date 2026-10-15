@@ -89,10 +89,10 @@ private theorem sub_loop_spec (a b : Scalar52) (mask : U64) (ha : ∀ i < 5, a[i
     · step with core.iter.range.IteratorRange.next_Usize_none_spec as ⟨o, iter1, ho, hiter1⟩
       subst ho
       have hk : iter.start.val = 5 := by scalar_tac
-      rw [hk, show 52 * 5 = 260 by rfl, ← montgomeryRadix_eq] at hsum
+      rw [hk, show 52 * 5 = 260 by rfl, ← montgomeryRadix_def] at hsum
       simp only [WP.spec_ok]
       refine ⟨?_, hd⟩
-      simp only [Scalar52.asNat, Array.asNat_eq_sum]
+      simp only [Scalar52.asNat_def, Array.asNat_eq_sum]
       exact hsum
   · refine ⟨rfl, by simp, fun i hi => ?_, by simp⟩
     exact ZERO_spec.2 i hi

@@ -14,7 +14,7 @@ open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
 open Curve25519Dalek.backend.serial.u64.scalar (Scalar52)
 open curve25519 (p a d A)
-open curve25519 (mod_p_of_lt d_eq)
+open curve25519 (mod_p_of_lt d_eq_natCast)
 
 namespace Curve25519Dalek.backend.serial.u64.constants
 
@@ -23,9 +23,10 @@ theorem EDWARDS_D_spec :
     EDWARDS_D ⦃ (r : FieldElement51) =>
       r.asNat = d.val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
   unfold EDWARDS_D
+  simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*
   subst_vars
   refine ⟨?_, by decide⟩
-  rw [d_eq, ZMod.val_natCast, mod_p_of_lt] <;> decide
+  rw [d_eq_natCast, ZMod.val_natCast, mod_p_of_lt] <;> decide
 
 end Curve25519Dalek.backend.serial.u64.constants

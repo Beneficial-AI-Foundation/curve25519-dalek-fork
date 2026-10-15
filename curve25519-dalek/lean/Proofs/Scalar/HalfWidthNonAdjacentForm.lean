@@ -25,6 +25,8 @@ theorem non_adjacent_form_spec (self : HalfWidthScalar) (w : Usize)
       (∀ i < 256, r[i]!.val ≠ 0 → r[i]!.val % 2 = 1 ∧ 2 * |r[i]!.val| < 2 ^ w.val) ∧
       ∀ i < 256, ∀ j < 256, i < j → j < i + w.val → r[i]!.val ≠ 0 → r[j]!.val = 0 ⦄ := by
   unfold non_adjacent_form
-  exact Scalar.non_adjacent_form_spec self w hw hself
+  simpa only [scalar.HalfWidthScalar.asNat_def] using
+    Scalar.non_adjacent_form_spec self w hw
+      (by simpa only [scalar.HalfWidthScalar.asNat_def] using hself)
 
 end Curve25519Dalek.scalar.HalfWidthScalar

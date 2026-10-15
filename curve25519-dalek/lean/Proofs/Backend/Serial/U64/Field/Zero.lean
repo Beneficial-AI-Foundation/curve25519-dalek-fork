@@ -18,6 +18,7 @@ theorem ZERO_spec :
     ZERO ⦃ (r : FieldElement51) =>
       r.asNat = 0 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
   unfold ZERO
+  simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*
   subst_vars
   decide

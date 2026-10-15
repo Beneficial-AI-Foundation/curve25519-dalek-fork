@@ -40,18 +40,37 @@ def sqrtM1 : ℕ := 196811613767075059568070793049885420154460665159238901627440
 
 /-! ## Characterisation of `p` and `L` -/
 
+/-! The defining equations (`<name>_def`), then the other characterisations. -/
+
+theorem p_def : p = 2 ^ 255 - 19 := by
+  unfold p
+  rfl
+
+theorem L_def : L = 2 ^ 252 + 27742317777372353535851937790883648493 := by
+  unfold L
+  rfl
+
+theorem d_def : d = -121665 * (121666 : ZMod p)⁻¹ := by
+  unfold d
+  rfl
+
+theorem sqrtM1_def :
+    sqrtM1 = 19681161376707505956807079304988542015446066515923890162744021073123829784752 := by
+  unfold sqrtM1
+  rfl
+
 /-- `p` as a numeral. -/
-theorem p_eq :
+theorem p_eq_numeral :
     p = 57896044618658097711785492504343953926634992332820282019728792003956564819949 := by
   decide
 
-theorem p_add_nineteen : p + 19 = 2 ^ 255 := by rw [p_eq]; decide
+theorem p_add_nineteen : p + 19 = 2 ^ 255 := by rw [p_eq_numeral]; decide
 
-theorem p_pos : 0 < p := by rw [p_eq]; decide
+theorem p_pos : 0 < p := by rw [p_eq_numeral]; decide
 
-theorem p_lt : p < 2 ^ 255 := by rw [p_eq]; decide
+theorem p_lt_two_pow_255 : p < 2 ^ 255 := by rw [p_eq_numeral]; decide
 
-theorem two_pow_255_mod_p : 2 ^ 255 % p = 19 := by rw [p_eq]; decide
+theorem two_pow_255_mod_p : 2 ^ 255 % p = 19 := by rw [p_eq_numeral]; decide
 
 theorem two_pow_255_eq_nineteen : (2 : ZMod p) ^ 255 = 19 := by
   rw [← Nat.cast_ofNat, ← Nat.cast_pow, ← p_add_nineteen]
@@ -80,70 +99,70 @@ theorem mod_p_of_lt {x : ℕ} (hx : x < 2 ^ 255) :
     grind
 
 /-- `A = 486662`. -/
-theorem A_eq : A = 486662 := by rfl
+theorem A_def : A = 486662 := by rfl
 
 /-- `a = -1`. -/
-theorem a_eq : a = -1 := by rfl
+theorem a_def : a = -1 := by rfl
 
 /-- `d = -121665 / 121666` as a natural number below `p`. -/
-theorem d_eq :
+theorem d_eq_natCast :
     d = ((37095705934669439343138083508754565189542113879843219016388785533085940283555 : ℕ) :
       ZMod p) := by
   have hinv : (121666 : ZMod p) * (121666 : ZMod p)⁻¹ = 1 := by
-    exact_mod_cast ZMod.coe_mul_inv_eq_one 121666 (by rw [p_eq]; decide)
+    exact_mod_cast ZMod.coe_mul_inv_eq_one 121666 (by rw [p_eq_numeral]; decide)
   have hd : ((121666 *
       37095705934669439343138083508754565189542113879843219016388785533085940283555 +
       121665 : ℕ) : ZMod p) = 0 :=
-    (ZMod.natCast_eq_zero_iff _ _).mpr (by rw [p_eq]; decide)
+    (ZMod.natCast_eq_zero_iff _ _).mpr (by rw [p_eq_numeral]; decide)
   rw [Nat.cast_add, Nat.cast_mul] at hd
   simp only [Nat.cast_ofNat] at hd ⊢
   rw [d, neg_eq_of_add_eq_zero_left hd, mul_comm (121666 : ZMod p), mul_assoc, hinv,
     mul_one]
 
 /-- `L` as a numeral. -/
-theorem L_eq :
+theorem L_eq_numeral :
     L = 7237005577332262213973186563042994240857116359379907606001950938285454250989 := by
   decide
 
-theorem L_pos : 0 < L := by rw [L_eq]; decide
+theorem L_pos : 0 < L := by rw [L_eq_numeral]; decide
 
-theorem L_lt : L < 2 ^ 253 := by rw [L_eq]; decide
+theorem L_lt_two_pow_253 : L < 2 ^ 253 := by rw [L_eq_numeral]; decide
 
-theorem two_pow_252_lt_L : 2 ^ 252 < L := by rw [L_eq]; decide
+theorem two_pow_252_lt_L : 2 ^ 252 < L := by rw [L_eq_numeral]; decide
 
 /-- `L` in radix `2^52`, the representation of dalek's `Scalar52`. -/
 theorem L_eq_limbs :
     L = 671914833335277 + 2 ^ 52 * 3916664325105025 + 2 ^ 104 * 1367801 + 2 ^ 156 * 0
       + 2 ^ 208 * 17592186044416 := by
-  rw [L_eq]
+  rw [L_eq_numeral]
   decide
 
-theorem L_mod_two_pow_52 : L % 2 ^ 52 = 671914833335277 := by rw [L_eq]; decide
+theorem L_mod_two_pow_52 : L % 2 ^ 52 = 671914833335277 := by rw [L_eq_numeral]; decide
 
-theorem L_mod_two : L % 2 = 1 := by rw [L_eq]
+theorem L_mod_two : L % 2 = 1 := by rw [L_eq_numeral]
 
 theorem L_lt_two_pow_260 : L < 2 ^ 260 := by
   rw [show 260 = 253 + 7 from rfl, pow_add]
-  exact L_lt.trans_le (Nat.le_mul_of_pos_right _ (by decide))
+  exact L_lt_two_pow_253.trans_le (Nat.le_mul_of_pos_right _ (by decide))
 
 /-- The Montgomery radix `2^260` modulo `L`. -/
 theorem two_pow_260_mod_L :
     2 ^ 260 % L =
       7237005577332262213973186563042994233755083008372585100823854863819240236781 := by
-  rw [L_eq]
+  rw [L_eq_numeral]
   decide +kernel
 
 theorem two_pow_520_mod_L :
     2 ^ 520 % L =
       4185850391763183796333492317919282507600454137915443218209456916606550724923 := by
-  rw [L_eq]
+  rw [L_eq_numeral]
   decide +kernel
 
 /-! ## Characterisation of `sqrtM1` -/
 
-theorem sqrtM1_lt : sqrtM1 < p := by rw [p_eq]; decide
+theorem sqrtM1_lt_p : sqrtM1 < p := by rw [p_eq_numeral]; decide
 
-theorem sqrtM1_sq_add_one : (sqrtM1 ^ 2 + 1) % p = 0 := by rw [p_eq]; decide
+theorem sqrtM1_sq_add_one_mod_p : (sqrtM1 ^ 2 + 1) % p = 0 := by rw [p_eq_numeral]; decide
 
 /-- `sqrtM1` in radix `2^51`, the representation of dalek's `FieldElement51`. -/
 theorem sqrtM1_eq_limbs :
@@ -151,9 +170,10 @@ theorem sqrtM1_eq_limbs :
       + 2 ^ 153 * 2117202627021982 + 2 ^ 204 * 765476049583133 := by
   decide
 
-/-- `sqrtM1` is the RFC 8032 value `2^((p-1)/4)`. -/
-theorem sqrtM1_eq_pow : (2 : ZMod p) ^ ((p - 1) / 4) = sqrtM1 := by
-  rw [p_eq, sqrtM1]
+/-- `sqrtM1` is the RFC 8032 value `2^((p-1)/4)`: of the two square roots of `-1` modulo `p`, the
+one RFC 8032 specifies (a check of the constant; proofs use `sqrtM1_sq_add_one_mod_p`). -/
+theorem sqrtM1_eq_two_pow : (sqrtM1 : ZMod p) = 2 ^ ((p - 1) / 4) := by
+  rw [p_eq_numeral, sqrtM1]
   reduce_mod_char
 
 

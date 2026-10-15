@@ -28,8 +28,8 @@ namespace Curve25519Dalek.backend.serial.u64.scalar
 /-- Five limbs below `2 ^ 52` represent a number below the Montgomery radix. -/
 theorem Scalar52.asNat_lt (a : Scalar52) (h : ∀ i < 5, a[i]!.val < 2 ^ 52) :
     a.asNat < montgomeryRadix :=
-  (Array.asNat_lt 52 a h).trans_eq
-    ((congrArg (2 ^ ·) (show 52 * (5#usize).val = 260 from rfl)).trans montgomeryRadix_eq.symm)
+  a.asNat_def ▸ (Array.asNat_lt 52 a h).trans_eq
+    ((congrArg (2 ^ ·) (show 52 * (5#usize).val = 260 from rfl)).trans montgomeryRadix_def.symm)
 
 /-- Limb 1 of the 52-bit limbs cut from 64-bit words: word 0 without its low 52 bits, and the
 low 40 bits of word 1. -/

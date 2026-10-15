@@ -16,6 +16,6 @@ namespace Curve25519Dalek.scalar.HalfWidthScalar
 
 theorem ZERO_spec :
     ZERO.asNat = 0 := by
-  simp [HalfWidthScalar.asNat, ZERO, Scalar.ZERO_spec]
+  simp [HalfWidthScalar.asNat_def, ZERO, Scalar.ZERO_spec]
 
 end Curve25519Dalek.scalar.HalfWidthScalar

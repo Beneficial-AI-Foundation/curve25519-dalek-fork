@@ -18,7 +18,7 @@ namespace Aeneas.Std.Array
 theorem asInt_eq_sum {ty : IScalarTy} {n : Usize} (bits : ℕ) (a : Array (IScalar ty) n) :
     a.asInt bits = ∑ i ∈ Finset.range n.val, 2 ^ (bits * i) * a[i]!.val := by
   have h : a.val.length = n.val := by simp
-  simp only [Array.asInt, Array.getElem!_Nat_eq]
+  simp only [Array.asInt_def, Array.getElem!_Nat_eq]
   rw [← h]
   generalize a.val = l
   induction l with

@@ -50,7 +50,7 @@ theorem asNat_setSlice!_toLEBytes {n : Usize} (a : Array U8 n) {w : ℕ} (v : Bi
     (hw : (w + 7) / 8 ≤ n.val)
     (h : a.val = (List.replicate n.val 0#u8).setSlice! 0 (v.toLEBytes.map UScalar.mk)) :
     a.asNat 8 = v.toNat := by
-  rw [Array.asNat, h, List.setSlice!_replicate_zero _ _ _ (by simpa using hw)]
+  rw [Array.asNat_def, h, List.setSlice!_replicate_zero _ _ _ (by simpa using hw)]
   have h0 : (0#u8).val = 0 := rfl
   simp only [List.map_append, List.map_replicate, h0, Nat.ofDigits_append_replicate_zero]
   rw [List.map_map]

@@ -25,7 +25,7 @@ theorem from_spec (x : U8) :
       r.asNat = x.val ⦄ := by
   unfold «from»
   step*
-  simp [Scalar.asNat, Array.asNat, Nat.ofDigits, *]
+  simp [Scalar.asNat_def, Array.asNat_def, Nat.ofDigits, *]
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU8
 
@@ -37,7 +37,7 @@ theorem from_spec (x : U16) :
       r.asNat = x.val ⦄ := by
   unfold «from»
   step*
-  rw [Scalar.asNat, ← UScalar.bv_toNat]
+  rw [Scalar.asNat_def, ← UScalar.bv_toNat]
   apply Array.asNat_setSlice!_toLEBytes _ x.bv (by simp)
   simp_all
 
@@ -51,7 +51,7 @@ theorem from_spec (x : U32) :
       r.asNat = x.val ⦄ := by
   unfold «from»
   step*
-  rw [Scalar.asNat, ← UScalar.bv_toNat]
+  rw [Scalar.asNat_def, ← UScalar.bv_toNat]
   apply Array.asNat_setSlice!_toLEBytes _ x.bv (by simp)
   simp_all
 
@@ -65,7 +65,7 @@ theorem from_spec (x : U64) :
       r.asNat = x.val ⦄ := by
   unfold «from»
   step*
-  rw [Scalar.asNat, ← UScalar.bv_toNat]
+  rw [Scalar.asNat_def, ← UScalar.bv_toNat]
   apply Array.asNat_setSlice!_toLEBytes _ x.bv (by simp)
   simp_all
 
@@ -79,7 +79,7 @@ theorem from_spec (x : U128) :
       r.asNat = x.val ⦄ := by
   unfold «from»
   step*
-  rw [Scalar.asNat, ← UScalar.bv_toNat]
+  rw [Scalar.asNat_def, ← UScalar.bv_toNat]
   apply Array.asNat_setSlice!_toLEBytes _ x.bv (by simp)
   simp_all
 

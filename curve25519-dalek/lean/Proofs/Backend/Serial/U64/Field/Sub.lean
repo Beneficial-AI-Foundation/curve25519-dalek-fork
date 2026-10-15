@@ -59,7 +59,8 @@ theorem sub_spec (self _rhs : FieldElement51)
     step as ⟨r, hr, hr_lt, hr_2p⟩
     refine ⟨?_, hr_lt⟩
     have hsum : FieldElement51.asNat a + _rhs.asNat = self.asNat + FieldElement51.asNat SIXTEEN_P :=
-      Array.asNat_add_eq_add 51 a _rhs self SIXTEEN_P hlimbs
+      by simpa only [backend.serial.u64.field.FieldElement51.asNat_def] using
+        Array.asNat_add_eq_add 51 a _rhs self SIXTEEN_P hlimbs
     rw [Nat.add_mod, hr, ← Nat.add_mod, hsum, SIXTEEN_P_spec.1, Nat.add_mul_mod_self_right]
   · subst hc
     exact sub.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU64.call_mut_spec

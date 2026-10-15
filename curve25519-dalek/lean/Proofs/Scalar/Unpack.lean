@@ -22,7 +22,8 @@ theorem unpack.«x86_64-tables_spec» (self : Scalar) :
       r.asNat = self.asNat ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
   unfold unpack.«x86_64-tables»
   step as ⟨r, hr, hrb⟩
-  exact ⟨hr, hrb⟩
+  refine ⟨?_, hrb⟩
+  simpa only [scalar.Scalar.asNat_def, backend.serial.u64.scalar.Scalar52.asNat_def] using hr
 
 end Curve25519Dalek.scalar.Scalar
 
@@ -34,6 +35,7 @@ theorem unpack.«x86_64-no-tables_spec» (self : Scalar) :
       r.asNat = self.asNat ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
   unfold unpack.«x86_64-no-tables»
   step as ⟨r, hr, hrb⟩
-  exact ⟨hr, hrb⟩
+  refine ⟨?_, hrb⟩
+  simpa only [scalar.Scalar.asNat_def, backend.serial.u64.scalar.Scalar52.asNat_def] using hr
 
 end Curve25519Dalek.scalar.Scalar

@@ -66,7 +66,7 @@ namespace Aeneas.Std.Array
 theorem asNat_eq_sum {ty : UScalarTy} {n : Usize} (bits : ℕ) (a : Array (UScalar ty) n) :
     a.asNat bits = ∑ i ∈ Finset.range n.val, 2 ^ (bits * i) * a[i]!.val := by
   have h : a.val.length = n.val := by simp
-  simp only [Array.asNat, Array.getElem!_Nat_eq]
+  simp only [Array.asNat_def, Array.getElem!_Nat_eq]
   rw [← h]
   generalize a.val = l
   induction l with
@@ -81,7 +81,7 @@ theorem asNat_five {ty : UScalarTy} (bits : ℕ) (a : Array (UScalar ty) 5#usize
     a.asNat bits = a[0]!.val + 2 ^ bits * a[1]!.val + 2 ^ (2 * bits) * a[2]!.val
       + 2 ^ (3 * bits) * a[3]!.val + 2 ^ (4 * bits) * a[4]!.val := by
   have h : a.val.length = 5 := by simp
-  simp only [Array.asNat, Array.getElem!_Nat_eq]
+  simp only [Array.asNat_def, Array.getElem!_Nat_eq]
   generalize a.val = l at h ⊢
   match l, h with
   | [x0, x1, x2, x3, x4], _ =>
@@ -96,7 +96,7 @@ theorem asNat_nine {ty : UScalarTy} (bits : ℕ) (a : Array (UScalar ty) 9#usize
       + 2 ^ (6 * bits) * a[6]!.val + 2 ^ (7 * bits) * a[7]!.val
       + 2 ^ (8 * bits) * a[8]!.val := by
   have h : a.val.length = 9 := by simp
-  simp only [Array.asNat, Array.getElem!_Nat_eq]
+  simp only [Array.asNat_def, Array.getElem!_Nat_eq]
   generalize a.val = l at h ⊢
   match l, h with
   | [x0, x1, x2, x3, x4, x5, x6, x7, x8], _ =>
@@ -170,7 +170,7 @@ digit (e.g. the parity of a byte string is the parity of its first byte). -/
 theorem asNat_mod_of_dvd {ty : UScalarTy} {n : Usize} (bits : ℕ) {m : ℕ} (hm : m ∣ 2 ^ bits)
     (a : Array (UScalar ty) n) (hn : 0 < n.val) : a.asNat bits % m = a[0]!.val % m := by
   have h : a.val.length = n.val := by simp
-  simp only [Array.asNat, Array.getElem!_Nat_eq]
+  simp only [Array.asNat_def, Array.getElem!_Nat_eq]
   generalize a.val = l at h ⊢
   match l, h with
   | [], h => simp at h; scalar_tac
@@ -190,7 +190,7 @@ theorem asNat_div_pow_mod {ty : UScalarTy} {n : Usize} (bits : ℕ) (a : Array (
     have := ha i (by simpa using hi)
     rwa [Array.getElem!_Nat_eq, List.getElem!_eq_getElem?_getD, List.getElem?_eq_getElem hi,
       Option.getD_some] at this
-  rw [Array.asNat, pow_mul, Nat.ofDigits_div_pow_mod _ _ hL j, Array.getElem!_Nat_eq]
+  rw [Array.asNat_def, pow_mul, Nat.ofDigits_div_pow_mod _ _ hL j, Array.getElem!_Nat_eq]
   simp only [List.getElem!_eq_getElem?_getD, List.getElem?_map]
   by_cases hj : j < a.val.length
   · rw [List.getElem?_eq_getElem hj]
@@ -221,7 +221,7 @@ theorem eq_of_asNat_eq {ty : UScalarTy} {n : Usize} {a b : Array (UScalar ty) n}
   have hbits : ty.numBits ≠ 0 := by
     rcases System.Platform.numBits_eq with hnb | hnb <;> cases ty <;> simp [hnb]
   have hmap := Nat.ofDigits_inj_of_len_eq (Nat.one_lt_two_pow hbits)
-    (by simp) (hlt a.val) (hlt b.val) h
+    (by simp) (hlt a.val) (hlt b.val) (by rwa [asNat_def, asNat_def] at h)
   exact Array.ext a b
     (List.map_injective_iff.mpr (fun x y hxy => UScalar.eq_of_val_eq hxy) hmap)
 

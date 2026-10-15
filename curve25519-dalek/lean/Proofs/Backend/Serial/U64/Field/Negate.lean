@@ -43,7 +43,8 @@ theorem negate_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2
     step as ⟨r, hr, hr_lt, hr_2p⟩
     refine ⟨?_, hr_lt⟩
     have hsum : FieldElement51.asNat a + self.asNat = FieldElement51.asNat SIXTEEN_P :=
-      Array.asNat_add_eq 51 a self SIXTEEN_P hlimbs
+      by simpa only [field.FieldElement51.asNat_def] using
+        Array.asNat_add_eq 51 a self SIXTEEN_P hlimbs
     rw [Nat.add_mod, hr, ← Nat.add_mod, hsum, SIXTEEN_P_spec.1, Nat.mul_mod_left]
   · subst hc
     exact negate.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU64.call_mut_spec c i hi

@@ -68,7 +68,7 @@ private theorem two_ne_zero_p : (2 : ZMod p) ≠ 0 := by
   omega
 
 private theorem sqrtM1_sq : (sqrtM1 : ZMod p) ^ 2 = -1 := by
-  have h := ZMod.natCast_eq_zero_iff_mod.mpr sqrtM1_sq_add_one
+  have h := ZMod.natCast_eq_zero_iff_mod.mpr sqrtM1_sq_add_one_mod_p
   push_cast at h
   linear_combination h
 

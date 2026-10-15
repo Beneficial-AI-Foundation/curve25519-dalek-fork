@@ -28,7 +28,7 @@ theorem is_canonical_spec (self : Scalar) (htgt : OnX86_64) :
   refine ⟨hcv, fun h => hc1 ?_, fun h => hc0 ?_⟩
   · rw [Nat.mod_eq_of_lt h] at hs
     have := Array.eq_of_asNat_eq (a := self.bytes) (b := s.bytes) (by
-      unfold Scalar.asNat at hs; exact hs.symm)
+      simp only [Scalar.asNat_def] at hs; exact hs.symm)
     exact congrArg Scalar.mk this
   · rintro rfl
     have := Nat.mod_lt self.asNat L_pos
