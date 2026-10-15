@@ -160,14 +160,6 @@ string literal in the generated dispatchers, and in `OnX86_64`, therefore adds
 `…_native.decide.ax_*` axioms to the statements of `scalar.rs`. Ask upstream for a kernel-checked
 bound (or a `Str` literal that carries none).
 
-## To do: `recall` in spec summaries
-
-In every spec summary, restate each statement with Mathlib's `recall` instead of a primed theorem
-(`theorem square_spec' … := square_spec …`): `recall square_spec (self …) : …` checks that the
-restated statement matches the proved one, without adding a second theorem. Check how the
-`#guard_msgs` axiom lines then refer to it (`#print axioms square_spec`), and update
-`verif-guidelines.md` ("Spec summary format") and `scripts/fill-guards.py`.
-
 ## To do: no `@[expose]` around `p` and `L`
 
 `Curve25519/Basic.lean` defines `p` and `L` with `irreducible_def` inside an `@[expose] public

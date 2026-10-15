@@ -24,9 +24,8 @@ public section
 
 /-! # Specs of `src/backend/serial/u64/constants.rs`
 
-Spec summary: every constant of `constants.rs` with its spec statement, proved by the theorem of
-the same name (without the prime) in `Proofs/Backend/Serial/U64/Constants/`, and the axioms that
-proof depends on.
+Spec summary: every constant of `constants.rs` with its spec statement, restated with `recall` from
+the theorem proved in `Proofs/Backend/Serial/U64/Constants/`, and the axioms that proof depends on.
 Definitions used: `FieldElement51.asNat` (`Defs/FieldElement51.lean`), `Scalar52.asNat`,
 `montgomeryRadix` (`Defs/Scalar52.lean`), `p`, `a`, `d`, `A`, `sqrtM1`, `curve25519.L`
 (`Curve25519/Basic.lean`).
@@ -44,120 +43,107 @@ open curve25519 (p a d A sqrtM1)
 namespace Curve25519Dalek.backend.serial.u64.constants
 
 /-- `MINUS_ONE`: the field element `-1`. -/
-theorem MINUS_ONE_spec' :
+recall MINUS_ONE_spec :
     MINUS_ONE ⦃ (r : FieldElement51) =>
-      r.asNat + 1 = p ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ :=
-  MINUS_ONE_spec
+      r.asNat + 1 = p ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms MINUS_ONE_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms MINUS_ONE_spec
 
 /-- `EDWARDS_D`: the Edwards coefficient `d`. -/
-theorem EDWARDS_D_spec' :
+recall EDWARDS_D_spec :
     EDWARDS_D ⦃ (r : FieldElement51) =>
-      r.asNat = d.val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ :=
-  EDWARDS_D_spec
+      r.asNat = d.val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms EDWARDS_D_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms EDWARDS_D_spec
 
 /-- `EDWARDS_D2`: `2 d`. -/
-theorem EDWARDS_D2_spec' :
+recall EDWARDS_D2_spec :
     EDWARDS_D2 ⦃ (r : FieldElement51) =>
-      r.asNat = (2 * d).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ :=
-  EDWARDS_D2_spec
+      r.asNat = (2 * d).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms EDWARDS_D2_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms EDWARDS_D2_spec
 
 /-- `ONE_MINUS_EDWARDS_D_SQUARED`: `1 - d²`. -/
-theorem ONE_MINUS_EDWARDS_D_SQUARED_spec' :
+recall ONE_MINUS_EDWARDS_D_SQUARED_spec :
     ONE_MINUS_EDWARDS_D_SQUARED ⦃ (r : FieldElement51) =>
-      r.asNat = (1 - d ^ 2).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ :=
-  ONE_MINUS_EDWARDS_D_SQUARED_spec
+      r.asNat = (1 - d ^ 2).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in
-#print axioms ONE_MINUS_EDWARDS_D_SQUARED_spec'
+#print axioms ONE_MINUS_EDWARDS_D_SQUARED_spec
 
 /-- `EDWARDS_D_MINUS_ONE_SQUARED`: `(d - 1)²`. -/
-theorem EDWARDS_D_MINUS_ONE_SQUARED_spec' :
+recall EDWARDS_D_MINUS_ONE_SQUARED_spec :
     EDWARDS_D_MINUS_ONE_SQUARED ⦃ (r : FieldElement51) =>
-      r.asNat = ((d - 1) ^ 2).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ :=
-  EDWARDS_D_MINUS_ONE_SQUARED_spec
+      r.asNat = ((d - 1) ^ 2).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in
-#print axioms EDWARDS_D_MINUS_ONE_SQUARED_spec'
+#print axioms EDWARDS_D_MINUS_ONE_SQUARED_spec
 
 /-- `SQRT_AD_MINUS_ONE`: a square root of `a d - 1`. -/
-theorem SQRT_AD_MINUS_ONE_spec' :
+recall SQRT_AD_MINUS_ONE_spec :
     SQRT_AD_MINUS_ONE ⦃ (r : FieldElement51) =>
       r.asNat < p ∧
-      r.asNat ^ 2 % p = (a * d - 1).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ :=
-  SQRT_AD_MINUS_ONE_spec
+      r.asNat ^ 2 % p = (a * d - 1).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms SQRT_AD_MINUS_ONE_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms SQRT_AD_MINUS_ONE_spec
 
 /-- `INVSQRT_A_MINUS_D`: `1 / sqrt(a - d)`, i.e. `r² (a - d) = 1`. -/
-theorem INVSQRT_A_MINUS_D_spec' :
+recall INVSQRT_A_MINUS_D_spec :
     INVSQRT_A_MINUS_D ⦃ (r : FieldElement51) =>
       r.asNat < p ∧
-      r.asNat ^ 2 * (a - d).val % p = 1 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ :=
-  INVSQRT_A_MINUS_D_spec
+      r.asNat ^ 2 * (a - d).val % p = 1 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms INVSQRT_A_MINUS_D_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms INVSQRT_A_MINUS_D_spec
 
 /-- `SQRT_M1`: the square root `sqrtM1` of `-1`. -/
-theorem SQRT_M1_spec' :
+recall SQRT_M1_spec :
     SQRT_M1 ⦃ (r : FieldElement51) =>
-      r.asNat = sqrtM1 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ :=
-  SQRT_M1_spec
+      r.asNat = sqrtM1 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms SQRT_M1_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms SQRT_M1_spec
 
 /-- `APLUS2_OVER_FOUR`: `(A + 2) / 4 = 121666`. -/
-theorem APLUS2_OVER_FOUR_spec' :
+recall APLUS2_OVER_FOUR_spec :
     APLUS2_OVER_FOUR ⦃ (r : FieldElement51) =>
-      r.asNat * 4 = A + 2 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ :=
-  APLUS2_OVER_FOUR_spec
+      r.asNat * 4 = A + 2 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms APLUS2_OVER_FOUR_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms APLUS2_OVER_FOUR_spec
 
 /-- `L`: the group order `ℓ`, in canonical radix-2^52 limbs. -/
-theorem L_spec' :
-    Scalar52.asNat L = curve25519.L ∧ ∀ i < 5, L[i]!.val < 2 ^ 52 :=
-  L_spec
+recall L_spec :
+    Scalar52.asNat L = curve25519.L ∧ ∀ i < 5, L[i]!.val < 2 ^ 52
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms L_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms L_spec
 
 /-- `LFACTOR`: `-ℓ⁻¹ mod 2^52`. -/
-theorem LFACTOR_spec' :
-    LFACTOR.val < 2 ^ 52 ∧ (LFACTOR.val * curve25519.L + 1) % 2 ^ 52 = 0 :=
-  LFACTOR_spec
+recall LFACTOR_spec :
+    LFACTOR.val < 2 ^ 52 ∧ (LFACTOR.val * curve25519.L + 1) % 2 ^ 52 = 0
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms LFACTOR_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms LFACTOR_spec
 
 /-- `R`: the Montgomery radix `2^260 mod ℓ`. -/
-theorem R_spec' :
-    Scalar52.asNat R = montgomeryRadix % curve25519.L ∧ ∀ i < 5, R[i]!.val < 2 ^ 52 :=
-  R_spec
+recall R_spec :
+    Scalar52.asNat R = montgomeryRadix % curve25519.L ∧ ∀ i < 5, R[i]!.val < 2 ^ 52
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms R_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms R_spec
 
 /-- `RR`: `R² = 2^520 mod ℓ`. -/
-theorem RR_spec' :
-    Scalar52.asNat RR = montgomeryRadix ^ 2 % curve25519.L ∧ ∀ i < 5, RR[i]!.val < 2 ^ 52 :=
-  RR_spec
+recall RR_spec :
+    Scalar52.asNat RR = montgomeryRadix ^ 2 % curve25519.L ∧ ∀ i < 5, RR[i]!.val < 2 ^ 52
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms RR_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms RR_spec
 
 end Curve25519Dalek.backend.serial.u64.constants

@@ -113,24 +113,25 @@ Defs/<Topic>.lean                  definitions needed to state the specs (audite
 ## Spec summary format
 
 - **Proof file:** holds the canonical `@[step]` theorem, used by `step`.
-- **Spec summary:** repeats the statement verbatim as `<name>'`, proved by that theorem, followed by its axioms:
+- **Spec summary:** restates the statement verbatim with `recall` (Mathlib), which checks that it
+  is the statement of the proved theorem, followed by its axioms:
 
 ```lean
 /-- `square`: `r = self²` mod `p`; limbs `< 2^54` in, `< 2^52` out. -/
-theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) :
+recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) :
     square self ⦃ (r : FieldElement51) =>
-      r.asNat % p = self.asNat ^ 2 % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
-  square_spec self hself
+      r.asNat % p = self.asNat ^ 2 % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms square_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms square_spec
 ```
 
   The axiom list is matched as a substring, with whitespace collapsed (Lean wraps the list when the
   name is long). A list over 100 characters is wrapped at the commas.
 
 - **Order:** the statements appear in the order of the items in the Rust file.
-- **Same statement:** the proof term type-checks only if both statements agree, up to definitional equality.
+- **Same statement:** `recall` fails unless the restated statement agrees with the proved one, up to
+  definitional equality. It adds no declaration.
 - **Pinned axioms:** `#guard_msgs` fixes the axioms each statement rests on.
   - `sorryAx` while the proof is pending (only on a working branch: CI rejects `sorry`).
   - Any `Subtle`/`Zeroize` spec axioms or std externals (`FunsExternal.lean`) that the proof uses.
@@ -141,7 +142,6 @@ theorem square_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 
   - `#print axioms` prints an axiom by its shortest name that resolves in the spec summary, so
     the module declaring it must be visible there. A proof file importing it privately is not
     enough: the spec summary then imports it itself.
-- **Not `@[step]`:** the primed theorems don't carry the attribute.
 - **Auditing:** an auditor reads `Curve25519/**`, `Defs/**`, `Specs/**`, the External files
   (`Curve25519Dalek/{Types,Funs}External.lean`), `Subtle/{Types,Basic}.lean` and
   `Zeroize/Basic.lean`. Nothing else.

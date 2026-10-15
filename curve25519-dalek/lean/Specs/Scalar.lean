@@ -68,9 +68,9 @@ public section
 
 /-! # Specs of `src/scalar.rs`
 
-Spec summary: the Rust items of `scalar.rs` with their spec statements, each proved by the theorem
-of the same name (without the prime) in `Proofs/Scalar/`, and the axioms that proof depends on.
-Items appear in the order of `scalar.rs`.
+Spec summary: the Rust items of `scalar.rs` with their spec statements, each restated with `recall`
+from the theorem proved in `Proofs/Scalar/`, and the axioms that proof depends on. Items appear in
+the order of `scalar.rs`.
 
 Functions with per-target variants are translated as dispatchers on `get_target`; their statements
 assume a 64-bit target (`OnX86_64`, `Defs/Target.lean`) until the u32 backend is verified.
@@ -98,10 +98,9 @@ open Curve25519Dalek.backend.serial.u64.scalar (montgomeryRadix)
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `from_bytes_mod_order`: the 256-bit little-endian value reduced modulo `L`. -/
-theorem from_bytes_mod_order_spec' (bytes : Array U8 32#usize) (htgt : OnX86_64) :
+recall from_bytes_mod_order_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
     from_bytes_mod_order bytes ⦃ (r : Scalar) =>
-      r.asNat = bytes.asNat 8 % L ⦄ :=
-  from_bytes_mod_order_spec bytes htgt
+      r.asNat = bytes.asNat 8 % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -112,17 +111,16 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_bytes_mod_order_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_bytes_mod_order_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `from_bytes_mod_order_wide`: the 512-bit little-endian value reduced modulo `L`. -/
-theorem from_bytes_mod_order_wide_spec' (input : Array U8 64#usize) (htgt : OnX86_64) :
+recall from_bytes_mod_order_wide_spec (input : Array U8 64#usize) (htgt : OnX86_64) :
     from_bytes_mod_order_wide input ⦃ (r : Scalar) =>
-      r.asNat = input.asNat 8 % L ⦄ :=
-  from_bytes_mod_order_wide_spec input htgt
+      r.asNat = input.asNat 8 % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -133,18 +131,17 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_bytes_mod_order_wide_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_bytes_mod_order_wide_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `from_canonical_bytes`: `Some` exactly for canonical encodings (value below `L`). -/
-theorem from_canonical_bytes_spec' (bytes : Array U8 32#usize) (htgt : OnX86_64) :
+recall from_canonical_bytes_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
     from_canonical_bytes bytes ⦃ (r : subtle.CtOption Scalar) =>
       r.is_some.IsValid ∧ r.value.bytes = bytes ∧
-      (bytes.asNat 8 < L → r.is_some = 1#u8) ∧ (L ≤ bytes.asNat 8 → r.is_some = 0#u8) ⦄ :=
-  from_canonical_bytes_spec bytes htgt
+      (bytes.asNat 8 < L → r.is_some = 1#u8) ∧ (L ≤ bytes.asNat 8 → r.is_some = 0#u8) ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target, subtle.CtOption.new_spec,
@@ -157,58 +154,54 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_canonical_bytes_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_canonical_bytes_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreCmpPartialEqScalar
 
 /-- `PartialEq::eq`: equality of the byte encodings. -/
-theorem eq_spec' (self other : Scalar) :
+recall eq_spec (self other : Scalar) :
     eq self other ⦃ (b : Bool) =>
-      (b = true ↔ self = other) ⦄ :=
-  eq_spec self other
+      (b = true ↔ self = other) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, Bool.Insts.CoreConvertFromChoice.from_spec,
   Slice.Insts.SubtleConstantTimeEq.ct_eq_spec, U8.Insts.SubtleConstantTimeEq.ct_eq_spec] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreCmpPartialEqScalar
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.SubtleConstantTimeEq
 
 /-- `ConstantTimeEq::ct_eq`: `1` iff the byte encodings are equal. -/
-theorem ct_eq_spec' (self other : Scalar) :
+recall ct_eq_spec (self other : Scalar) :
     ct_eq self other ⦃ (c : subtle.Choice) =>
-      c.IsValid ∧ (self = other → c = 1#u8) ∧ (self ≠ other → c = 0#u8) ⦄ :=
-  ct_eq_spec self other
+      c.IsValid ∧ (self = other → c = 1#u8) ∧ (self ≠ other → c = 0#u8) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
   U8.Insts.SubtleConstantTimeEq.ct_eq_spec] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.SubtleConstantTimeEq
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsIndexIndexUsizeU8
 
 /-- `Index::index`: byte `_index`. -/
-theorem index_spec' (self : Scalar) (_index : Usize) (hindex : _index.val < 32) :
+recall index_spec (self : Scalar) (_index : Usize) (hindex : _index.val < 32) :
     index self _index ⦃ (r : U8) =>
-      r = self.bytes[_index.val]! ⦄ :=
-  index_spec self _index hindex
+      r = self.bytes[_index.val]! ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms index_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms index_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsIndexIndexUsizeU8
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignSharedAScalar
 
 /-- `MulAssign::mul_assign`: the product modulo `L`. -/
-theorem mul_assign_spec' (self _rhs : Scalar) (htgt : OnX86_64) :
+recall mul_assign_spec (self _rhs : Scalar) (htgt : OnX86_64) :
     mul_assign self _rhs ⦃ (r : Scalar) =>
-      r.asNat = self.asNat * _rhs.asNat % L ⦄ :=
-  mul_assign_spec self _rhs htgt
+      r.asNat = self.asNat * _rhs.asNat % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -219,17 +212,16 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignSharedAScalar
 
 namespace Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithMulSharedAScalarScalar
 
 /-- `Mul::mul`: the product modulo `L`. -/
-theorem mul_spec' (self _rhs : Scalar) (htgt : OnX86_64) :
+recall mul_spec (self _rhs : Scalar) (htgt : OnX86_64) :
     mul self _rhs ⦃ (r : Scalar) =>
-      r.asNat = self.asNat * _rhs.asNat % L ⦄ :=
-  mul_spec self _rhs htgt
+      r.asNat = self.asNat * _rhs.asNat % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -240,18 +232,17 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithMulSharedAScalarScalar
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithAddAssignSharedAScalar
 
 /-- `AddAssign::add_assign`: the sum modulo `L`, for reduced inputs. -/
-theorem add_assign_spec' (self _rhs : Scalar) (hself : self.asNat < L) (hrhs : _rhs.asNat < L)
+recall add_assign_spec (self _rhs : Scalar) (hself : self.asNat < L) (hrhs : _rhs.asNat < L)
     (htgt : OnX86_64) :
     add_assign self _rhs ⦃ (r : Scalar) =>
-      r.asNat = (self.asNat + _rhs.asNat) % L ⦄ :=
-  add_assign_spec self _rhs hself hrhs htgt
+      r.asNat = (self.asNat + _rhs.asNat) % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -262,18 +253,17 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithAddAssignSharedAScalar
 
 namespace Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar
 
 /-- `Add::add`: the sum modulo `L`, for reduced inputs. -/
-theorem add_spec' (self _rhs : Scalar) (hself : self.asNat < L)
+recall add_spec (self _rhs : Scalar) (hself : self.asNat < L)
     (hrhs : _rhs.asNat < L) (htgt : OnX86_64) :
     add self _rhs ⦃ (r : Scalar) =>
-      r.asNat = (self.asNat + _rhs.asNat) % L ⦄ :=
-  add_spec self _rhs hself hrhs htgt
+      r.asNat = (self.asNat + _rhs.asNat) % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -284,18 +274,17 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubAssignSharedAScalar
 
 /-- `SubAssign::sub_assign`: the difference modulo `L`, reduced, for reduced inputs. -/
-theorem sub_assign_spec' (self _rhs : Scalar) (hself : self.asNat < L) (hrhs : _rhs.asNat < L)
+recall sub_assign_spec (self _rhs : Scalar) (hself : self.asNat < L) (hrhs : _rhs.asNat < L)
     (htgt : OnX86_64) :
     sub_assign self _rhs ⦃ (r : Scalar) =>
-      (r.asNat + _rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄ :=
-  sub_assign_spec self _rhs hself hrhs htgt
+      (r.asNat + _rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -306,18 +295,17 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubAssignSharedAScalar
 
 namespace Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithSubSharedAScalarScalar
 
 /-- `Sub::sub`: the difference modulo `L`, reduced, for reduced inputs. -/
-theorem sub_spec' (self rhs : Scalar) (hself : self.asNat < L)
+recall sub_spec (self rhs : Scalar) (hself : self.asNat < L)
     (hrhs : rhs.asNat < L) (htgt : OnX86_64) :
     sub self rhs ⦃ (r : Scalar) =>
-      (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄ :=
-  sub_spec self rhs hself hrhs htgt
+      (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -328,17 +316,16 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithSubSharedAScalarScalar
 
 namespace Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithNegScalar
 
 /-- `Neg::neg` (for `&Scalar`): the negation modulo `L`, reduced. -/
-theorem neg_spec' (self : Scalar) (htgt : OnX86_64) :
+recall neg_spec (self : Scalar) (htgt : OnX86_64) :
     neg self ⦃ (r : Scalar) =>
-      (r.asNat + self.asNat) % L = 0 ∧ r.asNat < L ⦄ :=
-  neg_spec self htgt
+      (r.asNat + self.asNat) % L = 0 ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -349,17 +336,16 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithNegScalar
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithNegScalar
 
 /-- `Neg::neg` (for `Scalar`): the negation modulo `L`, reduced. -/
-theorem neg_spec' (self : Scalar) (htgt : OnX86_64) :
+recall neg_spec (self : Scalar) (htgt : OnX86_64) :
     neg self ⦃ (r : Scalar) =>
-      (r.asNat + self.asNat) % L = 0 ∧ r.asNat < L ⦄ :=
-  neg_spec self htgt
+      (r.asNat + self.asNat) % L = 0 ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -370,36 +356,34 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithNegScalar
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.SubtleConditionallySelectable
 
 /-- `conditional_select`: `a` if `choice = 0`, `b` if `choice = 1`, for a valid `choice`. -/
-theorem conditional_select_spec' (a b : Scalar) (choice : subtle.Choice)
+recall conditional_select_spec (a b : Scalar) (choice : subtle.Choice)
     (hchoice : choice.IsValid) :
     conditional_select a b choice ⦃ (r : Scalar) =>
-      (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄ :=
-  conditional_select_spec a b choice hchoice
+      (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄
 
 /-- [propext, Classical.choice, Quot.sound,
   U8.Insts.SubtleConditionallySelectable.conditional_select_spec] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms conditional_select_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms conditional_select_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.SubtleConditionallySelectable
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreIterTraitsAccumProduct
 
 /-- `Product::product`: the product of the items modulo `L`. -/
-theorem product_spec' {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
+recall product_spec {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (ss : List Scalar) (hiter : iterInst.Yields iter xs)
     (hborrow : List.Forall₂ (fun x s => borrowInst.borrow x ⦃ (s' : Scalar) => s' = s ⦄) xs ss)
     (htgt : OnX86_64) :
     product borrowInst iterInst iter ⦃ (r : Scalar) =>
-      r.asNat = (ss.map (·.asNat)).prod % L ⦄ :=
-  product_spec borrowInst iterInst iter xs ss hiter hborrow htgt
+      r.asNat = (ss.map (·.asNat)).prod % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -410,21 +394,20 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms product_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms product_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreIterTraitsAccumProduct
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreIterTraitsAccumSum
 
 /-- `Sum::sum`: the sum of the items modulo `L`, for reduced items. -/
-theorem sum_spec' {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
+recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (ss : List Scalar) (hiter : iterInst.Yields iter xs)
     (hborrow : List.Forall₂ (fun x s => borrowInst.borrow x ⦃ (s' : Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < L) (htgt : OnX86_64) :
     sum borrowInst iterInst iter ⦃ (r : Scalar) =>
-      r.asNat = (ss.map (·.asNat)).sum % L ⦄ :=
-  sum_spec borrowInst iterInst iter xs ss hiter hborrow hss htgt
+      r.asNat = (ss.map (·.asNat)).sum % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -435,160 +418,148 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreIterTraitsAccumSum
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreDefaultDefault
 
 /-- `Default::default`: the scalar `0`. -/
-theorem default_spec' :
+recall default_spec :
     default ⦃ (r : Scalar) =>
-      r.asNat = 0 ⦄ :=
-  default_spec
+      r.asNat = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreDefaultDefault
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU8
 
 /-- `From<u8>`: the value of `x`. -/
-theorem from_spec' (x : U8) :
+recall from_spec (x : U8) :
     «from» x ⦃ (r : Scalar) =>
-      r.asNat = x.val ⦄ :=
-  from_spec x
+      r.asNat = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU8
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU16
 
 /-- `From<u16>`: the value of `x`. -/
-theorem from_spec' (x : U16) :
+recall from_spec (x : U16) :
     «from» x ⦃ (r : Scalar) =>
-      r.asNat = x.val ⦄ :=
-  from_spec x
+      r.asNat = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU16
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU32
 
 /-- `From<u32>`: the value of `x`. -/
-theorem from_spec' (x : U32) :
+recall from_spec (x : U32) :
     «from» x ⦃ (r : Scalar) =>
-      r.asNat = x.val ⦄ :=
-  from_spec x
+      r.asNat = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU32
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU64
 
 /-- `From<u64>`: the value of `x`. -/
-theorem from_spec' (x : U64) :
+recall from_spec (x : U64) :
     «from» x ⦃ (r : Scalar) =>
-      r.asNat = x.val ⦄ :=
-  from_spec x
+      r.asNat = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU64
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU128
 
 /-- `From<u128>`: the value of `x`. -/
-theorem from_spec' (x : U128) :
+recall from_spec (x : U128) :
     «from» x ⦃ (r : Scalar) =>
-      r.asNat = x.val ⦄ :=
-  from_spec x
+      r.asNat = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromU128
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.ZeroizeZeroize
 
 /-- `Zeroize::zeroize`: all bytes `0`. -/
-theorem zeroize_spec' (self : Scalar) :
+recall zeroize_spec (self : Scalar) :
     zeroize self ⦃ (r : Scalar) =>
-      r = { bytes := Array.repeat 32#usize 0#u8 } ⦄ :=
-  zeroize_spec self
+      r = { bytes := Array.repeat 32#usize 0#u8 } ⦄
 
 /-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
   zeroize.Zeroize.Blanket.zeroize_eq] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.ZeroizeZeroize
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `ZERO`: the scalar `0`. -/
-theorem ZERO_spec' :
-    ZERO.asNat = 0 :=
-  ZERO_spec
+recall ZERO_spec :
+    ZERO.asNat = 0
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms ZERO_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms ZERO_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `ONE`: the scalar `1`. -/
-theorem ONE_spec' :
-    ONE.asNat = 1 :=
-  ONE_spec
+recall ONE_spec :
+    ONE.asNat = 1
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms ONE_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms ONE_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `to_bytes`: the byte encoding. -/
-theorem to_bytes_spec' (self : Scalar) :
+recall to_bytes_spec (self : Scalar) :
     to_bytes self ⦃ (r : Array U8 32#usize) =>
-      r = self.bytes ⦄ :=
-  to_bytes_spec self
+      r = self.bytes ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_bytes_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_bytes_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `as_bytes`: the byte encoding. -/
-theorem as_bytes_spec' (self : Scalar) :
+recall as_bytes_spec (self : Scalar) :
     as_bytes self ⦃ (r : Array U8 32#usize) =>
-      r = self.bytes ⦄ :=
-  as_bytes_spec self
+      r = self.bytes ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms as_bytes_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms as_bytes_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `invert`: the inverse modulo `L` (reduced), and `0` for `0`. -/
-theorem invert_spec' (self : Scalar) (htgt : OnX86_64) :
+recall invert_spec (self : Scalar) (htgt : OnX86_64) :
     invert self ⦃ (r : Scalar) =>
       (self.asNat % L ≠ 0 → r.asNat * self.asNat % L = 1) ∧
-      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ⦄ :=
-  invert_spec self htgt
+      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -599,20 +570,19 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms invert_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms invert_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `invert_batch`: inverts every (nonzero) input; returns the inverse of their product. -/
-theorem invert_batch_spec' {N : Usize} (inputs : Array Scalar N)
+recall invert_batch_spec {N : Usize} (inputs : Array Scalar N)
     (hinputs : ∀ i < N.val, inputs[i]!.asNat % L ≠ 0) (htgt : OnX86_64) :
     invert_batch inputs ⦃ (ret : Scalar) (r : Array Scalar N) =>
       (∀ i < N.val, r[i]!.asNat * inputs[i]!.asNat % L = 1 ∧ r[i]!.asNat < L) ∧
       ret.asNat * (∏ i ∈ Finset.range N.val, inputs[i]!.asNat) % L = 1 ∧
-      ret.asNat < L ⦄ :=
-  invert_batch_spec inputs hinputs htgt
+      ret.asNat < L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target, Array.Insts.ZeroizeZeroize.zeroize_spec,
@@ -626,21 +596,20 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms invert_batch_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms invert_batch_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `invert_batch_alloc`: as `invert_batch`, on a slice. -/
-theorem invert_batch_alloc_spec' (inputs : Slice Scalar)
+recall invert_batch_alloc_spec (inputs : Slice Scalar)
     (hinputs : ∀ i < inputs.length, inputs[i]!.asNat % L ≠ 0) (htgt : OnX86_64) :
     invert_batch_alloc inputs ⦃ (ret : Scalar) (r : Slice Scalar) =>
       r.length = inputs.length ∧
       (∀ i < inputs.length, r[i]!.asNat * inputs[i]!.asNat % L = 1 ∧ r[i]!.asNat < L) ∧
       ret.asNat * (∏ i ∈ Finset.range inputs.length, inputs[i]!.asNat) % L = 1 ∧
-      ret.asNat < L ⦄ :=
-  invert_batch_alloc_spec inputs hinputs htgt
+      ret.asNat < L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target, Array.Insts.ZeroizeZeroize.zeroize_spec,
@@ -654,7 +623,7 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms invert_batch_alloc_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms invert_batch_alloc_spec
 
 end Curve25519Dalek.scalar.Scalar
 
@@ -662,7 +631,7 @@ namespace Curve25519Dalek.scalar.Scalar
 
 /-- `invert_batch_internal`: Montgomery's batch inversion; the scratch space is not specified.
 Target `x86_64-tables`. -/
-theorem invert_batch_internal.«x86_64-tables_spec'» (inputs : Slice Scalar)
+recall invert_batch_internal.«x86_64-tables_spec» (inputs : Slice Scalar)
     (scratch : Slice backend.serial.u64.scalar.Scalar52) (hlen : scratch.length = inputs.length)
     (hinputs : ∀ i < inputs.length, inputs[i]!.asNat % L ≠ 0) :
     invert_batch_internal.«x86_64-tables» inputs scratch
@@ -671,8 +640,7 @@ theorem invert_batch_internal.«x86_64-tables_spec'» (inputs : Slice Scalar)
       r.length = inputs.length ∧
       (∀ i < inputs.length, r[i]!.asNat * inputs[i]!.asNat % L = 1 ∧ r[i]!.asNat < L) ∧
       ret.asNat * (∏ i ∈ Finset.range inputs.length, inputs[i]!.asNat) % L = 1 ∧
-      ret.asNat < L ⦄ :=
-  invert_batch_internal.«x86_64-tables_spec» inputs scratch hlen hinputs
+      ret.asNat < L ⦄
 
 /-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
   Bool.Insts.CoreConvertFromChoice.from_spec, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
@@ -681,7 +649,7 @@ theorem invert_batch_internal.«x86_64-tables_spec'» (inputs : Slice Scalar)
   subtle.Choice.Insts.CoreConvertFromU8.from_spec,
   core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize_spec] -/
 #guard_msgs (whitespace := lax, substring := true) in
-#print axioms invert_batch_internal.«x86_64-tables_spec'»
+#print axioms invert_batch_internal.«x86_64-tables_spec»
 
 end Curve25519Dalek.scalar.Scalar
 
@@ -689,7 +657,7 @@ namespace Curve25519Dalek.scalar.Scalar
 
 /-- `invert_batch_internal`: Montgomery's batch inversion; the scratch space is not specified.
 Target `x86_64-no-tables`. -/
-theorem invert_batch_internal.«x86_64-no-tables_spec'» (inputs : Slice Scalar)
+recall invert_batch_internal.«x86_64-no-tables_spec» (inputs : Slice Scalar)
     (scratch : Slice backend.serial.u64.scalar.Scalar52) (hlen : scratch.length = inputs.length)
     (hinputs : ∀ i < inputs.length, inputs[i]!.asNat % L ≠ 0) :
     invert_batch_internal.«x86_64-no-tables» inputs scratch
@@ -698,8 +666,7 @@ theorem invert_batch_internal.«x86_64-no-tables_spec'» (inputs : Slice Scalar)
       r.length = inputs.length ∧
       (∀ i < inputs.length, r[i]!.asNat * inputs[i]!.asNat % L = 1 ∧ r[i]!.asNat < L) ∧
       ret.asNat * (∏ i ∈ Finset.range inputs.length, inputs[i]!.asNat) % L = 1 ∧
-      ret.asNat < L ⦄ :=
-  invert_batch_internal.«x86_64-no-tables_spec» inputs scratch hlen hinputs
+      ret.asNat < L ⦄
 
 /-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
   Bool.Insts.CoreConvertFromChoice.from_spec, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
@@ -708,17 +675,16 @@ theorem invert_batch_internal.«x86_64-no-tables_spec'» (inputs : Slice Scalar)
   subtle.Choice.Insts.CoreConvertFromU8.from_spec,
   core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize_spec] -/
 #guard_msgs (whitespace := lax, substring := true) in
-#print axioms invert_batch_internal.«x86_64-no-tables_spec'»
+#print axioms invert_batch_internal.«x86_64-no-tables_spec»
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `div_by_2`: `b` with `b + b = self` modulo `L`, reduced. -/
-theorem div_by_2_spec' (self : Scalar) (hself : self.asNat < L) (htgt : OnX86_64) :
+recall div_by_2_spec (self : Scalar) (hself : self.asNat < L) (htgt : OnX86_64) :
     div_by_2 self ⦃ (r : Scalar) =>
-      2 * r.asNat % L = self.asNat ∧ r.asNat < L ⦄ :=
-  div_by_2_spec self hself htgt
+      2 * r.asNat % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -729,7 +695,7 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms div_by_2_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms div_by_2_spec
 
 end Curve25519Dalek.scalar.Scalar
 
@@ -737,44 +703,41 @@ namespace Curve25519Dalek.scalar.Scalar
 
 /-- `non_adjacent_form`: the width-`w` NAF: odd digits below `2^(w-1)` in absolute value, at most
 one nonzero digit in any `w` consecutive ones, for `self < 2^255`. -/
-theorem non_adjacent_form_spec' (self : Scalar) (w : Usize) (hw : 2 ≤ w.val ∧ w.val ≤ 8)
+recall non_adjacent_form_spec (self : Scalar) (w : Usize) (hw : 2 ≤ w.val ∧ w.val ≤ 8)
     (hself : self.asNat < 2 ^ 255) :
     non_adjacent_form self w ⦃ (r : Array I8 256#usize) =>
       r.asInt 1 = self.asNat ∧
       (∀ i < 256, r[i]!.val ≠ 0 → r[i]!.val % 2 = 1 ∧ 2 * |r[i]!.val| < 2 ^ w.val) ∧
-      ∀ i < 256, ∀ j < 256, i < j → j < i + w.val → r[i]!.val ≠ 0 → r[j]!.val = 0 ⦄ :=
-  non_adjacent_form_spec self w hw hself
+      ∀ i < 256, ∀ j < 256, i < j → j < i + w.val → r[i]!.val ≠ 0 → r[j]!.val = 0 ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.fmt.Formatter,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms non_adjacent_form_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms non_adjacent_form_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar.as_radix_16
 
 /-- `as_radix_16::bot_half`: the low nibble. -/
-theorem bot_half_spec' (x : U8) :
+recall bot_half_spec (x : U8) :
     bot_half x ⦃ (r : U8) =>
-      r.val = x.val % 16 ⦄ :=
-  bot_half_spec x
+      r.val = x.val % 16 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms bot_half_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms bot_half_spec
 
 end Curve25519Dalek.scalar.Scalar.as_radix_16
 
 namespace Curve25519Dalek.scalar.Scalar.as_radix_16
 
 /-- `as_radix_16::top_half`: the high nibble. -/
-theorem top_half_spec' (x : U8) :
+recall top_half_spec (x : U8) :
     top_half x ⦃ (r : U8) =>
-      16 * r.val + x.val % 16 = x.val ⦄ :=
-  top_half_spec x
+      16 * r.val + x.val % 16 = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms top_half_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms top_half_spec
 
 end Curve25519Dalek.scalar.Scalar.as_radix_16
 
@@ -782,28 +745,26 @@ namespace Curve25519Dalek.scalar.Scalar
 
 /-- `as_radix_16`: signed radix-16 digits in `[-8, 8)` (the last in `[-8, 8]`), for
 `self < 2^255`. -/
-theorem as_radix_16_spec' (self : Scalar) (hself : self.asNat < 2 ^ 255) :
+recall as_radix_16_spec (self : Scalar) (hself : self.asNat < 2 ^ 255) :
     as_radix_16 self ⦃ (r : Array I8 64#usize) =>
       r.asInt 4 = self.asNat ∧
-      (∀ i < 63, -8 ≤ r[i]!.val ∧ r[i]!.val < 8) ∧ -8 ≤ r[63]!.val ∧ r[63]!.val ≤ 8 ⦄ :=
-  as_radix_16_spec self hself
+      (∀ i < 63, -8 ≤ r[i]!.val ∧ r[i]!.val < 8) ∧ -8 ≤ r[63]!.val ∧ r[63]!.val ≤ 8 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms as_radix_16_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms as_radix_16_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `to_radix_2w_size_hint`: `⌈256 / w⌉` digits, plus one for `w = 8`. -/
-theorem to_radix_2w_size_hint_spec' (w : Usize) (hw : 4 ≤ w.val ∧ w.val ≤ 8) :
+recall to_radix_2w_size_hint_spec (w : Usize) (hw : 4 ≤ w.val ∧ w.val ≤ 8) :
     to_radix_2w_size_hint w ⦃ (r : Usize) =>
       (w.val = 4 → r.val = 64) ∧ (w.val = 5 → r.val = 52) ∧ (w.val = 6 → r.val = 43) ∧
-      (w.val = 7 → r.val = 37) ∧ (w.val = 8 → r.val = 33) ⦄ :=
-  to_radix_2w_size_hint_spec w hw
+      (w.val = 7 → r.val = 37) ∧ (w.val = 8 → r.val = 33) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, core.num.Usize.div_ceil_spec] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_radix_2w_size_hint_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_radix_2w_size_hint_spec
 
 end Curve25519Dalek.scalar.Scalar
 
@@ -811,19 +772,18 @@ namespace Curve25519Dalek.scalar.Scalar
 
 /-- `as_radix_2w`: signed radix-`2^w` digits in `[-2^(w-1), 2^(w-1))` (the last in
 `[-2^(w-1), 2^(w-1)]`), the unused ones `0`, for `self < 2^255`. -/
-theorem as_radix_2w_spec' (self : Scalar) (w : Usize) (hw : 4 ≤ w.val ∧ w.val ≤ 8)
+recall as_radix_2w_spec (self : Scalar) (w : Usize) (hw : 4 ≤ w.val ∧ w.val ≤ 8)
     (hself : self.asNat < 2 ^ 255) :
     as_radix_2w self w ⦃ (r : Array I8 64#usize) =>
       r.asInt w.val = self.asNat ∧
       (∀ i < 64, (i + 1) * w.val < 256 → -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val < 2 ^ w.val) ∧
       (∀ i < 64, -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val ≤ 2 ^ w.val) ∧
-      ∀ i < 64, 256 < i * w.val → r[i]!.val = 0 ⦄ :=
-  as_radix_2w_spec self w hw hself
+      ∀ i < 64, 256 < i * w.val → r[i]!.val = 0 ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.num.Usize.div_ceil_spec, core.fmt.Formatter,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms as_radix_2w_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms as_radix_2w_spec
 
 end Curve25519Dalek.scalar.Scalar
 
@@ -831,13 +791,12 @@ namespace Curve25519Dalek.scalar.Scalar
 
 /-- `unpack`: the same value in 52-bit limbs.
 Target `x86_64-tables`. -/
-theorem unpack.«x86_64-tables_spec'» (self : Scalar) :
+recall unpack.«x86_64-tables_spec» (self : Scalar) :
     unpack.«x86_64-tables» self ⦃ (r : backend.serial.u64.scalar.Scalar52) =>
-      r.asNat = self.asNat ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
-  unpack.«x86_64-tables_spec» self
+      r.asNat = self.asNat ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms unpack.«x86_64-tables_spec'»
+#guard_msgs (whitespace := lax, substring := true) in #print axioms unpack.«x86_64-tables_spec»
 
 end Curve25519Dalek.scalar.Scalar
 
@@ -845,23 +804,21 @@ namespace Curve25519Dalek.scalar.Scalar
 
 /-- `unpack`: the same value in 52-bit limbs.
 Target `x86_64-no-tables`. -/
-theorem unpack.«x86_64-no-tables_spec'» (self : Scalar) :
+recall unpack.«x86_64-no-tables_spec» (self : Scalar) :
     unpack.«x86_64-no-tables» self ⦃ (r : backend.serial.u64.scalar.Scalar52) =>
-      r.asNat = self.asNat ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
-  unpack.«x86_64-no-tables_spec» self
+      r.asNat = self.asNat ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms unpack.«x86_64-no-tables_spec'»
+#guard_msgs (whitespace := lax, substring := true) in #print axioms unpack.«x86_64-no-tables_spec»
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `reduce`: the value modulo `L`. -/
-theorem reduce_spec' (self : Scalar) (htgt : OnX86_64) :
+recall reduce_spec (self : Scalar) (htgt : OnX86_64) :
     reduce self ⦃ (r : Scalar) =>
-      r.asNat = self.asNat % L ⦄ :=
-  reduce_spec self htgt
+      r.asNat = self.asNat % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target,
@@ -872,17 +829,16 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms reduce_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms reduce_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `is_canonical`: `1` iff the value is below `L`. -/
-theorem is_canonical_spec' (self : Scalar) (htgt : OnX86_64) :
+recall is_canonical_spec (self : Scalar) (htgt : OnX86_64) :
     is_canonical self ⦃ (c : subtle.Choice) =>
-      c.IsValid ∧ (self.asNat < L → c = 1#u8) ∧ (L ≤ self.asNat → c = 0#u8) ⦄ :=
-  is_canonical_spec self htgt
+      c.IsValid ∧ (self.asNat < L → c = 1#u8) ∧ (L ≤ self.asNat → c = 0#u8) ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, get_target, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
@@ -893,329 +849,306 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms is_canonical_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms is_canonical_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar52
 
 /-- `UnpackedScalar::pack`: the same value as 32 bytes. -/
-theorem pack_spec' (self : backend.serial.u64.scalar.Scalar52)
+recall pack_spec (self : backend.serial.u64.scalar.Scalar52)
     (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) (hself' : self.asNat < 2 ^ 256) :
     pack self ⦃ (r : Scalar) =>
-      r.asNat = self.asNat ⦄ :=
-  pack_spec self hself hself'
+      r.asNat = self.asNat ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms pack_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms pack_spec
 
 end Curve25519Dalek.scalar.Scalar52
 
 namespace Curve25519Dalek.scalar.Scalar52.montgomery_invert
 
 /-- `montgomery_invert::square_multiply`: `y^(2^squarings) x` in Montgomery form. -/
-theorem square_multiply_spec' (y : backend.serial.u64.scalar.Scalar52)
+recall square_multiply_spec (y : backend.serial.u64.scalar.Scalar52)
     (squarings : Usize) (x : backend.serial.u64.scalar.Scalar52) (hy : ∀ i < 5, y[i]!.val < 2 ^ 52)
     (hy' : y.asNat < L) (hx : ∀ i < 5, x[i]!.val < 2 ^ 52) (hx' : x.asNat < L) :
     square_multiply y squarings x ⦃ (r : backend.serial.u64.scalar.Scalar52) =>
       r.asNat * montgomeryRadix ^ 2 ^ squarings.val % L =
         y.asNat ^ 2 ^ squarings.val * x.asNat % L ∧
-      r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
-  square_multiply_spec y squarings x hy hy' hx hx'
+      r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   subtle.Choice.Insts.CoreConvertFromU8.from_spec] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms square_multiply_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms square_multiply_spec
 
 end Curve25519Dalek.scalar.Scalar52.montgomery_invert
 
 namespace Curve25519Dalek.scalar.Scalar52
 
 /-- `UnpackedScalar::montgomery_invert`: the inverse in Montgomery form (`a R ↦ a⁻¹ R`). -/
-theorem montgomery_invert_spec' (self : backend.serial.u64.scalar.Scalar52)
+recall montgomery_invert_spec (self : backend.serial.u64.scalar.Scalar52)
     (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) (hself' : self.asNat < L) :
     montgomery_invert self ⦃ (r : backend.serial.u64.scalar.Scalar52) =>
       (self.asNat % L ≠ 0 → r.asNat * self.asNat % L = montgomeryRadix ^ 2 % L) ∧
-      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
-  montgomery_invert_spec self hself hself'
+      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   subtle.Choice.Insts.CoreConvertFromU8.from_spec] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms montgomery_invert_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms montgomery_invert_spec
 
 end Curve25519Dalek.scalar.Scalar52
 
 namespace Curve25519Dalek.scalar.Scalar52
 
 /-- `UnpackedScalar::invert`: the inverse modulo `L` (reduced), and `0` for `0`. -/
-theorem invert_spec' (self : backend.serial.u64.scalar.Scalar52)
+recall invert_spec (self : backend.serial.u64.scalar.Scalar52)
     (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) :
     invert self ⦃ (r : backend.serial.u64.scalar.Scalar52) =>
       (self.asNat % L ≠ 0 → r.asNat * self.asNat % L = 1) ∧
-      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
-  invert_spec self hself
+      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound,
   U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
   subtle.Choice.Insts.CoreConvertFromU8.from_spec] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms invert_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms invert_spec
 
 end Curve25519Dalek.scalar.Scalar52
 
 namespace Curve25519Dalek.scalar
 
 /-- `read_le_u64_into`: each word is read from 8 little-endian bytes. -/
-theorem read_le_u64_into_spec' (src : Slice U8) (dst : Slice U64)
+recall read_le_u64_into_spec (src : Slice U8) (dst : Slice U64)
     (hsrc : src.length = 8 * dst.length) :
     read_le_u64_into src dst ⦃ (r : Slice U64) =>
       r.length = dst.length ∧
-      ∀ i < dst.length, ∀ j < 8, r[i]!.val / 2 ^ (8 * j) % 2 ^ 8 = src[8 * i + j]!.val ⦄ :=
-  read_le_u64_into_spec src dst hsrc
+      ∀ i < dst.length, ∀ j < 8, r[i]!.val / 2 ^ (8 * j) % 2 ^ 8 = src[8 * i + j]!.val ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.fmt.Formatter,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms read_le_u64_into_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms read_le_u64_into_spec
 
 end Curve25519Dalek.scalar
 
 namespace Curve25519Dalek.scalar
 
 /-- `clamp_integer`: clears the low 3 bits and bit 255, sets bit 254. -/
-theorem clamp_integer_spec' (bytes : Array U8 32#usize) :
+recall clamp_integer_spec (bytes : Array U8 32#usize) :
     clamp_integer bytes ⦃ (r : Array U8 32#usize) =>
-      r.asNat 8 + bytes.asNat 8 % 8 = 2 ^ 254 + bytes.asNat 8 % 2 ^ 254 ⦄ :=
-  clamp_integer_spec bytes
+      r.asNat 8 + bytes.asNat 8 % 8 = 2 ^ 254 + bytes.asNat 8 % 2 ^ 254 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms clamp_integer_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms clamp_integer_spec
 
 end Curve25519Dalek.scalar
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreDefaultDefault
 
 /-- `Default::default` (derived): the scalar `0`. -/
-theorem default_spec' :
+recall default_spec :
     default ⦃ (r : HalfWidthScalar) =>
-      r.asNat = 0 ⦄ :=
-  default_spec
+      r.asNat = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreDefaultDefault
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreCmpPartialEqHalfWidthScalar
 
 /-- `PartialEq::eq` (derived): equality. -/
-theorem eq_spec' (self other : HalfWidthScalar) :
+recall eq_spec (self other : HalfWidthScalar) :
     eq self other ⦃ (b : Bool) =>
-      (b = true ↔ self = other) ⦄ :=
-  eq_spec self other
+      (b = true ↔ self = other) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, Bool.Insts.CoreConvertFromChoice.from_spec,
   Slice.Insts.SubtleConstantTimeEq.ct_eq_spec, U8.Insts.SubtleConstantTimeEq.ct_eq_spec] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreCmpPartialEqHalfWidthScalar
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple
 
 /-- `TryFrom<Scalar> for HalfWidthScalar`: succeeds iff the value is below `2^128`. -/
-theorem try_from_spec' (value : Scalar) :
+recall try_from_spec (value : Scalar) :
     try_from value ⦃ (r : core.result.Result HalfWidthScalar Unit) =>
-      (value.asNat < 2 ^ 128 → r = .Ok value) ∧ (2 ^ 128 ≤ value.asNat → r = .Err ()) ⦄ :=
-  try_from_spec value
+      (value.asNat < 2 ^ 128 → r = .Ok value) ∧ (2 ^ 128 ≤ value.asNat → r = .Err ()) ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms try_from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms try_from_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar
 
 /-- `HalfWidthScalar::ZERO`: `0`. -/
-theorem ZERO_spec' :
-    ZERO.asNat = 0 :=
-  ZERO_spec
+recall ZERO_spec :
+    ZERO.asNat = 0
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms ZERO_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms ZERO_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar
 
 /-- `HalfWidthScalar::ONE`: `1`. -/
-theorem ONE_spec' :
-    ONE.asNat = 1 :=
-  ONE_spec
+recall ONE_spec :
+    ONE.asNat = 1
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms ONE_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms ONE_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar
 
 /-- `HalfWidthScalar::from_bytes`: the 128-bit little-endian value. -/
-theorem from_bytes_spec' (bytes : Array U8 16#usize) :
+recall from_bytes_spec (bytes : Array U8 16#usize) :
     from_bytes bytes ⦃ (r : HalfWidthScalar) =>
-      r.asNat = bytes.asNat 8 ⦄ :=
-  from_bytes_spec bytes
+      r.asNat = bytes.asNat 8 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_bytes_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_bytes_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar
 
 /-- `HalfWidthScalar::as_scalar`: the same value. -/
-theorem as_scalar_spec' (self : HalfWidthScalar) :
+recall as_scalar_spec (self : HalfWidthScalar) :
     as_scalar self ⦃ (r : Scalar) =>
-      r.asNat = self.asNat ⦄ :=
-  as_scalar_spec self
+      r.asNat = self.asNat ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms as_scalar_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms as_scalar_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar
 
 /-- `HalfWidthScalar::to_bytes`: the low 16 bytes. -/
-theorem to_bytes_spec' (self : HalfWidthScalar) :
+recall to_bytes_spec (self : HalfWidthScalar) :
     to_bytes self ⦃ (r : Array U8 16#usize) =>
-      r.asNat 8 = self.asNat % 2 ^ 128 ⦄ :=
-  to_bytes_spec self
+      r.asNat 8 = self.asNat % 2 ^ 128 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_bytes_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_bytes_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar
 
 /-- `HalfWidthScalar::non_adjacent_form`: as `Scalar::non_adjacent_form`. -/
-theorem non_adjacent_form_spec' (self : HalfWidthScalar) (w : Usize)
+recall non_adjacent_form_spec (self : HalfWidthScalar) (w : Usize)
     (hw : 2 ≤ w.val ∧ w.val ≤ 8) (hself : self.asNat < 2 ^ 255) :
     non_adjacent_form self w ⦃ (r : Array I8 256#usize) =>
       r.asInt 1 = self.asNat ∧
       (∀ i < 256, r[i]!.val ≠ 0 → r[i]!.val % 2 = 1 ∧ 2 * |r[i]!.val| < 2 ^ w.val) ∧
-      ∀ i < 256, ∀ j < 256, i < j → j < i + w.val → r[i]!.val ≠ 0 → r[j]!.val = 0 ⦄ :=
-  non_adjacent_form_spec self w hw hself
+      ∀ i < 256, ∀ j < 256, i < j → j < i + w.val → r[i]!.val ≠ 0 → r[j]!.val = 0 ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.fmt.Formatter,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms non_adjacent_form_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms non_adjacent_form_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar
 
 namespace Curve25519Dalek.scalar.Scalar
 
 /-- `split_at_128`: `self = lo + 2^128 hi` with both halves below `2^128`. -/
-theorem split_at_128_spec' (self : Scalar) :
+recall split_at_128_spec (self : Scalar) :
     split_at_128 self ⦃ (lo hi : HalfWidthScalar) =>
-      lo.asNat + 2 ^ 128 * hi.asNat = self.asNat ∧ lo.asNat < 2 ^ 128 ∧ hi.asNat < 2 ^ 128 ⦄ :=
-  split_at_128_spec self
+      lo.asNat + 2 ^ 128 * hi.asNat = self.asNat ∧ lo.asNat < 2 ^ 128 ∧ hi.asNat < 2 ^ 128 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms split_at_128_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms split_at_128_spec
 
 end Curve25519Dalek.scalar.Scalar
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromHalfWidthScalar
 
 /-- `From<HalfWidthScalar> for Scalar`: the same value. -/
-theorem from_spec' (x : HalfWidthScalar) :
+recall from_spec (x : HalfWidthScalar) :
     «from» x ⦃ (r : Scalar) =>
-      r.asNat = x.asNat ⦄ :=
-  from_spec x
+      r.asNat = x.asNat ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreConvertFromHalfWidthScalar
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertFromU8
 
 /-- `From<u8> for HalfWidthScalar`: the value of `x`. -/
-theorem from_spec' (x : U8) :
+recall from_spec (x : U8) :
     «from» x ⦃ (r : HalfWidthScalar) =>
-      r.asNat = x.val ⦄ :=
-  from_spec x
+      r.asNat = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertFromU8
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertFromU16
 
 /-- `From<u16> for HalfWidthScalar`: the value of `x`. -/
-theorem from_spec' (x : U16) :
+recall from_spec (x : U16) :
     «from» x ⦃ (r : HalfWidthScalar) =>
-      r.asNat = x.val ⦄ :=
-  from_spec x
+      r.asNat = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertFromU16
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertFromU32
 
 /-- `From<u32> for HalfWidthScalar`: the value of `x`. -/
-theorem from_spec' (x : U32) :
+recall from_spec (x : U32) :
     «from» x ⦃ (r : HalfWidthScalar) =>
-      r.asNat = x.val ⦄ :=
-  from_spec x
+      r.asNat = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertFromU32
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertFromU64
 
 /-- `From<u64> for HalfWidthScalar`: the value of `x`. -/
-theorem from_spec' (x : U64) :
+recall from_spec (x : U64) :
     «from» x ⦃ (r : HalfWidthScalar) =>
-      r.asNat = x.val ⦄ :=
-  from_spec x
+      r.asNat = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertFromU64
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertFromU128
 
 /-- `From<u128> for HalfWidthScalar`: the value of `x`. -/
-theorem from_spec' (x : U128) :
+recall from_spec (x : U128) :
     «from» x ⦃ (r : HalfWidthScalar) =>
-      r.asNat = x.val ⦄ :=
-  from_spec x
+      r.asNat = x.val ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertFromU128
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.ZeroizeZeroize
 
 /-- `Zeroize::zeroize` for `HalfWidthScalar`: all bytes `0`. -/
-theorem zeroize_spec' (self : HalfWidthScalar) :
+recall zeroize_spec (self : HalfWidthScalar) :
     zeroize self ⦃ (r : HalfWidthScalar) =>
-      r = { bytes := Array.repeat 32#usize 0#u8 } ⦄ :=
-  zeroize_spec self
+      r = { bytes := Array.repeat 32#usize 0#u8 } ⦄
 
 /-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
   zeroize.Zeroize.Blanket.zeroize_eq] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec'
+#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.ZeroizeZeroize
