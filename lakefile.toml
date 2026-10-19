@@ -1,7 +1,7 @@
 name = "curve25519-dalek"
 version = "0.1.0"
 keywords = ["formal verification"]
-defaultTargets = ["Curve25519Dalek", "Subtle", "Zeroize", "Curve25519", "Defs", "Specs", "Proofs"]
+defaultTargets = ["Curve25519Dalek", "Subtle", "Zeroize", "EllipticCurve", "Curve25519", "Defs", "Specs", "Proofs"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -32,6 +32,11 @@ srcDir = "curve25519-dalek/lean"
 # Aeneas-generated Lean translation.
 [[lean_lib]]
 name = "Curve25519Dalek"
+srcDir = "curve25519-dalek/lean"
+
+# Elliptic-curve models over a field, independent of any curve; see curve-api.md.
+[[lean_lib]]
+name = "EllipticCurve"
 srcDir = "curve25519-dalek/lean"
 
 # Curve25519 in general (parameters, later the curve models), independent of dalek.

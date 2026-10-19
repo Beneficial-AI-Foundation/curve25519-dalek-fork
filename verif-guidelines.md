@@ -40,7 +40,8 @@ How the Lean verification of curve25519-dalek is arranged. The plan and the open
 
 | lean_lib | Namespace | Content | Audited |
 |---|---|---|---|
-| `Curve25519` | `curve25519` | Curve25519 in general (`p`, `L`, `a`, `d`, `A`, later the curve models), independent of dalek | yes |
+| `EllipticCurve` | top level (`Curve`, `MontgomeryModel`, …) | Elliptic-curve models over a field, independent of any curve; Mathlib-bound. API in `curve-api.md` | yes, except `EllipticCurve/Proofs/**` and `Curve/Impl.lean` |
+| `Curve25519` | `curve25519` | Curve25519 in general (`p`, `L`, `a`, `d`, `A`, its models and facts), independent of dalek | yes |
 | `Curve25519Dalek` | `Curve25519Dalek` | Generated translation + hand-written External files | External files |
 | `Subtle`, `Zeroize` | as generated | Models of external crates | `Subtle/Types.lean`, `Basic.lean` |
 | `Defs` | `Curve25519Dalek` (extensions of Aeneas types: their namespace) | Definitions needed to state the specs | yes |
@@ -276,5 +277,6 @@ summaries import everything); run the linter on one library per command when mem
 - **`lean-translation.yml`:** the translation is current.
 - **`lean-build.yml`:**
   - `lake build --wfail` on every default target: any warning, including `sorry`, fails the build;
-  - `runLinter` on `Subtle`, `Zeroize`, `Curve25519`, `Defs`, `Specs` and `Proofs`, one step each
+  - `runLinter` on `Subtle`, `Zeroize`, `EllipticCurve`, `Curve25519`, `Defs`, `Specs` and
+    `Proofs`, one step each
     (`runLinter` stops at the first failing module).

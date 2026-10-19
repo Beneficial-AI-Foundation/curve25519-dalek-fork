@@ -44,6 +44,9 @@ jobs:
       - name: Lint Zeroize
         if: ${{ !cancelled() }}
         run: lake exe runLinter Zeroize
+      - name: Lint EllipticCurve
+        if: ${{ !cancelled() }}
+        run: lake exe runLinter EllipticCurve
       - name: Lint Curve25519
         if: ${{ !cancelled() }}
         run: lake exe runLinter Curve25519
