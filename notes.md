@@ -7,10 +7,13 @@
   - src/field.rs: done
   - src/scalar.rs: done for 64-bit targets (see below)
   - Serial 32 backend
-  - Elliptic curves
+  - Elliptic curves: the mathematical framework is done (see "Curve framework" below); next is
+    the `Defs` layer for the point structs and the specs of `curve_models.rs`, `edwards.rs`, …
   - All the other files
 3. Make it so Aeneas supports project-defined traits for external-crate (see below)
-4. Incorporate the new formalisation of elliptic curve models
+4. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
+   j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
+   `Proofs` modules changes (see `curve-api.md` §3)
 
 ## Contributors to the earlier project (future co-authors)
 
@@ -182,5 +185,31 @@ Spec summaries cover the crate's public API only (see `verif-guidelines.md`, "Co
 - Proved but not public (no spec summary): `src/backend/serial/u64/field.rs`, `scalar.rs`,
   `constants.rs` (the `EdwardsPoint` constants and tables wait for the curve model) and
   `src/field.rs`.
-- Next public files: `constants.rs`, `edwards.rs`, `montgomery.rs`, `ristretto.rs` (they need the
-  curve model).
+- Next public files: `constants.rs`, `edwards.rs`, `montgomery.rs`, `ristretto.rs`. The curve
+  model they need exists now (below); the `Defs` layer (`curve-api.md` §9: `toField`,
+  `OnCurve`/`Bounded`/`toPoint` per struct, tables, byte encodings) is the next step.
+
+## Curve framework (2026-10-16 to 2026-10-20)
+
+Two libraries, both audited except their `Proofs/**` and `Curve/Impl.lean`; API and decisions in
+`curve-api.md` (the reference), requirements in `curve-requirements.md`:
+
+- **`EllipticCurve`** (generic, Mathlib-bound): the abstract `Curve F` (hidden quotient of
+  Weierstrass models by isomorphism; `C.Point` a group), `MontgomeryModel`/`TwistedEdwardsModel`
+  with their own point types and groups pinned by coordinate lemmas, the Edwards↔Montgomery
+  equivalence, the five coordinate systems with dalek's formulas proved correct, the x-only
+  ladder with `xMul` on curve and twist, the even quotient (Decaf/Ristretto construction), the
+  RFC 8032 encoding, `ZMod.isNeg`/`abs`, the point-group isomorphism along a variable change
+  (`Weierstrass/PointEquiv`, missing from Mathlib), point counts of a model and its twist.
+- **`Curve25519`**: `edwards`, `montgomery`, `curve`, `basepoint` with `addOrderOf = L`,
+  `card = 8L` (no point counting), the ℤ/8 × ℤ/L decomposition, the eight torsion points,
+  `montgomeryBasepoint` (`u = 9`), `edwardsToMontgomery`, the twist (`4·twistL` points),
+  RFC 7748 `x25519` with its test vectors, the Ed25519 encoding with `encode basepoint`, the
+  `Ristretto` group (`card = L`), the 2-descent `even_iff_isSquare`, the RFC 9496 encoding,
+  decoding and one-way map with the RFC test vectors.
+- Trust: no `sorry`, no `native_decide`; every certificate is `decide +kernel` on the
+  inversion-free `Extended.nsmul`/`IsZero` (253-step chains take ~0.2 s) or a `norm_num`
+  Legendre-symbol computation; `#print axioms` is the standard three everywhere checked.
+- Found along the way: Mathlib lacks the action of `VariableChange` on points (built here);
+  the twist of curve25519 has `4·L'` points for a different prime `L'` (`twistL`), not `4L`;
+  RFC 7748's `a24` is `(A−2)/4`; the descent map is `B·u` modulo squares.

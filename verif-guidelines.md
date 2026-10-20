@@ -95,6 +95,32 @@ Released under Apache 2.0 license as described in the file LICENSE.
 - **Derived part:** `<Lib>/Lemmas.lean` (generic), `<Lib>/Instances.lean` (about instances in `Funs.lean`) and `Zeroize/Consistency.lean`. They add no axioms.
 - **Imports:** `FunsExternal.lean` imports only `<Lib>.Basic`.
 
+## Curves (`EllipticCurve`, `Curve25519`)
+
+The API, the terminology (curve / model / coordinates) and all design decisions are in
+`curve-api.md`; follow it. Conventions specific to these two libraries:
+
+- **Topic = definitions module + properties module.** `…/Defs.lean` holds structures, hidden
+  definitions and instances; `…/Lemmas.lean` does `import all …/Defs` and proves the
+  characterising lemmas (the audited statements). Heavy proofs go in `…/Proofs/*.lean` (not
+  audited), which also `import all` the definitions; the audited module re-exports their results.
+- **Constructions meant to be swappable** (`Curve`, `Curve.Point`, the group instances,
+  `toPoint`, `toCurve`, `pointEquiv`, the model-to-model equivalences, `xMul`, `decode*`) have no
+  `_def` lemma, only characterising lemmas; `Weierstrass` names never appear in an API signature
+  (`Curve/Impl.lean` and `Weierstrass/PointEquiv.lean` are imported privately).
+- **Exposed are formulas only** (`Equation`, `OnCurve`, `ProjEq`, `isNeg`, `abs`, the coordinate
+  formulas, `nsmul`/`ladder`/`clamp`/`x25519`, `encode`), so that `decide` can evaluate them.
+  Instances on hidden types carry `@[no_expose]`; everything on them is `noncomputable`.
+- **Certificates** (`Curve25519/Proofs/**`): `import all Curve25519.Basic` so the kernel can
+  unfold `p`, `L`; use the inversion-free `Extended.nsmul`/`IsZero` (`decide +kernel`), never a
+  field inverse (`ZMod` inversion is well-founded recursion and does not reduce); numeric facts by
+  `rw [p_eq_numeral]; norm_num; reduce_mod_char` or the `norm_num` Legendre-symbol extension.
+  `native_decide` is banned. RFC test vectors live in `Proofs/*/TestVector.lean`, imported
+  privately by the root so CI checks them.
+- **Hypotheses:** `IsNonsingular`/`IsComplete` include `(2 : F) ≠ 0`; oddness of `p` is an explicit
+  `(hp : p % 2 = 1)` in generic sign lemmas; `[Finite F]` where a square/non-square dichotomy is
+  used.
+
 ## Layout
 
 The hand-written Lean about dalek's items is in:
