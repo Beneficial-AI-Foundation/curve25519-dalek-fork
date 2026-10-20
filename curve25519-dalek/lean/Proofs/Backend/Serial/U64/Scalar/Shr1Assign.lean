@@ -9,6 +9,7 @@ import Mathlib.Tactic.LinearCombination
 import Proofs.Backend.Serial.U64.Scalar.Index
 import Proofs.Backend.Serial.U64.Scalar.IndexMut
 import Proofs.Helpers.AsNat
+import Proofs.Helpers.Iterator
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
@@ -27,36 +28,6 @@ private theorem shr1_sum_step {S S' P limb v c c' Self T : ℕ} (hset : S' + P *
     2 * S' + P * c' = Self + T := by
   zify at *
   linear_combination 2 * hset + hIH + (P : ℤ) * hv
-
-/-- `next` on a reversed `Usize` range that is not empty yields its last element. -/
-private theorem rev_next_some_spec (it : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
-    (hlt : it.iter.start.val < it.iter.end.val) :
-    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
-      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) it
-    ⦃ (o : Option Usize) (it' : core.iter.adapters.rev.Rev (core.ops.range.Range Usize)) =>
-      ∃ e : Usize, o = some e ∧ e.val + 1 = it.iter.end.val ∧ it'.iter.start = it.iter.start ∧
-        it'.iter.end = e ⦄ := by
-  unfold core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
-  have hb : (1#usize).val ≤ it.iter.end.val := by scalar_tac
-  simp only [core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
-    core.iter.range.UScalarStep, core.iter.range.UScalarStep.backward_checked, hb, ↓reduceDIte,
-    bind_tc_ok, core.cmp.impls.PartialOrdUsize.lt, hlt, decide_true, ↓reduceIte, WP.spec_ok]
-  exact ⟨_, rfl, by simp only [UScalar.ofNatCore_val_eq]; scalar_tac, rfl, rfl⟩
-
-/-- `next` on an empty reversed `Usize` range yields `none`. -/
-private theorem rev_next_none_spec (it : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
-    (hge : it.iter.end.val ≤ it.iter.start.val) :
-    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
-      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) it
-    ⦃ (o : Option Usize) (_ : core.iter.adapters.rev.Rev (core.ops.range.Range Usize)) =>
-      o = none ⦄ := by
-  unfold core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
-  have h_lt : ∀ a b : Usize, core.iter.range.StepUsize.partialOrdInst.lt a b
-      = ok (decide (a.val < b.val)) := fun _ _ => rfl
-  simp only [core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back, h_lt,
-    show ¬ it.iter.start.val < it.iter.end.val from Nat.not_lt.mpr hge, decide_false,
-    Bool.false_eq_true, ↓reduceIte, bind_tc_ok, WP.spec_ok]
-  exact rfl
 
 namespace Curve25519Dalek.backend.serial.u64.scalar.Scalar52
 
@@ -79,7 +50,8 @@ private theorem shr1_assign_loop_spec (self : Scalar52)
   · rintro ⟨it, s, carry⟩ ⟨hstart, hend, hcarry, hs, hlow, hsum⟩
     unfold shr1_assign_loop.body
     by_cases hlt : 0 < it.iter.end.val
-    · step with rev_next_some_spec as ⟨o, it1, i, ho, hi, hstart1, hend1⟩
+    · step with core.iter.adapters.rev.Rev.next_Usize_some_spec
+        as ⟨o, it1, i, ho, hi, hstart1, hend1⟩
       subst ho
       have hik : i.val < it.iter.end.val := by scalar_tac
       have hi5 : i.val < 5 := by scalar_tac
@@ -117,7 +89,7 @@ private theorem shr1_assign_loop_spec (self : Scalar52)
         have hset := Array.asNat_set_add 52 s i v hi5
         rw [← hlimb] at hset
         exact shr1_sum_step (by simpa only [scalar.Scalar52.asNat_def] using hset) hsum hstep
-    · step with rev_next_none_spec as ⟨o, it1, ho⟩
+    · step with core.iter.adapters.rev.Rev.next_Usize_none_spec as ⟨o, it1, ho⟩
       subst ho
       have he : it.iter.end.val = 0 := Nat.eq_zero_of_not_pos hlt
       rw [he, Nat.mul_zero, pow_zero, Nat.one_mul, Finset.sum_range_zero, Nat.add_zero] at hsum

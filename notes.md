@@ -179,6 +179,14 @@ bound (or a `Str` literal that carries none).
 
 ## Spec campaign status
 
+- Trusted externals added during the point campaign: `core.result.Result.map_spec` in
+  `FunsExternal.lean` (used by `CompressedEdwardsY::from_slice`); decided 2026-10-20 to keep it
+  as a spec axiom, consistent with `core.array.from_fn_spec`.
+- `IsIdentity::is_identity` (blanket impl in `traits.rs`, used by `EdwardsPoint`,
+  `CompressedEdwardsY`, `MontgomeryPoint`, `RistrettoPoint`, `CompressedRistretto`): decided
+  2026-10-20 to summarise it once, generically, in `Specs/Traits.lean` (conditional on the type's
+  `ct_eq`/`identity` behaviour); the per-type summaries do not repeat it.
+
 Spec summaries cover the crate's public API only (see `verif-guidelines.md`, "Coverage").
 
 - `src/scalar.rs`: all public items specified and proved, for 64-bit targets (`OnX86_64`).
@@ -213,3 +221,21 @@ Two libraries, both audited except their `Proofs/**` and `Curve/Impl.lean`; API 
 - Found along the way: Mathlib lacks the action of `VariableChange` on points (built here);
   the twist of curve25519 has `4·L'` points for a different prime `L'` (`twistL`), not `4L`;
   RFC 7748's `a24` is `(A−2)/4`; the descent map is `B·u` modulo squares.
+
+## To decide: certifying the precomputed tables (measured 2026-10-20)
+
+`ED25519_BASEPOINT_TABLE` (32 rows × 8 affine-Niels entries, 768 `from_limbs` binds) and
+`AFFINE_ODD_MULTIPLES_OF_BASEPOINT(_128)` (64 entries each). Today the with-tables `mul_base`,
+`mul_base_clamped` and `vartime_double_scalar_mul_basepoint` are proved as `_of_table` theorems
+with an explicit hypothesis that the constant represents the basepoint (option d).
+
+| Option | Proves | Measured | Notes |
+|---|---|---|---|
+| (a) per-entry kernel certificates | full fact, kernel only | math side: odd multiples + 8 multiples of `2^128 B`: 2.7 s / 1.3 GB; 256-entry table: 3 files of 8–13 s, max 3.4 GB (one file: 30 s / 3.6 GB). Limb extraction from the Lean constant: `AFFINE_ODD` (192 binds) 6.6 s / 2.4 GB with `simp [from_limbs, bind_ok]` + `decide +kernel`; `ED25519_BASEPOINT_TABLE` (768 binds) times out at 200k heartbeats, 47 s, 7.7 GB | `AFFINE_ODD` feasible now; the big table needs a cheaper extraction |
+| (b) equal to the translated `create` output | — | infeasible: `create` runs through monadic binds and field ops the kernel cannot evaluate | — |
+| (c) row-chain structural certificate | same as (a) | estimated < 2 s for the math; same extraction bottleneck | — |
+| (d) explicit hypothesis (current) | conditional statement | free | appears in theorem statements |
+| (e) translation patch / Charon option emitting constants as literals | would allow `rfl`/`decide` extraction | — | needs an upstream change |
+
+A Python check that all three tables hold the expected multiples was run (all correct).
+

@@ -1,5 +1,8 @@
 module
+public import Specs.Constants
+public import Specs.Edwards
 public import Specs.Scalar
+public import Specs.Traits
 
 /-! # Specs of curve25519-dalek
 

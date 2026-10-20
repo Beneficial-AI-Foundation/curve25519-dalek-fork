@@ -1,0 +1,49 @@
+/-
+Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+module
+public import Curve25519Dalek.Funs
+public import Defs.Edwards
+public import Defs.Scalar
+import Proofs.Backend.GetSelectedBackend
+import Proofs.Backend.Serial.ScalarMul.VariableBase.Mul
+public section
+
+open Aeneas Aeneas.Std Result Aeneas.Std.WP
+
+namespace Curve25519Dalek.backend
+
+namespace «x86_64-tables»
+
+/-- `variable_base_mul`: the serial `variable_base::mul`, `scalar • P` for
+`scalar.asNat < 2^255`; limbs `< 2^52`. -/
+@[step]
+theorem variable_base_mul_spec (point : edwards.EdwardsPoint.«x86_64-tables»)
+    (scalar : scalar.Scalar) (hpoint : point.Bounded) (hon : point.OnCurve)
+    (hscalar : scalar.asNat < 2 ^ 255) :
+    variable_base_mul.«x86_64-tables» point scalar
+      ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
+        r.OnCurve ∧ r.toPoint = scalar.asNat • point.toPoint ∧ r.Bounded ⦄ := by
+  unfold variable_base_mul.«x86_64-tables»
+  step*
+
+end «x86_64-tables»
+
+namespace «x86_64-no-tables»
+
+/-- `variable_base_mul`: the serial `variable_base::mul`, `scalar • P` for
+`scalar.asNat < 2^255`; limbs `< 2^52`. -/
+@[step]
+theorem variable_base_mul_spec (point : edwards.EdwardsPoint.«x86_64-no-tables»)
+    (scalar : scalar.Scalar) (hpoint : point.Bounded) (hon : point.OnCurve)
+    (hscalar : scalar.asNat < 2 ^ 255) :
+    variable_base_mul.«x86_64-no-tables» point scalar
+      ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
+        r.OnCurve ∧ r.toPoint = scalar.asNat • point.toPoint ∧ r.Bounded ⦄ := by
+  unfold variable_base_mul.«x86_64-no-tables»
+  step*
+
+end «x86_64-no-tables»
+
+end Curve25519Dalek.backend

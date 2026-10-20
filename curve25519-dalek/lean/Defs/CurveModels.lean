@@ -48,7 +48,8 @@ theorem toProjective_def (self : ProjectivePoint.«x86_64-tables») :
   self.toProjective.OnCurve
 
 /-- The point represented by `self` (`0` if `¬ self.OnCurve`). -/
-noncomputable def toPoint (self : ProjectivePoint.«x86_64-tables») : curve25519.edwards.Point :=
+noncomputable def toPoint (self : ProjectivePoint.«x86_64-tables») :
+    curve25519.edwards.Point :=
   self.toProjective.toPoint
 
 theorem toPoint_def (self : ProjectivePoint.«x86_64-tables») :
@@ -82,7 +83,8 @@ theorem toCompleted_def (self : CompletedPoint.«x86_64-tables») :
   self.toCompleted.OnCurve
 
 /-- The point represented by `self` (`0` if `¬ self.OnCurve`). -/
-noncomputable def toPoint (self : CompletedPoint.«x86_64-tables») : curve25519.edwards.Point :=
+noncomputable def toPoint (self : CompletedPoint.«x86_64-tables») :
+    curve25519.edwards.Point :=
   self.toCompleted.toPoint
 
 theorem toPoint_def (self : CompletedPoint.«x86_64-tables») :
@@ -107,7 +109,8 @@ noncomputable def toAffineNiels (self : AffineNielsPoint.«x86_64-tables») :
   ⟨self.y_plus_x.toField, self.y_minus_x.toField, self.xy2d.toField⟩
 
 theorem toAffineNiels_def (self : AffineNielsPoint.«x86_64-tables») :
-    self.toAffineNiels = ⟨self.y_plus_x.toField, self.y_minus_x.toField, self.xy2d.toField⟩ := by
+    self.toAffineNiels =
+      ⟨self.y_plus_x.toField, self.y_minus_x.toField, self.xy2d.toField⟩ := by
   unfold toAffineNiels
   rfl
 
@@ -117,7 +120,8 @@ theorem toAffineNiels_def (self : AffineNielsPoint.«x86_64-tables») :
   self.toAffineNiels.OnCurve
 
 /-- The point represented by `self` (`0` if `¬ self.OnCurve`). -/
-noncomputable def toPoint (self : AffineNielsPoint.«x86_64-tables») : curve25519.edwards.Point :=
+noncomputable def toPoint (self : AffineNielsPoint.«x86_64-tables») :
+    curve25519.edwards.Point :=
   self.toAffineNiels.toPoint
 
 theorem toPoint_def (self : AffineNielsPoint.«x86_64-tables») :
@@ -127,8 +131,8 @@ theorem toPoint_def (self : AffineNielsPoint.«x86_64-tables») :
 
 /-- The limb bounds of an `AffineNielsPoint`: all limbs `< 2^54`. -/
 @[expose] def Bounded (self : AffineNielsPoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.y_plus_x[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.y_minus_x[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.xy2d[i]!.val < 2 ^ 54)
+  (∀ i < 5, self.y_plus_x[i]!.val < 2 ^ 54) ∧
+    (∀ i < 5, self.y_minus_x[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.xy2d[i]!.val < 2 ^ 54)
 
 /-- Needed for `t[j]!` on tables of `AffineNielsPoint`s; the default is never observed for
 in-range indices. -/
@@ -158,7 +162,8 @@ theorem toProjectiveNiels_def (self : ProjectiveNielsPoint.«x86_64-tables») :
   self.toProjectiveNiels.OnCurve
 
 /-- The point represented by `self` (`0` if `¬ self.OnCurve`). -/
-noncomputable def toPoint (self : ProjectiveNielsPoint.«x86_64-tables») : curve25519.edwards.Point :=
+noncomputable def toPoint (self : ProjectiveNielsPoint.«x86_64-tables») :
+    curve25519.edwards.Point :=
   self.toProjectiveNiels.toPoint
 
 theorem toPoint_def (self : ProjectiveNielsPoint.«x86_64-tables») :
@@ -168,8 +173,9 @@ theorem toPoint_def (self : ProjectiveNielsPoint.«x86_64-tables») :
 
 /-- The limb bounds of a `ProjectiveNielsPoint`: all limbs `< 2^54`. -/
 @[expose] def Bounded (self : ProjectiveNielsPoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.Y_plus_X[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.Y_minus_X[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.T2d[i]!.val < 2 ^ 54)
+  (∀ i < 5, self.Y_plus_X[i]!.val < 2 ^ 54) ∧
+    (∀ i < 5, self.Y_minus_X[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.Z[i]!.val < 2 ^ 54) ∧
+    (∀ i < 5, self.T2d[i]!.val < 2 ^ 54)
 
 /-- Needed for `t[j]!` on tables of `ProjectiveNielsPoint`s; the default is never observed for
 in-range indices. -/
@@ -197,7 +203,8 @@ theorem toProjective_def (self : ProjectivePoint.«x86_64-no-tables») :
   self.toProjective.OnCurve
 
 /-- The point represented by `self` (`0` if `¬ self.OnCurve`). -/
-noncomputable def toPoint (self : ProjectivePoint.«x86_64-no-tables») : curve25519.edwards.Point :=
+noncomputable def toPoint (self : ProjectivePoint.«x86_64-no-tables») :
+    curve25519.edwards.Point :=
   self.toProjective.toPoint
 
 theorem toPoint_def (self : ProjectivePoint.«x86_64-no-tables») :
@@ -231,7 +238,8 @@ theorem toCompleted_def (self : CompletedPoint.«x86_64-no-tables») :
   self.toCompleted.OnCurve
 
 /-- The point represented by `self` (`0` if `¬ self.OnCurve`). -/
-noncomputable def toPoint (self : CompletedPoint.«x86_64-no-tables») : curve25519.edwards.Point :=
+noncomputable def toPoint (self : CompletedPoint.«x86_64-no-tables») :
+    curve25519.edwards.Point :=
   self.toCompleted.toPoint
 
 theorem toPoint_def (self : CompletedPoint.«x86_64-no-tables») :
@@ -256,7 +264,8 @@ noncomputable def toAffineNiels (self : AffineNielsPoint.«x86_64-no-tables») :
   ⟨self.y_plus_x.toField, self.y_minus_x.toField, self.xy2d.toField⟩
 
 theorem toAffineNiels_def (self : AffineNielsPoint.«x86_64-no-tables») :
-    self.toAffineNiels = ⟨self.y_plus_x.toField, self.y_minus_x.toField, self.xy2d.toField⟩ := by
+    self.toAffineNiels =
+      ⟨self.y_plus_x.toField, self.y_minus_x.toField, self.xy2d.toField⟩ := by
   unfold toAffineNiels
   rfl
 
@@ -266,7 +275,8 @@ theorem toAffineNiels_def (self : AffineNielsPoint.«x86_64-no-tables») :
   self.toAffineNiels.OnCurve
 
 /-- The point represented by `self` (`0` if `¬ self.OnCurve`). -/
-noncomputable def toPoint (self : AffineNielsPoint.«x86_64-no-tables») : curve25519.edwards.Point :=
+noncomputable def toPoint (self : AffineNielsPoint.«x86_64-no-tables») :
+    curve25519.edwards.Point :=
   self.toAffineNiels.toPoint
 
 theorem toPoint_def (self : AffineNielsPoint.«x86_64-no-tables») :
@@ -276,8 +286,8 @@ theorem toPoint_def (self : AffineNielsPoint.«x86_64-no-tables») :
 
 /-- The limb bounds of an `AffineNielsPoint`: all limbs `< 2^54`. -/
 @[expose] def Bounded (self : AffineNielsPoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.y_plus_x[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.y_minus_x[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.xy2d[i]!.val < 2 ^ 54)
+  (∀ i < 5, self.y_plus_x[i]!.val < 2 ^ 54) ∧
+    (∀ i < 5, self.y_minus_x[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.xy2d[i]!.val < 2 ^ 54)
 
 /-- Needed for `t[j]!` on tables of `AffineNielsPoint`s; the default is never observed for
 in-range indices. -/
@@ -307,7 +317,8 @@ theorem toProjectiveNiels_def (self : ProjectiveNielsPoint.«x86_64-no-tables»)
   self.toProjectiveNiels.OnCurve
 
 /-- The point represented by `self` (`0` if `¬ self.OnCurve`). -/
-noncomputable def toPoint (self : ProjectiveNielsPoint.«x86_64-no-tables») : curve25519.edwards.Point :=
+noncomputable def toPoint (self : ProjectiveNielsPoint.«x86_64-no-tables») :
+    curve25519.edwards.Point :=
   self.toProjectiveNiels.toPoint
 
 theorem toPoint_def (self : ProjectiveNielsPoint.«x86_64-no-tables») :
@@ -317,8 +328,9 @@ theorem toPoint_def (self : ProjectiveNielsPoint.«x86_64-no-tables») :
 
 /-- The limb bounds of a `ProjectiveNielsPoint`: all limbs `< 2^54`. -/
 @[expose] def Bounded (self : ProjectiveNielsPoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.Y_plus_X[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.Y_minus_X[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.T2d[i]!.val < 2 ^ 54)
+  (∀ i < 5, self.Y_plus_X[i]!.val < 2 ^ 54) ∧
+    (∀ i < 5, self.Y_minus_X[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.Z[i]!.val < 2 ^ 54) ∧
+    (∀ i < 5, self.T2d[i]!.val < 2 ^ 54)
 
 /-- Needed for `t[j]!` on tables of `ProjectiveNielsPoint`s; the default is never observed for
 in-range indices. -/

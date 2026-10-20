@@ -4,13 +4,18 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Alessandro D'Angelo, Oliver Butterley
 -/
 module
+public import Curve25519.Basic
 public import Curve25519Dalek.Types
 public import Defs.Array
 public section
 
-/-! # The value of a `FieldElement51` (audited) -/
+/-! # The value of a `FieldElement51` (audited)
 
-open Aeneas.Std
+`asNat` is the natural number encoded by the limbs (unreduced), the form of the field specs
+(`r.asNat % p = …`); `toField` is the field element it represents, the form of the point specs.
+The bridge between the two forms is `Proofs/Helpers/ToField.lean`. -/
+
+open Aeneas.Std curve25519
 
 namespace Curve25519Dalek.backend.serial.u64
 
@@ -21,6 +26,15 @@ def field.FieldElement51.asNat (self : field.FieldElement51) : ℕ :=
 theorem field.FieldElement51.asNat_def (self : field.FieldElement51) :
     self.asNat = Array.asNat 51 self := by
   unfold field.FieldElement51.asNat
+  rfl
+
+/-- The field element represented by the limbs: their value modulo `p`. -/
+noncomputable def field.FieldElement51.toField (self : field.FieldElement51) : ZMod p :=
+  (self.asNat : ZMod p)
+
+theorem field.FieldElement51.toField_def (self : field.FieldElement51) :
+    self.toField = (self.asNat : ZMod p) := by
+  unfold field.FieldElement51.toField
   rfl
 
 end Curve25519Dalek.backend.serial.u64

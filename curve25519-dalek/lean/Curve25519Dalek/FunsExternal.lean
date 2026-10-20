@@ -98,6 +98,16 @@ axiom core.array.from_fn_spec {T F : Type} (N : Std.Usize)
     core.array.from_fn N inst f ⦃ (a : Array T N) =>
       ∀ (i : ℕ) (hi : i < a.val.length), post i a.val[i] ⦄
 
+/-- `Result::map` (core/src/result.rs): "Maps a `Result<T, E>` to `Result<U, E>` by applying a
+function to a contained `Ok` value, leaving an `Err` value untouched." Conditional on the closure
+succeeding on the `Ok` value. -/
+axiom core.result.Result.map_spec {T E U F : Type} (inst : core.ops.function.FnOnce F T U)
+    (r : core.result.Result T E) (f : F)
+    (h : ∀ x, r = .Ok x → ∃ y, inst.call_once f x = ok y) :
+    core.result.Result.map inst r f ⦃ (r' : core.result.Result U E) =>
+      (∀ x, r = .Ok x → ∃ y, inst.call_once f x = ok y ∧ r' = .Ok y) ∧
+      (∀ e, r = .Err e → r' = .Err e) ⦄
+
 /-- `usize::div_ceil` (core/src/num/uint_macros.rs): "Calculates the quotient of `self` and `rhs`,
 rounding the result towards positive infinity. Panics if `rhs` is zero." -/
 @[step]
