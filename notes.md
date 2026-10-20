@@ -193,9 +193,10 @@ Spec summaries cover the crate's public API only (see `verif-guidelines.md`, "Co
 - Proved but not public (no spec summary): `src/backend/serial/u64/field.rs`, `scalar.rs`,
   `constants.rs` (the `EdwardsPoint` constants and tables wait for the curve model) and
   `src/field.rs`.
-- Next public files: `constants.rs`, `edwards.rs`, `montgomery.rs`, `ristretto.rs`. The curve
-  model they need exists now (below); the `Defs` layer (`curve-api.md` §9: `toField`,
-  `OnCurve`/`Bounded`/`toPoint` per struct, tables, byte encodings) is the next step.
+- Point campaign (2026-10-20; see `HANDOFF.md`): `Defs` layer done;
+  `curve_models.rs`, `window.rs`, `scalar_mul/*`, `edwards.rs` (+ `affine.rs`) and `traits.rs`
+  done for both x86_64 variants, summaries `Specs/{Edwards,Constants,Traits}.lean`; gaps listed
+  in `HANDOFF.md` §3. Next: `montgomery.rs`, `ristretto.rs`.
 
 ## Curve framework (2026-10-16 to 2026-10-20)
 
