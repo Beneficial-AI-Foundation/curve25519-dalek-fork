@@ -38,4 +38,4 @@ Weierstrass models, used by the hidden construction of `Curve F`) is imported pr
 that it is built with the library but no Weierstrass name reaches importers of this root; import
 it directly to use it. `EllipticCurve.Curve.Impl` (the construction interface, internal to model
 definition modules) and `EllipticCurve.Proofs.*` (heavy proofs, imported privately by the
-properties modules) are deliberately not part of this root. See `curve-api.md`. -/
+properties modules) are deliberately not part of this root. -/

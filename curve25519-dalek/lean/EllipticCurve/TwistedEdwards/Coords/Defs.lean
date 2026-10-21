@@ -29,7 +29,7 @@ projective systems the exposed projective equality `ProjEq` (what `EdwardsPoint:
 computes), with `projEq_iff_toPoint_eq`. The conversions between the systems, the identities
 and the negations are the exposed formulas the code computes; their `onCurve_*` and
 `toPoint_*` lemmas are in `EllipticCurve.TwistedEdwards.Coords.Lemmas`. The group operations in
-coordinates are in `EllipticCurve.TwistedEdwards.Formulas.*`. See `curve-api.md` §4.3. -/
+coordinates are in `EllipticCurve.TwistedEdwards.Formulas.*`. -/
 
 universe u
 

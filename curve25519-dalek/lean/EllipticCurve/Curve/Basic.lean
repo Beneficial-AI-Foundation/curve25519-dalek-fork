@@ -17,7 +17,7 @@ public section
 hidden: importers see a type, the group `C.Point` of its `F`-rational points with its instances,
 and nothing else. Everything else about a curve is said through its models (`MontgomeryModel`,
 …), each of which provides `toCurve` and a group isomorphism `pointEquiv : M.Point ≃+
-M.toCurve.Point`; see `curve-api.md` §3.
+M.toCurve.Point`.
 
 The construction today is the quotient of the nonsingular Weierstrass models (Mathlib's
 `WeierstrassCurve.Affine F` with `IsElliptic`, imported privately: no Weierstrass name appears in

@@ -20,10 +20,9 @@ as exposed formulas, exactly as curve25519-dalek's `curve_models.rs` computes th
 * `Extended.add` ("add-2008-hwcd", the complete extended addition for any `a`),
   `Extended.double`, the structurally recursive `Extended.nsmul` by double-and-add, and the
   zero test `Extended.IsZero`: field inversion appears nowhere, so that kernel `decide` can
-  evaluate them on constants (the certificate engine, `curve-api.md` §8).
+  evaluate them on constants (the certificate engine).
 
-Correctness with respect to `toPoint` is in `EllipticCurve.TwistedEdwards.Formulas.Lemmas`. See
-`curve-api.md` §4.4. -/
+Correctness with respect to `toPoint` is in `EllipticCurve.TwistedEdwards.Formulas.Lemmas`. -/
 
 universe u
 

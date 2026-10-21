@@ -19,7 +19,7 @@ negations (`onCurve_identity`, `toPoint_identity`, `onCurve_neg`, `toPoint_neg`)
 equality (`projEq_refl`, `projEq_symm`, `projEq_trans`) and the conversions between the systems
 (`onCurve_toProjective`, `toPoint_toProjective`, …): every conversion preserves `OnCurve` and
 represents the same point, and `Point.toExtended`, `Point.toAffineNiels` are sections of
-`toPoint`. See `curve-api.md` §4.3. -/
+`toPoint`. -/
 
 universe u
 

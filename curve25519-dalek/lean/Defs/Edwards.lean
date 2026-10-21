@@ -12,7 +12,7 @@ public section
 - `EdwardsPoint` implements the extended coordinates `(X : Y : Z : T)` of `curve25519.edwards`
   on radix-`2^51` limbs: `toExtended` (hidden, `toExtended_def`), `OnCurve` (exposed),
   `toPoint` (hidden, `toPoint_def`), `Bounded` (all limbs `< 2^52`, exposed; the bound forced by
-  the mixed affine-Niels addition, `curve-requirements.md` Q2) and `ProjEq` (exposed), the
+  the mixed affine-Niels addition) and `ProjEq` (exposed), the
   projective equality that `ct_eq` computes.
 - `AffinePoint` (`edwards/affine.rs`) is the affine point itself: `OnCurve` is the curve
   equation, `toPoint` the point (`0` off the curve), `Bounded` is `< 2^52`.
@@ -27,8 +27,8 @@ public section
 - The basepoint tables `EdwardsBasepointTable{,Radix32,Radix64,Radix128,Radix256}` (radix
   `2^w`, `w = 4, 5, 6, 7, 8`) hold `32` lookup tables of affine Niels points: `Represents t P`
   says that row `i` is the lookup table of `2^(2 w i) • P`, i.e. entry `j` of row `i`
-  represents `(j + 1) • 2^(2 w i) • P` (`BasepointTable::create`;
-  `curve-requirements.md` R9). They exist only in the `tables` configuration.
+  represents `(j + 1) • 2^(2 w i) • P` (`BasepointTable::create`).
+  They exist only in the `tables` configuration.
 
 `RistrettoPoint` is `EdwardsPoint`; see `Defs.Ristretto`. -/
 

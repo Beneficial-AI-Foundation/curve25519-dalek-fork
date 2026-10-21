@@ -27,7 +27,7 @@ is `decode_eq_none_iff`. The strict decoder accepts exactly the encodings:
 
 `encode` and `xSq` are exposed formulas; `decode` is hidden. The hypothesis `p < 2 ^ bits`
 (so that `y.val` fits in `bits` bits) is taken as `[Fact (p < 2 ^ bits)]` only where it is
-needed. See `curve-api.md` §4.6. -/
+needed. -/
 
 universe u
 

@@ -27,7 +27,7 @@ of `E.toMontgomery`. Everything in the section "The Montgomery model of a twiste
 is a hidden construction: the characterising lemmas (`zero_x`, `neg_x`, `add_x`, `add_y`,
 `u_toMontgomeryEquiv`, …) are proved in `EllipticCurve.TwistedEdwards.Lemmas` and
 `EllipticCurve.Proofs.TwistedEdwards.Group` by `import all` of this module, and nothing else may
-depend on the bodies. See `curve-api.md` §4 and §6.2. -/
+depend on the bodies. -/
 
 universe u
 
@@ -424,7 +424,7 @@ Hidden construction: it is characterised by `zero_x`, `zero_y`, `neg_x`, `neg_y`
 noncomputable def toMontgomeryEquiv : E.Point ≃+ E.toMontgomery.Point :=
   E.toMontgomeryEquivAux.addEquiv
 
-/-- The curve realised by `E`: that of its Montgomery model. Exposed (`curve-api.md` §3): it only
+/-- The curve realised by `E`: that of its Montgomery model. Exposed: it only
 fixes that the curve of `E` is the curve of `E.toMontgomery`. -/
 @[expose] noncomputable def toCurve : Curve F :=
   E.toMontgomery.toCurve

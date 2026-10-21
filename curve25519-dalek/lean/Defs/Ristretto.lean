@@ -14,8 +14,7 @@ when `self.OnCurve ∧ Even self.toPoint` (Mathlib's `Even`), with the Edwards `
 limb bounds: nothing new is defined for it. The quotient and its encoding are
 `curve25519.Ristretto` (`Curve25519/Ristretto/*`): a `decompress` spec reads `r.map toPoint =
 Ristretto.decodeRep bytes.asNat`, `compress` reads `r.asNat = Ristretto.encodeRep self.toPoint`,
-`ct_eq` reads `c = 1 ↔ curve25519.edwards.Rel self.toPoint other.toPoint` (`curve-api.md`
-§7.5).
+`ct_eq` reads `c = 1 ↔ curve25519.edwards.Rel self.toPoint other.toPoint`.
 
 `CompressedRistretto` is 32 bytes; `asNat` is their little-endian value. -/
 

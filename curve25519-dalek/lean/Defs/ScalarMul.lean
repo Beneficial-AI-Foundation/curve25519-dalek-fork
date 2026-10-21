@@ -9,8 +9,8 @@ public section
 /-! # The precomputations of `backend/serial/scalar_mul/precomputed_straus.rs` (audited)
 
 `VartimePrecomputedStraus` holds one `NafLookupTable8` of affine Niels points per static point;
-`Represents self ps` says that these tables are, in order, the NAF tables of the points `ps`
-(`curve-requirements.md` R10), and `Bounded self` that every entry meets the limb bounds. The
+`Represents self ps` says that these tables are, in order, the NAF tables of the points `ps`,
+and `Bounded self` that every entry meets the limb bounds. The
 backend enum `backend.VartimePrecomputedStraus` (whose only variant is `Scalar`) and its alias
 `edwards.VartimeEdwardsPrecomputation` forward to it. -/
 

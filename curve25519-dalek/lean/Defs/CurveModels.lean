@@ -11,14 +11,14 @@ public section
 
 `ProjectivePoint`, `CompletedPoint`, `AffineNielsPoint` and `ProjectiveNielsPoint` of
 `backend/serial/curve_models.rs` implement the coordinate systems `Projective`, `Completed`,
-`AffineNiels` and `ProjectiveNiels` of the Edwards model `curve25519.edwards` (see
-`curve-api.md` §4.3) on radix-`2^51` limbs. Each structure `S` gets:
+`AffineNiels` and `ProjectiveNiels` of the Edwards model `curve25519.edwards` on
+radix-`2^51` limbs. Each structure `S` gets:
 
 - `S.toX : S → curve25519.edwards.X`, its coordinates as field elements (hidden, `toX_def`);
 - `S.OnCurve := (toX self).OnCurve`, the algebraic validity (exposed);
 - `S.toPoint := (toX self).toPoint`, the point represented, `0` off the curve (hidden,
   `toPoint_def`);
-- `S.Bounded`, the limb bounds the code relies on (exposed; `curve-requirements.md` §2.2):
+- `S.Bounded`, the limb bounds the code relies on (exposed):
   `< 2^52` for `ProjectivePoint`, `< 2^54` for the three others.
 
 The two x86_64 configurations (`«x86_64-tables»`, `«x86_64-no-tables»`) have distinct

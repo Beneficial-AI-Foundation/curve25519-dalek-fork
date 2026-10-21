@@ -14,7 +14,8 @@ public section
 
 A Montgomery model `M = (A, B)` over a field `F` is the equation `B v² = u³ + A u² + u`
 (`MontgomeryModel.Equation`). Its points (`M.Point`) are the affine solutions plus the point at
-infinity, as an inductive type of our own (`curve-api.md`, principle 8). When `M` is nonsingular
+infinity, as an inductive type of our own (no Mathlib type appears in the API). When `M` is
+nonsingular
 (`M.IsNonsingular`) it realises a curve `M.toCurve : Curve F`, and the group structure on
 `M.Point` is *defined* by transport along a hidden bijection with the points of a model of that
 curve, which then becomes the group isomorphism `M.pointEquiv : M.Point ≃+ M.toCurve.Point`.

@@ -15,8 +15,8 @@ generic in the entry type `T`. The entry types are the four Niels structures of 
 `PointRepr` collects their `OnCurve`, `toPoint` and `Bounded`, so that each table predicate is
 stated once:
 
-- `LookupTable.Represents t P`: entry `j` of `t` is on the curve and represents `(j + 1) • P`
-  (`curve-requirements.md` R7); likewise for the radix-32…256 tables;
+- `LookupTable.Represents t P`: entry `j` of `t` is on the curve and represents `(j + 1) • P`;
+  likewise for the radix-32…256 tables;
 - `NafLookupTable5.Represents t P`, `NafLookupTable8.Represents t P`: entry `k` represents
   `(2 k + 1) • P` (R8);
 - `….Bounded t`: every entry satisfies the limb bounds of its type.

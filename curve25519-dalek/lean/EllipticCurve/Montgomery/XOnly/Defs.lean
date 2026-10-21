@@ -24,8 +24,7 @@ The x-only arithmetic of a Montgomery model `M`, i.e. everything that depends on
   `M.xDBL`, `M.xADD`, `M.ladder` instantiate them at `M.a24`.
 - the representation predicate `XZ.Represents`: `(U : W)` represents the point `Q`.
 
-Only `xMul` is hidden; the formulas are exposed so that the kernel can evaluate them
-(`curve-api.md` §8). -/
+Only `xMul` is hidden; the formulas are exposed so that the kernel can evaluate them. -/
 
 universe u
 

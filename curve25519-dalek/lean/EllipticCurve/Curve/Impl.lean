@@ -20,7 +20,7 @@ equalities of curves with `Curve.ofWeierstrass_eq` by exhibiting a variable chan
 
 **Internal.** This module must only ever be imported privately (`import EllipticCurve.Curve.Impl`)
 by model definition modules, never `public import`ed: its statements mention Mathlib's
-`WeierstrassCurve`, which no API module may expose (`curve-api.md`, principle 8). When the
+`WeierstrassCurve`, which no API module may expose. When the
 construction of `Curve F` changes, this module changes with it and nothing else does. -/
 
 universe u

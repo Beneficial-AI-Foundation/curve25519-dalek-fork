@@ -28,8 +28,7 @@ the shape of its coordinate system), whose point is `p + q` by the group law in 
 `Completed.onCurve_and_toPoint_eq_add` and `Extended.onCurve_and_toPoint_eq_add`. The
 coordinates of the inputs are eliminated through `X_eq_toPoint_x_mul_Z`, `YplusX_eq`, … of
 `EllipticCurve.TwistedEdwards.Coords.Lemmas`, after which each identity is polynomial (`ring`),
-except for `Projective.double`, which uses the curve equation of `p` once. See `curve-api.md`
-§4.4. -/
+except for `Projective.double`, which uses the curve equation of `p` once. -/
 
 universe u
 
