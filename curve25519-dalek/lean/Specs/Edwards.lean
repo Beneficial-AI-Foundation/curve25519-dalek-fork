@@ -51,6 +51,7 @@ import Proofs.Edwards.ToBytes
 import Proofs.Edwards.ToMontgomery
 import Proofs.Edwards.ToMontgomeryBatch
 import Proofs.Edwards.VartimeDoubleScalarMulBasepoint
+import Proofs.Edwards.VartimeTripleScalarMulBasepoint
 import Proofs.Edwards.VartimeEdwardsPrecomputationIsEmpty
 import Proofs.Edwards.VartimeEdwardsPrecomputationLen
 import Proofs.Edwards.VartimeEdwardsPrecomputationNew
@@ -69,7 +70,8 @@ statements. Items outside the public API (`is_valid`, `as_projective`, `as_proje
 `as_affine_niels`, `to_affine`, `double`, `mul_by_pow_2`, the `edwards/affine.rs` module) are proved
 in `Proofs/` but not restated here.
 
-**Complete except as follows.** `vartime_triple_scalar_mul_basepoint` is not proved.
+**Complete.** `vartime_triple_scalar_mul_basepoint` takes `a1, a2 < 2^128`, the invariant of
+`HalfWidthScalar` (a `Scalar` wrapper whose bound the Lean structure does not carry).
 
 The basepoint tables (`impl_basepoint_table!`) exist only in `x86_64-tables`. They are stated for a
 table `Represents P` (row `i` holds the multiples of `2^(w i) • P`) and `LimbsLt 54`.
@@ -1803,6 +1805,54 @@ set_option linter.style.longLine false in
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
+
+end «EdwardsPointx86_64-no-tables»
+end Curve25519Dalek.edwards
+
+namespace Curve25519Dalek.edwards
+namespace «EdwardsPointx86_64-tables»
+
+/-- `EdwardsPoint::vartime_triple_scalar_mul_basepoint`: `a1 • A1 + a2 • A2 + b • B` for the
+basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant); limbs `< 2^52`. -/
+recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
+    (A1 : EdwardsPoint.«x86_64-tables») (a2 : scalar.HalfWidthScalar)
+    (A2 : EdwardsPoint.«x86_64-tables»)
+    (b : scalar.Scalar) (ha1 : a1.asNat < 2 ^ 128) (hA1 : A1.LimbsLt 52) (hA1_on : A1.OnCurve)
+    (ha2 : a2.asNat < 2 ^ 128) (hA2 : A2.LimbsLt 52) (hA2_on : A2.OnCurve) :
+    vartime_triple_scalar_mul_basepoint a1 A1 a2 A2 b ⦃ (r : EdwardsPoint.«x86_64-tables») =>
+      r.OnCurve ∧
+        r.toPoint = a1.asNat • A1.toPoint + a2.asNat • A2.toPoint + b.asNat • basepoint ∧
+        r.LimbsLt 52 ⦄
+
+set_option linter.style.longLine false in
+/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter,
+  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms vartime_triple_scalar_mul_basepoint_spec
+
+end «EdwardsPointx86_64-tables»
+end Curve25519Dalek.edwards
+
+namespace Curve25519Dalek.edwards
+namespace «EdwardsPointx86_64-no-tables»
+
+/-- `EdwardsPoint::vartime_triple_scalar_mul_basepoint`: `a1 • A1 + a2 • A2 + b • B` for the
+basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant); limbs `< 2^52`. -/
+recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
+    (A1 : EdwardsPoint.«x86_64-no-tables») (a2 : scalar.HalfWidthScalar)
+    (A2 : EdwardsPoint.«x86_64-no-tables»)
+    (b : scalar.Scalar) (ha1 : a1.asNat < 2 ^ 128) (hA1 : A1.LimbsLt 52) (hA1_on : A1.OnCurve)
+    (ha2 : a2.asNat < 2 ^ 128) (hA2 : A2.LimbsLt 52) (hA2_on : A2.OnCurve) :
+    vartime_triple_scalar_mul_basepoint a1 A1 a2 A2 b ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
+      r.OnCurve ∧
+        r.toPoint = a1.asNat • A1.toPoint + a2.asNat • A2.toPoint + b.asNat • basepoint ∧
+        r.LimbsLt 52 ⦄
+
+set_option linter.style.longLine false in
+/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter,
+  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms vartime_triple_scalar_mul_basepoint_spec
 
 end «EdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards

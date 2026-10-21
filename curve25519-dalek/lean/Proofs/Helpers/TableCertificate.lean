@@ -381,6 +381,24 @@ theorem odd_smul_eq (B : edwards.Point) (n k : ℕ) :
   congr 1
   ring
 
+/-! ### Single points -/
+
+/-- `Q` is on the curve (division-free form) and projectively equal to `2^n • B`. -/
+@[expose] noncomputable def checkPoint (Q : E.Extended) (n : ℕ) : Bool :=
+  decide (Q.Z ≠ 0 ∧ Q.X * Q.Y = Q.Z * Q.T ∧
+    E.a * Q.X ^ 2 * Q.Z ^ 2 + Q.Y ^ 2 * Q.Z ^ 2 = Q.Z ^ 4 + E.d * Q.X ^ 2 * Q.Y ^ 2 ∧
+    Q.ProjEq (pow2 E n (basepointExt E)))
+
+/-- A point passing `checkPoint` is on the curve and represents `2^n • B`. -/
+theorem checkPoint_sound {Q : edwards.Extended} {n : ℕ} (h : checkPoint edwards Q n = true) :
+    Q.OnCurve ∧ Q.toPoint = 2 ^ n • basepoint := by
+  simp only [checkPoint, decide_eq_true_eq] at h
+  obtain ⟨hZ, hT, heq, hproj⟩ := h
+  have hon : Q.OnCurve := (Extended.onCurve_iff_homogeneous Q).mpr ⟨hZ, hT, heq⟩
+  refine ⟨hon, ?_⟩
+  rw [(Extended.projEq_iff_toPoint_eq hon (pow2_onCurve onCurve_basepointExt n)).mp hproj,
+    toPoint_pow2 onCurve_basepointExt, toPoint_basepointExt]
+
 /-! ### Tables from flat lists
 
 The constructors consume the list sequentially, so that the kernel compares `mk fes` with the

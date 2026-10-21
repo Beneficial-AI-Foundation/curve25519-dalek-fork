@@ -31,9 +31,11 @@ public import Proofs.Backend.Serial.ScalarMul.Straus.MultiscalarMul
 public import Proofs.Backend.Serial.ScalarMul.Straus.OptionalMultiscalarMul
 public import Proofs.Backend.Serial.ScalarMul.VariableBase.Mul
 public import Proofs.Backend.Serial.ScalarMul.VartimeDoubleBase.Mul
+public import Proofs.Backend.Serial.ScalarMul.VartimeTripleBase.Mul128128256
 public import Proofs.Backend.Serial.U64.Constants.AffineOddMultiplesOfBasepoint
 public import Proofs.Backend.Serial.U64.Constants.AffineOddMultiplesOfBasepoint128
 public import Proofs.Backend.Serial.U64.Constants.Aplus2OverFour
+public import Proofs.Backend.Serial.U64.Constants.Ed25519Basepoint128Point
 public import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointPoint
 public import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointTable
 public import Proofs.Backend.Serial.U64.Constants.EdwardsD
@@ -96,6 +98,7 @@ public import Proofs.Backend.StrausMultiscalarMul
 public import Proofs.Backend.StrausOptionalMultiscalarMul
 public import Proofs.Backend.VariableBaseMul
 public import Proofs.Backend.VartimeDoubleBaseMul
+public import Proofs.Backend.VartimeTripleBaseMul128128256
 public import Proofs.Backend.VartimePrecomputedStrausIsEmpty
 public import Proofs.Backend.VartimePrecomputedStrausLen
 public import Proofs.Backend.VartimePrecomputedStrausNew
@@ -160,6 +163,7 @@ public import Proofs.Edwards.ToBytes
 public import Proofs.Edwards.ToMontgomery
 public import Proofs.Edwards.ToMontgomeryBatch
 public import Proofs.Edwards.VartimeDoubleScalarMulBasepoint
+public import Proofs.Edwards.VartimeTripleScalarMulBasepoint
 public import Proofs.Edwards.VartimeEdwardsPrecomputationIsEmpty
 public import Proofs.Edwards.VartimeEdwardsPrecomputationLen
 public import Proofs.Edwards.VartimeEdwardsPrecomputationNew

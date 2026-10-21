@@ -48,6 +48,63 @@ theorem next_Usize_none_spec (it : core.iter.adapters.rev.Rev (core.ops.range.Ra
     Bool.false_eq_true, ↓reduceIte, bind_tc_ok, WP.spec_ok]
   exact rfl
 
+/-- `next` on a reversed, non-exhausted `Usize` inclusive range with `start ≤ end` yields `end`;
+the range shrinks from the top, and is exhausted once `start = end` has been yielded. Stated for
+any `DoubleEndedIterator` instance whose `next_back` is that of `RangeInclusive` (`hinst`). -/
+theorem next_RangeInclusive_Usize_some_spec
+    (inst : core.iter.traits.double_ended.DoubleEndedIterator
+      (core.ops.range.RangeInclusive Usize) Usize)
+    (hinst : inst.next_back =
+      core.ops.range.RangeInclusive.Insts.CoreIterTraitsDoubleEndedIterator.next_back
+        core.iter.range.StepUsize)
+    (it : core.iter.adapters.rev.Rev (core.ops.range.RangeInclusive Usize))
+    (hex : it.iter.exhausted = false) (hle : it.iter.start.val ≤ it.iter.end.val) :
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next inst it
+    ⦃ (o : Option Usize) (it' : core.iter.adapters.rev.Rev (core.ops.range.RangeInclusive Usize)) =>
+      o = some it.iter.end ∧ it'.iter.start = it.iter.start ∧
+      (it.iter.start.val < it.iter.end.val →
+        it'.iter.end.val + 1 = it.iter.end.val ∧ it'.iter.exhausted = false) ∧
+      (it.iter.start.val = it.iter.end.val →
+        it'.iter.end = it.iter.end ∧ it'.iter.exhausted = true) ⦄ := by
+  unfold core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+  rw [hinst]
+  rcases it with ⟨⟨st, en, ex⟩⟩
+  simp only at hex hle ⊢
+  subst hex
+  rcases Nat.lt_or_ge st.val en.val with hlt | hge
+  · have hb : (1#usize).val ≤ en.val := by scalar_tac
+    simp only [core.ops.range.RangeInclusive.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
+      core.ops.range.RangeInclusive.is_empty, core.iter.range.UScalarStep,
+      core.iter.range.UScalarStep.backward_checked, hb, ↓reduceDIte, Bool.false_eq_true,
+      ↓reduceIte, bind_tc_ok, core.cmp.impls.PartialOrdUsize.le, core.cmp.impls.PartialOrdUsize.lt,
+      Nat.le_of_lt hlt, hlt, decide_true, Bool.not_true, pure, WP.spec_ok]
+    refine ⟨rfl, rfl, fun _ => ⟨by simp only [UScalar.ofNatCore_val_eq]; scalar_tac, rfl⟩,
+      fun h => absurd h (Nat.ne_of_lt hlt)⟩
+  · have hnlt : ¬ st.val < en.val := by omega
+    simp only [core.ops.range.RangeInclusive.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
+      core.ops.range.RangeInclusive.is_empty, core.iter.range.UScalarStep, Bool.false_eq_true,
+      ↓reduceIte, bind_tc_ok, core.cmp.impls.PartialOrdUsize.le, core.cmp.impls.PartialOrdUsize.lt,
+      hle, hnlt, decide_true, decide_false, Bool.not_true, pure, WP.spec_ok]
+    exact ⟨rfl, rfl, fun h => h.elim, fun _ => ⟨rfl, rfl⟩⟩
+
+/-- `next` on an exhausted reversed `Usize` inclusive range yields `none` (`hinst` as above). -/
+theorem next_RangeInclusive_Usize_none_spec
+    (inst : core.iter.traits.double_ended.DoubleEndedIterator
+      (core.ops.range.RangeInclusive Usize) Usize)
+    (hinst : inst.next_back =
+      core.ops.range.RangeInclusive.Insts.CoreIterTraitsDoubleEndedIterator.next_back
+        core.iter.range.StepUsize)
+    (it : core.iter.adapters.rev.Rev (core.ops.range.RangeInclusive Usize))
+    (hex : it.iter.exhausted = true) :
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next inst it
+    ⦃ (o : Option Usize) (_ : core.iter.adapters.rev.Rev (core.ops.range.RangeInclusive Usize)) =>
+      o = none ⦄ := by
+  unfold core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+  rw [hinst]
+  simp only [core.ops.range.RangeInclusive.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
+    core.ops.range.RangeInclusive.is_empty, hex, ↓reduceIte, bind_tc_ok, WP.spec_ok]
+  exact rfl
+
 end Aeneas.Std.core.iter.adapters.rev.Rev
 
 namespace Aeneas.Std.core.iter.traits.iterator.Iterator

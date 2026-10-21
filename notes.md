@@ -403,8 +403,11 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 - `window.rs`: all `select`/`From` items (`Proofs/Window/`; no summary, `pub(crate)`).
 - `scalar_mul/*` and `backend/mod.rs` dispatchers: variable base, vartime double base, Straus,
   Pippenger, precomputed Straus.
-- `edwards.rs`, `edwards/affine.rs`: complete except the gaps under "Open decisions"
-  (`Proofs/Edwards/`, summary `Specs/Edwards.lean`, 149 statements).
+- `edwards.rs`, `edwards/affine.rs`: complete, both x86_64 variants (`Proofs/Edwards/`, summary
+  `Specs/Edwards.lean`, 156 statements). `vartime_triple_scalar_mul_basepoint` (2026-10-21) rests on
+  `naf5_digits_eq_zero_of_lt` (`Proofs/Helpers/Naf.lean`: a width-5 NAF of `x < 2^n` has no digit
+  above index `n`), reverse iteration over `RangeInclusive` (`Proofs/Helpers/Iterator.lean`) and the
+  certified constant `ED25519_BASEPOINT_128_POINT` (`TableCertificate.checkPoint`).
 - `traits.rs`: generic `is_identity` (`Proofs/Traits/IsIdentity.lean`, `Specs/Traits.lean`).
 - Point constants: `ED25519_BASEPOINT_POINT`, `EIGHT_TORSION`, `BASEPOINT_ORDER`,
   `ED25519_BASEPOINT_COMPRESSED`, `X25519_BASEPOINT` (`Specs/Constants.lean`).
@@ -439,23 +442,22 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 
 ## Open decisions (for the owner) and known gaps
 
-1. **`vartime_triple_scalar_mul_basepoint`:** not done; the `_128` table is certified, what is
-   left is a lemma "NAF digits above index 128 are zero for `x < 2^128`" and the proof.
-2. **The three new `x86_64-tables` statements** in `Specs/Edwards.lean` (`mul_base`,
-   `mul_base_clamped`, `vartime_double_scalar_mul_basepoint`): review (same shape as the
-   `x86_64-no-tables` ones).
-3. **Aeneas-generated axioms in guard lists:** `…_native.decide.ax_*` (from `toStr` on panic
+1. **New statements in `Specs/Edwards.lean` to review:** `mul_base`, `mul_base_clamped` and
+   `vartime_double_scalar_mul_basepoint` of `x86_64-tables` (same shape as the `x86_64-no-tables`
+   ones), `is_empty`, and `vartime_triple_scalar_mul_basepoint` (both variants; hypotheses
+   `a1, a2 < 2^128`, the `HalfWidthScalar` invariant the Lean structure does not carry).
+2. **Aeneas-generated axioms in guard lists:** `…_native.decide.ax_*` (from `toStr` on panic
    messages) and `core.fmt.Formatter` appear in the multiscalar/table guards; acceptable?
-4. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
-5. **Long lines:** 40 commands in generated proof files disable the long-line linter although
+3. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
+4. **Long lines:** 40 commands in generated proof files disable the long-line linter although
    some names exceed 100 characters only with indentation (the convention allows the option only
    for single tokens over 100). Shorten via `open`/local abbreviations, or accept.
-6. **Translating `lizard`:** `src/lizard/` sits behind the `lizard` Cargo feature (which pulls in
+5. **Translating `lizard`:** `src/lizard/` sits behind the `lizard` Cargo feature (which pulls in
    `digest`); `scripts/aeneas-translate.sh` translates with `--no-default-features --features
    alloc,zeroize`, so it is not translated. Include it (and verify it), or leave it out.
-7. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
+6. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
    `Specs/` and `Proofs/` (see also "Project-defined traits" below).
-8. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
+7. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
    variants into two files); window tables' `Default`/`Clone`/`Zeroize` not specified (low
    value); naming ambiguity `encode`/`decode`/`basepoint` between `curve25519` and
    `curve25519.Ristretto` under a double `open`; `twistL` and `ZMod.abs` names unconfirmed.
@@ -492,8 +494,7 @@ emit constants as literals (no longer needed).
 
 ## Plan
 
-1. `vartime_triple_scalar_mul_basepoint` (the `_128` table is certified; needs the NAF-digit
-   lemma), and the owner's review of the new `x86_64-tables` statements (open decision 2).
+1. The owner's review of the new `Specs/Edwards.lean` statements (open decision 1).
 2. **`FieldElement51.LimbsLt n`:** define it, write the point predicates' bodies with it
    (`X.LimbsLt n ∧ Y.LimbsLt n ∧ …`), and replace the raw `∀ i < 5, a[i]!.val < 2 ^ k` of the field
    specs (about 200 occurrences in `Proofs/`; statements change, so sign-off).
@@ -509,7 +510,7 @@ emit constants as literals (no longer needed).
    `Proofs/Helpers/ToField.lean`'s `sqrtRatioM1_eq_of_spec`, `mapRep`, `fromUniformRep`). First
    move the private `conditional_negate_spec`, duplicated in `Proofs/Field/SqrtRatioI.lean` and
    `Proofs/Edwards/Decompress.lean`, to `Proofs/Helpers`.
-5. Remaining files (`constants.rs` Ristretto constants, …; `lizard`: open decision 6).
+5. Remaining files (`constants.rs` Ristretto constants, …; `lizard`: open decision 5).
 6. The u32 backend (below).
 7. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
