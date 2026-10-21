@@ -22,14 +22,14 @@ open Curve25519Dalek.backend.serial.u64.scalar (montgomeryRadix)
 namespace Curve25519Dalek.scalar.MulAssignScalarSharedAScalar
 
 @[step]
-theorem mul_assign.«x86_64-tables_spec» (self _rhs : Scalar) :
-    mul_assign.«x86_64-tables» self _rhs ⦃ (r : Scalar) =>
-      r.asNat = self.asNat * _rhs.asNat % L ⦄ := by
+theorem mul_assign.«x86_64-tables_spec» (self rhs : Scalar) :
+    mul_assign.«x86_64-tables» self rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * rhs.asNat % L ⦄ := by
   unfold mul_assign.«x86_64-tables»
   step as ⟨a, ha, hab⟩
   step as ⟨b, hb, hbb⟩
   step with backend.serial.u64.scalar.Scalar52.mul_spec a b hab hbb
-    (ha ▸ hb ▸ mul_lt_montgomeryRadix_mul_L self.asNat_lt _rhs.asNat_lt) as ⟨c, hc, hcb⟩
+    (ha ▸ hb ▸ mul_lt_montgomeryRadix_mul_L self.asNat_lt rhs.asNat_lt) as ⟨c, hc, hcb⟩
   step with Scalar52.pack_spec c hcb (lt_two_pow_256_of_lt_L (hc ▸ Nat.mod_lt _ L_pos))
     as ⟨r, hr⟩
   rw [hr, hc, ha, hb]
@@ -39,23 +39,23 @@ end Curve25519Dalek.scalar.MulAssignScalarSharedAScalar
 namespace Curve25519Dalek.scalar.MulAssignScalarSharedAScalar
 
 @[step]
-theorem mul_assign.«x86_64-no-tables_spec» (self _rhs : Scalar) :
-    mul_assign.«x86_64-no-tables» self _rhs ⦃ (r : Scalar) =>
-      r.asNat = self.asNat * _rhs.asNat % L ⦄ :=
-  mul_assign.«x86_64-tables_spec» self _rhs
+theorem mul_assign.«x86_64-no-tables_spec» (self rhs : Scalar) :
+    mul_assign.«x86_64-no-tables» self rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * rhs.asNat % L ⦄ :=
+  mul_assign.«x86_64-tables_spec» self rhs
 
 end Curve25519Dalek.scalar.MulAssignScalarSharedAScalar
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignSharedAScalar
 
 @[step]
-theorem mul_assign_spec (self _rhs : Scalar) (htgt : OnX86_64) :
-    mul_assign self _rhs ⦃ (r : Scalar) =>
-      r.asNat = self.asNat * _rhs.asNat % L ⦄ := by
+theorem mul_assign_spec (self rhs : Scalar) (htgt : OnX86_64) :
+    mul_assign self rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * rhs.asNat % L ⦄ := by
   unfold mul_assign
   exact dispatch_spec htgt
-    (scalar.MulAssignScalarSharedAScalar.mul_assign.«x86_64-tables_spec» self _rhs)
-    (scalar.MulAssignScalarSharedAScalar.mul_assign.«x86_64-no-tables_spec» self _rhs)
+    (scalar.MulAssignScalarSharedAScalar.mul_assign.«x86_64-tables_spec» self rhs)
+    (scalar.MulAssignScalarSharedAScalar.mul_assign.«x86_64-no-tables_spec» self rhs)
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignSharedAScalar
 

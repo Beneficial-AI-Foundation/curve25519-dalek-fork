@@ -21,14 +21,14 @@ namespace CoreOpsArithAddAssignSharedAFieldElement51
 open scoped Helpers.IndexStep in
 /-- The loop of `add_assign` adds the limbs one by one. -/
 @[local step]
-private theorem add_assign_loop_spec (self _rhs : FieldElement51)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, _rhs[i]!.val < 2 ^ 54) :
-    add_assign_loop { start := 0#usize, «end» := 5#usize } self _rhs ⦃ (r : FieldElement51) =>
-      ∀ i < 5, r[i]!.val = self[i]!.val + _rhs[i]!.val ⦄ := by
+private theorem add_assign_loop_spec (self rhs : FieldElement51)
+    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, rhs[i]!.val < 2 ^ 54) :
+    add_assign_loop { start := 0#usize, «end» := 5#usize } self rhs ⦃ (r : FieldElement51) =>
+      ∀ i < 5, r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
   unfold add_assign_loop
   apply loop.spec_decr_nat (measure := fun (iter, _, _) => 5 - iter.start.val)
-    (inv := fun (iter, a, b) => b = _rhs ∧ iter.end = 5#usize ∧ iter.start.val ≤ 5 ∧
-      (∀ i < iter.start.val, a[i]!.val = self[i]!.val + _rhs[i]!.val) ∧
+    (inv := fun (iter, a, b) => b = rhs ∧ iter.end = 5#usize ∧ iter.start.val ≤ 5 ∧
+      (∀ i < iter.start.val, a[i]!.val = self[i]!.val + rhs[i]!.val) ∧
       ∀ i < 5, iter.start.val ≤ i → a[i]! = self[i]!)
   · rintro ⟨iter, a, b⟩ ⟨hb, hend, hstart, hlo, hhi⟩
     subst hb
@@ -50,10 +50,10 @@ private theorem add_assign_loop_spec (self _rhs : FieldElement51)
   · simp
 
 @[step]
-theorem add_assign_spec (self _rhs : FieldElement51)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, _rhs[i]!.val < 2 ^ 54) :
-    add_assign self _rhs ⦃ (r : FieldElement51) =>
-      ∀ i < 5, r[i]!.val = self[i]!.val + _rhs[i]!.val ⦄ := by
+theorem add_assign_spec (self rhs : FieldElement51)
+    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, rhs[i]!.val < 2 ^ 54) :
+    add_assign self rhs ⦃ (r : FieldElement51) =>
+      ∀ i < 5, r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
   unfold add_assign
   step*
 end CoreOpsArithAddAssignSharedAFieldElement51

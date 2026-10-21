@@ -15,10 +15,10 @@ open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
 namespace Curve25519Dalek.backend.serial.u64.field.FieldElement51.Insts
 namespace CoreOpsArithMulAssignSharedAFieldElement51
 @[step]
-theorem mul_assign_spec (self _rhs : FieldElement51)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, _rhs[i]!.val < 2 ^ 54) :
-    mul_assign self _rhs ⦃ (r : FieldElement51) =>
-      r.asNat % p = self.asNat * _rhs.asNat % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+theorem mul_assign_spec (self rhs : FieldElement51)
+    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, rhs[i]!.val < 2 ^ 54) :
+    mul_assign self rhs ⦃ (r : FieldElement51) =>
+      r.asNat % p = self.asNat * rhs.asNat % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
   unfold mul_assign
   step*
 end CoreOpsArithMulAssignSharedAFieldElement51

@@ -215,7 +215,10 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   `Debug`, local consts inside a function body; their helper specs may exist in proof files.
 - **Names:**
   - theorems are `<function>_spec`, in the function's namespace;
-  - argument names are exactly the identifiers of the specified Lean/Rust function (`self`, `_rhs`, `limbs`, …);
+  - argument names are the Rust identifiers with any leading underscores dropped (`self`, `rhs`
+    for Rust's `_rhs`, `limbs`, …): in Lean a leading `_` means "unused". Where an argument then
+    shadows the specified function (`index self index`), the function is written with its last
+    namespace component (`CoreOpsIndexIndexUsizeU8.index`);
     trait-instance arguments, which have no Rust name, are short (`borrowInst`, `iterInst`);
   - hypothesis names follow Mathlib: `h` + the argument (`hself`, `hrhs`, `hk`);
   - spec definitions follow Mathlib conventions: lowerCamelCase for data (`asNat`), UpperCamelCase for `Prop`s. Use dot notation (`self.asNat`). When the argument has the raw underlying type (`Array U64 5#usize`, as in `reduce`), write `FieldElement51.asNat limbs`.
@@ -445,9 +448,12 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 7. **Naming style of the spec definitions:** discuss and fix the conventions, e.g. `Bounded` versus
    `IsBounded` for the limb-bound predicates (`OnCurve`, `Represents`, `IsValid` likewise), before
    more `Defs` are written.
-8. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
+8. **Translating `lizard`:** `src/lizard/` sits behind the `lizard` Cargo feature (which pulls in
+   `digest`); `scripts/aeneas-translate.sh` translates with `--no-default-features --features
+   alloc,zeroize`, so it is not translated. Include it (and verify it), or leave it out.
+9. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
    `Specs/` and `Proofs/` (see also "Project-defined traits" below).
-9. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
+10. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
    variants into two files); window tables' `Default`/`Clone`/`Zeroize` not specified (low
    value); naming ambiguity `encode`/`decode`/`basepoint` between `curve25519` and
    `curve25519.Ristretto` under a double `open`; `twistL` and `ZMod.abs` names unconfirmed.
@@ -498,7 +504,7 @@ emit constants as literals (no longer needed).
    `Proofs/Helpers/ToField.lean`'s `sqrtRatioM1_eq_of_spec`, `mapRep`, `fromUniformRep`). First
    move the private `conditional_negate_spec`, duplicated in `Proofs/Field/SqrtRatioI.lean` and
    `Proofs/Edwards/Decompress.lean`, to `Proofs/Helpers`.
-4. Remaining files (`constants.rs` Ristretto constants; `lizard` is untranslated; …).
+4. Remaining files (`constants.rs` Ristretto constants, …; `lizard`: open decision 8).
 5. The u32 backend (below).
 6. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the

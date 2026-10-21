@@ -16,9 +16,9 @@ open Curve25519Dalek.backend.serial.u64.scalar (Scalar52)
 namespace Curve25519Dalek.backend.serial.u64.scalar.Scalar52.Insts.CoreOpsIndexIndexMutUsizeU64
 
 @[step]
-theorem index_mut_spec (self : Scalar52) (_index : Usize) (hindex : _index.val < 5) :
-    index_mut self _index ⦃ (r : U64) (back : U64 → Scalar52) =>
-      r = self[_index.val]! ∧ ∀ x, back x = self.set _index x ⦄ := by
+theorem index_mut_spec (self : Scalar52) (index : Usize) (hindex : index.val < 5) :
+    index_mut self index ⦃ (r : U64) (back : U64 → Scalar52) =>
+      r = self[index.val]! ∧ ∀ x, back x = self.set index x ⦄ := by
   unfold index_mut
   step*
   subst_vars

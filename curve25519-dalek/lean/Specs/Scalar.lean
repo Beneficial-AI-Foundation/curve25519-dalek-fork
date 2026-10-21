@@ -156,10 +156,10 @@ end Curve25519Dalek.scalar.Scalar.Insts.SubtleConstantTimeEq
 
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsIndexIndexUsizeU8
 
-/-- `Index::index`: byte `_index`. -/
-recall index_spec (self : Scalar) (_index : Usize) (hindex : _index.val < 32) :
-    index self _index ⦃ (r : U8) =>
-      r = self.bytes[_index.val]! ⦄
+/-- `Index::index`: byte `index`. -/
+recall index_spec (self : Scalar) (index : Usize) (hindex : index.val < 32) :
+    CoreOpsIndexIndexUsizeU8.index self index ⦃ (r : U8) =>
+      r = self.bytes[index.val]! ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms index_spec
@@ -169,9 +169,9 @@ end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsIndexIndexUsizeU8
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignSharedAScalar
 
 /-- `MulAssign::mul_assign`: the product modulo `L`. -/
-recall mul_assign_spec (self _rhs : Scalar) (htgt : OnX86_64) :
-    mul_assign self _rhs ⦃ (r : Scalar) =>
-      r.asNat = self.asNat * _rhs.asNat % L ⦄
+recall mul_assign_spec (self rhs : Scalar) (htgt : OnX86_64) :
+    mul_assign self rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * rhs.asNat % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
@@ -205,9 +205,9 @@ end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignScalar
 namespace Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithMulSharedAScalarScalar
 
 /-- `Mul::mul`: the product modulo `L`. -/
-recall mul_spec (self _rhs : Scalar) (htgt : OnX86_64) :
-    mul self _rhs ⦃ (r : Scalar) =>
-      r.asNat = self.asNat * _rhs.asNat % L ⦄
+recall mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
+    mul self rhs ⦃ (r : Scalar) =>
+      r.asNat = self.asNat * rhs.asNat % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
@@ -277,10 +277,10 @@ end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulScalarScalar
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithAddAssignSharedAScalar
 
 /-- `AddAssign::add_assign`: the sum modulo `L`, for reduced inputs. -/
-recall add_assign_spec (self _rhs : Scalar) (hself : self.asNat < L) (hrhs : _rhs.asNat < L)
+recall add_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L)
     (htgt : OnX86_64) :
-    add_assign self _rhs ⦃ (r : Scalar) =>
-      r.asNat = (self.asNat + _rhs.asNat) % L ⦄
+    add_assign self rhs ⦃ (r : Scalar) =>
+      r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
@@ -315,10 +315,10 @@ end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithAddAssignScalar
 namespace Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar
 
 /-- `Add::add`: the sum modulo `L`, for reduced inputs. -/
-recall add_spec (self _rhs : Scalar) (hself : self.asNat < L)
-    (hrhs : _rhs.asNat < L) (htgt : OnX86_64) :
-    add self _rhs ⦃ (r : Scalar) =>
-      r.asNat = (self.asNat + _rhs.asNat) % L ⦄
+recall add_spec (self rhs : Scalar) (hself : self.asNat < L)
+    (hrhs : rhs.asNat < L) (htgt : OnX86_64) :
+    add self rhs ⦃ (r : Scalar) =>
+      r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
@@ -391,10 +391,10 @@ end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithAddScalarScalar
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubAssignSharedAScalar
 
 /-- `SubAssign::sub_assign`: the difference modulo `L`, reduced, for reduced inputs. -/
-recall sub_assign_spec (self _rhs : Scalar) (hself : self.asNat < L) (hrhs : _rhs.asNat < L)
+recall sub_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L)
     (htgt : OnX86_64) :
-    sub_assign self _rhs ⦃ (r : Scalar) =>
-      (r.asNat + _rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
+    sub_assign self rhs ⦃ (r : Scalar) =>
+      (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,

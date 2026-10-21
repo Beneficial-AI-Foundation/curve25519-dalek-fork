@@ -16,10 +16,10 @@ open Curve25519Dalek.backend.serial.u64.scalar (Scalar52)
 namespace Curve25519Dalek.backend.serial.u64.scalar.Scalar52.Insts.CoreOpsIndexIndexUsizeU64
 
 @[step]
-theorem index_spec (self : Scalar52) (_index : Usize) (hindex : _index.val < 5) :
-    index self _index ⦃ (r : U64) =>
-      r = self[_index.val]! ⦄ := by
-  unfold index
+theorem index_spec (self : Scalar52) (index : Usize) (hindex : index.val < 5) :
+    CoreOpsIndexIndexUsizeU64.index self index ⦃ (r : U64) =>
+      r = self[index.val]! ⦄ := by
+  unfold CoreOpsIndexIndexUsizeU64.index
   step*
   simp_lists [*]
 

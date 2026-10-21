@@ -696,10 +696,10 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
 namespace «CoreOpsArithAddAssignSharedAEdwardsPointx86_64-tables»
 
 /-- `AddAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_assign_spec_point (self _rhs : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hrhs : _rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : _rhs.OnCurve) :
-    add_assign self _rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + _rhs.toPoint ∧ r.Bounded ⦄
+recall add_assign_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+    (hrhs : rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+    add_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.Bounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, core.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
@@ -726,10 +726,10 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
 namespace «CoreOpsArithAddAssignSharedAEdwardsPointx86_64-no-tables»
 
 /-- `AddAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_assign_spec_point (self _rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hrhs : _rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : _rhs.OnCurve) :
-    add_assign self _rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + _rhs.toPoint ∧ r.Bounded ⦄
+recall add_assign_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+    (hrhs : rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+    add_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.Bounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, core.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
@@ -878,10 +878,10 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
 namespace «CoreOpsArithSubAssignSharedAEdwardsPointx86_64-tables»
 
 /-- `SubAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_assign_spec_point (self _rhs : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hrhs : _rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : _rhs.OnCurve) :
-    sub_assign self _rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - _rhs.toPoint ∧ r.Bounded ⦄
+recall sub_assign_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+    (hrhs : rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+    sub_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.Bounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, core.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
@@ -908,10 +908,10 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
 namespace «CoreOpsArithSubAssignSharedAEdwardsPointx86_64-no-tables»
 
 /-- `SubAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_assign_spec_point (self _rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hrhs : _rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : _rhs.OnCurve) :
-    sub_assign self _rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - _rhs.toPoint ∧ r.Bounded ⦄
+recall sub_assign_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+    (hrhs : rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+    sub_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.Bounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, core.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point

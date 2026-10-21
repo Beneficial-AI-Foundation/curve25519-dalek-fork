@@ -19,10 +19,10 @@ open Curve25519Dalek.backend.serial.u64.scalar (montgomeryRadix)
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsIndexIndexUsizeU8
 
 @[step]
-theorem index_spec (self : Scalar) (_index : Usize) (hindex : _index.val < 32) :
-    index self _index ⦃ (r : U8) =>
-      r = self.bytes[_index.val]! ⦄ := by
-  unfold index
+theorem index_spec (self : Scalar) (index : Usize) (hindex : index.val < 32) :
+    CoreOpsIndexIndexUsizeU8.index self index ⦃ (r : U8) =>
+      r = self.bytes[index.val]! ⦄ := by
+  unfold CoreOpsIndexIndexUsizeU8.index
   step with Array.index_usize_getElem!_spec as ⟨r, hr⟩
   exact hr
 

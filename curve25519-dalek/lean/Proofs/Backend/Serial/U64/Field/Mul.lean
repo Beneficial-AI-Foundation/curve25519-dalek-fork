@@ -78,13 +78,13 @@ private theorem mul_coeffs_lt {a0 a1 a2 a3 a4 b0 b1 b2 b3 b4 : ℕ} (ha0 : a0 < 
 
 open scoped Helpers.IndexStep in
 @[local step]
-private theorem mul.prod_spec (self _rhs : FieldElement51)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, _rhs[i]!.val < 2 ^ 54) :
-    mul.prod self _rhs ⦃ (b1 b2 b3 b4 a0 b0 a4 a3 a2 a1 : U64) (c0 c1 c2 c3 c4 : U128) =>
+private theorem mul.prod_spec (self rhs : FieldElement51)
+    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, rhs[i]!.val < 2 ^ 54) :
+    mul.prod self rhs ⦃ (b1 b2 b3 b4 a0 b0 a4 a3 a2 a1 : U64) (c0 c1 c2 c3 c4 : U128) =>
       a0.val = self[0]!.val ∧ a1.val = self[1]!.val ∧ a2.val = self[2]!.val ∧
       a3.val = self[3]!.val ∧ a4.val = self[4]!.val ∧
-      b0.val = _rhs[0]!.val ∧ b1.val = _rhs[1]!.val ∧ b2.val = _rhs[2]!.val ∧
-      b3.val = _rhs[3]!.val ∧ b4.val = _rhs[4]!.val ∧
+      b0.val = rhs[0]!.val ∧ b1.val = rhs[1]!.val ∧ b2.val = rhs[2]!.val ∧
+      b3.val = rhs[3]!.val ∧ b4.val = rhs[4]!.val ∧
       c0.val = a0.val * b0.val + a4.val * (b1.val * 19) + a3.val * (b2.val * 19) +
         a2.val * (b3.val * 19) + a1.val * (b4.val * 19) ∧
       c1.val = a1.val * b0.val + a0.val * b1.val + a4.val * (b2.val * 19) +
@@ -106,14 +106,14 @@ private theorem mul.prod_spec (self _rhs : FieldElement51)
   simpa [*] using hc
 
 @[step]
-theorem mul_spec (self _rhs : FieldElement51)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, _rhs[i]!.val < 2 ^ 54) :
-    mul self _rhs ⦃ (r : FieldElement51) =>
-      r.asNat % p = self.asNat * _rhs.asNat % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+theorem mul_spec (self rhs : FieldElement51)
+    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, rhs[i]!.val < 2 ^ 54) :
+    mul self rhs ⦃ (r : FieldElement51) =>
+      r.asNat % p = self.asNat * rhs.asNat % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
   rw [mul_eq]
   step*
   refine ⟨?_, by assumption⟩
-  rw [FieldElement51.asNat_eq self, FieldElement51.asNat_eq _rhs]
+  rw [FieldElement51.asNat_eq self, FieldElement51.asNat_eq rhs]
   simp only [*]
   exact mul_coeffs_mod_p (by ring) (by ring) (by ring) (by ring) (by ring)
 end Curve25519Dalek.Shared0FieldElement51.Insts.CoreOpsArithMulSharedAFieldElement51FieldElement51

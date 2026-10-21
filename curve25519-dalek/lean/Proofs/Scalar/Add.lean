@@ -22,10 +22,10 @@ open Curve25519Dalek.backend.serial.u64.scalar (montgomeryRadix)
 namespace Curve25519Dalek.scalar.AddShared0ScalarSharedAScalarScalar
 
 @[step]
-theorem add.«x86_64-tables_spec» (self _rhs : Scalar) (hself : self.asNat < L)
-    (hrhs : _rhs.asNat < L) :
-    add.«x86_64-tables» self _rhs ⦃ (r : Scalar) =>
-      r.asNat = (self.asNat + _rhs.asNat) % L ⦄ := by
+theorem add.«x86_64-tables_spec» (self rhs : Scalar) (hself : self.asNat < L)
+    (hrhs : rhs.asNat < L) :
+    add.«x86_64-tables» self rhs ⦃ (r : Scalar) =>
+      r.asNat = (self.asNat + rhs.asNat) % L ⦄ := by
   unfold add.«x86_64-tables»
   step as ⟨a, ha, hab⟩
   step as ⟨b, hb, hbb⟩
@@ -40,25 +40,25 @@ end Curve25519Dalek.scalar.AddShared0ScalarSharedAScalarScalar
 namespace Curve25519Dalek.scalar.AddShared0ScalarSharedAScalarScalar
 
 @[step]
-theorem add.«x86_64-no-tables_spec» (self _rhs : Scalar) (hself : self.asNat < L)
-    (hrhs : _rhs.asNat < L) :
-    add.«x86_64-no-tables» self _rhs ⦃ (r : Scalar) =>
-      r.asNat = (self.asNat + _rhs.asNat) % L ⦄ :=
-  add.«x86_64-tables_spec» self _rhs hself hrhs
+theorem add.«x86_64-no-tables_spec» (self rhs : Scalar) (hself : self.asNat < L)
+    (hrhs : rhs.asNat < L) :
+    add.«x86_64-no-tables» self rhs ⦃ (r : Scalar) =>
+      r.asNat = (self.asNat + rhs.asNat) % L ⦄ :=
+  add.«x86_64-tables_spec» self rhs hself hrhs
 
 end Curve25519Dalek.scalar.AddShared0ScalarSharedAScalarScalar
 
 namespace Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar
 
 @[step]
-theorem add_spec (self _rhs : Scalar) (hself : self.asNat < L)
-    (hrhs : _rhs.asNat < L) (htgt : OnX86_64) :
-    add self _rhs ⦃ (r : Scalar) =>
-      r.asNat = (self.asNat + _rhs.asNat) % L ⦄ := by
+theorem add_spec (self rhs : Scalar) (hself : self.asNat < L)
+    (hrhs : rhs.asNat < L) (htgt : OnX86_64) :
+    add self rhs ⦃ (r : Scalar) =>
+      r.asNat = (self.asNat + rhs.asNat) % L ⦄ := by
   unfold add
   exact dispatch_spec htgt
-    (scalar.AddShared0ScalarSharedAScalarScalar.add.«x86_64-tables_spec» self _rhs hself hrhs)
-    (scalar.AddShared0ScalarSharedAScalarScalar.add.«x86_64-no-tables_spec» self _rhs hself hrhs)
+    (scalar.AddShared0ScalarSharedAScalarScalar.add.«x86_64-tables_spec» self rhs hself hrhs)
+    (scalar.AddShared0ScalarSharedAScalarScalar.add.«x86_64-no-tables_spec» self rhs hself hrhs)
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar
 

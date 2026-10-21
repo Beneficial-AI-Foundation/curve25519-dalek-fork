@@ -16,10 +16,10 @@ open Curve25519Dalek.scalar (Scalar)
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithAddAssignSharedAScalar
 
 @[step]
-theorem add_assign_spec (self _rhs : Scalar) (hself : self.asNat < L) (hrhs : _rhs.asNat < L)
+theorem add_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L)
     (htgt : OnX86_64) :
-    add_assign self _rhs ⦃ (r : Scalar) =>
-      r.asNat = (self.asNat + _rhs.asNat) % L ⦄ := by
+    add_assign self rhs ⦃ (r : Scalar) =>
+      r.asNat = (self.asNat + rhs.asNat) % L ⦄ := by
   unfold add_assign
   step*
 
