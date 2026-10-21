@@ -10,6 +10,8 @@ public import Curve25519Dalek.Types
 -- The style linter misreads `@[rust_fun "..."]` attributes.
 set_option linter.style.whitespace false
 -- Docstrings quote the Aeneas name patterns, which exceed 100 characters.
+-- The spec predicates name their hypotheses, as the theorems do.
+set_option linter.unusedVariables false
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek
 
@@ -21,9 +23,12 @@ This file is the trusted base for `zeroize`. Nothing here is derived.
   `Curve25519Dalek/FunsExternal_Template.lean`) is an `opaque` constant with the template's exact
   name, type and `@[rust_fun]` attribute. `opaque` adds no axiom, so `#print axioms` lists exactly
   the spec axioms below.
-* **Spec axioms.** Each function has one axiom that restates the Rust body/documentation. Every
-  spec that relies on a trait method of the generic `Z` (`Default::default`, `Zeroize::zeroize`)
-  is conditional on that method's behaviour. An unconditional spec could prove `False`.
+* **Specifications.** Each function has one predicate `….Spec : Prop` that restates the Rust
+  body/documentation. Every spec that relies on a trait method of the generic `Z`
+  (`Default::default`, `Zeroize::zeroize`) is conditional on that method's behaviour. An
+  unconditional spec could prove `False`. The single axiom `zeroize.spec` (end of file) states all
+  the predicates; the theorems `…_spec`/`…_eq` used by the proofs are its projections, so
+  `#print axioms` lists `zeroize.spec`.
 
 Volatile writes, `atomic_fence` and the "best effort" caveats (e.g. earlier `Vec` reallocations)
 are not observable in the functional semantics. Zeroizing replaces the value by its zeroized
@@ -40,10 +45,12 @@ set_option linter.dupNamespace false in
 opaque zeroize.Zeroize.Blanket.zeroize
   {Z : Type} (DefaultIsZeroesInst : zeroize.DefaultIsZeroes Z) : Z → Result Z
 
+set_option linter.dupNamespace false in
 /-- "Marker trait for types whose [`Default`] is the desired zeroization result" (lib.rs:281).
     Body (lib.rs:301-304): `volatile_write(self, Z::default()); atomic_fence();`. The result is
     exactly `Z::default()` (including its failure, if `default` fails). -/
-axiom zeroize.Zeroize.Blanket.zeroize_eq {Z : Type} (inst : zeroize.DefaultIsZeroes Z) (x : Z) :
+def zeroize.Zeroize.Blanket.zeroize.Spec : Prop :=
+  ∀ {Z : Type} (inst : zeroize.DefaultIsZeroes Z) (x : Z),
     zeroize.Zeroize.Blanket.zeroize inst x = inst.coredefaultDefaultInst.default
 
 /-- [zeroize::{impl zeroize::Zeroize for [Z; N]}::zeroize]:
@@ -57,9 +64,9 @@ opaque Array.Insts.ZeroizeZeroize.zeroize
 /-- "Impl [`Zeroize`] on arrays of types that impl [`Zeroize`]." (lib.rs:368). Body
     (lib.rs:373-375): `self.iter_mut().zeroize();`. Every element is zeroized, so each element of
     the result satisfies any postcondition that the element `zeroize` guarantees. -/
-axiom Array.Insts.ZeroizeZeroize.zeroize_spec
-    {Z : Type} {N : Std.Usize} (inst : zeroize.Zeroize Z) (a : Array Z N) {post : Z → Prop}
-    (h : ∀ x ∈ a.val, inst.zeroize x ⦃ post ⦄) :
+def Array.Insts.ZeroizeZeroize.zeroize.Spec : Prop :=
+  ∀ {Z : Type} {N : Std.Usize} (inst : zeroize.Zeroize Z) (a : Array Z N) {post : Z → Prop}
+    (h : ∀ x ∈ a.val, inst.zeroize x ⦃ post ⦄),
     Array.Insts.ZeroizeZeroize.zeroize inst a ⦃ a' => ∀ y ∈ a'.val, post y ⦄
 
 /-- [zeroize::{impl zeroize::Zeroize for core::slice::iter::IterMut<'_0, Z>}::zeroize]:
@@ -76,9 +83,9 @@ opaque core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize
     not yet yielded (indices `it.i ..`) is zeroized, and the already-yielded prefix is unchanged.
     The iterator ends exhausted. The zeroized slice is returned in the new iterator, so the
     backward function (ending the `'0` borrow) is the identity. -/
-axiom core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize_spec
-    {Z : Type} (inst : zeroize.Zeroize Z) (it : core.slice.iter.IterMut Z) {post : Z → Prop}
-    (h : ∀ x ∈ it.slice.val.drop it.i, inst.zeroize x ⦃ post ⦄) :
+def core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize.Spec : Prop :=
+  ∀ {Z : Type} (inst : zeroize.Zeroize Z) (it : core.slice.iter.IterMut Z) {post : Z → Prop}
+    (h : ∀ x ∈ it.slice.val.drop it.i, inst.zeroize x ⦃ post ⦄),
     core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize inst it ⦃ it' back =>
       back = id ∧ it'.i = it.slice.length ∧ it'.slice.length = it.slice.length ∧
       it'.slice.val.take it.i = it.slice.val.take it.i ∧
@@ -97,8 +104,51 @@ opaque alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize
     Body (lib.rs:551-560): zeroize the elements, `self.clear()`, zeroize the spare capacity.
     Aeneas' `Vec` has no capacity, so the observable result is the empty vector. Only the success
     of the element `zeroize` matters. -/
+def alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize.Spec : Prop :=
+  ∀ {Z : Type} (inst : zeroize.Zeroize Z) (v : alloc.vec.Vec Z)
+    (h : ∀ x ∈ v.val, inst.zeroize x ⦃ _ => True ⦄),
+    alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize inst v ⦃ v' => v' = alloc.vec.Vec.new Z ⦄
+
+/-! ## The specification of the crate -/
+
+/-- The specification of `zeroize`: one field per function, the predicates above. -/
+structure zeroize.Spec : Prop where
+  blanket_zeroize : zeroize.Zeroize.Blanket.zeroize.Spec
+  array_zeroize : Array.Insts.ZeroizeZeroize.zeroize.Spec
+  iterMut_zeroize : core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize.Spec
+  vec_zeroize : alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize.Spec
+
+/-- The single trusted assumption about `zeroize`: its functions meet their specifications. -/
+axiom zeroize.spec : zeroize.Spec
+
+/-- `zeroize.Zeroize.Blanket.zeroize` meets its specification (`zeroize.spec`). -/
+theorem zeroize.Zeroize.Blanket.zeroize_eq
+    {Z : Type} (inst : zeroize.DefaultIsZeroes Z) (x : Z) :
+    zeroize.Zeroize.Blanket.zeroize inst x = inst.coredefaultDefaultInst.default :=
+  zeroize.spec.blanket_zeroize inst x
+
+/-- `Array.Insts.ZeroizeZeroize.zeroize` meets its specification (`zeroize.spec`). -/
+theorem Array.Insts.ZeroizeZeroize.zeroize_spec
+    {Z : Type} {N : Std.Usize} (inst : zeroize.Zeroize Z) (a : Array Z N) {post : Z → Prop}
+    (h : ∀ x ∈ a.val, inst.zeroize x ⦃ post ⦄) :
+    Array.Insts.ZeroizeZeroize.zeroize inst a ⦃ a' => ∀ y ∈ a'.val, post y ⦄ :=
+  zeroize.spec.array_zeroize inst a h
+
+/-- `core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize`
+    meets its specification (`zeroize.spec`). -/
+theorem core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize_spec
+    {Z : Type} (inst : zeroize.Zeroize Z) (it : core.slice.iter.IterMut Z) {post : Z → Prop}
+    (h : ∀ x ∈ it.slice.val.drop it.i, inst.zeroize x ⦃ post ⦄) :
+    core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize inst it ⦃ it' back =>
+      back = id ∧ it'.i = it.slice.length ∧ it'.slice.length = it.slice.length ∧
+      it'.slice.val.take it.i = it.slice.val.take it.i ∧
+      ∀ y ∈ it'.slice.val.drop it.i, post y ⦄ :=
+  zeroize.spec.iterMut_zeroize inst it h
+
+/-- `alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize` meets its specification (`zeroize.spec`). -/
 @[step]
-axiom alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize_spec
+theorem alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize_spec
     {Z : Type} (inst : zeroize.Zeroize Z) (v : alloc.vec.Vec Z)
     (h : ∀ x ∈ v.val, inst.zeroize x ⦃ _ => True ⦄) :
-    alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize inst v ⦃ v' => v' = alloc.vec.Vec.new Z ⦄
+    alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize inst v ⦃ v' => v' = alloc.vec.Vec.new Z ⦄ :=
+  zeroize.spec.vec_zeroize inst v h

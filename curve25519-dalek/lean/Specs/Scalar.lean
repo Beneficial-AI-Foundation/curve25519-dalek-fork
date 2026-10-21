@@ -83,9 +83,7 @@ recall from_bytes_mod_order_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
       r.asNat = bytes.asNat 8 % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -103,9 +101,7 @@ recall from_bytes_mod_order_wide_spec (input : Array U8 64#usize) (htgt : OnX86_
       r.asNat = input.asNat 8 % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -124,11 +120,7 @@ recall from_canonical_bytes_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
       (bytes.asNat 8 < L → r.is_some = 1#u8) ∧ (L ≤ bytes.asNat 8 → r.is_some = 0#u8) ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target, subtle.CtOption.new_spec,
-  Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  U8.Insts.SubtleConstantTimeEq.ct_eq_spec, subtle.Choice.Insts.CoreConvertFromU8.from_spec,
-  subtle.Choice.Insts.CoreOpsBitBitAndChoiceChoice.bitand_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -145,8 +137,7 @@ recall eq_spec (self other : Scalar) :
     eq self other ⦃ (b : Bool) =>
       (b = true ↔ self = other) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, Bool.Insts.CoreConvertFromChoice.from_spec,
-  Slice.Insts.SubtleConstantTimeEq.ct_eq_spec, U8.Insts.SubtleConstantTimeEq.ct_eq_spec] -/
+/-- [propext, Classical.choice, Quot.sound, subtle.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreCmpPartialEqScalar
@@ -158,8 +149,7 @@ recall ct_eq_spec (self other : Scalar) :
     ct_eq self other ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (self = other → c = 1#u8) ∧ (self ≠ other → c = 0#u8) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
-  U8.Insts.SubtleConstantTimeEq.ct_eq_spec] -/
+/-- [propext, Classical.choice, Quot.sound, subtle.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.SubtleConstantTimeEq
@@ -184,9 +174,7 @@ recall mul_assign_spec (self _rhs : Scalar) (htgt : OnX86_64) :
       r.asNat = self.asNat * _rhs.asNat % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -204,9 +192,7 @@ recall mul_assign_spec (self rhs : Scalar) (htgt : OnX86_64) :
       r.asNat = self.asNat * rhs.asNat % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -224,9 +210,7 @@ recall mul_spec (self _rhs : Scalar) (htgt : OnX86_64) :
       r.asNat = self.asNat * _rhs.asNat % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -244,9 +228,7 @@ recall mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
       r.asNat = self.asNat * rhs.asNat % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -264,9 +246,7 @@ recall mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
       r.asNat = self.asNat * rhs.asNat % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -284,9 +264,7 @@ recall mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
       r.asNat = self.asNat * rhs.asNat % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -305,9 +283,7 @@ recall add_assign_spec (self _rhs : Scalar) (hself : self.asNat < L) (hrhs : _rh
       r.asNat = (self.asNat + _rhs.asNat) % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -326,9 +302,7 @@ recall add_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.
       r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -347,9 +321,7 @@ recall add_spec (self _rhs : Scalar) (hself : self.asNat < L)
       r.asNat = (self.asNat + _rhs.asNat) % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -368,9 +340,7 @@ recall add_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
       r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -389,9 +359,7 @@ recall add_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
       r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -410,9 +378,7 @@ recall add_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
       r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -431,9 +397,7 @@ recall sub_assign_spec (self _rhs : Scalar) (hself : self.asNat < L) (hrhs : _rh
       (r.asNat + _rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -452,9 +416,7 @@ recall sub_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -473,9 +435,7 @@ recall sub_spec (self rhs : Scalar) (hself : self.asNat < L)
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -494,9 +454,7 @@ recall sub_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -515,9 +473,7 @@ recall sub_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -536,9 +492,7 @@ recall sub_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -556,9 +510,7 @@ recall neg_spec (self : Scalar) (htgt : OnX86_64) :
       (r.asNat + self.asNat) % L = 0 ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -576,9 +528,7 @@ recall neg_spec (self : Scalar) (htgt : OnX86_64) :
       (r.asNat + self.asNat) % L = 0 ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -596,8 +546,7 @@ recall conditional_select_spec (a b : Scalar) (choice : subtle.Choice)
     conditional_select a b choice ⦃ (r : Scalar) =>
       (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄
 
-/-- [propext, Classical.choice, Quot.sound,
-  U8.Insts.SubtleConditionallySelectable.conditional_select_spec] -/
+/-- [propext, Classical.choice, Quot.sound, subtle.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms conditional_select_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.SubtleConditionallySelectable
@@ -614,9 +563,7 @@ recall product_spec {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
       r.asNat = (ss.map (·.asNat)).prod % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -638,9 +585,7 @@ recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
       r.asNat = (ss.map (·.asNat)).sum % L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -729,8 +674,7 @@ recall zeroize_spec (self : Scalar) :
     zeroize self ⦃ (r : Scalar) =>
       r = { bytes := Array.repeat 32#usize 0#u8 } ⦄
 
-/-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
-  zeroize.Zeroize.Blanket.zeroize_eq] -/
+/-- [propext, Classical.choice, Quot.sound, zeroize.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.ZeroizeZeroize
@@ -790,9 +734,7 @@ recall invert_spec (self : Scalar) (htgt : OnX86_64) :
       (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -813,14 +755,9 @@ recall invert_batch_spec {N : Usize} (inputs : Array Scalar N)
       ret.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target, Array.Insts.ZeroizeZeroize.zeroize_spec,
-  Bool.Insts.CoreConvertFromChoice.from_spec, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  U8.Insts.SubtleConstantTimeEq.ct_eq_spec, zeroize.Zeroize.Blanket.zeroize_eq,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, zeroize.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize_spec,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
@@ -840,14 +777,9 @@ recall invert_batch_alloc_spec (inputs : Slice Scalar)
       ret.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target, Array.Insts.ZeroizeZeroize.zeroize_spec,
-  Bool.Insts.CoreConvertFromChoice.from_spec, Slice.Insts.SubtleConstantTimeEq.ct_eq_spec,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  U8.Insts.SubtleConstantTimeEq.ct_eq_spec, zeroize.Zeroize.Blanket.zeroize_eq,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, zeroize.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize_spec,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
@@ -863,9 +795,7 @@ recall div_by_2_spec (self : Scalar) (hself : self.asNat < L) (htgt : OnX86_64) 
       2 * r.asNat % L = self.asNat ∧ r.asNat < L ⦄
 
 set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, get_target,
-  U64.Insts.SubtleConditionallySelectable.conditional_select_spec,
-  subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+/-- [propext, Classical.choice, Quot.sound, subtle.spec, get_target,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
   _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
   _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
@@ -906,8 +836,7 @@ recall eq_spec (self other : HalfWidthScalar) :
     eq self other ⦃ (b : Bool) =>
       (b = true ↔ self = other) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, Bool.Insts.CoreConvertFromChoice.from_spec,
-  Slice.Insts.SubtleConstantTimeEq.ct_eq_spec, U8.Insts.SubtleConstantTimeEq.ct_eq_spec] -/
+/-- [propext, Classical.choice, Quot.sound, subtle.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreCmpPartialEqHalfWidthScalar
@@ -1061,8 +990,7 @@ recall zeroize_spec (self : HalfWidthScalar) :
     zeroize self ⦃ (r : HalfWidthScalar) =>
       r = { bytes := Array.repeat 32#usize 0#u8 } ⦄
 
-/-- [propext, Classical.choice, Quot.sound, Array.Insts.ZeroizeZeroize.zeroize_spec,
-  zeroize.Zeroize.Blanket.zeroize_eq] -/
+/-- [propext, Classical.choice, Quot.sound, zeroize.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.ZeroizeZeroize

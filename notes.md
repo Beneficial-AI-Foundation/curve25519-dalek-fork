@@ -38,8 +38,10 @@ Read `AGENTS.md` first (PRs to the curve25519-dalek repo must be written by huma
   overwritten. After each translation, compare them against the gitignored
   `*External_Template.lean` files Aeneas emits, and update them by hand.
 - **External function signatures are `opaque`** wherever possible (the template prints `axiom`;
-  replace it), so that they add no axiom. Their behaviour is then given by spec axioms, which are
-  the only trusted additions and are listed by `#print axioms`.
+  replace it), so that they add no axiom. Their behaviour is then given by one predicate
+  `<function>.Spec : Prop` each and one axiom per crate (`core.spec`, `alloc.spec`, in
+  `FunsExternal.lean`) stating all of them, the only trusted additions; the theorems
+  `<function>_spec` are projections, so `#print axioms` names the crate axioms.
 
 ## Libraries
 
@@ -97,7 +99,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 ```
 
 **External-crate libraries (`Subtle`, `Zeroize`):**
-- **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Basic.lean`. Basic holds `opaque` signatures with the template names, plus one `@[step]` spec axiom per function. Each spec axiom is conditional on any trait-instance behaviour it relies on. Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
+- **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Basic.lean`. Basic holds `opaque` signatures with the template names, one predicate `<function>.Spec : Prop` per function (its specification, conditional on any trait-instance behaviour it relies on), a structure `<crate>.Spec` with one field per predicate, and the single axiom `<crate>.spec : <crate>.Spec`. The `@[step]` theorems `<function>_spec` are its projections, so a guard list names at most `subtle.spec` and `zeroize.spec`. Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
 - **Derived part:** `<Lib>/Lemmas.lean` (generic), `<Lib>/Instances.lean` (about instances in `Funs.lean`) and `Zeroize/Consistency.lean`. They add no axioms.
 - **Imports:** `FunsExternal.lean` imports only `<Lib>.Basic`.
 
@@ -187,7 +189,8 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   definitional equality. It adds no declaration.
 - **Pinned axioms:** `#guard_msgs` fixes the axioms each statement rests on.
   - `sorryAx` while the proof is pending (only on a working branch: CI rejects `sorry`).
-  - Any `Subtle`/`Zeroize` spec axioms or std externals (`FunsExternal.lean`) that the proof uses.
+  - `subtle.spec`/`zeroize.spec` (the one axiom of each external crate) or std externals
+    (`FunsExternal.lean`) that the proof uses.
   - For dispatched functions: `get_target` and the `…_native.decide.ax_*` axioms of Aeneas's
     `toStr` (the string literals of the dispatchers and of `OnX86_64`). Accepted: they only assert
     that each literal's byte length fits a `u32` (see "`native_decide` from Aeneas's `toStr`").
@@ -416,6 +419,12 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   behaviour; the per-type summaries do not repeat it (2026-10-20).
 - Spec summaries cover the crate's public API only; the coverage is checked by review, not by a
   committed script or CI step.
+- One axiom per external crate (2026-10-21): `subtle.spec`, `zeroize.spec`, `core.spec` and
+  `alloc.spec` state all the per-function predicates; the per-function `@[step]` theorems are
+  projections. Guard lists name only these (plus `get_target`, `core.fmt.Formatter` and the
+  Aeneas `toStr` axioms).
+- `Vec::is_empty` has a spec (`alloc.vec.Vec.is_empty.Spec`: `b = decide (v.length = 0)`, no
+  precondition), decided 2026-10-21, like the other std opaques.
 
 ## Open decisions (for the owner) and known gaps
 
@@ -433,9 +442,12 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 6. **Long lines:** 40 commands in generated proof files disable the long-line linter although
    some names exceed 100 characters only with indentation (the convention allows the option only
    for single tokens over 100). Shorten via `open`/local abbreviations, or accept.
-7. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
+7. **Naming style of the spec definitions:** discuss and fix the conventions, e.g. `Bounded` versus
+   `IsBounded` for the limb-bound predicates (`OnCurve`, `Represents`, `IsValid` likewise), before
+   more `Defs` are written.
+8. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
    `Specs/` and `Proofs/` (see also "Project-defined traits" below).
-8. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
+9. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
    variants into two files); window tables' `Default`/`Clone`/`Zeroize` not specified (low
    value); naming ambiguity `encode`/`decode`/`basepoint` between `curve25519` and
    `curve25519.Ristretto` under a double `open`; `twistL` and `ZMod.abs` names unconfirmed.
@@ -492,16 +504,6 @@ emit constants as literals (no longer needed).
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
 7. Add std lib models to Aeneas.
-8. One axiom per external crate (below).
-
-### One axiom per external crate
-
-Today `Subtle/Basic.lean` and `Zeroize/Basic.lean` state one `@[step]` spec axiom per function,
-so the guard lists name each of them. Refactor each library to a single named axiom covering the
-whole crate (e.g. `subtle_spec`, a conjunction of all its function specs, and `zeroize_spec`
-likewise), and derive the per-function `@[step]` specs from it as theorems. A guard list then
-names at most one axiom per external crate. The `#guard_msgs` lists of the spec summaries change
-accordingly.
 
 ### u32 backend
 
@@ -510,6 +512,12 @@ proving `src/backend/serial/u32/scalar.rs` (`Scalar29`), its constants, and the 
 the `scalar.rs` functions lets the hypothesis be dropped from the `scalar.rs` statements (a change
 of frozen statements: sign-off needed), and allows `Scalar29::pack`, `Scalar29::invert` and
 `Scalar29::montgomery_invert` to be specified.
+The i686 table constants (`backend.serial.u32.constants.ED25519_BASEPOINT_TABLE`, the two
+`AFFINE_ODD_MULTIPLES_OF_BASEPOINT` tables) are chains of `FieldElement2625.from_limbs` binds
+over `Array U32 10`; `Proofs/Helpers/TableCertificate.lean` is written for `FieldElement51`
+(`collect_limbs`, `bindList`, `limbsNat`, the `«x86_64-tables»` checkers), so parametrise it over
+the limb type when the u32 `Defs` (`FieldElement2625.toField`) exist. Mechanical; the method and
+costs carry over.
 
 ### Primality certificates
 

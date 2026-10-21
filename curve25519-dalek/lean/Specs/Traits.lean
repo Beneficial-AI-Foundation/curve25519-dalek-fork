@@ -37,7 +37,7 @@ recall is_identity_spec {T : Type} (ctEqInst : subtle.ConstantTimeEq T)
       c.IsValid ∧ (c = 1#u8 ↔ Q) ⦄) :
     is_identity ctEqInst identityInst self ⦃ (b : Bool) => b = true ↔ Q ⦄
 
-/-- [propext, Classical.choice, Quot.sound, Bool.Insts.CoreConvertFromChoice.from_spec] -/
+/-- [propext, Classical.choice, Quot.sound, subtle.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_identity_spec
 
 end Curve25519Dalek.traits.IsIdentity.Blanket

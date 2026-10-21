@@ -23,6 +23,7 @@ public import Proofs.Backend.Serial.CurveModels.ProjectiveNielsNeg
 public import Proofs.Backend.Serial.CurveModels.SubAffineNiels
 public import Proofs.Backend.Serial.CurveModels.SubProjectiveNiels
 public import Proofs.Backend.Serial.ScalarMul.Pippenger.OptionalMultiscalarMul
+public import Proofs.Backend.Serial.ScalarMul.PrecomputedStraus.IsEmpty
 public import Proofs.Backend.Serial.ScalarMul.PrecomputedStraus.Len
 public import Proofs.Backend.Serial.ScalarMul.PrecomputedStraus.New
 public import Proofs.Backend.Serial.ScalarMul.PrecomputedStraus.OptionalMixedMultiscalarMul
@@ -95,6 +96,7 @@ public import Proofs.Backend.StrausMultiscalarMul
 public import Proofs.Backend.StrausOptionalMultiscalarMul
 public import Proofs.Backend.VariableBaseMul
 public import Proofs.Backend.VartimeDoubleBaseMul
+public import Proofs.Backend.VartimePrecomputedStrausIsEmpty
 public import Proofs.Backend.VartimePrecomputedStrausLen
 public import Proofs.Backend.VartimePrecomputedStrausNew
 public import Proofs.Backend.VartimePrecomputedStrausOptionalMixedMultiscalarMul
@@ -158,6 +160,7 @@ public import Proofs.Edwards.ToBytes
 public import Proofs.Edwards.ToMontgomery
 public import Proofs.Edwards.ToMontgomeryBatch
 public import Proofs.Edwards.VartimeDoubleScalarMulBasepoint
+public import Proofs.Edwards.VartimeEdwardsPrecomputationIsEmpty
 public import Proofs.Edwards.VartimeEdwardsPrecomputationLen
 public import Proofs.Edwards.VartimeEdwardsPrecomputationNew
 public import Proofs.Edwards.VartimeEdwardsPrecomputationOptionalMixedMultiscalarMul

@@ -81,47 +81,121 @@ opaque alloc.vec.Vec.is_empty
 @[rust_fun "core::borrow::{core::borrow::Borrow<@T, @T>}::borrow"]
 opaque core.borrow.Borrow.Blanket.borrow {T : Type} : T → Result T
 
-/-! ## Spec axioms
+/-! ## Specifications
 
 The behaviour of the `opaque` functions above, as stated in the Rust standard library
-documentation. These are the only trusted additions of this file. -/
+documentation: one predicate `….Spec : Prop` per function, and one axiom per crate (`core.spec`,
+`alloc.spec`) stating all of them. The axioms are the only trusted additions of this file; the
+theorems `…_spec` used by the proofs are their projections. -/
 
 /-- `core::array::from_fn`: "Creates an array of type `[T; N]`, where each element `T` is the
 returned value from `cb` using that element's index." The closure is called on the indices
 `0, 1, …, N-1` in order, each call receiving the closure state left by the previous one. Stated
 with an invariant `inv` on the closure state and a property `post` of each element. -/
-axiom core.array.from_fn_spec {T F : Type} (N : Std.Usize)
-    (inst : core.ops.function.FnMut F Std.Usize T) (f : F)
+@[nolint defsWithUnderscore]
+def core.array.from_fn.Spec : Prop :=
+  ∀ {T F : Type} (N : Std.Usize) (inst : core.ops.function.FnMut F Std.Usize T) (f : F)
     (inv : ℕ → F → Prop) (post : ℕ → T → Prop) (h0 : inv 0 f)
     (h : ∀ (i : Std.Usize) (g : F), i.val < N.val → inv i.val g →
-      inst.call_mut g i ⦃ (x : T) (g' : F) => post i.val x ∧ inv (i.val + 1) g' ⦄) :
+      inst.call_mut g i ⦃ (x : T) (g' : F) => post i.val x ∧ inv (i.val + 1) g' ⦄),
     core.array.from_fn N inst f ⦃ (a : Array T N) =>
       ∀ (i : ℕ) (hi : i < a.val.length), post i a.val[i] ⦄
 
 /-- `Result::map` (core/src/result.rs): "Maps a `Result<T, E>` to `Result<U, E>` by applying a
 function to a contained `Ok` value, leaving an `Err` value untouched." Conditional on the closure
 succeeding on the `Ok` value. -/
-axiom core.result.Result.map_spec {T E U F : Type} (inst : core.ops.function.FnOnce F T U)
-    (r : core.result.Result T E) (f : F)
-    (h : ∀ x, r = .Ok x → ∃ y, inst.call_once f x = ok y) :
+def core.result.Result.map.Spec : Prop :=
+  ∀ {T E U F : Type} (inst : core.ops.function.FnOnce F T U) (r : core.result.Result T E) (f : F)
+    (h : ∀ x, r = .Ok x → ∃ y, inst.call_once f x = ok y),
     core.result.Result.map inst r f ⦃ (r' : core.result.Result U E) =>
       (∀ x, r = .Ok x → ∃ y, inst.call_once f x = ok y ∧ r' = .Ok y) ∧
       (∀ e, r = .Err e → r' = .Err e) ⦄
 
 /-- `usize::div_ceil` (core/src/num/uint_macros.rs): "Calculates the quotient of `self` and `rhs`,
 rounding the result towards positive infinity. Panics if `rhs` is zero." -/
-@[step]
-axiom core.num.Usize.div_ceil_spec (self rhs : Std.Usize) (hrhs : rhs.val ≠ 0) :
+@[nolint defsWithUnderscore]
+def core.num.Usize.div_ceil.Spec : Prop :=
+  ∀ (self rhs : Std.Usize) (hrhs : rhs.val ≠ 0),
     core.num.Usize.div_ceil self rhs ⦃ (r : Std.Usize) =>
       r.val = (self.val + rhs.val - 1) / rhs.val ⦄
 
 /-- `<&mut [T; N] as IntoIterator>::into_iter`: a mutable iterator over the whole array, starting
 at index `0`; the backward function writes the iterator's slice back into the array. -/
-@[step]
-axiom MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter_spec {T : Type}
-    {N : Std.Usize} (a : Array T N) :
+@[nolint defsWithUnderscore]
+def MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter.Spec : Prop :=
+  ∀ {T : Type} {N : Std.Usize} (a : Array T N),
     MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter a ⦃
       (it : core.slice.iter.IterMut T) (back : core.slice.iter.IterMut T → Array T N) =>
       it.slice.val = a.val ∧ it.i = 0 ∧
       ∀ it' : core.slice.iter.IterMut T, it'.slice.length = N.val →
         (back it').val = it'.slice.val ⦄
+
+/-- `Vec::is_empty` (alloc/src/vec/mod.rs): "Returns `true` if the vector contains no elements."
+Body: `self.len() == 0`; never fails. `A` is the allocator type parameter. -/
+@[nolint defsWithUnderscore]
+def alloc.vec.Vec.is_empty.Spec : Prop :=
+  ∀ {T : Type} (A : Type) (v : alloc.vec.Vec T),
+    alloc.vec.Vec.is_empty A v ⦃ (b : Bool) => b = decide (v.length = 0) ⦄
+
+/-- The specification of the `core` functions used: one field per function, the predicates
+above. -/
+structure core.Spec : Prop where
+  array_from_fn : core.array.from_fn.Spec
+  result_map : core.result.Result.map.Spec
+  usize_div_ceil : core.num.Usize.div_ceil.Spec
+  mutArray_into_iter : MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter.Spec
+
+/-- The single trusted assumption about `core`: its functions meet their specifications. -/
+axiom core.spec : core.Spec
+
+/-- The specification of the `alloc` functions used: one field per function, the predicates
+above. -/
+structure alloc.Spec : Prop where
+  vec_is_empty : alloc.vec.Vec.is_empty.Spec
+
+/-- The single trusted assumption about `alloc`: its functions meet their specifications. -/
+axiom alloc.spec : alloc.Spec
+
+/-- `core.array.from_fn` meets its specification (`core.spec`). -/
+theorem core.array.from_fn_spec {T F : Type} (N : Std.Usize)
+    (inst : core.ops.function.FnMut F Std.Usize T) (f : F)
+    (inv : ℕ → F → Prop) (post : ℕ → T → Prop) (h0 : inv 0 f)
+    (h : ∀ (i : Std.Usize) (g : F), i.val < N.val → inv i.val g →
+      inst.call_mut g i ⦃ (x : T) (g' : F) => post i.val x ∧ inv (i.val + 1) g' ⦄) :
+    core.array.from_fn N inst f ⦃ (a : Array T N) =>
+      ∀ (i : ℕ) (hi : i < a.val.length), post i a.val[i] ⦄ :=
+  core.spec.array_from_fn N inst f inv post h0 h
+
+/-- `core.result.Result.map` meets its specification (`core.spec`). -/
+theorem core.result.Result.map_spec {T E U F : Type} (inst : core.ops.function.FnOnce F T U)
+    (r : core.result.Result T E) (f : F)
+    (h : ∀ x, r = .Ok x → ∃ y, inst.call_once f x = ok y) :
+    core.result.Result.map inst r f ⦃ (r' : core.result.Result U E) =>
+      (∀ x, r = .Ok x → ∃ y, inst.call_once f x = ok y ∧ r' = .Ok y) ∧
+      (∀ e, r = .Err e → r' = .Err e) ⦄ :=
+  core.spec.result_map inst r f h
+
+/-- `core.num.Usize.div_ceil` meets its specification (`core.spec`). -/
+@[step]
+theorem core.num.Usize.div_ceil_spec (self rhs : Std.Usize) (hrhs : rhs.val ≠ 0) :
+    core.num.Usize.div_ceil self rhs ⦃ (r : Std.Usize) =>
+      r.val = (self.val + rhs.val - 1) / rhs.val ⦄ :=
+  core.spec.usize_div_ceil self rhs hrhs
+
+/-- `MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter`
+    meets its specification (`core.spec`). -/
+@[step]
+theorem MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter_spec {T : Type}
+    {N : Std.Usize} (a : Array T N) :
+    MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter a ⦃
+      (it : core.slice.iter.IterMut T) (back : core.slice.iter.IterMut T → Array T N) =>
+      it.slice.val = a.val ∧ it.i = 0 ∧
+      ∀ it' : core.slice.iter.IterMut T, it'.slice.length = N.val →
+        (back it').val = it'.slice.val ⦄ :=
+  core.spec.mutArray_into_iter a
+
+/-- `alloc.vec.Vec.is_empty` meets its specification (`alloc.spec`). -/
+@[step]
+theorem alloc.vec.Vec.is_empty_spec {T : Type} (A : Type) (v : alloc.vec.Vec T) :
+    alloc.vec.Vec.is_empty A v ⦃ (b : Bool) => b = decide (v.length = 0) ⦄ :=
+  alloc.spec.vec_is_empty A v
