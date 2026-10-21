@@ -52,7 +52,7 @@ private theorem not_zero : (1#u8 &&& ~~~(0#u8 : subtle.Choice)) = 1#u8 := by dec
 
 /-- `fe` is the product of the nonzero inputs before index `i`, with limbs `< 2^54`. -/
 private def IsPre (inputs : Slice FieldElement51) (fe : FieldElement51) (i : ℕ) : Prop :=
-  (fe.asNat : ZMod p) = pre inputs i ∧ ∀ j < 5, fe[j]!.val < 2 ^ 54
+  (fe.asNat : ZMod p) = pre inputs i ∧ fe.LimbsLt 54
 
 /-! ## First loop: prefix products into `scratch` -/
 
@@ -66,7 +66,7 @@ private theorem isPre_set {inputs s : Slice FieldElement51} {a : FieldElement51}
 private theorem internal_invert_batch_loop0_body_spec (inputs scratch : Slice FieldElement51)
     (acc : FieldElement51) (n i : Usize) (hn : n.val = inputs.length)
     (hlen : scratch.length = inputs.length) (hlt : i < n)
-    (hinputs : ∀ k < inputs.length, ∀ j < 5, (inputs[k]!)[j]!.val < 2 ^ 54)
+    (hinputs : ∀ k < inputs.length, (inputs[k]!).LimbsLt 54)
     (hacc : IsPre inputs acc i.val) :
     internal_invert_batch_loop0.body inputs n scratch acc i ⦃ r =>
       ∃ acc1 i1, r = .cont (scratch.set i acc, acc1, i1) ∧ i1.val = i.val + 1 ∧
@@ -79,7 +79,7 @@ private theorem internal_invert_batch_loop0_body_spec (inputs scratch : Slice Fi
   step as ⟨fe, hfe⟩
   have hfe' : fe = inputs[i.val]! := by
     rw [hfe, Slice.getElem!_Nat_eq, getElem!_pos]
-  have hfeb : ∀ j < 5, fe[j]!.val < 2 ^ 54 := hfe' ▸ hinputs i.val hlt'
+  have hfeb : fe.LimbsLt 54 := hfe' ▸ hinputs i.val hlt'
   step as ⟨fe1, hfe1, hfe1b⟩
   step as ⟨c, _, hc1, hc0⟩
   step as ⟨c1, _, hc1'⟩
@@ -99,7 +99,7 @@ private theorem internal_invert_batch_loop0_body_spec (inputs scratch : Slice Fi
 private theorem internal_invert_batch_loop0_spec (inputs scratch : Slice FieldElement51)
     (acc : FieldElement51) (n i : Usize) (hn : n.val = inputs.length)
     (hlen : scratch.length = inputs.length) (hi : i.val ≤ n.val)
-    (hinputs : ∀ k < inputs.length, ∀ j < 5, (inputs[k]!)[j]!.val < 2 ^ 54)
+    (hinputs : ∀ k < inputs.length, (inputs[k]!).LimbsLt 54)
     (hacc : IsPre inputs acc i.val) (hscratch : ∀ k < i.val, IsPre inputs scratch[k]! k) :
     internal_invert_batch_loop0 inputs scratch acc n i ⦃ (s : Slice FieldElement51)
       (a : FieldElement51) =>
@@ -131,7 +131,7 @@ private theorem internal_invert_batch_loop0_spec (inputs scratch : Slice FieldEl
 /-- What the batch inversion leaves in place of the input `x`. -/
 private def Done (x r : FieldElement51) : Prop :=
   ((x.asNat : ZMod p) = 0 → r = x) ∧
-  ((x.asNat : ZMod p) ≠ 0 → (r.asNat : ZMod p) * x.asNat = 1 ∧ ∀ i < 5, r[i]!.val < 2 ^ 52)
+  ((x.asNat : ZMod p) ≠ 0 → (r.asNat : ZMod p) * x.asNat = 1 ∧ r.LimbsLt 52)
 
 /-- One step of the second loop: input `k - 1` is replaced by its inverse, unless zero, and `acc`
 becomes the inverse of the product before `k - 1`. -/
@@ -139,15 +139,15 @@ private theorem internal_invert_batch_loop1_body_spec
     (inputs0 inputs scratch : Slice FieldElement51) (acc : FieldElement51) (k : Usize)
     (hpos : k > 0#usize) (hk : k.val ≤ inputs0.length)
     (hlen : inputs.length = inputs0.length)
-    (hinputs : ∀ k < inputs0.length, ∀ j < 5, (inputs0[k]!)[j]!.val < 2 ^ 54)
+    (hinputs : ∀ k < inputs0.length, (inputs0[k]!).LimbsLt 54)
     (hscratch : ∀ k < inputs0.length, IsPre inputs0 scratch[k]! k)
     (hslen : scratch.length = inputs0.length)
     (hacc : (acc.asNat : ZMod p) * pre inputs0 k.val = 1)
-    (haccb : ∀ j < 5, acc[j]!.val < 2 ^ 54)
+    (haccb : acc.LimbsLt 54)
     (hlow : ∀ j < k.val, inputs[j]! = inputs0[j]!) :
     internal_invert_batch_loop1.body scratch inputs acc k ⦃ r =>
       ∃ fe acc1 k1, r = .cont (inputs.set k1 fe, acc1, k1) ∧ k1.val + 1 = k.val ∧
-        (acc1.asNat : ZMod p) * pre inputs0 k1.val = 1 ∧ (∀ j < 5, acc1[j]!.val < 2 ^ 54) ∧
+        (acc1.asNat : ZMod p) * pre inputs0 k1.val = 1 ∧ (acc1.LimbsLt 54) ∧
         Done inputs0[k1.val]! fe ⦄ := by
   unfold internal_invert_batch_loop1.body
   simp only [hpos, ite_true]
@@ -158,14 +158,14 @@ private theorem internal_invert_batch_loop1_body_spec
   step as ⟨fe, hfe⟩
   have hfe' : fe = inputs0[k1.val]! := by
     rw [hfe, ← hlow k1.val hk1k, Slice.getElem!_Nat_eq, getElem!_pos]
-  have hfeb : ∀ j < 5, fe[j]!.val < 2 ^ 54 := hfe' ▸ hinputs k1.val hk1'
+  have hfeb : fe.LimbsLt 54 := hfe' ▸ hinputs k1.val hk1'
   step as ⟨tmp, htmp, htmpb⟩
   step as ⟨c, _, hc1, hc0⟩
   step as ⟨nz, _, hnz⟩
   step as ⟨fe1, hfe1⟩
   have hfe1' : fe1 = scratch[k1.val]! := by
     rw [hfe1, Slice.getElem!_Nat_eq, getElem!_pos]
-  have hfe1b : ∀ j < 5, fe1[j]!.val < 2 ^ 54 := hfe1' ▸ (hscratch k1.val hk1').2
+  have hfe1b : fe1.LimbsLt 54 := hfe1' ▸ (hscratch k1.val hk1').2
   step as ⟨prod, hprod, hprodb⟩
   step as ⟨fe2, back, hfe2, hback⟩
   step as ⟨fe3, hfe30, hfe31⟩
@@ -209,11 +209,11 @@ private theorem done_set {inputs0 s : Slice FieldElement51} {fe : FieldElement51
 private theorem internal_invert_batch_loop1_spec (inputs0 inputs scratch : Slice FieldElement51)
     (acc : FieldElement51) (k : Usize) (hk : k.val ≤ inputs0.length)
     (hlen : inputs.length = inputs0.length)
-    (hinputs : ∀ k < inputs0.length, ∀ j < 5, (inputs0[k]!)[j]!.val < 2 ^ 54)
+    (hinputs : ∀ k < inputs0.length, (inputs0[k]!).LimbsLt 54)
     (hscratch : ∀ k < inputs0.length, IsPre inputs0 scratch[k]! k)
     (hslen : scratch.length = inputs0.length)
     (hacc : (acc.asNat : ZMod p) * pre inputs0 k.val = 1)
-    (haccb : ∀ j < 5, acc[j]!.val < 2 ^ 54)
+    (haccb : acc.LimbsLt 54)
     (hlow : ∀ j < k.val, inputs[j]! = inputs0[j]!)
     (hhigh : ∀ j < inputs0.length, k.val ≤ j → Done inputs0[j]! inputs[j]!) :
     internal_invert_batch_loop1 inputs scratch acc k ⦃ (r : Slice FieldElement51) =>
@@ -221,7 +221,7 @@ private theorem internal_invert_batch_loop1_spec (inputs0 inputs scratch : Slice
   unfold internal_invert_batch_loop1
   apply loop.spec_decr_nat (measure := fun x => x.2.2.val)
     (inv := fun x => x.2.2.val ≤ inputs0.length ∧ x.1.length = inputs0.length ∧
-      (x.2.1.asNat : ZMod p) * pre inputs0 x.2.2.val = 1 ∧ (∀ j < 5, x.2.1[j]!.val < 2 ^ 54) ∧
+      (x.2.1.asNat : ZMod p) * pre inputs0 x.2.2.val = 1 ∧ (x.2.1.LimbsLt 54) ∧
       (∀ j < x.2.2.val, x.1[j]! = inputs0[j]!) ∧
       ∀ j < inputs0.length, x.2.2.val ≤ j → Done inputs0[j]! x.1[j]!)
   · rintro ⟨s, a, k'⟩ ⟨hk', hsl, ha, hab, hl, hh⟩
@@ -244,13 +244,13 @@ private theorem internal_invert_batch_loop1_spec (inputs0 inputs scratch : Slice
 @[step]
 theorem internal_invert_batch_spec (inputs scratch : Slice FieldElement51)
     (hlen : scratch.length = inputs.length)
-    (hinputs : ∀ i < inputs.length, ∀ j < 5, (inputs[i]!)[j]!.val < 2 ^ 54) :
+    (hinputs : ∀ i < inputs.length, (inputs[i]!).LimbsLt 54) :
     internal_invert_batch inputs scratch ⦃ (r _scratch : Slice FieldElement51) =>
       r.length = inputs.length ∧
       ∀ i < inputs.length,
         (inputs[i]!.asNat % p = 0 → r[i]! = inputs[i]!) ∧
         (inputs[i]!.asNat % p ≠ 0 → r[i]!.asNat * inputs[i]!.asNat % p = 1 ∧
-          ∀ j < 5, (r[i]!)[j]!.val < 2 ^ 52) ⦄ := by
+          (r[i]!).LimbsLt 52) ⦄ := by
   unfold internal_invert_batch
   step as ⟨hlen'⟩
   step as ⟨one, hone, honeb⟩

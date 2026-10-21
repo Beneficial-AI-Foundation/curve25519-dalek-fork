@@ -144,6 +144,20 @@ For `u = u(Q)` with `u ≠ 0` and `k < 2 ^ bits` it computes `u(k • Q)` (`ladd
 @[expose] def ladder (a24 : F) (bits k : ℕ) (u : F) : F :=
   (ladderXZ a24 bits k u).toU
 
+/-- The projective result of the ladder over a sequence of bits `bs`, most significant first:
+the loop body `ladderStep` at each bit, from `(1 : 0)`, `(u : 1)`, `swap = 0`, then the final
+`cswap`. `ladderXZ a24 bits k u` is the case of the low `bits` bits of `k`
+(`ladderXZ_eq_ladderBitsXZ`). -/
+@[expose] def ladderBitsXZ (a24 : F) (bs : List Bool) (u : F) : XZ F :=
+  let s := bs.foldl (ladderStep a24 u) ⟨⟨1, 0⟩, ⟨u, 1⟩, false⟩
+  (cswap s.swap s.R₀ s.R₁).1
+
+/-- The ladder over a sequence of bits, most significant first: `x_2 / z_2` after
+`ladderBitsXZ`. It computes `u(n • Q)` for the integer `n` with these big-endian bits
+(`ladderBits_eq_xMul`). -/
+@[expose] def ladderBits (a24 : F) (bs : List Bool) (u : F) : F :=
+  (ladderBitsXZ a24 bs u).toU
+
 /-- `(U : W)` represents the point `Q`: for `Q = ∞`, `W = 0` and `U ≠ 0`; for `Q` affine,
 `W ≠ 0` and `U = u(Q) · W`. The pair `(0 : 0)` represents nothing. -/
 @[expose] def Represents (P : XZ F) {M : MontgomeryModel F} [M.IsNonsingular] (Q : M.Point) :
@@ -164,5 +178,10 @@ difference: `XZ.add`. It does not depend on the model, so it takes none. -/
 /-- The Montgomery ladder of `M` over `bits` bits: `XZ.ladder` at `M.a24`. -/
 @[expose] def ladder (bits k : ℕ) (u : F) : F :=
   XZ.ladder M.a24 bits k u
+
+/-- The Montgomery ladder of `M` over a sequence of bits, most significant first:
+`XZ.ladderBits` at `M.a24`. -/
+@[expose] def ladderBits (bs : List Bool) (u : F) : F :=
+  XZ.ladderBits M.a24 bs u
 
 end MontgomeryModel

@@ -129,9 +129,9 @@ theorem toField_inv_of_mod {r a : FieldElement51} (h1 : a.asNat % p ≠ 0 → r.
 /-- The shape of `invert_batch_spec` (entry by entry): the inverse, with zeros left in place, so
 `0⁻¹ = 0`; limbs `< 2^52` in, `< 2^52` out. -/
 theorem toField_inv_of_batch {r a : FieldElement51} (h0 : a.asNat % p = 0 → r = a)
-    (h1 : a.asNat % p ≠ 0 → r.asNat * a.asNat % p = 1 ∧ ∀ j < 5, r[j]!.val < 2 ^ 52)
-    (ha : ∀ j < 5, a[j]!.val < 2 ^ 52) :
-    r.toField = a.toField⁻¹ ∧ ∀ j < 5, r[j]!.val < 2 ^ 52 := by
+    (h1 : a.asNat % p ≠ 0 → r.asNat * a.asNat % p = 1 ∧ r.LimbsLt 52)
+    (ha : a.LimbsLt 52) :
+    r.toField = a.toField⁻¹ ∧ r.LimbsLt 52 := by
   by_cases hz : a.asNat % p = 0
   · rw [h0 hz, toField_eq_zero_iff.mpr hz, inv_zero]
     exact ⟨rfl, ha⟩
@@ -155,13 +155,13 @@ theorem asNat_eq_val_of_mod {s : Array U8 32#usize} {a : FieldElement51}
 /-! ### Limb bounds -/
 
 theorem limbs_lt_of_le {a : FieldElement51} {k l : ℕ} (hkl : k ≤ l)
-    (h : ∀ i < 5, a[i]!.val < 2 ^ k) : ∀ i < 5, a[i]!.val < 2 ^ l :=
+    (h : a.LimbsLt k) : a.LimbsLt l :=
   fun i hi => (h i hi).trans_le (Nat.pow_le_pow_right two_pos hkl)
 
 /-- The limbs of `add_spec`'s output: one bit more than its inputs. -/
 theorem limbs_add_lt {r a b : FieldElement51} {k : ℕ}
-    (h : ∀ i < 5, r[i]!.val = a[i]!.val + b[i]!.val) (ha : ∀ i < 5, a[i]!.val < 2 ^ k)
-    (hb : ∀ i < 5, b[i]!.val < 2 ^ k) : ∀ i < 5, r[i]!.val < 2 ^ (k + 1) := fun i hi => by
+    (h : ∀ i < 5, r[i]!.val = a[i]!.val + b[i]!.val) (ha : a.LimbsLt k)
+    (hb : b.LimbsLt k) : r.LimbsLt (k + 1) := fun i hi => by
   rw [h i hi, pow_succ]
   have := ha i hi
   have := hb i hi
@@ -197,7 +197,7 @@ theorem asNat_repeat_zero : FieldElement51.asNat (Array.repeat 5#usize 0#u64) = 
 theorem toField_repeat_zero : FieldElement51.toField (Array.repeat 5#usize 0#u64) = 0 :=
   toField_eq_zero_of_asNat asNat_repeat_zero
 
-theorem limbs_repeat_zero_lt (k : ℕ) : ∀ i < 5, (Array.repeat 5#usize 0#u64)[i]!.val < 2 ^ k :=
+theorem limbs_repeat_zero_lt (k : ℕ) : FieldElement51.LimbsLt k (Array.repeat 5#usize 0#u64) :=
   fun i hi => by
     rw [Array.getElem!_repeat 0#u64 (by simpa using hi)]
     exact Nat.two_pow_pos k

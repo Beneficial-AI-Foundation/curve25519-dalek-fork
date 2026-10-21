@@ -67,7 +67,7 @@ private theorem compress_batch_alloc_loop1_spec (inputs : Slice EdwardsPoint.«x
     (hn : n.val = inputs.length) (zs : alloc.vec.Vec FieldElement51)
     (hzslen : zs.length = inputs.length)
     (hzs : ∀ k < inputs.length,
-      zs[k]!.toField = inputs[k]!.Z.toField⁻¹ ∧ ∀ j < 5, (zs[k]!)[j]!.val < 2 ^ 52)
+      zs[k]!.toField = inputs[k]!.Z.toField⁻¹ ∧ (zs[k]!).LimbsLt 52)
     (out : alloc.vec.Vec CompressedEdwardsY) (i : Usize) (hi : i.val ≤ n.val)
     (hlen : out.length = i.val)
     (hout : ∀ k < i.val, out[k]!.asNat = (inputs[k]!.Y.toField / inputs[k]!.Z.toField).val +
@@ -126,7 +126,7 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»
     (alloc.vec.Vec.with_capacity FieldElement51 (Slice.len inputs)) 0#usize (by scalar_tac)
     (by rfl) (fun k hk => absurd hk (Nat.not_lt_zero k)) as ⟨z1, hz1len, hz1⟩
   simp only [alloc.vec.Vec.deref_mut, lift]
-  have hz1b : ∀ k < z1.slice.length, ∀ j < 5, (z1.slice[k]!)[j]!.val < 2 ^ 54 :=
+  have hz1b : ∀ k < z1.slice.length, (z1.slice[k]!).LimbsLt 54 :=
     fun k hk j hj => by
       rw [alloc.vec.Vec.getElem!_slice, hz1 k (hz1len ▸ hk)]
       exact ((hinputs k (hz1len ▸ hk)).2.2.1 j hj).trans (by norm_num : (2 : ℕ) ^ 52 < 2 ^ 54)
@@ -134,7 +134,7 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»
   have hs1' : ∀ k < inputs.length,
       ({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!.toField =
         inputs[k]!.Z.toField⁻¹ ∧
-      ∀ j < 5, (({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!)[j]!.val < 2 ^ 52 := by
+      (({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!).LimbsLt 52 := by
     intro k hk
     obtain ⟨h0, h1⟩ := hs1 k (by rw [← hz1len] at hk; exact hk)
     rw [alloc.vec.Vec.getElem!_mk]
@@ -200,7 +200,7 @@ private theorem compress_batch_alloc_loop1_spec (inputs : Slice EdwardsPoint.«x
     (hn : n.val = inputs.length) (zs : alloc.vec.Vec FieldElement51)
     (hzslen : zs.length = inputs.length)
     (hzs : ∀ k < inputs.length,
-      zs[k]!.toField = inputs[k]!.Z.toField⁻¹ ∧ ∀ j < 5, (zs[k]!)[j]!.val < 2 ^ 52)
+      zs[k]!.toField = inputs[k]!.Z.toField⁻¹ ∧ (zs[k]!).LimbsLt 52)
     (out : alloc.vec.Vec CompressedEdwardsY) (i : Usize) (hi : i.val ≤ n.val)
     (hlen : out.length = i.val)
     (hout : ∀ k < i.val, out[k]!.asNat = (inputs[k]!.Y.toField / inputs[k]!.Z.toField).val +
@@ -259,7 +259,7 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-table
     (alloc.vec.Vec.with_capacity FieldElement51 (Slice.len inputs)) 0#usize (by scalar_tac)
     (by rfl) (fun k hk => absurd hk (Nat.not_lt_zero k)) as ⟨z1, hz1len, hz1⟩
   simp only [alloc.vec.Vec.deref_mut, lift]
-  have hz1b : ∀ k < z1.slice.length, ∀ j < 5, (z1.slice[k]!)[j]!.val < 2 ^ 54 :=
+  have hz1b : ∀ k < z1.slice.length, (z1.slice[k]!).LimbsLt 54 :=
     fun k hk j hj => by
       rw [alloc.vec.Vec.getElem!_slice, hz1 k (hz1len ▸ hk)]
       exact ((hinputs k (hz1len ▸ hk)).2.2.1 j hj).trans (by norm_num : (2 : ℕ) ^ 52 < 2 ^ 54)
@@ -267,7 +267,7 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-table
   have hs1' : ∀ k < inputs.length,
       ({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!.toField =
         inputs[k]!.Z.toField⁻¹ ∧
-      ∀ j < 5, (({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!)[j]!.val < 2 ^ 52 := by
+      (({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!).LimbsLt 52 := by
     intro k hk
     obtain ⟨h0, h1⟩ := hs1 k (by rw [← hz1len] at hk; exact hk)
     rw [alloc.vec.Vec.getElem!_mk]

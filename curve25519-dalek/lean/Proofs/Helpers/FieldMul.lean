@@ -6,6 +6,7 @@ Authors: Markus Dablander, Hoang Le Truong, Oliver Butterley
 module
 public import Curve25519.Basic
 public import Defs.Array
+public import Defs.FieldElement51
 public import Aeneas.Std.Scalar.Bitwise
 public import Aeneas.Std.Scalar.Casts
 public import Aeneas.Std.Scalar.Notations
@@ -227,7 +228,7 @@ theorem carryChain_spec (low_51_bit_mask : Result U64) (a : Array U64 5#usize)
     carryChain low_51_bit_mask a c0 c1 c2 c3 c4 ⦃ (r : Array U64 5#usize) =>
       Array.asNat 51 r % p =
         (c0.val + 2 ^ 51 * c1.val + 2 ^ 102 * c2.val + 2 ^ 153 * c3.val + 2 ^ 204 * c4.val) % p ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      FieldElement51.LimbsLt 52 r ⦄ := by
   unfold carryChain
   step
   step
@@ -241,7 +242,8 @@ theorem carryChain_spec (low_51_bit_mask : Result U64) (a : Array U64 5#usize)
   · rw [Array.asNat_five]
     simp (disch := simp) only [*, Array.getElem!_Nat_set_ne, Array.getElem!_Nat_set_eq]
     exact carryChain_mod_p _ _ _ _ _ rfl rfl rfl (fold_eq _ _ _)
-  · rw [Nat.forall_lt_five]
+  · unfold FieldElement51.LimbsLt
+    rw [Nat.forall_lt_five]
     simp (disch := simp) only [*, Array.getElem!_Nat_set_ne, Array.getElem!_Nat_set_eq]
     have hlt : ∀ x : ℕ, x % 2 ^ 51 < 2 ^ 52 := fun x => (Nat.mod_lt _ (by norm_num)).trans
       (by norm_num)

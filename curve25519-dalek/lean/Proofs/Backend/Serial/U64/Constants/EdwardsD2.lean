@@ -22,7 +22,7 @@ namespace Curve25519Dalek.backend.serial.u64.constants
 @[step]
 theorem EDWARDS_D2_spec :
     EDWARDS_D2 ⦃ (r : FieldElement51) =>
-      r.asNat = (2 * d).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
+      r.asNat = (2 * d).val ∧ r.LimbsLt 51 ⦄ := by
   unfold EDWARDS_D2
   simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*

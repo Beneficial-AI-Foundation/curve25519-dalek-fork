@@ -22,7 +22,7 @@ open scoped Helpers.IndexStep in
 /-- The loop of `add_assign` adds the limbs one by one. -/
 @[local step]
 private theorem add_assign_loop_spec (self rhs : FieldElement51)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, rhs[i]!.val < 2 ^ 54) :
+    (hself : self.LimbsLt 54) (hrhs : rhs.LimbsLt 54) :
     add_assign_loop { start := 0#usize, «end» := 5#usize } self rhs ⦃ (r : FieldElement51) =>
       ∀ i < 5, r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
   unfold add_assign_loop
@@ -51,7 +51,7 @@ private theorem add_assign_loop_spec (self rhs : FieldElement51)
 
 @[step]
 theorem add_assign_spec (self rhs : FieldElement51)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, rhs[i]!.val < 2 ^ 54) :
+    (hself : self.LimbsLt 54) (hrhs : rhs.LimbsLt 54) :
     add_assign self rhs ⦃ (r : FieldElement51) =>
       ∀ i < 5, r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
   unfold add_assign

@@ -30,9 +30,9 @@ private theorem two_pow_sub_one_mul_add (a b : ℕ) :
 
 /-- `pow2k_spec` with the power hidden behind `powTwoPow`. -/
 private theorem pow2k_spec' (self : FieldElement51) (k : U32) (hk : 0 < k.val)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) :
+    (hself : self.LimbsLt 54) :
     self.pow2k k ⦃ (r : FieldElement51) =>
-      r.asNat % p = powTwoPow self.asNat k.val % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat % p = powTwoPow self.asNat k.val % p ∧ r.LimbsLt 52 ⦄ := by
   unfold powTwoPow
   exact backend.serial.u64.field.FieldElement51.pow2k_spec self k hk hself
 
@@ -48,10 +48,10 @@ private theorem pow_step {x y z u w : ℕ} (a b c : ℕ) (hc : a + b = c)
   exact hw.trans h
 
 @[step]
-theorem pow22501_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) :
+theorem pow22501_spec (self : FieldElement51) (hself : self.LimbsLt 54) :
     pow22501 self ⦃ (t19 t3 : FieldElement51) =>
       t19.asNat % p = self.asNat ^ (2 ^ 250 - 1) % p ∧ t3.asNat % p = self.asNat ^ 11 % p ∧
-      (∀ i < 5, t19[i]!.val < 2 ^ 52) ∧ ∀ i < 5, t3[i]!.val < 2 ^ 52 ⦄ := by
+      t19.LimbsLt 52 ∧ t3.LimbsLt 52 ⦄ := by
   unfold pow22501
   step as ⟨t0, ht0, ht0b⟩
   step as ⟨fe, hfe, hfeb⟩

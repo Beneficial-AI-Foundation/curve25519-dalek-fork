@@ -5,6 +5,7 @@ Authors: Oliver Butterley
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.FieldElement51
 import Proofs.Backend.Serial.U64.Field.AddAssign
 public section
 
@@ -15,7 +16,7 @@ namespace Curve25519Dalek.Shared0FieldElement51.Insts
 namespace CoreOpsArithAddSharedAFieldElement51FieldElement51
 @[step]
 theorem add_spec (self rhs : FieldElement51)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, rhs[i]!.val < 2 ^ 54) :
+    (hself : self.LimbsLt 54) (hrhs : rhs.LimbsLt 54) :
     add self rhs ⦃ (r : FieldElement51) =>
       ∀ i < 5, r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
   unfold add

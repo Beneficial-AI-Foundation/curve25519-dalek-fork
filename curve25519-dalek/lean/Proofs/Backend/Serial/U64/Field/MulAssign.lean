@@ -16,9 +16,9 @@ namespace Curve25519Dalek.backend.serial.u64.field.FieldElement51.Insts
 namespace CoreOpsArithMulAssignSharedAFieldElement51
 @[step]
 theorem mul_assign_spec (self rhs : FieldElement51)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, rhs[i]!.val < 2 ^ 54) :
+    (hself : self.LimbsLt 54) (hrhs : rhs.LimbsLt 54) :
     mul_assign self rhs ⦃ (r : FieldElement51) =>
-      r.asNat % p = self.asNat * rhs.asNat % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat % p = self.asNat * rhs.asNat % p ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_assign
   step*
 end CoreOpsArithMulAssignSharedAFieldElement51

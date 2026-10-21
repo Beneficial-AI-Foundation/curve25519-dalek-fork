@@ -45,7 +45,7 @@ private theorem compress_batch.closure_1.call_mut_spec {N : Usize}
     (inputs : Array EdwardsPoint.«x86_64-tables» N) (zs : Array FieldElement51 N) (i : Usize)
     (hi : i.val < N.val) (hinput : inputs[i.val]!.LimbsLt 52)
     (hz : zs[i.val]!.toField = inputs[i.val]!.Z.toField⁻¹)
-    (hzb : ∀ j < 5, (zs[i.val]!)[j]!.val < 2 ^ 52) :
+    (hzb : (zs[i.val]!).LimbsLt 52) :
     compress_batch.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeCompressedEdwardsY.call_mut
       (inputs, zs) i ⦃ (r : CompressedEdwardsY) (c' : compress_batch.closure_1 N) =>
         r.asNat = (inputs[i.val]!.Y.toField / inputs[i.val]!.Z.toField).val +
@@ -77,7 +77,7 @@ theorem compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«x86_64-ta
     have hz : ∀ i < N.val, zs[i]! = inputs[i]!.Z := fun i hi => by
       rw [Array.getElem!_Nat_eq, getElem!_pos zs.val i (by simpa using hi)]
       exact hzs i (by simpa using hi)
-    have hzb : ∀ i < N.val, ∀ j < 5, (zs[i]!)[j]!.val < 2 ^ 54 := fun i hi j hj => by
+    have hzb : ∀ i < N.val, (zs[i]!).LimbsLt 54 := fun i hi j hj => by
       rw [hz i hi]
       exact ((hinputs i hi).2.2.1 j hj).trans (by norm_num : (2 : ℕ) ^ 52 < 2 ^ 54)
     step as ⟨zs1, hzs1⟩
@@ -126,7 +126,7 @@ private theorem compress_batch.closure_1.call_mut_spec {N : Usize}
     (inputs : Array EdwardsPoint.«x86_64-no-tables» N) (zs : Array FieldElement51 N) (i : Usize)
     (hi : i.val < N.val) (hinput : inputs[i.val]!.LimbsLt 52)
     (hz : zs[i.val]!.toField = inputs[i.val]!.Z.toField⁻¹)
-    (hzb : ∀ j < 5, (zs[i.val]!)[j]!.val < 2 ^ 52) :
+    (hzb : (zs[i.val]!).LimbsLt 52) :
     compress_batch.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeCompressedEdwardsY.call_mut
       (inputs, zs) i ⦃ (r : CompressedEdwardsY) (c' : compress_batch.closure_1 N) =>
         r.asNat = (inputs[i.val]!.Y.toField / inputs[i.val]!.Z.toField).val +
@@ -158,7 +158,7 @@ theorem compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«x86_64-no
     have hz : ∀ i < N.val, zs[i]! = inputs[i]!.Z := fun i hi => by
       rw [Array.getElem!_Nat_eq, getElem!_pos zs.val i (by simpa using hi)]
       exact hzs i (by simpa using hi)
-    have hzb : ∀ i < N.val, ∀ j < 5, (zs[i]!)[j]!.val < 2 ^ 54 := fun i hi j hj => by
+    have hzb : ∀ i < N.val, (zs[i]!).LimbsLt 54 := fun i hi j hj => by
       rw [hz i hi]
       exact ((hinputs i hi).2.2.1 j hj).trans (by norm_num : (2 : ℕ) ^ 52 < 2 ^ 54)
     step as ⟨zs1, hzs1⟩

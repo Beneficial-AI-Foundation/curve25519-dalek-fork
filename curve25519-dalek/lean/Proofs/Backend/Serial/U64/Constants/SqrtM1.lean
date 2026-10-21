@@ -21,7 +21,7 @@ namespace Curve25519Dalek.backend.serial.u64.constants
 @[step]
 theorem SQRT_M1_spec :
     SQRT_M1 ⦃ (r : FieldElement51) =>
-      r.asNat = sqrtM1 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
+      r.asNat = sqrtM1 ∧ r.LimbsLt 51 ⦄ := by
   unfold SQRT_M1
   simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*

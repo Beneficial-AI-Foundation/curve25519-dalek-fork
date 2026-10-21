@@ -124,12 +124,13 @@ open scoped Helpers.MaskStep
 @[step]
 theorem from_bytes_spec (bytes : Array U8 32#usize) :
     from_bytes bytes ⦃ (r : FieldElement51) =>
-      r.asNat = bytes.asNat 8 % 2 ^ 255 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
+      r.asNat = bytes.asNat 8 % 2 ^ 255 ∧ r.LimbsLt 51 ⦄ := by
   unfold from_bytes
   step as ⟨two_pow_51, h_two_pow_51⟩
   step as ⟨mask, h_mask⟩
   have h_mask' : mask.val = 2 ^ 51 - 1 := by scalar_tac
   step*
+  unfold FieldElement51.LimbsLt
   rw [FieldElement51.asNat_eq, Nat.forall_lt_five]
   simp only [Array.getElem!_Nat_eq, Array.make_val, List.getElem!_cons_zero,
     List.getElem!_cons_succ]

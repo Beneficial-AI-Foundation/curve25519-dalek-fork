@@ -22,7 +22,7 @@ namespace Curve25519Dalek.backend.serial.u64.constants
 @[step]
 theorem ONE_MINUS_EDWARDS_D_SQUARED_spec :
     ONE_MINUS_EDWARDS_D_SQUARED ⦃ (r : FieldElement51) =>
-      r.asNat = (1 - d ^ 2).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
+      r.asNat = (1 - d ^ 2).val ∧ r.LimbsLt 51 ⦄ := by
   unfold ONE_MINUS_EDWARDS_D_SQUARED
   simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*

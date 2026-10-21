@@ -15,9 +15,9 @@ open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
 
 namespace Curve25519Dalek.backend.serial.u64.field.FieldElement51
 @[step]
-theorem square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) :
+theorem square_spec (self : FieldElement51) (hself : self.LimbsLt 54) :
     square self ⦃ (r : FieldElement51) =>
-      r.asNat % p = self.asNat ^ 2 % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat % p = self.asNat ^ 2 % p ∧ r.LimbsLt 52 ⦄ := by
   unfold square
   step*
 end Curve25519Dalek.backend.serial.u64.field.FieldElement51

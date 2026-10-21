@@ -43,7 +43,7 @@ private theorem square_limbs.carry_spec (a : Array U64 5#usize) (c0 c1 c2 c3 c4 
     square_limbs.carry a c0 c1 c2 c3 c4 ⦃ (r : Array U64 5#usize) =>
       FieldElement51.asNat r % p =
         (c0.val + 2 ^ 51 * c1.val + 2 ^ 102 * c2.val + 2 ^ 153 * c3.val + 2 ^ 204 * c4.val) % p ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      FieldElement51.LimbsLt 52 r ⦄ := by
   have h : square_limbs.carry a c0 c1 c2 c3 c4 =
       carryChain square_limbs.LOW_51_BIT_MASK a c0 c1 c2 c3 c4 := by
     simp only [square_limbs.carry, carryChain, carryAdd, lowLimb, carryOut, carryFold,
@@ -83,7 +83,7 @@ private theorem square_coeffs_mod_p {a0 a1 a2 a3 a4 c0 c1 c2 c3 c4 : ℕ}
 
 @[local step]
 private theorem square_limbs.prod_spec (a : Array U64 5#usize)
-    (ha : ∀ i < 5, a[i]!.val < 2 ^ 54) :
+    (ha : FieldElement51.LimbsLt 54 a) :
     square_limbs.prod a ⦃ (a3 a4 a0 a1 a2 : U64) (c0 c1 c2 c3 c4 : U128) =>
       a0.val = a[0]!.val ∧ a1.val = a[1]!.val ∧ a2.val = a[2]!.val ∧ a3.val = a[3]!.val ∧
       a4.val = a[4]!.val ∧
@@ -105,10 +105,10 @@ private theorem square_limbs.prod_spec (a : Array U64 5#usize)
   simpa [*] using hc
 
 @[step]
-theorem square_limbs_spec (a : Array U64 5#usize) (ha : ∀ i < 5, a[i]!.val < 2 ^ 54) :
+theorem square_limbs_spec (a : Array U64 5#usize) (ha : FieldElement51.LimbsLt 54 a) :
     square_limbs a ⦃ (r : Array U64 5#usize) =>
       FieldElement51.asNat r % p = FieldElement51.asNat a ^ 2 % p ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      FieldElement51.LimbsLt 52 r ⦄ := by
   rw [square_limbs_eq]
   step*
   refine ⟨?_, by assumption⟩

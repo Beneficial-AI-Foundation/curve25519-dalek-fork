@@ -17,7 +17,7 @@ namespace Curve25519Dalek.backend.serial.u64.field.FieldElement51
 @[step]
 theorem MINUS_ONE_spec :
     MINUS_ONE ⦃ (r : FieldElement51) =>
-      r.asNat + 1 = p ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
+      r.asNat + 1 = p ∧ r.LimbsLt 51 ⦄ := by
   unfold MINUS_ONE
   simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*

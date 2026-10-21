@@ -30,9 +30,9 @@ namespace Curve25519Dalek.field.FieldElement51
 private def e58 : ℕ := 2 ^ 252 - 3
 
 @[local step]
-private theorem pow_p58_spec' (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) :
+private theorem pow_p58_spec' (self : FieldElement51) (hself : self.LimbsLt 54) :
     pow_p58 self ⦃ (r : FieldElement51) =>
-      r.asNat % p = self.asNat ^ e58 % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ :=
+      r.asNat % p = self.asNat ^ e58 % p ∧ r.LimbsLt 52 ⦄ :=
   pow_p58_spec self hself
 
 private theorem e58_eq : 8 * e58 + 5 = p := by
@@ -159,20 +159,20 @@ private theorem choice_or {a b : subtle.Choice} {P Q : Prop} (ha1 : P → a = 1#
 /-- `conditional_negate` on field elements. -/
 @[local step]
 private theorem conditional_negate_spec (x : FieldElement51) (c : subtle.Choice)
-    (hc : c.IsValid) (hx : ∀ i < 5, x[i]!.val < 2 ^ 54) :
+    (hc : c.IsValid) (hx : x.LimbsLt 54) :
     subtle.ConditionallyNegatable.Blanket.conditional_negate
       backend.serial.u64.field.FieldElement51.Insts.SubtleConditionallySelectable
       Shared0FieldElement51.Insts.CoreOpsArithNegFieldElement51 x c ⦃ (r : FieldElement51) =>
       (c = 0#u8 → r = x) ∧
-      (c = 1#u8 → (r.asNat + x.asNat) % p = 0 ∧ ∀ i < 5, r[i]!.val < 2 ^ 52) ⦄ := by
+      (c = 1#u8 → (r.asNat + x.asNat) % p = 0 ∧ r.LimbsLt 52) ⦄ := by
   unfold subtle.ConditionallyNegatable.Blanket.conditional_negate
   step as ⟨n, hn, hnb⟩
   step as ⟨r, hr0, hr1⟩
   exact ⟨hr0, fun hc => by rw [hr1 hc]; exact ⟨hn, hnb⟩⟩
 
 @[step]
-theorem sqrt_ratio_i_spec (u v : FieldElement51) (hu : ∀ i < 5, u[i]!.val < 2 ^ 54)
-    (hv : ∀ i < 5, v[i]!.val < 2 ^ 54) :
+theorem sqrt_ratio_i_spec (u v : FieldElement51) (hu : u.LimbsLt 54)
+    (hv : v.LimbsLt 54) :
     sqrt_ratio_i u v ⦃ (c : subtle.Choice) (r : FieldElement51) =>
       c.IsValid ∧ (u.asNat % p = 0 → c = 1#u8 ∧ r.asNat % p = 0) ∧
       (u.asNat % p ≠ 0 → v.asNat % p = 0 → c = 0#u8 ∧ r.asNat % p = 0) ∧
@@ -180,7 +180,7 @@ theorem sqrt_ratio_i_spec (u v : FieldElement51) (hu : ∀ i < 5, u[i]!.val < 2 
         c = 1#u8 ∧ r.asNat ^ 2 * v.asNat % p = u.asNat % p) ∧
       (v.asNat % p ≠ 0 → (¬∃ x : ℕ, x ^ 2 * v.asNat % p = u.asNat % p) →
         c = 0#u8 ∧ r.asNat ^ 2 * v.asNat % p = sqrtM1 * u.asNat % p) ∧
-      r.asNat % p % 2 = 0 ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat % p % 2 = 0 ∧ r.LimbsLt 52 ⦄ := by
   unfold sqrt_ratio_i
   step as ⟨fe, hfe, hfeb⟩
   step as ⟨v3, hv3, hv3b⟩
@@ -202,13 +202,13 @@ theorem sqrt_ratio_i_spec (u v : FieldElement51) (hu : ∀ i < 5, u[i]!.val < 2 
   step as ⟨c, hcv, hc⟩
   step as ⟨r1, hr10, hr11⟩
   step as ⟨rn, hrnv, hrn⟩
-  have hr1b : ∀ i < 5, r1[i]!.val < 2 ^ 52 := by
+  have hr1b : r1.LimbsLt 52 := by
     rcases hcv with h | h
     · rw [hr10 h]
       exact hrb
     · rw [hr11 h]
       exact hr'b
-  have hr1b' : ∀ i < 5, r1[i]!.val < 2 ^ 54 := fun i hi =>
+  have hr1b' : r1.LimbsLt 54 := fun i hi =>
     lt_trans (hr1b i hi) (by norm_num)
   step as ⟨r2, hr20, hr21⟩
   step as ⟨out, houtv, hout⟩
@@ -224,7 +224,7 @@ theorem sqrt_ratio_i_spec (u v : FieldElement51) (hu : ∀ i < 5, u[i]!.val < 2 
     · refine neg_mod_two (hr21 h).1 ?_
       rw [← hrn, h]
       rfl
-  have hr2b : ∀ i < 5, r2[i]!.val < 2 ^ 52 := by
+  have hr2b : r2.LimbsLt 52 := by
     rcases hrnv with h | h
     · rw [hr20 h]
       exact hr1b

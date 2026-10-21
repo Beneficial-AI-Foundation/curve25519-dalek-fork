@@ -246,8 +246,11 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   whole file. A long `namespace X.Y` is split into two consecutive `namespace` commands (closed by
   two `end`s); long strings use string gaps (`\` at the end of the line). Only a single token over
   100 characters justifies `set_option linter.style.longLine false in` on that one command.
-- **Limb bounds:** every point structure and table has `LimbsLt (n : ℕ) (self) : Prop`, "every
-  limb is `< 2^n`" (tables: of every entry), stated with the bound: `r.LimbsLt 52` for
+- **Limb bounds:** `FieldElement51.LimbsLt n a` ("every limb `< 2^n`", an `abbrev` so that
+  `step`, `scalar_tac` and `agrind` see the `∀ i < 5` form; write `FieldElement51.LimbsLt k a`
+  when `a` is typed `Array U64 5#usize`, and `unfold` it before `rw [Nat.forall_lt_five]`), and
+  every point structure and table has `LimbsLt (n : ℕ) (self) : Prop` (the conjunction over its
+  coordinates; tables: over every entry), stated with the bound: `r.LimbsLt 52` for
   `EdwardsPoint`, `AffinePoint` and the projective points, `r.LimbsLt 54` for `CompletedPoint` and
   the Niels forms and their tables. Names of `Prop`s follow Mathlib: `Is` + adjective (`IsValid`),
   no `Is` for relations and point conditions (`Represents`, `ProjEq`, `OnCurve`, like Mathlib's
@@ -408,6 +411,13 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   `naf5_digits_eq_zero_of_lt` (`Proofs/Helpers/Naf.lean`: a width-5 NAF of `x < 2^n` has no digit
   above index `n`), reverse iteration over `RangeInclusive` (`Proofs/Helpers/Iterator.lean`) and the
   certified constant `ED25519_BASEPOINT_128_POINT` (`TableCertificate.checkPoint`).
+- `montgomery.rs` (2026-10-21): complete (`Proofs/Montgomery/`, summary `Specs/Montgomery.lean`,
+  24 statements). `Mul`/`MulAssign` are `encodeU (ladder 255 (s.asNat % 2^255) u)` with no
+  precondition; `mul_clamped`/`mul_base_clamped` are `x25519` byte for byte; `mul_base` needs
+  `scalar.asNat < 2^255`; `mul_bits_be` is stated with the new `MontgomeryModel.ladderBits` (ladder
+  over a bit list, most significant first) and `ladderBits_eq_xMul`
+  (`EllipticCurve/Montgomery/XOnly/`); `to_edwards` is stated per variant with `decodeLenient`.
+  The private `ProjectivePoint` and `differential_add_and_double` specs are in the proof files.
 - `traits.rs`: generic `is_identity` (`Proofs/Traits/IsIdentity.lean`, `Specs/Traits.lean`).
 - Point constants: `ED25519_BASEPOINT_POINT`, `EIGHT_TORSION`, `BASEPOINT_ORDER`,
   `ED25519_BASEPOINT_COMPRESSED`, `X25519_BASEPOINT` (`Specs/Constants.lean`).
@@ -417,7 +427,7 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   AffineOddMultiplesOfBasepoint128}.lean` on `Proofs/Helpers/TableCertificate.lean`; standard
   axioms only, 3–6 s per file including imports, < 2 GB). `mul_base`, `mul_base_clamped` and
   `vartime_double_scalar_mul_basepoint` of `x86_64-tables` are therefore unconditional and in
-  `Specs/Edwards.lean` (152 statements; the three new statements await the owner's review).
+  `Specs/Edwards.lean` (the new statements await the owner's review).
 - All x86_64 items are stated for both `«x86_64-tables»` and `«x86_64-no-tables»`; the i686
   variants wait for the u32 backend.
 
@@ -431,8 +441,9 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   behaviour; the per-type summaries do not repeat it (2026-10-20).
 - Spec summaries cover the crate's public API only; the coverage is checked by review, not by a
   committed script or CI step.
-- Limb bounds as `LimbsLt n` (2026-10-21), replacing the per-type `Bounded`; the raw field-level
-  form `∀ i < 5, a[i]!.val < 2 ^ k` in the field specs is still to convert (plan).
+- Limb bounds as `LimbsLt n` (2026-10-21), replacing the per-type `Bounded`, down to the field
+  elements (`FieldElement51.LimbsLt`, 227 field-level bounds converted; the only raw form left is
+  `reduce`'s `< 2^51 + 2^18`). `Scalar52` limbs are still raw (plan).
 - One axiom per external crate (2026-10-21): `subtle.contract`, `zeroize.contract`,
   `core.contract` and `alloc.contract` state all the per-function predicates; the per-function `@[step]` theorems are
   projections. Guard lists name only these (plus `get_target`, `core.fmt.Formatter` and the
@@ -445,7 +456,9 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 1. **New statements in `Specs/Edwards.lean` to review:** `mul_base`, `mul_base_clamped` and
    `vartime_double_scalar_mul_basepoint` of `x86_64-tables` (same shape as the `x86_64-no-tables`
    ones), `is_empty`, and `vartime_triple_scalar_mul_basepoint` (both variants; hypotheses
-   `a1, a2 < 2^128`, the `HalfWidthScalar` invariant the Lean structure does not carry).
+   `a1, a2 < 2^128`, the `HalfWidthScalar` invariant the Lean structure does not carry). All of
+   `Specs/Montgomery.lean` is new; points to check: `mul_base`'s `scalar.asNat < 2^255`, `Mul`
+   using only the low 255 bits, `to_edwards` returning `none` exactly for `u = -1`.
 2. **Aeneas-generated axioms in guard lists:** `…_native.decide.ax_*` (from `toStr` on panic
    messages) and `core.fmt.Formatter` appear in the multiscalar/table guards; acceptable?
 3. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
@@ -494,28 +507,23 @@ emit constants as literals (no longer needed).
 
 ## Plan
 
-1. The owner's review of the new `Specs/Edwards.lean` statements (open decision 1).
-2. **`FieldElement51.LimbsLt n`:** define it, write the point predicates' bodies with it
-   (`X.LimbsLt n ∧ Y.LimbsLt n ∧ …`), and replace the raw `∀ i < 5, a[i]!.val < 2 ^ k` of the field
-   specs (about 200 occurrences in `Proofs/`; statements change, so sign-off).
-3. `montgomery.rs`: library support in `Curve25519/{X25519,Montgomery}.lean` (`x25519`, `xMul`,
-   `ladder_eq_xMul`, `x25519_eq_u_nsmul`, `x25519_basepoint_edwards`, `edwardsToMontgomery`,
-   `montgomeryTwist`) and `Defs/Montgomery.lean` (`MontgomeryPoint.u`, `ProjectivePoint.toXZ`,
-   `LimbsLt`). `mul_clamped` is exactly RFC 7748 X25519 (byte-exact via `x25519`), `Mul` uses
-   `scalar.asNat % 2^255` with no precondition, and the old project's Montgomery `mul_spec` was
-   false (do not port it).
-4. `ristretto.rs` (+ `elligator.rs`): library support in `Curve25519/Ristretto/*` (`Rel`,
+1. The owner's review of the new `Specs/Edwards.lean` and `Specs/Montgomery.lean` statements
+   (open decision 1).
+2. **`Scalar52.LimbsLt n`:** the same for the scalar limbs (`∀ i < 5, a[i]!.val < 2 ^ 52` in
+   `Proofs/Backend/Serial/U64/Scalar/`, `Proofs/Scalar/`, the `R`/`RR` constants), as an
+   `abbrev` like `FieldElement51.LimbsLt`.
+3. `ristretto.rs` (+ `elligator.rs`): library support in `Curve25519/Ristretto/*` (`Rel`,
    `rel_iff_formula` = meaning of `ct_eq`, `even_iff_isSquare`, `decodeRep`/`encodeRep`,
    `sqrtRatioM1` with the uniqueness lemmas to match `sqrt_ratio_i_spec` via
    `Proofs/Helpers/ToField.lean`'s `sqrtRatioM1_eq_of_spec`, `mapRep`, `fromUniformRep`). First
    move the private `conditional_negate_spec`, duplicated in `Proofs/Field/SqrtRatioI.lean` and
    `Proofs/Edwards/Decompress.lean`, to `Proofs/Helpers`.
-5. Remaining files (`constants.rs` Ristretto constants, …; `lizard`: open decision 5).
-6. The u32 backend (below).
-7. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
+4. Remaining files (`constants.rs` Ristretto constants, …; `lizard`: open decision 5).
+5. The u32 backend (below).
+6. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
-8. Add std lib models to Aeneas.
+7. Add std lib models to Aeneas.
 
 ### u32 backend
 

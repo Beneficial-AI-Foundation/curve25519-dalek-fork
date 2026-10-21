@@ -19,7 +19,7 @@ namespace Curve25519Dalek.backend.serial.u64.field.FieldElement51.Insts.CoreDefa
 @[step]
 theorem default_spec :
     default ⦃ (r : FieldElement51) =>
-      r.asNat = 0 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
+      r.asNat = 0 ∧ r.LimbsLt 51 ⦄ := by
   unfold default
   step*
 

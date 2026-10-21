@@ -39,15 +39,15 @@ private theorem to_montgomery_batch_loop0_spec (eds : Slice EdwardsPoint.«x86_6
     (den : alloc.vec.Vec FieldElement51) (i : Usize) (hi : i.val ≤ n.val)
     (hlen : den.length = i.val)
     (hden : ∀ k < i.val, den[k]!.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧
-      ∀ j < 5, (den[k]!)[j]!.val < 2 ^ 52) :
+      (den[k]!).LimbsLt 52) :
     to_montgomery_batch_loop0 eds n den i ⦃ (r : alloc.vec.Vec FieldElement51) =>
       r.length = eds.length ∧ ∀ k < eds.length,
         r[k]!.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧
-        ∀ j < 5, (r[k]!)[j]!.val < 2 ^ 52 ⦄ := by
+        (r[k]!).LimbsLt 52 ⦄ := by
   unfold to_montgomery_batch_loop0
   apply loop.spec_decr_nat (measure := fun (_, i') => n.val - i'.val)
     (inv := fun (d, i') => i'.val ≤ n.val ∧ d.length = i'.val ∧ ∀ k < i'.val,
-      d[k]!.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧ ∀ j < 5, (d[k]!)[j]!.val < 2 ^ 52)
+      d[k]!.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧ (d[k]!).LimbsLt 52)
   · rintro ⟨d, i'⟩ ⟨hi', hl, hd⟩
     unfold to_montgomery_batch_loop0.body
     by_cases hlt : i' < n
@@ -61,7 +61,7 @@ private theorem to_montgomery_batch_loop0_spec (eds : Slice EdwardsPoint.«x86_6
         by scalar_tac⟩
       rw [hi1, ← hl]
       exact alloc.vec.Vec.forall_lt_of_val_eq_append (P := fun k x =>
-          x.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧ ∀ j < 5, x[j]!.val < 2 ^ 52)
+          x.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧ x.LimbsLt 52)
         hd1 (hl ▸ hd) ⟨by rw [toField_sub_of_mod hfe, hep, hl], hfeb⟩
     · simp only [hlt, ite_false, WP.spec_ok]
       have hin : i'.val = eds.length := by scalar_tac
@@ -76,7 +76,7 @@ private theorem to_montgomery_batch_loop1_spec (eds : Slice EdwardsPoint.«x86_6
     (den : alloc.vec.Vec FieldElement51) (hdenlen : den.length = eds.length)
     (hden : ∀ k < eds.length,
       den[k]!.toField = (eds[k]!.Z.toField - eds[k]!.Y.toField)⁻¹ ∧
-      ∀ j < 5, (den[k]!)[j]!.val < 2 ^ 54)
+      (den[k]!).LimbsLt 54)
     (ret : alloc.vec.Vec montgomery.MontgomeryPoint) (i : Usize) (hi : i.val ≤ n.val)
     (hlen : ret.length = i.val)
     (hret : ∀ k < i.val, ret[k]!.asNat = ((eds[k]!.Z.toField + eds[k]!.Y.toField) /
@@ -136,7 +136,7 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
     (alloc.vec.Vec.with_capacity FieldElement51 (Slice.len eds)) 0#usize (by scalar_tac) (by rfl)
     (fun k hk => absurd hk (Nat.not_lt_zero k)) as ⟨d1, hd1len, hd1⟩
   simp only [alloc.vec.Vec.deref_mut, lift]
-  have hd1b : ∀ k < d1.slice.length, ∀ j < 5, (d1.slice[k]!)[j]!.val < 2 ^ 54 :=
+  have hd1b : ∀ k < d1.slice.length, (d1.slice[k]!).LimbsLt 54 :=
     fun k hk j hj => by
       rw [alloc.vec.Vec.getElem!_slice]
       exact ((hd1 k (hd1len ▸ hk)).2 j hj).trans (by norm_num : (2 : ℕ) ^ 52 < 2 ^ 54)
@@ -144,7 +144,7 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
   have hs1' : ∀ k < eds.length,
       ({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!.toField =
         (eds[k]!.Z.toField - eds[k]!.Y.toField)⁻¹ ∧
-      ∀ j < 5, (({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!)[j]!.val < 2 ^ 54 := by
+      (({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!).LimbsLt 54 := by
     intro k hk
     obtain ⟨hdk, hdkb⟩ := hd1 k hk
     obtain ⟨h0, h1⟩ := hs1 k (by rw [← hd1len] at hk; exact hk)
@@ -182,15 +182,15 @@ private theorem to_montgomery_batch_loop0_spec (eds : Slice EdwardsPoint.«x86_6
     (den : alloc.vec.Vec FieldElement51) (i : Usize) (hi : i.val ≤ n.val)
     (hlen : den.length = i.val)
     (hden : ∀ k < i.val, den[k]!.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧
-      ∀ j < 5, (den[k]!)[j]!.val < 2 ^ 52) :
+      (den[k]!).LimbsLt 52) :
     to_montgomery_batch_loop0 eds n den i ⦃ (r : alloc.vec.Vec FieldElement51) =>
       r.length = eds.length ∧ ∀ k < eds.length,
         r[k]!.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧
-        ∀ j < 5, (r[k]!)[j]!.val < 2 ^ 52 ⦄ := by
+        (r[k]!).LimbsLt 52 ⦄ := by
   unfold to_montgomery_batch_loop0
   apply loop.spec_decr_nat (measure := fun (_, i') => n.val - i'.val)
     (inv := fun (d, i') => i'.val ≤ n.val ∧ d.length = i'.val ∧ ∀ k < i'.val,
-      d[k]!.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧ ∀ j < 5, (d[k]!)[j]!.val < 2 ^ 52)
+      d[k]!.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧ (d[k]!).LimbsLt 52)
   · rintro ⟨d, i'⟩ ⟨hi', hl, hd⟩
     unfold to_montgomery_batch_loop0.body
     by_cases hlt : i' < n
@@ -204,7 +204,7 @@ private theorem to_montgomery_batch_loop0_spec (eds : Slice EdwardsPoint.«x86_6
         by scalar_tac⟩
       rw [hi1, ← hl]
       exact alloc.vec.Vec.forall_lt_of_val_eq_append (P := fun k x =>
-          x.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧ ∀ j < 5, x[j]!.val < 2 ^ 52)
+          x.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧ x.LimbsLt 52)
         hd1 (hl ▸ hd) ⟨by rw [toField_sub_of_mod hfe, hep, hl], hfeb⟩
     · simp only [hlt, ite_false, WP.spec_ok]
       have hin : i'.val = eds.length := by scalar_tac
@@ -219,7 +219,7 @@ private theorem to_montgomery_batch_loop1_spec (eds : Slice EdwardsPoint.«x86_6
     (den : alloc.vec.Vec FieldElement51) (hdenlen : den.length = eds.length)
     (hden : ∀ k < eds.length,
       den[k]!.toField = (eds[k]!.Z.toField - eds[k]!.Y.toField)⁻¹ ∧
-      ∀ j < 5, (den[k]!)[j]!.val < 2 ^ 54)
+      (den[k]!).LimbsLt 54)
     (ret : alloc.vec.Vec montgomery.MontgomeryPoint) (i : Usize) (hi : i.val ≤ n.val)
     (hlen : ret.length = i.val)
     (hret : ∀ k < i.val, ret[k]!.asNat = ((eds[k]!.Z.toField + eds[k]!.Y.toField) /
@@ -279,7 +279,7 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
     (alloc.vec.Vec.with_capacity FieldElement51 (Slice.len eds)) 0#usize (by scalar_tac) (by rfl)
     (fun k hk => absurd hk (Nat.not_lt_zero k)) as ⟨d1, hd1len, hd1⟩
   simp only [alloc.vec.Vec.deref_mut, lift]
-  have hd1b : ∀ k < d1.slice.length, ∀ j < 5, (d1.slice[k]!)[j]!.val < 2 ^ 54 :=
+  have hd1b : ∀ k < d1.slice.length, (d1.slice[k]!).LimbsLt 54 :=
     fun k hk j hj => by
       rw [alloc.vec.Vec.getElem!_slice]
       exact ((hd1 k (hd1len ▸ hk)).2 j hj).trans (by norm_num : (2 : ℕ) ^ 52 < 2 ^ 54)
@@ -287,7 +287,7 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
   have hs1' : ∀ k < eds.length,
       ({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!.toField =
         (eds[k]!.Z.toField - eds[k]!.Y.toField)⁻¹ ∧
-      ∀ j < 5, (({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!)[j]!.val < 2 ^ 54 := by
+      (({ slice := s1 } : alloc.vec.Vec FieldElement51)[k]!).LimbsLt 54 := by
     intro k hk
     obtain ⟨hdk, hdkb⟩ := hd1 k hk
     obtain ⟨h0, h1⟩ := hs1 k (by rw [← hd1len] at hk; exact hk)

@@ -69,9 +69,9 @@ private theorem square2_loop_spec (iter : core.slice.iter.IterMut U64)
   · exact ⟨rfl, le_refl _, hi, fun im him => ⟨im, rfl, him, fun j hj => by simp⟩⟩
 
 @[step]
-theorem square2_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) :
+theorem square2_spec (self : FieldElement51) (hself : self.LimbsLt 54) :
     square2 self ⦃ (r : FieldElement51) =>
-      r.asNat % p = 2 * self.asNat ^ 2 % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 53 ⦄ := by
+      r.asNat % p = 2 * self.asNat ^ 2 % p ∧ r.LimbsLt 53 ⦄ := by
   unfold square2
   step as ⟨sq, hsq, hsq_lt⟩
   step as ⟨it, back, hit, hi0, hback⟩

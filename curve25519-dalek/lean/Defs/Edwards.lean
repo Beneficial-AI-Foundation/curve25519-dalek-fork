@@ -67,8 +67,7 @@ theorem toPoint_def (self : EdwardsPoint.«x86_64-tables») :
 
 /-- Every limb of an `EdwardsPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : EdwardsPoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ n)
+  self.X.LimbsLt n ∧ self.Y.LimbsLt n ∧ self.Z.LimbsLt n ∧ self.T.LimbsLt n
 
 /-- Projective equality `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` ignored): what `ct_eq` computes.
 Equality of the represented points when both are on the curve
@@ -105,7 +104,7 @@ theorem toPoint_def (self : AffinePoint.«x86_64-tables») :
 
 /-- Every limb of an `AffinePoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : AffinePoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.x[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.y[i]!.val < 2 ^ n)
+  self.x.LimbsLt n ∧ self.y.LimbsLt n
 
 end affine.AffinePoint.«x86_64-tables»
 
@@ -138,8 +137,7 @@ theorem toPoint_def (self : EdwardsPoint.«x86_64-no-tables») :
 
 /-- Every limb of an `EdwardsPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : EdwardsPoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ n)
+  self.X.LimbsLt n ∧ self.Y.LimbsLt n ∧ self.Z.LimbsLt n ∧ self.T.LimbsLt n
 
 /-- Projective equality `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` ignored): what `ct_eq` computes.
 Equality of the represented points when both are on the curve
@@ -176,7 +174,7 @@ theorem toPoint_def (self : AffinePoint.«x86_64-no-tables») :
 
 /-- Every limb of an `AffinePoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : AffinePoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.x[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.y[i]!.val < 2 ^ n)
+  self.x.LimbsLt n ∧ self.y.LimbsLt n
 
 end affine.AffinePoint.«x86_64-no-tables»
 

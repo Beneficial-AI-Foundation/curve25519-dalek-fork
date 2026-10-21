@@ -65,7 +65,7 @@ theorem toXZ_def (self : ProjectivePoint.«x86_64-tables») :
 
 /-- Every limb of a Montgomery `ProjectivePoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : ProjectivePoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.U[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.W[i]!.val < 2 ^ n)
+  self.U.LimbsLt n ∧ self.W.LimbsLt n
 
 end ProjectivePoint.«x86_64-tables»
 
@@ -83,7 +83,7 @@ theorem toXZ_def (self : ProjectivePoint.«x86_64-no-tables») :
 
 /-- Every limb of a Montgomery `ProjectivePoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : ProjectivePoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.U[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.W[i]!.val < 2 ^ n)
+  self.U.LimbsLt n ∧ self.W.LimbsLt n
 
 end ProjectivePoint.«x86_64-no-tables»
 

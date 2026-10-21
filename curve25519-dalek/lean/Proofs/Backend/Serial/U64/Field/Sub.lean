@@ -44,9 +44,9 @@ open backend.serial.u64.field.SubShared0FieldElement51SharedAFieldElement51Field
 
 @[step]
 theorem sub_spec (self rhs : FieldElement51)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) (hrhs : ∀ i < 5, rhs[i]!.val < 2 ^ 54) :
+    (hself : self.LimbsLt 54) (hrhs : rhs.LimbsLt 54) :
     sub self rhs ⦃ (r : FieldElement51) =>
-      (r.asNat + rhs.asNat) % p = self.asNat % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      (r.asNat + rhs.asNat) % p = self.asNat % p ∧ r.LimbsLt 52 ⦄ := by
   unfold sub
   apply spec_bind (core.array.from_fn_spec 5#usize _ (self, rhs) (fun _ c => c = (self, rhs))
     (fun i x => x.val + rhs[i]!.val = self[i]!.val + SIXTEEN_P[i]!.val) rfl

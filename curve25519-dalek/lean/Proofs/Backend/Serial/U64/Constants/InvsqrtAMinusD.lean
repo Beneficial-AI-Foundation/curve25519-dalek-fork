@@ -23,7 +23,7 @@ namespace Curve25519Dalek.backend.serial.u64.constants
 theorem INVSQRT_A_MINUS_D_spec :
     INVSQRT_A_MINUS_D ⦃ (r : FieldElement51) =>
       r.asNat < p ∧
-      r.asNat ^ 2 * (a - d).val % p = 1 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
+      r.asNat ^ 2 * (a - d).val % p = 1 ∧ r.LimbsLt 51 ⦄ := by
   unfold INVSQRT_A_MINUS_D
   simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*

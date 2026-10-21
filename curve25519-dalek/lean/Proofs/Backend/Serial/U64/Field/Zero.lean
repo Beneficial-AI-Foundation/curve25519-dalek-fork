@@ -16,7 +16,7 @@ namespace Curve25519Dalek.backend.serial.u64.field.FieldElement51
 @[step]
 theorem ZERO_spec :
     ZERO ⦃ (r : FieldElement51) =>
-      r.asNat = 0 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
+      r.asNat = 0 ∧ r.LimbsLt 51 ⦄ := by
   unfold ZERO
   simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*

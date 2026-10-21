@@ -142,9 +142,10 @@ private theorem to_bytes.bytes_eq (l0 l1 l2 l3 l4 : U64) (h0 : l0.val < 2 ^ 51)
 /-- The byte-packing phase of `to_bytes`: canonical limbs are written out as 32 bytes. -/
 @[local step]
 private theorem to_bytes.pack_spec (limbs : Array U64 5#usize)
-    (hlimbs : ∀ i < 5, limbs[i]!.val < 2 ^ 51) :
+    (hlimbs : FieldElement51.LimbsLt 51 limbs) :
     to_bytes.pack limbs ⦃ (s : Array U8 32#usize) =>
       s.asNat 8 = FieldElement51.asNat limbs ∧ s[31]!.val < 2 ^ 7 ⦄ := by
+  unfold FieldElement51.LimbsLt at hlimbs
   rw [Nat.forall_lt_five] at hlimbs
   simp (disch := simp) only [Array.getElem!_Nat_eq, getElem!_pos] at hlimbs
   obtain ⟨h0, h1, h2, h3, h4⟩ := hlimbs
@@ -170,8 +171,9 @@ attribute [local scalar_tac_simps] Nat.shiftRight_eq_div_pow
 /-- The quotient phase of `to_bytes`: `q = ⌊(fe + 19) / 2^255⌋`. -/
 @[local step]
 private theorem to_bytes.quotient_spec (fe : FieldElement51) (i : U64) (hi : i.val = fe[0]!.val)
-    (hfe : ∀ j < 5, fe[j]!.val < 2 ^ 52) :
+    (hfe : fe.LimbsLt 52) :
     to_bytes.quotient fe i ⦃ (q : U64) => q.val = (fe.asNat + 19) / 2 ^ 255 ⦄ := by
+  unfold FieldElement51.LimbsLt at hfe
   rw [Nat.forall_lt_five] at hfe
   rw [FieldElement51.asNat_eq]
   simp (disch := simp) only [Array.getElem!_Nat_eq, getElem!_pos] at hi hfe ⊢
@@ -221,10 +223,11 @@ open scoped Helpers.IndexStep Helpers.UpdateStep Helpers.MaskStep in
 /-- The carry phase of `to_bytes`: `fe + 19 q` reduced modulo `2^255`, in canonical limbs. -/
 @[local step]
 private theorem to_bytes.carry_spec (fe : FieldElement51) (i q : U64) (hi : i.val = fe[0]!.val)
-    (hfe : ∀ j < 5, fe[j]!.val < 2 ^ 52) (hq : q.val ≤ 1) :
+    (hfe : fe.LimbsLt 52) (hq : q.val ≤ 1) :
     to_bytes.carry fe i q ⦃ (r : Array U64 5#usize) =>
       FieldElement51.asNat r = (fe.asNat + 19 * q.val) % 2 ^ 255 ∧
-      ∀ j < 5, r[j]!.val < 2 ^ 51 ⦄ := by
+      FieldElement51.LimbsLt 51 r ⦄ := by
+  unfold FieldElement51.LimbsLt at hfe ⊢
   rw [Nat.forall_lt_five] at hfe
   obtain ⟨h0, h1, h2, h3, h4⟩ := hfe
   simp only [Nat.forall_lt_five, FieldElement51.asNat_eq]

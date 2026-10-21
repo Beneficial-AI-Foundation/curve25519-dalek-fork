@@ -20,7 +20,7 @@ namespace Curve25519Dalek.backend.serial.u64.constants
 @[step]
 theorem APLUS2_OVER_FOUR_spec :
     APLUS2_OVER_FOUR ⦃ (r : FieldElement51) =>
-      r.asNat * 4 = A + 2 ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
+      r.asNat * 4 = A + 2 ∧ r.LimbsLt 51 ⦄ := by
   unfold APLUS2_OVER_FOUR
   simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*

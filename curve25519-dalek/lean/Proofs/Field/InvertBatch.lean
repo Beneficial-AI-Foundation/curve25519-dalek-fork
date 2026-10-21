@@ -17,12 +17,12 @@ namespace Curve25519Dalek.field.FieldElement51
 
 @[step]
 theorem invert_batch_spec {N : Usize} (inputs : Array FieldElement51 N)
-    (hinputs : ∀ i < N.val, ∀ j < 5, (inputs[i]!)[j]!.val < 2 ^ 54) :
+    (hinputs : ∀ i < N.val, (inputs[i]!).LimbsLt 54) :
     invert_batch inputs ⦃ (r : Array FieldElement51 N) =>
       ∀ i < N.val,
         (inputs[i]!.asNat % p = 0 → r[i]! = inputs[i]!) ∧
         (inputs[i]!.asNat % p ≠ 0 → r[i]!.asNat * inputs[i]!.asNat % p = 1 ∧
-          ∀ j < 5, (r[i]!)[j]!.val < 2 ^ 52) ⦄ := by
+          (r[i]!).LimbsLt 52) ⦄ := by
   unfold invert_batch
   step as ⟨one, hone, honeb⟩
   step as ⟨s, back, hs, hback⟩

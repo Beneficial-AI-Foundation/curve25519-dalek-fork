@@ -599,6 +599,72 @@ theorem ladder_zero (a24 : F) (bits k : ℕ) : ladder a24 bits k 0 = 0 := by
 
 end XZ
 
+namespace XZ
+
+/-- The ladder loop over the bits `t - 1, …, 0` of `k` is the loop body folded over those bits. -/
+theorem ladderLoop_eq_foldl (a24 x₁ : F) (k t : ℕ) (s : LadderState F) :
+    ladderLoop a24 x₁ k t s =
+      ((List.range t).reverse.map k.testBit).foldl (ladderStep a24 x₁) s := by
+  induction t generalizing s with
+  | zero => rfl
+  | succ t ih =>
+    rw [ladderLoop, ih, List.range_succ, List.reverse_append, List.reverse_singleton,
+      List.singleton_append, List.map_cons, List.foldl_cons]
+
+/-- The ladder over `bits` bits of `k` is the ladder over the bit sequence
+`k.testBit (bits - 1), …, k.testBit 0`. -/
+theorem ladderXZ_eq_ladderBitsXZ (a24 : F) (bits k : ℕ) (u : F) :
+    ladderXZ a24 bits k u = ladderBitsXZ a24 ((List.range bits).reverse.map k.testBit) u := by
+  simp only [ladderXZ, ladderBitsXZ, ladderLoop_eq_foldl]
+
+end XZ
+
+/-- The integer with the big-endian bits `bs`. -/
+private def ofBitsBE (bs : List Bool) : ℕ :=
+  bs.foldl (fun n b => 2 * n + b.toNat) 0
+
+private theorem ofBitsBE_append (bs : List Bool) (b : Bool) :
+    ofBitsBE (bs ++ [b]) = 2 * ofBitsBE bs + b.toNat := by
+  simp only [ofBitsBE, List.foldl_append, List.foldl_cons, List.foldl_nil]
+
+private theorem ofBitsBE_lt (bs : List Bool) : ofBitsBE bs < 2 ^ bs.length := by
+  induction bs using List.reverseRecOn with
+  | nil => simp [ofBitsBE]
+  | append_singleton bs b ih =>
+    rw [ofBitsBE_append, List.length_append, List.length_singleton, pow_succ]
+    have := Bool.toNat_le b
+    omega
+
+private theorem testBits_ofBitsBE (bs : List Bool) :
+    (List.range bs.length).reverse.map (ofBitsBE bs).testBit = bs := by
+  induction bs using List.reverseRecOn with
+  | nil => rfl
+  | append_singleton bs b ih =>
+    rw [ofBitsBE_append, List.length_append, List.length_singleton, List.range_succ_eq_map,
+      List.reverse_cons, List.map_append, List.map_reverse, List.map_map]
+    have hbit : ∀ i, (2 * ofBitsBE bs + b.toNat).testBit (i + 1) = (ofBitsBE bs).testBit i := by
+      intro i
+      rw [Nat.testBit_succ]
+      congr 1
+      have := Bool.toNat_le b
+      omega
+    have h0 : (2 * ofBitsBE bs + b.toNat).testBit 0 = b := by
+      rw [Nat.testBit_zero]
+      cases b <;> simp
+    simp only [Function.comp_def, Nat.succ_eq_add_one, hbit, List.map_cons, List.map_nil, h0]
+    rw [← List.map_reverse, ih]
+
+namespace XZ
+
+/-- The ladder over the bit sequence `bs` is the ladder over `bs.length` bits of the integer
+with these big-endian bits. -/
+private theorem ladderBits_eq_ladder (a24 : F) (bs : List Bool) (u : F) :
+    ladderBits a24 bs u = ladder a24 bs.length (ofBitsBE bs) u := by
+  rw [ladder, ladderXZ_eq_ladderBitsXZ, testBits_ofBitsBE]
+  rfl
+
+end XZ
+
 /-! ### The ladder of a model -/
 
 /-- The ladder at `u = 0` returns `0`. -/
@@ -658,6 +724,14 @@ theorem ladder_eq_xMul_of_exists {c : F} (hc : ¬ IsSquare c) {bits k : ℕ} (hk
 theorem ladder_eq_xMul [Finite F] {c : F} (hc : ¬ IsSquare c) {bits k : ℕ} (hk : k < 2 ^ bits)
     (u : F) : M.ladder bits k u = M.xMul c k u :=
   ladder_eq_xMul_of_exists hc hk (exists_point_u_or_twist hc u)
+
+/-- Over a finite field, the ladder over a bit sequence `bs` is `xMul` for a non-square `c` at
+the integer `n` with the big-endian bits `bs`: `u ↦ u(n • Q)` on the curve and on the twist. -/
+theorem ladderBits_eq_xMul [Finite F] {c : F} (hc : ¬ IsSquare c) (bs : List Bool) (u : F) :
+    ∃ n < 2 ^ bs.length, (List.range bs.length).reverse.map n.testBit = bs ∧
+      M.ladderBits bs u = M.xMul c n u :=
+  ⟨ofBitsBE bs, ofBitsBE_lt bs, testBits_ofBitsBE bs, by
+    rw [ladderBits, XZ.ladderBits_eq_ladder, ← ladder, ladder_eq_xMul hc (ofBitsBE_lt bs)]⟩
 
 end LadderXMul
 

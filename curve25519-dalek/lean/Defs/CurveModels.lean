@@ -59,8 +59,7 @@ theorem toPoint_def (self : ProjectivePoint.«x86_64-tables») :
 
 /-- Every limb of a `ProjectivePoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : ProjectivePoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ n)
+  self.X.LimbsLt n ∧ self.Y.LimbsLt n ∧ self.Z.LimbsLt n
 
 end ProjectivePoint.«x86_64-tables»
 
@@ -94,8 +93,7 @@ theorem toPoint_def (self : CompletedPoint.«x86_64-tables») :
 
 /-- Every limb of a `CompletedPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : CompletedPoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ n)
+  self.X.LimbsLt n ∧ self.Y.LimbsLt n ∧ self.Z.LimbsLt n ∧ self.T.LimbsLt n
 
 end CompletedPoint.«x86_64-tables»
 
@@ -131,8 +129,7 @@ theorem toPoint_def (self : AffineNielsPoint.«x86_64-tables») :
 
 /-- Every limb of an `AffineNielsPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : AffineNielsPoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.y_plus_x[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.y_minus_x[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.xy2d[i]!.val < 2 ^ n)
+  self.y_plus_x.LimbsLt n ∧ self.y_minus_x.LimbsLt n ∧ self.xy2d.LimbsLt n
 
 /-- Needed for `t[j]!` on tables of `AffineNielsPoint`s; the default is never observed for
 in-range indices. -/
@@ -173,9 +170,7 @@ theorem toPoint_def (self : ProjectiveNielsPoint.«x86_64-tables») :
 
 /-- Every limb of a `ProjectiveNielsPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : ProjectiveNielsPoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.Y_plus_X[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.Y_minus_X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.T2d[i]!.val < 2 ^ n)
+  self.Y_plus_X.LimbsLt n ∧ self.Y_minus_X.LimbsLt n ∧ self.Z.LimbsLt n ∧ self.T2d.LimbsLt n
 
 /-- Needed for `t[j]!` on tables of `ProjectiveNielsPoint`s; the default is never observed for
 in-range indices. -/
@@ -214,8 +209,7 @@ theorem toPoint_def (self : ProjectivePoint.«x86_64-no-tables») :
 
 /-- Every limb of a `ProjectivePoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : ProjectivePoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ n)
+  self.X.LimbsLt n ∧ self.Y.LimbsLt n ∧ self.Z.LimbsLt n
 
 end ProjectivePoint.«x86_64-no-tables»
 
@@ -249,8 +243,7 @@ theorem toPoint_def (self : CompletedPoint.«x86_64-no-tables») :
 
 /-- Every limb of a `CompletedPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : CompletedPoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ n)
+  self.X.LimbsLt n ∧ self.Y.LimbsLt n ∧ self.Z.LimbsLt n ∧ self.T.LimbsLt n
 
 end CompletedPoint.«x86_64-no-tables»
 
@@ -286,8 +279,7 @@ theorem toPoint_def (self : AffineNielsPoint.«x86_64-no-tables») :
 
 /-- Every limb of an `AffineNielsPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : AffineNielsPoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.y_plus_x[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.y_minus_x[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.xy2d[i]!.val < 2 ^ n)
+  self.y_plus_x.LimbsLt n ∧ self.y_minus_x.LimbsLt n ∧ self.xy2d.LimbsLt n
 
 /-- Needed for `t[j]!` on tables of `AffineNielsPoint`s; the default is never observed for
 in-range indices. -/
@@ -328,9 +320,7 @@ theorem toPoint_def (self : ProjectiveNielsPoint.«x86_64-no-tables») :
 
 /-- Every limb of a `ProjectiveNielsPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : ProjectiveNielsPoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.Y_plus_X[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.Y_minus_X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧
-    (∀ i < 5, self.T2d[i]!.val < 2 ^ n)
+  self.Y_plus_X.LimbsLt n ∧ self.Y_minus_X.LimbsLt n ∧ self.Z.LimbsLt n ∧ self.T2d.LimbsLt n
 
 /-- Needed for `t[j]!` on tables of `ProjectiveNielsPoint`s; the default is never observed for
 in-range indices. -/

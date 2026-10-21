@@ -17,13 +17,13 @@ namespace Curve25519Dalek.field.FieldElement51
 
 @[step]
 theorem invert_batch_alloc_spec (inputs : Slice FieldElement51)
-    (hinputs : ∀ i < inputs.length, ∀ j < 5, (inputs[i]!)[j]!.val < 2 ^ 54) :
+    (hinputs : ∀ i < inputs.length, (inputs[i]!).LimbsLt 54) :
     invert_batch_alloc inputs ⦃ (r : Slice FieldElement51) =>
       r.length = inputs.length ∧
       ∀ i < inputs.length,
         (inputs[i]!.asNat % p = 0 → r[i]! = inputs[i]!) ∧
         (inputs[i]!.asNat % p ≠ 0 → r[i]!.asNat * inputs[i]!.asNat % p = 1 ∧
-          ∀ j < 5, (r[i]!)[j]!.val < 2 ^ 52) ⦄ := by
+          (r[i]!).LimbsLt 52) ⦄ := by
   unfold invert_batch_alloc
   step as ⟨one, hone, honeb⟩
   step with alloc.vec.from_elem_spec

@@ -16,13 +16,13 @@ open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
 namespace Curve25519Dalek.backend.serial.u64.field.FieldElement51
 @[local step]
 private theorem pow2k_loop_spec (k : U32) (a : Array U64 5#usize) (hk : 0 < k.val)
-    (ha : ∀ i < 5, a[i]!.val < 2 ^ 54) :
+    (ha : FieldElement51.LimbsLt 54 a) :
     pow2k_loop k a ⦃ (r : Array U64 5#usize) =>
       FieldElement51.asNat r % p = FieldElement51.asNat a ^ 2 ^ k.val % p ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      FieldElement51.LimbsLt 52 r ⦄ := by
   unfold pow2k_loop
   apply loop.spec_decr_nat (measure := fun s => s.1.val)
-    (inv := fun s => 0 < s.1.val ∧ s.1.val ≤ k.val ∧ (∀ i < 5, s.2[i]!.val < 2 ^ 54) ∧
+    (inv := fun s => 0 < s.1.val ∧ s.1.val ≤ k.val ∧ FieldElement51.LimbsLt 54 s.2 ∧
       FieldElement51.asNat s.2 % p = FieldElement51.asNat a ^ 2 ^ (k.val - s.1.val) % p)
   · rintro ⟨k', a'⟩ ⟨hk0, hkk, ha', hmod⟩
     unfold pow2k_loop.body
@@ -44,9 +44,9 @@ private theorem pow2k_loop_spec (k : U32) (a : Array U64 5#usize) (hk : 0 < k.va
 
 @[step]
 theorem pow2k_spec (self : FieldElement51) (k : U32) (hk : 0 < k.val)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) :
+    (hself : self.LimbsLt 54) :
     pow2k self k ⦃ (r : FieldElement51) =>
-      r.asNat % p = self.asNat ^ 2 ^ k.val % p ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat % p = self.asNat ^ 2 ^ k.val % p ∧ r.LimbsLt 52 ⦄ := by
   unfold pow2k
   step*
 end Curve25519Dalek.backend.serial.u64.field.FieldElement51

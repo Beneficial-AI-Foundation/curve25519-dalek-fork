@@ -22,7 +22,7 @@ namespace Curve25519Dalek.backend.serial.u64.constants
 theorem SQRT_AD_MINUS_ONE_spec :
     SQRT_AD_MINUS_ONE ⦃ (r : FieldElement51) =>
       r.asNat < p ∧
-      r.asNat ^ 2 % p = (a * d - 1).val ∧ ∀ i < 5, r[i]!.val < 2 ^ 51 ⦄ := by
+      r.asNat ^ 2 % p = (a * d - 1).val ∧ r.LimbsLt 51 ⦄ := by
   unfold SQRT_AD_MINUS_ONE
   simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   step*

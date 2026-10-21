@@ -483,7 +483,7 @@ theorem rows_getElem!_getElem! {T : Type} [Inhabited T] :
 /-- Every limb of every element of a list passing the bound check is `< 2^54`. -/
 theorem limbs_lt_of_all {fes : List FieldElement51}
     (h : fes.all (fun a => a.val.all fun l => decide (l.val < 2 ^ 54)) = true) {k : ℕ}
-    (hk : k < fes.length) : ∀ i < 5, (fes[k]!)[i]!.val < 2 ^ 54 := by
+    (hk : k < fes.length) : (fes[k]!).LimbsLt 54 := by
   rw [List.all_eq_true] at h
   have ha := h (fes[k]) (List.getElem_mem hk)
   rw [List.all_eq_true] at ha

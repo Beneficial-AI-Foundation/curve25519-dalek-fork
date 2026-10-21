@@ -34,12 +34,12 @@ namespace decompress
 /-- `conditional_negate` on field elements. -/
 @[local step]
 private theorem conditional_negate_spec (x : FieldElement51) (c : subtle.Choice)
-    (hc : c.IsValid) (hx : ∀ i < 5, x[i]!.val < 2 ^ 54) :
+    (hc : c.IsValid) (hx : x.LimbsLt 54) :
     subtle.ConditionallyNegatable.Blanket.conditional_negate
       backend.serial.u64.field.FieldElement51.Insts.SubtleConditionallySelectable
       Shared0FieldElement51.Insts.CoreOpsArithNegFieldElement51 x c ⦃ (r : FieldElement51) =>
       (c = 0#u8 → r = x) ∧
-      (c = 1#u8 → (r.asNat + x.asNat) % p = 0 ∧ ∀ i < 5, r[i]!.val < 2 ^ 52) ⦄ := by
+      (c = 1#u8 → (r.asNat + x.asNat) % p = 0 ∧ r.LimbsLt 52) ⦄ := by
   unfold subtle.ConditionallyNegatable.Blanket.conditional_negate
   step as ⟨n, hn, hnb⟩
   step as ⟨r, hr0, hr1⟩
@@ -62,8 +62,8 @@ private theorem step_1_spec (repr : CompressedEdwardsY) :
       Z.toField = 1 ∧
       (c = 1#u8 ↔ IsSquare (curve25519.edwards.xSq Y.toField)) ∧
       (c = 1#u8 → X.toField ^ 2 = curve25519.edwards.xSq Y.toField) ∧ ¬ X.toField.isNeg ∧
-      (∀ i < 5, X[i]!.val < 2 ^ 52) ∧ (∀ i < 5, Y[i]!.val < 2 ^ 52) ∧
-      (∀ i < 5, Z[i]!.val < 2 ^ 52) ⦄ := by
+      X.LimbsLt 52 ∧ Y.LimbsLt 52 ∧
+      Z.LimbsLt 52 ⦄ := by
   unfold step_1.«x86_64-tables»
   step as ⟨a, ha⟩
   step as ⟨Y, hY, hY_lt⟩
@@ -101,8 +101,8 @@ private theorem step_1_spec (repr : CompressedEdwardsY) :
 
 /-- `decompress::step_2`: `X` negated when bit `255` is set, `T = X Y`; limbs `< 2^52`. -/
 private theorem step_2_spec (repr : CompressedEdwardsY) (X Y Z : FieldElement51)
-    (hX : ∀ i < 5, X[i]!.val < 2 ^ 52) (hY : ∀ i < 5, Y[i]!.val < 2 ^ 52)
-    (hZ : ∀ i < 5, Z[i]!.val < 2 ^ 52) :
+    (hX : X.LimbsLt 52) (hY : Y.LimbsLt 52)
+    (hZ : Z.LimbsLt 52) :
     step_2.«x86_64-tables» repr X Y Z ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       (CompressedEdwardsY.asNat repr / 2 ^ 255 = 0 →
         r.toExtended = ⟨X.toField, Y.toField, Z.toField, X.toField * Y.toField⟩) ∧
@@ -209,8 +209,8 @@ private theorem step_1_spec (repr : CompressedEdwardsY) :
       Z.toField = 1 ∧
       (c = 1#u8 ↔ IsSquare (curve25519.edwards.xSq Y.toField)) ∧
       (c = 1#u8 → X.toField ^ 2 = curve25519.edwards.xSq Y.toField) ∧ ¬ X.toField.isNeg ∧
-      (∀ i < 5, X[i]!.val < 2 ^ 52) ∧ (∀ i < 5, Y[i]!.val < 2 ^ 52) ∧
-      (∀ i < 5, Z[i]!.val < 2 ^ 52) ⦄ := by
+      X.LimbsLt 52 ∧ Y.LimbsLt 52 ∧
+      Z.LimbsLt 52 ⦄ := by
   unfold step_1.«x86_64-no-tables»
   step as ⟨a, ha⟩
   step as ⟨Y, hY, hY_lt⟩
@@ -248,8 +248,8 @@ private theorem step_1_spec (repr : CompressedEdwardsY) :
 
 /-- `decompress::step_2`: `X` negated when bit `255` is set, `T = X Y`; limbs `< 2^52`. -/
 private theorem step_2_spec (repr : CompressedEdwardsY) (X Y Z : FieldElement51)
-    (hX : ∀ i < 5, X[i]!.val < 2 ^ 52) (hY : ∀ i < 5, Y[i]!.val < 2 ^ 52)
-    (hZ : ∀ i < 5, Z[i]!.val < 2 ^ 52) :
+    (hX : X.LimbsLt 52) (hY : Y.LimbsLt 52)
+    (hZ : Z.LimbsLt 52) :
     step_2.«x86_64-no-tables» repr X Y Z ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       (CompressedEdwardsY.asNat repr / 2 ^ 255 = 0 →
         r.toExtended = ⟨X.toField, Y.toField, Z.toField, X.toField * Y.toField⟩) ∧

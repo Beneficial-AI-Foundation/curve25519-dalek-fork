@@ -104,7 +104,7 @@ private theorem reduce_exact_spec (limbs : Array U64 5#usize) :
 @[step]
 theorem reduce_spec (limbs : Array U64 5#usize) :
     reduce limbs ⦃ (r : FieldElement51) =>
-      r.asNat % p = FieldElement51.asNat limbs % p ∧ (∀ i < 5, r[i]!.val < 2 ^ 52) ∧
+      r.asNat % p = FieldElement51.asNat limbs % p ∧ r.LimbsLt 52 ∧
       r.asNat < 2 * p ⦄ := by
   step with reduce_exact_spec
   refine ⟨by grind [Nat.add_mul_mod_self_left], by grind, ?_⟩

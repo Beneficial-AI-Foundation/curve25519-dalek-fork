@@ -29,10 +29,10 @@ private theorem invert_exponent : (2 ^ 250 - 1) * 2 ^ 5 + 11 + 1 = p - 1 := by
   omega
 
 @[step]
-theorem invert_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) :
+theorem invert_spec (self : FieldElement51) (hself : self.LimbsLt 54) :
     invert self ⦃ (r : FieldElement51) =>
       (self.asNat % p ≠ 0 → r.asNat * self.asNat % p = 1) ∧
-      (self.asNat % p = 0 → r.asNat % p = 0) ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      (self.asNat % p = 0 → r.asNat % p = 0) ∧ r.LimbsLt 52 ⦄ := by
   unfold invert
   step as ⟨t19, t3, h19, h3, h19b, h3b⟩
   generalize hn : 2 ^ 250 - 1 = n at h19

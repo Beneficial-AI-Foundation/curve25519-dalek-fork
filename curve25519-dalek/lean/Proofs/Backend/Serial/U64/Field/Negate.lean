@@ -30,9 +30,9 @@ private theorem negate.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU64.call_mut_
   step*
 
 @[step]
-theorem negate_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 ^ 54) :
+theorem negate_spec (self : FieldElement51) (hself : self.LimbsLt 54) :
     negate self ⦃ (r : FieldElement51) =>
-      (r.asNat + self.asNat) % p = 0 ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      (r.asNat + self.asNat) % p = 0 ∧ r.LimbsLt 52 ⦄ := by
   unfold negate
   apply spec_bind (core.array.from_fn_spec 5#usize _ self (fun _ c => c = self)
     (fun i x => x.val + self[i]!.val = SIXTEEN_P[i]!.val) rfl fun i c hi hc => ?_)

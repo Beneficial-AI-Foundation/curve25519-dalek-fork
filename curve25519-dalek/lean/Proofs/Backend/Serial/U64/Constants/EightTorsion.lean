@@ -83,24 +83,24 @@ theorem EIGHT_TORSION_spec :
     rw [f14n, f9n, h5, asNat_def, Array.asNat_def, Array.make_val, p_eq_numeral]; decide
   have hT10' : f10.asNat % p = f14.asNat * f4.asNat % p := by
     rw [f14n, f4n, h10, asNat_def, Array.asNat_def, Array.make_val, p_eq_numeral]; decide
-  have b0 : ∀ i < 5, f0[i]!.val < 2 ^ 52 := by rw [h0]; decide
-  have b1 : ∀ i < 5, f1[i]!.val < 2 ^ 52 := by rw [h1]; decide
-  have b2 : ∀ i < 5, f2[i]!.val < 2 ^ 52 := by rw [h2]; decide
-  have b3 : ∀ i < 5, f3[i]!.val < 2 ^ 52 := by rw [h3]; decide
-  have b4 : ∀ i < 5, f4[i]!.val < 2 ^ 52 := by rw [h4]; decide
-  have b5 : ∀ i < 5, f5[i]!.val < 2 ^ 52 := by rw [h5]; decide
-  have b6 : ∀ i < 5, f6[i]!.val < 2 ^ 52 := by rw [h6]; decide
-  have b7 : ∀ i < 5, f7[i]!.val < 2 ^ 52 := by rw [h7]; decide
-  have b8 : ∀ i < 5, f8[i]!.val < 2 ^ 52 := by rw [h8]; decide
-  have b9 : ∀ i < 5, f9[i]!.val < 2 ^ 52 := by rw [h9]; decide
-  have b10 : ∀ i < 5, f10[i]!.val < 2 ^ 52 := by rw [h10]; decide
-  have b11 : ∀ i < 5, f11[i]!.val < 2 ^ 52 := by rw [h11]; decide
-  have b12 : ∀ i < 5, f12[i]!.val < 2 ^ 52 := by rw [h12]; decide
-  have b13 : ∀ i < 5, f13[i]!.val < 2 ^ 52 := by rw [h13]; decide
-  have b14 : ∀ i < 5, f14[i]!.val < 2 ^ 52 := by rw [h14]; decide
-  have b15 : ∀ i < 5, f15[i]!.val < 2 ^ 52 := by rw [h15]; decide
-  have b16 : ∀ i < 5, f16[i]!.val < 2 ^ 52 := by rw [h16]; decide
-  have b17 : ∀ i < 5, f17[i]!.val < 2 ^ 52 := by rw [h17]; decide
+  have b0 : f0.LimbsLt 52 := by rw [h0]; decide
+  have b1 : f1.LimbsLt 52 := by rw [h1]; decide
+  have b2 : f2.LimbsLt 52 := by rw [h2]; decide
+  have b3 : f3.LimbsLt 52 := by rw [h3]; decide
+  have b4 : f4.LimbsLt 52 := by rw [h4]; decide
+  have b5 : f5.LimbsLt 52 := by rw [h5]; decide
+  have b6 : f6.LimbsLt 52 := by rw [h6]; decide
+  have b7 : f7.LimbsLt 52 := by rw [h7]; decide
+  have b8 : f8.LimbsLt 52 := by rw [h8]; decide
+  have b9 : f9.LimbsLt 52 := by rw [h9]; decide
+  have b10 : f10.LimbsLt 52 := by rw [h10]; decide
+  have b11 : f11.LimbsLt 52 := by rw [h11]; decide
+  have b12 : f12.LimbsLt 52 := by rw [h12]; decide
+  have b13 : f13.LimbsLt 52 := by rw [h13]; decide
+  have b14 : f14.LimbsLt 52 := by rw [h14]; decide
+  have b15 : f15.LimbsLt 52 := by rw [h15]; decide
+  have b16 : f16.LimbsLt 52 := by rw [h16]; decide
+  have b17 : f17.LimbsLt 52 := by rw [h17]; decide
   have e0 : (⟨f0, f1, f1, f2⟩ : edwards.EdwardsPoint.«x86_64-tables»).toExtended =
       (eightTorsion 0).toExtended := by
     rw [edwards.EdwardsPoint.«x86_64-tables».toExtended_def, Point.toExtended, eightTorsion_zero,
@@ -229,24 +229,24 @@ theorem EIGHT_TORSION_spec :
     rw [f14n, f9n, h5, asNat_def, Array.asNat_def, Array.make_val, p_eq_numeral]; decide
   have hT10' : f10.asNat % p = f14.asNat * f4.asNat % p := by
     rw [f14n, f4n, h10, asNat_def, Array.asNat_def, Array.make_val, p_eq_numeral]; decide
-  have b0 : ∀ i < 5, f0[i]!.val < 2 ^ 52 := by rw [h0]; decide
-  have b1 : ∀ i < 5, f1[i]!.val < 2 ^ 52 := by rw [h1]; decide
-  have b2 : ∀ i < 5, f2[i]!.val < 2 ^ 52 := by rw [h2]; decide
-  have b3 : ∀ i < 5, f3[i]!.val < 2 ^ 52 := by rw [h3]; decide
-  have b4 : ∀ i < 5, f4[i]!.val < 2 ^ 52 := by rw [h4]; decide
-  have b5 : ∀ i < 5, f5[i]!.val < 2 ^ 52 := by rw [h5]; decide
-  have b6 : ∀ i < 5, f6[i]!.val < 2 ^ 52 := by rw [h6]; decide
-  have b7 : ∀ i < 5, f7[i]!.val < 2 ^ 52 := by rw [h7]; decide
-  have b8 : ∀ i < 5, f8[i]!.val < 2 ^ 52 := by rw [h8]; decide
-  have b9 : ∀ i < 5, f9[i]!.val < 2 ^ 52 := by rw [h9]; decide
-  have b10 : ∀ i < 5, f10[i]!.val < 2 ^ 52 := by rw [h10]; decide
-  have b11 : ∀ i < 5, f11[i]!.val < 2 ^ 52 := by rw [h11]; decide
-  have b12 : ∀ i < 5, f12[i]!.val < 2 ^ 52 := by rw [h12]; decide
-  have b13 : ∀ i < 5, f13[i]!.val < 2 ^ 52 := by rw [h13]; decide
-  have b14 : ∀ i < 5, f14[i]!.val < 2 ^ 52 := by rw [h14]; decide
-  have b15 : ∀ i < 5, f15[i]!.val < 2 ^ 52 := by rw [h15]; decide
-  have b16 : ∀ i < 5, f16[i]!.val < 2 ^ 52 := by rw [h16]; decide
-  have b17 : ∀ i < 5, f17[i]!.val < 2 ^ 52 := by rw [h17]; decide
+  have b0 : f0.LimbsLt 52 := by rw [h0]; decide
+  have b1 : f1.LimbsLt 52 := by rw [h1]; decide
+  have b2 : f2.LimbsLt 52 := by rw [h2]; decide
+  have b3 : f3.LimbsLt 52 := by rw [h3]; decide
+  have b4 : f4.LimbsLt 52 := by rw [h4]; decide
+  have b5 : f5.LimbsLt 52 := by rw [h5]; decide
+  have b6 : f6.LimbsLt 52 := by rw [h6]; decide
+  have b7 : f7.LimbsLt 52 := by rw [h7]; decide
+  have b8 : f8.LimbsLt 52 := by rw [h8]; decide
+  have b9 : f9.LimbsLt 52 := by rw [h9]; decide
+  have b10 : f10.LimbsLt 52 := by rw [h10]; decide
+  have b11 : f11.LimbsLt 52 := by rw [h11]; decide
+  have b12 : f12.LimbsLt 52 := by rw [h12]; decide
+  have b13 : f13.LimbsLt 52 := by rw [h13]; decide
+  have b14 : f14.LimbsLt 52 := by rw [h14]; decide
+  have b15 : f15.LimbsLt 52 := by rw [h15]; decide
+  have b16 : f16.LimbsLt 52 := by rw [h16]; decide
+  have b17 : f17.LimbsLt 52 := by rw [h17]; decide
   have e0 : (⟨f0, f1, f1, f2⟩ : edwards.EdwardsPoint.«x86_64-no-tables»).toExtended =
       (eightTorsion 0).toExtended := by
     rw [edwards.EdwardsPoint.«x86_64-no-tables».toExtended_def, Point.toExtended, eightTorsion_zero,
