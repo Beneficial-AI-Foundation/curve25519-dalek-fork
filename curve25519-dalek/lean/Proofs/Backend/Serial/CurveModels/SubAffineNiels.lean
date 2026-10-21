@@ -26,11 +26,11 @@ namespace «CoreOpsArithSubSharedAAffineNielsPointx86_64-tablesCompletedPointx86
 `Extended.subAffineNiels`; limbs `< 2^52` and `< 2^54` in, `< 2^54` out. -/
 @[step]
 theorem sub_spec (self : edwards.EdwardsPoint.«x86_64-tables»)
-    (other : AffineNielsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hother : other.Bounded) :
+    (other : AffineNielsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 54) :
     sub self other ⦃ (r : CompletedPoint.«x86_64-tables») =>
       r.toCompleted = self.toExtended.subAffineNiels other.toAffineNiels ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 54 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   obtain ⟨hypx, hymx, hxy2d⟩ := hother
   unfold sub
@@ -59,10 +59,10 @@ theorem sub_spec (self : edwards.EdwardsPoint.«x86_64-tables»)
 
 /-- `Sub<&AffineNielsPoint> for &EdwardsPoint` subtracts the represented points. -/
 theorem sub_spec_point (self : edwards.EdwardsPoint.«x86_64-tables»)
-    (other : AffineNielsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hother : other.Bounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+    (other : AffineNielsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 54) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     sub self other ⦃ (r : CompletedPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 54 ⦄ :=
   spec_mono (sub_spec self other hself hother) fun r ⟨hr, hb⟩ => by
     rw [CompletedPoint.«x86_64-tables».onCurve_iff,
       CompletedPoint.«x86_64-tables».toPoint_def, hr,
@@ -81,11 +81,11 @@ namespace «CoreOpsArithSubSharedAAffineNielsPointx86_64-no-tablesCompletedPoint
 `Extended.subAffineNiels`; limbs `< 2^52` and `< 2^54` in, `< 2^54` out. -/
 @[step]
 theorem sub_spec (self : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (other : AffineNielsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hother : other.Bounded) :
+    (other : AffineNielsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 54) :
     sub self other ⦃ (r : CompletedPoint.«x86_64-no-tables») =>
       r.toCompleted = self.toExtended.subAffineNiels other.toAffineNiels ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 54 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   obtain ⟨hypx, hymx, hxy2d⟩ := hother
   unfold sub
@@ -114,10 +114,10 @@ theorem sub_spec (self : edwards.EdwardsPoint.«x86_64-no-tables»)
 
 /-- `Sub<&AffineNielsPoint> for &EdwardsPoint` subtracts the represented points. -/
 theorem sub_spec_point (self : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (other : AffineNielsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hother : other.Bounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+    (other : AffineNielsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 54) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     sub self other ⦃ (r : CompletedPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 54 ⦄ :=
   spec_mono (sub_spec self other hself hother) fun r ⟨hr, hb⟩ => by
     rw [CompletedPoint.«x86_64-no-tables».onCurve_iff,
       CompletedPoint.«x86_64-no-tables».toPoint_def, hr,

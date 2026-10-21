@@ -27,10 +27,10 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (hborrow : List.Forall₂
       (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄) ys
           ps)
-    (hps : ∀ P ∈ ps, P.Bounded ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeEdwardsPrecomputation.«x86_64-tables») =>
-        r.Represents (ps.map (·.toPoint)) ∧ r.Bounded ⦄ := by
+        r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄ := by
   unfold new
   step with backend.«VartimePrecomputedStrausx86_64-tables».new_spec _ _ _ ys ps hstatic_points
       hborrow
@@ -54,10 +54,10 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (hborrow : List.Forall₂
       (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
           ys ps)
-    (hps : ∀ P ∈ ps, P.Bounded ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeEdwardsPrecomputation.«x86_64-no-tables») =>
-        r.Represents (ps.map (·.toPoint)) ∧ r.Bounded ⦄ := by
+        r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄ := by
   unfold new
   step with backend.«VartimePrecomputedStrausx86_64-no-tables».new_spec _ _ _ ys ps hstatic_points
       hborrow

@@ -69,7 +69,7 @@ limbs `< 2^54`. -/
 theorem AFFINE_ODD_MULTIPLES_OF_BASEPOINT_spec :
     AFFINE_ODD_MULTIPLES_OF_BASEPOINT
       ⦃ (r : window.NafLookupTable8 AffineNielsPoint.«x86_64-tables») =>
-        r.Represents basepoint ∧ r.Bounded ⦄ := by
+        r.Represents basepoint ∧ r.LimbsLt 54 ⦄ := by
   rw [odd_eq, spec_ok]
   constructor
   · intro k hk

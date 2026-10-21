@@ -23,9 +23,9 @@ namespace «EdwardsPointx86_64-tables»
 @[step]
 theorem vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : EdwardsPoint.«x86_64-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
-    (hA : A.Bounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
+    (hA : A.LimbsLt 52) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄ := by
   unfold vartime_double_scalar_mul_basepoint
   step with backend.«x86_64-tables».vartime_double_base_mul_spec as ⟨r, hron, hr, hrb⟩
   exact ⟨hron, hr, hrb⟩
@@ -39,9 +39,9 @@ namespace «EdwardsPointx86_64-no-tables»
 @[step]
 theorem vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : EdwardsPoint.«x86_64-no-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
-    (hA : A.Bounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
+    (hA : A.LimbsLt 52) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄ := by
   unfold vartime_double_scalar_mul_basepoint
   step*
 

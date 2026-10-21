@@ -31,10 +31,10 @@ private theorem sum_loop_spec {T I : Type}
     (hiter : iterInst.Yields iter xs) (ps : List EdwardsPoint.«x86_64-tables»)
     (hborrow : List.Forall₂
       (fun x P => borrowInst.borrow x ⦃ (P' : EdwardsPoint.«x86_64-tables») => P' = P ⦄) xs ps)
-    (hps : ∀ P ∈ ps, P.Bounded) (hps_on : ∀ P ∈ ps, P.OnCurve)
-    (acc : EdwardsPoint.«x86_64-tables») (hacc : acc.Bounded) (hacc_on : acc.OnCurve) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52) (hps_on : ∀ P ∈ ps, P.OnCurve)
+    (acc : EdwardsPoint.«x86_64-tables») (hacc : acc.LimbsLt 52) (hacc_on : acc.OnCurve) :
     sum_loop borrowInst iterInst iter acc ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = acc.toPoint + (ps.map (·.toPoint)).sum ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = acc.toPoint + (ps.map (·.toPoint)).sum ∧ r.LimbsLt 52 ⦄ := by
   induction hiter generalizing acc ps with
   | nil hnext =>
     cases hborrow
@@ -69,9 +69,9 @@ theorem sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«
     (ps : List EdwardsPoint.«x86_64-tables») (hiter : iterInst.Yields iter xs)
     (hborrow : List.Forall₂
       (fun x P => borrowInst.borrow x ⦃ (P' : EdwardsPoint.«x86_64-tables») => P' = P ⦄) xs ps)
-    (hps : ∀ P ∈ ps, P.Bounded) (hps_on : ∀ P ∈ ps, P.OnCurve) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52) (hps_on : ∀ P ∈ ps, P.OnCurve) :
     sum borrowInst iterInst iter ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.LimbsLt 52 ⦄ := by
   unfold sum
   step with Curve25519_dalekTraitsIdentity.identity_spec_point as ⟨acc, hacc_on, hacc, haccb⟩
   apply WP.spec_mono (sum_loop_spec borrowInst iterInst iter xs hiter ps hborrow hps hps_on acc
@@ -95,10 +95,10 @@ private theorem sum_loop_spec {T I : Type}
     (hiter : iterInst.Yields iter xs) (ps : List EdwardsPoint.«x86_64-no-tables»)
     (hborrow : List.Forall₂
       (fun x P => borrowInst.borrow x ⦃ (P' : EdwardsPoint.«x86_64-no-tables») => P' = P ⦄) xs ps)
-    (hps : ∀ P ∈ ps, P.Bounded) (hps_on : ∀ P ∈ ps, P.OnCurve)
-    (acc : EdwardsPoint.«x86_64-no-tables») (hacc : acc.Bounded) (hacc_on : acc.OnCurve) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52) (hps_on : ∀ P ∈ ps, P.OnCurve)
+    (acc : EdwardsPoint.«x86_64-no-tables») (hacc : acc.LimbsLt 52) (hacc_on : acc.OnCurve) :
     sum_loop borrowInst iterInst iter acc ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = acc.toPoint + (ps.map (·.toPoint)).sum ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = acc.toPoint + (ps.map (·.toPoint)).sum ∧ r.LimbsLt 52 ⦄ := by
   induction hiter generalizing acc ps with
   | nil hnext =>
     cases hborrow
@@ -133,9 +133,9 @@ theorem sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«
     (ps : List EdwardsPoint.«x86_64-no-tables») (hiter : iterInst.Yields iter xs)
     (hborrow : List.Forall₂
       (fun x P => borrowInst.borrow x ⦃ (P' : EdwardsPoint.«x86_64-no-tables») => P' = P ⦄) xs ps)
-    (hps : ∀ P ∈ ps, P.Bounded) (hps_on : ∀ P ∈ ps, P.OnCurve) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52) (hps_on : ∀ P ∈ ps, P.OnCurve) :
     sum borrowInst iterInst iter ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.LimbsLt 52 ⦄ := by
   unfold sum
   step with Curve25519_dalekTraitsIdentity.identity_spec_point as ⟨acc, hacc_on, hacc, haccb⟩
   apply WP.spec_mono (sum_loop_spec borrowInst iterInst iter xs hiter ps hborrow hps hps_on acc

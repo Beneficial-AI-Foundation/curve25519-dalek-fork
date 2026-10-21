@@ -24,7 +24,7 @@ namespace EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity
 @[step]
 theorem identity_spec :
     identity ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.toExtended = Extended.identity ∧ r.Bounded ⦄ := by
+      r.toExtended = Extended.identity ∧ r.LimbsLt 52 ⦄ := by
   unfold identity
   step as ⟨zero, hzero, hzero_lt⟩
   step as ⟨one, hone, hone_lt⟩
@@ -37,7 +37,7 @@ theorem identity_spec :
 /-- `Identity for EdwardsPoint` represents the neutral element. -/
 theorem identity_spec_point :
     identity ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄ :=
   spec_mono identity_spec fun r ⟨hr, hb⟩ => by
     rw [EdwardsPoint.«x86_64-tables».onCurve_iff,
       EdwardsPoint.«x86_64-tables».toPoint_def,
@@ -52,7 +52,7 @@ namespace EdwardsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity
 @[step]
 theorem identity_spec :
     identity ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.toExtended = Extended.identity ∧ r.Bounded ⦄ := by
+      r.toExtended = Extended.identity ∧ r.LimbsLt 52 ⦄ := by
   unfold identity
   step as ⟨zero, hzero, hzero_lt⟩
   step as ⟨one, hone, hone_lt⟩
@@ -65,7 +65,7 @@ theorem identity_spec :
 /-- `Identity for EdwardsPoint` represents the neutral element. -/
 theorem identity_spec_point :
     identity ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄ :=
   spec_mono identity_spec fun r ⟨hr, hb⟩ => by
     rw [EdwardsPoint.«x86_64-no-tables».onCurve_iff,
       EdwardsPoint.«x86_64-no-tables».toPoint_def,

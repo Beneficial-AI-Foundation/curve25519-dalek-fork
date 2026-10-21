@@ -20,7 +20,7 @@ namespace «EdwardsPointx86_64-tables»
 
 /-- `EdwardsPoint::is_small_order`: `8 • P = 0`; limbs `< 2^52`. -/
 @[step]
-theorem is_small_order_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem is_small_order_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     is_small_order self ⦃ (b : Bool) => b = true ↔ 8 • self.toPoint = 0 ⦄ := by
   unfold is_small_order
@@ -34,7 +34,7 @@ namespace «EdwardsPointx86_64-no-tables»
 
 /-- `EdwardsPoint::is_small_order`: `8 • P = 0`; limbs `< 2^52`. -/
 @[step]
-theorem is_small_order_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem is_small_order_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     is_small_order self ⦃ (b : Bool) => b = true ↔ 8 • self.toPoint = 0 ⦄ := by
   unfold is_small_order

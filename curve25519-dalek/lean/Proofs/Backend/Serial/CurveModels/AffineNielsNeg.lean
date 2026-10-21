@@ -22,9 +22,9 @@ namespace «CoreOpsArithNegAffineNielsPointx86_64-tables»
 
 /-- `Neg for &AffineNielsPoint`: swap `y + x` and `y - x`, negate `xy2d`; limbs `< 2^54`. -/
 @[step]
-theorem neg_spec (self : AffineNielsPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem neg_spec (self : AffineNielsPoint.«x86_64-tables») (hself : self.LimbsLt 54) :
     neg self ⦃ (r : AffineNielsPoint.«x86_64-tables») =>
-      r.toAffineNiels = self.toAffineNiels.neg ∧ r.Bounded ⦄ := by
+      r.toAffineNiels = self.toAffineNiels.neg ∧ r.LimbsLt 54 ⦄ := by
   obtain ⟨hypx, hymx, hxy2d⟩ := hself
   unfold neg
   step as ⟨xy2d', hxy2d', hxy2d'_lt⟩
@@ -34,10 +34,10 @@ theorem neg_spec (self : AffineNielsPoint.«x86_64-tables») (hself : self.Bound
   · exact ⟨hymx, hypx, limbs_lt_of_le (by decide) hxy2d'_lt⟩
 
 /-- `Neg for &AffineNielsPoint` negates the represented point. -/
-theorem neg_spec_point (self : AffineNielsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem neg_spec_point (self : AffineNielsPoint.«x86_64-tables») (hself : self.LimbsLt 54)
     (hon : self.OnCurve) :
     neg self ⦃ (r : AffineNielsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 54 ⦄ :=
   spec_mono (neg_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [AffineNielsPoint.«x86_64-tables».onCurve_iff,
       AffineNielsPoint.«x86_64-tables».toPoint_def, hr,
@@ -52,9 +52,9 @@ namespace «CoreOpsArithNegAffineNielsPointx86_64-no-tables»
 
 /-- `Neg for &AffineNielsPoint`: swap `y + x` and `y - x`, negate `xy2d`; limbs `< 2^54`. -/
 @[step]
-theorem neg_spec (self : AffineNielsPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem neg_spec (self : AffineNielsPoint.«x86_64-no-tables») (hself : self.LimbsLt 54) :
     neg self ⦃ (r : AffineNielsPoint.«x86_64-no-tables») =>
-      r.toAffineNiels = self.toAffineNiels.neg ∧ r.Bounded ⦄ := by
+      r.toAffineNiels = self.toAffineNiels.neg ∧ r.LimbsLt 54 ⦄ := by
   obtain ⟨hypx, hymx, hxy2d⟩ := hself
   unfold neg
   step as ⟨xy2d', hxy2d', hxy2d'_lt⟩
@@ -64,10 +64,10 @@ theorem neg_spec (self : AffineNielsPoint.«x86_64-no-tables») (hself : self.Bo
   · exact ⟨hymx, hypx, limbs_lt_of_le (by decide) hxy2d'_lt⟩
 
 /-- `Neg for &AffineNielsPoint` negates the represented point. -/
-theorem neg_spec_point (self : AffineNielsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem neg_spec_point (self : AffineNielsPoint.«x86_64-no-tables») (hself : self.LimbsLt 54)
     (hon : self.OnCurve) :
     neg self ⦃ (r : AffineNielsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 54 ⦄ :=
   spec_mono (neg_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [AffineNielsPoint.«x86_64-no-tables».onCurve_iff,
       AffineNielsPoint.«x86_64-no-tables».toPoint_def, hr,

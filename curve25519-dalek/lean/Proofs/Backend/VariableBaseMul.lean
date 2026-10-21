@@ -20,11 +20,11 @@ namespace «x86_64-tables»
 `scalar.asNat < 2^255`; limbs `< 2^52`. -/
 @[step]
 theorem variable_base_mul_spec (point : edwards.EdwardsPoint.«x86_64-tables»)
-    (scalar : scalar.Scalar) (hpoint : point.Bounded) (hon : point.OnCurve)
+    (scalar : scalar.Scalar) (hpoint : point.LimbsLt 52) (hon : point.OnCurve)
     (hscalar : scalar.asNat < 2 ^ 255) :
     variable_base_mul.«x86_64-tables» point scalar
       ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-        r.OnCurve ∧ r.toPoint = scalar.asNat • point.toPoint ∧ r.Bounded ⦄ := by
+        r.OnCurve ∧ r.toPoint = scalar.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold variable_base_mul.«x86_64-tables»
   step*
 
@@ -36,11 +36,11 @@ namespace «x86_64-no-tables»
 `scalar.asNat < 2^255`; limbs `< 2^52`. -/
 @[step]
 theorem variable_base_mul_spec (point : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (scalar : scalar.Scalar) (hpoint : point.Bounded) (hon : point.OnCurve)
+    (scalar : scalar.Scalar) (hpoint : point.LimbsLt 52) (hon : point.OnCurve)
     (hscalar : scalar.asNat < 2 ^ 255) :
     variable_base_mul.«x86_64-no-tables» point scalar
       ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-        r.OnCurve ∧ r.toPoint = scalar.asNat • point.toPoint ∧ r.Bounded ⦄ := by
+        r.OnCurve ∧ r.toPoint = scalar.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold variable_base_mul.«x86_64-no-tables»
   step*
 

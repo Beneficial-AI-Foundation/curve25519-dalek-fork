@@ -31,7 +31,7 @@ namespace «x86_64-tables»
 theorem EIGHT_TORSION_spec :
     EIGHT_TORSION.«x86_64-tables»
       ⦃ (r : Array edwards.EdwardsPoint.«x86_64-tables» 8#usize) =>
-      ∀ i : Fin 8, r[i.val]!.toExtended = (eightTorsion i).toExtended ∧ r[i.val]!.Bounded ⦄ := by
+      ∀ i : Fin 8, r[i.val]!.toExtended = (eightTorsion i).toExtended ∧ r[i.val]!.LimbsLt 52 ⦄ := by
   unfold EIGHT_TORSION.«x86_64-tables» EIGHT_TORSION_INNER_DOC_HIDDEN.«x86_64-tables»
   step as ⟨f0, h0⟩
   step as ⟨f1, h1⟩
@@ -159,7 +159,8 @@ theorem EIGHT_TORSION_spec :
 theorem EIGHT_TORSION_spec_point :
     EIGHT_TORSION.«x86_64-tables»
       ⦃ (r : Array edwards.EdwardsPoint.«x86_64-tables» 8#usize) =>
-      ∀ i : Fin 8, r[i.val]!.OnCurve ∧ r[i.val]!.toPoint = eightTorsion i ∧ r[i.val]!.Bounded ⦄ :=
+      ∀ i : Fin 8, r[i.val]!.OnCurve ∧ r[i.val]!.toPoint = eightTorsion i ∧
+        r[i.val]!.LimbsLt 52 ⦄ :=
   spec_mono EIGHT_TORSION_spec fun r h i => by
     obtain ⟨hr, hb⟩ := h i
     rw [edwards.EdwardsPoint.«x86_64-tables».onCurve_iff,
@@ -176,7 +177,7 @@ namespace «x86_64-no-tables»
 theorem EIGHT_TORSION_spec :
     EIGHT_TORSION.«x86_64-no-tables»
       ⦃ (r : Array edwards.EdwardsPoint.«x86_64-no-tables» 8#usize) =>
-      ∀ i : Fin 8, r[i.val]!.toExtended = (eightTorsion i).toExtended ∧ r[i.val]!.Bounded ⦄ := by
+      ∀ i : Fin 8, r[i.val]!.toExtended = (eightTorsion i).toExtended ∧ r[i.val]!.LimbsLt 52 ⦄ := by
   unfold EIGHT_TORSION.«x86_64-no-tables» EIGHT_TORSION_INNER_DOC_HIDDEN.«x86_64-no-tables»
   step as ⟨f0, h0⟩
   step as ⟨f1, h1⟩
@@ -304,7 +305,8 @@ theorem EIGHT_TORSION_spec :
 theorem EIGHT_TORSION_spec_point :
     EIGHT_TORSION.«x86_64-no-tables»
       ⦃ (r : Array edwards.EdwardsPoint.«x86_64-no-tables» 8#usize) =>
-      ∀ i : Fin 8, r[i.val]!.OnCurve ∧ r[i.val]!.toPoint = eightTorsion i ∧ r[i.val]!.Bounded ⦄ :=
+      ∀ i : Fin 8, r[i.val]!.OnCurve ∧ r[i.val]!.toPoint = eightTorsion i ∧
+        r[i.val]!.LimbsLt 52 ⦄ :=
   spec_mono EIGHT_TORSION_spec fun r h i => by
     obtain ⟨hr, hb⟩ := h i
     rw [edwards.EdwardsPoint.«x86_64-no-tables».onCurve_iff,

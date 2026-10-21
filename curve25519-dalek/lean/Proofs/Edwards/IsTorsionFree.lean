@@ -19,7 +19,7 @@ namespace «EdwardsPointx86_64-tables»
 /-- `EdwardsPoint::is_torsion_free`: `L • P = 0` (multiplication by the unreduced
 `BASEPOINT_ORDER`); limbs `< 2^52`. -/
 @[step]
-theorem is_torsion_free_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem is_torsion_free_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄ := by
   unfold is_torsion_free
@@ -36,7 +36,7 @@ namespace «EdwardsPointx86_64-no-tables»
 /-- `EdwardsPoint::is_torsion_free`: `L • P = 0` (multiplication by the unreduced
 `BASEPOINT_ORDER`); limbs `< 2^52`. -/
 @[step]
-theorem is_torsion_free_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem is_torsion_free_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄ := by
   unfold is_torsion_free

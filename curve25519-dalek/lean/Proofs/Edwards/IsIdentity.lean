@@ -22,7 +22,7 @@ namespace EdwardsPoint.«x86_64-tables»
 /-- `IsIdentity::is_identity` (the blanket implementation of `traits.rs`) at `EdwardsPoint`:
 `ct_eq` with the identity; limbs `< 2^52`. -/
 @[step]
-theorem is_identity_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem is_identity_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     traits.IsIdentity.Blanket.is_identity
       EdwardsPoint.«x86_64-tables».Insts.SubtleConstantTimeEq
@@ -40,7 +40,7 @@ namespace EdwardsPoint.«x86_64-no-tables»
 /-- `IsIdentity::is_identity` (the blanket implementation of `traits.rs`) at `EdwardsPoint`:
 `ct_eq` with the identity; limbs `< 2^52`. -/
 @[step]
-theorem is_identity_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem is_identity_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     traits.IsIdentity.Blanket.is_identity
       EdwardsPoint.«x86_64-no-tables».Insts.SubtleConstantTimeEq

@@ -34,9 +34,9 @@ open scoped Helpers.IndexStep in
 limbs `< 2^52`. -/
 @[step]
 theorem basepoint_spec (self : EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P) :
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄ := by
   unfold basepoint
   step with EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨e, heon, he, heb⟩
@@ -62,9 +62,9 @@ open scoped Helpers.IndexStep in
 limbs `< 2^52`. -/
 @[step]
 theorem basepoint_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P) :
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄ := by
   unfold basepoint
   step with EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨e, heon, he, heb⟩
@@ -90,9 +90,9 @@ open scoped Helpers.IndexStep in
 limbs `< 2^52`. -/
 @[step]
 theorem basepoint_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P) :
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄ := by
   unfold basepoint
   step with EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨e, heon, he, heb⟩
@@ -118,9 +118,9 @@ open scoped Helpers.IndexStep in
 limbs `< 2^52`. -/
 @[step]
 theorem basepoint_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P) :
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄ := by
   unfold basepoint
   step with EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨e, heon, he, heb⟩
@@ -146,9 +146,9 @@ open scoped Helpers.IndexStep in
 limbs `< 2^52`. -/
 @[step]
 theorem basepoint_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P) :
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄ := by
   unfold basepoint
   step with EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨e, heon, he, heb⟩

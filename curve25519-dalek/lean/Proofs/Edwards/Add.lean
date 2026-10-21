@@ -24,12 +24,12 @@ namespace «CoreOpsArithAddSharedAEdwardsPointx86_64-tablesEdwardsPointx86_64-ta
 /-- `Add<&EdwardsPoint> for &EdwardsPoint`: the mixed formula `addProjectiveNiels` on the projective
 Niels form of `other`, back in extended coordinates; limbs `< 2^52`. -/
 @[step]
-theorem add_spec (self other : edwards.EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hother : other.Bounded) :
+theorem add_spec (self other : edwards.EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 52) :
     add self other ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.toExtended =
         (self.toExtended.addProjectiveNiels other.toExtended.toProjectiveNiels).toExtended ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   unfold add
   step as ⟨pnp, hpnp, hpnpb⟩
   step as ⟨cp, hcp, hcpb⟩
@@ -41,8 +41,8 @@ private theorem point_of_post {self other r : edwards.EdwardsPoint.«x86_64-tabl
     (hself_on : self.OnCurve) (hother_on : other.OnCurve)
     (h : r.toExtended =
         (self.toExtended.addProjectiveNiels other.toExtended.toProjectiveNiels).toExtended ∧
-      r.Bounded) :
-    r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.Bounded := by
+      r.LimbsLt 52) :
+    r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 := by
   obtain ⟨hr, hb⟩ := h
   have hon' := Extended.addProjectiveNiels_onCurve edwards_a_eq_neg_one hself_on
     (Extended.onCurve_toProjectiveNiels two_ne_zero hother_on)
@@ -57,10 +57,10 @@ private theorem point_of_post {self other r : edwards.EdwardsPoint.«x86_64-tabl
 
 /-- `Add<&EdwardsPoint> for &EdwardsPoint` on the represented points. -/
 theorem add_spec_point (self other : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.Bounded) (hother : other.Bounded) (hself_on : self.OnCurve)
+    (hself : self.LimbsLt 52) (hother : other.LimbsLt 52) (hself_on : self.OnCurve)
     (hother_on : other.OnCurve) :
     add self other ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (add_spec self other hself hother) fun _ => point_of_post hself_on hother_on
 
 end «CoreOpsArithAddSharedAEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -75,20 +75,20 @@ namespace «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 
 /-- `Add<EdwardsPoint> for EdwardsPoint`: as the borrowed form. -/
 @[step]
-theorem add_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) :
+theorem add_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.toExtended =
         (self.toExtended.addProjectiveNiels rhs.toExtended.toProjectiveNiels).toExtended ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   unfold add
   step*
 
 /-- `Add<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-theorem add_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+theorem add_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (add_spec self rhs hself hrhs) fun _ => point_of_post hself_on hrhs_on
 
 end «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -97,20 +97,20 @@ namespace «CoreOpsArithAddSharedBEdwardsPointx86_64-tablesEdwardsPointx86_64-ta
 
 /-- `Add<&EdwardsPoint> for EdwardsPoint`: as the borrowed form. -/
 @[step]
-theorem add_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) :
+theorem add_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.toExtended =
         (self.toExtended.addProjectiveNiels rhs.toExtended.toProjectiveNiels).toExtended ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   unfold add
   step*
 
 /-- `Add<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-theorem add_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+theorem add_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (add_spec self rhs hself hrhs) fun _ => point_of_post hself_on hrhs_on
 
 end «CoreOpsArithAddSharedBEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -121,20 +121,20 @@ namespace «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 
 /-- `Add<EdwardsPoint> for &EdwardsPoint`: as the borrowed form. -/
 @[step]
-theorem add_spec (self rhs : edwards.EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) :
+theorem add_spec (self rhs : edwards.EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) :
     add self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.toExtended =
         (self.toExtended.addProjectiveNiels rhs.toExtended.toProjectiveNiels).toExtended ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   unfold add
   step*
 
 /-- `Add<EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-theorem add_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+theorem add_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (add_spec self rhs hself hrhs) fun _ => point_of_post hself_on hrhs_on
 
 end «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -146,12 +146,12 @@ namespace «CoreOpsArithAddSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64
 /-- `Add<&EdwardsPoint> for &EdwardsPoint`: the mixed formula `addProjectiveNiels` on the projective
 Niels form of `other`, back in extended coordinates; limbs `< 2^52`. -/
 @[step]
-theorem add_spec (self other : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hother : other.Bounded) :
+theorem add_spec (self other : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 52) :
     add self other ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.toExtended =
         (self.toExtended.addProjectiveNiels other.toExtended.toProjectiveNiels).toExtended ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   unfold add
   step as ⟨pnp, hpnp, hpnpb⟩
   step as ⟨cp, hcp, hcpb⟩
@@ -163,8 +163,8 @@ private theorem point_of_post {self other r : edwards.EdwardsPoint.«x86_64-no-t
     (hself_on : self.OnCurve) (hother_on : other.OnCurve)
     (h : r.toExtended =
         (self.toExtended.addProjectiveNiels other.toExtended.toProjectiveNiels).toExtended ∧
-      r.Bounded) :
-    r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.Bounded := by
+      r.LimbsLt 52) :
+    r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 := by
   obtain ⟨hr, hb⟩ := h
   have hon' := Extended.addProjectiveNiels_onCurve edwards_a_eq_neg_one hself_on
     (Extended.onCurve_toProjectiveNiels two_ne_zero hother_on)
@@ -179,10 +179,10 @@ private theorem point_of_post {self other r : edwards.EdwardsPoint.«x86_64-no-t
 
 /-- `Add<&EdwardsPoint> for &EdwardsPoint` on the represented points. -/
 theorem add_spec_point (self other : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.Bounded) (hother : other.Bounded) (hself_on : self.OnCurve)
+    (hself : self.LimbsLt 52) (hother : other.LimbsLt 52) (hself_on : self.OnCurve)
     (hother_on : other.OnCurve) :
     add self other ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (add_spec self other hself hother) fun _ => point_of_post hself_on hother_on
 
 end «CoreOpsArithAddSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -197,20 +197,20 @@ namespace «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tab
 
 /-- `Add<EdwardsPoint> for EdwardsPoint`: as the borrowed form. -/
 @[step]
-theorem add_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) :
+theorem add_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.toExtended =
         (self.toExtended.addProjectiveNiels rhs.toExtended.toProjectiveNiels).toExtended ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   unfold add
   step*
 
 /-- `Add<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-theorem add_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+theorem add_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (add_spec self rhs hself hrhs) fun _ => point_of_post hself_on hrhs_on
 
 end «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -219,20 +219,20 @@ namespace «CoreOpsArithAddSharedBEdwardsPointx86_64-no-tablesEdwardsPointx86_64
 
 /-- `Add<&EdwardsPoint> for EdwardsPoint`: as the borrowed form. -/
 @[step]
-theorem add_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) :
+theorem add_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.toExtended =
         (self.toExtended.addProjectiveNiels rhs.toExtended.toProjectiveNiels).toExtended ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   unfold add
   step*
 
 /-- `Add<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-theorem add_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+theorem add_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (add_spec self rhs hself hrhs) fun _ => point_of_post hself_on hrhs_on
 
 end «CoreOpsArithAddSharedBEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -243,20 +243,21 @@ namespace «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tab
 
 /-- `Add<EdwardsPoint> for &EdwardsPoint`: as the borrowed form. -/
 @[step]
-theorem add_spec (self rhs : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) :
+theorem add_spec (self rhs : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) :
     add self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.toExtended =
         (self.toExtended.addProjectiveNiels rhs.toExtended.toProjectiveNiels).toExtended ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   unfold add
   step*
 
 /-- `Add<EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-theorem add_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hrhs : rhs.Bounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+theorem add_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-no-tables»)
+    (hself : self.LimbsLt 52)
+    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (add_spec self rhs hself hrhs) fun _ => point_of_post hself_on hrhs_on
 
 end «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»

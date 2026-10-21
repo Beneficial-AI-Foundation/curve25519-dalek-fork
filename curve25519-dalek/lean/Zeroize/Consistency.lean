@@ -8,12 +8,12 @@ public import Curve25519Dalek.Types
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek
 
-/-! # Consistency witness for the `zeroize` spec axioms (not trusted, no axioms)
+/-! # Consistency witness for the `zeroize` axiom (not trusted, no axioms)
 
-Concrete models of the four opaque `zeroize` functions. Each model satisfies the statement of its
-spec axiom in `Zeroize/Basic.lean`, with the opaque constant replaced by the model. Replacing each
-opaque constant by its model therefore turns the axioms into theorems, so the axiom set is
-satisfiable. No `zeroize` axiom can prove `False`.
+Concrete models of the four opaque `zeroize` functions. Each model satisfies its field of
+`zeroize.Contract` in `Zeroize/Basic.lean`, with the opaque constant replaced by the model.
+Replacing each opaque constant by its model therefore turns the axiom `zeroize.contract` into a
+theorem, so it is satisfiable: it cannot prove `False`.
 -/
 
 namespace ZeroizeModel

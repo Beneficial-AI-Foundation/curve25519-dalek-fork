@@ -146,7 +146,7 @@ namespace Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPo
 
 /-- The buckets of `optional_multiscalar_mul`: `n` points on the curve within the limb bounds. -/
 private def BucketsOK (v : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») (n : ℕ) : Prop :=
-  v.length = n ∧ ∀ j < n, v.val[j]!.OnCurve ∧ v.val[j]!.Bounded
+  v.length = n ∧ ∀ j < n, v.val[j]!.OnCurve ∧ v.val[j]!.LimbsLt 52
 
 set_option linter.style.longLine false in
 /-- The first loop: `buckets_count` identities. -/
@@ -154,14 +154,14 @@ set_option linter.style.longLine false in
 private theorem optional_multiscalar_mul_loop0_spec (bc : Usize)
     (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») (b : Usize) (hbc : bc.val ≤ 128)
     (hb : b.val ≤ bc.val) (hlen : buckets.length = b.val)
-    (hbk : ∀ j < b.val, buckets.val[j]!.OnCurve ∧ buckets.val[j]!.Bounded ∧
+    (hbk : ∀ j < b.val, buckets.val[j]!.OnCurve ∧ buckets.val[j]!.LimbsLt 52 ∧
       buckets.val[j]!.toPoint = 0) :
     optional_multiscalar_mul_loop0 bc buckets b
       ⦃ (r : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») => BucketsOK r bc.val ⦄ := by
   unfold optional_multiscalar_mul_loop0
   apply loop.spec_decr_nat (measure := fun (_, b') => bc.val - b'.val)
     (inv := fun (v, b') => b'.val ≤ bc.val ∧ v.length = b'.val ∧
-      ∀ j < b'.val, v.val[j]!.OnCurve ∧ v.val[j]!.Bounded ∧ v.val[j]!.toPoint = 0)
+      ∀ j < b'.val, v.val[j]!.OnCurve ∧ v.val[j]!.LimbsLt 52 ∧ v.val[j]!.toPoint = 0)
   · rintro ⟨v, b'⟩ ⟨hb', hl, hv⟩
     unfold optional_multiscalar_mul_loop0.body
     by_cases hlt : b' < bc
@@ -175,7 +175,7 @@ private theorem optional_multiscalar_mul_loop0_spec (bc : Usize)
         by scalar_tac⟩
       rw [hb1, ← hl]
       exact alloc.vec.Vec.forall_lt_of_val_eq_append
-        (P := fun _ x => x.OnCurve ∧ x.Bounded ∧ x.toPoint = 0) hv1 (hl ▸ hv) ⟨heon, heb, he⟩
+        (P := fun _ x => x.OnCurve ∧ x.LimbsLt 52 ∧ x.toPoint = 0) hv1 (hl ▸ hv) ⟨heon, heb, he⟩
     · simp only [hlt, ite_false, WP.spec_ok]
       have : b'.val = bc.val := by scalar_tac
       exact ⟨this ▸ hl, fun j hj => ⟨(hv j (this ▸ hj)).1, (hv j (this ▸ hj)).2.1⟩⟩
@@ -227,18 +227,19 @@ set_option linter.style.longLine false in
 private theorem optional_multiscalar_mul_loop1_loop2_spec
     (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») (bc : ℕ)
     (hok : BucketsOK buckets bc) (inter sum : edwards.EdwardsPoint.«x86_64-tables») (i : Usize)
-    (hi : i.val < bc) (hinter : inter.OnCurve ∧ inter.Bounded ∧
+    (hi : i.val < bc) (hinter : inter.OnCurve ∧ inter.LimbsLt 52 ∧
       inter.toPoint = ∑ b ∈ Finset.Ico i.val bc, buckets.val[b]!.toPoint)
-    (hsum : sum.OnCurve ∧ sum.Bounded ∧
+    (hsum : sum.OnCurve ∧ sum.LimbsLt 52 ∧
       sum.toPoint = ∑ b ∈ Finset.Ico i.val bc, (b - i.val + 1) • buckets.val[b]!.toPoint) :
     optional_multiscalar_mul_loop1_loop2 buckets inter sum i
-      ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧ r.Bounded ∧
+      ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧ r.LimbsLt 52 ∧
         r.toPoint = wsum edwards.EdwardsPoint.«x86_64-tables».toPoint buckets.val bc ⦄ := by
   unfold optional_multiscalar_mul_loop1_loop2
   apply loop.spec_decr_nat (measure := fun (_, _, i') => i'.val)
     (inv := fun (it, sm, i') => i'.val < bc ∧
-      it.OnCurve ∧ it.Bounded ∧ it.toPoint = ∑ b ∈ Finset.Ico i'.val bc, buckets.val[b]!.toPoint ∧
-      sm.OnCurve ∧ sm.Bounded ∧
+      it.OnCurve ∧ it.LimbsLt 52 ∧
+        it.toPoint = ∑ b ∈ Finset.Ico i'.val bc, buckets.val[b]!.toPoint ∧
+      sm.OnCurve ∧ sm.LimbsLt 52 ∧
         sm.toPoint = ∑ b ∈ Finset.Ico i'.val bc, (b - i'.val + 1) • buckets.val[b]!.toPoint)
   · rintro ⟨it, sm, i'⟩ ⟨hi', hiton, hitb, hitp, hsmon, hsmb, hsmp⟩
     unfold optional_multiscalar_mul_loop1_loop2.body
@@ -279,7 +280,7 @@ private theorem optional_multiscalar_mul_loop1_loop1_spec
     (sp : alloc.vec.Vec ((Array I8 64#usize) × ProjectiveNielsPoint.«x86_64-tables»))
     (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») (e si : Usize) (bc : ℕ)
     (P : ℕ → curve25519.edwards.Point) (he : e.val < 64) (hbc : bc ≤ 128)
-    (hsp : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.Bounded ∧
+    (hsp : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.LimbsLt 54 ∧
       (sp.val[k]!).2.toPoint = P k)
     (hdig : ∀ k < sp.length, -(bc : ℤ) ≤ (sp.val[k]!).1[e.val]!.val ∧
       (sp.val[k]!).1[e.val]!.val ≤ bc)
@@ -400,22 +401,22 @@ private theorem optional_multiscalar_mul_loop1_spec (w bc : Usize)
     (total : Option edwards.EdwardsPoint.«x86_64-tables») (di : Usize)
     (P : ℕ → curve25519.edwards.Point) (dc : ℕ) (hw : 0 < w.val ∧ w.val ≤ 8)
     (hbc1 : 1 ≤ bc.val) (hbc : bc.val ≤ 128) (hdc : dc ≤ 64)
-    (hsp : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.Bounded ∧
+    (hsp : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.LimbsLt 54 ∧
       (sp.val[k]!).2.toPoint = P k)
     (hdig : ∀ k < sp.length, ∀ e < 64, -(bc.val : ℤ) ≤ (sp.val[k]!).1[e]!.val ∧
       (sp.val[k]!).1[e]!.val ≤ (bc.val : ℤ))
     (hok : BucketsOK buckets bc.val) (hdi : di.val ≤ dc)
     (hnone : total = none ↔ di.val = dc)
-    (hsome : ∀ T, total = some T → T.OnCurve ∧ T.Bounded ∧
+    (hsome : ∀ T, total = some T → T.OnCurve ∧ T.LimbsLt 52 ∧
       T.toPoint = ∑ j ∈ Finset.range (dc - di.val), 2 ^ (w.val * j) • column sp P (di.val + j)) :
     optional_multiscalar_mul_loop1 w bc sp buckets total di
       ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (r = none ↔ dc = 0) ∧
-        ∀ T, r = some T → T.OnCurve ∧ T.Bounded ∧
+        ∀ T, r = some T → T.OnCurve ∧ T.LimbsLt 52 ∧
           T.toPoint = ∑ j ∈ Finset.range dc, 2 ^ (w.val * j) • column sp P j ⦄ := by
   unfold optional_multiscalar_mul_loop1
   apply loop.spec_decr_nat (measure := fun (_, _, d) => d.val)
     (inv := fun (v, t, d) => BucketsOK v bc.val ∧ d.val ≤ dc ∧ (t = none ↔ d.val = dc) ∧
-      ∀ T, t = some T → T.OnCurve ∧ T.Bounded ∧
+      ∀ T, t = some T → T.OnCurve ∧ T.LimbsLt 52 ∧
         T.toPoint = ∑ j ∈ Finset.range (dc - d.val), 2 ^ (w.val * j) • column sp P (d.val + j))
   · rintro ⟨v, t, d⟩ ⟨hv, hd, htn, hts⟩
     unfold optional_multiscalar_mul_loop1.body
@@ -509,7 +510,7 @@ private def PairsOK (w : ℕ) (ss : List scalar.Scalar)
     (v : alloc.vec.Vec ((Array I8 64#usize) × ProjectiveNielsPoint.«x86_64-tables»)) (m : ℕ) : Prop
         :=
   v.length = m ∧ ∀ j < m, ∃ P, ops[j]! = some P ∧
-    (v.val[j]!).2.OnCurve ∧ (v.val[j]!).2.Bounded ∧ (v.val[j]!).2.toPoint = P.toPoint ∧
+    (v.val[j]!).2.OnCurve ∧ (v.val[j]!).2.LimbsLt 54 ∧ (v.val[j]!).2.toPoint = P.toPoint ∧
     (v.val[j]!).1.asInt w = ss[j]!.asNat ∧
     (∀ i < 64, -2 ^ w ≤ 2 * (v.val[j]!).1[i]!.val ∧ 2 * (v.val[j]!).1[i]!.val ≤ 2 ^ w) ∧
     ∀ i < 64, 256 < i * w → (v.val[j]!).1[i]!.val = 0
@@ -531,7 +532,7 @@ private theorem scalars_points_loop_spec {S It : Type}
       (fun x s => borrowInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) scalars.val ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (w : Usize) (hw : 4 ≤ w.val ∧ w.val ≤ 8)
     (ops : List (Option edwards.EdwardsPoint.«x86_64-tables»))
-    (hps : ∀ P, some P ∈ ops → P.Bounded ∧ P.OnCurve) (points : It) (k : Usize)
+    (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve) (points : It) (k : Usize)
     (hit : iterInst.Yields points (ops.drop k.val)) (hk : k.val ≤ ss.length)
     (hkops : k.val ≤ ops.length)
     (out : alloc.vec.Vec ((Array I8 64#usize) × ProjectiveNielsPoint.«x86_64-tables»))
@@ -656,14 +657,14 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.Bounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve)
     (hxs : xs.length ≤ Usize.max) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (r = none ↔ none ∈ ops.take ss.length)
           ∧
         ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
-          R.Bounded ⦄ := by
+          R.LimbsLt 52 ⦄ := by
   unfold optional_multiscalar_mul
   have hscalars' : scalarsInst.into_iter scalars
       ⦃ (it : Clause0_IntoIter) => scalarsInst.iteratorInst.Yields it xs ⦄ := hscalars
@@ -720,7 +721,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   · have hnn : none ∉ ops.take ss.length := fun h => by cases hnone.mpr h
     obtain ⟨hsplen, hsp⟩ := hsome sp rfl
     let P : ℕ → curve25519.edwards.Point := fun k => ((ops[k]!).getD default).toPoint
-    have hsp' : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.Bounded ∧
+    have hsp' : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.LimbsLt 54 ∧
         (sp.val[k]!).2.toPoint = P k := fun k hk => by
       obtain ⟨Q, hQ, hon, hb, hp, -⟩ := hsp k (hsplen ▸ hk)
       exact ⟨hon, hb, by rw [hp]; change Q.toPoint = ((ops[k]!).getD default).toPoint; rw [hQ]; rfl⟩
@@ -766,7 +767,7 @@ namespace Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPo
 
 /-- The buckets of `optional_multiscalar_mul`: `n` points on the curve within the limb bounds. -/
 private def BucketsOK (v : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») (n : ℕ) : Prop :=
-  v.length = n ∧ ∀ j < n, v.val[j]!.OnCurve ∧ v.val[j]!.Bounded
+  v.length = n ∧ ∀ j < n, v.val[j]!.OnCurve ∧ v.val[j]!.LimbsLt 52
 
 set_option linter.style.longLine false in
 /-- The first loop: `buckets_count` identities. -/
@@ -775,14 +776,14 @@ private theorem optional_multiscalar_mul_loop0_spec (bc : Usize)
     (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») (b : Usize)
         (hbc : bc.val ≤ 128)
     (hb : b.val ≤ bc.val) (hlen : buckets.length = b.val)
-    (hbk : ∀ j < b.val, buckets.val[j]!.OnCurve ∧ buckets.val[j]!.Bounded ∧
+    (hbk : ∀ j < b.val, buckets.val[j]!.OnCurve ∧ buckets.val[j]!.LimbsLt 52 ∧
       buckets.val[j]!.toPoint = 0) :
     optional_multiscalar_mul_loop0 bc buckets b
       ⦃ (r : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») => BucketsOK r bc.val ⦄ := by
   unfold optional_multiscalar_mul_loop0
   apply loop.spec_decr_nat (measure := fun (_, b') => bc.val - b'.val)
     (inv := fun (v, b') => b'.val ≤ bc.val ∧ v.length = b'.val ∧
-      ∀ j < b'.val, v.val[j]!.OnCurve ∧ v.val[j]!.Bounded ∧ v.val[j]!.toPoint = 0)
+      ∀ j < b'.val, v.val[j]!.OnCurve ∧ v.val[j]!.LimbsLt 52 ∧ v.val[j]!.toPoint = 0)
   · rintro ⟨v, b'⟩ ⟨hb', hl, hv⟩
     unfold optional_multiscalar_mul_loop0.body
     by_cases hlt : b' < bc
@@ -796,7 +797,7 @@ private theorem optional_multiscalar_mul_loop0_spec (bc : Usize)
         by scalar_tac⟩
       rw [hb1, ← hl]
       exact alloc.vec.Vec.forall_lt_of_val_eq_append
-        (P := fun _ x => x.OnCurve ∧ x.Bounded ∧ x.toPoint = 0) hv1 (hl ▸ hv) ⟨heon, heb, he⟩
+        (P := fun _ x => x.OnCurve ∧ x.LimbsLt 52 ∧ x.toPoint = 0) hv1 (hl ▸ hv) ⟨heon, heb, he⟩
     · simp only [hlt, ite_false, WP.spec_ok]
       have : b'.val = bc.val := by scalar_tac
       exact ⟨this ▸ hl, fun j hj => ⟨(hv j (this ▸ hj)).1, (hv j (this ▸ hj)).2.1⟩⟩
@@ -848,18 +849,19 @@ set_option linter.style.longLine false in
 private theorem optional_multiscalar_mul_loop1_loop2_spec
     (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») (bc : ℕ)
     (hok : BucketsOK buckets bc) (inter sum : edwards.EdwardsPoint.«x86_64-no-tables») (i : Usize)
-    (hi : i.val < bc) (hinter : inter.OnCurve ∧ inter.Bounded ∧
+    (hi : i.val < bc) (hinter : inter.OnCurve ∧ inter.LimbsLt 52 ∧
       inter.toPoint = ∑ b ∈ Finset.Ico i.val bc, buckets.val[b]!.toPoint)
-    (hsum : sum.OnCurve ∧ sum.Bounded ∧
+    (hsum : sum.OnCurve ∧ sum.LimbsLt 52 ∧
       sum.toPoint = ∑ b ∈ Finset.Ico i.val bc, (b - i.val + 1) • buckets.val[b]!.toPoint) :
     optional_multiscalar_mul_loop1_loop2 buckets inter sum i
-      ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧ r.Bounded ∧
+      ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧ r.LimbsLt 52 ∧
         r.toPoint = wsum edwards.EdwardsPoint.«x86_64-no-tables».toPoint buckets.val bc ⦄ := by
   unfold optional_multiscalar_mul_loop1_loop2
   apply loop.spec_decr_nat (measure := fun (_, _, i') => i'.val)
     (inv := fun (it, sm, i') => i'.val < bc ∧
-      it.OnCurve ∧ it.Bounded ∧ it.toPoint = ∑ b ∈ Finset.Ico i'.val bc, buckets.val[b]!.toPoint ∧
-      sm.OnCurve ∧ sm.Bounded ∧
+      it.OnCurve ∧ it.LimbsLt 52 ∧
+        it.toPoint = ∑ b ∈ Finset.Ico i'.val bc, buckets.val[b]!.toPoint ∧
+      sm.OnCurve ∧ sm.LimbsLt 52 ∧
         sm.toPoint = ∑ b ∈ Finset.Ico i'.val bc, (b - i'.val + 1) • buckets.val[b]!.toPoint)
   · rintro ⟨it, sm, i'⟩ ⟨hi', hiton, hitb, hitp, hsmon, hsmb, hsmp⟩
     unfold optional_multiscalar_mul_loop1_loop2.body
@@ -900,7 +902,7 @@ private theorem optional_multiscalar_mul_loop1_loop1_spec
     (sp : alloc.vec.Vec ((Array I8 64#usize) × ProjectiveNielsPoint.«x86_64-no-tables»))
     (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») (e si : Usize) (bc : ℕ)
     (P : ℕ → curve25519.edwards.Point) (he : e.val < 64) (hbc : bc ≤ 128)
-    (hsp : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.Bounded ∧
+    (hsp : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.LimbsLt 54 ∧
       (sp.val[k]!).2.toPoint = P k)
     (hdig : ∀ k < sp.length, -(bc : ℤ) ≤ (sp.val[k]!).1[e.val]!.val ∧
       (sp.val[k]!).1[e.val]!.val ≤ bc)
@@ -1021,22 +1023,22 @@ private theorem optional_multiscalar_mul_loop1_spec (w bc : Usize)
     (total : Option edwards.EdwardsPoint.«x86_64-no-tables») (di : Usize)
     (P : ℕ → curve25519.edwards.Point) (dc : ℕ) (hw : 0 < w.val ∧ w.val ≤ 8)
     (hbc1 : 1 ≤ bc.val) (hbc : bc.val ≤ 128) (hdc : dc ≤ 64)
-    (hsp : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.Bounded ∧
+    (hsp : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.LimbsLt 54 ∧
       (sp.val[k]!).2.toPoint = P k)
     (hdig : ∀ k < sp.length, ∀ e < 64, -(bc.val : ℤ) ≤ (sp.val[k]!).1[e]!.val ∧
       (sp.val[k]!).1[e]!.val ≤ (bc.val : ℤ))
     (hok : BucketsOK buckets bc.val) (hdi : di.val ≤ dc)
     (hnone : total = none ↔ di.val = dc)
-    (hsome : ∀ T, total = some T → T.OnCurve ∧ T.Bounded ∧
+    (hsome : ∀ T, total = some T → T.OnCurve ∧ T.LimbsLt 52 ∧
       T.toPoint = ∑ j ∈ Finset.range (dc - di.val), 2 ^ (w.val * j) • column sp P (di.val + j)) :
     optional_multiscalar_mul_loop1 w bc sp buckets total di
       ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (r = none ↔ dc = 0) ∧
-        ∀ T, r = some T → T.OnCurve ∧ T.Bounded ∧
+        ∀ T, r = some T → T.OnCurve ∧ T.LimbsLt 52 ∧
           T.toPoint = ∑ j ∈ Finset.range dc, 2 ^ (w.val * j) • column sp P j ⦄ := by
   unfold optional_multiscalar_mul_loop1
   apply loop.spec_decr_nat (measure := fun (_, _, d) => d.val)
     (inv := fun (v, t, d) => BucketsOK v bc.val ∧ d.val ≤ dc ∧ (t = none ↔ d.val = dc) ∧
-      ∀ T, t = some T → T.OnCurve ∧ T.Bounded ∧
+      ∀ T, t = some T → T.OnCurve ∧ T.LimbsLt 52 ∧
         T.toPoint = ∑ j ∈ Finset.range (dc - d.val), 2 ^ (w.val * j) • column sp P (d.val + j))
   · rintro ⟨v, t, d⟩ ⟨hv, hd, htn, hts⟩
     unfold optional_multiscalar_mul_loop1.body
@@ -1130,7 +1132,7 @@ private def PairsOK (w : ℕ) (ss : List scalar.Scalar)
     (v : alloc.vec.Vec ((Array I8 64#usize) × ProjectiveNielsPoint.«x86_64-no-tables»)) (m : ℕ) :
         Prop :=
   v.length = m ∧ ∀ j < m, ∃ P, ops[j]! = some P ∧
-    (v.val[j]!).2.OnCurve ∧ (v.val[j]!).2.Bounded ∧ (v.val[j]!).2.toPoint = P.toPoint ∧
+    (v.val[j]!).2.OnCurve ∧ (v.val[j]!).2.LimbsLt 54 ∧ (v.val[j]!).2.toPoint = P.toPoint ∧
     (v.val[j]!).1.asInt w = ss[j]!.asNat ∧
     (∀ i < 64, -2 ^ w ≤ 2 * (v.val[j]!).1[i]!.val ∧ 2 * (v.val[j]!).1[i]!.val ≤ 2 ^ w) ∧
     ∀ i < 64, 256 < i * w → (v.val[j]!).1[i]!.val = 0
@@ -1153,7 +1155,7 @@ private theorem scalars_points_loop_spec {S It : Type}
       (fun x s => borrowInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) scalars.val ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (w : Usize) (hw : 4 ≤ w.val ∧ w.val ≤ 8)
     (ops : List (Option edwards.EdwardsPoint.«x86_64-no-tables»))
-    (hps : ∀ P, some P ∈ ops → P.Bounded ∧ P.OnCurve) (points : It) (k : Usize)
+    (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve) (points : It) (k : Usize)
     (hit : iterInst.Yields points (ops.drop k.val)) (hk : k.val ≤ ss.length)
     (hkops : k.val ≤ ops.length)
     (out : alloc.vec.Vec ((Array I8 64#usize) × ProjectiveNielsPoint.«x86_64-no-tables»))
@@ -1279,14 +1281,14 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.Bounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve)
     (hxs : xs.length ≤ Usize.max) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») =>
           (r = none ↔ none ∈ ops.take ss.length) ∧
         ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
-          R.Bounded ⦄ := by
+          R.LimbsLt 52 ⦄ := by
   unfold optional_multiscalar_mul
   have hscalars' : scalarsInst.into_iter scalars
       ⦃ (it : Clause0_IntoIter) => scalarsInst.iteratorInst.Yields it xs ⦄ := hscalars
@@ -1344,7 +1346,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   · have hnn : none ∉ ops.take ss.length := fun h => by cases hnone.mpr h
     obtain ⟨hsplen, hsp⟩ := hsome sp rfl
     let P : ℕ → curve25519.edwards.Point := fun k => ((ops[k]!).getD default).toPoint
-    have hsp' : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.Bounded ∧
+    have hsp' : ∀ k < sp.length, (sp.val[k]!).2.OnCurve ∧ (sp.val[k]!).2.LimbsLt 54 ∧
         (sp.val[k]!).2.toPoint = P k := fun k hk => by
       obtain ⟨Q, hQ, hon, hb, hp, -⟩ := hsp k (hsplen ▸ hk)
       exact ⟨hon, hb, by rw [hp]; change Q.toPoint = ((ops[k]!).getD default).toPoint; rw [hQ]; rfl⟩

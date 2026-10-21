@@ -74,14 +74,14 @@ private theorem lookup_tables_spec {It Clause0_Item : Type}
     (hborrow : List.Forall₂
       (fun x P => borrowInst.borrow x ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄) ys
           ps)
-    (hps : ∀ P ∈ ps, P.Bounded ∧ P.OnCurve) (hlen : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hlen : ys.length ≤ Usize.max) :
     lookup_tables iterInst borrowInst points
       ⦃ (r : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«x86_64-tables»)) =>
-        List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.Bounded) ps r.val ⦄ := by
+        List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) ps r.val ⦄ := by
   unfold lookup_tables lookup_tables_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     window.«LookupTableProjectiveNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
-    (fun P t => t.Represents P.toPoint ∧ t.Bounded) points ys hit ps hborrow
+    (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) points ys hit ps hborrow
     (fun P hP =>
         window.«LookupTableProjectiveNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
       P (hps P hP).1 (hps P hP).2) _ (by simpa using hlen))
@@ -125,17 +125,17 @@ private theorem multiscalar_mul_loop0_loop0_spec
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize)) (Q : edwards.EdwardsPoint.«x86_64-tables»)
     (j n i : Usize) (P : ℕ → curve25519.edwards.Point) (hj : j.val < 64)
     (hn : n.val ≤ lookup_tables.length ∧ n.val ≤ scalar_digits.length)
-    (hT : ∀ k < n.val, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.Bounded)
+    (hT : ∀ k < n.val, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.LimbsLt 54)
     (hD : ∀ k < n.val, ∀ e < 64, -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
       (scalar_digits.val[k]!)[e]!.val ≤ 8)
-    (hi : i.val ≤ n.val) (hQ : Q.Bounded) (hon : Q.OnCurve) :
+    (hi : i.val ≤ n.val) (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     multiscalar_mul_loop0_loop0 lookup_tables scalar_digits Q j n i
-      ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧ r.Bounded ∧
+      ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧ r.LimbsLt 52 ∧
         r.toPoint = Q.toPoint + ∑ k ∈ Finset.Ico i.val n.val,
           (scalar_digits.val[k]!)[j.val]!.val • P k ⦄ := by
   unfold multiscalar_mul_loop0_loop0
   apply loop.spec_decr_nat (measure := fun (_, i') => n.val - i'.val)
-    (inv := fun (Q', i') => i.val ≤ i'.val ∧ i'.val ≤ n.val ∧ Q'.OnCurve ∧ Q'.Bounded ∧
+    (inv := fun (Q', i') => i.val ≤ i'.val ∧ i'.val ≤ n.val ∧ Q'.OnCurve ∧ Q'.LimbsLt 52 ∧
       Q'.toPoint = Q.toPoint + ∑ k ∈ Finset.Ico i.val i'.val,
         (scalar_digits.val[k]!)[j.val]!.val • P k)
   · rintro ⟨Q', i'⟩ ⟨hii, hin, hQ'on, hQ'b, hQ'p⟩
@@ -171,20 +171,20 @@ private theorem multiscalar_mul_loop0_spec
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize)) (Q : edwards.EdwardsPoint.«x86_64-tables»)
     (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min scalar_digits.length lookup_tables.length)
-    (hT : ∀ k < n, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.Bounded)
+    (hT : ∀ k < n, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.LimbsLt 54)
     (hD : ∀ k < n, ∀ e < 64, -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
       (scalar_digits.val[k]!)[e]!.val ≤ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 64)
-    (hQ : Q.Bounded) (hon : Q.OnCurve)
+    (hQ : Q.LimbsLt 52) (hon : Q.OnCurve)
     (hQp : Q.toPoint = ∑ k ∈ Finset.range n,
       radix16Tail scalar_digits.val[k]! iter.iter.end.val • P k) :
     multiscalar_mul_loop0 iter lookup_tables scalar_digits Q
-      ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧ r.Bounded ∧
+      ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧ r.LimbsLt 52 ∧
         r.toPoint = ∑ k ∈ Finset.range n, radix16Tail scalar_digits.val[k]! 0 • P k ⦄ := by
   unfold multiscalar_mul_loop0
   apply loop.spec_decr_nat (measure := fun (it, _) => it.iter.end.val)
     (inv := fun (it, Q') => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 64 ∧ Q'.OnCurve ∧
-      Q'.Bounded ∧ Q'.toPoint = ∑ k ∈ Finset.range n,
+      Q'.LimbsLt 52 ∧ Q'.toPoint = ∑ k ∈ Finset.range n,
         radix16Tail scalar_digits.val[k]! it.iter.end.val • P k)
   · rintro ⟨it, Q'⟩ ⟨hst, hen, hQ'on, hQ'b, hQ'p⟩
     unfold multiscalar_mul_loop0.body
@@ -228,11 +228,11 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.Bounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
-        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.Bounded ⦄ := by
+        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄ := by
   unfold multiscalar_mul
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints
@@ -300,14 +300,14 @@ private theorem lookup_tables_spec {It Clause0_Item : Type}
     (hborrow : List.Forall₂
       (fun x P => borrowInst.borrow x ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
           ys ps)
-    (hps : ∀ P ∈ ps, P.Bounded ∧ P.OnCurve) (hlen : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hlen : ys.length ≤ Usize.max) :
     lookup_tables iterInst borrowInst points
       ⦃ (r : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«x86_64-no-tables»)) =>
-        List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.Bounded) ps r.val ⦄ := by
+        List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) ps r.val ⦄ := by
   unfold lookup_tables lookup_tables_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     window.«LookupTableProjectiveNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».«from»
-    (fun P t => t.Represents P.toPoint ∧ t.Bounded) points ys hit ps hborrow
+    (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) points ys hit ps hborrow
     (fun P hP =>
         window.«LookupTableProjectiveNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
       P (hps P hP).1 (hps P hP).2) _ (by simpa using hlen))
@@ -352,17 +352,17 @@ private theorem multiscalar_mul_loop0_loop0_spec
         (Q : edwards.EdwardsPoint.«x86_64-no-tables»)
     (j n i : Usize) (P : ℕ → curve25519.edwards.Point) (hj : j.val < 64)
     (hn : n.val ≤ lookup_tables.length ∧ n.val ≤ scalar_digits.length)
-    (hT : ∀ k < n.val, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.Bounded)
+    (hT : ∀ k < n.val, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.LimbsLt 54)
     (hD : ∀ k < n.val, ∀ e < 64, -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
       (scalar_digits.val[k]!)[e]!.val ≤ 8)
-    (hi : i.val ≤ n.val) (hQ : Q.Bounded) (hon : Q.OnCurve) :
+    (hi : i.val ≤ n.val) (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     multiscalar_mul_loop0_loop0 lookup_tables scalar_digits Q j n i
-      ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧ r.Bounded ∧
+      ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧ r.LimbsLt 52 ∧
         r.toPoint = Q.toPoint + ∑ k ∈ Finset.Ico i.val n.val,
           (scalar_digits.val[k]!)[j.val]!.val • P k ⦄ := by
   unfold multiscalar_mul_loop0_loop0
   apply loop.spec_decr_nat (measure := fun (_, i') => n.val - i'.val)
-    (inv := fun (Q', i') => i.val ≤ i'.val ∧ i'.val ≤ n.val ∧ Q'.OnCurve ∧ Q'.Bounded ∧
+    (inv := fun (Q', i') => i.val ≤ i'.val ∧ i'.val ≤ n.val ∧ Q'.OnCurve ∧ Q'.LimbsLt 52 ∧
       Q'.toPoint = Q.toPoint + ∑ k ∈ Finset.Ico i.val i'.val,
         (scalar_digits.val[k]!)[j.val]!.val • P k)
   · rintro ⟨Q', i'⟩ ⟨hii, hin, hQ'on, hQ'b, hQ'p⟩
@@ -399,20 +399,20 @@ private theorem multiscalar_mul_loop0_spec
         (Q : edwards.EdwardsPoint.«x86_64-no-tables»)
     (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min scalar_digits.length lookup_tables.length)
-    (hT : ∀ k < n, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.Bounded)
+    (hT : ∀ k < n, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.LimbsLt 54)
     (hD : ∀ k < n, ∀ e < 64, -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
       (scalar_digits.val[k]!)[e]!.val ≤ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 64)
-    (hQ : Q.Bounded) (hon : Q.OnCurve)
+    (hQ : Q.LimbsLt 52) (hon : Q.OnCurve)
     (hQp : Q.toPoint = ∑ k ∈ Finset.range n,
       radix16Tail scalar_digits.val[k]! iter.iter.end.val • P k) :
     multiscalar_mul_loop0 iter lookup_tables scalar_digits Q
-      ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧ r.Bounded ∧
+      ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧ r.LimbsLt 52 ∧
         r.toPoint = ∑ k ∈ Finset.range n, radix16Tail scalar_digits.val[k]! 0 • P k ⦄ := by
   unfold multiscalar_mul_loop0
   apply loop.spec_decr_nat (measure := fun (it, _) => it.iter.end.val)
     (inv := fun (it, Q') => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 64 ∧ Q'.OnCurve ∧
-      Q'.Bounded ∧ Q'.toPoint = ∑ k ∈ Finset.range n,
+      Q'.LimbsLt 52 ∧ Q'.toPoint = ∑ k ∈ Finset.range n,
         radix16Tail scalar_digits.val[k]! it.iter.end.val • P k)
   · rintro ⟨it, Q'⟩ ⟨hst, hen, hQ'on, hQ'b, hQ'p⟩
     unfold multiscalar_mul_loop0.body
@@ -457,11 +457,11 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.Bounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧
-        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.Bounded ⦄ := by
+        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄ := by
   unfold multiscalar_mul
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints

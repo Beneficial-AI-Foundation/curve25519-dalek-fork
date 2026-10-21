@@ -33,7 +33,7 @@ namespace «EdwardsPointx86_64-tables»
 /-- `EdwardsPoint::to_montgomery`: the canonical bytes of `(Z + Y) / (Z - Y)` (`0` if
 `Z = Y`); limbs `< 2^52`. -/
 @[step]
-theorem to_montgomery_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem to_montgomery_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = ((self.Z.toField + self.Y.toField) / (self.Z.toField - self.Y.toField)).val ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
@@ -48,7 +48,7 @@ theorem to_montgomery_spec (self : EdwardsPoint.«x86_64-tables») (hself : self
 
 /-- `EdwardsPoint::to_montgomery`: RFC 7748's encoding of the `u`-coordinate of the
 Montgomery image of the represented point (`0` for the identity). -/
-theorem to_montgomery_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem to_montgomery_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄ :=
@@ -63,7 +63,7 @@ namespace «EdwardsPointx86_64-no-tables»
 /-- `EdwardsPoint::to_montgomery`: the canonical bytes of `(Z + Y) / (Z - Y)` (`0` if
 `Z = Y`); limbs `< 2^52`. -/
 @[step]
-theorem to_montgomery_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem to_montgomery_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = ((self.Z.toField + self.Y.toField) / (self.Z.toField - self.Y.toField)).val ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
@@ -78,7 +78,7 @@ theorem to_montgomery_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : s
 
 /-- `EdwardsPoint::to_montgomery`: RFC 7748's encoding of the `u`-coordinate of the
 Montgomery image of the represented point (`0` for the identity). -/
-theorem to_montgomery_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem to_montgomery_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄ :=

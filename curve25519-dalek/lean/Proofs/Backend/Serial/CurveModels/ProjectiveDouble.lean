@@ -24,9 +24,9 @@ namespace «ProjectivePointx86_64-tables»
 /-- `ProjectivePoint::double`: the "dbl-2008-bbjlp" formula `Projective.double`; limbs `< 2^52`
 in, `< 2^54` out. -/
 @[step]
-theorem double_spec (self : ProjectivePoint.«x86_64-tables») (hself : self.Bounded) :
+theorem double_spec (self : ProjectivePoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     double self ⦃ (r : CompletedPoint.«x86_64-tables») =>
-      r.toCompleted = self.toProjective.double ∧ r.Bounded ⦄ := by
+      r.toCompleted = self.toProjective.double ∧ r.LimbsLt 54 ⦄ := by
   obtain ⟨hX, hY, hZ⟩ := hself
   unfold double
   step as ⟨XX, hXX, hXX_lt⟩
@@ -50,10 +50,10 @@ theorem double_spec (self : ProjectivePoint.«x86_64-tables») (hself : self.Bou
       limbs_lt_of_le (by decide) hYY_minus_XX_lt, limbs_lt_of_le (by decide) hT'_lt⟩
 
 /-- `ProjectivePoint::double` doubles the represented point. -/
-theorem double_spec_point (self : ProjectivePoint.«x86_64-tables») (hself : self.Bounded)
+theorem double_spec_point (self : ProjectivePoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     double self ⦃ (r : CompletedPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 2 • self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 2 • self.toPoint ∧ r.LimbsLt 54 ⦄ :=
   spec_mono (double_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [CompletedPoint.«x86_64-tables».onCurve_iff,
       CompletedPoint.«x86_64-tables».toPoint_def, hr,
@@ -68,9 +68,9 @@ namespace «ProjectivePointx86_64-no-tables»
 /-- `ProjectivePoint::double`: the "dbl-2008-bbjlp" formula `Projective.double`; limbs `< 2^52`
 in, `< 2^54` out. -/
 @[step]
-theorem double_spec (self : ProjectivePoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem double_spec (self : ProjectivePoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     double self ⦃ (r : CompletedPoint.«x86_64-no-tables») =>
-      r.toCompleted = self.toProjective.double ∧ r.Bounded ⦄ := by
+      r.toCompleted = self.toProjective.double ∧ r.LimbsLt 54 ⦄ := by
   obtain ⟨hX, hY, hZ⟩ := hself
   unfold double
   step as ⟨XX, hXX, hXX_lt⟩
@@ -94,10 +94,10 @@ theorem double_spec (self : ProjectivePoint.«x86_64-no-tables») (hself : self.
       limbs_lt_of_le (by decide) hYY_minus_XX_lt, limbs_lt_of_le (by decide) hT'_lt⟩
 
 /-- `ProjectivePoint::double` doubles the represented point. -/
-theorem double_spec_point (self : ProjectivePoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem double_spec_point (self : ProjectivePoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     double self ⦃ (r : CompletedPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 2 • self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 2 • self.toPoint ∧ r.LimbsLt 54 ⦄ :=
   spec_mono (double_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [CompletedPoint.«x86_64-no-tables».onCurve_iff,
       CompletedPoint.«x86_64-no-tables».toPoint_def, hr,

@@ -29,16 +29,16 @@ open window.«LookupTableAffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^4`): row `i` is the lookup table of
 `2^(8 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.Bounded)
+theorem create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.LimbsLt 52)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents basepoint.toPoint ∧ r.Bounded ⦄ := by
+      r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄ := by
   unfold create
   unfold window.LookupTable.Insts.CoreDefaultDefault.default
   step with AffineNielsPoint.«x86_64-tables».Insts.CoreDefaultDefault.default_spec as ⟨d, hd⟩
   have h := basepointTable.createLoop_spec
     «CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
-    (fun t P => t.Represents P) (fun t => t.Bounded)
+    (fun t P => t.Represents P) (fun t => t.LimbsLt 54)
     (fun Q hQ hQon => «CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec Q hQ hQon)
     4#u32 4 rfl (by decide) (by decide) (Array.repeat 32#usize (Array.repeat 8#usize d))
     basepoint hbasepoint hon
@@ -59,16 +59,16 @@ open window.«LookupTableRadix32AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^5`): row `i` is the lookup table of
 `2^(10 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.Bounded)
+theorem create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.LimbsLt 52)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
-      r.Represents basepoint.toPoint ∧ r.Bounded ⦄ := by
+      r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄ := by
   unfold create
   unfold window.LookupTableRadix32.Insts.CoreDefaultDefault.default
   step with AffineNielsPoint.«x86_64-tables».Insts.CoreDefaultDefault.default_spec as ⟨d, hd⟩
   have h := basepointTable.createLoop_spec
     «CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
-    (fun t P => t.Represents P) (fun t => t.Bounded)
+    (fun t P => t.Represents P) (fun t => t.LimbsLt 54)
     (fun Q hQ hQon => «CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec Q hQ hQon)
     5#u32 5 rfl (by decide) (by decide) (Array.repeat 32#usize (Array.repeat 16#usize d))
     basepoint hbasepoint hon
@@ -89,16 +89,16 @@ open window.«LookupTableRadix64AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^6`): row `i` is the lookup table of
 `2^(12 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.Bounded)
+theorem create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.LimbsLt 52)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
-      r.Represents basepoint.toPoint ∧ r.Bounded ⦄ := by
+      r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄ := by
   unfold create
   unfold window.LookupTableRadix64.Insts.CoreDefaultDefault.default
   step with AffineNielsPoint.«x86_64-tables».Insts.CoreDefaultDefault.default_spec as ⟨d, hd⟩
   have h := basepointTable.createLoop_spec
     «CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
-    (fun t P => t.Represents P) (fun t => t.Bounded)
+    (fun t P => t.Represents P) (fun t => t.LimbsLt 54)
     (fun Q hQ hQon => «CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec Q hQ hQon)
     6#u32 6 rfl (by decide) (by decide) (Array.repeat 32#usize (Array.repeat 32#usize d))
     basepoint hbasepoint hon
@@ -119,16 +119,16 @@ open window.«LookupTableRadix128AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^7`): row `i` is the lookup table of
 `2^(14 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.Bounded)
+theorem create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.LimbsLt 52)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
-      r.Represents basepoint.toPoint ∧ r.Bounded ⦄ := by
+      r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄ := by
   unfold create
   unfold window.LookupTableRadix128.Insts.CoreDefaultDefault.default
   step with AffineNielsPoint.«x86_64-tables».Insts.CoreDefaultDefault.default_spec as ⟨d, hd⟩
   have h := basepointTable.createLoop_spec
     «CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
-    (fun t P => t.Represents P) (fun t => t.Bounded)
+    (fun t P => t.Represents P) (fun t => t.LimbsLt 54)
     (fun Q hQ hQon => «CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec Q hQ hQon)
     7#u32 7 rfl (by decide) (by decide) (Array.repeat 32#usize (Array.repeat 64#usize d))
     basepoint hbasepoint hon
@@ -149,16 +149,16 @@ open window.«LookupTableRadix256AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^8`): row `i` is the lookup table of
 `2^(16 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.Bounded)
+theorem create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.LimbsLt 52)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
-      r.Represents basepoint.toPoint ∧ r.Bounded ⦄ := by
+      r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄ := by
   unfold create
   unfold window.LookupTableRadix256.Insts.CoreDefaultDefault.default
   step with AffineNielsPoint.«x86_64-tables».Insts.CoreDefaultDefault.default_spec as ⟨d, hd⟩
   have h := basepointTable.createLoop_spec
     «CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
-    (fun t P => t.Represents P) (fun t => t.Bounded)
+    (fun t P => t.Represents P) (fun t => t.LimbsLt 54)
     (fun Q hQ hQon => «CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec Q hQ hQon)
     8#u32 8 rfl (by decide) (by decide) (Array.repeat 32#usize (Array.repeat 128#usize d))
     basepoint hbasepoint hon

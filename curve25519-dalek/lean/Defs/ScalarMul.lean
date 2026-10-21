@@ -10,7 +10,7 @@ public section
 
 `VartimePrecomputedStraus` holds one `NafLookupTable8` of affine Niels points per static point;
 `Represents self ps` says that these tables are, in order, the NAF tables of the points `ps`,
-and `Bounded self` that every entry meets the limb bounds. The
+and `self.LimbsLt n` that every limb of every entry is `< 2^n`. The
 backend enum `backend.VartimePrecomputedStraus` (whose only variant is `Scalar`) and its alias
 `edwards.VartimeEdwardsPrecomputation` forward to it. -/
 
@@ -26,10 +26,10 @@ namespace backend.serial.scalar_mul.precomputed_straus
     Prop :=
   List.Forall₂ window.NafLookupTable8.Represents self.static_lookup_tables.val ps
 
-/-- Every entry of every table of `self` satisfies the limb bounds. -/
-@[expose] def VartimePrecomputedStraus.«x86_64-tables».Bounded
+/-- Every limb of every entry of every table of `self` is `< 2^n`. -/
+@[expose] def VartimePrecomputedStraus.«x86_64-tables».LimbsLt (n : ℕ)
     (self : VartimePrecomputedStraus.«x86_64-tables») : Prop :=
-  ∀ t ∈ self.static_lookup_tables.val, window.NafLookupTable8.Bounded t
+  ∀ t ∈ self.static_lookup_tables.val, window.NafLookupTable8.LimbsLt n t
 
 /-- The tables of `self` are the NAF tables of the points `ps`, in order (same length). -/
 @[expose] def VartimePrecomputedStraus.«x86_64-no-tables».Represents
@@ -37,10 +37,10 @@ namespace backend.serial.scalar_mul.precomputed_straus
     Prop :=
   List.Forall₂ window.NafLookupTable8.Represents self.static_lookup_tables.val ps
 
-/-- Every entry of every table of `self` satisfies the limb bounds. -/
-@[expose] def VartimePrecomputedStraus.«x86_64-no-tables».Bounded
+/-- Every limb of every entry of every table of `self` is `< 2^n`. -/
+@[expose] def VartimePrecomputedStraus.«x86_64-no-tables».LimbsLt (n : ℕ)
     (self : VartimePrecomputedStraus.«x86_64-no-tables») : Prop :=
-  ∀ t ∈ self.static_lookup_tables.val, window.NafLookupTable8.Bounded t
+  ∀ t ∈ self.static_lookup_tables.val, window.NafLookupTable8.LimbsLt n t
 
 end backend.serial.scalar_mul.precomputed_straus
 
@@ -51,20 +51,20 @@ namespace backend
     VartimePrecomputedStraus.«x86_64-tables» → List curve25519.edwards.Point → Prop
   | .Scalar pre, ps => pre.Represents ps
 
-/-- The serial precomputation inside the backend enum is bounded. -/
-@[expose] def VartimePrecomputedStraus.«x86_64-tables».Bounded :
+/-- The limbs of the serial precomputation inside the backend enum are `< 2^n`. -/
+@[expose] def VartimePrecomputedStraus.«x86_64-tables».LimbsLt (n : ℕ) :
     VartimePrecomputedStraus.«x86_64-tables» → Prop
-  | .Scalar pre => pre.Bounded
+  | .Scalar pre => pre.LimbsLt n
 
 /-- The serial precomputation inside the backend enum represents `ps`. -/
 @[expose] def VartimePrecomputedStraus.«x86_64-no-tables».Represents :
     VartimePrecomputedStraus.«x86_64-no-tables» → List curve25519.edwards.Point → Prop
   | .Scalar pre, ps => pre.Represents ps
 
-/-- The serial precomputation inside the backend enum is bounded. -/
-@[expose] def VartimePrecomputedStraus.«x86_64-no-tables».Bounded :
+/-- The limbs of the serial precomputation inside the backend enum are `< 2^n`. -/
+@[expose] def VartimePrecomputedStraus.«x86_64-no-tables».LimbsLt (n : ℕ) :
     VartimePrecomputedStraus.«x86_64-no-tables» → Prop
-  | .Scalar pre => pre.Bounded
+  | .Scalar pre => pre.LimbsLt n
 
 end backend
 

@@ -36,9 +36,9 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (hborrow : List.Forall₂
       (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄) ys
           ps)
-    (hps : ∀ P ∈ ps, P.Bounded ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points ⦃ (r : VartimePrecomputedStraus.«x86_64-tables») =>
-      r.Represents (ps.map (·.toPoint)) ∧ r.Bounded ⦄ := by
+      r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄ := by
   unfold new
   have h : pointsInst.into_iter static_points
       ⦃ (it : Clause0_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hstatic_points
@@ -48,7 +48,7 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables_loop
   apply spec_bind (collect.collectMapLoop_spec _ borrowInst.borrow
     window.«NafLookupTable8AffineNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
-    (fun P t => t.Represents P.toPoint ∧ t.Bounded) it ys hit ps hborrow
+    (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) it ys hit ps hborrow
     (fun P hP =>
         window.«NafLookupTable8AffineNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
       P (hps P hP).1 (hps P hP).2) (alloc.vec.Vec.new _) (by simpa using hys))
@@ -81,9 +81,9 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (hborrow : List.Forall₂
       (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
           ys ps)
-    (hps : ∀ P ∈ ps, P.Bounded ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points ⦃ (r : VartimePrecomputedStraus.«x86_64-no-tables») =>
-      r.Represents (ps.map (·.toPoint)) ∧ r.Bounded ⦄ := by
+      r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄ := by
   unfold new
   have h : pointsInst.into_iter static_points
       ⦃ (it : Clause0_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hstatic_points
@@ -93,7 +93,7 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables_loop
   apply spec_bind (collect.collectMapLoop_spec _ borrowInst.borrow
     window.«NafLookupTable8AffineNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».«from»
-    (fun P t => t.Represents P.toPoint ∧ t.Bounded) it ys hit ps hborrow
+    (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) it ys hit ps hborrow
     (fun P hP =>
         window.«NafLookupTable8AffineNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
       P (hps P hP).1 (hps P hP).2) (alloc.vec.Vec.new _) (by simpa using hys))

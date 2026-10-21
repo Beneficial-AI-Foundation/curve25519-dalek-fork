@@ -21,14 +21,14 @@ namespace AffinePoint.«x86_64-tables».Insts.CoreDefaultDefault
 @[step]
 theorem default_spec :
     default ⦃ (r : AffinePoint.«x86_64-tables») =>
-      r.x.toField = 0 ∧ r.y.toField = 1 ∧ r.Bounded ⦄ := by
+      r.x.toField = 0 ∧ r.y.toField = 1 ∧ r.LimbsLt 52 ⦄ := by
   unfold default
   step*
 
 /-- `Default for AffinePoint` represents the neutral element. -/
 theorem default_spec_point :
     default ⦃ (r : AffinePoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄ := by
   unfold default
   exact Curve25519_dalekTraitsIdentity.identity_spec_point
 
@@ -40,14 +40,14 @@ namespace AffinePoint.«x86_64-no-tables».Insts.CoreDefaultDefault
 @[step]
 theorem default_spec :
     default ⦃ (r : AffinePoint.«x86_64-no-tables») =>
-      r.x.toField = 0 ∧ r.y.toField = 1 ∧ r.Bounded ⦄ := by
+      r.x.toField = 0 ∧ r.y.toField = 1 ∧ r.LimbsLt 52 ⦄ := by
   unfold default
   step*
 
 /-- `Default for AffinePoint` represents the neutral element. -/
 theorem default_spec_point :
     default ⦃ (r : AffinePoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄ := by
   unfold default
   exact Curve25519_dalekTraitsIdentity.identity_spec_point
 

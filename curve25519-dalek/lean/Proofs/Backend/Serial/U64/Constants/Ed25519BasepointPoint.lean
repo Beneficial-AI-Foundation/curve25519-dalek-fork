@@ -29,7 +29,7 @@ limbs `< 2^51`. -/
 @[step]
 theorem ED25519_BASEPOINT_POINT_spec :
     ED25519_BASEPOINT_POINT.«x86_64-tables» ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.toExtended = basepoint.toExtended ∧ r.Bounded ⦄ := by
+      r.toExtended = basepoint.toExtended ∧ r.LimbsLt 52 ⦄ := by
   unfold ED25519_BASEPOINT_POINT.«x86_64-tables»
   step as ⟨X, hX⟩
   step as ⟨Y, hY⟩
@@ -48,14 +48,14 @@ theorem ED25519_BASEPOINT_POINT_spec :
   · rw [edwards.EdwardsPoint.«x86_64-tables».toExtended_def, Point.toExtended,
       toField_mul_of_mod hTn, toField_eq_ofNat_of_asNat hXn, toField_eq_ofNat_of_asNat hYn,
       toField_eq_one_of_asNat hZn, basepoint_x_eq, basepoint_y_eq]
-  · unfold edwards.EdwardsPoint.«x86_64-tables».Bounded
+  · unfold edwards.EdwardsPoint.«x86_64-tables».LimbsLt
     subst hX hY hZ hT
     decide
 
 /-- `ED25519_BASEPOINT_POINT` represents the basepoint. -/
 theorem ED25519_BASEPOINT_POINT_spec_point :
     ED25519_BASEPOINT_POINT.«x86_64-tables» ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = basepoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono ED25519_BASEPOINT_POINT_spec fun r ⟨hr, hb⟩ => by
     rw [edwards.EdwardsPoint.«x86_64-tables».onCurve_iff,
       edwards.EdwardsPoint.«x86_64-tables».toPoint_def, hr]
@@ -70,7 +70,7 @@ limbs `< 2^51`. -/
 @[step]
 theorem ED25519_BASEPOINT_POINT_spec :
     ED25519_BASEPOINT_POINT.«x86_64-no-tables» ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.toExtended = basepoint.toExtended ∧ r.Bounded ⦄ := by
+      r.toExtended = basepoint.toExtended ∧ r.LimbsLt 52 ⦄ := by
   unfold ED25519_BASEPOINT_POINT.«x86_64-no-tables»
   step as ⟨X, hX⟩
   step as ⟨Y, hY⟩
@@ -89,14 +89,14 @@ theorem ED25519_BASEPOINT_POINT_spec :
   · rw [edwards.EdwardsPoint.«x86_64-no-tables».toExtended_def, Point.toExtended,
       toField_mul_of_mod hTn, toField_eq_ofNat_of_asNat hXn, toField_eq_ofNat_of_asNat hYn,
       toField_eq_one_of_asNat hZn, basepoint_x_eq, basepoint_y_eq]
-  · unfold edwards.EdwardsPoint.«x86_64-no-tables».Bounded
+  · unfold edwards.EdwardsPoint.«x86_64-no-tables».LimbsLt
     subst hX hY hZ hT
     decide
 
 /-- `ED25519_BASEPOINT_POINT` represents the basepoint. -/
 theorem ED25519_BASEPOINT_POINT_spec_point :
     ED25519_BASEPOINT_POINT.«x86_64-no-tables» ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = basepoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono ED25519_BASEPOINT_POINT_spec fun r ⟨hr, hb⟩ => by
     rw [edwards.EdwardsPoint.«x86_64-no-tables».onCurve_iff,
       edwards.EdwardsPoint.«x86_64-no-tables».toPoint_def, hr]

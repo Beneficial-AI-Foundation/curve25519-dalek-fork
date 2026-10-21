@@ -43,7 +43,7 @@ open scoped Helpers.IndexStep in
 /-- The second closure of `compress_batch`: compress `(X z, Y z)` for the inverse `z` of `Z`. -/
 private theorem compress_batch.closure_1.call_mut_spec {N : Usize}
     (inputs : Array EdwardsPoint.«x86_64-tables» N) (zs : Array FieldElement51 N) (i : Usize)
-    (hi : i.val < N.val) (hinput : inputs[i.val]!.Bounded)
+    (hi : i.val < N.val) (hinput : inputs[i.val]!.LimbsLt 52)
     (hz : zs[i.val]!.toField = inputs[i.val]!.Z.toField⁻¹)
     (hzb : ∀ j < 5, (zs[i.val]!)[j]!.val < 2 ^ 52) :
     compress_batch.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeCompressedEdwardsY.call_mut
@@ -66,7 +66,7 @@ private theorem compress_batch.closure_1.call_mut_spec {N : Usize}
 sign of `x = X / Z` in bit `255`; limbs `< 2^52`. -/
 @[step]
 theorem compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«x86_64-tables» N)
-    (hinputs : ∀ i < N.val, inputs[i]!.Bounded) :
+    (hinputs : ∀ i < N.val, inputs[i]!.LimbsLt 52) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
       ∀ i < N.val, r[i]!.asNat = (inputs[i]!.Y.toField / inputs[i]!.Z.toField).val +
         2 ^ 255 * (if (inputs[i]!.X.toField / inputs[i]!.Z.toField).isNeg then 1 else 0) ⦄ := by
@@ -98,7 +98,7 @@ theorem compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«x86_64-ta
 
 /-- `EdwardsPoint::compress_batch`: entry `i` is RFC 8032's encoding of point `i`. -/
 theorem compress_batch_spec_point {N : Usize} (inputs : Array EdwardsPoint.«x86_64-tables» N)
-    (hinputs : ∀ i < N.val, inputs[i]!.Bounded) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
+    (hinputs : ∀ i < N.val, inputs[i]!.LimbsLt 52) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
       ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄ :=
   spec_mono (compress_batch_spec inputs hinputs) fun r hr i hi => by
@@ -124,7 +124,7 @@ open scoped Helpers.IndexStep in
 /-- The second closure of `compress_batch`: compress `(X z, Y z)` for the inverse `z` of `Z`. -/
 private theorem compress_batch.closure_1.call_mut_spec {N : Usize}
     (inputs : Array EdwardsPoint.«x86_64-no-tables» N) (zs : Array FieldElement51 N) (i : Usize)
-    (hi : i.val < N.val) (hinput : inputs[i.val]!.Bounded)
+    (hi : i.val < N.val) (hinput : inputs[i.val]!.LimbsLt 52)
     (hz : zs[i.val]!.toField = inputs[i.val]!.Z.toField⁻¹)
     (hzb : ∀ j < 5, (zs[i.val]!)[j]!.val < 2 ^ 52) :
     compress_batch.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeCompressedEdwardsY.call_mut
@@ -147,7 +147,7 @@ private theorem compress_batch.closure_1.call_mut_spec {N : Usize}
 sign of `x = X / Z` in bit `255`; limbs `< 2^52`. -/
 @[step]
 theorem compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«x86_64-no-tables» N)
-    (hinputs : ∀ i < N.val, inputs[i]!.Bounded) :
+    (hinputs : ∀ i < N.val, inputs[i]!.LimbsLt 52) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
       ∀ i < N.val, r[i]!.asNat = (inputs[i]!.Y.toField / inputs[i]!.Z.toField).val +
         2 ^ 255 * (if (inputs[i]!.X.toField / inputs[i]!.Z.toField).isNeg then 1 else 0) ⦄ := by
@@ -179,7 +179,7 @@ theorem compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«x86_64-no
 
 /-- `EdwardsPoint::compress_batch`: entry `i` is RFC 8032's encoding of point `i`. -/
 theorem compress_batch_spec_point {N : Usize} (inputs : Array EdwardsPoint.«x86_64-no-tables» N)
-    (hinputs : ∀ i < N.val, inputs[i]!.Bounded) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
+    (hinputs : ∀ i < N.val, inputs[i]!.LimbsLt 52) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
       ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄ :=
   spec_mono (compress_batch_spec inputs hinputs) fun r hr i hi => by

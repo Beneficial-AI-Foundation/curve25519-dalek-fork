@@ -35,7 +35,7 @@ open scoped Helpers.IndexStep in
 /-- The first loop of `to_montgomery_batch`: the denominators `Z - Y`. -/
 @[local step]
 private theorem to_montgomery_batch_loop0_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
-    (heds : ∀ k < eds.length, eds[k]!.Bounded) (n : Usize) (hn : n.val = eds.length)
+    (heds : ∀ k < eds.length, eds[k]!.LimbsLt 52) (n : Usize) (hn : n.val = eds.length)
     (den : alloc.vec.Vec FieldElement51) (i : Usize) (hi : i.val ≤ n.val)
     (hlen : den.length = i.val)
     (hden : ∀ k < i.val, den[k]!.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧
@@ -72,7 +72,7 @@ open scoped Helpers.IndexStep in
 /-- The second loop of `to_montgomery_batch`: `u = (Z + Y) · (Z - Y)⁻¹` as bytes. -/
 @[local step]
 private theorem to_montgomery_batch_loop1_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
-    (heds : ∀ k < eds.length, eds[k]!.Bounded) (n : Usize) (hn : n.val = eds.length)
+    (heds : ∀ k < eds.length, eds[k]!.LimbsLt 52) (n : Usize) (hn : n.val = eds.length)
     (den : alloc.vec.Vec FieldElement51) (hdenlen : den.length = eds.length)
     (hden : ∀ k < eds.length,
       den[k]!.toField = (eds[k]!.Z.toField - eds[k]!.Y.toField)⁻¹ ∧
@@ -126,7 +126,7 @@ private theorem to_montgomery_batch_loop1_spec (eds : Slice EdwardsPoint.«x86_6
 `(Z + Y) / (Z - Y)` of point `i` (`0` if `Z = Y`); limbs `< 2^52`. -/
 @[step]
 theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
-    (heds : ∀ i < eds.length, eds[i]!.Bounded) :
+    (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧ ∀ i < eds.length, r[i]!.asNat =
         ((eds[i]!.Z.toField + eds[i]!.Y.toField) /
@@ -162,7 +162,7 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is RFC 7748's encoding of the
 `u`-coordinate of the Montgomery image of point `i` (`0` for the identity). -/
 theorem to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«x86_64-tables»)
-    (heds : ∀ i < eds.length, eds[i]!.Bounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
+    (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄ :=
@@ -178,7 +178,7 @@ open scoped Helpers.IndexStep in
 /-- The first loop of `to_montgomery_batch`: the denominators `Z - Y`. -/
 @[local step]
 private theorem to_montgomery_batch_loop0_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
-    (heds : ∀ k < eds.length, eds[k]!.Bounded) (n : Usize) (hn : n.val = eds.length)
+    (heds : ∀ k < eds.length, eds[k]!.LimbsLt 52) (n : Usize) (hn : n.val = eds.length)
     (den : alloc.vec.Vec FieldElement51) (i : Usize) (hi : i.val ≤ n.val)
     (hlen : den.length = i.val)
     (hden : ∀ k < i.val, den[k]!.toField = eds[k]!.Z.toField - eds[k]!.Y.toField ∧
@@ -215,7 +215,7 @@ open scoped Helpers.IndexStep in
 /-- The second loop of `to_montgomery_batch`: `u = (Z + Y) · (Z - Y)⁻¹` as bytes. -/
 @[local step]
 private theorem to_montgomery_batch_loop1_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
-    (heds : ∀ k < eds.length, eds[k]!.Bounded) (n : Usize) (hn : n.val = eds.length)
+    (heds : ∀ k < eds.length, eds[k]!.LimbsLt 52) (n : Usize) (hn : n.val = eds.length)
     (den : alloc.vec.Vec FieldElement51) (hdenlen : den.length = eds.length)
     (hden : ∀ k < eds.length,
       den[k]!.toField = (eds[k]!.Z.toField - eds[k]!.Y.toField)⁻¹ ∧
@@ -269,7 +269,7 @@ private theorem to_montgomery_batch_loop1_spec (eds : Slice EdwardsPoint.«x86_6
 `(Z + Y) / (Z - Y)` of point `i` (`0` if `Z = Y`); limbs `< 2^52`. -/
 @[step]
 theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
-    (heds : ∀ i < eds.length, eds[i]!.Bounded) :
+    (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧ ∀ i < eds.length, r[i]!.asNat =
         ((eds[i]!.Z.toField + eds[i]!.Y.toField) /
@@ -305,7 +305,7 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is RFC 7748's encoding of the
 `u`-coordinate of the Montgomery image of point `i` (`0` for the identity). -/
 theorem to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«x86_64-no-tables»)
-    (heds : ∀ i < eds.length, eds[i]!.Bounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
+    (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄ :=

@@ -34,7 +34,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (dynamic_points : K) (ps : List curve25519.edwards.Point) (xs : List Clause0_Item)
     (ss : List scalar.Scalar) (ys : List Clause2_Item) (ds : List scalar.Scalar)
     (qops : List (Option edwards.EdwardsPoint.«x86_64-tables»))
-    (hself : self.Represents ps) (hself_b : self.Bounded)
+    (hself : self.Represents ps) (hself_b : self.LimbsLt 54)
     (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
     (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
     (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
@@ -43,7 +43,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.Bounded ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ ps.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -53,7 +53,7 @@ theorem optional_mixed_multiscalar_mul_spec
         ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss ps).sum +
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
-          R.Bounded ⦄ := by
+          R.LimbsLt 52 ⦄ := by
   unfold optional_mixed_multiscalar_mul
   exact backend.«VartimePrecomputedStrausx86_64-tables».optional_mixed_multiscalar_mul_spec
     _ _ _ _ _ self _ _ _ ps xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars
@@ -84,7 +84,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (dynamic_points : K) (ps : List curve25519.edwards.Point) (xs : List Clause0_Item)
     (ss : List scalar.Scalar) (ys : List Clause2_Item) (ds : List scalar.Scalar)
     (qops : List (Option edwards.EdwardsPoint.«x86_64-no-tables»))
-    (hself : self.Represents ps) (hself_b : self.Bounded)
+    (hself : self.Represents ps) (hself_b : self.LimbsLt 54)
     (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
     (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
     (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
@@ -93,7 +93,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.Bounded ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ ps.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -103,7 +103,7 @@ theorem optional_mixed_multiscalar_mul_spec
         ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss ps).sum +
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
-          R.Bounded ⦄ := by
+          R.LimbsLt 52 ⦄ := by
   unfold optional_mixed_multiscalar_mul
   exact backend.«VartimePrecomputedStrausx86_64-no-tables».optional_mixed_multiscalar_mul_spec
     _ _ _ _ _ self _ _ _ ps xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars

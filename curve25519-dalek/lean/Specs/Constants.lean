@@ -30,7 +30,7 @@ hypothesis that it represents the basepoint (see `Specs/Edwards.lean`); `BASEPOI
 (`RISTRETTO_BASEPOINT_COMPRESSED`, `RISTRETTO_BASEPOINT_POINT`, `RISTRETTO_BASEPOINT_TABLE`), left
 for the specs of `ristretto.rs`. Not translated: `X25519_LOW_ORDER_POINTS`.
 
-Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `Bounded`, `CompressedEdwardsY.asNat`
+Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `LimbsLt`, `CompressedEdwardsY.asNat`
 (`Defs/Edwards.lean`), `MontgomeryPoint.asNat` (`Defs/Montgomery.lean`), `curve25519.basepoint`
 (`Curve25519/Edwards/Basepoint.lean`), `curve25519.encode` (`Curve25519/Edwards/Encoding.lean`),
 `curve25519.eightTorsion` (`Curve25519/Edwards/Torsion.lean`), `curve25519.montgomeryBasepoint`
@@ -44,7 +44,7 @@ namespace «x86_64-tables»
 /-- `ED25519_BASEPOINT_POINT` represents the basepoint. -/
 recall ED25519_BASEPOINT_POINT_spec_point :
     ED25519_BASEPOINT_POINT.«x86_64-tables» ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = basepoint ∧ r.Bounded ⦄
+      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -59,7 +59,7 @@ namespace «x86_64-no-tables»
 /-- `ED25519_BASEPOINT_POINT` represents the basepoint. -/
 recall ED25519_BASEPOINT_POINT_spec_point :
     ED25519_BASEPOINT_POINT.«x86_64-no-tables» ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = basepoint ∧ r.Bounded ⦄
+      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -75,7 +75,7 @@ namespace «x86_64-tables»
 recall EIGHT_TORSION_spec_point :
     EIGHT_TORSION.«x86_64-tables»
       ⦃ (r : Array edwards.EdwardsPoint.«x86_64-tables» 8#usize) =>
-      ∀ i : Fin 8, r[i.val]!.OnCurve ∧ r[i.val]!.toPoint = eightTorsion i ∧ r[i.val]!.Bounded ⦄
+      ∀ i : Fin 8, r[i.val]!.OnCurve ∧ r[i.val]!.toPoint = eightTorsion i ∧ r[i.val]!.LimbsLt 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms EIGHT_TORSION_spec_point
@@ -90,7 +90,7 @@ namespace «x86_64-no-tables»
 recall EIGHT_TORSION_spec_point :
     EIGHT_TORSION.«x86_64-no-tables»
       ⦃ (r : Array edwards.EdwardsPoint.«x86_64-no-tables» 8#usize) =>
-      ∀ i : Fin 8, r[i.val]!.OnCurve ∧ r[i.val]!.toPoint = eightTorsion i ∧ r[i.val]!.Bounded ⦄
+      ∀ i : Fin 8, r[i.val]!.OnCurve ∧ r[i.val]!.toPoint = eightTorsion i ∧ r[i.val]!.LimbsLt 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms EIGHT_TORSION_spec_point

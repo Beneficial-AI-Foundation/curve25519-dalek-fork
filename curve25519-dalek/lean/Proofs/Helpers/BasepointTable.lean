@@ -54,18 +54,18 @@ open scoped Helpers.UpdateStep in
 /-- The loop of `create` over `0..32`: row `i` represents `2^(2 w i) • B`. -/
 theorem createLoop_spec (fromF : EdwardsPoint.«x86_64-tables» → Result Tab)
     (Rep : Tab → curve25519.edwards.Point → Prop) (Bnd : Tab → Prop)
-    (hfrom : ∀ Q : EdwardsPoint.«x86_64-tables», Q.Bounded → Q.OnCurve →
+    (hfrom : ∀ Q : EdwardsPoint.«x86_64-tables», Q.LimbsLt 52 → Q.OnCurve →
       fromF Q ⦃ (t : Tab) => Rep t Q.toPoint ∧ Bnd t ⦄)
     (radix : U32) (w : ℕ) (hw : radix.val = w) (hw' : 0 < w) (hw8 : w ≤ 8)
     (a : Array Tab 32#usize) (P : EdwardsPoint.«x86_64-tables»)
-    (hP : P.Bounded) (hon : P.OnCurve) :
+    (hP : P.LimbsLt 52) (hon : P.OnCurve) :
     loop (fun ((iter1, a1, P1) : (core.ops.range.Range Usize) × (Array Tab 32#usize) ×
         EdwardsPoint.«x86_64-tables») => createLoopBody fromF radix iter1 a1 P1)
       ({ start := 0#usize, «end» := 32#usize }, a, P)
       ⦃ (r : Array Tab 32#usize) =>
         ∀ i < 32, Rep r[i]! (2 ^ (2 * w * i) • P.toPoint) ∧ Bnd r[i]! ⦄ := by
   apply loop.spec_decr_nat (measure := fun (it, _, _) => it.end.val - it.start.val)
-    (inv := fun (it, t, Q) => it.end.val = 32 ∧ it.start.val ≤ 32 ∧ Q.Bounded ∧ Q.OnCurve ∧
+    (inv := fun (it, t, Q) => it.end.val = 32 ∧ it.start.val ≤ 32 ∧ Q.LimbsLt 52 ∧ Q.OnCurve ∧
       Q.toPoint = 2 ^ (2 * w * it.start.val) • P.toPoint ∧
       ∀ i < it.start.val, Rep t[i]! (2 ^ (2 * w * i) • P.toPoint) ∧ Bnd t[i]!)
   · rintro ⟨it, t, Q⟩ ⟨hend, hle, hQ, hQon, hQp, ht⟩
@@ -150,18 +150,18 @@ theorem mulBaseLoop_spec (adds : Usize) (hadds : adds.val ≤ 64)
     (sel : Tab → I8 → Result AffineNielsPoint.«x86_64-tables») (a : Array I8 64#usize)
     (tables : Array Tab 32#usize) (B : curve25519.edwards.Point) (w : ℕ)
     (hsel : ∀ i < adds.val, sel tables[i / 2]! a[i]! ⦃ (q : AffineNielsPoint.«x86_64-tables») =>
-      q.OnCurve ∧ q.toPoint = a[i]!.val • 2 ^ (2 * w * (i / 2)) • B ∧ q.Bounded ⦄)
+      q.OnCurve ∧ q.toPoint = a[i]!.val • 2 ^ (2 * w * (i / 2)) • B ∧ q.LimbsLt 54 ⦄)
     (hz : ∀ j < 64, adds.val ≤ j → a[j]!.val = 0) (i0 : Usize) (hi0 : i0.val < 2)
-    (P : EdwardsPoint.«x86_64-tables») (hP : P.Bounded) (hon : P.OnCurve) :
+    (P : EdwardsPoint.«x86_64-tables») (hP : P.LimbsLt 52) (hon : P.OnCurve) :
     loop (fun ((P1, i1) : EdwardsPoint.«x86_64-tables» × Usize) =>
         mulBaseLoopBody adds sel a tables P1 i1) (P, i0)
       ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
         r.toPoint = P.toPoint +
           (∑ k ∈ Finset.range 32, a[i0.val + 2 * k]!.val * 2 ^ (2 * w * k)) • B ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   apply loop.spec_decr_nat (measure := fun (_, i) => adds.val + 2 - i.val)
     (inv := fun (Q, i) => i.val % 2 = i0.val ∧ i0.val ≤ i.val ∧ i.val ≤ adds.val + 1 ∧
-      Q.OnCurve ∧ Q.Bounded ∧ Q.toPoint = P.toPoint +
+      Q.OnCurve ∧ Q.LimbsLt 52 ∧ Q.toPoint = P.toPoint +
         (∑ k ∈ Finset.range (i.val / 2), a[i0.val + 2 * k]!.val * 2 ^ (2 * w * k)) • B)
   · rintro ⟨Q, i⟩ ⟨hpar, hge, hle, hQon, hQb, hQp⟩
     unfold mulBaseLoopBody

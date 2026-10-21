@@ -24,7 +24,7 @@ namespace EdwardsPoint.«x86_64-tables».Insts.ZeroizeZeroize
 @[step]
 theorem zeroize_spec (self : EdwardsPoint.«x86_64-tables») :
     zeroize self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.toExtended = Extended.identity ∧ r.Bounded ⦄ := by
+      r.toExtended = Extended.identity ∧ r.LimbsLt 52 ⦄ := by
   unfold zeroize
   step as ⟨X, hX⟩
   step as ⟨one, hone, hone_lt⟩
@@ -39,7 +39,7 @@ theorem zeroize_spec (self : EdwardsPoint.«x86_64-tables») :
 /-- `Zeroize for EdwardsPoint` leaves the neutral element. -/
 theorem zeroize_spec_point (self : EdwardsPoint.«x86_64-tables») :
     zeroize self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (zeroize_spec self) fun r ⟨hr, hb⟩ => by
     rw [EdwardsPoint.«x86_64-tables».onCurve_iff,
       EdwardsPoint.«x86_64-tables».toPoint_def,
@@ -54,7 +54,7 @@ namespace EdwardsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize
 @[step]
 theorem zeroize_spec (self : EdwardsPoint.«x86_64-no-tables») :
     zeroize self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.toExtended = Extended.identity ∧ r.Bounded ⦄ := by
+      r.toExtended = Extended.identity ∧ r.LimbsLt 52 ⦄ := by
   unfold zeroize
   step as ⟨X, hX⟩
   step as ⟨one, hone, hone_lt⟩
@@ -69,7 +69,7 @@ theorem zeroize_spec (self : EdwardsPoint.«x86_64-no-tables») :
 /-- `Zeroize for EdwardsPoint` leaves the neutral element. -/
 theorem zeroize_spec_point (self : EdwardsPoint.«x86_64-no-tables») :
     zeroize self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (zeroize_spec self) fun r ⟨hr, hb⟩ => by
     rw [EdwardsPoint.«x86_64-no-tables».onCurve_iff,
       EdwardsPoint.«x86_64-no-tables».toPoint_def,

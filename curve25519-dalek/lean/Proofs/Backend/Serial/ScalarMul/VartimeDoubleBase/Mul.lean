@@ -114,25 +114,26 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     (table_A : window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-tables»)
     (table_B : window.NafLookupTable8 AffineNielsPoint.«x86_64-tables»)
     (r : ProjectivePoint.«x86_64-tables») (A B : curve25519.edwards.Point)
-    (hA : table_A.Represents A) (hAb : table_A.Bounded)
-    (hB : table_B.Represents B) (hBb : table_B.Bounded)
+    (hA : table_A.Represents A) (hAb : table_A.LimbsLt 54)
+    (hB : table_B.Represents B) (hBb : table_B.LimbsLt 54)
     (ha : ∀ k < 256, a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧ 2 * |a_naf[k]!.val| < 2 ^ 5)
     (hb : ∀ k < 256, b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧ 2 * |b_naf[k]!.val| < 2 ^ 8)
-    (hi : i.val < 256) (hr : r.OnCurve) (hrb : r.Bounded)
+    (hi : i.val < 256) (hr : r.OnCurve) (hrb : r.LimbsLt 52)
     (hrp : r.toPoint = nafTail a_naf (i.val + 1) • A + nafTail b_naf (i.val + 1) • B) :
     mul.«x86_64-tables_loop1» a_naf b_naf i table_A table_B r
       ⦃ (res : edwards.EdwardsPoint.«x86_64-tables») => res.OnCurve ∧
-        res.toPoint = nafTail a_naf 0 • A + nafTail b_naf 0 • B ∧ res.Bounded ⦄ := by
+        res.toPoint = nafTail a_naf 0 • A + nafTail b_naf 0 • B ∧ res.LimbsLt 52 ⦄ := by
   unfold mul.«x86_64-tables_loop1»
   apply loop.spec_decr_nat (measure := fun (j, _) => j.val)
-    (inv := fun (j, q) => j.val < 256 ∧ q.OnCurve ∧ q.Bounded ∧
+    (inv := fun (j, q) => j.val < 256 ∧ q.OnCurve ∧ q.LimbsLt 52 ∧
       q.toPoint = nafTail a_naf (j.val + 1) • A + nafTail b_naf (j.val + 1) • B)
   · rintro ⟨j, q⟩ ⟨hj, hq, hqb, hqp⟩
     unfold mul.«x86_64-tables_loop1».body
     step with «ProjectivePointx86_64-tables».double_spec_point as ⟨t, hton, htp, htb⟩
     step as ⟨d, hd⟩
     rw [show lift (core.cmp.impls.OrdI8.cmp d 0#i8) = ok (compare d.val 0) from rfl, bind_ok]
-    apply spec_bind (Pₘ := fun t1 => t1.OnCurve ∧ t1.toPoint = t.toPoint + d.val • A ∧ t1.Bounded)
+    apply spec_bind (Pₘ := fun t1 => t1.OnCurve ∧ t1.toPoint = t.toPoint + d.val • A ∧
+      t1.LimbsLt 54)
     · rcases lt_trichotomy d.val 0 with hneg | hzero | hpos
       · rw [(compare_lt_iff_lt).mpr hneg]
         simp only
@@ -169,7 +170,7 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     step as ⟨e, he⟩
     rw [show lift (core.cmp.impls.OrdI8.cmp e 0#i8) = ok (compare e.val 0) from rfl, bind_ok]
     apply spec_bind (Pₘ := fun t2 => t2.OnCurve ∧ t2.toPoint = t1.toPoint + e.val • B ∧
-      t2.Bounded)
+      t2.LimbsLt 54)
     · rcases lt_trichotomy e.val 0 with hneg | hzero | hpos
       · rw [(compare_lt_iff_lt).mpr hneg]
         simp only
@@ -227,10 +228,10 @@ open scoped Helpers.IndexStep in
 `< 2^255`, the precondition of `non_adjacent_form`); limbs `< 2^52`. -/
 @[step]
 theorem mul_spec (a : scalar.Scalar) (A : edwards.EdwardsPoint.«x86_64-tables»)
-    (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255) (hA : A.Bounded) (hon : A.OnCurve)
+    (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255) (hA : A.LimbsLt 52) (hon : A.OnCurve)
     (hb : b.asNat < 2 ^ 255) :
     mul.«x86_64-tables» a A b ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul.«x86_64-tables»
   step as ⟨a_naf, haval, hadig, hanaf⟩
   step as ⟨b_naf, hbval, hbdig, hbnaf⟩
@@ -323,25 +324,26 @@ open scoped Helpers.IndexStep in
 private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     (table_A table_B : window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-no-tables»)
     (r : ProjectivePoint.«x86_64-no-tables») (A B : curve25519.edwards.Point)
-    (hA : table_A.Represents A) (hAb : table_A.Bounded)
-    (hB : table_B.Represents B) (hBb : table_B.Bounded)
+    (hA : table_A.Represents A) (hAb : table_A.LimbsLt 54)
+    (hB : table_B.Represents B) (hBb : table_B.LimbsLt 54)
     (ha : ∀ k < 256, a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧ 2 * |a_naf[k]!.val| < 2 ^ 5)
     (hb : ∀ k < 256, b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧ 2 * |b_naf[k]!.val| < 2 ^ 5)
-    (hi : i.val < 256) (hr : r.OnCurve) (hrb : r.Bounded)
+    (hi : i.val < 256) (hr : r.OnCurve) (hrb : r.LimbsLt 52)
     (hrp : r.toPoint = nafTail a_naf (i.val + 1) • A + nafTail b_naf (i.val + 1) • B) :
     mul.«x86_64-no-tables_loop1» a_naf b_naf i table_A table_B r
       ⦃ (res : edwards.EdwardsPoint.«x86_64-no-tables») => res.OnCurve ∧
-        res.toPoint = nafTail a_naf 0 • A + nafTail b_naf 0 • B ∧ res.Bounded ⦄ := by
+        res.toPoint = nafTail a_naf 0 • A + nafTail b_naf 0 • B ∧ res.LimbsLt 52 ⦄ := by
   unfold mul.«x86_64-no-tables_loop1»
   apply loop.spec_decr_nat (measure := fun (j, _) => j.val)
-    (inv := fun (j, q) => j.val < 256 ∧ q.OnCurve ∧ q.Bounded ∧
+    (inv := fun (j, q) => j.val < 256 ∧ q.OnCurve ∧ q.LimbsLt 52 ∧
       q.toPoint = nafTail a_naf (j.val + 1) • A + nafTail b_naf (j.val + 1) • B)
   · rintro ⟨j, q⟩ ⟨hj, hq, hqb, hqp⟩
     unfold mul.«x86_64-no-tables_loop1».body
     step with «ProjectivePointx86_64-no-tables».double_spec_point as ⟨t, hton, htp, htb⟩
     step as ⟨d, hd⟩
     rw [show lift (core.cmp.impls.OrdI8.cmp d 0#i8) = ok (compare d.val 0) from rfl, bind_ok]
-    apply spec_bind (Pₘ := fun t1 => t1.OnCurve ∧ t1.toPoint = t.toPoint + d.val • A ∧ t1.Bounded)
+    apply spec_bind (Pₘ := fun t1 => t1.OnCurve ∧ t1.toPoint = t.toPoint + d.val • A ∧
+      t1.LimbsLt 54)
     · rcases lt_trichotomy d.val 0 with hneg | hzero | hpos
       · rw [(compare_lt_iff_lt).mpr hneg]
         simp only
@@ -378,7 +380,7 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     step as ⟨e, he⟩
     rw [show lift (core.cmp.impls.OrdI8.cmp e 0#i8) = ok (compare e.val 0) from rfl, bind_ok]
     apply spec_bind (Pₘ := fun t2 => t2.OnCurve ∧ t2.toPoint = t1.toPoint + e.val • B ∧
-      t2.Bounded)
+      t2.LimbsLt 54)
     · rcases lt_trichotomy e.val 0 with hneg | hzero | hpos
       · rw [(compare_lt_iff_lt).mpr hneg]
         simp only
@@ -433,10 +435,10 @@ open scoped Helpers.IndexStep in
 `< 2^255`, the precondition of `non_adjacent_form`); limbs `< 2^52`. -/
 @[step]
 theorem mul_spec (a : scalar.Scalar) (A : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255) (hA : A.Bounded) (hon : A.OnCurve)
+    (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255) (hA : A.LimbsLt 52) (hon : A.OnCurve)
     (hb : b.asNat < 2 ^ 255) :
     mul.«x86_64-no-tables» a A b ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul.«x86_64-no-tables»
   step as ⟨a_naf, haval, hadig, hanaf⟩
   step as ⟨b_naf, hbval, hbdig, hbnaf⟩

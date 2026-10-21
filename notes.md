@@ -39,7 +39,7 @@ Read `AGENTS.md` first (PRs to the curve25519-dalek repo must be written by huma
   `*External_Template.lean` files Aeneas emits, and update them by hand.
 - **External function signatures are `opaque`** wherever possible (the template prints `axiom`;
   replace it), so that they add no axiom. Their behaviour is then given by one predicate
-  `<function>.Spec : Prop` each and one axiom per crate (`core.spec`, `alloc.spec`, in
+  `<function>.Contract : Prop` each and one axiom per crate (`core.contract`, `alloc.contract`, in
   `FunsExternal.lean`) stating all of them, the only trusted additions; the theorems
   `<function>_spec` are projections, so `#print axioms` names the crate axioms.
 
@@ -99,7 +99,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 ```
 
 **External-crate libraries (`Subtle`, `Zeroize`):**
-- **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Basic.lean`. Basic holds `opaque` signatures with the template names, one predicate `<function>.Spec : Prop` per function (its specification, conditional on any trait-instance behaviour it relies on), a structure `<crate>.Spec` with one field per predicate, and the single axiom `<crate>.spec : <crate>.Spec`. The `@[step]` theorems `<function>_spec` are its projections, so a guard list names at most `subtle.spec` and `zeroize.spec`. Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
+- **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Basic.lean`. Basic holds `opaque` signatures with the template names, one predicate `<function>.Contract : Prop` per function (its contract, conditional on any trait-instance behaviour it relies on), a structure `<crate>.Contract` with one field per predicate, and the single axiom `<crate>.contract : <crate>.Contract`. The `@[step]` theorems `<function>_spec` are its projections, so a guard list names at most `subtle.contract` and `zeroize.contract`. (`Contract`, not `Spec`: Mathlib's `Spec` is the spectrum of a ring.) Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
 - **Derived part:** `<Lib>/Lemmas.lean` (generic), `<Lib>/Instances.lean` (about instances in `Funs.lean`) and `Zeroize/Consistency.lean`. They add no axioms.
 - **Imports:** `FunsExternal.lean` imports only `<Lib>.Basic`.
 
@@ -189,7 +189,7 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   definitional equality. It adds no declaration.
 - **Pinned axioms:** `#guard_msgs` fixes the axioms each statement rests on.
   - `sorryAx` while the proof is pending (only on a working branch: CI rejects `sorry`).
-  - `subtle.spec`/`zeroize.spec` (the one axiom of each external crate) or std externals
+  - `subtle.contract`/`zeroize.contract` (the one axiom of each external crate) or std externals
     (`FunsExternal.lean`) that the proof uses.
   - For dispatched functions: `get_target` and the `…_native.decide.ax_*` axioms of Aeneas's
     `toStr` (the string literals of the dispatchers and of `OnX86_64`). Accepted: they only assert
@@ -236,9 +236,9 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   - **no natural-number subtraction or division that could truncate**: move terms to the other
     side (`r.asNat + 1 = p`, `(r.asNat + _rhs.asNat) % p = self.asNat % p`, `r.asNat * 4 = A + 2`);
   - lines stay within 100 characters (wrap conjuncts).
-- **Point statements:** coordinate-level exact `@[step]` specs with `Bounded` hypotheses
-  (`r.toCompleted = self.toProjective.double ∧ r.Bounded`), plus `_spec_point` corollaries
-  (`r.OnCurve ∧ r.toPoint = 2 • self.toPoint ∧ r.Bounded`); iterated operations (scalar
+- **Point statements:** coordinate-level exact `@[step]` specs with `LimbsLt` hypotheses
+  (`r.toCompleted = self.toProjective.double ∧ r.LimbsLt 54`), plus `_spec_point` corollaries
+  (`r.OnCurve ∧ r.toPoint = 2 • self.toPoint ∧ r.LimbsLt 52`); iterated operations (scalar
   multiplication) have point-level main specs, and the spec summaries use the point-level forms.
   Hypotheses `hself`, `hother`, `hon`/`hself_on`, `hscalar`; scalars unreduced (`s.asNat • P`,
   precondition `s.asNat < 2^255`).
@@ -246,6 +246,12 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   whole file. A long `namespace X.Y` is split into two consecutive `namespace` commands (closed by
   two `end`s); long strings use string gaps (`\` at the end of the line). Only a single token over
   100 characters justifies `set_option linter.style.longLine false in` on that one command.
+- **Limb bounds:** every point structure and table has `LimbsLt (n : ℕ) (self) : Prop`, "every
+  limb is `< 2^n`" (tables: of every entry), stated with the bound: `r.LimbsLt 52` for
+  `EdwardsPoint`, `AffinePoint` and the projective points, `r.LimbsLt 54` for `CompletedPoint` and
+  the Niels forms and their tables. Names of `Prop`s follow Mathlib: `Is` + adjective (`IsValid`),
+  no `Is` for relations and point conditions (`Represents`, `ProjEq`, `OnCurve`, like Mathlib's
+  `Equation`/`Nonsingular`).
 - **`Choice` validity:** the `subtle` crate maintains the invariant that a `Choice` is `0` or `1`
   (`subtle.Choice.IsValid`, defined in `Subtle/Basic.lean`). Every spec (and `Subtle` spec
   axiom) with a `Choice` argument `c` assumes `(hc : c.IsValid)`, and every spec returning a
@@ -293,7 +299,7 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   lemmas (e.g. about `Nat`, `ZMod p`, `Nat.ofDigits`), use whichever tactic is right, including
   these.
 - **Statements are frozen.** A proof file never changes the statement text of its theorem.
-- **Pitfalls:** destructure a `Bounded` hypothesis only after the `step` whose callee needs it;
+- **Pitfalls:** destructure a `LimbsLt` hypothesis only after the `step` whose callee needs it;
   `ZMod p` inversion does not reduce in the kernel (certificates use the inversion-free
   `Extended.nsmul`/`IsZero`).
 - **`Result` is a coinductive ITree** in this Aeneas (`Aeneas/Std/Primitives.lean`,
@@ -388,7 +394,7 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 **Dalek point layer** (2026-10-20):
 - `Defs/{FieldElement51 (toField), CurveModels, Edwards, Montgomery, Ristretto, Window,
   ScalarMul, Iterator}.lean`: meaning of every point struct (`toX` coordinates, `OnCurve`,
-  `Bounded`, `toPoint`), byte encodings, the lenient decoder `decodeLenient`, table predicates.
+  `LimbsLt`, `toPoint`), byte encodings, the lenient decoder `decodeLenient`, table predicates.
 - `Proofs/Helpers/{ToField, Coords, Edwards, EdwardsMontgomery, Window, Naf, BasepointTable,
   Iterator, Vec, Collect, Cmp}.lean`: bridges from the field specs (`asNat % p`) to `toField`, and
   shared lemmas.
@@ -422,38 +428,34 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   behaviour; the per-type summaries do not repeat it (2026-10-20).
 - Spec summaries cover the crate's public API only; the coverage is checked by review, not by a
   committed script or CI step.
-- One axiom per external crate (2026-10-21): `subtle.spec`, `zeroize.spec`, `core.spec` and
-  `alloc.spec` state all the per-function predicates; the per-function `@[step]` theorems are
+- Limb bounds as `LimbsLt n` (2026-10-21), replacing the per-type `Bounded`; the raw field-level
+  form `∀ i < 5, a[i]!.val < 2 ^ k` in the field specs is still to convert (plan).
+- One axiom per external crate (2026-10-21): `subtle.contract`, `zeroize.contract`,
+  `core.contract` and `alloc.contract` state all the per-function predicates; the per-function `@[step]` theorems are
   projections. Guard lists name only these (plus `get_target`, `core.fmt.Formatter` and the
   Aeneas `toStr` axioms).
-- `Vec::is_empty` has a spec (`alloc.vec.Vec.is_empty.Spec`: `b = decide (v.length = 0)`, no
+- `Vec::is_empty` has a contract (`alloc.vec.Vec.is_empty.Contract`: `b = decide (v.length = 0)`, no
   precondition), decided 2026-10-21, like the other std opaques.
 
 ## Open decisions (for the owner) and known gaps
 
-1. **`VartimePrecomputedMultiscalarMul::is_empty`:** blocked; `alloc.vec.Vec.is_empty` is opaque
-   without a spec. Options: a spec axiom in `FunsExternal.lean` (as for
-   `core.result.Result.map_spec`), a body, or leaving the item out.
-2. **`vartime_triple_scalar_mul_basepoint`:** not done; the `_128` table is certified, what is
+1. **`vartime_triple_scalar_mul_basepoint`:** not done; the `_128` table is certified, what is
    left is a lemma "NAF digits above index 128 are zero for `x < 2^128`" and the proof.
-3. **The three new `x86_64-tables` statements** in `Specs/Edwards.lean` (`mul_base`,
+2. **The three new `x86_64-tables` statements** in `Specs/Edwards.lean` (`mul_base`,
    `mul_base_clamped`, `vartime_double_scalar_mul_basepoint`): review (same shape as the
    `x86_64-no-tables` ones).
-4. **Aeneas-generated axioms in guard lists:** `…_native.decide.ax_*` (from `toStr` on panic
+3. **Aeneas-generated axioms in guard lists:** `…_native.decide.ax_*` (from `toStr` on panic
    messages) and `core.fmt.Formatter` appear in the multiscalar/table guards; acceptable?
-5. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
-6. **Long lines:** 40 commands in generated proof files disable the long-line linter although
+4. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
+5. **Long lines:** 40 commands in generated proof files disable the long-line linter although
    some names exceed 100 characters only with indentation (the convention allows the option only
    for single tokens over 100). Shorten via `open`/local abbreviations, or accept.
-7. **Naming style of the spec definitions:** discuss and fix the conventions, e.g. `Bounded` versus
-   `IsBounded` for the limb-bound predicates (`OnCurve`, `Represents`, `IsValid` likewise), before
-   more `Defs` are written.
-8. **Translating `lizard`:** `src/lizard/` sits behind the `lizard` Cargo feature (which pulls in
+6. **Translating `lizard`:** `src/lizard/` sits behind the `lizard` Cargo feature (which pulls in
    `digest`); `scripts/aeneas-translate.sh` translates with `--no-default-features --features
    alloc,zeroize`, so it is not translated. Include it (and verify it), or leave it out.
-9. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
+7. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
    `Specs/` and `Proofs/` (see also "Project-defined traits" below).
-10. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
+8. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
    variants into two files); window tables' `Default`/`Clone`/`Zeroize` not specified (low
    value); naming ambiguity `encode`/`decode`/`basepoint` between `curve25519` and
    `curve25519.Ristretto` under a double `open`; `twistL` and `ZMod.abs` names unconfirmed.
@@ -490,26 +492,29 @@ emit constants as literals (no longer needed).
 
 ## Plan
 
-1. Owner decisions on the open decisions 1–3; `vartime_triple_scalar_mul_basepoint` (the
-   `_128` table is certified; needs the NAF-digit lemma).
-2. `montgomery.rs`: library support in `Curve25519/{X25519,Montgomery}.lean` (`x25519`, `xMul`,
+1. `vartime_triple_scalar_mul_basepoint` (the `_128` table is certified; needs the NAF-digit
+   lemma), and the owner's review of the new `x86_64-tables` statements (open decision 2).
+2. **`FieldElement51.LimbsLt n`:** define it, write the point predicates' bodies with it
+   (`X.LimbsLt n ∧ Y.LimbsLt n ∧ …`), and replace the raw `∀ i < 5, a[i]!.val < 2 ^ k` of the field
+   specs (about 200 occurrences in `Proofs/`; statements change, so sign-off).
+3. `montgomery.rs`: library support in `Curve25519/{X25519,Montgomery}.lean` (`x25519`, `xMul`,
    `ladder_eq_xMul`, `x25519_eq_u_nsmul`, `x25519_basepoint_edwards`, `edwardsToMontgomery`,
    `montgomeryTwist`) and `Defs/Montgomery.lean` (`MontgomeryPoint.u`, `ProjectivePoint.toXZ`,
-   `Bounded`). `mul_clamped` is exactly RFC 7748 X25519 (byte-exact via `x25519`), `Mul` uses
+   `LimbsLt`). `mul_clamped` is exactly RFC 7748 X25519 (byte-exact via `x25519`), `Mul` uses
    `scalar.asNat % 2^255` with no precondition, and the old project's Montgomery `mul_spec` was
    false (do not port it).
-3. `ristretto.rs` (+ `elligator.rs`): library support in `Curve25519/Ristretto/*` (`Rel`,
+4. `ristretto.rs` (+ `elligator.rs`): library support in `Curve25519/Ristretto/*` (`Rel`,
    `rel_iff_formula` = meaning of `ct_eq`, `even_iff_isSquare`, `decodeRep`/`encodeRep`,
    `sqrtRatioM1` with the uniqueness lemmas to match `sqrt_ratio_i_spec` via
    `Proofs/Helpers/ToField.lean`'s `sqrtRatioM1_eq_of_spec`, `mapRep`, `fromUniformRep`). First
    move the private `conditional_negate_spec`, duplicated in `Proofs/Field/SqrtRatioI.lean` and
    `Proofs/Edwards/Decompress.lean`, to `Proofs/Helpers`.
-4. Remaining files (`constants.rs` Ristretto constants, …; `lizard`: open decision 8).
-5. The u32 backend (below).
-6. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
+5. Remaining files (`constants.rs` Ristretto constants, …; `lizard`: open decision 6).
+6. The u32 backend (below).
+7. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
-7. Add std lib models to Aeneas.
+8. Add std lib models to Aeneas.
 
 ### u32 backend
 

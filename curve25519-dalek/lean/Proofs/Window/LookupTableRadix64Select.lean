@@ -34,13 +34,13 @@ namespace «LookupTableRadix64ProjectiveNielsPointx86_64-tables»
 `-32 ≤ x ≤ 32`; limbs `< 2^54`. -/
 @[step]
 theorem select_spec (self : LookupTableRadix64 ProjectiveNielsPoint.«x86_64-tables») (x : I8)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P)
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
     (hx : -32 ≤ x.val ∧ x.val ≤ 32) :
     LookupTableRadix64.select Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
       (subtle.ConditionallyNegatable.Blanket SubtleConditionallySelectable
         «CoreOpsArithNegProjectiveNielsPointx86_64-tables»)
       self x ⦃ (r : ProjectiveNielsPoint.«x86_64-tables») =>
-        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.Bounded ⦄ :=
+        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.LimbsLt 54 ⦄ :=
   window.select_spec (-32)#i8 32#i16 33#usize (by decide) (by decide) (by decide) (by decide)
     Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
     «CoreOpsArithNegProjectiveNielsPointx86_64-tables»
@@ -63,13 +63,13 @@ namespace «LookupTableRadix64AffineNielsPointx86_64-tables»
 `-32 ≤ x ≤ 32`; limbs `< 2^54`. -/
 @[step]
 theorem select_spec (self : LookupTableRadix64 AffineNielsPoint.«x86_64-tables») (x : I8)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P)
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
     (hx : -32 ≤ x.val ∧ x.val ≤ 32) :
     LookupTableRadix64.select Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
       (subtle.ConditionallyNegatable.Blanket SubtleConditionallySelectable
         «CoreOpsArithNegAffineNielsPointx86_64-tables»)
       self x ⦃ (r : AffineNielsPoint.«x86_64-tables») =>
-        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.Bounded ⦄ :=
+        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.LimbsLt 54 ⦄ :=
   window.select_spec (-32)#i8 32#i16 33#usize (by decide) (by decide) (by decide) (by decide)
     Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
     «CoreOpsArithNegAffineNielsPointx86_64-tables»

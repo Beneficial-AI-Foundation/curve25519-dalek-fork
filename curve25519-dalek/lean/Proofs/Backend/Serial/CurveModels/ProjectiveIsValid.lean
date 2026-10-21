@@ -27,7 +27,7 @@ namespace ProjectivePoint.«x86_64-tables».Insts.Curve25519_dalekTraitsValidity
 /-- `ValidityCheck for ProjectivePoint`: the homogeneous curve equation
 `(Y² - X²) Z² = Z⁴ + d X² Y²` (it does not check `Z ≠ 0`); limbs `< 2^52`. -/
 @[step]
-theorem is_valid_spec (self : ProjectivePoint.«x86_64-tables») (hself : self.Bounded) :
+theorem is_valid_spec (self : ProjectivePoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     is_valid self ⦃ (b : Bool) =>
       b = true ↔ (self.Y.toField ^ 2 - self.X.toField ^ 2) * self.Z.toField ^ 2 =
         self.Z.toField ^ 4 + d * self.X.toField ^ 2 * self.Y.toField ^ 2 ⦄ := by
@@ -51,7 +51,7 @@ theorem is_valid_spec (self : ProjectivePoint.«x86_64-tables») (hself : self.B
   constructor <;> intro h <;> linear_combination h
 
 /-- `ValidityCheck for ProjectivePoint` with `Z ≠ 0`: `OnCurve`. -/
-theorem is_valid_spec_point (self : ProjectivePoint.«x86_64-tables») (hself : self.Bounded)
+theorem is_valid_spec_point (self : ProjectivePoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hZ : self.Z.toField ≠ 0) :
     is_valid self ⦃ (b : Bool) => b = true ↔ self.OnCurve ⦄ :=
   spec_mono (is_valid_spec self hself) fun b hb => by
@@ -65,7 +65,7 @@ namespace ProjectivePoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsValid
 /-- `ValidityCheck for ProjectivePoint`: the homogeneous curve equation
 `(Y² - X²) Z² = Z⁴ + d X² Y²` (it does not check `Z ≠ 0`); limbs `< 2^52`. -/
 @[step]
-theorem is_valid_spec (self : ProjectivePoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem is_valid_spec (self : ProjectivePoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     is_valid self ⦃ (b : Bool) =>
       b = true ↔ (self.Y.toField ^ 2 - self.X.toField ^ 2) * self.Z.toField ^ 2 =
         self.Z.toField ^ 4 + d * self.X.toField ^ 2 * self.Y.toField ^ 2 ⦄ := by
@@ -89,7 +89,7 @@ theorem is_valid_spec (self : ProjectivePoint.«x86_64-no-tables») (hself : sel
   constructor <;> intro h <;> linear_combination h
 
 /-- `ValidityCheck for ProjectivePoint` with `Z ≠ 0`: `OnCurve`. -/
-theorem is_valid_spec_point (self : ProjectivePoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem is_valid_spec_point (self : ProjectivePoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hZ : self.Z.toField ≠ 0) :
     is_valid self ⦃ (b : Bool) => b = true ↔ self.OnCurve ⦄ :=
   spec_mono (is_valid_spec self hself) fun b hb => by

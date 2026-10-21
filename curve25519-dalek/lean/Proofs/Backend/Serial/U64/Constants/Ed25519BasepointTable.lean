@@ -70,7 +70,7 @@ is the lookup table of `2^(8 i) • B`); limbs `< 2^54`. -/
 theorem ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN_spec :
     ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN
       ⦃ (r : edwards.EdwardsBasepointTable.«x86_64-tables») =>
-        r.Represents basepoint ∧ r.Bounded ⦄ := by
+        r.Represents basepoint ∧ r.LimbsLt 54 ⦄ := by
   rw [inner_eq, spec_ok]
   constructor
   · intro i hi j hj
@@ -89,7 +89,7 @@ table of `2^(8 i) • B`); limbs `< 2^54`. -/
 @[step]
 theorem ED25519_BASEPOINT_TABLE_spec :
     ED25519_BASEPOINT_TABLE ⦃ (r : edwards.EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents basepoint ∧ r.Bounded ⦄ := by
+      r.Represents basepoint ∧ r.LimbsLt 54 ⦄ := by
   unfold ED25519_BASEPOINT_TABLE
   exact ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN_spec
 

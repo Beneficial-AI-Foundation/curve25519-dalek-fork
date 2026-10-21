@@ -27,7 +27,7 @@ namespace EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsValidityChe
 `(Y² - X²) Z² = Z⁴ + d X² Y²` and `X Y = Z T` (it does not check `Z ≠ 0`);
 limbs `< 2^52`. -/
 @[step]
-theorem is_valid_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem is_valid_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     is_valid self ⦃ (b : Bool) =>
       b = true ↔ (self.Y.toField ^ 2 - self.X.toField ^ 2) * self.Z.toField ^ 2 =
           self.Z.toField ^ 4 + d * self.X.toField ^ 2 * self.Y.toField ^ 2 ∧
@@ -55,7 +55,7 @@ theorem is_valid_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Boun
     exact iff_of_false Bool.false_ne_true fun h => hb (hpoc.mpr h.1)
 
 /-- `ValidityCheck for EdwardsPoint` with `Z ≠ 0`: `OnCurve`. -/
-theorem is_valid_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem is_valid_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hZ : self.Z.toField ≠ 0) :
     is_valid self ⦃ (b : Bool) => b = true ↔ self.OnCurve ⦄ :=
   spec_mono (is_valid_spec self hself) fun b hb => by
@@ -74,7 +74,7 @@ namespace EdwardsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsValidity
 `(Y² - X²) Z² = Z⁴ + d X² Y²` and `X Y = Z T` (it does not check `Z ≠ 0`);
 limbs `< 2^52`. -/
 @[step]
-theorem is_valid_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem is_valid_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     is_valid self ⦃ (b : Bool) =>
       b = true ↔ (self.Y.toField ^ 2 - self.X.toField ^ 2) * self.Z.toField ^ 2 =
           self.Z.toField ^ 4 + d * self.X.toField ^ 2 * self.Y.toField ^ 2 ∧
@@ -102,7 +102,7 @@ theorem is_valid_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.B
     exact iff_of_false Bool.false_ne_true fun h => hb (hpoc.mpr h.1)
 
 /-- `ValidityCheck for EdwardsPoint` with `Z ≠ 0`: `OnCurve`. -/
-theorem is_valid_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem is_valid_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hZ : self.Z.toField ≠ 0) :
     is_valid self ⦃ (b : Bool) => b = true ↔ self.OnCurve ⦄ :=
   spec_mono (is_valid_spec self hself) fun b hb => by

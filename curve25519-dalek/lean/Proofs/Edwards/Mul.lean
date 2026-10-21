@@ -25,9 +25,9 @@ namespace «CoreOpsArithMulSharedAScalarEdwardsPointx86_64-tables»
 /-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • P` (unreduced, `< 2^255`); limbs `< 2^52`. -/
 @[step]
 theorem mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (scalar : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -40,9 +40,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointx86_64-tables»
 /-- `Mul<Scalar> for EdwardsPoint`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -55,9 +55,9 @@ namespace «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
 /-- `Mul<&Scalar> for EdwardsPoint`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -70,9 +70,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointx86_64-tables»
 /-- `Mul<Scalar> for &EdwardsPoint`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -85,9 +85,9 @@ namespace «CoreOpsArithMulSharedAEdwardsPointx86_64-tablesEdwardsPointx86_64-ta
 /-- `Mul<&EdwardsPoint> for &Scalar`: as `&EdwardsPoint * &Scalar`. -/
 @[step]
 theorem mul_spec (self : scalar.Scalar) (point : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.asNat < 2 ^ 255) (hpoint : point.Bounded) (hpoint_on : point.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hpoint : point.LimbsLt 52) (hpoint_on : point.OnCurve) :
     mul self point ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -100,9 +100,9 @@ namespace «CoreOpsArithMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 /-- `Mul<EdwardsPoint> for Scalar`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.Bounded) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -115,9 +115,9 @@ namespace «CoreOpsArithMulSharedBEdwardsPointx86_64-tablesEdwardsPointx86_64-ta
 /-- `Mul<&EdwardsPoint> for Scalar`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.Bounded) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -130,9 +130,9 @@ namespace «CoreOpsArithMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 /-- `Mul<EdwardsPoint> for &Scalar`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.Bounded) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -145,9 +145,9 @@ namespace «CoreOpsArithMulSharedAScalarEdwardsPointx86_64-no-tables»
 /-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • P` (unreduced, `< 2^255`); limbs `< 2^52`. -/
 @[step]
 theorem mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (scalar : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -160,9 +160,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointx86_64-no-tables»
 /-- `Mul<Scalar> for EdwardsPoint`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -175,9 +175,9 @@ namespace «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-no-tables»
 /-- `Mul<&Scalar> for EdwardsPoint`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -190,9 +190,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointx86_64-no-tables»
 /-- `Mul<Scalar> for &EdwardsPoint`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -205,9 +205,9 @@ namespace «CoreOpsArithMulSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64
 /-- `Mul<&EdwardsPoint> for &Scalar`: as `&EdwardsPoint * &Scalar`. -/
 @[step]
 theorem mul_spec (self : scalar.Scalar) (point : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hpoint : point.Bounded) (hpoint_on : point.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hpoint : point.LimbsLt 52) (hpoint_on : point.OnCurve) :
     mul self point ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -220,9 +220,9 @@ namespace «CoreOpsArithMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tab
 /-- `Mul<EdwardsPoint> for Scalar`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.Bounded) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -235,9 +235,9 @@ namespace «CoreOpsArithMulSharedBEdwardsPointx86_64-no-tablesEdwardsPointx86_64
 /-- `Mul<&EdwardsPoint> for Scalar`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.Bounded) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 
@@ -250,9 +250,9 @@ namespace «CoreOpsArithMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tab
 /-- `Mul<EdwardsPoint> for &Scalar`: as the borrowed form. -/
 @[step]
 theorem mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.Bounded) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   step*
 

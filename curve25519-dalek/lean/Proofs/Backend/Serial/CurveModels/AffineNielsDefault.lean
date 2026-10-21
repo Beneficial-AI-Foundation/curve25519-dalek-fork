@@ -21,14 +21,14 @@ namespace AffineNielsPoint.«x86_64-tables».Insts.CoreDefaultDefault
 @[step]
 theorem default_spec :
     default ⦃ (r : AffineNielsPoint.«x86_64-tables») =>
-      r.toAffineNiels = AffineNiels.identity ∧ r.Bounded ⦄ := by
+      r.toAffineNiels = AffineNiels.identity ∧ r.LimbsLt 54 ⦄ := by
   unfold default
   step*
 
 /-- `Default for AffineNielsPoint` represents the neutral element. -/
 theorem default_spec_point :
     default ⦃ (r : AffineNielsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 54 ⦄ :=
   spec_mono default_spec fun r ⟨hr, hb⟩ => by
     rw [AffineNielsPoint.«x86_64-tables».onCurve_iff,
       AffineNielsPoint.«x86_64-tables».toPoint_def, hr]
@@ -42,14 +42,14 @@ namespace AffineNielsPoint.«x86_64-no-tables».Insts.CoreDefaultDefault
 @[step]
 theorem default_spec :
     default ⦃ (r : AffineNielsPoint.«x86_64-no-tables») =>
-      r.toAffineNiels = AffineNiels.identity ∧ r.Bounded ⦄ := by
+      r.toAffineNiels = AffineNiels.identity ∧ r.LimbsLt 54 ⦄ := by
   unfold default
   step*
 
 /-- `Default for AffineNielsPoint` represents the neutral element. -/
 theorem default_spec_point :
     default ⦃ (r : AffineNielsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 54 ⦄ :=
   spec_mono default_spec fun r ⟨hr, hb⟩ => by
     rw [AffineNielsPoint.«x86_64-no-tables».onCurve_iff,
       AffineNielsPoint.«x86_64-no-tables».toPoint_def, hr]

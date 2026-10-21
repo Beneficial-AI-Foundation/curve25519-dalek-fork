@@ -15,10 +15,10 @@ modulo `p`). A canonical output has `asNat < p` (`to_bytes`).
 
 `ProjectivePoint (U : W)` is the `x`-only projective point of the Montgomery ladder: `toXZ` maps
 it to `MontgomeryModel.XZ (ZMod p)`, whose `toU` is `U / W` (`0` at `W = 0`, as `as_affine`).
-`Bounded` is the limb bound `< 2^52`: the code's `differential_add_and_double` adds two
-coordinates before squaring or multiplying them, so it needs limbs `< 2^53`, and every
-producer (`identity`, `from_bytes`, the `mul`/`square` outputs of the ladder step) gives
-`< 2^52`. -/
+`LimbsLt n` says every limb is `< 2^n`; the specs use `LimbsLt 52`: the code's
+`differential_add_and_double` adds two coordinates before squaring or multiplying them, so it
+needs limbs `< 2^53`, and every producer (`identity`, `from_bytes`, the `mul`/`square` outputs of
+the ladder step) gives `< 2^52`. -/
 
 open Aeneas Aeneas.Std curve25519
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
@@ -63,9 +63,9 @@ theorem toXZ_def (self : ProjectivePoint.«x86_64-tables») :
   unfold toXZ
   rfl
 
-/-- The limb bounds of a Montgomery `ProjectivePoint`: all limbs `< 2^52`. -/
-@[expose] def Bounded (self : ProjectivePoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.U[i]!.val < 2 ^ 52) ∧ (∀ i < 5, self.W[i]!.val < 2 ^ 52)
+/-- Every limb of a Montgomery `ProjectivePoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : ProjectivePoint.«x86_64-tables») : Prop :=
+  (∀ i < 5, self.U[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.W[i]!.val < 2 ^ n)
 
 end ProjectivePoint.«x86_64-tables»
 
@@ -81,9 +81,9 @@ theorem toXZ_def (self : ProjectivePoint.«x86_64-no-tables») :
   unfold toXZ
   rfl
 
-/-- The limb bounds of a Montgomery `ProjectivePoint`: all limbs `< 2^52`. -/
-@[expose] def Bounded (self : ProjectivePoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.U[i]!.val < 2 ^ 52) ∧ (∀ i < 5, self.W[i]!.val < 2 ^ 52)
+/-- Every limb of a Montgomery `ProjectivePoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : ProjectivePoint.«x86_64-no-tables») : Prop :=
+  (∀ i < 5, self.U[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.W[i]!.val < 2 ^ n)
 
 end ProjectivePoint.«x86_64-no-tables»
 

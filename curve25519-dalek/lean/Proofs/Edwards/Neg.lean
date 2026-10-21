@@ -22,9 +22,9 @@ namespace «CoreOpsArithNegEdwardsPointx86_64-tables»
 
 /-- `Neg for &EdwardsPoint`: `(-X : Y : Z : -T)`, limbs `< 2^52`. -/
 @[step]
-theorem neg_spec (self : edwards.EdwardsPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem neg_spec (self : edwards.EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     neg self ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.toExtended = self.toExtended.neg ∧ r.Bounded ⦄ := by
+      r.toExtended = self.toExtended.neg ∧ r.LimbsLt 52 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold neg
   step as ⟨X', hX', hX'_lt⟩
@@ -36,8 +36,8 @@ theorem neg_spec (self : edwards.EdwardsPoint.«x86_64-tables») (hself : self.B
 
 /-- The point-level reading of the postcondition of `neg_spec`. -/
 private theorem point_of_post {self r : edwards.EdwardsPoint.«x86_64-tables»}
-    (hon : self.OnCurve) (h : r.toExtended = self.toExtended.neg ∧ r.Bounded) :
-    r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.Bounded := by
+    (hon : self.OnCurve) (h : r.toExtended = self.toExtended.neg ∧ r.LimbsLt 52) :
+    r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 := by
   obtain ⟨hr, hb⟩ := h
   rw [edwards.EdwardsPoint.«x86_64-tables».onCurve_iff,
     edwards.EdwardsPoint.«x86_64-tables».toPoint_def, hr,
@@ -45,10 +45,10 @@ private theorem point_of_post {self r : edwards.EdwardsPoint.«x86_64-tables»}
   exact ⟨Extended.onCurve_neg hon, Extended.toPoint_neg hon, hb⟩
 
 /-- `Neg for &EdwardsPoint` negates the represented point. -/
-theorem neg_spec_point (self : edwards.EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem neg_spec_point (self : edwards.EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     neg self ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (neg_spec self hself) fun _ => point_of_post hon
 
 end «CoreOpsArithNegEdwardsPointx86_64-tables»
@@ -62,17 +62,17 @@ namespace «CoreOpsArithNegEdwardsPointx86_64-tables»
 
 /-- `Neg for EdwardsPoint` (by value): `(-X : Y : Z : -T)`, limbs `< 2^52`. -/
 @[step]
-theorem neg_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem neg_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     neg self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.toExtended = self.toExtended.neg ∧ r.Bounded ⦄ := by
+      r.toExtended = self.toExtended.neg ∧ r.LimbsLt 52 ⦄ := by
   unfold neg
   step*
 
 /-- `Neg for EdwardsPoint` (by value) negates the represented point. -/
-theorem neg_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem neg_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     neg self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (neg_spec self hself) fun _ => point_of_post hon
 
 end «CoreOpsArithNegEdwardsPointx86_64-tables»
@@ -83,9 +83,9 @@ namespace «CoreOpsArithNegEdwardsPointx86_64-no-tables»
 
 /-- `Neg for &EdwardsPoint`: `(-X : Y : Z : -T)`, limbs `< 2^52`. -/
 @[step]
-theorem neg_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem neg_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     neg self ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.toExtended = self.toExtended.neg ∧ r.Bounded ⦄ := by
+      r.toExtended = self.toExtended.neg ∧ r.LimbsLt 52 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold neg
   step as ⟨X', hX', hX'_lt⟩
@@ -97,8 +97,8 @@ theorem neg_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (hself : sel
 
 /-- The point-level reading of the postcondition of `neg_spec`. -/
 private theorem point_of_post {self r : edwards.EdwardsPoint.«x86_64-no-tables»}
-    (hon : self.OnCurve) (h : r.toExtended = self.toExtended.neg ∧ r.Bounded) :
-    r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.Bounded := by
+    (hon : self.OnCurve) (h : r.toExtended = self.toExtended.neg ∧ r.LimbsLt 52) :
+    r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 := by
   obtain ⟨hr, hb⟩ := h
   rw [edwards.EdwardsPoint.«x86_64-no-tables».onCurve_iff,
     edwards.EdwardsPoint.«x86_64-no-tables».toPoint_def, hr,
@@ -106,10 +106,10 @@ private theorem point_of_post {self r : edwards.EdwardsPoint.«x86_64-no-tables�
   exact ⟨Extended.onCurve_neg hon, Extended.toPoint_neg hon, hb⟩
 
 /-- `Neg for &EdwardsPoint` negates the represented point. -/
-theorem neg_spec_point (self : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem neg_spec_point (self : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     neg self ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (neg_spec self hself) fun _ => point_of_post hon
 
 end «CoreOpsArithNegEdwardsPointx86_64-no-tables»
@@ -123,17 +123,17 @@ namespace «CoreOpsArithNegEdwardsPointx86_64-no-tables»
 
 /-- `Neg for EdwardsPoint` (by value): `(-X : Y : Z : -T)`, limbs `< 2^52`. -/
 @[step]
-theorem neg_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem neg_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     neg self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.toExtended = self.toExtended.neg ∧ r.Bounded ⦄ := by
+      r.toExtended = self.toExtended.neg ∧ r.LimbsLt 52 ⦄ := by
   unfold neg
   step*
 
 /-- `Neg for EdwardsPoint` (by value) negates the represented point. -/
-theorem neg_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem neg_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     neg self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (neg_spec self hself) fun _ => point_of_post hon
 
 end «CoreOpsArithNegEdwardsPointx86_64-no-tables»

@@ -23,9 +23,9 @@ namespace «EdwardsPointx86_64-tables»
 /-- `EdwardsPoint::double`: the projective doubling formula, back in extended coordinates;
 limbs `< 2^52`. -/
 @[step]
-theorem double_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem double_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     double self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.toExtended = self.toExtended.toProjective.double.toExtended ∧ r.Bounded ⦄ := by
+      r.toExtended = self.toExtended.toProjective.double.toExtended ∧ r.LimbsLt 52 ⦄ := by
   unfold double
   step as ⟨pp, hpp, hppb⟩
   step as ⟨cp, hcp, hcpb⟩
@@ -33,10 +33,10 @@ theorem double_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounde
   exact ⟨by rw [hr, hcp, hpp], hrb⟩
 
 /-- `EdwardsPoint::double` doubles the represented point. -/
-theorem double_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem double_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     double self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 2 • self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 2 • self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (double_spec self hself) fun r ⟨hr, hb⟩ => by
     have hon' := Projective.double_onCurve edwards_a_eq_neg_one (Extended.onCurve_toProjective hon)
     rw [EdwardsPoint.«x86_64-tables».onCurve_iff,
@@ -54,9 +54,9 @@ namespace «EdwardsPointx86_64-no-tables»
 /-- `EdwardsPoint::double`: the projective doubling formula, back in extended coordinates;
 limbs `< 2^52`. -/
 @[step]
-theorem double_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem double_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     double self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.toExtended = self.toExtended.toProjective.double.toExtended ∧ r.Bounded ⦄ := by
+      r.toExtended = self.toExtended.toProjective.double.toExtended ∧ r.LimbsLt 52 ⦄ := by
   unfold double
   step as ⟨pp, hpp, hppb⟩
   step as ⟨cp, hcp, hcpb⟩
@@ -64,10 +64,10 @@ theorem double_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bou
   exact ⟨by rw [hr, hcp, hpp], hrb⟩
 
 /-- `EdwardsPoint::double` doubles the represented point. -/
-theorem double_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem double_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     double self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 2 • self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 2 • self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (double_spec self hself) fun r ⟨hr, hb⟩ => by
     have hon' := Projective.double_onCurve edwards_a_eq_neg_one (Extended.onCurve_toProjective hon)
     rw [EdwardsPoint.«x86_64-no-tables».onCurve_iff,

@@ -18,9 +18,9 @@ namespace edwards.EdwardsPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignShar
 /-- `MulAssign<&Scalar> for EdwardsPoint`: as `Mul`, `scalar • P` (unreduced, `< 2^255`). -/
 @[step]
 theorem mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-tables») (scalar : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_assign self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_assign
   step*
 
@@ -31,9 +31,9 @@ namespace edwards.EdwardsPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignScal
 /-- `MulAssign<Scalar> for EdwardsPoint`: as the borrowed form. -/
 @[step]
 theorem mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul_assign self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_assign
   step*
 
@@ -44,9 +44,9 @@ namespace edwards.EdwardsPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignS
 /-- `MulAssign<&Scalar> for EdwardsPoint`: as `Mul`, `scalar • P` (unreduced, `< 2^255`). -/
 @[step]
 theorem mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (scalar : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_assign self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_assign
   step*
 
@@ -57,9 +57,9 @@ namespace edwards.EdwardsPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignS
 /-- `MulAssign<Scalar> for EdwardsPoint`: as the borrowed form. -/
 @[step]
 theorem mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar.Scalar)
-    (hself : self.Bounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul_assign self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_assign
   step*
 

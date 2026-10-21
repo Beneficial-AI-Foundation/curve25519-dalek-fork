@@ -120,14 +120,15 @@ private theorem lookup_tables_loop_spec {It : Type}
     (iterInst : core.iter.traits.iterator.Iterator It (Option edwards.EdwardsPoint.«x86_64-tables»))
     (points : It) (ops : List (Option edwards.EdwardsPoint.«x86_64-tables»))
     (hit : iterInst.Yields points ops)
-    (hps : ∀ P, some P ∈ ops → P.Bounded ∧ P.OnCurve)
+    (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve)
     (out : alloc.vec.Vec (window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-tables»))
     (hlen : out.length + ops.length ≤ Usize.max) :
     lookup_tables_loop iterInst points out
       ⦃ (r : Option (alloc.vec.Vec (window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-tables»)))
           =>
         (r = none ↔ none ∈ ops) ∧ ∀ v, r = some v → ∃ zs, v.val = out.val ++ zs ∧
-          List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.Bounded) (ops.filterMap id) zs ⦄ := by
+          List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) (ops.filterMap id)
+            zs ⦄ := by
   induction hit generalizing out with
   | nil hnext =>
     unfold lookup_tables_loop loop lookup_tables_loop.body
@@ -169,12 +170,12 @@ private theorem lookup_tables_spec {It : Type}
     (iterInst : core.iter.traits.iterator.Iterator It (Option edwards.EdwardsPoint.«x86_64-tables»))
     (points : It) (ops : List (Option edwards.EdwardsPoint.«x86_64-tables»))
     (hit : iterInst.Yields points ops)
-    (hps : ∀ P, some P ∈ ops → P.Bounded ∧ P.OnCurve) (hlen : ops.length ≤ Usize.max) :
+    (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve) (hlen : ops.length ≤ Usize.max) :
     lookup_tables iterInst points
       ⦃ (r : Option (alloc.vec.Vec (window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-tables»)))
           =>
         (r = none ↔ none ∈ ops) ∧ ∀ v, r = some v →
-          List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.Bounded)
+          List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54)
             (ops.filterMap id) v.val ⦄ := by
   unfold lookup_tables
   apply spec_mono (lookup_tables_loop_spec iterInst points ops hit hps (alloc.vec.Vec.new _)
@@ -201,18 +202,18 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop0_spec (iter : core.ops
     (hj : j.val < 256)
         (hn : iter.end.val ≤ dynamic_nafs.length ∧ iter.end.val ≤ dynamic_lookup_tables.length)
     (hT : ∀ m < iter.end.val, dynamic_lookup_tables.val[m]!.Represents (P m) ∧
-        dynamic_lookup_tables.val[m]!.Bounded)
+        dynamic_lookup_tables.val[m]!.LimbsLt 54)
     (hD : ∀ m < iter.end.val, ∀ e < 256, (dynamic_nafs.val[m]!)[e]!.val ≠ 0 →
       (dynamic_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(dynamic_nafs.val[m]!)[e]!.val| < 2 ^ 5)
-    (hk : iter.start.val ≤ iter.end.val) (hR : R.OnCurve) (hRb : R.Bounded) :
+    (hk : iter.start.val ≤ iter.end.val) (hR : R.OnCurve) (hRb : R.LimbsLt 54) :
     optional_mixed_multiscalar_mul_loop0_loop0 iter dynamic_nafs dynamic_lookup_tables j R
-      ⦃ (r : CompletedPoint.«x86_64-tables») => r.OnCurve ∧ r.Bounded ∧
+      ⦃ (r : CompletedPoint.«x86_64-tables») => r.OnCurve ∧ r.LimbsLt 54 ∧
         r.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val iter.end.val,
           (dynamic_nafs.val[m]!)[j.val]!.val • P m ⦄ := by
   unfold optional_mixed_multiscalar_mul_loop0_loop0
   apply loop.spec_decr_nat (measure := fun (it, _) => it.end.val - it.start.val)
     (inv := fun (it, R') => it.end = iter.end ∧ iter.start.val ≤ it.start.val ∧
-      it.start.val ≤ iter.end.val ∧ R'.OnCurve ∧ R'.Bounded ∧
+      it.start.val ≤ iter.end.val ∧ R'.OnCurve ∧ R'.LimbsLt 54 ∧
       R'.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val it.start.val,
         (dynamic_nafs.val[m]!)[j.val]!.val • P m)
   · rintro ⟨it, R'⟩ ⟨hend, hst, hle, hR'on, hR'b, hR'p⟩
@@ -226,10 +227,10 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop0_spec (iter : core.ops
       step as ⟨a, ha⟩
       rw [← getElem!_pos] at ha
       step as ⟨d, hd⟩
-      have hstep : ∀ R1 : CompletedPoint.«x86_64-tables», R1.OnCurve → R1.Bounded →
+      have hstep : ∀ R1 : CompletedPoint.«x86_64-tables», R1.OnCurve → R1.LimbsLt 54 →
           R1.toPoint = R'.toPoint + d.val • P it.start.val →
           it1.end = iter.end ∧ iter.start.val ≤ it1.start.val ∧ it1.start.val ≤ iter.end.val ∧
-          R1.OnCurve ∧ R1.Bounded ∧
+          R1.OnCurve ∧ R1.LimbsLt 54 ∧
           R1.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val it1.start.val,
             (dynamic_nafs.val[m]!)[j.val]!.val • P m ∧
           it1.end.val - it1.start.val < it.end.val - it.start.val := by
@@ -290,18 +291,18 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop1_spec (iter : core.ops
     (v : alloc.vec.Vec (window.NafLookupTable8 AffineNielsPoint.«x86_64-tables»))
     (j : Usize) (R : CompletedPoint.«x86_64-tables») (P : ℕ → curve25519.edwards.Point)
     (hj : j.val < 256) (hn : iter.end.val ≤ static_nafs.length ∧ iter.end.val ≤ v.length)
-    (hT : ∀ m < iter.end.val, v.val[m]!.Represents (P m) ∧ v.val[m]!.Bounded)
+    (hT : ∀ m < iter.end.val, v.val[m]!.Represents (P m) ∧ v.val[m]!.LimbsLt 54)
     (hD : ∀ m < iter.end.val, ∀ e < 256, (static_nafs.val[m]!)[e]!.val ≠ 0 →
       (static_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(static_nafs.val[m]!)[e]!.val| < 2 ^ 8)
-    (hk : iter.start.val ≤ iter.end.val) (hR : R.OnCurve) (hRb : R.Bounded) :
+    (hk : iter.start.val ≤ iter.end.val) (hR : R.OnCurve) (hRb : R.LimbsLt 54) :
     optional_mixed_multiscalar_mul_loop0_loop1 iter v static_nafs j R
-      ⦃ (r : CompletedPoint.«x86_64-tables») => r.OnCurve ∧ r.Bounded ∧
+      ⦃ (r : CompletedPoint.«x86_64-tables») => r.OnCurve ∧ r.LimbsLt 54 ∧
         r.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val iter.end.val,
           (static_nafs.val[m]!)[j.val]!.val • P m ⦄ := by
   unfold optional_mixed_multiscalar_mul_loop0_loop1
   apply loop.spec_decr_nat (measure := fun (it, _) => it.end.val - it.start.val)
     (inv := fun (it, R') => it.end = iter.end ∧ iter.start.val ≤ it.start.val ∧
-      it.start.val ≤ iter.end.val ∧ R'.OnCurve ∧ R'.Bounded ∧
+      it.start.val ≤ iter.end.val ∧ R'.OnCurve ∧ R'.LimbsLt 54 ∧
       R'.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val it.start.val,
         (static_nafs.val[m]!)[j.val]!.val • P m)
   · rintro ⟨it, R'⟩ ⟨hend, hst, hle, hR'on, hR'b, hR'p⟩
@@ -315,10 +316,10 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop1_spec (iter : core.ops
       step as ⟨a, ha⟩
       rw [← getElem!_pos] at ha
       step as ⟨d, hd⟩
-      have hstep : ∀ R1 : CompletedPoint.«x86_64-tables», R1.OnCurve → R1.Bounded →
+      have hstep : ∀ R1 : CompletedPoint.«x86_64-tables», R1.OnCurve → R1.LimbsLt 54 →
           R1.toPoint = R'.toPoint + d.val • P it.start.val →
           it1.end = iter.end ∧ iter.start.val ≤ it1.start.val ∧ it1.start.val ≤ iter.end.val ∧
-          R1.OnCurve ∧ R1.Bounded ∧
+          R1.OnCurve ∧ R1.LimbsLt 54 ∧
           R1.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val it1.start.val,
             (static_nafs.val[m]!)[j.val]!.val • P m ∧
           it1.end.val - it1.start.val < it.end.val - it.start.val := by
@@ -386,26 +387,26 @@ private theorem optional_mixed_multiscalar_mul_loop0_spec
     (hdp : dp.val ≤ dynamic_nafs.length ∧ dp.val ≤ dynamic_lookup_tables.length)
     (hsl : static_nafs.length ≤ v.length)
     (hT : ∀ m < dp.val, dynamic_lookup_tables.val[m]!.Represents (Q m) ∧
-      dynamic_lookup_tables.val[m]!.Bounded)
+      dynamic_lookup_tables.val[m]!.LimbsLt 54)
     (hD : ∀ m < dp.val, ∀ e < 256, (dynamic_nafs.val[m]!)[e]!.val ≠ 0 →
       (dynamic_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(dynamic_nafs.val[m]!)[e]!.val| < 2 ^ 5)
-    (hV : ∀ m < static_nafs.length, v.val[m]!.Represents (P m) ∧ v.val[m]!.Bounded)
+    (hV : ∀ m < static_nafs.length, v.val[m]!.Represents (P m) ∧ v.val[m]!.LimbsLt 54)
     (hE : ∀ m < static_nafs.length, ∀ e < 256, (static_nafs.val[m]!)[e]!.val ≠ 0 →
       (static_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(static_nafs.val[m]!)[e]!.val| < 2 ^ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 256)
-    (hS : S.OnCurve) (hSb : S.Bounded)
+    (hS : S.OnCurve) (hSb : S.LimbsLt 52)
     (hSp : S.toPoint =
       (∑ m ∈ Finset.range dp.val, nafTail dynamic_nafs.val[m]! iter.iter.end.val • Q m) +
         ∑ m ∈ Finset.range static_nafs.length,
           nafTail static_nafs.val[m]! iter.iter.end.val • P m) :
     optional_mixed_multiscalar_mul_loop0 iter v static_nafs dynamic_nafs dynamic_lookup_tables dp S
-      ⦃ (r : ProjectivePoint.«x86_64-tables») => r.OnCurve ∧ r.Bounded ∧ r.toPoint =
+      ⦃ (r : ProjectivePoint.«x86_64-tables») => r.OnCurve ∧ r.LimbsLt 52 ∧ r.toPoint =
         (∑ m ∈ Finset.range dp.val, nafTail dynamic_nafs.val[m]! 0 • Q m) +
           ∑ m ∈ Finset.range static_nafs.length, nafTail static_nafs.val[m]! 0 • P m ⦄ := by
   unfold optional_mixed_multiscalar_mul_loop0
   apply loop.spec_decr_nat (measure := fun (it, _) => it.iter.end.val)
     (inv := fun (it, q) => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 256 ∧ q.OnCurve ∧
-      q.Bounded ∧ q.toPoint =
+      q.LimbsLt 52 ∧ q.toPoint =
         (∑ m ∈ Finset.range dp.val, nafTail dynamic_nafs.val[m]! it.iter.end.val • Q m) +
           ∑ m ∈ Finset.range static_nafs.length,
             nafTail static_nafs.val[m]! it.iter.end.val • P m)
@@ -457,7 +458,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (dynamic_points : K) (ps : List curve25519.edwards.Point) (xs : List Clause0_Item)
     (ss : List scalar.Scalar) (ys : List Clause2_Item) (ds : List scalar.Scalar)
     (qops : List (Option edwards.EdwardsPoint.«x86_64-tables»))
-    (hself : self.Represents ps) (hself_b : self.Bounded)
+    (hself : self.Represents ps) (hself_b : self.LimbsLt 54)
     (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
     (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
     (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
@@ -466,7 +467,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.Bounded ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ ps.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -476,7 +477,7 @@ theorem optional_mixed_multiscalar_mul_spec
         ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss ps).sum +
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
-          R.Bounded ⦄ := by
+          R.LimbsLt 52 ⦄ := by
   unfold optional_mixed_multiscalar_mul
   have h1 : staticScalarsInst.into_iter static_scalars
       ⦃ (it : Clause0_IntoIter) => staticScalarsInst.iteratorInst.Yields it xs ⦄ :=
@@ -600,14 +601,15 @@ private theorem lookup_tables_loop_spec {It : Type}
         (Option edwards.EdwardsPoint.«x86_64-no-tables»))
     (points : It) (ops : List (Option edwards.EdwardsPoint.«x86_64-no-tables»))
     (hit : iterInst.Yields points ops)
-    (hps : ∀ P, some P ∈ ops → P.Bounded ∧ P.OnCurve)
+    (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve)
     (out : alloc.vec.Vec (window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-no-tables»))
     (hlen : out.length + ops.length ≤ Usize.max) :
     lookup_tables_loop iterInst points out
       ⦃ (r : Option
           (alloc.vec.Vec (window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-no-tables»))) =>
         (r = none ↔ none ∈ ops) ∧ ∀ v, r = some v → ∃ zs, v.val = out.val ++ zs ∧
-          List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.Bounded) (ops.filterMap id) zs ⦄ := by
+          List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) (ops.filterMap id)
+            zs ⦄ := by
   induction hit generalizing out with
   | nil hnext =>
     unfold lookup_tables_loop loop lookup_tables_loop.body
@@ -650,12 +652,12 @@ private theorem lookup_tables_spec {It : Type}
         (Option edwards.EdwardsPoint.«x86_64-no-tables»))
     (points : It) (ops : List (Option edwards.EdwardsPoint.«x86_64-no-tables»))
     (hit : iterInst.Yields points ops)
-    (hps : ∀ P, some P ∈ ops → P.Bounded ∧ P.OnCurve) (hlen : ops.length ≤ Usize.max) :
+    (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve) (hlen : ops.length ≤ Usize.max) :
     lookup_tables iterInst points
       ⦃ (r : Option
           (alloc.vec.Vec (window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-no-tables»))) =>
         (r = none ↔ none ∈ ops) ∧ ∀ v, r = some v →
-          List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.Bounded)
+          List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54)
             (ops.filterMap id) v.val ⦄ := by
   unfold lookup_tables
   apply spec_mono (lookup_tables_loop_spec iterInst points ops hit hps (alloc.vec.Vec.new _)
@@ -684,18 +686,18 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop0_spec (iter : core.ops
     (hj : j.val < 256)
         (hn : iter.end.val ≤ dynamic_nafs.length ∧ iter.end.val ≤ dynamic_lookup_tables.length)
     (hT : ∀ m < iter.end.val, dynamic_lookup_tables.val[m]!.Represents (P m) ∧
-        dynamic_lookup_tables.val[m]!.Bounded)
+        dynamic_lookup_tables.val[m]!.LimbsLt 54)
     (hD : ∀ m < iter.end.val, ∀ e < 256, (dynamic_nafs.val[m]!)[e]!.val ≠ 0 →
       (dynamic_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(dynamic_nafs.val[m]!)[e]!.val| < 2 ^ 5)
-    (hk : iter.start.val ≤ iter.end.val) (hR : R.OnCurve) (hRb : R.Bounded) :
+    (hk : iter.start.val ≤ iter.end.val) (hR : R.OnCurve) (hRb : R.LimbsLt 54) :
     optional_mixed_multiscalar_mul_loop0_loop0 iter dynamic_nafs dynamic_lookup_tables j R
-      ⦃ (r : CompletedPoint.«x86_64-no-tables») => r.OnCurve ∧ r.Bounded ∧
+      ⦃ (r : CompletedPoint.«x86_64-no-tables») => r.OnCurve ∧ r.LimbsLt 54 ∧
         r.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val iter.end.val,
           (dynamic_nafs.val[m]!)[j.val]!.val • P m ⦄ := by
   unfold optional_mixed_multiscalar_mul_loop0_loop0
   apply loop.spec_decr_nat (measure := fun (it, _) => it.end.val - it.start.val)
     (inv := fun (it, R') => it.end = iter.end ∧ iter.start.val ≤ it.start.val ∧
-      it.start.val ≤ iter.end.val ∧ R'.OnCurve ∧ R'.Bounded ∧
+      it.start.val ≤ iter.end.val ∧ R'.OnCurve ∧ R'.LimbsLt 54 ∧
       R'.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val it.start.val,
         (dynamic_nafs.val[m]!)[j.val]!.val • P m)
   · rintro ⟨it, R'⟩ ⟨hend, hst, hle, hR'on, hR'b, hR'p⟩
@@ -709,10 +711,10 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop0_spec (iter : core.ops
       step as ⟨a, ha⟩
       rw [← getElem!_pos] at ha
       step as ⟨d, hd⟩
-      have hstep : ∀ R1 : CompletedPoint.«x86_64-no-tables», R1.OnCurve → R1.Bounded →
+      have hstep : ∀ R1 : CompletedPoint.«x86_64-no-tables», R1.OnCurve → R1.LimbsLt 54 →
           R1.toPoint = R'.toPoint + d.val • P it.start.val →
           it1.end = iter.end ∧ iter.start.val ≤ it1.start.val ∧ it1.start.val ≤ iter.end.val ∧
-          R1.OnCurve ∧ R1.Bounded ∧
+          R1.OnCurve ∧ R1.LimbsLt 54 ∧
           R1.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val it1.start.val,
             (dynamic_nafs.val[m]!)[j.val]!.val • P m ∧
           it1.end.val - it1.start.val < it.end.val - it.start.val := by
@@ -773,18 +775,18 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop1_spec (iter : core.ops
     (v : alloc.vec.Vec (window.NafLookupTable8 AffineNielsPoint.«x86_64-no-tables»))
     (j : Usize) (R : CompletedPoint.«x86_64-no-tables») (P : ℕ → curve25519.edwards.Point)
     (hj : j.val < 256) (hn : iter.end.val ≤ static_nafs.length ∧ iter.end.val ≤ v.length)
-    (hT : ∀ m < iter.end.val, v.val[m]!.Represents (P m) ∧ v.val[m]!.Bounded)
+    (hT : ∀ m < iter.end.val, v.val[m]!.Represents (P m) ∧ v.val[m]!.LimbsLt 54)
     (hD : ∀ m < iter.end.val, ∀ e < 256, (static_nafs.val[m]!)[e]!.val ≠ 0 →
       (static_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(static_nafs.val[m]!)[e]!.val| < 2 ^ 8)
-    (hk : iter.start.val ≤ iter.end.val) (hR : R.OnCurve) (hRb : R.Bounded) :
+    (hk : iter.start.val ≤ iter.end.val) (hR : R.OnCurve) (hRb : R.LimbsLt 54) :
     optional_mixed_multiscalar_mul_loop0_loop1 iter v static_nafs j R
-      ⦃ (r : CompletedPoint.«x86_64-no-tables») => r.OnCurve ∧ r.Bounded ∧
+      ⦃ (r : CompletedPoint.«x86_64-no-tables») => r.OnCurve ∧ r.LimbsLt 54 ∧
         r.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val iter.end.val,
           (static_nafs.val[m]!)[j.val]!.val • P m ⦄ := by
   unfold optional_mixed_multiscalar_mul_loop0_loop1
   apply loop.spec_decr_nat (measure := fun (it, _) => it.end.val - it.start.val)
     (inv := fun (it, R') => it.end = iter.end ∧ iter.start.val ≤ it.start.val ∧
-      it.start.val ≤ iter.end.val ∧ R'.OnCurve ∧ R'.Bounded ∧
+      it.start.val ≤ iter.end.val ∧ R'.OnCurve ∧ R'.LimbsLt 54 ∧
       R'.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val it.start.val,
         (static_nafs.val[m]!)[j.val]!.val • P m)
   · rintro ⟨it, R'⟩ ⟨hend, hst, hle, hR'on, hR'b, hR'p⟩
@@ -798,10 +800,10 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop1_spec (iter : core.ops
       step as ⟨a, ha⟩
       rw [← getElem!_pos] at ha
       step as ⟨d, hd⟩
-      have hstep : ∀ R1 : CompletedPoint.«x86_64-no-tables», R1.OnCurve → R1.Bounded →
+      have hstep : ∀ R1 : CompletedPoint.«x86_64-no-tables», R1.OnCurve → R1.LimbsLt 54 →
           R1.toPoint = R'.toPoint + d.val • P it.start.val →
           it1.end = iter.end ∧ iter.start.val ≤ it1.start.val ∧ it1.start.val ≤ iter.end.val ∧
-          R1.OnCurve ∧ R1.Bounded ∧
+          R1.OnCurve ∧ R1.LimbsLt 54 ∧
           R1.toPoint = R.toPoint + ∑ m ∈ Finset.Ico iter.start.val it1.start.val,
             (static_nafs.val[m]!)[j.val]!.val • P m ∧
           it1.end.val - it1.start.val < it.end.val - it.start.val := by
@@ -869,26 +871,26 @@ private theorem optional_mixed_multiscalar_mul_loop0_spec
     (hdp : dp.val ≤ dynamic_nafs.length ∧ dp.val ≤ dynamic_lookup_tables.length)
     (hsl : static_nafs.length ≤ v.length)
     (hT : ∀ m < dp.val, dynamic_lookup_tables.val[m]!.Represents (Q m) ∧
-      dynamic_lookup_tables.val[m]!.Bounded)
+      dynamic_lookup_tables.val[m]!.LimbsLt 54)
     (hD : ∀ m < dp.val, ∀ e < 256, (dynamic_nafs.val[m]!)[e]!.val ≠ 0 →
       (dynamic_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(dynamic_nafs.val[m]!)[e]!.val| < 2 ^ 5)
-    (hV : ∀ m < static_nafs.length, v.val[m]!.Represents (P m) ∧ v.val[m]!.Bounded)
+    (hV : ∀ m < static_nafs.length, v.val[m]!.Represents (P m) ∧ v.val[m]!.LimbsLt 54)
     (hE : ∀ m < static_nafs.length, ∀ e < 256, (static_nafs.val[m]!)[e]!.val ≠ 0 →
       (static_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(static_nafs.val[m]!)[e]!.val| < 2 ^ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 256)
-    (hS : S.OnCurve) (hSb : S.Bounded)
+    (hS : S.OnCurve) (hSb : S.LimbsLt 52)
     (hSp : S.toPoint =
       (∑ m ∈ Finset.range dp.val, nafTail dynamic_nafs.val[m]! iter.iter.end.val • Q m) +
         ∑ m ∈ Finset.range static_nafs.length,
           nafTail static_nafs.val[m]! iter.iter.end.val • P m) :
     optional_mixed_multiscalar_mul_loop0 iter v static_nafs dynamic_nafs dynamic_lookup_tables dp S
-      ⦃ (r : ProjectivePoint.«x86_64-no-tables») => r.OnCurve ∧ r.Bounded ∧ r.toPoint =
+      ⦃ (r : ProjectivePoint.«x86_64-no-tables») => r.OnCurve ∧ r.LimbsLt 52 ∧ r.toPoint =
         (∑ m ∈ Finset.range dp.val, nafTail dynamic_nafs.val[m]! 0 • Q m) +
           ∑ m ∈ Finset.range static_nafs.length, nafTail static_nafs.val[m]! 0 • P m ⦄ := by
   unfold optional_mixed_multiscalar_mul_loop0
   apply loop.spec_decr_nat (measure := fun (it, _) => it.iter.end.val)
     (inv := fun (it, q) => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 256 ∧ q.OnCurve ∧
-      q.Bounded ∧ q.toPoint =
+      q.LimbsLt 52 ∧ q.toPoint =
         (∑ m ∈ Finset.range dp.val, nafTail dynamic_nafs.val[m]! it.iter.end.val • Q m) +
           ∑ m ∈ Finset.range static_nafs.length,
             nafTail static_nafs.val[m]! it.iter.end.val • P m)
@@ -940,7 +942,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (dynamic_points : K) (ps : List curve25519.edwards.Point) (xs : List Clause0_Item)
     (ss : List scalar.Scalar) (ys : List Clause2_Item) (ds : List scalar.Scalar)
     (qops : List (Option edwards.EdwardsPoint.«x86_64-no-tables»))
-    (hself : self.Represents ps) (hself_b : self.Bounded)
+    (hself : self.Represents ps) (hself_b : self.LimbsLt 54)
     (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
     (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
     (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
@@ -949,7 +951,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.Bounded ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ ps.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -959,7 +961,7 @@ theorem optional_mixed_multiscalar_mul_spec
         ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss ps).sum +
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
-          R.Bounded ⦄ := by
+          R.LimbsLt 52 ⦄ := by
   unfold optional_mixed_multiscalar_mul
   have h1 : staticScalarsInst.into_iter static_scalars
       ⦃ (it : Clause0_IntoIter) => staticScalarsInst.iteratorInst.Yields it xs ⦄ :=

@@ -63,7 +63,7 @@ open scoped Helpers.IndexStep in
 `Z`. -/
 @[local step]
 private theorem compress_batch_alloc_loop1_spec (inputs : Slice EdwardsPoint.«x86_64-tables»)
-    (hinputs : ∀ k < inputs.length, inputs[k]!.Bounded) (n : Usize)
+    (hinputs : ∀ k < inputs.length, inputs[k]!.LimbsLt 52) (n : Usize)
     (hn : n.val = inputs.length) (zs : alloc.vec.Vec FieldElement51)
     (hzslen : zs.length = inputs.length)
     (hzs : ∀ k < inputs.length,
@@ -116,7 +116,7 @@ private theorem compress_batch_alloc_loop1_spec (inputs : Slice EdwardsPoint.«x
 with the sign of `x = X / Z` in bit `255`; limbs `< 2^52`. -/
 @[step]
 theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»)
-    (hinputs : ∀ i < inputs.length, inputs[i]!.Bounded) :
+    (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 52) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧ ∀ i < inputs.length,
         r[i]!.asNat = (inputs[i]!.Y.toField / inputs[i]!.Z.toField).val +
@@ -148,7 +148,7 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is RFC 8032's encoding of point `i`. -/
 theorem compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«x86_64-tables»)
-    (hinputs : ∀ i < inputs.length, inputs[i]!.Bounded)
+    (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 52)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
@@ -196,7 +196,7 @@ open scoped Helpers.IndexStep in
 `Z`. -/
 @[local step]
 private theorem compress_batch_alloc_loop1_spec (inputs : Slice EdwardsPoint.«x86_64-no-tables»)
-    (hinputs : ∀ k < inputs.length, inputs[k]!.Bounded) (n : Usize)
+    (hinputs : ∀ k < inputs.length, inputs[k]!.LimbsLt 52) (n : Usize)
     (hn : n.val = inputs.length) (zs : alloc.vec.Vec FieldElement51)
     (hzslen : zs.length = inputs.length)
     (hzs : ∀ k < inputs.length,
@@ -249,7 +249,7 @@ private theorem compress_batch_alloc_loop1_spec (inputs : Slice EdwardsPoint.«x
 with the sign of `x = X / Z` in bit `255`; limbs `< 2^52`. -/
 @[step]
 theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-tables»)
-    (hinputs : ∀ i < inputs.length, inputs[i]!.Bounded) :
+    (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 52) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧ ∀ i < inputs.length,
         r[i]!.asNat = (inputs[i]!.Y.toField / inputs[i]!.Z.toField).val +
@@ -281,7 +281,7 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-table
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is RFC 8032's encoding of point `i`. -/
 theorem compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«x86_64-no-tables»)
-    (hinputs : ∀ i < inputs.length, inputs[i]!.Bounded)
+    (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 52)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧

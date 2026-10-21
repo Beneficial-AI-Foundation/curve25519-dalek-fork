@@ -23,7 +23,7 @@ namespace ProjectiveNielsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIde
 @[step]
 theorem identity_spec :
     identity ⦃ (r : ProjectiveNielsPoint.«x86_64-tables») =>
-      r.toProjectiveNiels = ProjectiveNiels.identity ∧ r.Bounded ⦄ := by
+      r.toProjectiveNiels = ProjectiveNiels.identity ∧ r.LimbsLt 54 ⦄ := by
   unfold identity
   step as ⟨one, hone, hone_lt⟩
   step as ⟨zero, hzero, hzero_lt⟩
@@ -36,7 +36,7 @@ theorem identity_spec :
 /-- `Identity for ProjectiveNielsPoint` represents the neutral element. -/
 theorem identity_spec_point :
     identity ⦃ (r : ProjectiveNielsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 54 ⦄ :=
   spec_mono identity_spec fun r ⟨hr, hb⟩ => by
     rw [ProjectiveNielsPoint.«x86_64-tables».onCurve_iff,
       ProjectiveNielsPoint.«x86_64-tables».toPoint_def, hr]
@@ -50,7 +50,7 @@ namespace ProjectiveNielsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraits
 @[step]
 theorem identity_spec :
     identity ⦃ (r : ProjectiveNielsPoint.«x86_64-no-tables») =>
-      r.toProjectiveNiels = ProjectiveNiels.identity ∧ r.Bounded ⦄ := by
+      r.toProjectiveNiels = ProjectiveNiels.identity ∧ r.LimbsLt 54 ⦄ := by
   unfold identity
   step as ⟨one, hone, hone_lt⟩
   step as ⟨zero, hzero, hzero_lt⟩
@@ -63,7 +63,7 @@ theorem identity_spec :
 /-- `Identity for ProjectiveNielsPoint` represents the neutral element. -/
 theorem identity_spec_point :
     identity ⦃ (r : ProjectiveNielsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 54 ⦄ :=
   spec_mono identity_spec fun r ⟨hr, hb⟩ => by
     rw [ProjectiveNielsPoint.«x86_64-no-tables».onCurve_iff,
       ProjectiveNielsPoint.«x86_64-no-tables».toPoint_def, hr]

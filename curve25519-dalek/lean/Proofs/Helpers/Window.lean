@@ -29,25 +29,25 @@ noncomputable instance edwards.EdwardsPoint.«x86_64-tables».instPointRepr :
     PointRepr edwards.EdwardsPoint.«x86_64-tables» where
   OnCurve := edwards.EdwardsPoint.«x86_64-tables».OnCurve
   toPoint := edwards.EdwardsPoint.«x86_64-tables».toPoint
-  Bounded := edwards.EdwardsPoint.«x86_64-tables».Bounded
+  LimbsLt := edwards.EdwardsPoint.«x86_64-tables».LimbsLt
 
 noncomputable instance edwards.EdwardsPoint.«x86_64-no-tables».instPointRepr :
     PointRepr edwards.EdwardsPoint.«x86_64-no-tables» where
   OnCurve := edwards.EdwardsPoint.«x86_64-no-tables».OnCurve
   toPoint := edwards.EdwardsPoint.«x86_64-no-tables».toPoint
-  Bounded := edwards.EdwardsPoint.«x86_64-no-tables».Bounded
+  LimbsLt := edwards.EdwardsPoint.«x86_64-no-tables».LimbsLt
 
 noncomputable instance CompletedPoint.«x86_64-tables».instPointRepr :
     PointRepr CompletedPoint.«x86_64-tables» where
   OnCurve := CompletedPoint.«x86_64-tables».OnCurve
   toPoint := CompletedPoint.«x86_64-tables».toPoint
-  Bounded := CompletedPoint.«x86_64-tables».Bounded
+  LimbsLt := CompletedPoint.«x86_64-tables».LimbsLt
 
 noncomputable instance CompletedPoint.«x86_64-no-tables».instPointRepr :
     PointRepr CompletedPoint.«x86_64-no-tables» where
   OnCurve := CompletedPoint.«x86_64-no-tables».OnCurve
   toPoint := CompletedPoint.«x86_64-no-tables».toPoint
-  Bounded := CompletedPoint.«x86_64-no-tables».Bounded
+  LimbsLt := CompletedPoint.«x86_64-no-tables».LimbsLt
 
 namespace window
 
@@ -142,7 +142,7 @@ its loop range as parameters. -/
   let neg_mask ← subtle.Choice.Insts.CoreConvertFromU8.from i5
   negInst.conditional_negate t1 neg_mask
 
-variable {T : Type} [Inhabited T] [PointRepr T]
+variable {T : Type} [Inhabited T] [PointRepr T] {n : ℕ}
 
 /-- The loop of `select`: after the loop, `t` represents `n • P` (`n = |x| ≤ N`), the entry
 `n - 1` if `n > 0` and the identity if `n = 0`. -/
@@ -150,17 +150,17 @@ theorem selectLoop_spec {N : Usize} (selInst : subtle.ConditionallySelectable T)
     (hsel : ∀ a b (c : subtle.Choice), c.IsValid →
       selInst.conditional_assign a b c ⦃ (r : T) => (c = 0#u8 → r = a) ∧ (c = 1#u8 → r = b) ⦄)
     (self : Array T N) (P : curve25519.edwards.Point)
-    (hself : ∀ j < N.val, Bounded self[j]!)
+    (hself : ∀ j < N.val, LimbsLt n self[j]!)
     (hP : ∀ j < N.val, OnCurve self[j]! ∧ toPoint self[j]! = (j + 1) • P)
     (e : Usize) (he : e.val = N.val + 1) (hN : N.val ≤ 128) (xabs : I16)
     (hxabs : 0 ≤ xabs.val ∧ xabs.val ≤ N.val) (t : T)
-    (ht : OnCurve t ∧ toPoint t = 0 ∧ Bounded t) :
+    (ht : OnCurve t ∧ toPoint t = 0 ∧ LimbsLt n t) :
     selectLoop selInst { start := 1#usize, «end» := e } self xabs t ⦃ (r : T) =>
-      OnCurve r ∧ toPoint r = xabs.val.toNat • P ∧ Bounded r ⦄ := by
+      OnCurve r ∧ toPoint r = xabs.val.toNat • P ∧ LimbsLt n r ⦄ := by
   unfold selectLoop
   apply loop.spec_decr_nat (measure := fun (it, _, _) => it.end.val - it.start.val)
     (inv := fun (it, s, t') => s = self ∧ it.end = e ∧ 1 ≤ it.start.val ∧
-      it.start.val ≤ e.val ∧ OnCurve t' ∧ Bounded t' ∧
+      it.start.val ≤ e.val ∧ OnCurve t' ∧ LimbsLt n t' ∧
       toPoint t' = (if xabs.val.toNat < it.start.val then xabs.val.toNat else 0) • P)
   · rintro ⟨it, s, t'⟩ ⟨rfl, hend, hstart, hle, hon', hb', hpt'⟩
     unfold selectLoopBody
@@ -211,17 +211,17 @@ theorem select_spec {N : Usize} (lo : I8) (hi : I16) (e : Usize) (hlo : lo.val =
     (hhi : hi.val = N.val) (he : e.val = N.val + 1) (hN : N.val ≤ 128)
     (identityInst : traits.Identity T) (selInst : subtle.ConditionallySelectable T)
     (negInst : core.ops.arith.Neg T T)
-    (hid : identityInst.identity ⦃ (r : T) => OnCurve r ∧ toPoint r = 0 ∧ Bounded r ⦄)
+    (hid : identityInst.identity ⦃ (r : T) => OnCurve r ∧ toPoint r = 0 ∧ LimbsLt n r ⦄)
     (hsel : ∀ a b (c : subtle.Choice), c.IsValid →
       selInst.conditional_assign a b c ⦃ (r : T) => (c = 0#u8 → r = a) ∧ (c = 1#u8 → r = b) ⦄)
-    (hneg : ∀ a, Bounded a → OnCurve a →
-      negInst.neg a ⦃ (r : T) => OnCurve r ∧ toPoint r = -toPoint a ∧ Bounded r ⦄)
+    (hneg : ∀ a, LimbsLt n a → OnCurve a →
+      negInst.neg a ⦃ (r : T) => OnCurve r ∧ toPoint r = -toPoint a ∧ LimbsLt n r ⦄)
     (self : Array T N) (P : curve25519.edwards.Point)
-    (hself : ∀ j < N.val, Bounded self[j]!)
+    (hself : ∀ j < N.val, LimbsLt n self[j]!)
     (hP : ∀ j < N.val, OnCurve self[j]! ∧ toPoint self[j]! = (j + 1) • P)
     (x : I8) (hx : -(N.val : ℤ) ≤ x.val ∧ x.val ≤ N.val) :
     select lo hi e identityInst selInst (subtle.ConditionallyNegatable.Blanket selInst negInst)
-      self x ⦃ (r : T) => OnCurve r ∧ toPoint r = x.val • P ∧ Bounded r ⦄ := by
+      self x ⦃ (r : T) => OnCurve r ∧ toPoint r = x.val • P ∧ LimbsLt n r ⦄ := by
   unfold select
   step
   step as ⟨i, hi'⟩
@@ -306,25 +306,25 @@ theorem select_spec {N : Usize} (lo : I8) (hi : I16) (e : Usize) (hlo : lo.val =
 open scoped Helpers.IndexStep Helpers.UpdateStep in
 /-- The loop of the `From<&EdwardsPoint>` impls over `0..N-1`: entry `k` represents
 `entry 0 + k • Q`. -/
-theorem fromLoop_spec {C E : Type} [PointRepr C] [PointRepr E] {N : Usize}
+theorem fromLoop_spec {C E : Type} [PointRepr C] [PointRepr E] {nC nE : ℕ} {N : Usize}
     (add : T → Result C) (asExt : C → Result E) (asNiels : E → Result T)
     (Q : curve25519.edwards.Point)
-    (hadd : ∀ q, Bounded q → OnCurve q →
-      add q ⦃ (c : C) => OnCurve c ∧ toPoint c = Q + toPoint q ∧ Bounded c ⦄)
-    (hext : ∀ c : C, Bounded c → OnCurve c →
-      asExt c ⦃ (e : E) => OnCurve e ∧ toPoint e = toPoint c ∧ Bounded e ⦄)
-    (hniels : ∀ e : E, Bounded e → OnCurve e →
-      asNiels e ⦃ (r : T) => OnCurve r ∧ toPoint r = toPoint e ∧ Bounded r ⦄)
+    (hadd : ∀ q, LimbsLt n q → OnCurve q →
+      add q ⦃ (c : C) => OnCurve c ∧ toPoint c = Q + toPoint q ∧ LimbsLt nC c ⦄)
+    (hext : ∀ c : C, LimbsLt nC c → OnCurve c →
+      asExt c ⦃ (e : E) => OnCurve e ∧ toPoint e = toPoint c ∧ LimbsLt nE e ⦄)
+    (hniels : ∀ e : E, LimbsLt nE e → OnCurve e →
+      asNiels e ⦃ (r : T) => OnCurve r ∧ toPoint r = toPoint e ∧ LimbsLt n r ⦄)
     (iter : core.ops.range.Range Usize) (hstart : iter.start.val = 0)
     (hend : iter.end.val + 1 = N.val) (points : Array T N)
-    (h0 : OnCurve points[0]! ∧ Bounded points[0]!) :
+    (h0 : OnCurve points[0]! ∧ LimbsLt n points[0]!) :
     loop (fun (iter1, points1) => fromLoopBody add asExt asNiels iter1 points1) (iter, points)
       ⦃ (r : Array T N) => ∀ k < N.val,
-        OnCurve r[k]! ∧ toPoint r[k]! = toPoint points[0]! + k • Q ∧ Bounded r[k]! ⦄ := by
+        OnCurve r[k]! ∧ toPoint r[k]! = toPoint points[0]! + k • Q ∧ LimbsLt n r[k]! ⦄ := by
   apply loop.spec_decr_nat (measure := fun (it, _) => it.end.val - it.start.val)
     (inv := fun (it, pts) => it.end = iter.end ∧ it.start.val ≤ it.end.val ∧
       ∀ k ≤ it.start.val,
-        OnCurve pts[k]! ∧ toPoint pts[k]! = toPoint points[0]! + k • Q ∧ Bounded pts[k]!)
+        OnCurve pts[k]! ∧ toPoint pts[k]! = toPoint points[0]! + k • Q ∧ LimbsLt n pts[k]!)
   · rintro ⟨it, pts⟩ ⟨hend', hle, hinv⟩
     unfold fromLoopBody
     by_cases hlt : it.start.val < it.end.val

@@ -79,17 +79,17 @@ private theorem mul_loop_spec (iter : core.iter.adapters.rev.Rev (core.ops.range
     (scalar_digits : Array I8 64#usize) (tmp3 : edwards.EdwardsPoint.«x86_64-tables»)
     (tmp1 : CompletedPoint.«x86_64-tables») (P : curve25519.edwards.Point)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 63)
-    (htab : lookup_table.Bounded) (hP : lookup_table.Represents P)
+    (htab : lookup_table.LimbsLt 54) (hP : lookup_table.Represents P)
     (hd : ∀ i < 64, -8 ≤ scalar_digits[i]!.val ∧ scalar_digits[i]!.val ≤ 8)
-    (hon : tmp1.OnCurve) (hb : tmp1.Bounded)
+    (hon : tmp1.OnCurve) (hb : tmp1.LimbsLt 54)
     (h1 : tmp1.toPoint = digitSum scalar_digits iter.iter.end.val • P) :
     mul.«x86_64-tables_loop» iter lookup_table scalar_digits tmp3 tmp1
       ⦃ (r : CompletedPoint.«x86_64-tables») =>
-        r.OnCurve ∧ r.toPoint = digitSum scalar_digits 0 • P ∧ r.Bounded ⦄ := by
+        r.OnCurve ∧ r.toPoint = digitSum scalar_digits 0 • P ∧ r.LimbsLt 54 ⦄ := by
   unfold mul.«x86_64-tables_loop»
   apply loop.spec_decr_nat (measure := fun (it, _, _) => it.iter.end.val)
     (inv := fun (it, _, t) => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 63 ∧ t.OnCurve ∧
-      t.Bounded ∧ t.toPoint = digitSum scalar_digits it.iter.end.val • P)
+      t.LimbsLt 54 ∧ t.toPoint = digitSum scalar_digits it.iter.end.val • P)
   · rintro ⟨it, t3, t⟩ ⟨hst, hen, hton, htb, htp⟩
     unfold mul.«x86_64-tables_loop».body
     by_cases hlt : 0 < it.iter.end.val
@@ -124,9 +124,9 @@ open scoped Helpers.IndexStep in
 precondition of `as_radix_16`); limbs `< 2^52`. -/
 @[step]
 theorem mul_spec (point : edwards.EdwardsPoint.«x86_64-tables») (s : scalar.Scalar)
-    (hpoint : point.Bounded) (hon : point.OnCurve) (hs : s.asNat < 2 ^ 255) :
+    (hpoint : point.LimbsLt 52) (hon : point.OnCurve) (hs : s.asNat < 2 ^ 255) :
     mul.«x86_64-tables» point s ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • point.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = s.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul.«x86_64-tables»
   step as ⟨table, hrep, htab⟩
   step as ⟨d, hval, hlow, h63l, h63u⟩
@@ -171,17 +171,17 @@ private theorem mul_loop_spec (iter : core.iter.adapters.rev.Rev (core.ops.range
     (scalar_digits : Array I8 64#usize) (tmp3 : edwards.EdwardsPoint.«x86_64-no-tables»)
     (tmp1 : CompletedPoint.«x86_64-no-tables») (P : curve25519.edwards.Point)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 63)
-    (htab : lookup_table.Bounded) (hP : lookup_table.Represents P)
+    (htab : lookup_table.LimbsLt 54) (hP : lookup_table.Represents P)
     (hd : ∀ i < 64, -8 ≤ scalar_digits[i]!.val ∧ scalar_digits[i]!.val ≤ 8)
-    (hon : tmp1.OnCurve) (hb : tmp1.Bounded)
+    (hon : tmp1.OnCurve) (hb : tmp1.LimbsLt 54)
     (h1 : tmp1.toPoint = digitSum scalar_digits iter.iter.end.val • P) :
     mul.«x86_64-no-tables_loop» iter lookup_table scalar_digits tmp3 tmp1
       ⦃ (r : CompletedPoint.«x86_64-no-tables») =>
-        r.OnCurve ∧ r.toPoint = digitSum scalar_digits 0 • P ∧ r.Bounded ⦄ := by
+        r.OnCurve ∧ r.toPoint = digitSum scalar_digits 0 • P ∧ r.LimbsLt 54 ⦄ := by
   unfold mul.«x86_64-no-tables_loop»
   apply loop.spec_decr_nat (measure := fun (it, _, _) => it.iter.end.val)
     (inv := fun (it, _, t) => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 63 ∧ t.OnCurve ∧
-      t.Bounded ∧ t.toPoint = digitSum scalar_digits it.iter.end.val • P)
+      t.LimbsLt 54 ∧ t.toPoint = digitSum scalar_digits it.iter.end.val • P)
   · rintro ⟨it, t3, t⟩ ⟨hst, hen, hton, htb, htp⟩
     unfold mul.«x86_64-no-tables_loop».body
     by_cases hlt : 0 < it.iter.end.val
@@ -216,9 +216,9 @@ open scoped Helpers.IndexStep in
 precondition of `as_radix_16`); limbs `< 2^52`. -/
 @[step]
 theorem mul_spec (point : edwards.EdwardsPoint.«x86_64-no-tables») (s : scalar.Scalar)
-    (hpoint : point.Bounded) (hon : point.OnCurve) (hs : s.asNat < 2 ^ 255) :
+    (hpoint : point.LimbsLt 52) (hon : point.OnCurve) (hs : s.asNat < 2 ^ 255) :
     mul.«x86_64-no-tables» point s ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • point.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = s.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul.«x86_64-no-tables»
   step as ⟨table, hrep, htab⟩
   step as ⟨d, hval, hlow, h63l, h63u⟩

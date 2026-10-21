@@ -26,9 +26,9 @@ namespace «EdwardsPointx86_64-tables»
 /-- `EdwardsPoint::as_affine_niels`: `(y + x, y - x, x y (2 d))` with `x = X Z⁻¹`, `y = Y Z⁻¹`
 (`0⁻¹ = 0`); limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem as_affine_niels_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem as_affine_niels_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     as_affine_niels self ⦃ (r : AffineNielsPoint.«x86_64-tables») =>
-      r.toAffineNiels = self.toExtended.toAffineNiels ∧ r.Bounded ⦄ := by
+      r.toAffineNiels = self.toExtended.toAffineNiels ∧ r.LimbsLt 54 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold as_affine_niels
   step as ⟨recip, hrecip1, hrecip0, hrecip_lt⟩
@@ -49,10 +49,10 @@ theorem as_affine_niels_spec (self : EdwardsPoint.«x86_64-tables») (hself : se
       limbs_lt_of_le (by decide) hy_minus_x_lt, limbs_lt_of_le (by decide) hxy2d_lt⟩
 
 /-- `EdwardsPoint::as_affine_niels` represents the same point. -/
-theorem as_affine_niels_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem as_affine_niels_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     as_affine_niels self ⦃ (r : AffineNielsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.LimbsLt 54 ⦄ :=
   spec_mono (as_affine_niels_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [AffineNielsPoint.«x86_64-tables».onCurve_iff,
       AffineNielsPoint.«x86_64-tables».toPoint_def, hr,
@@ -67,9 +67,9 @@ namespace «EdwardsPointx86_64-no-tables»
 /-- `EdwardsPoint::as_affine_niels`: `(y + x, y - x, x y (2 d))` with `x = X Z⁻¹`, `y = Y Z⁻¹`
 (`0⁻¹ = 0`); limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem as_affine_niels_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem as_affine_niels_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     as_affine_niels self ⦃ (r : AffineNielsPoint.«x86_64-no-tables») =>
-      r.toAffineNiels = self.toExtended.toAffineNiels ∧ r.Bounded ⦄ := by
+      r.toAffineNiels = self.toExtended.toAffineNiels ∧ r.LimbsLt 54 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold as_affine_niels
   step as ⟨recip, hrecip1, hrecip0, hrecip_lt⟩
@@ -90,10 +90,11 @@ theorem as_affine_niels_spec (self : EdwardsPoint.«x86_64-no-tables») (hself :
       limbs_lt_of_le (by decide) hy_minus_x_lt, limbs_lt_of_le (by decide) hxy2d_lt⟩
 
 /-- `EdwardsPoint::as_affine_niels` represents the same point. -/
-theorem as_affine_niels_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem as_affine_niels_spec_point (self : EdwardsPoint.«x86_64-no-tables»)
+    (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     as_affine_niels self ⦃ (r : AffineNielsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.LimbsLt 54 ⦄ :=
   spec_mono (as_affine_niels_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [AffineNielsPoint.«x86_64-no-tables».onCurve_iff,
       AffineNielsPoint.«x86_64-no-tables».toPoint_def, hr,

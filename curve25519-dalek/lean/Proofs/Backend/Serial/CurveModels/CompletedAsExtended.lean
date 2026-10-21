@@ -20,9 +20,9 @@ namespace «CompletedPointx86_64-tables»
 
 /-- `CompletedPoint::as_extended`: `(X T : Y Z : Z T : X Y)`, limbs `< 2^52`. -/
 @[step]
-theorem as_extended_spec (self : CompletedPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem as_extended_spec (self : CompletedPoint.«x86_64-tables») (hself : self.LimbsLt 54) :
     as_extended self ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.toExtended = self.toCompleted.toExtended ∧ r.Bounded ⦄ := by
+      r.toExtended = self.toCompleted.toExtended ∧ r.LimbsLt 52 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold as_extended
   step as ⟨XT, hXT, hXT_lt⟩
@@ -37,10 +37,10 @@ theorem as_extended_spec (self : CompletedPoint.«x86_64-tables») (hself : self
   · exact ⟨hXT_lt, hYZ_lt, hZT_lt, hXY_lt⟩
 
 /-- `CompletedPoint::as_extended` represents the same point. -/
-theorem as_extended_spec_point (self : CompletedPoint.«x86_64-tables») (hself : self.Bounded)
+theorem as_extended_spec_point (self : CompletedPoint.«x86_64-tables») (hself : self.LimbsLt 54)
     (hon : self.OnCurve) :
     as_extended self ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (as_extended_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [edwards.EdwardsPoint.«x86_64-tables».onCurve_iff,
       edwards.EdwardsPoint.«x86_64-tables».toPoint_def, hr,
@@ -53,9 +53,9 @@ namespace «CompletedPointx86_64-no-tables»
 
 /-- `CompletedPoint::as_extended`: `(X T : Y Z : Z T : X Y)`, limbs `< 2^52`. -/
 @[step]
-theorem as_extended_spec (self : CompletedPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem as_extended_spec (self : CompletedPoint.«x86_64-no-tables») (hself : self.LimbsLt 54) :
     as_extended self ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.toExtended = self.toCompleted.toExtended ∧ r.Bounded ⦄ := by
+      r.toExtended = self.toCompleted.toExtended ∧ r.LimbsLt 52 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold as_extended
   step as ⟨XT, hXT, hXT_lt⟩
@@ -70,10 +70,10 @@ theorem as_extended_spec (self : CompletedPoint.«x86_64-no-tables») (hself : s
   · exact ⟨hXT_lt, hYZ_lt, hZT_lt, hXY_lt⟩
 
 /-- `CompletedPoint::as_extended` represents the same point. -/
-theorem as_extended_spec_point (self : CompletedPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem as_extended_spec_point (self : CompletedPoint.«x86_64-no-tables») (hself : self.LimbsLt 54)
     (hon : self.OnCurve) :
     as_extended self ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (as_extended_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [edwards.EdwardsPoint.«x86_64-no-tables».onCurve_iff,
       edwards.EdwardsPoint.«x86_64-no-tables».toPoint_def, hr,

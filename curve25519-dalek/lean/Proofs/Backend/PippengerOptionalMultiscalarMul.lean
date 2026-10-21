@@ -34,7 +34,7 @@ theorem pippenger_optional_multiscalar_mul_spec
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.Bounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve)
     (hxs : xs.length ≤ Usize.max) :
     pippenger_optional_multiscalar_mul.«x86_64-tables» scalarsInst borrowScalarInst pointsInst
         scalars
@@ -42,7 +42,7 @@ theorem pippenger_optional_multiscalar_mul_spec
         (r = none ↔ none ∈ ops.take ss.length) ∧
         ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
-          R.Bounded ⦄ := by
+          R.LimbsLt 52 ⦄ := by
   unfold pippenger_optional_multiscalar_mul.«x86_64-tables»
   step
   exact
@@ -68,7 +68,7 @@ theorem pippenger_optional_multiscalar_mul_spec
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.Bounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve)
     (hxs : xs.length ≤ Usize.max) :
     pippenger_optional_multiscalar_mul.«x86_64-no-tables» scalarsInst borrowScalarInst pointsInst
         scalars
@@ -76,7 +76,7 @@ theorem pippenger_optional_multiscalar_mul_spec
         (r = none ↔ none ∈ ops.take ss.length) ∧
         ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
-          R.Bounded ⦄ := by
+          R.LimbsLt 52 ⦄ := by
   unfold pippenger_optional_multiscalar_mul.«x86_64-no-tables»
   step
   exact

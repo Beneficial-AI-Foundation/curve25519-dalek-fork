@@ -25,14 +25,14 @@ namespace «EdwardsPointx86_64-tables»
 @[local step]
 private theorem mul_by_pow_2_loop_spec (iter : core.ops.range.Range U32)
     (s : ProjectivePoint.«x86_64-tables») (hiter : iter.start.val ≤ iter.end.val)
-    (hs : s.Bounded) (hon : s.OnCurve) :
+    (hs : s.LimbsLt 52) (hon : s.OnCurve) :
     mul_by_pow_2_loop iter s ⦃ (r : ProjectivePoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = 2 ^ (iter.end.val - iter.start.val) • s.toPoint ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   unfold mul_by_pow_2_loop
   apply loop.spec_decr_nat (measure := fun (it, _) => it.end.val - it.start.val)
     (inv := fun (it, s') => it.end = iter.end ∧ iter.start.val ≤ it.start.val ∧
-      it.start.val ≤ it.end.val ∧ s'.OnCurve ∧ s'.Bounded ∧
+      it.start.val ≤ it.end.val ∧ s'.OnCurve ∧ s'.LimbsLt 52 ∧
       s'.toPoint = 2 ^ (it.start.val - iter.start.val) • s.toPoint)
   · rintro ⟨it, s'⟩ ⟨hend, hstart, hle, hon', hb', hs'⟩
     unfold mul_by_pow_2_loop.body
@@ -57,9 +57,9 @@ private theorem mul_by_pow_2_loop_spec (iter : core.ops.range.Range U32)
 /-- `EdwardsPoint::mul_by_pow_2`: `k` doublings, `2^k • P` (requires `k > 0`); limbs `< 2^52`. -/
 @[step]
 theorem mul_by_pow_2_spec (self : EdwardsPoint.«x86_64-tables») (k : U32)
-    (hself : self.Bounded) (hon : self.OnCurve) (hk : 0 < k.val) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hk : 0 < k.val) :
     mul_by_pow_2 self k ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 2 ^ k.val • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = 2 ^ k.val • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_by_pow_2
   step
   step with as_projective_spec_point as ⟨s, hson, hs, hsb⟩
@@ -79,14 +79,14 @@ namespace «EdwardsPointx86_64-no-tables»
 @[local step]
 private theorem mul_by_pow_2_loop_spec (iter : core.ops.range.Range U32)
     (s : ProjectivePoint.«x86_64-no-tables») (hiter : iter.start.val ≤ iter.end.val)
-    (hs : s.Bounded) (hon : s.OnCurve) :
+    (hs : s.LimbsLt 52) (hon : s.OnCurve) :
     mul_by_pow_2_loop iter s ⦃ (r : ProjectivePoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = 2 ^ (iter.end.val - iter.start.val) • s.toPoint ∧
-        r.Bounded ⦄ := by
+        r.LimbsLt 52 ⦄ := by
   unfold mul_by_pow_2_loop
   apply loop.spec_decr_nat (measure := fun (it, _) => it.end.val - it.start.val)
     (inv := fun (it, s') => it.end = iter.end ∧ iter.start.val ≤ it.start.val ∧
-      it.start.val ≤ it.end.val ∧ s'.OnCurve ∧ s'.Bounded ∧
+      it.start.val ≤ it.end.val ∧ s'.OnCurve ∧ s'.LimbsLt 52 ∧
       s'.toPoint = 2 ^ (it.start.val - iter.start.val) • s.toPoint)
   · rintro ⟨it, s'⟩ ⟨hend, hstart, hle, hon', hb', hs'⟩
     unfold mul_by_pow_2_loop.body
@@ -111,9 +111,9 @@ private theorem mul_by_pow_2_loop_spec (iter : core.ops.range.Range U32)
 /-- `EdwardsPoint::mul_by_pow_2`: `k` doublings, `2^k • P` (requires `k > 0`); limbs `< 2^52`. -/
 @[step]
 theorem mul_by_pow_2_spec (self : EdwardsPoint.«x86_64-no-tables») (k : U32)
-    (hself : self.Bounded) (hon : self.OnCurve) (hk : 0 < k.val) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hk : 0 < k.val) :
     mul_by_pow_2 self k ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 2 ^ k.val • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = 2 ^ k.val • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_by_pow_2
   step
   step with as_projective_spec_point as ⟨s, hson, hs, hsb⟩

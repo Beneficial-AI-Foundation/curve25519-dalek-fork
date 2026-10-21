@@ -21,8 +21,8 @@ namespace EdwardsPoint.«x86_64-tables».Insts.«CoreCmpPartialEqEdwardsPointx86
 /-- `PartialEq for EdwardsPoint`: projective equality
 `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` is not compared); limbs `< 2^52`. -/
 @[step]
-theorem eq_spec (self other : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hother : other.Bounded) :
+theorem eq_spec (self other : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 52) :
     eq self other ⦃ (b : Bool) => b = true ↔ self.ProjEq other ⦄ := by
   unfold eq
   step as ⟨c, hcv, hc⟩
@@ -31,8 +31,8 @@ theorem eq_spec (self other : EdwardsPoint.«x86_64-tables») (hself : self.Boun
   rcases hcv with rfl | rfl <;> decide
 
 /-- `PartialEq for EdwardsPoint` on points: equality of the represented points. -/
-theorem eq_spec_point (self other : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hother : other.Bounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+theorem eq_spec_point (self other : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 52) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     eq self other ⦃ (b : Bool) => b = true ↔ self.toPoint = other.toPoint ⦄ :=
   spec_mono (eq_spec self other hself hother) fun _ hb =>
     hb.trans (EdwardsPoint.«x86_64-tables».projEq_iff_toPoint_eq hself_on hother_on)
@@ -44,8 +44,8 @@ namespace EdwardsPoint.«x86_64-no-tables».Insts.«CoreCmpPartialEqEdwardsPoint
 /-- `PartialEq for EdwardsPoint`: projective equality
 `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` is not compared); limbs `< 2^52`. -/
 @[step]
-theorem eq_spec (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hother : other.Bounded) :
+theorem eq_spec (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 52) :
     eq self other ⦃ (b : Bool) => b = true ↔ self.ProjEq other ⦄ := by
   unfold eq
   step as ⟨c, hcv, hc⟩
@@ -54,8 +54,8 @@ theorem eq_spec (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.B
   rcases hcv with rfl | rfl <;> decide
 
 /-- `PartialEq for EdwardsPoint` on points: equality of the represented points. -/
-theorem eq_spec_point (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hother : other.Bounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+theorem eq_spec_point (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 52) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     eq self other ⦃ (b : Bool) => b = true ↔ self.toPoint = other.toPoint ⦄ :=
   spec_mono (eq_spec self other hself hother) fun _ hb =>
     hb.trans (EdwardsPoint.«x86_64-no-tables».projEq_iff_toPoint_eq hself_on hother_on)

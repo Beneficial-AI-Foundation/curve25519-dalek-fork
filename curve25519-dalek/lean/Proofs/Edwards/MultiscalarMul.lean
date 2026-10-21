@@ -41,12 +41,12 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.Bounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
-        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.Bounded ⦄ := by
+        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄ := by
   unfold multiscalar_mul
   have hscalars' : scalarsInst.into_iter scalars
       ⦃ (it : Clause0_IntoIter) => scalarsInst.iteratorInst.Yields it xs ⦄ := hscalars
@@ -95,12 +95,12 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.Bounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧
-        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.Bounded ⦄ := by
+        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄ := by
   unfold multiscalar_mul
   have hscalars' : scalarsInst.into_iter scalars
       ⦃ (it : Clause0_IntoIter) => scalarsInst.iteratorInst.Yields it xs ⦄ := hscalars

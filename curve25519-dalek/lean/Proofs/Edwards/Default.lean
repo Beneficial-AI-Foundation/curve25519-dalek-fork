@@ -22,14 +22,14 @@ namespace EdwardsPoint.«x86_64-tables».Insts.CoreDefaultDefault
 @[step]
 theorem default_spec :
     default ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.toExtended = Extended.identity ∧ r.Bounded ⦄ := by
+      r.toExtended = Extended.identity ∧ r.LimbsLt 52 ⦄ := by
   unfold default
   step*
 
 /-- `Default for EdwardsPoint` represents the neutral element. -/
 theorem default_spec_point :
     default ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄ :=
   spec_mono default_spec fun r ⟨hr, hb⟩ => by
     rw [EdwardsPoint.«x86_64-tables».onCurve_iff,
       EdwardsPoint.«x86_64-tables».toPoint_def,
@@ -44,14 +44,14 @@ namespace EdwardsPoint.«x86_64-no-tables».Insts.CoreDefaultDefault
 @[step]
 theorem default_spec :
     default ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.toExtended = Extended.identity ∧ r.Bounded ⦄ := by
+      r.toExtended = Extended.identity ∧ r.LimbsLt 52 ⦄ := by
   unfold default
   step*
 
 /-- `Default for EdwardsPoint` represents the neutral element. -/
 theorem default_spec_point :
     default ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄ :=
   spec_mono default_spec fun r ⟨hr, hb⟩ => by
     rw [EdwardsPoint.«x86_64-no-tables».onCurve_iff,
       EdwardsPoint.«x86_64-no-tables».toPoint_def,

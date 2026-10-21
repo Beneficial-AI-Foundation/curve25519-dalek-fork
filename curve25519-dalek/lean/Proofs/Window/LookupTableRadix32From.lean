@@ -39,11 +39,11 @@ namespace «CoreConvertFromSharedAEdwardsPointx86_64-tables»
 /-- The loop: entry `k` represents `x + k • Q`, `Q` the added point. -/
 @[local step]
 private theorem from_loop_spec (P : edwards.EdwardsPoint.«x86_64-tables»)
-    (x : ProjectiveNielsPoint.«x86_64-tables») (hP : P.Bounded) (hon : P.OnCurve)
-    (hx : x.Bounded) (hxon : x.OnCurve) :
+    (x : ProjectiveNielsPoint.«x86_64-tables») (hP : P.LimbsLt 52) (hon : P.OnCurve)
+    (hx : x.LimbsLt 54) (hxon : x.OnCurve) :
     from_loop { start := 0#usize, «end» := 15#usize } P (Array.repeat 16#usize x)
       ⦃ (r : Array ProjectiveNielsPoint.«x86_64-tables» 16#usize) => ∀ k < 16,
-        r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • P.toPoint ∧ r[k]!.Bounded ⦄ := by
+        r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • P.toPoint ∧ r[k]!.LimbsLt 54 ⦄ := by
   unfold from_loop
   have h := fromLoop_spec (N := 16#usize) (add P) as_extended as_projective_niels P.toPoint
     (fun q hq hqon => add_spec_point P q hP hq hon hqon)
@@ -57,9 +57,9 @@ private theorem from_loop_spec (P : edwards.EdwardsPoint.«x86_64-tables»)
 /-- `From<&EdwardsPoint> for LookupTableRadix32<ProjectiveNielsPoint>`: entry `j` represents
 `(j + 1) • P`; limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem from_spec (P : edwards.EdwardsPoint.«x86_64-tables») (hP : P.Bounded) (hon : P.OnCurve) :
+theorem from_spec (P : edwards.EdwardsPoint.«x86_64-tables») (hP : P.LimbsLt 52) (hon : P.OnCurve) :
     «from» P ⦃ (r : LookupTableRadix32 ProjectiveNielsPoint.«x86_64-tables») =>
-      r.Represents P.toPoint ∧ r.Bounded ⦄ := by
+      r.Represents P.toPoint ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step with as_projective_niels_spec_point as ⟨x, hxon, hxp, hxb⟩
   step as ⟨r, hr⟩
@@ -87,11 +87,11 @@ namespace «CoreConvertFromSharedAEdwardsPointx86_64-tables»
 /-- The loop: entry `k` represents `x + k • Q`, `Q` the added point. -/
 @[local step]
 private theorem from_loop_spec (P : edwards.EdwardsPoint.«x86_64-tables»)
-    (x : AffineNielsPoint.«x86_64-tables») (hP : P.Bounded) (hon : P.OnCurve)
-    (hx : x.Bounded) (hxon : x.OnCurve) :
+    (x : AffineNielsPoint.«x86_64-tables») (hP : P.LimbsLt 52) (hon : P.OnCurve)
+    (hx : x.LimbsLt 54) (hxon : x.OnCurve) :
     from_loop { start := 0#usize, «end» := 15#usize } P (Array.repeat 16#usize x)
       ⦃ (r : Array AffineNielsPoint.«x86_64-tables» 16#usize) => ∀ k < 16,
-        r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • P.toPoint ∧ r[k]!.Bounded ⦄ := by
+        r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • P.toPoint ∧ r[k]!.LimbsLt 54 ⦄ := by
   unfold from_loop
   have h := fromLoop_spec (N := 16#usize) (add P) as_extended as_affine_niels P.toPoint
     (fun q hq hqon => add_spec_point P q hP hq hon hqon)
@@ -105,9 +105,9 @@ private theorem from_loop_spec (P : edwards.EdwardsPoint.«x86_64-tables»)
 /-- `From<&EdwardsPoint> for LookupTableRadix32<AffineNielsPoint>`: entry `j` represents
 `(j + 1) • P`; limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem from_spec (P : edwards.EdwardsPoint.«x86_64-tables») (hP : P.Bounded) (hon : P.OnCurve) :
+theorem from_spec (P : edwards.EdwardsPoint.«x86_64-tables») (hP : P.LimbsLt 52) (hon : P.OnCurve) :
     «from» P ⦃ (r : LookupTableRadix32 AffineNielsPoint.«x86_64-tables») =>
-      r.Represents P.toPoint ∧ r.Bounded ⦄ := by
+      r.Represents P.toPoint ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step with as_affine_niels_spec_point as ⟨x, hxon, hxp, hxb⟩
   step as ⟨r, hr⟩

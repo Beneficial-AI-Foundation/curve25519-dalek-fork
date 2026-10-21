@@ -108,7 +108,7 @@ private theorem step_2_spec (repr : CompressedEdwardsY) (X Y Z : FieldElement51)
         r.toExtended = ⟨X.toField, Y.toField, Z.toField, X.toField * Y.toField⟩) ∧
       (CompressedEdwardsY.asNat repr / 2 ^ 255 = 1 →
         r.toExtended = ⟨-X.toField, Y.toField, Z.toField, -X.toField * Y.toField⟩) ∧
-      r.Bounded ⦄ := by
+      r.LimbsLt 52 ⦄ := by
   unfold step_2.«x86_64-tables»
   step as ⟨a, ha⟩
   step with Array.index_usize_getElem!_spec as ⟨i, hi⟩
@@ -167,7 +167,7 @@ limbs `< 2^52`. -/
 theorem decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-tables»)) =>
       r.map EdwardsPoint.«x86_64-tables».toPoint = decodeLenient self.asNat ∧
-      ∀ q, r = some q → q.OnCurve ∧ q.Bounded ⦄ := by
+      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
   unfold decompress.«x86_64-tables»
   step with decompress.«x86_64-tables».step_1_spec
     as ⟨c, X, Y, Z, hcv, hYf, hZf, hc, hX, hXneg, hX_lt, hY_lt, hZ_lt⟩
@@ -255,7 +255,7 @@ private theorem step_2_spec (repr : CompressedEdwardsY) (X Y Z : FieldElement51)
         r.toExtended = ⟨X.toField, Y.toField, Z.toField, X.toField * Y.toField⟩) ∧
       (CompressedEdwardsY.asNat repr / 2 ^ 255 = 1 →
         r.toExtended = ⟨-X.toField, Y.toField, Z.toField, -X.toField * Y.toField⟩) ∧
-      r.Bounded ⦄ := by
+      r.LimbsLt 52 ⦄ := by
   unfold step_2.«x86_64-no-tables»
   step as ⟨a, ha⟩
   step with Array.index_usize_getElem!_spec as ⟨i, hi⟩
@@ -314,7 +314,7 @@ limbs `< 2^52`. -/
 theorem decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-no-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-no-tables»)) =>
       r.map EdwardsPoint.«x86_64-no-tables».toPoint = decodeLenient self.asNat ∧
-      ∀ q, r = some q → q.OnCurve ∧ q.Bounded ⦄ := by
+      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
   unfold decompress.«x86_64-no-tables»
   step with decompress.«x86_64-no-tables».step_1_spec
     as ⟨c, X, Y, Z, hcv, hYf, hZf, hc, hX, hXneg, hX_lt, hY_lt, hZ_lt⟩

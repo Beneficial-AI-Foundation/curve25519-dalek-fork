@@ -18,8 +18,8 @@ radix-`2^51` limbs. Each structure `S` gets:
 - `S.OnCurve := (toX self).OnCurve`, the algebraic validity (exposed);
 - `S.toPoint := (toX self).toPoint`, the point represented, `0` off the curve (hidden,
   `toPoint_def`);
-- `S.Bounded`, the limb bounds the code relies on (exposed):
-  `< 2^52` for `ProjectivePoint`, `< 2^54` for the three others.
+- `S.LimbsLt n`: every limb is `< 2^n` (exposed). The specs use `LimbsLt 52` for
+  `ProjectivePoint` and `LimbsLt 54` for the three others.
 
 The two x86_64 configurations (`«x86_64-tables»`, `«x86_64-no-tables»`) have distinct
 structures with identical bodies, so every definition appears twice. -/
@@ -57,10 +57,10 @@ theorem toPoint_def (self : ProjectivePoint.«x86_64-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of a `ProjectivePoint`: all limbs `< 2^52`. -/
-@[expose] def Bounded (self : ProjectivePoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ 52) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ 52) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ 52)
+/-- Every limb of a `ProjectivePoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : ProjectivePoint.«x86_64-tables») : Prop :=
+  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.Z[i]!.val < 2 ^ n)
 
 end ProjectivePoint.«x86_64-tables»
 
@@ -92,10 +92,10 @@ theorem toPoint_def (self : CompletedPoint.«x86_64-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of a `CompletedPoint`: all limbs `< 2^54`. -/
-@[expose] def Bounded (self : CompletedPoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ 54)
+/-- Every limb of a `CompletedPoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : CompletedPoint.«x86_64-tables») : Prop :=
+  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ n)
 
 end CompletedPoint.«x86_64-tables»
 
@@ -129,10 +129,10 @@ theorem toPoint_def (self : AffineNielsPoint.«x86_64-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of an `AffineNielsPoint`: all limbs `< 2^54`. -/
-@[expose] def Bounded (self : AffineNielsPoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.y_plus_x[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.y_minus_x[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.xy2d[i]!.val < 2 ^ 54)
+/-- Every limb of an `AffineNielsPoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : AffineNielsPoint.«x86_64-tables») : Prop :=
+  (∀ i < 5, self.y_plus_x[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.y_minus_x[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.xy2d[i]!.val < 2 ^ n)
 
 /-- Needed for `t[j]!` on tables of `AffineNielsPoint`s; the default is never observed for
 in-range indices. -/
@@ -171,11 +171,11 @@ theorem toPoint_def (self : ProjectiveNielsPoint.«x86_64-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of a `ProjectiveNielsPoint`: all limbs `< 2^54`. -/
-@[expose] def Bounded (self : ProjectiveNielsPoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.Y_plus_X[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.Y_minus_X[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.Z[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.T2d[i]!.val < 2 ^ 54)
+/-- Every limb of a `ProjectiveNielsPoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : ProjectiveNielsPoint.«x86_64-tables») : Prop :=
+  (∀ i < 5, self.Y_plus_X[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.Y_minus_X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.T2d[i]!.val < 2 ^ n)
 
 /-- Needed for `t[j]!` on tables of `ProjectiveNielsPoint`s; the default is never observed for
 in-range indices. -/
@@ -212,10 +212,10 @@ theorem toPoint_def (self : ProjectivePoint.«x86_64-no-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of a `ProjectivePoint`: all limbs `< 2^52`. -/
-@[expose] def Bounded (self : ProjectivePoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ 52) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ 52) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ 52)
+/-- Every limb of a `ProjectivePoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : ProjectivePoint.«x86_64-no-tables») : Prop :=
+  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.Z[i]!.val < 2 ^ n)
 
 end ProjectivePoint.«x86_64-no-tables»
 
@@ -247,10 +247,10 @@ theorem toPoint_def (self : CompletedPoint.«x86_64-no-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of a `CompletedPoint`: all limbs `< 2^54`. -/
-@[expose] def Bounded (self : CompletedPoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ 54)
+/-- Every limb of a `CompletedPoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : CompletedPoint.«x86_64-no-tables») : Prop :=
+  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ n)
 
 end CompletedPoint.«x86_64-no-tables»
 
@@ -284,10 +284,10 @@ theorem toPoint_def (self : AffineNielsPoint.«x86_64-no-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of an `AffineNielsPoint`: all limbs `< 2^54`. -/
-@[expose] def Bounded (self : AffineNielsPoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.y_plus_x[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.y_minus_x[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.xy2d[i]!.val < 2 ^ 54)
+/-- Every limb of an `AffineNielsPoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : AffineNielsPoint.«x86_64-no-tables») : Prop :=
+  (∀ i < 5, self.y_plus_x[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.y_minus_x[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.xy2d[i]!.val < 2 ^ n)
 
 /-- Needed for `t[j]!` on tables of `AffineNielsPoint`s; the default is never observed for
 in-range indices. -/
@@ -326,11 +326,11 @@ theorem toPoint_def (self : ProjectiveNielsPoint.«x86_64-no-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of a `ProjectiveNielsPoint`: all limbs `< 2^54`. -/
-@[expose] def Bounded (self : ProjectiveNielsPoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.Y_plus_X[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.Y_minus_X[i]!.val < 2 ^ 54) ∧ (∀ i < 5, self.Z[i]!.val < 2 ^ 54) ∧
-    (∀ i < 5, self.T2d[i]!.val < 2 ^ 54)
+/-- Every limb of a `ProjectiveNielsPoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : ProjectiveNielsPoint.«x86_64-no-tables») : Prop :=
+  (∀ i < 5, self.Y_plus_X[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.Y_minus_X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.T2d[i]!.val < 2 ^ n)
 
 /-- Needed for `t[j]!` on tables of `ProjectiveNielsPoint`s; the default is never observed for
 in-range indices. -/

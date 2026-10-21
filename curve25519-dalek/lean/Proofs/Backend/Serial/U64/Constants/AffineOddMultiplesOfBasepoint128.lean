@@ -71,7 +71,7 @@ private theorem odd128_bounded :
 theorem AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128_spec :
     AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128
       ⦃ (r : window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-tables») =>
-        r.Represents (2 ^ 128 • basepoint) ∧ r.Bounded ⦄ := by
+        r.Represents (2 ^ 128 • basepoint) ∧ r.LimbsLt 54 ⦄ := by
   rw [odd128_eq, spec_ok]
   constructor
   · intro k hk

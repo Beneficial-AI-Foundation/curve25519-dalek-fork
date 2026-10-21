@@ -23,7 +23,7 @@ namespace «EdwardsPointx86_64-tables»
 /-- `EdwardsPoint::compress`: the canonical `y = Y / Z` with the sign of `x = X / Z` in
 bit `255`; limbs `< 2^52`. -/
 @[step]
-theorem compress_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem compress_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     compress self ⦃ (r : CompressedEdwardsY) =>
       r.asNat = (self.Y.toField / self.Z.toField).val +
         2 ^ 255 * (if (self.X.toField / self.Z.toField).isNeg then 1 else 0) ⦄ := by
@@ -33,7 +33,7 @@ theorem compress_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Boun
   rw [hr, hx, hy]
 
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
-theorem compress_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem compress_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
   spec_mono (compress_spec self hself) fun r hr => by
@@ -47,7 +47,7 @@ namespace «EdwardsPointx86_64-no-tables»
 /-- `EdwardsPoint::compress`: the canonical `y = Y / Z` with the sign of `x = X / Z` in
 bit `255`; limbs `< 2^52`. -/
 @[step]
-theorem compress_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem compress_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     compress self ⦃ (r : CompressedEdwardsY) =>
       r.asNat = (self.Y.toField / self.Z.toField).val +
         2 ^ 255 * (if (self.X.toField / self.Z.toField).isNeg then 1 else 0) ⦄ := by
@@ -57,7 +57,7 @@ theorem compress_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.B
   rw [hr, hx, hy]
 
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
-theorem compress_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem compress_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
   spec_mono (compress_spec self hself) fun r hr => by

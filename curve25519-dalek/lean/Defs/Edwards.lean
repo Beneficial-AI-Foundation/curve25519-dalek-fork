@@ -11,11 +11,11 @@ public section
 
 - `EdwardsPoint` implements the extended coordinates `(X : Y : Z : T)` of `curve25519.edwards`
   on radix-`2^51` limbs: `toExtended` (hidden, `toExtended_def`), `OnCurve` (exposed),
-  `toPoint` (hidden, `toPoint_def`), `Bounded` (all limbs `< 2^52`, exposed; the bound forced by
-  the mixed affine-Niels addition) and `ProjEq` (exposed), the
+  `toPoint` (hidden, `toPoint_def`), `LimbsLt n` (all limbs `< 2^n`, exposed; the specs use
+  `LimbsLt 52`, the bound forced by the mixed affine-Niels addition) and `ProjEq` (exposed), the
   projective equality that `ct_eq` computes.
 - `AffinePoint` (`edwards/affine.rs`) is the affine point itself: `OnCurve` is the curve
-  equation, `toPoint` the point (`0` off the curve), `Bounded` is `< 2^52`.
+  equation, `toPoint` the point (`0` off the curve), `LimbsLt n` as for `EdwardsPoint`.
 - `CompressedEdwardsY` is 32 bytes; `asNat` is their little-endian value, RFC 8032's encoding
   `curve25519.encode` of a point.
 - `decodeLenient` is dalek's `CompressedEdwardsY::decompress` on the value `n` of the bytes:
@@ -65,10 +65,10 @@ theorem toPoint_def (self : EdwardsPoint.«x86_64-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of an `EdwardsPoint`: all limbs `< 2^52`. -/
-@[expose] def Bounded (self : EdwardsPoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ 52) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ 52) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ 52) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ 52)
+/-- Every limb of an `EdwardsPoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : EdwardsPoint.«x86_64-tables») : Prop :=
+  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ n)
 
 /-- Projective equality `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` ignored): what `ct_eq` computes.
 Equality of the represented points when both are on the curve
@@ -103,9 +103,9 @@ theorem toPoint_def (self : AffinePoint.«x86_64-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of an `AffinePoint`: all limbs `< 2^52`. -/
-@[expose] def Bounded (self : AffinePoint.«x86_64-tables») : Prop :=
-  (∀ i < 5, self.x[i]!.val < 2 ^ 52) ∧ (∀ i < 5, self.y[i]!.val < 2 ^ 52)
+/-- Every limb of an `AffinePoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : AffinePoint.«x86_64-tables») : Prop :=
+  (∀ i < 5, self.x[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.y[i]!.val < 2 ^ n)
 
 end affine.AffinePoint.«x86_64-tables»
 
@@ -136,10 +136,10 @@ theorem toPoint_def (self : EdwardsPoint.«x86_64-no-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of an `EdwardsPoint`: all limbs `< 2^52`. -/
-@[expose] def Bounded (self : EdwardsPoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.X[i]!.val < 2 ^ 52) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ 52) ∧
-    (∀ i < 5, self.Z[i]!.val < 2 ^ 52) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ 52)
+/-- Every limb of an `EdwardsPoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : EdwardsPoint.«x86_64-no-tables») : Prop :=
+  (∀ i < 5, self.X[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.Y[i]!.val < 2 ^ n) ∧
+    (∀ i < 5, self.Z[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.T[i]!.val < 2 ^ n)
 
 /-- Projective equality `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` ignored): what `ct_eq` computes.
 Equality of the represented points when both are on the curve
@@ -174,9 +174,9 @@ theorem toPoint_def (self : AffinePoint.«x86_64-no-tables») :
   unfold toPoint
   rfl
 
-/-- The limb bounds of an `AffinePoint`: all limbs `< 2^52`. -/
-@[expose] def Bounded (self : AffinePoint.«x86_64-no-tables») : Prop :=
-  (∀ i < 5, self.x[i]!.val < 2 ^ 52) ∧ (∀ i < 5, self.y[i]!.val < 2 ^ 52)
+/-- Every limb of an `AffinePoint` is `< 2^n`. -/
+@[expose] def LimbsLt (n : ℕ) (self : AffinePoint.«x86_64-no-tables») : Prop :=
+  (∀ i < 5, self.x[i]!.val < 2 ^ n) ∧ (∀ i < 5, self.y[i]!.val < 2 ^ n)
 
 end affine.AffinePoint.«x86_64-no-tables»
 
@@ -226,10 +226,10 @@ theorem decodeLenient_def (n : ℕ) :
     (self : EdwardsBasepointTable.«x86_64-tables») (P : curve25519.edwards.Point) : Prop :=
   ∀ i < 32, (self[i]!).Represents (2 ^ (8 * i) • P)
 
-/-- Every entry of every row satisfies the limb bounds. -/
-@[expose] def EdwardsBasepointTable.«x86_64-tables».Bounded
+/-- Every limb of every entry of every row is `< 2^n`. -/
+@[expose] def EdwardsBasepointTable.«x86_64-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTable.«x86_64-tables») : Prop :=
-  ∀ i < 32, (self[i]!).Bounded
+  ∀ i < 32, (self[i]!).LimbsLt n
 
 /-- Row `i` of the radix-`32` table is the lookup table of `2^(10 i) • P`. -/
 @[expose] def EdwardsBasepointTableRadix32.«x86_64-tables».Represents
@@ -237,10 +237,10 @@ theorem decodeLenient_def (n : ℕ) :
     Prop :=
   ∀ i < 32, (self[i]!).Represents (2 ^ (10 * i) • P)
 
-/-- Every entry of every row satisfies the limb bounds. -/
-@[expose] def EdwardsBasepointTableRadix32.«x86_64-tables».Bounded
+/-- Every limb of every entry of every row is `< 2^n`. -/
+@[expose] def EdwardsBasepointTableRadix32.«x86_64-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTableRadix32.«x86_64-tables») : Prop :=
-  ∀ i < 32, (self[i]!).Bounded
+  ∀ i < 32, (self[i]!).LimbsLt n
 
 /-- Row `i` of the radix-`64` table is the lookup table of `2^(12 i) • P`. -/
 @[expose] def EdwardsBasepointTableRadix64.«x86_64-tables».Represents
@@ -248,10 +248,10 @@ theorem decodeLenient_def (n : ℕ) :
     Prop :=
   ∀ i < 32, (self[i]!).Represents (2 ^ (12 * i) • P)
 
-/-- Every entry of every row satisfies the limb bounds. -/
-@[expose] def EdwardsBasepointTableRadix64.«x86_64-tables».Bounded
+/-- Every limb of every entry of every row is `< 2^n`. -/
+@[expose] def EdwardsBasepointTableRadix64.«x86_64-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTableRadix64.«x86_64-tables») : Prop :=
-  ∀ i < 32, (self[i]!).Bounded
+  ∀ i < 32, (self[i]!).LimbsLt n
 
 /-- Row `i` of the radix-`128` table is the lookup table of `2^(14 i) • P`. -/
 @[expose] def EdwardsBasepointTableRadix128.«x86_64-tables».Represents
@@ -259,10 +259,10 @@ theorem decodeLenient_def (n : ℕ) :
     Prop :=
   ∀ i < 32, (self[i]!).Represents (2 ^ (14 * i) • P)
 
-/-- Every entry of every row satisfies the limb bounds. -/
-@[expose] def EdwardsBasepointTableRadix128.«x86_64-tables».Bounded
+/-- Every limb of every entry of every row is `< 2^n`. -/
+@[expose] def EdwardsBasepointTableRadix128.«x86_64-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTableRadix128.«x86_64-tables») : Prop :=
-  ∀ i < 32, (self[i]!).Bounded
+  ∀ i < 32, (self[i]!).LimbsLt n
 
 /-- Row `i` of the radix-`256` table is the lookup table of `2^(16 i) • P`. -/
 @[expose] def EdwardsBasepointTableRadix256.«x86_64-tables».Represents
@@ -270,9 +270,9 @@ theorem decodeLenient_def (n : ℕ) :
     Prop :=
   ∀ i < 32, (self[i]!).Represents (2 ^ (16 * i) • P)
 
-/-- Every entry of every row satisfies the limb bounds. -/
-@[expose] def EdwardsBasepointTableRadix256.«x86_64-tables».Bounded
+/-- Every limb of every entry of every row is `< 2^n`. -/
+@[expose] def EdwardsBasepointTableRadix256.«x86_64-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTableRadix256.«x86_64-tables») : Prop :=
-  ∀ i < 32, (self[i]!).Bounded
+  ∀ i < 32, (self[i]!).LimbsLt n
 
 end Curve25519Dalek.edwards

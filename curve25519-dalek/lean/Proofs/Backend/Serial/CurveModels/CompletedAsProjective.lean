@@ -20,9 +20,9 @@ namespace «CompletedPointx86_64-tables»
 
 /-- `CompletedPoint::as_projective`: `(X T : Y Z : Z T)`, limbs `< 2^52`. -/
 @[step]
-theorem as_projective_spec (self : CompletedPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem as_projective_spec (self : CompletedPoint.«x86_64-tables») (hself : self.LimbsLt 54) :
     as_projective self ⦃ (r : ProjectivePoint.«x86_64-tables») =>
-      r.toProjective = self.toCompleted.toProjective ∧ r.Bounded ⦄ := by
+      r.toProjective = self.toCompleted.toProjective ∧ r.LimbsLt 52 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold as_projective
   step as ⟨XT, hXT, hXT_lt⟩
@@ -35,10 +35,10 @@ theorem as_projective_spec (self : CompletedPoint.«x86_64-tables») (hself : se
   · exact ⟨hXT_lt, hYZ_lt, hZT_lt⟩
 
 /-- `CompletedPoint::as_projective` represents the same point. -/
-theorem as_projective_spec_point (self : CompletedPoint.«x86_64-tables») (hself : self.Bounded)
+theorem as_projective_spec_point (self : CompletedPoint.«x86_64-tables») (hself : self.LimbsLt 54)
     (hon : self.OnCurve) :
     as_projective self ⦃ (r : ProjectivePoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (as_projective_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [ProjectivePoint.«x86_64-tables».onCurve_iff,
       ProjectivePoint.«x86_64-tables».toPoint_def, hr,
@@ -51,9 +51,9 @@ namespace «CompletedPointx86_64-no-tables»
 
 /-- `CompletedPoint::as_projective`: `(X T : Y Z : Z T)`, limbs `< 2^52`. -/
 @[step]
-theorem as_projective_spec (self : CompletedPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem as_projective_spec (self : CompletedPoint.«x86_64-no-tables») (hself : self.LimbsLt 54) :
     as_projective self ⦃ (r : ProjectivePoint.«x86_64-no-tables») =>
-      r.toProjective = self.toCompleted.toProjective ∧ r.Bounded ⦄ := by
+      r.toProjective = self.toCompleted.toProjective ∧ r.LimbsLt 52 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold as_projective
   step as ⟨XT, hXT, hXT_lt⟩
@@ -66,10 +66,11 @@ theorem as_projective_spec (self : CompletedPoint.«x86_64-no-tables») (hself :
   · exact ⟨hXT_lt, hYZ_lt, hZT_lt⟩
 
 /-- `CompletedPoint::as_projective` represents the same point. -/
-theorem as_projective_spec_point (self : CompletedPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem as_projective_spec_point (self : CompletedPoint.«x86_64-no-tables»)
+    (hself : self.LimbsLt 54)
     (hon : self.OnCurve) :
     as_projective self ⦃ (r : ProjectivePoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (as_projective_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [ProjectivePoint.«x86_64-no-tables».onCurve_iff,
       ProjectivePoint.«x86_64-no-tables».toPoint_def, hr,

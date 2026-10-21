@@ -22,9 +22,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -38,9 +38,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -54,9 +54,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -70,9 +70,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -86,9 +86,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -102,9 +102,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -118,9 +118,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -134,9 +134,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -150,9 +150,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -166,9 +166,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -182,9 +182,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -198,9 +198,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -214,9 +214,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -230,9 +230,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -246,9 +246,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -262,9 +262,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -278,9 +278,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -294,9 +294,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -310,9 +310,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 
@@ -326,9 +326,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 point; limbs `< 2^54`. -/
 @[step]
 theorem from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.Bounded) (hP : table.Represents P) :
+    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
-      r.Represents P ∧ r.Bounded ⦄ := by
+      r.Represents P ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step*
 

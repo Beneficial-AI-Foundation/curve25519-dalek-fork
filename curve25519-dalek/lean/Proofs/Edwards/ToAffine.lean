@@ -22,10 +22,10 @@ namespace «EdwardsPointx86_64-tables»
 
 /-- `EdwardsPoint::to_affine`: `(X / Z, Y / Z)` (`0⁻¹ = 0`), limbs `< 2^52`. -/
 @[step]
-theorem to_affine_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem to_affine_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     to_affine self ⦃ (r : affine.AffinePoint.«x86_64-tables») =>
       r.x.toField = self.X.toField / self.Z.toField ∧
-        r.y.toField = self.Y.toField / self.Z.toField ∧ r.Bounded ⦄ := by
+        r.y.toField = self.Y.toField / self.Z.toField ∧ r.LimbsLt 52 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold to_affine
   step as ⟨recip, hrecip1, hrecip0, hrecip_lt⟩
@@ -36,10 +36,10 @@ theorem to_affine_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bou
   exact ⟨rfl, rfl, hx_lt, hy_lt⟩
 
 /-- `EdwardsPoint::to_affine` represents the same point. -/
-theorem to_affine_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem to_affine_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     to_affine self ⦃ (r : affine.AffinePoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (to_affine_spec self hself) fun r ⟨hx, hy, hb⟩ => by
     obtain ⟨-, -, heq⟩ := (EdwardsPoint.«x86_64-tables».onCurve_iff_equation self).mp hon
     have hr : r.OnCurve := by
@@ -57,10 +57,10 @@ namespace «EdwardsPointx86_64-no-tables»
 
 /-- `EdwardsPoint::to_affine`: `(X / Z, Y / Z)` (`0⁻¹ = 0`), limbs `< 2^52`. -/
 @[step]
-theorem to_affine_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem to_affine_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     to_affine self ⦃ (r : affine.AffinePoint.«x86_64-no-tables») =>
       r.x.toField = self.X.toField / self.Z.toField ∧
-        r.y.toField = self.Y.toField / self.Z.toField ∧ r.Bounded ⦄ := by
+        r.y.toField = self.Y.toField / self.Z.toField ∧ r.LimbsLt 52 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold to_affine
   step as ⟨recip, hrecip1, hrecip0, hrecip_lt⟩
@@ -71,10 +71,10 @@ theorem to_affine_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.
   exact ⟨rfl, rfl, hx_lt, hy_lt⟩
 
 /-- `EdwardsPoint::to_affine` represents the same point. -/
-theorem to_affine_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem to_affine_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     to_affine self ⦃ (r : affine.AffinePoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (to_affine_spec self hself) fun r ⟨hx, hy, hb⟩ => by
     obtain ⟨-, -, heq⟩ := (EdwardsPoint.«x86_64-no-tables».onCurve_iff_equation self).mp hon
     have hr : r.OnCurve := by

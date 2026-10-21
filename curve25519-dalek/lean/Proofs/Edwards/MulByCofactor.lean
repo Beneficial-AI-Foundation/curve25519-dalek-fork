@@ -19,10 +19,10 @@ namespace «EdwardsPointx86_64-tables»
 
 /-- `EdwardsPoint::mul_by_cofactor`: `8 • P`; limbs `< 2^52`. -/
 @[step]
-theorem mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
+theorem mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_by_cofactor
   step as ⟨r, hron, hr, hrb⟩
   exact ⟨hron, by rw [hr]; rfl, hrb⟩
@@ -33,10 +33,10 @@ namespace «EdwardsPointx86_64-no-tables»
 
 /-- `EdwardsPoint::mul_by_cofactor`: `8 • P`; limbs `< 2^52`. -/
 @[step]
-theorem mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
+theorem mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.Bounded ⦄ := by
+      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_by_cofactor
   step as ⟨r, hron, hr, hrb⟩
   exact ⟨hron, by rw [hr]; rfl, hrb⟩

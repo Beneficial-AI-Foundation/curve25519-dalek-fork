@@ -25,9 +25,9 @@ namespace «EdwardsPointx86_64-tables»
 /-- `EdwardsPoint::as_projective_niels`: `(Y + X : Y - X : Z : T (2 d))`; limbs `< 2^52` in,
 `< 2^54` out. -/
 @[step]
-theorem as_projective_niels_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Bounded) :
+theorem as_projective_niels_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     as_projective_niels self ⦃ (r : ProjectiveNielsPoint.«x86_64-tables») =>
-      r.toProjectiveNiels = self.toExtended.toProjectiveNiels ∧ r.Bounded ⦄ := by
+      r.toProjectiveNiels = self.toExtended.toProjectiveNiels ∧ r.LimbsLt 54 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold as_projective_niels
   step as ⟨Y_plus_X, hY_plus_X⟩
@@ -45,9 +45,9 @@ theorem as_projective_niels_spec (self : EdwardsPoint.«x86_64-tables») (hself 
 
 /-- `EdwardsPoint::as_projective_niels` represents the same point. -/
 theorem as_projective_niels_spec_point (self : EdwardsPoint.«x86_64-tables»)
-    (hself : self.Bounded) (hon : self.OnCurve) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) :
     as_projective_niels self ⦃ (r : ProjectiveNielsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.LimbsLt 54 ⦄ :=
   spec_mono (as_projective_niels_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [ProjectiveNielsPoint.«x86_64-tables».onCurve_iff,
       ProjectiveNielsPoint.«x86_64-tables».toPoint_def, hr,
@@ -62,9 +62,10 @@ namespace «EdwardsPointx86_64-no-tables»
 /-- `EdwardsPoint::as_projective_niels`: `(Y + X : Y - X : Z : T (2 d))`; limbs `< 2^52` in,
 `< 2^54` out. -/
 @[step]
-theorem as_projective_niels_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded) :
+theorem as_projective_niels_spec (self : EdwardsPoint.«x86_64-no-tables»)
+    (hself : self.LimbsLt 52) :
     as_projective_niels self ⦃ (r : ProjectiveNielsPoint.«x86_64-no-tables») =>
-      r.toProjectiveNiels = self.toExtended.toProjectiveNiels ∧ r.Bounded ⦄ := by
+      r.toProjectiveNiels = self.toExtended.toProjectiveNiels ∧ r.LimbsLt 54 ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   unfold as_projective_niels
   step as ⟨Y_plus_X, hY_plus_X⟩
@@ -82,9 +83,9 @@ theorem as_projective_niels_spec (self : EdwardsPoint.«x86_64-no-tables») (hse
 
 /-- `EdwardsPoint::as_projective_niels` represents the same point. -/
 theorem as_projective_niels_spec_point (self : EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.Bounded) (hon : self.OnCurve) :
+    (hself : self.LimbsLt 52) (hon : self.OnCurve) :
     as_projective_niels self ⦃ (r : ProjectiveNielsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = self.toPoint ∧ r.LimbsLt 54 ⦄ :=
   spec_mono (as_projective_niels_spec self hself) fun r ⟨hr, hb⟩ => by
     rw [ProjectiveNielsPoint.«x86_64-no-tables».onCurve_iff,
       ProjectiveNielsPoint.«x86_64-no-tables».toPoint_def, hr,

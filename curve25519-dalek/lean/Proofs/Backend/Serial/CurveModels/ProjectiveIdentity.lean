@@ -23,7 +23,7 @@ namespace ProjectivePoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity
 @[step]
 theorem identity_spec :
     identity ⦃ (r : ProjectivePoint.«x86_64-tables») =>
-      r.toProjective = Projective.identity ∧ r.Bounded ⦄ := by
+      r.toProjective = Projective.identity ∧ r.LimbsLt 52 ⦄ := by
   unfold identity
   step as ⟨zero, hzero, hzero_lt⟩
   step as ⟨one, hone, hone_lt⟩
@@ -36,7 +36,7 @@ theorem identity_spec :
 /-- `Identity for ProjectivePoint` represents the neutral element. -/
 theorem identity_spec_point :
     identity ⦃ (r : ProjectivePoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄ :=
   spec_mono identity_spec fun r ⟨hr, hb⟩ => by
     rw [ProjectivePoint.«x86_64-tables».onCurve_iff,
       ProjectivePoint.«x86_64-tables».toPoint_def, hr]
@@ -50,7 +50,7 @@ namespace ProjectivePoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdent
 @[step]
 theorem identity_spec :
     identity ⦃ (r : ProjectivePoint.«x86_64-no-tables») =>
-      r.toProjective = Projective.identity ∧ r.Bounded ⦄ := by
+      r.toProjective = Projective.identity ∧ r.LimbsLt 52 ⦄ := by
   unfold identity
   step as ⟨zero, hzero, hzero_lt⟩
   step as ⟨one, hone, hone_lt⟩
@@ -63,7 +63,7 @@ theorem identity_spec :
 /-- `Identity for ProjectivePoint` represents the neutral element. -/
 theorem identity_spec_point :
     identity ⦃ (r : ProjectivePoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.Bounded ⦄ :=
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄ :=
   spec_mono identity_spec fun r ⟨hr, hb⟩ => by
     rw [ProjectivePoint.«x86_64-no-tables».onCurve_iff,
       ProjectivePoint.«x86_64-no-tables».toPoint_def, hr]

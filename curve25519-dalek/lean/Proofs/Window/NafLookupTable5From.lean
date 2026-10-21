@@ -38,11 +38,11 @@ namespace «CoreConvertFromSharedAEdwardsPointx86_64-tables»
 /-- The loop: entry `k` represents `x + k • Q`, `Q` the added point. -/
 @[local step]
 private theorem from_loop_spec (A2 : edwards.EdwardsPoint.«x86_64-tables»)
-    (x : ProjectiveNielsPoint.«x86_64-tables») (hA2 : A2.Bounded) (hA2on : A2.OnCurve)
-    (hx : x.Bounded) (hxon : x.OnCurve) :
+    (x : ProjectiveNielsPoint.«x86_64-tables») (hA2 : A2.LimbsLt 52) (hA2on : A2.OnCurve)
+    (hx : x.LimbsLt 54) (hxon : x.OnCurve) :
     from_loop { start := 0#usize, «end» := 7#usize } (Array.repeat 8#usize x) A2
       ⦃ (r : Array ProjectiveNielsPoint.«x86_64-tables» 8#usize) => ∀ k < 8,
-        r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • A2.toPoint ∧ r[k]!.Bounded ⦄ := by
+        r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • A2.toPoint ∧ r[k]!.LimbsLt 54 ⦄ := by
   unfold from_loop
   have h := fromLoop_spec (N := 8#usize) (add A2) as_extended as_projective_niels A2.toPoint
     (fun q hq hqon => add_spec_point A2 q hA2 hq hA2on hqon)
@@ -56,9 +56,9 @@ private theorem from_loop_spec (A2 : edwards.EdwardsPoint.«x86_64-tables»)
 /-- `From<&EdwardsPoint> for NafLookupTable5<ProjectiveNielsPoint>`: entry `k` represents
 `(2 k + 1) • A`; limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem from_spec (A : edwards.EdwardsPoint.«x86_64-tables») (hA : A.Bounded) (hon : A.OnCurve) :
+theorem from_spec (A : edwards.EdwardsPoint.«x86_64-tables») (hA : A.LimbsLt 52) (hon : A.OnCurve) :
     «from» A ⦃ (r : NafLookupTable5 ProjectiveNielsPoint.«x86_64-tables») =>
-      r.Represents A.toPoint ∧ r.Bounded ⦄ := by
+      r.Represents A.toPoint ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step with as_projective_niels_spec_point as ⟨x, hxon, hxp, hxb⟩
   step with double_spec_point as ⟨A2, hA2on, hA2p, hA2b⟩
@@ -87,11 +87,11 @@ namespace «CoreConvertFromSharedAEdwardsPointx86_64-no-tables»
 /-- The loop: entry `k` represents `x + k • Q`, `Q` the added point. -/
 @[local step]
 private theorem from_loop_spec (A2 : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (x : ProjectiveNielsPoint.«x86_64-no-tables») (hA2 : A2.Bounded) (hA2on : A2.OnCurve)
-    (hx : x.Bounded) (hxon : x.OnCurve) :
+    (x : ProjectiveNielsPoint.«x86_64-no-tables») (hA2 : A2.LimbsLt 52) (hA2on : A2.OnCurve)
+    (hx : x.LimbsLt 54) (hxon : x.OnCurve) :
     from_loop { start := 0#usize, «end» := 7#usize } (Array.repeat 8#usize x) A2
       ⦃ (r : Array ProjectiveNielsPoint.«x86_64-no-tables» 8#usize) => ∀ k < 8,
-        r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • A2.toPoint ∧ r[k]!.Bounded ⦄ := by
+        r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • A2.toPoint ∧ r[k]!.LimbsLt 54 ⦄ := by
   unfold from_loop
   have h := fromLoop_spec (N := 8#usize) (add A2) as_extended as_projective_niels A2.toPoint
     (fun q hq hqon => add_spec_point A2 q hA2 hq hA2on hqon)
@@ -105,9 +105,10 @@ private theorem from_loop_spec (A2 : edwards.EdwardsPoint.«x86_64-no-tables»)
 /-- `From<&EdwardsPoint> for NafLookupTable5<ProjectiveNielsPoint>`: entry `k` represents
 `(2 k + 1) • A`; limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem from_spec (A : edwards.EdwardsPoint.«x86_64-no-tables») (hA : A.Bounded) (hon : A.OnCurve) :
+theorem from_spec (A : edwards.EdwardsPoint.«x86_64-no-tables») (hA : A.LimbsLt 52)
+    (hon : A.OnCurve) :
     «from» A ⦃ (r : NafLookupTable5 ProjectiveNielsPoint.«x86_64-no-tables») =>
-      r.Represents A.toPoint ∧ r.Bounded ⦄ := by
+      r.Represents A.toPoint ∧ r.LimbsLt 54 ⦄ := by
   unfold «from»
   step with as_projective_niels_spec_point as ⟨x, hxon, hxp, hxb⟩
   step with double_spec_point as ⟨A2, hA2on, hA2p, hA2b⟩

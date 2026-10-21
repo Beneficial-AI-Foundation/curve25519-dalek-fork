@@ -34,13 +34,13 @@ namespace «LookupTableProjectiveNielsPointx86_64-tables»
 `-8 ≤ x ≤ 8`; limbs `< 2^54`. -/
 @[step]
 theorem select_spec (self : LookupTable ProjectiveNielsPoint.«x86_64-tables») (x : I8)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P)
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
     (hx : -8 ≤ x.val ∧ x.val ≤ 8) :
     LookupTable.select Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
       (subtle.ConditionallyNegatable.Blanket SubtleConditionallySelectable
         «CoreOpsArithNegProjectiveNielsPointx86_64-tables»)
       self x ⦃ (r : ProjectiveNielsPoint.«x86_64-tables») =>
-        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.Bounded ⦄ :=
+        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.LimbsLt 54 ⦄ :=
   window.select_spec (-8)#i8 8#i16 9#usize (by decide) (by decide) (by decide) (by decide)
     Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
     «CoreOpsArithNegProjectiveNielsPointx86_64-tables»
@@ -63,13 +63,13 @@ namespace «LookupTableAffineNielsPointx86_64-tables»
 `-8 ≤ x ≤ 8`; limbs `< 2^54`. -/
 @[step]
 theorem select_spec (self : LookupTable AffineNielsPoint.«x86_64-tables») (x : I8)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P)
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
     (hx : -8 ≤ x.val ∧ x.val ≤ 8) :
     LookupTable.select Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
       (subtle.ConditionallyNegatable.Blanket SubtleConditionallySelectable
         «CoreOpsArithNegAffineNielsPointx86_64-tables»)
       self x ⦃ (r : AffineNielsPoint.«x86_64-tables») =>
-        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.Bounded ⦄ :=
+        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.LimbsLt 54 ⦄ :=
   window.select_spec (-8)#i8 8#i16 9#usize (by decide) (by decide) (by decide) (by decide)
     Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
     «CoreOpsArithNegAffineNielsPointx86_64-tables»
@@ -92,13 +92,13 @@ namespace «LookupTableProjectiveNielsPointx86_64-no-tables»
 `-8 ≤ x ≤ 8`; limbs `< 2^54`. -/
 @[step]
 theorem select_spec (self : LookupTable ProjectiveNielsPoint.«x86_64-no-tables») (x : I8)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P)
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
     (hx : -8 ≤ x.val ∧ x.val ≤ 8) :
     LookupTable.select Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
       (subtle.ConditionallyNegatable.Blanket SubtleConditionallySelectable
         «CoreOpsArithNegProjectiveNielsPointx86_64-no-tables»)
       self x ⦃ (r : ProjectiveNielsPoint.«x86_64-no-tables») =>
-        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.Bounded ⦄ :=
+        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.LimbsLt 54 ⦄ :=
   window.select_spec (-8)#i8 8#i16 9#usize (by decide) (by decide) (by decide) (by decide)
     Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
     «CoreOpsArithNegProjectiveNielsPointx86_64-no-tables»
@@ -121,13 +121,13 @@ namespace «LookupTableAffineNielsPointx86_64-no-tables»
 `-8 ≤ x ≤ 8`; limbs `< 2^54`. -/
 @[step]
 theorem select_spec (self : LookupTable AffineNielsPoint.«x86_64-no-tables») (x : I8)
-    (P : curve25519.edwards.Point) (hself : self.Bounded) (hP : self.Represents P)
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
     (hx : -8 ≤ x.val ∧ x.val ≤ 8) :
     LookupTable.select Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
       (subtle.ConditionallyNegatable.Blanket SubtleConditionallySelectable
         «CoreOpsArithNegAffineNielsPointx86_64-no-tables»)
       self x ⦃ (r : AffineNielsPoint.«x86_64-no-tables») =>
-        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.Bounded ⦄ :=
+        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.LimbsLt 54 ⦄ :=
   window.select_spec (-8)#i8 8#i16 9#usize (by decide) (by decide) (by decide) (by decide)
     Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
     «CoreOpsArithNegAffineNielsPointx86_64-no-tables»

@@ -24,8 +24,8 @@ namespace EdwardsPoint.«x86_64-tables».Insts.SubtleConstantTimeEq
 /-- `ConstantTimeEq for EdwardsPoint`: projective equality
 `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` is not compared); limbs `< 2^52`. -/
 @[step]
-theorem ct_eq_spec (self other : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hother : other.Bounded) :
+theorem ct_eq_spec (self other : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 52) :
     ct_eq self other ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (c = 1#u8 ↔ self.ProjEq other) ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
@@ -45,8 +45,8 @@ theorem ct_eq_spec (self other : EdwardsPoint.«x86_64-tables») (hself : self.B
   rcases hcv with rfl | rfl <;> rcases hc1v with rfl | rfl <;> decide
 
 /-- `ConstantTimeEq for EdwardsPoint` on points: equality of the represented points. -/
-theorem ct_eq_spec_point (self other : EdwardsPoint.«x86_64-tables») (hself : self.Bounded)
-    (hother : other.Bounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+theorem ct_eq_spec_point (self other : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 52) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     ct_eq self other ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (c = 1#u8 ↔ self.toPoint = other.toPoint) ⦄ :=
   spec_mono (ct_eq_spec self other hself hother) fun _ ⟨hcv, hc⟩ =>
@@ -59,8 +59,8 @@ namespace EdwardsPoint.«x86_64-no-tables».Insts.SubtleConstantTimeEq
 /-- `ConstantTimeEq for EdwardsPoint`: projective equality
 `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` is not compared); limbs `< 2^52`. -/
 @[step]
-theorem ct_eq_spec (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hother : other.Bounded) :
+theorem ct_eq_spec (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 52) :
     ct_eq self other ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (c = 1#u8 ↔ self.ProjEq other) ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hself
@@ -80,8 +80,8 @@ theorem ct_eq_spec (self other : EdwardsPoint.«x86_64-no-tables») (hself : sel
   rcases hcv with rfl | rfl <;> rcases hc1v with rfl | rfl <;> decide
 
 /-- `ConstantTimeEq for EdwardsPoint` on points: equality of the represented points. -/
-theorem ct_eq_spec_point (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.Bounded)
-    (hother : other.Bounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+theorem ct_eq_spec_point (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+    (hother : other.LimbsLt 52) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     ct_eq self other ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (c = 1#u8 ↔ self.toPoint = other.toPoint) ⦄ :=
   spec_mono (ct_eq_spec self other hself hother) fun _ ⟨hcv, hc⟩ =>
