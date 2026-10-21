@@ -63,10 +63,10 @@ private theorem from_montgomery_loop_spec (self : Scalar52) :
     rfl
 
 @[step]
-theorem from_montgomery_spec (self : Scalar52) (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) :
+theorem from_montgomery_spec (self : Scalar52) (hself : self.LimbsLt 52) :
     from_montgomery self ⦃ (r : Scalar52) =>
       r.asNat * montgomeryRadix % L = self.asNat % L ∧ r.asNat < L ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.LimbsLt 52 ⦄ := by
   unfold from_montgomery
   step as ⟨limbs, hlow, hhigh⟩
   have hval : limbs.asNat 52 = self.asNat := by

@@ -54,7 +54,7 @@ private theorem pre_ne_zero (inputs : Slice Scalar)
 
 /-- `v` is the Montgomery form `x * R` of `x`, reduced and with 52-bit limbs. -/
 private def MontVal (v : Scalar52) (x : ZMod L) : Prop :=
-  (v.asNat : ZMod L) = x * montgomeryRadix ∧ v.asNat < L ∧ ∀ j < 5, v[j]!.val < 2 ^ 52
+  (v.asNat : ZMod L) = x * montgomeryRadix ∧ v.asNat < L ∧ v.LimbsLt 52
 
 /-- The Montgomery product of two Montgomery forms. -/
 private theorem montVal_mul {a b r : Scalar52} {x y : ZMod L} (ha : MontVal a x)
@@ -176,11 +176,11 @@ private theorem loop1_body_spec (inputs inputs1 ins : Slice Scalar) (scratch : S
       (inputs1[k]!.asNat : ZMod L) = inputs[k]!.asNat * montgomeryRadix)
     (hinl : ins.length = inputs.length) (hslen : scratch.length = inputs.length)
     (ha : (a.asNat : ZMod L) * pre inputs k.val = 1) (haL : a.asNat < L)
-    (hab : ∀ j < 5, a[j]!.val < 2 ^ 52) (hlow : ∀ j < k.val, ins[j]! = inputs1[j]!) :
+    (hab : a.LimbsLt 52) (hlow : ∀ j < k.val, ins[j]! = inputs1[j]!) :
     invert_batch_internal.«x86_64-tables_loop1».body scratch ins a k ⦃ r =>
       ∃ y t k1, r = .cont (ins.set k1 y, t, k1) ∧ k1.val + 1 = k.val ∧
         (t.asNat : ZMod L) * pre inputs k1.val = 1 ∧ t.asNat < L ∧
-        (∀ j < 5, t[j]!.val < 2 ^ 52) ∧
+        t.LimbsLt 52 ∧
         (y.asNat : ZMod L) * inputs[k1.val]!.asNat = 1 ∧ y.asNat < L ⦄ := by
   unfold invert_batch_internal.«x86_64-tables_loop1».body
   simp only [hpos, ite_true]
@@ -222,7 +222,7 @@ private theorem loop1_spec (inputs inputs1 : Slice Scalar) (scratch : Slice Scal
     (hinputs1 : ∀ k < inputs.length,
       (inputs1[k]!.asNat : ZMod L) = inputs[k]!.asNat * montgomeryRadix)
     (hacc : (acc.asNat : ZMod L) * pre inputs inputs.length = 1) (haccL : acc.asNat < L)
-    (haccb : ∀ j < 5, acc[j]!.val < 2 ^ 52) :
+    (haccb : acc.LimbsLt 52) :
     invert_batch_internal.«x86_64-tables_loop1» inputs1 scratch acc n
       ⦃ (r : Slice Scalar) =>
       r.length = inputs.length ∧
@@ -231,7 +231,7 @@ private theorem loop1_spec (inputs inputs1 : Slice Scalar) (scratch : Slice Scal
   apply loop.spec_decr_nat (measure := fun x => x.2.2.val)
     (inv := fun x => x.2.2.val ≤ inputs.length ∧ x.1.length = inputs.length ∧
       (x.2.1.asNat : ZMod L) * pre inputs x.2.2.val = 1 ∧ x.2.1.asNat < L ∧
-      (∀ j < 5, x.2.1[j]!.val < 2 ^ 52) ∧ (∀ j < x.2.2.val, x.1[j]! = inputs1[j]!) ∧
+      x.2.1.LimbsLt 52 ∧ (∀ j < x.2.2.val, x.1[j]! = inputs1[j]!) ∧
       ∀ j < inputs.length, x.2.2.val ≤ j →
         (x.1[j]!.asNat : ZMod L) * inputs[j]!.asNat = 1 ∧ x.1[j]!.asNat < L)
   · rintro ⟨ins, a, k⟩ ⟨hk, hinl, ha, haL, hab, hlow, hhigh⟩

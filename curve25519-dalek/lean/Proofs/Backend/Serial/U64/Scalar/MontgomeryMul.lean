@@ -17,11 +17,11 @@ open Curve25519Dalek.backend.serial.u64.scalar (Scalar52)
 namespace Curve25519Dalek.backend.serial.u64.scalar.Scalar52
 
 @[step]
-theorem montgomery_mul_spec (a b : Scalar52) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52)
-    (hb : ∀ i < 5, b[i]!.val < 2 ^ 52) (hab : a.asNat * b.asNat < montgomeryRadix * L) :
+theorem montgomery_mul_spec (a b : Scalar52) (ha : a.LimbsLt 52)
+    (hb : b.LimbsLt 52) (hab : a.asNat * b.asNat < montgomeryRadix * L) :
     montgomery_mul a b ⦃ (r : Scalar52) =>
       r.asNat * montgomeryRadix % L = a.asNat * b.asNat % L ∧ r.asNat < L ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.LimbsLt 52 ⦄ := by
   unfold montgomery_mul
   step with mul_internal_spec a b ha hb as ⟨ab, hab_eq, hab_lt⟩
   step with montgomery_reduce_spec ab (fun i hi => (hab_lt i hi).trans (by decide))

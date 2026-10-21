@@ -246,12 +246,13 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   whole file. A long `namespace X.Y` is split into two consecutive `namespace` commands (closed by
   two `end`s); long strings use string gaps (`\` at the end of the line). Only a single token over
   100 characters justifies `set_option linter.style.longLine false in` on that one command.
-- **Limb bounds:** `FieldElement51.LimbsLt n a` ("every limb `< 2^n`", an `abbrev` so that
-  `step`, `scalar_tac` and `agrind` see the `∀ i < 5` form; write `FieldElement51.LimbsLt k a`
-  when `a` is typed `Array U64 5#usize`, and `unfold` it before `rw [Nat.forall_lt_five]`), and
-  every point structure and table has `LimbsLt (n : ℕ) (self) : Prop` (the conjunction over its
-  coordinates; tables: over every entry), stated with the bound: `r.LimbsLt 52` for
-  `EdwardsPoint`, `AffinePoint` and the projective points, `r.LimbsLt 54` for `CompletedPoint` and
+- **Limb bounds:** `FieldElement51.LimbsLt n a` and `Scalar52.LimbsLt n a` ("every limb
+  `< 2^n`", an `abbrev` so that `step`, `scalar_tac` and `agrind` see the `∀ i < 5` form; write
+  `FieldElement51.LimbsLt k a` (or `Scalar52.…`) when `a` is typed `Array U64 5#usize`, and
+  `unfold` it before `rw [Nat.forall_lt_five]`), and every point structure and table has
+  `LimbsLt (n : ℕ) (self) : Prop` (the conjunction over its coordinates; tables: over every
+  entry), stated with the bound: `r.LimbsLt 52` for `EdwardsPoint`, `AffinePoint` and the
+  projective points, `r.LimbsLt 54` for `CompletedPoint` and
   the Niels forms and their tables. Names of `Prop`s follow Mathlib: `Is` + adjective (`IsValid`),
   no `Is` for relations and point conditions (`Represents`, `ProjEq`, `OnCurve`, like Mathlib's
   `Equation`/`Nonsingular`).
@@ -418,6 +419,7 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   over a bit list, most significant first) and `ladderBits_eq_xMul`
   (`EllipticCurve/Montgomery/XOnly/`); `to_edwards` is stated per variant with `decodeLenient`.
   The private `ProjectivePoint` and `differential_add_and_double` specs are in the proof files.
+  Statements approved by the owner (2026-10-21).
 - `traits.rs`: generic `is_identity` (`Proofs/Traits/IsIdentity.lean`, `Specs/Traits.lean`).
 - Point constants: `ED25519_BASEPOINT_POINT`, `EIGHT_TORSION`, `BASEPOINT_ORDER`,
   `ED25519_BASEPOINT_COMPRESSED`, `X25519_BASEPOINT` (`Specs/Constants.lean`).
@@ -427,7 +429,7 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   AffineOddMultiplesOfBasepoint128}.lean` on `Proofs/Helpers/TableCertificate.lean`; standard
   axioms only, 3–6 s per file including imports, < 2 GB). `mul_base`, `mul_base_clamped` and
   `vartime_double_scalar_mul_basepoint` of `x86_64-tables` are therefore unconditional and in
-  `Specs/Edwards.lean` (the new statements await the owner's review).
+  `Specs/Edwards.lean`.
 - All x86_64 items are stated for both `«x86_64-tables»` and `«x86_64-no-tables»`; the i686
   variants wait for the u32 backend.
 
@@ -443,7 +445,8 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   committed script or CI step.
 - Limb bounds as `LimbsLt n` (2026-10-21), replacing the per-type `Bounded`, down to the field
   elements (`FieldElement51.LimbsLt`, 227 field-level bounds converted; the only raw form left is
-  `reduce`'s `< 2^51 + 2^18`). `Scalar52` limbs are still raw (plan).
+  `reduce`'s `< 2^51 + 2^18`), and the scalar limbs (`Scalar52.LimbsLt`, 76 bounds; the 9-limb
+  wide products stay raw).
 - One axiom per external crate (2026-10-21): `subtle.contract`, `zeroize.contract`,
   `core.contract` and `alloc.contract` state all the per-function predicates; the per-function `@[step]` theorems are
   projections. Guard lists name only these (plus `get_target`, `core.fmt.Formatter` and the
@@ -453,24 +456,18 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 
 ## Open decisions (for the owner) and known gaps
 
-1. **New statements in `Specs/Edwards.lean` to review:** `mul_base`, `mul_base_clamped` and
-   `vartime_double_scalar_mul_basepoint` of `x86_64-tables` (same shape as the `x86_64-no-tables`
-   ones), `is_empty`, and `vartime_triple_scalar_mul_basepoint` (both variants; hypotheses
-   `a1, a2 < 2^128`, the `HalfWidthScalar` invariant the Lean structure does not carry). All of
-   `Specs/Montgomery.lean` is new; points to check: `mul_base`'s `scalar.asNat < 2^255`, `Mul`
-   using only the low 255 bits, `to_edwards` returning `none` exactly for `u = -1`.
-2. **Aeneas-generated axioms in guard lists:** `…_native.decide.ax_*` (from `toStr` on panic
+1. **Aeneas-generated axioms in guard lists:** `…_native.decide.ax_*` (from `toStr` on panic
    messages) and `core.fmt.Formatter` appear in the multiscalar/table guards; acceptable?
-3. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
-4. **Long lines:** 40 commands in generated proof files disable the long-line linter although
+2. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
+3. **Long lines:** 40 commands in generated proof files disable the long-line linter although
    some names exceed 100 characters only with indentation (the convention allows the option only
    for single tokens over 100). Shorten via `open`/local abbreviations, or accept.
-5. **Translating `lizard`:** `src/lizard/` sits behind the `lizard` Cargo feature (which pulls in
+4. **Translating `lizard`:** `src/lizard/` sits behind the `lizard` Cargo feature (which pulls in
    `digest`); `scripts/aeneas-translate.sh` translates with `--no-default-features --features
    alloc,zeroize`, so it is not translated. Include it (and verify it), or leave it out.
-6. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
+5. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
    `Specs/` and `Proofs/` (see also "Project-defined traits" below).
-7. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
+6. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
    variants into two files); window tables' `Default`/`Clone`/`Zeroize` not specified (low
    value); naming ambiguity `encode`/`decode`/`basepoint` between `curve25519` and
    `curve25519.Ristretto` under a double `open`; `twistL` and `ZMod.abs` names unconfirmed.
@@ -507,23 +504,18 @@ emit constants as literals (no longer needed).
 
 ## Plan
 
-1. The owner's review of the new `Specs/Edwards.lean` and `Specs/Montgomery.lean` statements
-   (open decision 1).
-2. **`Scalar52.LimbsLt n`:** the same for the scalar limbs (`∀ i < 5, a[i]!.val < 2 ^ 52` in
-   `Proofs/Backend/Serial/U64/Scalar/`, `Proofs/Scalar/`, the `R`/`RR` constants), as an
-   `abbrev` like `FieldElement51.LimbsLt`.
-3. `ristretto.rs` (+ `elligator.rs`): library support in `Curve25519/Ristretto/*` (`Rel`,
+1. `ristretto.rs` (+ `elligator.rs`): library support in `Curve25519/Ristretto/*` (`Rel`,
    `rel_iff_formula` = meaning of `ct_eq`, `even_iff_isSquare`, `decodeRep`/`encodeRep`,
    `sqrtRatioM1` with the uniqueness lemmas to match `sqrt_ratio_i_spec` via
    `Proofs/Helpers/ToField.lean`'s `sqrtRatioM1_eq_of_spec`, `mapRep`, `fromUniformRep`). First
    move the private `conditional_negate_spec`, duplicated in `Proofs/Field/SqrtRatioI.lean` and
    `Proofs/Edwards/Decompress.lean`, to `Proofs/Helpers`.
-4. Remaining files (`constants.rs` Ristretto constants, …; `lizard`: open decision 5).
-5. The u32 backend (below).
-6. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
+2. Remaining files (`constants.rs` Ristretto constants, …; `lizard`: open decision 4).
+3. The u32 backend (below).
+4. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
-7. Add std lib models to Aeneas.
+5. Add std lib models to Aeneas.
 
 ### u32 backend
 

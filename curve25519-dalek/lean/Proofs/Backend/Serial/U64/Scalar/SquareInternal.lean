@@ -41,7 +41,7 @@ private theorem square_coeffs_lt {a0 a1 a2 a3 a4 : ℕ} (ha0 : a0 < 2 ^ 52) (ha1
       h ha1 ha3, h ha1 ha4, h ha2 ha2, h ha2 ha3, h ha2 ha4, h ha3 ha3, h ha3 ha4, h ha4 ha4]
 
 @[step]
-theorem square_internal_spec (a : Scalar52) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52) :
+theorem square_internal_spec (a : Scalar52) (ha : a.LimbsLt 52) :
     square_internal a ⦃ (r : Array U128 9#usize) =>
       r.asNat 52 = a.asNat ^ 2 ∧ ∀ i < 9, r[i]!.val < 2 ^ 107 ⦄ := by
   unfold square_internal

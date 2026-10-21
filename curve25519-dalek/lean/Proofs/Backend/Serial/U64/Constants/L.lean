@@ -18,7 +18,7 @@ open curve25519 (L_eq_limbs)
 namespace Curve25519Dalek.backend.serial.u64.constants
 
 theorem L_spec :
-    Scalar52.asNat L = curve25519.L ∧ ∀ i < 5, L[i]!.val < 2 ^ 52 := by
+    Scalar52.asNat L = curve25519.L ∧ L.LimbsLt 52 := by
   unfold L
   simp only [scalar.Scalar52.asNat_def, Array.asNat_def]
   refine ⟨?_, by decide⟩

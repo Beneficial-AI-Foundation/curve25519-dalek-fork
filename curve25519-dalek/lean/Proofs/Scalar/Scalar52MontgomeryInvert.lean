@@ -41,18 +41,18 @@ private theorem mul_step {R y y' x r : ZMod L} (k : ℕ) (hR : R ≠ 0)
 
 @[local step]
 private theorem square_multiply_loop_spec (y : backend.serial.u64.scalar.Scalar52)
-    (squarings : Usize) (hy : ∀ i < 5, y[i]!.val < 2 ^ 52) (hy' : y.asNat < L) :
+    (squarings : Usize) (hy : y.LimbsLt 52) (hy' : y.asNat < L) :
     square_multiply_loop { start := 0#usize, «end» := squarings } y
       ⦃ (r : backend.serial.u64.scalar.Scalar52) =>
       (r.asNat : ZMod L) * montgomeryRadix ^ 2 ^ squarings.val =
         (y.asNat : ZMod L) ^ 2 ^ squarings.val * montgomeryRadix ∧
-      r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat < L ∧ r.LimbsLt 52 ⦄ := by
   unfold square_multiply_loop
   apply loop.spec_decr_nat (measure := fun (iter, _) => squarings.val - iter.start.val)
     (inv := fun (iter, y1) => iter.end = squarings ∧ iter.start.val ≤ squarings.val ∧
       (y1.asNat : ZMod L) * montgomeryRadix ^ 2 ^ iter.start.val =
         (y.asNat : ZMod L) ^ 2 ^ iter.start.val * montgomeryRadix ∧
-      y1.asNat < L ∧ ∀ i < 5, y1[i]!.val < 2 ^ 52)
+      y1.asNat < L ∧ y1.LimbsLt 52)
   · rintro ⟨iter, y1⟩ ⟨hend, hstart, hinv, hy1, hy1b⟩
     unfold square_multiply_loop.body
     by_cases hlt : iter.start.val < squarings.val
@@ -79,12 +79,12 @@ private theorem square_multiply_loop_spec (y : backend.serial.u64.scalar.Scalar5
 
 @[step]
 theorem square_multiply_spec (y : backend.serial.u64.scalar.Scalar52)
-    (squarings : Usize) (x : backend.serial.u64.scalar.Scalar52) (hy : ∀ i < 5, y[i]!.val < 2 ^ 52)
-    (hy' : y.asNat < L) (hx : ∀ i < 5, x[i]!.val < 2 ^ 52) (hx' : x.asNat < L) :
+    (squarings : Usize) (x : backend.serial.u64.scalar.Scalar52) (hy : y.LimbsLt 52)
+    (hy' : y.asNat < L) (hx : x.LimbsLt 52) (hx' : x.asNat < L) :
     square_multiply y squarings x ⦃ (r : backend.serial.u64.scalar.Scalar52) =>
       r.asNat * montgomeryRadix ^ 2 ^ squarings.val % L =
         y.asNat ^ 2 ^ squarings.val * x.asNat % L ∧
-      r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat < L ∧ r.LimbsLt 52 ⦄ := by
   unfold square_multiply
   step as ⟨y1, hy1, hy1L, hy1b⟩
   step with backend.serial.u64.scalar.Scalar52.montgomery_mul_spec y1 x hy1b hx
@@ -107,7 +107,7 @@ namespace Curve25519Dalek.scalar.Scalar52
 irreducible so that the large exponents are never expanded. -/
 @[irreducible] private def Mont (α : ZMod L) (e : ℕ) (v : backend.serial.u64.scalar.Scalar52) :
     Prop :=
-  (v.asNat : ZMod L) = α ^ e * montgomeryRadix ∧ v.asNat < L ∧ ∀ i < 5, v[i]!.val < 2 ^ 52
+  (v.asNat : ZMod L) = α ^ e * montgomeryRadix ∧ v.asNat < L ∧ v.LimbsLt 52
 
 private theorem mont_mul_spec {α : ZMod L} {e f : ℕ} {a b : backend.serial.u64.scalar.Scalar52}
     (ha : Mont α e a) (hb : Mont α f b) :
@@ -169,7 +169,7 @@ private theorem mont_congr {α : ZMod L} {e e' : ℕ} {v : backend.serial.u64.sc
 
 /-- `self` is the Montgomery form of `self / R`. -/
 private theorem mont_self (self : backend.serial.u64.scalar.Scalar52)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) (hself' : self.asNat < L) :
+    (hself : self.LimbsLt 52) (hself' : self.asNat < L) :
     Mont ((self.asNat : ZMod L) * (montgomeryRadix : ZMod L)⁻¹) 1 self := by
   unfold Mont
   refine ⟨?_, hself', hself⟩
@@ -179,7 +179,7 @@ private theorem mont_self (self : backend.serial.u64.scalar.Scalar52)
 private theorem mont_inv (self r : backend.serial.u64.scalar.Scalar52)
     (hr : Mont ((self.asNat : ZMod L) * (montgomeryRadix : ZMod L)⁻¹) (L - 2) r) :
     (self.asNat % L ≠ 0 → r.asNat * self.asNat % L = montgomeryRadix ^ 2 % L) ∧
-      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 := by
+      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ r.LimbsLt 52 := by
   unfold Mont at hr
   obtain ⟨hr, hrL, hrb⟩ := hr
   have hR := montgomeryRadix_natCast_ne_zero
@@ -205,10 +205,10 @@ private theorem mont_inv (self r : backend.serial.u64.scalar.Scalar52)
 
 @[step]
 theorem montgomery_invert_spec (self : backend.serial.u64.scalar.Scalar52)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) (hself' : self.asNat < L) :
+    (hself : self.LimbsLt 52) (hself' : self.asNat < L) :
     montgomery_invert self ⦃ (r : backend.serial.u64.scalar.Scalar52) =>
       (self.asNat % L ≠ 0 → r.asNat * self.asNat % L = montgomeryRadix ^ 2 % L) ∧
-      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ r.LimbsLt 52 ⦄ := by
   unfold montgomery_invert
   have h1 := mont_self self hself hself'
   step with mont_square_spec h1 as ⟨x10, h10⟩

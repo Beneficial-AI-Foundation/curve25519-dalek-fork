@@ -19,7 +19,7 @@ namespace Curve25519Dalek.scalar.Scalar52
 
 @[step]
 theorem pack_spec (self : backend.serial.u64.scalar.Scalar52)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) (hself' : self.asNat < 2 ^ 256) :
+    (hself : self.LimbsLt 52) (hself' : self.asNat < 2 ^ 256) :
     pack self ⦃ (r : Scalar) =>
       r.asNat = self.asNat ⦄ := by
   unfold pack

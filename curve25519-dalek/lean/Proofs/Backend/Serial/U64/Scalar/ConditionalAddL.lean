@@ -39,17 +39,17 @@ private theorem carry_step {Sa Ss SL P cin s l c carry1 : ℕ} (hIH : Sa + P * c
 @[local step]
 private theorem conditional_add_l_loop_spec (self : Scalar52) (condition : subtle.Choice)
     (mask : U64)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) (hcondition : condition.IsValid)
+    (hself : self.LimbsLt 52) (hcondition : condition.IsValid)
     (hmask : mask.val = 2 ^ 52 - 1) :
     conditional_add_l_loop { start := 0#usize, «end» := 5#usize } self condition 0#u64 mask
     ⦃ (c : U64) (r : Scalar52) =>
       r.asNat + montgomeryRadix * (c.val / 2 ^ 52) =
         self.asNat + (if condition = 1#u8 then 1 else 0) * Scalar52.asNat constants.L ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.LimbsLt 52 ⦄ := by
   unfold conditional_add_l_loop
   apply loop.spec_decr_nat (measure := fun (iter, _, _) => 5 - iter.start.val)
     (inv := fun (iter, a, carry) => iter.end = 5#usize ∧ iter.start.val ≤ 5 ∧
-      carry.val < 2 ^ 53 ∧ (∀ i < 5, a[i]!.val < 2 ^ 52) ∧
+      carry.val < 2 ^ 53 ∧ a.LimbsLt 52 ∧
       (∀ i < 5, iter.start.val ≤ i → a[i]! = self[i]!) ∧
       ∑ j ∈ Finset.range iter.start.val, 2 ^ (52 * j) * a[j]!.val
         + 2 ^ (52 * iter.start.val) * (carry.val / 2 ^ 52) =
@@ -111,11 +111,11 @@ private theorem eq_mod_of_add_mul_eq {r q x M : ℕ} (hr : r < M) (h : r + M * q
 
 @[step]
 theorem conditional_add_l_spec (self : Scalar52) (condition : subtle.Choice)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) (hcondition : condition.IsValid) :
-    conditional_add_l self condition ⦃ (c : U64) (r : Scalar52) =>
+    (hself : self.LimbsLt 52) (hcondition : condition.IsValid) :
+    conditional_add_l self condition ⦃ (_ : U64) (r : Scalar52) =>
       (condition = 0#u8 → r.asNat = self.asNat) ∧
       (condition = 1#u8 → r.asNat = (self.asNat + L) % montgomeryRadix) ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.LimbsLt 52 ⦄ := by
   unfold conditional_add_l
   step as ⟨two_pow_52, htwo_pow_52⟩
   step as ⟨mask, hmask⟩

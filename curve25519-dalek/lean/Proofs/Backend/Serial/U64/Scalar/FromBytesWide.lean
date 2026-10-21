@@ -210,9 +210,9 @@ private theorem from_bytes_wide.limbs_eq (w0 w1 w2 w3 w4 w5 w6 w7 : U64) :
 
 /-- `montgomery_mul` by `R = montgomeryRadix mod L` reduces modulo `L`. -/
 @[local step]
-private theorem montgomery_mul_R_spec (a : Scalar52) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52) :
+private theorem montgomery_mul_R_spec (a : Scalar52) (ha : a.LimbsLt 52) :
     montgomery_mul a constants.R ⦃ (r : Scalar52) =>
-      r.asNat % L = a.asNat % L ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat % L = a.asNat % L ∧ r.asNat < L ∧ r.LimbsLt 52 ⦄ := by
   obtain ⟨hR, hR_limbs⟩ := constants.R_spec
   have hR_lt : constants.R.asNat < L := hR ▸ Nat.mod_lt _ L_pos
   apply spec_mono (montgomery_mul_spec a _ ha hR_limbs
@@ -224,10 +224,10 @@ private theorem montgomery_mul_R_spec (a : Scalar52) (ha : ∀ i < 5, a[i]!.val 
 /-- `montgomery_mul` by `RR = montgomeryRadix ^ 2 mod L` multiplies by `R = montgomeryRadix mod L`
 modulo `L`. -/
 @[local step]
-private theorem montgomery_mul_RR_spec (a : Scalar52) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52) :
+private theorem montgomery_mul_RR_spec (a : Scalar52) (ha : a.LimbsLt 52) :
     montgomery_mul a constants.RR ⦃ (r : Scalar52) =>
       r.asNat % L = a.asNat * constants.R.asNat % L ∧ r.asNat < L ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.LimbsLt 52 ⦄ := by
   obtain ⟨hRR, hRR_limbs⟩ := constants.RR_spec
   have hRR_lt : constants.RR.asNat < L := hRR ▸ Nat.mod_lt _ L_pos
   apply spec_mono (montgomery_mul_spec a _ ha hRR_limbs
@@ -264,7 +264,7 @@ private theorem from_bytes_wide.bytes_eq (bytes : Array U8 64#usize) (w : Array 
 @[step]
 theorem from_bytes_wide_spec (bytes : Array U8 64#usize) :
     from_bytes_wide bytes ⦃ (r : Scalar52) =>
-      r.asNat = bytes.asNat 8 % L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat = bytes.asNat 8 % L ∧ r.LimbsLt 52 ⦄ := by
   unfold from_bytes_wide
   step with from_bytes_wide_loop0_spec as ⟨w, hw⟩
   have hbytes := from_bytes_wide.bytes_eq bytes w hw

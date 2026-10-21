@@ -37,13 +37,13 @@ moving each limb's low bit into the next limb below. -/
 private theorem shr1_assign_loop_spec (self : Scalar52)
     (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
     (hiter : iter.iter = { start := 0#usize, «end» := 5#usize })
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) :
+    (hself : self.LimbsLt 52) :
     shr1_assign_loop iter self 0#u64 ⦃ (c : U64) (r : Scalar52) =>
-      2 * r.asNat + c.val = self.asNat ∧ c.val < 2 ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      2 * r.asNat + c.val = self.asNat ∧ c.val < 2 ∧ r.LimbsLt 52 ⦄ := by
   unfold shr1_assign_loop
   apply loop.spec_decr_nat (measure := fun (it, _, _) => it.iter.end.val)
     (inv := fun (it, s, carry) => it.iter.start = 0#usize ∧ it.iter.end.val ≤ 5 ∧
-      carry.val < 2 ∧ (∀ i < 5, s[i]!.val < 2 ^ 52) ∧
+      carry.val < 2 ∧ s.LimbsLt 52 ∧
       (∀ i < it.iter.end.val, s[i]! = self[i]!) ∧
       2 * s.asNat + 2 ^ (52 * it.iter.end.val) * carry.val =
         self.asNat + ∑ j ∈ Finset.range it.iter.end.val, 2 ^ (52 * j) * self[j]!.val)
@@ -103,9 +103,9 @@ private theorem shr1_assign_loop_spec (self : Scalar52)
     simp only [Scalar52.asNat_def, Array.asNat_eq_sum]
 
 @[step]
-theorem shr1_assign_spec (self : Scalar52) (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) :
+theorem shr1_assign_spec (self : Scalar52) (hself : self.LimbsLt 52) :
     shr1_assign self ⦃ (c : U64) (r : Scalar52) =>
-      2 * r.asNat + c.val = self.asNat ∧ c.val < 2 ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      2 * r.asNat + c.val = self.asNat ∧ c.val < 2 ∧ r.LimbsLt 52 ⦄ := by
   unfold shr1_assign
   step*
 

@@ -38,15 +38,15 @@ private theorem add_carry_step {Ss Sa Sb P cin x y carry1 : ℕ} (hIH : Ss + P *
 
 /-- The loop of `add` adds limb by limb with a carry; the last carry is dropped. -/
 @[local step]
-private theorem add_loop_spec (a b : Scalar52) (mask : U64) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52)
-    (hb : ∀ i < 5, b[i]!.val < 2 ^ 52) (hmask : mask.val = 2 ^ 52 - 1) :
+private theorem add_loop_spec (a b : Scalar52) (mask : U64) (ha : a.LimbsLt 52)
+    (hb : b.LimbsLt 52) (hmask : mask.val = 2 ^ 52 - 1) :
     add_loop { start := 0#usize, «end» := 5#usize } a b ZERO mask 0#u64
     ⦃ (r : Scalar52) =>
-      r.asNat = (a.asNat + b.asNat) % montgomeryRadix ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat = (a.asNat + b.asNat) % montgomeryRadix ∧ r.LimbsLt 52 ⦄ := by
   unfold add_loop
   apply loop.spec_decr_nat (measure := fun (iter, _, _) => 5 - iter.start.val)
     (inv := fun (iter, s, carry) => iter.end = 5#usize ∧ iter.start.val ≤ 5 ∧
-      carry.val < 2 ^ 53 ∧ (∀ i < 5, s[i]!.val < 2 ^ 52) ∧
+      carry.val < 2 ^ 53 ∧ s.LimbsLt 52 ∧
       ∑ j ∈ Finset.range iter.start.val, 2 ^ (52 * j) * s[j]!.val
         + 2 ^ (52 * iter.start.val) * (carry.val / 2 ^ 52) =
         ∑ j ∈ Finset.range iter.start.val, 2 ^ (52 * j) * a[j]!.val
@@ -90,10 +90,10 @@ private theorem add_loop_spec (a b : Scalar52) (mask : U64) (ha : ∀ i < 5, a[i
   · refine ⟨rfl, by simp, by simp, fun i hi => ZERO_spec.2 i hi, by simp⟩
 
 @[step]
-theorem add_spec (a b : Scalar52) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52)
-    (hb : ∀ i < 5, b[i]!.val < 2 ^ 52) (ha' : a.asNat < L) (hb' : b.asNat < L) :
+theorem add_spec (a b : Scalar52) (ha : a.LimbsLt 52)
+    (hb : b.LimbsLt 52) (ha' : a.asNat < L) (hb' : b.asNat < L) :
     add a b ⦃ (r : Scalar52) =>
-      r.asNat = (a.asNat + b.asNat) % L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat = (a.asNat + b.asNat) % L ∧ r.LimbsLt 52 ⦄ := by
   unfold add
   step as ⟨two_pow_52, htwo_pow_52⟩
   step as ⟨mask, hmask⟩

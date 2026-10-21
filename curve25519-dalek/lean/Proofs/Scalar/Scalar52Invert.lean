@@ -25,10 +25,10 @@ namespace Curve25519Dalek.scalar.Scalar52
 
 @[step]
 theorem invert_spec (self : backend.serial.u64.scalar.Scalar52)
-    (hself : ∀ i < 5, self[i]!.val < 2 ^ 52) :
+    (hself : self.LimbsLt 52) :
     invert self ⦃ (r : backend.serial.u64.scalar.Scalar52) =>
       (self.asNat % L ≠ 0 → r.asNat * self.asNat % L = 1) ∧
-      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ∧ r.LimbsLt 52 ⦄ := by
   unfold invert
   have hR := montgomeryRadix_natCast_ne_zero
   step as ⟨s, hs, hsb⟩

@@ -42,16 +42,16 @@ private theorem sub_sum_step {Sd Sb Sa P beta dk bk ak beta' : ℕ} (hIH : Sd + 
 /-- The loop of `sub` subtracts limb by limb with a borrow; the last borrow's top bit tells
 whether `a < b`. -/
 @[local step]
-private theorem sub_loop_spec (a b : Scalar52) (mask : U64) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52)
-    (hb : ∀ i < 5, b[i]!.val < 2 ^ 52) (hmask : mask.val = 2 ^ 52 - 1) :
+private theorem sub_loop_spec (a b : Scalar52) (mask : U64) (ha : a.LimbsLt 52)
+    (hb : b.LimbsLt 52) (hmask : mask.val = 2 ^ 52 - 1) :
     sub_loop { start := 0#usize, «end» := 5#usize } a b ZERO mask 0#u64
     ⦃ (d : Scalar52) (borrow : U64) =>
       d.asNat + b.asNat = a.asNat + montgomeryRadix * (borrow.val / 2 ^ 63) ∧
-      ∀ i < 5, d[i]!.val < 2 ^ 52 ⦄ := by
+      d.LimbsLt 52 ⦄ := by
   unfold sub_loop
   apply loop.spec_decr_nat (measure := fun (iter, _, _) => 5 - iter.start.val)
     (inv := fun (iter, d, borrow) => iter.end = 5#usize ∧ iter.start.val ≤ 5 ∧
-      (∀ i < 5, d[i]!.val < 2 ^ 52) ∧
+      d.LimbsLt 52 ∧
       ∑ j ∈ Finset.range iter.start.val, 2 ^ (52 * j) * d[j]!.val
         + ∑ j ∈ Finset.range iter.start.val, 2 ^ (52 * j) * b[j]!.val =
         ∑ j ∈ Finset.range iter.start.val, 2 ^ (52 * j) * a[j]!.val
@@ -120,10 +120,10 @@ private def SubCorrection (a b d : Scalar52) (beta : ℕ) : Prop :=
     (r.asNat + b.asNat) % L = a.asNat % L ∧ r.asNat < L
 
 @[step]
-theorem sub_spec (a b : Scalar52) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52)
-    (hb : ∀ i < 5, b[i]!.val < 2 ^ 52) (ha' : a.asNat < b.asNat + L) (hb' : b.asNat ≤ L) :
+theorem sub_spec (a b : Scalar52) (ha : a.LimbsLt 52)
+    (hb : b.LimbsLt 52) (ha' : a.asNat < b.asNat + L) (hb' : b.asNat ≤ L) :
     sub a b ⦃ (r : Scalar52) =>
-      (r.asNat + b.asNat) % L = a.asNat % L ∧ r.asNat < L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      (r.asNat + b.asNat) % L = a.asNat % L ∧ r.asNat < L ∧ r.LimbsLt 52 ⦄ := by
   unfold sub
   step as ⟨two_pow_52, htwo_pow_52⟩
   step as ⟨mask, hmask⟩

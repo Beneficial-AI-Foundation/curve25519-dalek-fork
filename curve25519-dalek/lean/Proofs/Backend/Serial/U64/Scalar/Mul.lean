@@ -20,10 +20,10 @@ open Curve25519Dalek.backend.serial.u64.scalar (Scalar52)
 namespace Curve25519Dalek.backend.serial.u64.scalar.Scalar52
 
 @[step]
-theorem mul_spec (a b : Scalar52) (ha : ∀ i < 5, a[i]!.val < 2 ^ 52)
-    (hb : ∀ i < 5, b[i]!.val < 2 ^ 52) (hab : a.asNat * b.asNat < montgomeryRadix * L) :
+theorem mul_spec (a b : Scalar52) (ha : a.LimbsLt 52)
+    (hb : b.LimbsLt 52) (hab : a.asNat * b.asNat < montgomeryRadix * L) :
     mul a b ⦃ (r : Scalar52) =>
-      r.asNat = a.asNat * b.asNat % L ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat = a.asNat * b.asNat % L ∧ r.LimbsLt 52 ⦄ := by
   unfold mul
   obtain ⟨hRR, hRR_lt⟩ := constants.RR_spec
   generalize hR2 : montgomeryRadix ^ 2 % L = R2 at hRR

@@ -17,11 +17,11 @@ open Curve25519Dalek.backend.serial.u64.scalar (Scalar52)
 namespace Curve25519Dalek.backend.serial.u64.scalar.Scalar52
 
 @[step]
-theorem montgomery_square_spec (self : Scalar52) (hself : ∀ i < 5, self[i]!.val < 2 ^ 52)
+theorem montgomery_square_spec (self : Scalar52) (hself : self.LimbsLt 52)
     (hself' : self.asNat ^ 2 < montgomeryRadix * L) :
     montgomery_square self ⦃ (r : Scalar52) =>
       r.asNat * montgomeryRadix % L = self.asNat ^ 2 % L ∧ r.asNat < L ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.LimbsLt 52 ⦄ := by
   unfold montgomery_square
   step with square_internal_spec self hself as ⟨aa, haa_eq, haa_lt⟩
   step with montgomery_reduce_spec aa (fun i hi => (haa_lt i hi).trans (by decide))

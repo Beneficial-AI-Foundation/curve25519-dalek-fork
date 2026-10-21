@@ -17,7 +17,7 @@ open Curve25519Dalek.backend.serial.u64.scalar (Scalar52)
 namespace Curve25519Dalek.backend.serial.u64.scalar.Scalar52
 
 theorem ZERO_spec :
-    Scalar52.asNat ZERO = 0 ∧ ∀ i < 5, ZERO[i]!.val < 2 ^ 52 := by
+    Scalar52.asNat ZERO = 0 ∧ ZERO.LimbsLt 52 := by
   unfold ZERO
   simp only [scalar.Scalar52.asNat_def, Array.asNat_def]
   decide

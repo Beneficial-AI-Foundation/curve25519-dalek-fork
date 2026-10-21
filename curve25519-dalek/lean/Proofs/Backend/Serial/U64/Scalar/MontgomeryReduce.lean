@@ -240,7 +240,7 @@ theorem montgomery_reduce_spec (limbs : Array U128 9#usize)
     (hlimbs : ∀ i < 9, limbs[i]!.val < 2 ^ 127) (hlimbs' : limbs.asNat 52 < montgomeryRadix * L) :
     montgomery_reduce limbs ⦃ (r : Scalar52) =>
       r.asNat * montgomeryRadix % L = limbs.asNat 52 % L ∧ r.asNat < L ∧
-      ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.LimbsLt 52 ⦄ := by
   rw [montgomery_reduce_eq]
   have hl5 := hlimbs 5 (by decide)
   have hl6 := hlimbs 6 (by decide)
@@ -267,8 +267,8 @@ theorem montgomery_reduce_spec (limbs : Array U128 9#usize)
       r0.val + 2 ^ 52 * r1.val + 2 ^ 104 * r2.val + 2 ^ 156 * r3.val + 2 ^ 208 * c8.val := by
     rw [Scalar52.asNat_eq]
     simp only [Array.getElem!_make, List.getElem!_cons_succ, List.getElem!_cons_zero, hr4']
-  have ha : ∀ i < 5, (Array.make 5#usize [r0, r1, r2, r3, r4])[i]!.val < 2 ^ 52 := by
-    rw [Nat.forall_lt_five]
+  have ha : Scalar52.LimbsLt 52 (Array.make 5#usize [r0, r1, r2, r3, r4]) := by
+    rw [Scalar52.LimbsLt, Nat.forall_lt_five]
     simp only [Array.getElem!_make, List.getElem!_cons_succ, List.getElem!_cons_zero, hr4']
     exact ⟨hr0, hr1, hr2, hr3, hc8⟩
   have ha' : Scalar52.asNat (Array.make 5#usize [r0, r1, r2, r3, r4]) < constants.L.asNat + L := by

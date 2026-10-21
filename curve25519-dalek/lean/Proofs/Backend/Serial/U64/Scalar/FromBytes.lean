@@ -141,7 +141,7 @@ private theorem from_bytes.limbs_eq (w0 w1 w2 w3 : U64) :
 @[step]
 theorem from_bytes_spec (bytes : Array U8 32#usize) :
     from_bytes bytes ⦃ (r : Scalar52) =>
-      r.asNat = bytes.asNat 8 ∧ ∀ i < 5, r[i]!.val < 2 ^ 52 ⦄ := by
+      r.asNat = bytes.asNat 8 ∧ r.LimbsLt 52 ⦄ := by
   unfold from_bytes
   step with from_bytes_loop0_spec as ⟨w, hw⟩
   have hbytes : bytes.asNat 8

@@ -96,12 +96,13 @@ private theorem to_bytes.bytes_eq (l0 l1 l2 l3 l4 : U64) (h0 : l0.val < 2 ^ 52)
     + 2 ^ 52 * d1 + 2 ^ 156 * d3
 
 @[step]
-theorem to_bytes_spec (self : Scalar52) (hself : ∀ i < 5, self[i]!.val < 2 ^ 52)
+theorem to_bytes_spec (self : Scalar52) (hself : self.LimbsLt 52)
     (hself' : self.asNat < 2 ^ 256) :
     to_bytes self ⦃ (r : Array U8 32#usize) =>
       r.asNat 8 = self.asNat ⦄ := by
   rw [Scalar52.asNat_eq] at hself'
   have h4 := top_limb_lt hself'
+  unfold Scalar52.LimbsLt at hself
   rw [Nat.forall_lt_five] at hself
   simp (disch := simp) only [Array.getElem!_Nat_eq, getElem!_pos] at hself h4
   obtain ⟨h0, h1, h2, h3, -⟩ := hself
