@@ -68,13 +68,9 @@ statements. Items outside the public API (`is_valid`, `as_projective`, `as_proje
 `as_affine_niels`, `to_affine`, `double`, `mul_by_pow_2`, the `edwards/affine.rs` module) are proved
 in `Proofs/` but not restated here.
 
-**Complete except as follows.** Not restated here: `mul_base` and `mul_base_clamped` of
-`x86_64-tables` and `vartime_double_scalar_mul_basepoint` of `x86_64-tables`. They read the
-constants `ED25519_BASEPOINT_TABLE` and `AFFINE_ODD_MULTIPLES_OF_BASEPOINT`, and their proofs
-(`…_spec_of_table` in `Proofs/Edwards/`) take as a hypothesis that the constant represents the
-basepoint's table. `vartime_triple_scalar_mul_basepoint` is not proved. It needs the same
-constants (`AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128`). `VartimePrecomputedMultiscalarMul::is_empty`
-is not proved either: it calls `Vec::is_empty`, which the library leaves opaque without a spec.
+**Complete except as follows.** `vartime_triple_scalar_mul_basepoint` is not proved.
+`VartimePrecomputedMultiscalarMul::is_empty` is not proved either: it calls `Vec::is_empty`, which
+the library leaves opaque without a spec.
 The basepoint tables (`impl_basepoint_table!`) exist only in `x86_64-tables`. They are stated for a
 table `Represents P` (row `i` holds the multiples of `2^(w i) • P`) and `Bounded`.
 
@@ -1465,6 +1461,25 @@ recall mul_spec (self : scalar.Scalar) (point : edwards.EdwardsPoint.«x86_64-no
 end «CoreOpsArithMulSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.Shared0Scalar.Insts
 
+namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
+
+/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
+limbs `< 2^52`. -/
+recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
+    mul_base scalar ⦃ (r : EdwardsPoint.«x86_64-tables») =>
+      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.Bounded ⦄
+
+set_option linter.style.longLine false in
+/-- [propext, Classical.choice, Quot.sound, core.array.from_fn_spec,
+  MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter_spec,
+  U16.Insts.SubtleConstantTimeEq.ct_eq_spec,
+  U64.Insts.SubtleConditionallySelectable.conditional_assign_spec, core.num.Usize.div_ceil_spec,
+  core.fmt.Formatter, subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
+
+end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
+
 namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 
 /-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
@@ -1517,6 +1532,25 @@ recall mul_clamped_spec (self : EdwardsPoint.«x86_64-no-tables») (bytes : Arra
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
+
+namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
+
+/-- `EdwardsPoint::mul_base_clamped`: `clamp bytes • B`, with RFC 7748's clamping of the
+little-endian value of `bytes`; limbs `< 2^52`. -/
+recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
+    mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
+      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.Bounded ⦄
+
+set_option linter.style.longLine false in
+/-- [propext, Classical.choice, Quot.sound, core.array.from_fn_spec,
+  MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter_spec,
+  U16.Insts.SubtleConstantTimeEq.ct_eq_spec,
+  U64.Insts.SubtleConditionallySelectable.conditional_assign_spec, core.num.Usize.div_ceil_spec,
+  core.fmt.Formatter, subtle.Choice.Insts.CoreConvertFromU8.from_spec,
+  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
+
+end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 
 namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 
@@ -1873,6 +1907,27 @@ set_option linter.style.longLine false in
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts
+
+namespace Curve25519Dalek.edwards
+namespace «EdwardsPointx86_64-tables»
+
+/-- `EdwardsPoint::vartime_double_scalar_mul_basepoint`: `a • A + b • B` for the basepoint `B`
+(unreduced scalars `< 2^255`); limbs `< 2^52`. -/
+recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
+    (A : EdwardsPoint.«x86_64-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
+    (hA : A.Bounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
+    vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«x86_64-tables») =>
+      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.Bounded ⦄
+
+set_option linter.style.longLine false in
+/-- [propext, Classical.choice, Quot.sound, core.array.from_fn_spec,
+  MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter_spec, core.fmt.Formatter,
+  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms vartime_double_scalar_mul_basepoint_spec
+
+end «EdwardsPointx86_64-tables»
+end Curve25519Dalek.edwards
 
 namespace Curve25519Dalek.edwards
 namespace «EdwardsPointx86_64-no-tables»

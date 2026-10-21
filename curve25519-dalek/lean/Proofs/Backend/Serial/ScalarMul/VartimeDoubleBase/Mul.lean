@@ -24,6 +24,7 @@ import Proofs.Scalar.NonAdjacentForm
 import Proofs.Window.NafLookupTable5From
 import Proofs.Window.NafLookupTable5Select
 import Proofs.Window.NafLookupTable8Select
+import Proofs.Backend.Serial.U64.Constants.AffineOddMultiplesOfBasepoint
 public section
 
 /-! # `vartime_double_base::mul`
@@ -223,15 +224,9 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
 set_option linter.style.longLine false in
 open scoped Helpers.IndexStep in
 /-- `vartime_double_base::mul`: `a • A + b • B` for the basepoint `B` (unreduced scalars
-`< 2^255`, the precondition of `non_adjacent_form`); limbs `< 2^52`. Conditional on the
-precomputed constant `AFFINE_ODD_MULTIPLES_OF_BASEPOINT` being the table of odd multiples of
-`B` (`htable`, not proved yet). -/
+`< 2^255`, the precondition of `non_adjacent_form`); limbs `< 2^52`. -/
 @[step]
-theorem mul_spec_of_table
-    (htable : backend.serial.u64.constants.AFFINE_ODD_MULTIPLES_OF_BASEPOINT
-      ⦃ (t : window.NafLookupTable8 AffineNielsPoint.«x86_64-tables») =>
-        t.Represents basepoint ∧ t.Bounded ⦄)
-    (a : scalar.Scalar) (A : edwards.EdwardsPoint.«x86_64-tables»)
+theorem mul_spec (a : scalar.Scalar) (A : edwards.EdwardsPoint.«x86_64-tables»)
     (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255) (hA : A.Bounded) (hon : A.OnCurve)
     (hb : b.asNat < 2 ^ 255) :
     mul.«x86_64-tables» a A b ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
@@ -246,7 +241,7 @@ theorem mul_spec_of_table
   step with
       window.«NafLookupTable5ProjectiveNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
     as ⟨tA, htA, htAb⟩
-  step with htable as ⟨tB, htB, htBb⟩
+  step as ⟨tB, htB, htBb⟩
   step with ProjectivePoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨r, hron, hrp, hrb⟩
   have hr' : r.toPoint = nafTail a_naf (i.val + 1) • A.toPoint +

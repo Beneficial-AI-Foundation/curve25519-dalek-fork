@@ -290,6 +290,13 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
 - **Pitfalls:** destructure a `Bounded` hypothesis only after the `step` whose callee needs it;
   `ZMod p` inversion does not reduce in the kernel (certificates use the inversion-free
   `Extended.nsmul`/`IsZero`).
+- **`Result` is a coinductive ITree** in this Aeneas (`Aeneas/Std/Primitives.lean`,
+  `Data/Coinductive/ITree.lean`): `bind` is a fixed point and never reduces, so no `rfl`,
+  `decide +kernel` or `with_unfolding_all` evaluates translated code across a bind, and rewriting
+  a long bind chain step by step (`simp`, `rw`, an `Eq.trans` chain) keeps O(N²) copies of the
+  chain alive (768 binds exhausted 15 GB and rebooted the machine, 2026-10-21). Translated
+  constants are reduced by reflection instead: `Proofs/Helpers/TableCertificate.lean` (`bindList`,
+  `bindList_eq`, `collect_limbs`, `kernel_rfl`), O(N) and a few seconds.
 
 ## Workflow per Rust file
 
@@ -324,7 +331,8 @@ one module target per `lake build` command, run at most one Lean process per age
 language-server tools in agents. `lake exe runLinter Specs` loads every library (the spec
 summaries import everything); run the linter on one library per command when memory is tight.
 `scripts/memwatch.sh`, run in the background, kills the largest `lean` process when free memory
-gets low.
+gets low. Experiments that may blow up run in a capped scope, which kills only that process:
+`systemd-run --user --scope -p MemoryMax=9G -p MemorySwapMax=0 lake env lean <file>`.
 
 ## CI
 
@@ -388,6 +396,13 @@ gets low.
 - `traits.rs`: generic `is_identity` (`Proofs/Traits/IsIdentity.lean`, `Specs/Traits.lean`).
 - Point constants: `ED25519_BASEPOINT_POINT`, `EIGHT_TORSION`, `BASEPOINT_ORDER`,
   `ED25519_BASEPOINT_COMPRESSED`, `X25519_BASEPOINT` (`Specs/Constants.lean`).
+- Precomputed tables (2026-10-21): `ED25519_BASEPOINT_TABLE`, `AFFINE_ODD_MULTIPLES_OF_BASEPOINT`
+  and `AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128` are certified unconditionally
+  (`Proofs/Backend/Serial/U64/Constants/{Ed25519BasepointTable, AffineOddMultiplesOfBasepoint,
+  AffineOddMultiplesOfBasepoint128}.lean` on `Proofs/Helpers/TableCertificate.lean`; standard
+  axioms only, 3–11 s per file). `mul_base`, `mul_base_clamped` and
+  `vartime_double_scalar_mul_basepoint` of `x86_64-tables` are therefore unconditional and in
+  `Specs/Edwards.lean` (152 statements; the three new statements await the owner's review).
 - All x86_64 items are stated for both `«x86_64-tables»` and `«x86_64-no-tables»`; the i686
   variants wait for the u32 backend.
 
@@ -404,48 +419,57 @@ gets low.
 
 ## Open decisions (for the owner) and known gaps
 
-1. **Precomputed tables** (see "Certifying the precomputed tables" below). Today the with-tables
-   `mul_base`, `mul_base_clamped` and `vartime_double_scalar_mul_basepoint` are proved as
-   `_of_table` theorems with an explicit hypothesis that the constant represents the basepoint,
-   and are not in the spec summaries.
-2. **`_of_table` theorems in the summaries:** include them with their hypothesis, or wait.
-3. **`VartimePrecomputedMultiscalarMul::is_empty`:** blocked; `alloc.vec.Vec.is_empty` is opaque
+1. **`VartimePrecomputedMultiscalarMul::is_empty`:** blocked; `alloc.vec.Vec.is_empty` is opaque
    without a spec. Options: a spec axiom in `FunsExternal.lean` (as for
    `core.result.Result.map_spec`), a body, or leaving the item out.
-4. **`vartime_triple_scalar_mul_basepoint`:** not done; needs the `_128` odd-multiples table
-   (decision 1) and a lemma "NAF digits above index 128 are zero for `x < 2^128`".
-5. **Aeneas-generated axioms in guard lists:** `…_native.decide.ax_*` (from `toStr` on panic
+2. **`vartime_triple_scalar_mul_basepoint`:** not done; the `_128` table is certified, what is
+   left is a lemma "NAF digits above index 128 are zero for `x < 2^128`" and the proof.
+3. **The three new `x86_64-tables` statements** in `Specs/Edwards.lean` (`mul_base`,
+   `mul_base_clamped`, `vartime_double_scalar_mul_basepoint`): review (same shape as the
+   `x86_64-no-tables` ones).
+4. **Aeneas-generated axioms in guard lists:** `…_native.decide.ax_*` (from `toStr` on panic
    messages) and `core.fmt.Formatter` appear in the multiscalar/table guards; acceptable?
-6. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
-7. **Long lines:** 40 commands in generated proof files disable the long-line linter although
+5. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
+6. **Long lines:** 40 commands in generated proof files disable the long-line linter although
    some names exceed 100 characters only with indentation (the convention allows the option only
    for single tokens over 100). Shorten via `open`/local abbreviations, or accept.
-8. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
+7. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
    `Specs/` and `Proofs/` (see also "Project-defined traits" below).
-9. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
+8. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
    variants into two files); window tables' `Default`/`Clone`/`Zeroize` not specified (low
    value); naming ambiguity `encode`/`decode`/`basepoint` between `curve25519` and
    `curve25519.Ristretto` under a double `open`; `twistL` and `ZMod.abs` names unconfirmed.
 
-### Certifying the precomputed tables (measured 2026-10-20)
+### Certifying the precomputed tables (done 2026-10-21)
 
-`ED25519_BASEPOINT_TABLE` (32 rows × 8 affine-Niels entries, 768 `from_limbs` binds) and
-`AFFINE_ODD_MULTIPLES_OF_BASEPOINT(_128)` (64 entries each). Currently option (d).
+Two parts, both kernel-checked, no literal written in the sources:
 
-| Option | Proves | Measured | Notes |
-|---|---|---|---|
-| (a) per-entry kernel certificates | full fact, kernel only | math side: odd multiples + 8 multiples of `2^128 B`: 2.7 s / 1.3 GB; 256-entry table: 3 files of 8–13 s, max 3.4 GB (one file: 30 s / 3.6 GB). Limb extraction from the Lean constant: `AFFINE_ODD` (192 binds) 6.6 s / 2.4 GB with `simp [from_limbs, bind_ok]` + `decide +kernel`; `ED25519_BASEPOINT_TABLE` (768 binds) times out at 200k heartbeats, 47 s, 7.7 GB | `AFFINE_ODD` feasible now; the big table needs a cheaper extraction |
-| (b) equal to the translated `create` output | — | infeasible: `create` runs through monadic binds and field ops the kernel cannot evaluate | — |
-| (c) row-chain structural certificate | same as (a) | estimated < 2 s for the math; same extraction bottleneck | — |
-| (d) explicit hypothesis (current) | conditional statement | free | appears in theorem statements |
-| (e) translation patch / Charon option emitting constants as literals | would allow `rfl`/`decide` extraction | — | needs an upstream change |
+- **Extraction.** A translated constant is a chain of `from_limbs` binds ending in `ok (value)`;
+  `bind` never reduces (ITree, see Pitfalls). `collect_limbs xs from c` (a command elaborator)
+  reads the limb arrays off the chain without instantiating anything, `bindList xs k` is the
+  generic shape with `bindList_eq : bindList xs k = k xs` by induction, and
+  `c = bindList xs (fun fes => ok (mk fes))` is an `Eq.refl` checked by the kernel only
+  (`kernel_rfl`; the elaborator's own defeq check would triple the time). `mk` rebuilds the
+  structure from the flat list by `List.ofFn` indexing, so `c = ok (mk xs)` follows.
+  Measured on the 768-bind table: 7 s, 2.7 GB (versus 47 s / 7.7 GB and a timeout for the old
+  `simp [bind_ok]` route, and a reboot for an `Eq.trans` chain).
+- **Content.** `Bool` checkers over the flat list, evaluated by `decide +kernel` after
+  `rw [edwards_eq_numerals]`: `checkRow S Q l` (entries `Q, Q + S, Q + 2 S, …`, by running
+  additions in extended coordinates and three cross-multiplication equalities per entry, so no
+  inversion), `checkRowProj` (projective Niels entries), `checkTable P fes n` (rows
+  `P, 2^8 P, …` by 8 doublings each). Soundness is proved once, generically
+  (`checkRow_sound`, `checkTable_sound`); the big table's 256 entries check in ~2 s. Checkers
+  walk the list linearly: indexing through `mk` in the certificate itself cost 24 s / 4.9 GB.
+  Negative controls (a corrupted limb, a duplicated row) fail as they should.
 
-A Python check that all three tables hold the expected multiples was run (all correct).
+Rejected: per-entry `nsmul` certificates (30 s, 3.4 GB per file, measured 2026-10-20), equality
+with the translated `create` (loops are `divergent`, not kernel-evaluable), an upstream change to
+emit constants as literals (no longer needed).
 
 ## Plan
 
-1. Owner decisions on the open decisions 1–3, then the corresponding work (and
-   `vartime_triple_scalar_mul_basepoint`).
+1. Owner decisions on the open decisions 1–3; `vartime_triple_scalar_mul_basepoint` (the
+   `_128` table is certified; needs the NAF-digit lemma).
 2. `montgomery.rs`: library support in `Curve25519/{X25519,Montgomery}.lean` (`x25519`, `xMul`,
    `ladder_eq_xMul`, `x25519_eq_u_nsmul`, `x25519_basepoint_edwards`, `edwardsToMontgomery`,
    `montgomeryTwist`) and `Defs/Montgomery.lean` (`MontgomeryPoint.u`, `ProjectivePoint.toXZ`,
@@ -464,6 +488,16 @@ A Python check that all three tables hold the expected multiples was run (all co
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
 7. Add std lib models to Aeneas.
+8. One axiom per external crate (below).
+
+### One axiom per external crate
+
+Today `Subtle/Basic.lean` and `Zeroize/Basic.lean` state one `@[step]` spec axiom per function,
+so the guard lists name each of them. Refactor each library to a single named axiom covering the
+whole crate (e.g. `subtle_spec`, a conjunction of all its function specs, and `zeroize_spec`
+likewise), and derive the per-function `@[step]` specs from it as theorems. A guard list then
+names at most one axiom per external crate. The `#guard_msgs` lists of the spec summaries change
+accordingly.
 
 ### u32 backend
 

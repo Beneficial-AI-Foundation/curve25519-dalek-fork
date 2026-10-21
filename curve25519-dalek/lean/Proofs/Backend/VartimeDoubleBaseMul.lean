@@ -18,14 +18,9 @@ namespace Curve25519Dalek.backend
 namespace «x86_64-tables»
 
 /-- `vartime_double_base_mul`: the serial `vartime_double_base::mul`, `a • A + b • B`;
-limbs `< 2^52`. Conditional on `AFFINE_ODD_MULTIPLES_OF_BASEPOINT` (`htable`). -/
+limbs `< 2^52`. -/
 @[step]
-theorem vartime_double_base_mul_spec_of_table
-    (htable : backend.serial.u64.constants.AFFINE_ODD_MULTIPLES_OF_BASEPOINT
-      ⦃ (t : window.NafLookupTable8
-        backend.serial.curve_models.AffineNielsPoint.«x86_64-tables») =>
-        t.Represents curve25519.basepoint ∧ t.Bounded ⦄)
-    (a : scalar.Scalar) (A : edwards.EdwardsPoint.«x86_64-tables»)
+theorem vartime_double_base_mul_spec (a : scalar.Scalar) (A : edwards.EdwardsPoint.«x86_64-tables»)
     (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255) (hA : A.Bounded) (hon : A.OnCurve)
     (hb : b.asNat < 2 ^ 255) :
     vartime_double_base_mul.«x86_64-tables» a A b ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
@@ -33,8 +28,7 @@ theorem vartime_double_base_mul_spec_of_table
         r.Bounded ⦄ := by
   unfold vartime_double_base_mul.«x86_64-tables»
   step
-  step with serial.scalar_mul.vartime_double_base.«x86_64-tables».mul_spec_of_table htable
-    as ⟨r, hron, hr, hrb⟩
+  step with serial.scalar_mul.vartime_double_base.«x86_64-tables».mul_spec as ⟨r, hron, hr, hrb⟩
   exact ⟨hron, hr, hrb⟩
 
 end «x86_64-tables»

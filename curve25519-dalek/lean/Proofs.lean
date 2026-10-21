@@ -30,8 +30,11 @@ public import Proofs.Backend.Serial.ScalarMul.Straus.MultiscalarMul
 public import Proofs.Backend.Serial.ScalarMul.Straus.OptionalMultiscalarMul
 public import Proofs.Backend.Serial.ScalarMul.VariableBase.Mul
 public import Proofs.Backend.Serial.ScalarMul.VartimeDoubleBase.Mul
+public import Proofs.Backend.Serial.U64.Constants.AffineOddMultiplesOfBasepoint
+public import Proofs.Backend.Serial.U64.Constants.AffineOddMultiplesOfBasepoint128
 public import Proofs.Backend.Serial.U64.Constants.Aplus2OverFour
 public import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointPoint
+public import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointTable
 public import Proofs.Backend.Serial.U64.Constants.EdwardsD
 public import Proofs.Backend.Serial.U64.Constants.EdwardsD2
 public import Proofs.Backend.Serial.U64.Constants.EdwardsDMinusOneSquared
@@ -192,6 +195,7 @@ public import Proofs.Helpers.Naf
 public import Proofs.Helpers.Scalar
 public import Proofs.Helpers.Scalar52
 public import Proofs.Helpers.StepSpecs
+public import Proofs.Helpers.TableCertificate
 public import Proofs.Helpers.Target
 public import Proofs.Helpers.ToField
 public import Proofs.Helpers.Vec
