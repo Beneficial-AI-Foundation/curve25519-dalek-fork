@@ -27,18 +27,20 @@ set_option maxRecDepth 100000 in
 collect_limbs oddLimbs from AFFINE_ODD_MULTIPLES_OF_BASEPOINT
 
 /-- The table built from its 192 field elements in source order. -/
-@[expose] def mkOddTable (fes : List FieldElement51) :
+private def mkOddTable (fes : List FieldElement51) :
     window.NafLookupTable8 AffineNielsPoint.«x86_64-tables» :=
-  Array.make 64#usize (List.ofFn fun k : Fin 64 =>
-    ({ y_plus_x := fes[3 * k.val]!, y_minus_x := fes[3 * k.val + 1]!,
-       xy2d := fes[3 * k.val + 2]! } : AffineNielsPoint.«x86_64-tables»))
-    (by rw [List.length_ofFn]; rfl)
+  if h : (entries fes).length = (64#usize).val then Array.make 64#usize (entries fes) h
+  else default
 
-theorem mkOddTable_get (fes : List FieldElement51) {k : ℕ} (hk : k < 64) :
+private theorem mkOddTable_get {fes : List FieldElement51} (hlen : fes.length = 192) {k : ℕ}
+    (hk : k < 64) :
     (mkOddTable fes)[k]! =
       (⟨fes[3 * k]!, fes[3 * k + 1]!, fes[3 * k + 2]!⟩ : AffineNielsPoint.«x86_64-tables») := by
-  simp only [mkOddTable, Array.getElem!_Nat_eq, Array.make_val, getElem!_pos, List.length_ofFn, hk,
-    List.getElem_ofFn]
+  have h64 : (entries fes).length = (64#usize).val := by
+    rw [entries_length, hlen]
+    rfl
+  rw [mkOddTable, dite_eq_left_of_eq_true (eq_true h64), Array.getElem!_Nat_eq, Array.make_val,
+    entries_getElem! _ _ (by rw [hlen]; omega)]
 
 set_option maxRecDepth 100000 in
 private theorem odd_eq_bindList : AFFINE_ODD_MULTIPLES_OF_BASEPOINT =
@@ -71,7 +73,7 @@ theorem AFFINE_ODD_MULTIPLES_OF_BASEPOINT_spec :
   rw [odd_eq, spec_ok]
   constructor
   · intro k hk
-    rw [mkOddTable_get _ hk]
+    rw [mkOddTable_get oddLimbs_length hk]
     have h := checkRow_sound (pow2_onCurve onCurve_basepointExt 1) onCurve_basepointExt odd_check k
       (by rw [oddLimbs_length]; omega)
     rw [toPoint_pow2 onCurve_basepointExt 1, toPoint_basepointExt, pow_one] at h
@@ -79,7 +81,7 @@ theorem AFFINE_ODD_MULTIPLES_OF_BASEPOINT_spec :
     simp only [pow_zero, one_smul, zero_add, pow_one] at e
     rwa [e] at h
   · intro k hk
-    rw [mkOddTable_get _ hk]
+    rw [mkOddTable_get oddLimbs_length hk]
     exact ⟨limbs_lt_of_all odd_bounded (by rw [oddLimbs_length]; omega),
       limbs_lt_of_all odd_bounded (by rw [oddLimbs_length]; omega),
       limbs_lt_of_all odd_bounded (by rw [oddLimbs_length]; omega)⟩

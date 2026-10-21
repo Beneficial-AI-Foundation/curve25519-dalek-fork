@@ -26,19 +26,24 @@ namespace Curve25519Dalek.backend.serial.u64.constants
 set_option maxRecDepth 100000 in
 collect_limbs tableLimbs from ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN
 
-/-- The table built from its 768 field elements in source order. -/
-@[expose] def mkTable (fes : List FieldElement51) : edwards.EdwardsBasepointTable.«x86_64-tables» :=
-  Array.make 32#usize (List.ofFn fun i : Fin 32 => Array.make 8#usize (List.ofFn fun j : Fin 8 =>
-    ({ y_plus_x := fes[24 * i.val + 3 * j.val]!, y_minus_x := fes[24 * i.val + 3 * j.val + 1]!,
-       xy2d := fes[24 * i.val + 3 * j.val + 2]! } : AffineNielsPoint.«x86_64-tables»))
-    (by rw [List.length_ofFn]; rfl)) (by rw [List.length_ofFn]; rfl)
+/-- The table built from its 768 field elements in source order: 32 rows of 8 entries. -/
+private def mkTable (fes : List FieldElement51) : edwards.EdwardsBasepointTable.«x86_64-tables» :=
+  if h : (rows (entries fes)).length = (32#usize).val then
+    Array.make 32#usize (rows (entries fes)) h
+  else default
 
-theorem mkTable_get (fes : List FieldElement51) {i j : ℕ} (hi : i < 32) (hj : j < 8) :
+private theorem mkTable_get {fes : List FieldElement51} (hlen : fes.length = 768) {i j : ℕ}
+    (hi : i < 32) (hj : j < 8) :
     ((mkTable fes)[i]!)[j]! =
       (⟨fes[24 * i + 3 * j]!, fes[24 * i + 3 * j + 1]!, fes[24 * i + 3 * j + 2]!⟩ :
         AffineNielsPoint.«x86_64-tables») := by
-  simp only [mkTable, Array.getElem!_Nat_eq, Array.make_val, getElem!_pos, List.length_ofFn, hi, hj,
-    List.getElem_ofFn]
+  have h32 : (rows (entries fes)).length = (32#usize).val := by
+    rw [rows_length, entries_length, hlen]
+    rfl
+  rw [mkTable, dite_eq_left_of_eq_true (eq_true h32),
+    Array.getElem!_Nat_eq (Array.make 32#usize (rows (entries fes)) _) i, Array.make_val,
+    rows_getElem!_getElem! _ _ _ (by rw [entries_length, hlen]; omega) hj,
+    entries_getElem! _ _ (by rw [hlen]; omega), show 3 * (8 * i + j) = 24 * i + 3 * j by ring]
 
 set_option maxRecDepth 100000 in
 private theorem inner_eq_bindList : ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN =
@@ -48,7 +53,7 @@ private theorem inner_eq_bindList : ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN =
 private theorem inner_eq : ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN = ok (mkTable tableLimbs) := by
   rw [inner_eq_bindList, bindList_eq]
 
-private theorem tableLimbs_length : tableLimbs.length = 24 * 32 := by
+private theorem tableLimbs_length : tableLimbs.length = 768 := by
   decide +kernel
 
 private theorem table_check : checkTable edwards (basepointExt edwards) tableLimbs 32 = true := by
@@ -69,11 +74,12 @@ theorem ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN_spec :
   rw [inner_eq, spec_ok]
   constructor
   · intro i hi j hj
-    rw [mkTable_get _ hi hj]
-    have h := checkTable_sound onCurve_basepointExt table_check tableLimbs_length i hi j hj
+    rw [mkTable_get tableLimbs_length hi hj]
+    have h := checkTable_sound onCurve_basepointExt table_check (by rw [tableLimbs_length]) i hi
+      j hj
     rwa [toPoint_basepointExt] at h
   · intro i hi j hj
-    rw [mkTable_get _ hi hj]
+    rw [mkTable_get tableLimbs_length hi hj]
     refine ⟨limbs_lt_of_all table_bounded (by rw [tableLimbs_length]; omega),
       limbs_lt_of_all table_bounded (by rw [tableLimbs_length]; omega),
       limbs_lt_of_all table_bounded (by rw [tableLimbs_length]; omega)⟩

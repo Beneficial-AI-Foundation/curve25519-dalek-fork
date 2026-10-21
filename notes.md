@@ -400,7 +400,7 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   and `AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128` are certified unconditionally
   (`Proofs/Backend/Serial/U64/Constants/{Ed25519BasepointTable, AffineOddMultiplesOfBasepoint,
   AffineOddMultiplesOfBasepoint128}.lean` on `Proofs/Helpers/TableCertificate.lean`; standard
-  axioms only, 3–11 s per file). `mul_base`, `mul_base_clamped` and
+  axioms only, 3–6 s per file including imports, < 2 GB). `mul_base`, `mul_base_clamped` and
   `vartime_double_scalar_mul_basepoint` of `x86_64-tables` are therefore unconditional and in
   `Specs/Edwards.lean` (152 statements; the three new statements await the owner's review).
 - All x86_64 items are stated for both `«x86_64-tables»` and `«x86_64-no-tables»`; the i686
@@ -450,16 +450,20 @@ Two parts, both kernel-checked, no literal written in the sources:
   generic shape with `bindList_eq : bindList xs k = k xs` by induction, and
   `c = bindList xs (fun fes => ok (mk fes))` is an `Eq.refl` checked by the kernel only
   (`kernel_rfl`; the elaborator's own defeq check would triple the time). `mk` rebuilds the
-  structure from the flat list by `List.ofFn` indexing, so `c = ok (mk xs)` follows.
-  Measured on the 768-bind table: 7 s, 2.7 GB (versus 47 s / 7.7 GB and a timeout for the old
-  `simp [bind_ok]` route, and a reboot for an `Eq.trans` chain).
+  structure from the flat list **sequentially** (`entries`, `rows`: three or four limb arrays
+  per entry, eight entries per row), so `c = ok (mk xs)` follows. Measured on the 768-bind
+  table: well under a second (versus 47 s / 7.7 GB and a timeout for the old `simp [bind_ok]`
+  route, and a reboot for an `Eq.trans` chain). A first version of `mk` indexed the list
+  (`fes[24 i + 3 j]!` under `List.ofFn`): the kernel then walked O(N²) list cells, 8 s for this
+  table; `bindList` via `brecOn` versus `List.rec` made no difference.
 - **Content.** `Bool` checkers over the flat list, evaluated by `decide +kernel` after
   `rw [edwards_eq_numerals]`: `checkRow S Q l` (entries `Q, Q + S, Q + 2 S, …`, by running
   additions in extended coordinates and three cross-multiplication equalities per entry, so no
   inversion), `checkRowProj` (projective Niels entries), `checkTable P fes n` (rows
   `P, 2^8 P, …` by 8 doublings each). Soundness is proved once, generically
-  (`checkRow_sound`, `checkTable_sound`); the big table's 256 entries check in ~2 s. Checkers
-  walk the list linearly: indexing through `mk` in the certificate itself cost 24 s / 4.9 GB.
+  (`checkRow_sound`, `checkTable_sound`); the big table's 256 entries check in ~2 s, the limb
+  bounds in ~1 s. Rule for anything the kernel evaluates: walk lists linearly, never index them
+  (indexing through `mk` in the bounds check alone cost 24 s / 4.9 GB).
   Negative controls (a corrupted limb, a duplicated row) fail as they should.
 
 Rejected: per-entry `nsmul` certificates (30 s, 3.4 GB per file, measured 2026-10-20), equality

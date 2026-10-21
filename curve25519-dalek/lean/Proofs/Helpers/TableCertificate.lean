@@ -381,6 +381,85 @@ theorem odd_smul_eq (B : edwards.Point) (n k : ℕ) :
   congr 1
   ring
 
+/-! ### Tables from flat lists
+
+The constructors consume the list sequentially, so that the kernel compares `mk fes` with the
+translated structure in linear time (indexing into `fes` there cost 8 s for 768 elements). The
+index lemmas serve the proofs. -/
+
+/-- Affine Niels entries, three limb arrays each. -/
+@[expose] def entries : List FieldElement51 → List AffineNielsPoint.«x86_64-tables»
+  | ya :: yb :: c :: rest => ⟨ya, yb, c⟩ :: entries rest
+  | _ => []
+
+/-- Projective Niels entries, four limb arrays each. -/
+@[expose] def entriesProj : List FieldElement51 → List ProjectiveNielsPoint.«x86_64-tables»
+  | ya :: yb :: z :: t :: rest => ⟨ya, yb, z, t⟩ :: entriesProj rest
+  | _ => []
+
+/-- Lookup tables of eight entries each. -/
+@[expose] def rows {T : Type} : List T → List (window.LookupTable T)
+  | e0 :: e1 :: e2 :: e3 :: e4 :: e5 :: e6 :: e7 :: rest =>
+    Array.make 8#usize [e0, e1, e2, e3, e4, e5, e6, e7] :: rows rest
+  | _ => []
+
+theorem entries_length : ∀ l : List FieldElement51, (entries l).length = l.length / 3
+  | [] | [_] | [_, _] => by simp [entries]
+  | _ :: _ :: _ :: rest => by
+    simp only [entries, List.length_cons, entries_length rest]
+    omega
+
+theorem entries_getElem! : ∀ (l : List FieldElement51) (k : ℕ), 3 * k + 2 < l.length →
+    (entries l)[k]! =
+      (⟨l[3 * k]!, l[3 * k + 1]!, l[3 * k + 2]!⟩ : AffineNielsPoint.«x86_64-tables»)
+  | [], _, h | [_], _, h | [_, _], _, h =>
+    absurd h (by simp only [List.length_cons, List.length_nil]; omega)
+  | _ :: _ :: _ :: _, 0, _ => by simp [entries]
+  | _ :: _ :: _ :: rest, k + 1, h => by
+    have ih := entries_getElem! rest k (by simp only [List.length_cons] at h; omega)
+    rw [show 3 * (k + 1) = 3 * k + 2 + 1 by ring]
+    simpa only [entries, List.getElem!_cons_succ] using ih
+
+theorem entriesProj_length : ∀ l : List FieldElement51, (entriesProj l).length = l.length / 4
+  | [] | [_] | [_, _] | [_, _, _] => by simp [entriesProj]
+  | _ :: _ :: _ :: _ :: rest => by
+    simp only [entriesProj, List.length_cons, entriesProj_length rest]
+    omega
+
+theorem entriesProj_getElem! : ∀ (l : List FieldElement51) (k : ℕ), 4 * k + 3 < l.length →
+    (entriesProj l)[k]! =
+      (⟨l[4 * k]!, l[4 * k + 1]!, l[4 * k + 2]!, l[4 * k + 3]!⟩ :
+        ProjectiveNielsPoint.«x86_64-tables»)
+  | [], _, h | [_], _, h | [_, _], _, h | [_, _, _], _, h =>
+    absurd h (by simp only [List.length_cons, List.length_nil]; omega)
+  | _ :: _ :: _ :: _ :: _, 0, _ => by simp [entriesProj]
+  | _ :: _ :: _ :: _ :: rest, k + 1, h => by
+    have ih := entriesProj_getElem! rest k (by simp only [List.length_cons] at h; omega)
+    rw [show 4 * (k + 1) = 4 * k + 3 + 1 by ring]
+    simpa only [entriesProj, List.getElem!_cons_succ] using ih
+
+theorem rows_length {T : Type} : ∀ l : List T, (rows l).length = l.length / 8
+  | [] | [_] | [_, _] | [_, _, _] | [_, _, _, _] | [_, _, _, _, _] | [_, _, _, _, _, _]
+  | [_, _, _, _, _, _, _] => by simp [rows]
+  | _ :: _ :: _ :: _ :: _ :: _ :: _ :: _ :: rest => by
+    simp only [rows, List.length_cons, rows_length rest]
+    omega
+
+theorem rows_getElem!_getElem! {T : Type} [Inhabited T] :
+    ∀ (l : List T) (i j : ℕ), 8 * i + 7 < l.length → j < 8 → ((rows l)[i]!)[j]! = l[8 * i + j]!
+  | [], _, _, h, _ | [_], _, _, h, _ | [_, _], _, _, h, _ | [_, _, _], _, _, h, _
+  | [_, _, _, _], _, _, h, _ | [_, _, _, _, _], _, _, h, _ | [_, _, _, _, _, _], _, _, h, _
+  | [_, _, _, _, _, _, _], _, _, h, _ =>
+    absurd h (by simp only [List.length_cons, List.length_nil]; omega)
+  | _ :: _ :: _ :: _ :: _ :: _ :: _ :: _ :: _, 0, j, _, hj => by
+    simp only [rows, List.getElem!_cons_zero, Array.getElem!_Nat_eq, Array.make_val, Nat.mul_zero,
+      Nat.zero_add]
+    interval_cases j <;> rfl
+  | _ :: _ :: _ :: _ :: _ :: _ :: _ :: _ :: rest, i + 1, j, h, hj => by
+    have ih := rows_getElem!_getElem! rest i j (by simp only [List.length_cons] at h; omega) hj
+    rw [show 8 * (i + 1) + j = 8 * i + j + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 by ring]
+    simpa only [rows, List.getElem!_cons_succ] using ih
+
 /-! ### Limb bounds -/
 
 /-- Every limb of every element of a list passing the bound check is `< 2^54`. -/

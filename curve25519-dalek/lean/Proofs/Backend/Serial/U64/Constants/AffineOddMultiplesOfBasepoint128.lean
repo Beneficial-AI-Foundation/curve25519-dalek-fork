@@ -27,19 +27,21 @@ set_option maxRecDepth 100000 in
 collect_limbs odd128Limbs from AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128
 
 /-- The table built from its 32 field elements in source order. -/
-@[expose] def mkOdd128Table (fes : List FieldElement51) :
+private def mkOdd128Table (fes : List FieldElement51) :
     window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-tables» :=
-  Array.make 8#usize (List.ofFn fun k : Fin 8 =>
-    ({ Y_plus_X := fes[4 * k.val]!, Y_minus_X := fes[4 * k.val + 1]!, Z := fes[4 * k.val + 2]!,
-       T2d := fes[4 * k.val + 3]! } : ProjectiveNielsPoint.«x86_64-tables»))
-    (by rw [List.length_ofFn]; rfl)
+  if h : (entriesProj fes).length = (8#usize).val then Array.make 8#usize (entriesProj fes) h
+  else default
 
-theorem mkOdd128Table_get (fes : List FieldElement51) {k : ℕ} (hk : k < 8) :
+private theorem mkOdd128Table_get {fes : List FieldElement51} (hlen : fes.length = 32) {k : ℕ}
+    (hk : k < 8) :
     (mkOdd128Table fes)[k]! =
       (⟨fes[4 * k]!, fes[4 * k + 1]!, fes[4 * k + 2]!, fes[4 * k + 3]!⟩ :
         ProjectiveNielsPoint.«x86_64-tables») := by
-  simp only [mkOdd128Table, Array.getElem!_Nat_eq, Array.make_val, getElem!_pos, List.length_ofFn,
-    hk, List.getElem_ofFn]
+  have h8 : (entriesProj fes).length = (8#usize).val := by
+    rw [entriesProj_length, hlen]
+    rfl
+  rw [mkOdd128Table, dite_eq_left_of_eq_true (eq_true h8), Array.getElem!_Nat_eq, Array.make_val,
+    entriesProj_getElem! _ _ (by rw [hlen]; omega)]
 
 set_option maxRecDepth 100000 in
 private theorem odd128_eq_bindList : AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128 =
@@ -73,13 +75,13 @@ theorem AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128_spec :
   rw [odd128_eq, spec_ok]
   constructor
   · intro k hk
-    rw [mkOdd128Table_get _ hk]
+    rw [mkOdd128Table_get odd128Limbs_length hk]
     have h := checkRowProj_sound (pow2_onCurve onCurve_basepointExt 129)
       (pow2_onCurve onCurve_basepointExt 128) odd128_check k (by rw [odd128Limbs_length]; omega)
     rwa [toPoint_pow2 onCurve_basepointExt 129, toPoint_pow2 onCurve_basepointExt 128,
       toPoint_basepointExt, odd_smul_eq] at h
   · intro k hk
-    rw [mkOdd128Table_get _ hk]
+    rw [mkOdd128Table_get odd128Limbs_length hk]
     exact ⟨limbs_lt_of_all odd128_bounded (by rw [odd128Limbs_length]; omega),
       limbs_lt_of_all odd128_bounded (by rw [odd128Limbs_length]; omega),
       limbs_lt_of_all odd128_bounded (by rw [odd128Limbs_length]; omega),
