@@ -3,7 +3,6 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Aeneas.Std.String
 public import Aeneas.Std.Target
 public import Aeneas.Std.WP
 public section
@@ -23,6 +22,6 @@ namespace Curve25519Dalek
 /-- The crate is compiled for one of the two x86_64 targets (u64 backend). -/
 @[expose, nolint defsWithUnderscore]
 def OnX86_64 : Prop :=
-  get_target ⦃ (t : Str) => t = toStr "x86_64-tables" ∨ t = toStr "x86_64-no-tables" ⦄
+  get_target ⦃ (t : String) => t = "x86_64-tables" ∨ t = "x86_64-no-tables" ⦄
 
 end Curve25519Dalek

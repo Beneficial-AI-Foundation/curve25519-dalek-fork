@@ -73,13 +73,7 @@ masked, reduced modulo `p`; x86_64 targets). -/
 recall ct_eq_spec (self other : MontgomeryPoint) (htgt : OnX86_64) :
     ct_eq self other ⦃ (c : subtle.Choice) => c.IsValid ∧ (c = 1#u8 ↔ self.u = other.u) ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.SubtleConstantTimeEq
@@ -103,13 +97,7 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreCmpPartialEqMontg
 recall eq_spec (self other : MontgomeryPoint) (htgt : OnX86_64) :
     eq self other ⦃ (b : Bool) => b = true ↔ self.u = other.u ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreCmpPartialEqMontgomeryPoint
@@ -145,14 +133,8 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
     mul_base scalar ⦃ (r : MontgomeryPoint) =>
       r.asNat = encodeU (scalar.asNat • montgomeryBasepoint).u ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, get_target,
-  core.fmt.Formatter, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 
@@ -161,13 +143,8 @@ recall mul_clamped_spec (self : MontgomeryPoint) (bytes : Array U8 32#usize) (ht
     mul_clamped self bytes ⦃ (r : MontgomeryPoint) =>
       r.asNat = x25519 (bytes.asNat 8) self.asNat ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
 
 
@@ -176,14 +153,8 @@ recall mul_base_clamped_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
     mul_base_clamped bytes ⦃ (r : MontgomeryPoint) =>
       r.asNat = x25519 (bytes.asNat 8) 9 ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, get_target,
-  core.fmt.Formatter, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
 
 
@@ -195,13 +166,8 @@ recall mul_bits_be_spec {T0 : Type} (inst : core.iter.traits.iterator.Iterator T
     mul_bits_be inst self bits ⦃ (r : MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladderBits bs self.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_bits_be_spec
 
 
@@ -260,13 +226,8 @@ recall mul_spec (self : montgomery.MontgomeryPoint) (s : scalar.Scalar) (htgt : 
     mul self s ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (s.asNat % 2 ^ 255) self.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.Shared1MontgomeryPoint.Insts.CoreOpsArithMulShared0ScalarMontgomeryPoint
@@ -278,13 +239,8 @@ recall mul_assign_spec (self : MontgomeryPoint) (scalar : scalar.Scalar) (htgt :
     mul_assign self scalar ⦃ (r : MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (scalar.asNat % 2 ^ 255) self.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreOpsArithMulAssignShared0Scalar
@@ -297,13 +253,8 @@ recall mul_spec (self : montgomery.MontgomeryPoint) (rhs : scalar.Scalar) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end CoreOpsArithMulSharedBScalarMontgomeryPoint
@@ -316,13 +267,8 @@ recall mul_spec (self : montgomery.MontgomeryPoint) (rhs : scalar.Scalar) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.SharedAMontgomeryPoint.Insts.CoreOpsArithMulScalarMontgomeryPoint
@@ -334,13 +280,8 @@ recall mul_spec (self : montgomery.MontgomeryPoint) (rhs : scalar.Scalar) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreOpsArithMulScalarMontgomeryPoint
@@ -352,13 +293,8 @@ recall mul_spec (self : scalar.Scalar) (point : montgomery.MontgomeryPoint) (htg
     mul self point ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (self.asNat % 2 ^ 255) point.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.Shared1Scalar.Insts.CoreOpsArithMulShared0MontgomeryPointMontgomeryPoint
@@ -370,13 +306,8 @@ recall mul_spec (self : scalar.Scalar) (rhs : montgomery.MontgomeryPoint) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulSharedBMontgomeryPointMontgomeryPoint
@@ -388,13 +319,8 @@ recall mul_spec (self : scalar.Scalar) (rhs : montgomery.MontgomeryPoint) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.SharedAScalar.Insts.CoreOpsArithMulMontgomeryPointMontgomeryPoint
@@ -406,13 +332,8 @@ recall mul_spec (self : scalar.Scalar) (rhs : montgomery.MontgomeryPoint) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulMontgomeryPointMontgomeryPoint
@@ -424,13 +345,8 @@ recall mul_assign_spec (self : MontgomeryPoint) (rhs : scalar.Scalar) (htgt : On
     mul_assign self rhs ⦃ (r : MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄
 
-set_option linter.style.longLine false in
 /-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
-  get_target, _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_1,
-  _private.Defs.Target.0.Curve25519Dalek.OnX86_64._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_3,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar.add._native.decide.ax_5] -/
+  get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreOpsArithMulAssignScalar

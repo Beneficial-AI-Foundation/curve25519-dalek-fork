@@ -15,6 +15,17 @@ Read `AGENTS.md` first (PRs to the curve25519-dalek repo must be written by huma
 ./scripts/aeneas-translate.sh   # patch a copy of the workspace (.llbc/work/), run charon + aeneas
 ```
 
+- **Updating Aeneas:** set `rev` in `lakefile.toml` to the new release tag; delete
+  `.lake/packages/aeneas/backends/lean/.lake`; `lake update aeneas` (check that Mathlib moves only
+  to Aeneas's pin); `lake build aeneas:release`; `./scripts/aeneas-install.sh` (copies Aeneas's
+  `lean-toolchain`); `./scripts/aeneas-translate.sh`; compare the `*External_Template.lean` files
+  with the External files; then the full strict build, `scripts/fill-guards.py` on every spec
+  summary, the linters and `typos`. Last done 2026-10-22 (nightly-2026.10.13 → nightly-2026.10.22,
+  Lean v4.35.0-rc4 → v4.35.0): `get_target` returns a `String` (`OnX86_64`, `dispatch_spec`), the
+  `Vec` models moved to `Aeneas.Std.Alloc`, integer comparisons are `Bool` functions under
+  `liftFun2` (four iterator proofs), type parameters are `Type _` (the External files keep
+  `Type`, which still elaborates).
+
 - **No post-translation tweaks.** `curve25519-dalek/lean/Curve25519Dalek/{Types,Funs}.lean` and
   `translation.json` are exactly what Aeneas emits. CI (`lean-translation.yml`) re-translates and
   fails if they differ from the committed files.
@@ -191,9 +202,9 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   - `sorryAx` while the proof is pending (only on a working branch: CI rejects `sorry`).
   - `subtle.contract`/`zeroize.contract` (the one axiom of each external crate) or std externals
     (`FunsExternal.lean`) that the proof uses.
-  - For dispatched functions: `get_target` and the `…_native.decide.ax_*` axioms of Aeneas's
-    `toStr` (the string literals of the dispatchers and of `OnX86_64`). Accepted: they only assert
-    that each literal's byte length fits a `u32` (see "`native_decide` from Aeneas's `toStr`").
+  - For dispatched functions: `get_target` (the dispatchers compare it with string literals).
+  - `core.fmt.Formatter`, a type Aeneas declares as an axiom, where a proof goes through the
+    translation of a panic message.
   - Update the list when a proof lands.
   - `#print axioms` prints an axiom by its shortest name that resolves in the spec summary, so
     the module declaring it must be visible there. A proof file importing it privately is not
@@ -449,15 +460,16 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   wide products stay raw).
 - One axiom per external crate (2026-10-21): `subtle.contract`, `zeroize.contract`,
   `core.contract` and `alloc.contract` state all the per-function predicates; the per-function `@[step]` theorems are
-  projections. Guard lists name only these (plus `get_target`, `core.fmt.Formatter` and the
-  Aeneas `toStr` axioms).
+  projections. Guard lists name only these (plus `get_target` and `core.fmt.Formatter`).
 - `Vec::is_empty` has a contract (`alloc.vec.Vec.is_empty.Contract`: `b = decide (v.length = 0)`, no
   precondition), decided 2026-10-21, like the other std opaques.
 
 ## Open decisions (for the owner) and known gaps
 
-1. **Aeneas-generated axioms in guard lists:** `…_native.decide.ax_*` (from `toStr` on panic
-   messages) and `core.fmt.Formatter` appear in the multiscalar/table guards; acceptable?
+1. **`core.fmt.Formatter` in guard lists:** Aeneas declares this type as an axiom, and it appears
+   in the multiscalar/table guards; acceptable? (The `…_native.decide.ax_*` axioms of Aeneas's
+   `toStr` are gone since Aeneas nightly-2026.10.22, which proves the bound with `decide +kernel`
+   and no longer uses `toStr` in the dispatchers.)
 2. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
 3. **Long lines:** 40 commands in generated proof files disable the long-line linter although
    some names exceed 100 characters only with indentation (the convention allows the option only
@@ -571,20 +583,13 @@ depend on the generated types and are specific to this translation.
 - Until then, leave `Subtle` and `Zeroize` as they are. Afterwards: move the trait structures
   into the libraries, and drop their `Curve25519Dalek.Types` imports.
 
-## `native_decide` from Aeneas's `toStr`
-
-Aeneas's `toStr` discharges its length bound with `decide +native` (marked TODO in
-`Aeneas/Std/String.lean`: the kernel cannot reduce `String.toByteArray` of a literal). Every
-string literal in the generated dispatchers, and in `OnX86_64`, therefore adds
-`…_native.decide.ax_*` axioms to the statements of `scalar.rs`. Ask upstream for a kernel-checked
-bound (or a `Str` literal that carries none).
-
 ## Tooling
 
 - **Prebuilt Aeneas oleans after a version bump.** Lake downloads the Aeneas release's build
   archive only when `.lake/packages/aeneas/backends/lean/.lake/build` does not exist, so after
-  `lake update aeneas` it compiles Aeneas from source. Make `scripts/aeneas-install.sh` delete
-  `.lake/packages/aeneas/backends/lean/.lake` (or run `lake build aeneas:release`).
+  `lake update aeneas` it compiles Aeneas from source. Delete
+  `.lake/packages/aeneas/backends/lean/.lake` before the update and run `lake build aeneas:release`
+  after it (worked on 2026-10-22); `scripts/aeneas-install.sh` could do both.
 - **Large exponents in the kernel.** Lean v4.35 refuses to evaluate `Nat.pow` with an exponent that
   does not fit in 32 bits (`invert_spec` hit this with `0 ^ ((2^250-1)*2^5+11)`). `generalize` does
   not hide such a term from the kernel; `obtain ⟨N, hN⟩ : ∃ N, … = N + 1` or an `irreducible_def`

@@ -107,10 +107,8 @@ Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `LimbsLt`, `CompressedEdwar
 `Represents`, `LimbsLt` (`Defs/Edwards.lean`, `Defs/Window.lean`), `subtle.Choice.IsValid`
 (`Subtle/`), `core.result.Result.map_spec` (`Curve25519Dalek/FunsExternal.lean`).
 
-The axioms `…_native.decide.ax_*` and `core.fmt.Formatter` in the lists of the multiscalar and
-basepoint-table items come from the translation of panics: Aeneas's `toStr` proves the length
-bound of each message literal with `decide +native` (see `notes.md`), and Aeneas declares the
-type `core.fmt.Formatter` as an axiom.
+The axiom `core.fmt.Formatter` in the lists of the multiscalar and basepoint-table items comes
+from the translation of panics: Aeneas declares the type `core.fmt.Formatter` as an axiom.
 
 Not specified: derived `Clone`/`Copy` impls. Not translated: `Debug`, `Hash`, `map_to_curve`,
 `encode_to_curve`, `hash_to_curve`, `random`, the `group` and `serde` impls. -/
@@ -1344,9 +1342,7 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
     mul_base scalar ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
@@ -1400,9 +1396,7 @@ recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
@@ -1515,10 +1509,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul._native.decide.ax_5] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables»
@@ -1551,10 +1542,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul._native.decide.ax_5] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -1709,9 +1697,7 @@ recall optional_mixed_multiscalar_mul_spec
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms optional_mixed_multiscalar_mul_spec
 
@@ -1760,9 +1746,7 @@ recall optional_mixed_multiscalar_mul_spec
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms optional_mixed_multiscalar_mul_spec
 
@@ -1780,9 +1764,7 @@ recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
 
@@ -1800,9 +1782,7 @@ recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
 
@@ -1824,9 +1804,7 @@ recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
         r.toPoint = a1.asNat • A1.toPoint + a2.asNat • A2.toPoint + b.asNat • basepoint ∧
         r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_triple_scalar_mul_basepoint_spec
 
@@ -1848,9 +1826,7 @@ recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
         r.toPoint = a1.asNat • A1.toPoint + a2.asNat • A2.toPoint + b.asNat • basepoint ∧
         r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_triple_scalar_mul_basepoint_spec
 
@@ -1901,9 +1877,7 @@ recall mul_base_spec (self : EdwardsBasepointTable.«x86_64-tables») (s : scala
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -1919,9 +1893,7 @@ recall mul_spec (self : edwards.EdwardsBasepointTable.«x86_64-tables»)
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -1938,9 +1910,7 @@ recall mul_spec
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsBasepointTablex86_64-tablesEdwardsPointx86_64-tables»
@@ -1990,9 +1960,7 @@ recall mul_base_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables») (s 
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2008,9 +1976,7 @@ recall mul_spec (self : edwards.EdwardsBasepointTableRadix32.«x86_64-tables»)
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -2027,9 +1993,7 @@ recall mul_spec
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsBasepointTableRadix32x86_64-tablesEdwardsPointx86_64-tables»
@@ -2079,9 +2043,7 @@ recall mul_base_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables») (s 
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2097,9 +2059,7 @@ recall mul_spec (self : edwards.EdwardsBasepointTableRadix64.«x86_64-tables»)
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -2116,9 +2076,7 @@ recall mul_spec
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsBasepointTableRadix64x86_64-tablesEdwardsPointx86_64-tables»
@@ -2168,9 +2126,7 @@ recall mul_base_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables») (s
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2186,9 +2142,7 @@ recall mul_spec (self : edwards.EdwardsBasepointTableRadix128.«x86_64-tables»)
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -2207,9 +2161,7 @@ recall mul_spec
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsBasepointTableRadix128x86_64-tablesEdwardsPointx86_64-tables»
@@ -2259,9 +2211,7 @@ recall mul_base_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables») (s
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2277,9 +2227,7 @@ recall mul_spec (self : edwards.EdwardsBasepointTableRadix256.«x86_64-tables»)
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -2298,9 +2246,7 @@ recall mul_spec
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-set_option linter.style.longLine false in
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter,
-  _private.Curve25519Dalek.Funs.0.Curve25519Dalek.scalar.read_le_u64_into_loop.body._native.decide.ax_1] -/
+/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsBasepointTableRadix256x86_64-tablesEdwardsPointx86_64-tables»

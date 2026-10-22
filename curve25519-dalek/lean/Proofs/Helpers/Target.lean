@@ -18,8 +18,8 @@ namespace Curve25519Dalek
 
 /-- A four-way dispatch satisfies `P` when `get_target` returns `s₁` or `s₂` and the first two
 branches satisfy `P`. The strings need not be distinct. -/
-theorem dispatch_spec {α : Type} {P : α → Prop} {s₁ s₂ s₃ : Str} {f g h k : Result α}
-    (htgt : get_target ⦃ (t : Str) => t = s₁ ∨ t = s₂ ⦄) (hf : f ⦃ P ⦄) (hg : g ⦃ P ⦄) :
+theorem dispatch_spec {α : Type} {P : α → Prop} {s₁ s₂ s₃ : String} {f g h k : Result α}
+    (htgt : get_target ⦃ (t : String) => t = s₁ ∨ t = s₂ ⦄) (hf : f ⦃ P ⦄) (hg : g ⦃ P ⦄) :
     (do
       let t ← get_target
       if t = s₁ then f else if t = s₂ then g else if t = s₃ then h else k) ⦃ P ⦄ := by

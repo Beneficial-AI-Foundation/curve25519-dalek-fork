@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Aeneas.Std.RangeIter
-public import Aeneas.Std.VecIter
+public import Aeneas.Std.Alloc.Vec.IntoIter
 public import Defs.Iterator
 public section
 
@@ -30,7 +30,8 @@ theorem next_Usize_some_spec (it : core.iter.adapters.rev.Rev (core.ops.range.Ra
   have hb : (1#usize).val ≤ it.iter.end.val := by scalar_tac
   simp only [core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
     core.iter.range.UScalarStep, core.iter.range.UScalarStep.backward_checked, hb, ↓reduceDIte,
-    bind_tc_ok, core.cmp.impls.PartialOrdUsize.lt, hlt, decide_true, ↓reduceIte, WP.spec_ok]
+    bind_ok, uncurry, liftFun2, core.cmp.impls.PartialOrdUsize.lt, hlt, decide_true, ↓reduceIte,
+    WP.spec_ok]
   exact ⟨_, rfl, by simp only [UScalar.ofNatCore_val_eq]; scalar_tac, rfl, rfl⟩
 
 /-- `next` on an empty reversed `Usize` range yields `none`. -/
@@ -45,7 +46,7 @@ theorem next_Usize_none_spec (it : core.iter.adapters.rev.Rev (core.ops.range.Ra
       = .ok (decide (a.val < b.val)) := fun _ _ => rfl
   simp only [core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back, h_lt,
     show ¬ it.iter.start.val < it.iter.end.val from Nat.not_lt.mpr hge, decide_false,
-    Bool.false_eq_true, ↓reduceIte, bind_tc_ok, WP.spec_ok]
+    Bool.false_eq_true, ↓reduceIte, bind_ok, uncurry, WP.spec_ok]
   exact rfl
 
 /-- `next` on a reversed, non-exhausted `Usize` inclusive range with `start ≤ end` yields `end`;
@@ -76,14 +77,16 @@ theorem next_RangeInclusive_Usize_some_spec
     simp only [core.ops.range.RangeInclusive.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
       core.ops.range.RangeInclusive.is_empty, core.iter.range.UScalarStep,
       core.iter.range.UScalarStep.backward_checked, hb, ↓reduceDIte, Bool.false_eq_true,
-      ↓reduceIte, bind_tc_ok, core.cmp.impls.PartialOrdUsize.le, core.cmp.impls.PartialOrdUsize.lt,
+      ↓reduceIte, bind_ok, uncurry, liftFun2, core.cmp.impls.PartialOrdUsize.le,
+      core.cmp.impls.PartialOrdUsize.lt,
       Nat.le_of_lt hlt, hlt, decide_true, Bool.not_true, pure, WP.spec_ok]
     refine ⟨rfl, rfl, fun _ => ⟨by simp only [UScalar.ofNatCore_val_eq]; scalar_tac, rfl⟩,
       fun h => absurd h (Nat.ne_of_lt hlt)⟩
   · have hnlt : ¬ st.val < en.val := by omega
     simp only [core.ops.range.RangeInclusive.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
       core.ops.range.RangeInclusive.is_empty, core.iter.range.UScalarStep, Bool.false_eq_true,
-      ↓reduceIte, bind_tc_ok, core.cmp.impls.PartialOrdUsize.le, core.cmp.impls.PartialOrdUsize.lt,
+      ↓reduceIte, bind_ok, uncurry, liftFun2, core.cmp.impls.PartialOrdUsize.le,
+      core.cmp.impls.PartialOrdUsize.lt,
       hle, hnlt, decide_true, decide_false, Bool.not_true, pure, WP.spec_ok]
     exact ⟨rfl, rfl, fun h => h.elim, fun _ => ⟨rfl, rfl⟩⟩
 
@@ -102,7 +105,7 @@ theorem next_RangeInclusive_Usize_none_spec
   unfold core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
   rw [hinst]
   simp only [core.ops.range.RangeInclusive.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
-    core.ops.range.RangeInclusive.is_empty, hex, ↓reduceIte, bind_tc_ok, WP.spec_ok]
+    core.ops.range.RangeInclusive.is_empty, hex, ↓reduceIte, bind_ok, uncurry, WP.spec_ok]
   exact rfl
 
 end Aeneas.Std.core.iter.adapters.rev.Rev
