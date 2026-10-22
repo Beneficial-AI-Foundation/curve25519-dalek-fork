@@ -449,6 +449,18 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   (`Proofs/Backend/Serial/U64/Field/ConditionalNegate.lean`), `eq_ite_of_choice` (`ToField`),
   `index_rangeFull_spec` (`Array`), `asNat_append_eq` (`AsNat`), `collectApplyBody` with
   `collectApplyLoop_spec`/`collectApplyLoopP_spec` and `optionMap_id_spec` (`Collect`).
+- `backend/serial/u32/field.rs` (2026-10-22): all items, ported from the proofs of András Némedy
+  Varga (BAIF `curve25519-dalek-u32`, branch `nva/scratch`; his `Authors:` lines kept), in
+  `Proofs/Backend/Serial/U32/Field/` (no summary, the module is not public). Value
+  `Defs/FieldElement2625.lean`: `Array.asNat2625 a = ∑ a[i] · 2 ^ (i * 51 ⌈/⌉ 2)`, the formula of
+  the Rust comment (on any ten limbs, since `reduce` takes `[u64; 10]`); forms of the sum in
+  `Proofs/Helpers/FieldElement2625.lean` (`limbWeight`, `limbRadix`, `asNat2625_eq_sum`,
+  `asNat2625_expand`). Bounds, uniform `LimbsLt n` where possible: outputs `LimbsLt 26`; inputs
+  `add` 31, `sub`/`negate`/`neg` 28, `square`/`square2`/`pow2k` 27; `mul`/`mul_assign` take the
+  explicit `< 3 * 2 ^ 26` (sums of three reduced elements, as in Edwards addition; `LimbsLt 28`
+  overflows `19 * y[i]`, the Rust `b < 1.75`). `reduce` also states the parity bound
+  `< 2 ^ (26 - i % 2) + (i % 2) · 2 ^ 18` used by `to_bytes`. Their 4 axioms are covered by our
+  contracts. `zeroize` is in `Zeroize/Instances.lean`.
 - `traits.rs`: generic `is_identity` (`Proofs/Traits/IsIdentity.lean`, `Specs/Traits.lean`).
 - Point constants: `ED25519_BASEPOINT_POINT`, `EIGHT_TORSION`, `BASEPOINT_ORDER`,
   `ED25519_BASEPOINT_COMPRESSED`, `X25519_BASEPOINT` (`Specs/Constants.lean`).
@@ -553,7 +565,7 @@ emit constants as literals (no longer needed).
 
 ## Plan
 
-1. The u32 backend (below).
+1. The u32 backend (below): `field.rs` done; next `scalar.rs` (`Scalar29`), then the rest.
 2. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
@@ -626,6 +638,15 @@ depend on the generated types and are specific to this translation.
   does. If it recurs, name the field exponents of `invert` and `pow_p58` with `irreducible_def`.
 - **Public imports.** `lake shake` misses `open`-only namespaces and `step` specs, so some files
   keep public imports they may not need; trim them by hand when touching a file.
+
+## Performance to-do (noted 2026-10-22)
+
+- Imports: `public import` only where a declaration's statement needs it; everything used only in
+  proofs is a plain `import` (fewer rebuilds, smaller public environments). Audit every file.
+- Other things to check: heavy `simp`/`step*` calls in the u32 field proofs (`SquareInner`,
+  `Mul`); the two `maxHeartbeats 1000000` overrides in `U32/Field/ToBytes.lean`
+  (`calcCanonical_spec`, `toArray_spec`: split them with `#decompose`); the fragile `step* N` /
+  `‹_›` style of the ported `ToBytes`/`FromBytes`; per-file build times.
 
 ## Performance findings (2026-10-10)
 

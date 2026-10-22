@@ -2,6 +2,7 @@ module
 public import Defs.Array
 public import Defs.CurveModels
 public import Defs.Edwards
+public import Defs.FieldElement2625
 public import Defs.FieldElement51
 public import Defs.Iterator
 public import Defs.Montgomery
