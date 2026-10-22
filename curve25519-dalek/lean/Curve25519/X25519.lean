@@ -178,4 +178,13 @@ theorem x25519_eq_u_nsmul_twist (k : ℕ) (Q : montgomeryTwist.Point) :
   have : (montgomery.twist 2).IsNonsingular := instIsNonsingularMontgomeryTwist
   exact congrArg encodeU (MontgomeryModel.xMul_eq_u_nsmul_twist not_isSquare_two (clamp k) Q)
 
+/-- A coordinate whose `u ↦ u(8 • Q)` image is `0` (a point of order dividing `8` on the curve
+or the twist, or `u = 0`) is sent to `0` by `x25519` for every scalar, since clamped scalars
+are multiples of `8`. -/
+theorem x25519_eq_zero_of_xMul_eight {u : ℕ} (h : montgomery.xMul 2 8 (decodeU u) = 0) (k : ℕ) :
+    x25519 k u = 0 := by
+  obtain ⟨m, hm⟩ := Nat.dvd_of_mod_eq_zero (clamp_mod_eight k)
+  rw [x25519_eq_xMul, hm, Nat.mul_comm, MontgomeryModel.xMul_mul not_isSquare_two, h,
+    MontgomeryModel.xMul_zero_right, encodeU, ZMod.val_zero]
+
 end curve25519

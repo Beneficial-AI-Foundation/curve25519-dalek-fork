@@ -108,6 +108,7 @@ public import Proofs.Constants.BasepointOrder
 public import Proofs.Constants.Ed25519BasepointCompressed
 public import Proofs.Constants.RistrettoBasepoint
 public import Proofs.Constants.X25519Basepoint
+public import Proofs.Constants.X25519LowOrderPoints
 public import Proofs.Edwards.Add
 public import Proofs.Edwards.AddAssign
 public import Proofs.Edwards.Affine.Compress

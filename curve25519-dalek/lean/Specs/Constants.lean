@@ -20,6 +20,7 @@ import Proofs.Backend.Serial.U64.Constants.EightTorsion
 import Proofs.Constants.Ed25519BasepointCompressed
 import Proofs.Constants.RistrettoBasepoint
 import Proofs.Constants.X25519Basepoint
+import Proofs.Constants.X25519LowOrderPoints
 public section
 
 /-! # Specs of `src/constants.rs`
@@ -31,15 +32,16 @@ in the order of `constants.rs`, starting with the constants it re-exports from t
 
 The tables `ED25519_BASEPOINT_TABLE` and `RISTRETTO_BASEPOINT_TABLE` exist only with
 precomputed tables (`x86_64-tables`). Not restated here: `BASEPOINT_ORDER` (`pub(crate)`, proved
-in `Proofs/Constants/BasepointOrder.lean`). Not translated: `X25519_LOW_ORDER_POINTS`.
+in `Proofs/Constants/BasepointOrder.lean`).
 
 Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `LimbsLt`, `CompressedEdwardsY.asNat`
 (`Defs/Edwards.lean`), `MontgomeryPoint.asNat` (`Defs/Montgomery.lean`), `curve25519.basepoint`
 (`Curve25519/Edwards/Basepoint.lean`), `curve25519.encode` (`Curve25519/Edwards/Encoding.lean`),
 `curve25519.eightTorsion` (`Curve25519/Edwards/Torsion.lean`), `curve25519.montgomeryBasepoint`
-(`Curve25519/Montgomery.lean`), `curve25519.encodeU` (`Curve25519/X25519.lean`), the tables'
-`Represents` (`Defs/Edwards.lean`), `CompressedRistretto.asNat` (`Defs/Ristretto.lean`),
-`Ristretto.encodeRep` (`Curve25519/Ristretto/`). -/
+(`Curve25519/Montgomery.lean`), `curve25519.encodeU`, `curve25519.x25519`
+(`Curve25519/X25519.lean`), the tables' `Represents` (`Defs/Edwards.lean`),
+`CompressedRistretto.asNat` (`Defs/Ristretto.lean`), `Ristretto.encodeRep`
+(`Curve25519/Ristretto/`). -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519 TwistedEdwardsModel
 
@@ -186,5 +188,14 @@ recall RISTRETTO_BASEPOINT_TABLE_spec :
 #guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_TABLE_spec
 
 end «x86_64-tables»
+
+/-- `X25519_LOW_ORDER_POINTS`: X25519 sends each of the seven points to `0`, whatever the
+scalar ("The output of any scalar multiplied by these points is zero"; true for clamped
+scalars, which is what X25519 uses). -/
+recall X25519_LOW_ORDER_POINTS_spec :
+    ∀ P ∈ X25519_LOW_ORDER_POINTS.val, ∀ k : ℕ, x25519 k P.asNat = 0
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms X25519_LOW_ORDER_POINTS_spec
 
 end Curve25519Dalek.constants

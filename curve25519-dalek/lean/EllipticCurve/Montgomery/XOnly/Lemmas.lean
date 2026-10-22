@@ -250,6 +250,16 @@ theorem xMul_one [Finite F] {c : F} (hc : ¬ IsSquare c) (u : F) : M.xMul c 1 u 
   · rw [xMul_eq_u_nsmul, one_nsmul]
   · rw [xMul_eq_u_nsmul_twist hc, one_nsmul]
 
+/-- `xMul` by `m * n` is `xMul` by `n` followed by `xMul` by `m`, over a finite field and for a
+non-square `c`. -/
+theorem xMul_mul [Finite F] {c : F} (hc : ¬ IsSquare c) (m n : ℕ) (u : F) :
+    M.xMul c (m * n) u = M.xMul c m (M.xMul c n u) := by
+  have := M.isNonsingular_twist (ne_zero_of_not_isSquare hc)
+  rcases exists_point_u_or_twist (M := M) hc u with ⟨Q, rfl⟩ | ⟨Q, rfl⟩
+  · rw [xMul_eq_u_nsmul, xMul_eq_u_nsmul, xMul_eq_u_nsmul, mul_nsmul']
+  · rw [xMul_eq_u_nsmul_twist hc, xMul_eq_u_nsmul_twist hc, xMul_eq_u_nsmul_twist hc,
+      mul_nsmul']
+
 end XMul
 
 private theorem four_ne_zero' (M : MontgomeryModel F) [M.IsNonsingular] : (4 : F) ≠ 0 := by

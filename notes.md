@@ -452,6 +452,11 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 - `traits.rs`: generic `is_identity` (`Proofs/Traits/IsIdentity.lean`, `Specs/Traits.lean`).
 - Point constants: `ED25519_BASEPOINT_POINT`, `EIGHT_TORSION`, `BASEPOINT_ORDER`,
   `ED25519_BASEPOINT_COMPRESSED`, `X25519_BASEPOINT` (`Specs/Constants.lean`).
+- `X25519_LOW_ORDER_POINTS` (2026-10-22): `x25519 k P.asNat = 0` for each of the seven points and
+  every `k` (`Proofs/Constants/X25519LowOrderPoints.lean`): a kernel check that the 4-bit ladder on
+  `8` ends at infinity, `xMul_mul` (`EllipticCurve/Montgomery/XOnly/Lemmas.lean`) and
+  `x25519_eq_zero_of_xMul_eight` (`Curve25519/X25519.lean`, clamped scalars are multiples of `8`).
+  With it every public item of the crate outside `lizard` and the u32 backend is specified.
 - Precomputed tables (2026-10-21): `ED25519_BASEPOINT_TABLE`, `AFFINE_ODD_MULTIPLES_OF_BASEPOINT`
   and `AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128` are certified unconditionally
   (`Proofs/Backend/Serial/U64/Constants/{Ed25519BasepointTable, AffineOddMultiplesOfBasepoint,
@@ -502,11 +507,12 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
    `double_and_compress_batch`) assume `length ≤ Usize.max` for the lists the iterators yield.
    The patched code collects each iterator into a `Vec` by `push`, and Aeneas's `Vec.push` fails
    (panics) once the length would exceed `Usize.max`, so without the hypothesis the statements are
-   false for (unrealisable) longer inputs. Keep (recommended), or restate as "succeeds iff".
+   false for (unrealisable) longer inputs. Decided 2026-10-22: keep the hypothesis.
 3. **New std contract `core.borrow.Borrow.Blanket.borrow`** (2026-10-22, in `core.contract`):
    `<T as Borrow<T>>::borrow` returns its argument. Needed by the Ristretto `multiscalar_mul` and
-   `VartimeRistrettoPrecomputation::new`, which pass this instance to the Edwards functions; to be
-   approved.
+   `VartimeRistrettoPrecomputation::new`, which pass this instance to the Edwards functions;
+   approved 2026-10-22 (field `borrow_blanket` of `core.Contract`, following the
+   one-axiom-per-crate convention).
 4. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
    variants into two files); window tables' `Default`/`Clone`/`Zeroize` not specified (low
    value); naming ambiguity `encode`/`decode`/`basepoint` between `curve25519` and
@@ -544,12 +550,11 @@ emit constants as literals (no longer needed).
 
 ## Plan
 
-1. Remaining files (`lizard` left out for now).
-2. The u32 backend (below).
-3. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
+1. The u32 backend (below).
+2. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
-4. Add std lib models to Aeneas.
+3. Add std lib models to Aeneas.
 
 ### u32 backend
 
