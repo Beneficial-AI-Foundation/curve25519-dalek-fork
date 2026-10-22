@@ -1,0 +1,157 @@
+/-
+Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+-/
+module
+public import Curve25519Dalek.Funs
+public import Defs.Edwards
+import Proofs.Edwards.Sub
+public section
+
+/-! # `Sub` for `RistrettoPoint` -/
+
+open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
+
+namespace Curve25519Dalek
+
+namespace «Shared0RistrettoPointx86_64-tables».Insts
+namespace «CoreOpsArithSubSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
+
+open edwards.EdwardsPoint.«x86_64-tables».Insts in
+/-- `Sub<&RistrettoPoint> for &RistrettoPoint` on the represented points. -/
+@[step]
+theorem sub_spec (self other : ristretto.RistrettoPoint.«x86_64-tables»)
+    (hself : self.LimbsLt 52) (hother : other.LimbsLt 52) (hself_on : self.OnCurve)
+    (hother_on : other.OnCurve) :
+    sub self other ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 52 ⦄ := by
+  unfold sub
+  step with «CoreOpsArithSubEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».sub_spec_point
+    self other hself hother hself_on hother_on as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end «CoreOpsArithSubSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
+end «Shared0RistrettoPointx86_64-tables».Insts
+
+namespace ristretto.RistrettoPoint.«x86_64-tables».Insts
+namespace «CoreOpsArithSubSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
+
+/-- `Sub<&RistrettoPoint> for RistrettoPoint` on the represented points. -/
+@[step]
+theorem sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
+    (hself : self.LimbsLt 52) (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve)
+    (hrhs_on : rhs.OnCurve) :
+    sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
+  unfold sub
+  step as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end «CoreOpsArithSubSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
+end ristretto.RistrettoPoint.«x86_64-tables».Insts
+
+namespace «SharedARistrettoPointx86_64-tables».Insts
+namespace «CoreOpsArithSubRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
+
+/-- `Sub<RistrettoPoint> for &RistrettoPoint` on the represented points. -/
+@[step]
+theorem sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
+    (hself : self.LimbsLt 52) (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve)
+    (hrhs_on : rhs.OnCurve) :
+    sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
+  unfold sub
+  step as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end «CoreOpsArithSubRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
+end «SharedARistrettoPointx86_64-tables».Insts
+
+namespace ristretto.RistrettoPoint.«x86_64-tables».Insts
+namespace «CoreOpsArithSubRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
+
+/-- `Sub<RistrettoPoint> for RistrettoPoint` on the represented points. -/
+@[step]
+theorem sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
+    (hself : self.LimbsLt 52) (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve)
+    (hrhs_on : rhs.OnCurve) :
+    sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
+  unfold sub
+  step as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end «CoreOpsArithSubRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
+end ristretto.RistrettoPoint.«x86_64-tables».Insts
+
+namespace «Shared0RistrettoPointx86_64-no-tables».Insts
+namespace «CoreOpsArithSubSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
+
+open edwards.EdwardsPoint.«x86_64-no-tables».Insts in
+/-- `Sub<&RistrettoPoint> for &RistrettoPoint` on the represented points. -/
+@[step]
+theorem sub_spec (self other : ristretto.RistrettoPoint.«x86_64-no-tables»)
+    (hself : self.LimbsLt 52) (hother : other.LimbsLt 52) (hself_on : self.OnCurve)
+    (hother_on : other.OnCurve) :
+    sub self other ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 52 ⦄ := by
+  unfold sub
+  step with «CoreOpsArithSubEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».sub_spec_point
+    self other hself hother hself_on hother_on as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end «CoreOpsArithSubSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
+end «Shared0RistrettoPointx86_64-no-tables».Insts
+
+namespace ristretto.RistrettoPoint.«x86_64-no-tables».Insts
+namespace «CoreOpsArithSubSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
+
+/-- `Sub<&RistrettoPoint> for RistrettoPoint` on the represented points. -/
+@[step]
+theorem sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»)
+    (hself : self.LimbsLt 52) (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve)
+    (hrhs_on : rhs.OnCurve) :
+    sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
+  unfold sub
+  step as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end «CoreOpsArithSubSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
+end ristretto.RistrettoPoint.«x86_64-no-tables».Insts
+
+namespace «SharedARistrettoPointx86_64-no-tables».Insts
+namespace «CoreOpsArithSubRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
+
+/-- `Sub<RistrettoPoint> for &RistrettoPoint` on the represented points. -/
+@[step]
+theorem sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»)
+    (hself : self.LimbsLt 52) (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve)
+    (hrhs_on : rhs.OnCurve) :
+    sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
+  unfold sub
+  step as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end «CoreOpsArithSubRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
+end «SharedARistrettoPointx86_64-no-tables».Insts
+
+namespace ristretto.RistrettoPoint.«x86_64-no-tables».Insts
+namespace «CoreOpsArithSubRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
+
+/-- `Sub<RistrettoPoint> for RistrettoPoint` on the represented points. -/
+@[step]
+theorem sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»)
+    (hself : self.LimbsLt 52) (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve)
+    (hrhs_on : rhs.OnCurve) :
+    sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄ := by
+  unfold sub
+  step as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end «CoreOpsArithSubRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
+end ristretto.RistrettoPoint.«x86_64-no-tables».Insts
+
+end Curve25519Dalek

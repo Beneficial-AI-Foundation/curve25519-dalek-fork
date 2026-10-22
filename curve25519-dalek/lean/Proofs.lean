@@ -54,6 +54,7 @@ public import Proofs.Backend.Serial.U64.Constants.SqrtM1
 public import Proofs.Backend.Serial.U64.Field.Add
 public import Proofs.Backend.Serial.U64.Field.AddAssign
 public import Proofs.Backend.Serial.U64.Field.ConditionalAssign
+public import Proofs.Backend.Serial.U64.Field.ConditionalNegate
 public import Proofs.Backend.Serial.U64.Field.ConditionalSelect
 public import Proofs.Backend.Serial.U64.Field.ConditionalSwap
 public import Proofs.Backend.Serial.U64.Field.FromBytes

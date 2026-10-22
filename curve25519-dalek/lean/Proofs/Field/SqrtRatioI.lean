@@ -11,6 +11,7 @@ import Mathlib.FieldTheory.Finite.Basic
 import Mathlib.Tactic.ReduceModChar
 import Proofs.Backend.Serial.U64.Constants.SqrtM1
 import Proofs.Backend.Serial.U64.Field.ConditionalAssign
+import Proofs.Backend.Serial.U64.Field.ConditionalNegate
 import Proofs.Backend.Serial.U64.Field.Mul
 import Proofs.Backend.Serial.U64.Field.Neg
 import Proofs.Backend.Serial.U64.Field.Square
@@ -155,20 +156,6 @@ private theorem choice_or {a b : subtle.Choice} {P Q : Prop} (ha1 : P → a = 1#
     (ha0 : ¬P → a = 0#u8) (hb1 : Q → b = 1#u8) (hb0 : ¬Q → b = 0#u8) :
     (P ∨ Q → (a ||| b) = 1#u8) ∧ (¬(P ∨ Q) → (a ||| b) = 0#u8) := by
   by_cases hP : P <;> by_cases hQ : Q <;> simp_all [show (1#u8 ||| 1#u8) = 1#u8 by decide]
-
-/-- `conditional_negate` on field elements. -/
-@[local step]
-private theorem conditional_negate_spec (x : FieldElement51) (c : subtle.Choice)
-    (hc : c.IsValid) (hx : x.LimbsLt 54) :
-    subtle.ConditionallyNegatable.Blanket.conditional_negate
-      backend.serial.u64.field.FieldElement51.Insts.SubtleConditionallySelectable
-      Shared0FieldElement51.Insts.CoreOpsArithNegFieldElement51 x c ⦃ (r : FieldElement51) =>
-      (c = 0#u8 → r = x) ∧
-      (c = 1#u8 → (r.asNat + x.asNat) % p = 0 ∧ r.LimbsLt 52) ⦄ := by
-  unfold subtle.ConditionallyNegatable.Blanket.conditional_negate
-  step as ⟨n, hn, hnb⟩
-  step as ⟨r, hr0, hr1⟩
-  exact ⟨hr0, fun hc => by rw [hr1 hc]; exact ⟨hn, hnb⟩⟩
 
 @[step]
 theorem sqrt_ratio_i_spec (u v : FieldElement51) (hu : u.LimbsLt 54)

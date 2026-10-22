@@ -8,6 +8,7 @@ public import Defs.Edwards
 import Proofs.Backend.Serial.U64.Constants.EdwardsD
 import Proofs.Backend.Serial.U64.Field.Add
 import Proofs.Backend.Serial.U64.Field.ConditionalAssign
+import Proofs.Backend.Serial.U64.Field.ConditionalNegate
 import Proofs.Backend.Serial.U64.Field.FromBytes
 import Proofs.Backend.Serial.U64.Field.Mul
 import Proofs.Backend.Serial.U64.Field.Neg
@@ -30,20 +31,6 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace Curve25519Dalek.edwards
 
 namespace decompress
-
-/-- `conditional_negate` on field elements. -/
-@[local step]
-private theorem conditional_negate_spec (x : FieldElement51) (c : subtle.Choice)
-    (hc : c.IsValid) (hx : x.LimbsLt 54) :
-    subtle.ConditionallyNegatable.Blanket.conditional_negate
-      backend.serial.u64.field.FieldElement51.Insts.SubtleConditionallySelectable
-      Shared0FieldElement51.Insts.CoreOpsArithNegFieldElement51 x c ⦃ (r : FieldElement51) =>
-      (c = 0#u8 → r = x) ∧
-      (c = 1#u8 → (r.asNat + x.asNat) % p = 0 ∧ r.LimbsLt 52) ⦄ := by
-  unfold subtle.ConditionallyNegatable.Blanket.conditional_negate
-  step as ⟨n, hn, hnb⟩
-  step as ⟨r, hr0, hr1⟩
-  exact ⟨hr0, fun hc => by rw [hr1 hc]; exact ⟨hn, hnb⟩⟩
 
 /-- `d y² + 1 ≠ 0`: `-1/d` is not a square. -/
 private theorem d_mul_sq_add_one_ne_zero (y : ZMod p) : curve25519.d * y ^ 2 + 1 ≠ 0 := by
@@ -122,7 +109,7 @@ private theorem step_2_spec (repr : CompressedEdwardsY) (X Y Z : FieldElement51)
     · exact Or.inl (UScalar.eq_of_val_eq h)
     · exact Or.inr (UScalar.eq_of_val_eq h)
   step as ⟨csb, hcsbv, hcsb⟩
-  step with decompress.conditional_negate_spec as ⟨X1, hX10, hX11⟩
+  step as ⟨X1, hX10, hX11⟩
   step as ⟨T, hT, hT_lt⟩
   rw [hcsb] at hX10 hX11
   refine ⟨fun h0 => ?_, fun h1 => ?_, ?_⟩
@@ -269,7 +256,7 @@ private theorem step_2_spec (repr : CompressedEdwardsY) (X Y Z : FieldElement51)
     · exact Or.inl (UScalar.eq_of_val_eq h)
     · exact Or.inr (UScalar.eq_of_val_eq h)
   step as ⟨csb, hcsbv, hcsb⟩
-  step with decompress.conditional_negate_spec as ⟨X1, hX10, hX11⟩
+  step as ⟨X1, hX10, hX11⟩
   step as ⟨T, hT, hT_lt⟩
   rw [hcsb] at hX10 hX11
   refine ⟨fun h0 => ?_, fun h1 => ?_, ?_⟩
