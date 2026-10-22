@@ -219,6 +219,15 @@ theorem eq_zero_iff_not_isNeg_toField {c : subtle.Choice} {a : FieldElement51} (
   rw [← eq_one_iff_isNeg_toField h]
   rcases hc with rfl | rfl <;> simp
 
+/-- A choice that is `1` exactly when `P` holds selects between two values (the shape of
+`conditional_assign`/`conditional_negate` results). -/
+theorem eq_ite_of_choice {c : subtle.Choice} {P : Prop} [Decidable P] {α : Type} {r a b : α}
+    (hc : c.IsValid) (hP : c = 1#u8 ↔ P) (h0 : c = 0#u8 → r = a) (h1 : c = 1#u8 → r = b) :
+    r = if P then b else a := by
+  rcases hc with rfl | rfl
+  · rw [ite_eq_right (fun h => absurd (hP.mpr h) (by decide)), h0 rfl]
+  · rw [ite_eq_left (hP.mp rfl), h1 rfl]
+
 /-- The shape of `is_zero_spec`. -/
 theorem eq_one_iff_toField_eq_zero {c : subtle.Choice} {a : FieldElement51}
     (h1 : a.asNat % p = 0 → c = 1#u8) (h0 : a.asNat % p ≠ 0 → c = 0#u8) :

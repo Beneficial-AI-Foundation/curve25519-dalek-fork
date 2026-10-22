@@ -61,7 +61,7 @@ Read `AGENTS.md` first (PRs to the curve25519-dalek repo must be written by huma
 | `EllipticCurve` | top level (`Curve`, `MontgomeryModel`, …) | Elliptic-curve models over a field, independent of any curve; Mathlib-bound | yes, except `EllipticCurve/Proofs/**` and `Curve/Impl.lean` |
 | `Curve25519` | `curve25519` | Curve25519 in general (`p`, `L`, `a`, `d`, `A`, its models and facts), independent of dalek | yes |
 | `Curve25519Dalek` | `Curve25519Dalek` | Generated translation + hand-written External files | External files |
-| `Subtle`, `Zeroize` | as generated | Models of external crates | `Subtle/Types.lean`, `Basic.lean` |
+| `Subtle`, `Zeroize` | as generated | Models of external crates; at the repository root (`Subtle.lean` + `Subtle/`, `Zeroize.lean` + `Zeroize/`) | `Subtle/Types.lean`, `Basic.lean` |
 | `Defs` | `Curve25519Dalek` (extensions of Aeneas types: their namespace) | Definitions needed to state the specs | yes |
 | `Specs` | `Curve25519Dalek` | Spec summaries, one per Rust file | yes |
 | `Proofs` | `Curve25519Dalek` | Proofs, one file per Rust item, and `Proofs/Helpers` | no |
@@ -253,10 +253,14 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   multiplication) have point-level main specs, and the spec summaries use the point-level forms.
   Hypotheses `hself`, `hother`, `hon`/`hself_on`, `hscalar`; scalars unreduced (`s.asNat • P`,
   precondition `s.asNat < 2^255`).
-- **Line length (all hand-written files):** the 100-character linter is never switched off for a
-  whole file. A long `namespace X.Y` is split into two consecutive `namespace` commands (closed by
-  two `end`s); long strings use string gaps (`\` at the end of the line). Only a single token over
-  100 characters justifies `set_option linter.style.longLine false in` on that one command.
+- **Line length (all hand-written files):** no line over 100 characters; only the files Aeneas
+  generates may have long lines. A long `namespace X.Y` is split into two consecutive `namespace`
+  commands (closed by two `end`s); long strings use string gaps (`\` at the end of the line); a
+  long qualified name is shortened with `open P in` before the declaration (two chained
+  `open … in` when one is too long, `open P renaming f → g in` when the short name would be
+  shadowed). Only a single name component too long for any line (with `namespace`, `open` or
+  `end` in front) justifies switching the linter off, for that one line
+  (`set_option linter.style.longLine false` / `… true` around it); 9 such lines remain (2026-10-22).
 - **Limb bounds:** `FieldElement51.LimbsLt n a` and `Scalar52.LimbsLt n a` ("every limb
   `< 2^n`", an `abbrev` so that `step`, `scalar_tac` and `agrind` see the `∀ i < 5` form; write
   `FieldElement51.LimbsLt k a` (or `Scalar52.…`) when `a` is typed `Array U64 5#usize`, and
@@ -431,6 +435,20 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   (`EllipticCurve/Montgomery/XOnly/`); `to_edwards` is stated per variant with `decodeLenient`.
   The private `ProjectivePoint` and `differential_add_and_double` specs are in the proof files.
   Statements approved by the owner (2026-10-21).
+- `ristretto.rs`, `ristretto/elligator.rs` (2026-10-22): complete, both x86_64 variants
+  (`Proofs/Ristretto/`, summary `Specs/Ristretto.lean`, 101 statements; the Ristretto constants
+  and `ED25519_BASEPOINT_TABLE` added to `Specs/Constants.lean`). Group operations are exact on
+  representatives (as for `EdwardsPoint`); `ct_eq`/`eq` decide `edwards.Rel`; `compress` is
+  `Ristretto.encodeRep` for any representative (`Proofs/Helpers/RistrettoCompress.lean`:
+  `compressProj_eq_encodeRep`, the RFC formula on `(X : Y : Z : T)` changes by a sign under
+  scaling); `decompress` is `decodeRep`; `double_and_compress_batch` encodes `2 P`
+  (`doubleCompress_eq_encodeRep`: on the curve `h² - g² = (a - d) e²`, so the inverse square root
+  is rational); `elligator_ristretto_flavor`/`map_to_curve` are `mapRep` exactly
+  (`SQRT_AD_MINUS_ONE` is the RFC root, `SQRT_AD_MINUS_ONE_spec_eq`); `from_uniform_bytes` is
+  `fromUniformRep`. New helpers: `conditional_negate_spec`
+  (`Proofs/Backend/Serial/U64/Field/ConditionalNegate.lean`), `eq_ite_of_choice` (`ToField`),
+  `index_rangeFull_spec` (`Array`), `asNat_append_eq` (`AsNat`), `collectApplyBody` with
+  `collectApplyLoop_spec`/`collectApplyLoopP_spec` and `optionMap_id_spec` (`Collect`).
 - `traits.rs`: generic `is_identity` (`Proofs/Traits/IsIdentity.lean`, `Specs/Traits.lean`).
 - Point constants: `ED25519_BASEPOINT_POINT`, `EIGHT_TORSION`, `BASEPOINT_ORDER`,
   `ED25519_BASEPOINT_COMPRESSED`, `X25519_BASEPOINT` (`Specs/Constants.lean`).
@@ -464,22 +482,32 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 - `Vec::is_empty` has a contract (`alloc.vec.Vec.is_empty.Contract`: `b = decide (v.length = 0)`, no
   precondition), decided 2026-10-21, like the other std opaques.
 
+- `lizard` (2026-10-22): not translated for now (behind the `lizard` Cargo feature, which pulls in
+  `digest`); may be added later.
+- `Subtle` and `Zeroize` (2026-10-22): separate `lean_lib`s in folders at the repository root.
+- Long lines (2026-10-22): none in hand-written files (see "Line length").
+
 ## Open decisions (for the owner) and known gaps
 
-1. **`core.fmt.Formatter` in guard lists:** Aeneas declares this type as an axiom, and it appears
-   in the multiscalar/table guards; acceptable? (The `…_native.decide.ax_*` axioms of Aeneas's
+1. **`core.fmt.Formatter` in guard lists:** Aeneas declares this type as an axiom
+   (`Aeneas/Std/Core/Fmt.lean`). The one place it enters is the formatted panic message of
+   `scalar::read_le_u64_into` (`assert!(…, "src.len() = {}, dst.len() = {}", …)`, translated with
+   `Argument.new_display` on `usize`'s `Display`, whose `fmt` mentions `Formatter`); it reaches
+   every spec whose proof goes through `as_radix_2w` (basepoint tables, `mul_base`,
+   `mul_base_clamped`, Pippenger) or `non_adjacent_form`. It only asserts that some type exists;
+   acceptable? (The `…_native.decide.ax_*` axioms of Aeneas's
    `toStr` are gone since Aeneas nightly-2026.10.22, which proves the bound with `decide +kernel`
    and no longer uses `toStr` in the dispatchers.)
-2. **Iterator lengths:** lists from iterators need `length ≤ Usize.max` hypotheses; acceptable?
-3. **Long lines:** 40 commands in generated proof files disable the long-line linter although
-   some names exceed 100 characters only with indentation (the convention allows the option only
-   for single tokens over 100). Shorten via `open`/local abbreviations, or accept.
-4. **Translating `lizard`:** `src/lizard/` sits behind the `lizard` Cargo feature (which pulls in
-   `digest`); `scripts/aeneas-translate.sh` translates with `--no-default-features --features
-   alloc,zeroize`, so it is not translated. Include it (and verify it), or leave it out.
-5. **Location of `Subtle` and `Zeroize`**, now that the hand-written Lean is split into `Defs/`,
-   `Specs/` and `Proofs/` (see also "Project-defined traits" below).
-6. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
+2. **Iterator lengths:** the multiscalar and precomputation statements (and
+   `double_and_compress_batch`) assume `length ≤ Usize.max` for the lists the iterators yield.
+   The patched code collects each iterator into a `Vec` by `push`, and Aeneas's `Vec.push` fails
+   (panics) once the length would exceed `Usize.max`, so without the hypothesis the statements are
+   false for (unrealisable) longer inputs. Keep (recommended), or restate as "succeeds iff".
+3. **New std contract `core.borrow.Borrow.Blanket.borrow`** (2026-10-22, in `core.contract`):
+   `<T as Borrow<T>>::borrow` returns its argument. Needed by the Ristretto `multiscalar_mul` and
+   `VartimeRistrettoPrecomputation::new`, which pass this instance to the Edwards functions; to be
+   approved.
+4. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
    variants into two files); window tables' `Default`/`Clone`/`Zeroize` not specified (low
    value); naming ambiguity `encode`/`decode`/`basepoint` between `curve25519` and
    `curve25519.Ristretto` under a double `open`; `twistL` and `ZMod.abs` names unconfirmed.
@@ -516,18 +544,12 @@ emit constants as literals (no longer needed).
 
 ## Plan
 
-1. `ristretto.rs` (+ `elligator.rs`): library support in `Curve25519/Ristretto/*` (`Rel`,
-   `rel_iff_formula` = meaning of `ct_eq`, `even_iff_isSquare`, `decodeRep`/`encodeRep`,
-   `sqrtRatioM1` with the uniqueness lemmas to match `sqrt_ratio_i_spec` via
-   `Proofs/Helpers/ToField.lean`'s `sqrtRatioM1_eq_of_spec`, `mapRep`, `fromUniformRep`). First
-   move the private `conditional_negate_spec`, duplicated in `Proofs/Field/SqrtRatioI.lean` and
-   `Proofs/Edwards/Decompress.lean`, to `Proofs/Helpers`.
-2. Remaining files (`constants.rs` Ristretto constants, …; `lizard`: open decision 4).
-3. The u32 backend (below).
-4. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
+1. Remaining files (`lizard` left out for now).
+2. The u32 backend (below).
+3. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
-5. Add std lib models to Aeneas.
+4. Add std lib models to Aeneas.
 
 ### u32 backend
 

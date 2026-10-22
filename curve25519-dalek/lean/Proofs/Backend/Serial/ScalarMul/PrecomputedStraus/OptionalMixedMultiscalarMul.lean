@@ -113,7 +113,7 @@ private theorem nafs_spec {It Clause0_Item : Type}
   rintro r ⟨zs, hr, hzs⟩
   simpa [hr] using hzs
 
-set_option linter.style.longLine false in
+open window.«NafLookupTable5ProjectiveNielsPointx86_64-tables».Insts in
 /-- The loop of `lookup_tables`: pushes the tables of the remaining points; `none` iff one of
 them is `none`. -/
 private theorem lookup_tables_loop_spec {It : Type}
@@ -146,8 +146,7 @@ private theorem lookup_tables_loop_spec {It : Type}
     rcases x with _ | P
     · simp
     · obtain ⟨hPb, hPon⟩ := hps P List.mem_cons_self
-      step with
-          window.«NafLookupTable5ProjectiveNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
+      step with «CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
         P hPb hPon as ⟨z, hz, hzb⟩
       step with alloc.vec.Vec.push_spec out z
         (by
@@ -190,6 +189,10 @@ end «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwar
 
 namespace VartimePrecomputedStraus.«x86_64-tables».Insts
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
+
+set_option linter.style.longLine false
+open «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables»
+set_option linter.style.longLine true
 
 open scoped Helpers.IndexStep in
 /-- The loop0_loop0 loop over the points `i ∈ [k, n)`: adds `d_i[j] • P_i`. -/
@@ -282,7 +285,8 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop0_spec (iter : core.ops
       exact ⟨hR'on, hR'b, this ▸ hR'p⟩
   · exact ⟨rfl, le_refl _, hk, hR, hRb, by rw [Finset.Ico_self, Finset.sum_empty, add_zero]⟩
 
-set_option linter.style.longLine false in
+open «CoreOpsArithAddSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables» in
+open «CoreOpsArithSubSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables» in
 open scoped Helpers.IndexStep in
 /-- The loop0_loop1 loop over the points `i ∈ [k, n)`: adds `d_i[j] • P_i`. -/
 @[local step]
@@ -340,8 +344,7 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop1_spec (iter : core.ops
         step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
         step with window.NafLookupTable8.select_spec (P := P it.start.val) _ tab i2
           (htab ▸ hb) (htab ▸ hrep) ⟨by omega, by omega⟩ as ⟨q, hqon, hq, hqb⟩
-        step with
-            «CoreOpsArithSubSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables».sub_spec_point
+        step with sub_spec_point
             ep q hepb hqb hepon hqon as ⟨R1, h1on, h1p, h1b⟩
         refine hstep R1 h1on h1b ?_
         rw [h1p, hep, show AffineNielsPoint.«x86_64-tables».toPoint q = PointRepr.toPoint q from
@@ -361,8 +364,7 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop1_spec (iter : core.ops
         step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
         step with window.NafLookupTable8.select_spec (P := P it.start.val) _ tab i1
           (htab ▸ hb) (htab ▸ hrep) ⟨by omega, by omega⟩ as ⟨q, hqon, hq, hqb⟩
-        step with
-            «CoreOpsArithAddSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables».add_spec_point
+        step with add_spec_point
             ep q hepb hqb hepon hqon as ⟨R1, h1on, h1p, h1b⟩
         refine hstep R1 h1on h1b ?_
         rw [h1p, hep, show AffineNielsPoint.«x86_64-tables».toPoint q = PointRepr.toPoint q from
@@ -439,7 +441,6 @@ private theorem optional_mixed_multiscalar_mul_loop0_spec
       exact ⟨hqon, hqb, hqp⟩
   · exact ⟨hstart, hend, hS, hSb, hSp⟩
 
-set_option linter.style.longLine false in
 /-- `VartimePrecomputedStraus::optional_mixed_multiscalar_mul`: for a precomputation of the
 static points `ps`, `none` iff some dynamic point is `none`; otherwise
 `∑ s_i • ps_i + ∑ d_i • Q_i` over the static scalars (at most `|ps|`, the missing ones count as
@@ -489,16 +490,13 @@ theorem optional_mixed_multiscalar_mul_spec
       ⦃ (it : Clause4_IntoIter) => dynamicPointsInst.iteratorInst.Yields it qops ⦄ :=
     hdynamic_points
   step with h1 as ⟨it, hit⟩
-  step with
-      «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.nafs_spec
+  step with optional_mixed_multiscalar_mul.nafs_spec
     _ _ it xs hit ss hborrow_static hss hxs 8#usize (by decide) as ⟨sn, hsn⟩
   step with h2 as ⟨it1, hit1⟩
-  step with
-      «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.nafs_spec
+  step with optional_mixed_multiscalar_mul.nafs_spec
     _ _ it1 ys hit1 ds hborrow_dynamic hds hys 5#usize (by decide) as ⟨dn, hdn⟩
   step with h3 as ⟨it2, hit2⟩
-  step with
-      «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.lookup_tables_spec
+  step with optional_mixed_multiscalar_mul.lookup_tables_spec
     _ it2 qops hit2 hqs hqops as ⟨o, hnone, hsome⟩
   rcases o with _ | dtabs
   · dsimp only
@@ -593,7 +591,7 @@ private theorem nafs_spec {It Clause0_Item : Type}
   rintro r ⟨zs, hr, hzs⟩
   simpa [hr] using hzs
 
-set_option linter.style.longLine false in
+open window.«NafLookupTable5ProjectiveNielsPointx86_64-no-tables».Insts in
 /-- The loop of `lookup_tables`: pushes the tables of the remaining points; `none` iff one of
 them is `none`. -/
 private theorem lookup_tables_loop_spec {It : Type}
@@ -627,8 +625,7 @@ private theorem lookup_tables_loop_spec {It : Type}
     rcases x with _ | P
     · simp
     · obtain ⟨hPb, hPon⟩ := hps P List.mem_cons_self
-      step with
-          window.«NafLookupTable5ProjectiveNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
+      step with «CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
         P hPb hPon as ⟨z, hz, hzb⟩
       step with alloc.vec.Vec.push_spec out z
         (by
@@ -674,6 +671,10 @@ set_option linter.style.longLine true
 
 namespace VartimePrecomputedStraus.«x86_64-no-tables».Insts
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
+
+set_option linter.style.longLine false
+open «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables»
+set_option linter.style.longLine true
 
 open scoped Helpers.IndexStep in
 /-- The loop0_loop0 loop over the points `i ∈ [k, n)`: adds `d_i[j] • P_i`. -/
@@ -766,7 +767,8 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop0_spec (iter : core.ops
       exact ⟨hR'on, hR'b, this ▸ hR'p⟩
   · exact ⟨rfl, le_refl _, hk, hR, hRb, by rw [Finset.Ico_self, Finset.sum_empty, add_zero]⟩
 
-set_option linter.style.longLine false in
+open «CoreOpsArithAddSharedAAffineNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables» in
+open «CoreOpsArithSubSharedAAffineNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables» in
 open scoped Helpers.IndexStep in
 /-- The loop0_loop1 loop over the points `i ∈ [k, n)`: adds `d_i[j] • P_i`. -/
 @[local step]
@@ -824,8 +826,7 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop1_spec (iter : core.ops
         step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
         step with window.NafLookupTable8.select_spec (P := P it.start.val) _ tab i2
           (htab ▸ hb) (htab ▸ hrep) ⟨by omega, by omega⟩ as ⟨q, hqon, hq, hqb⟩
-        step with
-            «CoreOpsArithSubSharedAAffineNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables».sub_spec_point
+        step with sub_spec_point
             ep q hepb hqb hepon hqon as ⟨R1, h1on, h1p, h1b⟩
         refine hstep R1 h1on h1b ?_
         rw [h1p, hep, show AffineNielsPoint.«x86_64-no-tables».toPoint q = PointRepr.toPoint q from
@@ -845,8 +846,7 @@ private theorem optional_mixed_multiscalar_mul_loop0_loop1_spec (iter : core.ops
         step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
         step with window.NafLookupTable8.select_spec (P := P it.start.val) _ tab i1
           (htab ▸ hb) (htab ▸ hrep) ⟨by omega, by omega⟩ as ⟨q, hqon, hq, hqb⟩
-        step with
-            «CoreOpsArithAddSharedAAffineNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables».add_spec_point
+        step with add_spec_point
             ep q hepb hqb hepon hqon as ⟨R1, h1on, h1p, h1b⟩
         refine hstep R1 h1on h1b ?_
         rw [h1p, hep, show AffineNielsPoint.«x86_64-no-tables».toPoint q = PointRepr.toPoint q from
@@ -923,7 +923,6 @@ private theorem optional_mixed_multiscalar_mul_loop0_spec
       exact ⟨hqon, hqb, hqp⟩
   · exact ⟨hstart, hend, hS, hSb, hSp⟩
 
-set_option linter.style.longLine false in
 /-- `VartimePrecomputedStraus::optional_mixed_multiscalar_mul`: for a precomputation of the
 static points `ps`, `none` iff some dynamic point is `none`; otherwise
 `∑ s_i • ps_i + ∑ d_i • Q_i` over the static scalars (at most `|ps|`, the missing ones count as
@@ -973,16 +972,13 @@ theorem optional_mixed_multiscalar_mul_spec
       ⦃ (it : Clause4_IntoIter) => dynamicPointsInst.iteratorInst.Yields it qops ⦄ :=
     hdynamic_points
   step with h1 as ⟨it, hit⟩
-  step with
-      «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.nafs_spec
+  step with optional_mixed_multiscalar_mul.nafs_spec
     _ _ it xs hit ss hborrow_static hss hxs 8#usize (by decide) as ⟨sn, hsn⟩
   step with h2 as ⟨it1, hit1⟩
-  step with
-      «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.nafs_spec
+  step with optional_mixed_multiscalar_mul.nafs_spec
     _ _ it1 ys hit1 ds hborrow_dynamic hds hys 5#usize (by decide) as ⟨dn, hdn⟩
   step with h3 as ⟨it2, hit2⟩
-  step with
-      «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.lookup_tables_spec
+  step with optional_mixed_multiscalar_mul.lookup_tables_spec
     _ it2 qops hit2 hqs hqops as ⟨o, hnone, hsome⟩
   rcases o with _ | dtabs
   · dsimp only

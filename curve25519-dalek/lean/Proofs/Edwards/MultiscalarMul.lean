@@ -75,7 +75,7 @@ end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
 namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
 namespace «Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables»
 
-set_option linter.style.longLine false in
+open «MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables» in
 /-- `MultiscalarMul::multiscalar_mul` for `EdwardsPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
 scalars `< 2^255`); limbs `< 2^52`. -/
@@ -107,9 +107,7 @@ theorem multiscalar_mul_spec
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  unfold
-      «MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect
-    «MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect_loop
+  unfold multiscalar_mul.collect multiscalar_mul.collect_loop
   apply spec_bind (collect.collectLoop_spec _ it xs hit (alloc.vec.Vec.new _) (by simpa using hxs))
   intro vs hvs
   step with hpoints' as ⟨it1, hit1⟩

@@ -2,6 +2,7 @@ module
 public import Specs.Constants
 public import Specs.Edwards
 public import Specs.Montgomery
+public import Specs.Ristretto
 public import Specs.Scalar
 public import Specs.Traits
 

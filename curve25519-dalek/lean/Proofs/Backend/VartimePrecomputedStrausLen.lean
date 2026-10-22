@@ -17,7 +17,7 @@ namespace Curve25519Dalek.backend
 
 namespace «VartimePrecomputedStrausx86_64-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts in
 /-- `VartimePrecomputedStraus::len` (backend): the number of static points. -/
 @[step]
 theorem len_spec (self : VartimePrecomputedStraus.«x86_64-tables»)
@@ -26,15 +26,14 @@ theorem len_spec (self : VartimePrecomputedStraus.«x86_64-tables»)
     len self ⦃ (r : Usize) => r.val = ps.length ⦄ := by
   rcases self with ⟨inner⟩
   unfold len
-  exact
-      serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».len_spec
+  exact «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».len_spec
       inner ps hself
 
 end «VartimePrecomputedStrausx86_64-tables»
 
 namespace «VartimePrecomputedStrausx86_64-no-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts in
 /-- `VartimePrecomputedStraus::len` (backend): the number of static points. -/
 @[step]
 theorem len_spec (self : VartimePrecomputedStraus.«x86_64-no-tables»)
@@ -44,7 +43,7 @@ theorem len_spec (self : VartimePrecomputedStraus.«x86_64-no-tables»)
   rcases self with ⟨inner⟩
   unfold len
   exact
-      serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».len_spec
+      «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».len_spec
       inner ps hself
 
 end «VartimePrecomputedStrausx86_64-no-tables»

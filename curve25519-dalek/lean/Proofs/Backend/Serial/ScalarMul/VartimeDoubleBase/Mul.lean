@@ -105,7 +105,8 @@ private theorem mul_loop0_spec (iter : core.iter.adapters.rev.Rev (core.ops.rang
       exact ⟨hj, fun k _ hk' => hzk k (by omega) hk'⟩
   · exact ⟨hstart, hend, hi, hz⟩
 
-set_option linter.style.longLine false in
+open «CoreOpsArithAddSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables» in
+open «CoreOpsArithSubSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables» in
 open scoped Helpers.IndexStep in
 /-- The second loop of `mul`: after the digits `i, …, 255`, the accumulator represents
 `nafTail a i • A + nafTail b i • B`. -/
@@ -181,8 +182,7 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
         step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
         step with window.NafLookupTable8.select_spec (P := B) _ table_B i2 hBb hB
             ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with
-            «CoreOpsArithSubSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables».sub_spec_point
+        step with sub_spec_point
           ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
         refine ⟨ht2on, ?_, ht2b⟩
         rw [ht2p, hep, show AffineNielsPoint.«x86_64-tables».toPoint pnp = PointRepr.toPoint pnp
@@ -200,8 +200,7 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
         step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
         step with window.NafLookupTable8.select_spec (P := B) _ table_B i1 hBb hB
             ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with
-            «CoreOpsArithAddSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables».add_spec_point
+        step with add_spec_point
           ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
         refine ⟨ht2on, ?_, ht2b⟩
         rw [ht2p, hep, show AffineNielsPoint.«x86_64-tables».toPoint pnp = PointRepr.toPoint pnp
@@ -222,7 +221,7 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
       rw [hval, hj1']
   · exact ⟨hi, hr, hrb, hrp⟩
 
-set_option linter.style.longLine false in
+open window.«NafLookupTable5ProjectiveNielsPointx86_64-tables».Insts in
 open scoped Helpers.IndexStep in
 /-- `vartime_double_base::mul`: `a • A + b • B` for the basepoint `B` (unreduced scalars
 `< 2^255`, the precondition of `non_adjacent_form`); limbs `< 2^52`. -/
@@ -239,8 +238,7 @@ theorem mul_spec (a : scalar.Scalar) (A : edwards.EdwardsPoint.«x86_64-tables»
   step with mul_loop0_spec iter a_naf b_naf 255#usize (by rw [hiter]; rfl) (by rw [hiter]; decide)
     (by decide) (fun k hk hk' => absurd hk' (by rw [hiter] at hk; simp at hk; omega))
     as ⟨i, hi, hz⟩
-  step with
-      window.«NafLookupTable5ProjectiveNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
+  step with «CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
     as ⟨tA, htA, htAb⟩
   step as ⟨tB, htB, htBb⟩
   step with ProjectivePoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
@@ -429,7 +427,7 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
       rw [hval, hj1']
   · exact ⟨hi, hr, hrb, hrp⟩
 
-set_option linter.style.longLine false in
+open window.«NafLookupTable5ProjectiveNielsPointx86_64-no-tables».Insts in
 open scoped Helpers.IndexStep in
 /-- `vartime_double_base::mul`: `a • A + b • B` for the basepoint `B` (unreduced scalars
 `< 2^255`, the precondition of `non_adjacent_form`); limbs `< 2^52`. -/
@@ -446,13 +444,11 @@ theorem mul_spec (a : scalar.Scalar) (A : edwards.EdwardsPoint.«x86_64-no-table
   step with mul_loop0_spec iter a_naf b_naf 255#usize (by rw [hiter]; rfl) (by rw [hiter]; decide)
     (by decide) (fun k hk hk' => absurd hk' (by rw [hiter] at hk; simp at hk; omega))
     as ⟨i, hi, hz⟩
-  step with
-      window.«NafLookupTable5ProjectiveNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
+  step with «CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
     as ⟨tA, htA, htAb⟩
   step with backend.serial.u64.constants.«x86_64-no-tables».ED25519_BASEPOINT_POINT_spec_point
     as ⟨bp, hbpon, hbp, hbpb⟩
-  step with
-      window.«NafLookupTable5ProjectiveNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
+  step with «CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
     as ⟨tB, htB, htBb⟩
   step with
       ProjectivePoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point

@@ -137,6 +137,12 @@ def alloc.vec.Vec.is_empty.Contract : Prop :=
   ∀ {T : Type} (A : Type) (v : alloc.vec.Vec T),
     alloc.vec.Vec.is_empty A v ⦃ (b : Bool) => b = decide (v.length = 0) ⦄
 
+/-- `<T as Borrow<T>>::borrow` (core/src/borrow.rs, `impl<T: ?Sized> Borrow<T> for T`): "Immutably
+borrows from an owned value." Body: `self`; never fails. -/
+@[nolint defsWithUnderscore]
+def core.borrow.Borrow.Blanket.borrow.Contract : Prop :=
+  ∀ {T : Type} (x : T), core.borrow.Borrow.Blanket.borrow x ⦃ (y : T) => y = x ⦄
+
 /-- The specification of the `core` functions used: one field per function, the predicates
 above. -/
 structure core.Contract : Prop where
@@ -145,6 +151,7 @@ structure core.Contract : Prop where
   usize_div_ceil : core.num.Usize.div_ceil.Contract
   mutArray_into_iter :
     MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter.Contract
+  borrow_blanket : core.borrow.Borrow.Blanket.borrow.Contract
 
 /-- The single trusted assumption about `core`: its functions meet their contracts. -/
 axiom core.contract : core.Contract
@@ -194,6 +201,12 @@ theorem MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter_
       ∀ it' : core.slice.iter.IterMut T, it'.slice.length = N.val →
         (back it').val = it'.slice.val ⦄ :=
   core.contract.mutArray_into_iter a
+
+/-- `core.borrow.Borrow.Blanket.borrow` meets its contract (`core.contract`). -/
+@[step]
+theorem core.borrow.Borrow.Blanket.borrow_spec {T : Type} (x : T) :
+    core.borrow.Borrow.Blanket.borrow x ⦃ (y : T) => y = x ⦄ :=
+  core.contract.borrow_blanket x
 
 /-- `alloc.vec.Vec.is_empty` meets its contract (`alloc.contract`). -/
 @[step]

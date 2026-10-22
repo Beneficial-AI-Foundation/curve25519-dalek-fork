@@ -10,10 +10,15 @@ public import Curve25519.Montgomery
 public import Curve25519.X25519
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
+public import Curve25519.Ristretto.Encoding
 public import Defs.Montgomery
+public import Defs.Ristretto
+public import Defs.ScalarMul
 import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointPoint
+import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointTable
 import Proofs.Backend.Serial.U64.Constants.EightTorsion
 import Proofs.Constants.Ed25519BasepointCompressed
+import Proofs.Constants.RistrettoBasepoint
 import Proofs.Constants.X25519Basepoint
 public section
 
@@ -24,17 +29,17 @@ with `recall` from the theorems proved in `Proofs/`, and the axioms they depend 
 in the order of `constants.rs`, starting with the constants it re-exports from the 64-bit backend
 (`backend/serial/u64/constants.rs`); those are per-configuration, so each has two statements.
 
-Not restated here: `ED25519_BASEPOINT_TABLE` (`x86_64-tables` only), whose items assume as a
-hypothesis that it represents the basepoint (see `Specs/Edwards.lean`); `BASEPOINT_ORDER`
-(`pub(crate)`, proved in `Proofs/Constants/BasepointOrder.lean`); the Ristretto constants
-(`RISTRETTO_BASEPOINT_COMPRESSED`, `RISTRETTO_BASEPOINT_POINT`, `RISTRETTO_BASEPOINT_TABLE`), left
-for the specs of `ristretto.rs`. Not translated: `X25519_LOW_ORDER_POINTS`.
+The tables `ED25519_BASEPOINT_TABLE` and `RISTRETTO_BASEPOINT_TABLE` exist only with
+precomputed tables (`x86_64-tables`). Not restated here: `BASEPOINT_ORDER` (`pub(crate)`, proved
+in `Proofs/Constants/BasepointOrder.lean`). Not translated: `X25519_LOW_ORDER_POINTS`.
 
 Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `LimbsLt`, `CompressedEdwardsY.asNat`
 (`Defs/Edwards.lean`), `MontgomeryPoint.asNat` (`Defs/Montgomery.lean`), `curve25519.basepoint`
 (`Curve25519/Edwards/Basepoint.lean`), `curve25519.encode` (`Curve25519/Edwards/Encoding.lean`),
 `curve25519.eightTorsion` (`Curve25519/Edwards/Torsion.lean`), `curve25519.montgomeryBasepoint`
-(`Curve25519/Montgomery.lean`), `curve25519.encodeU` (`Curve25519/X25519.lean`). -/
+(`Curve25519/Montgomery.lean`), `curve25519.encodeU` (`Curve25519/X25519.lean`), the tables'
+`Represents` (`Defs/Edwards.lean`), `CompressedRistretto.asNat` (`Defs/Ristretto.lean`),
+`Ristretto.encodeRep` (`Curve25519/Ristretto/`). -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519 TwistedEdwardsModel
 
@@ -98,6 +103,18 @@ recall EIGHT_TORSION_spec_point :
 end «x86_64-no-tables»
 end Curve25519Dalek.backend.serial.u64.constants
 
+namespace Curve25519Dalek.backend.serial.u64.constants
+
+/-- `ED25519_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^54`. -/
+recall ED25519_BASEPOINT_TABLE_spec :
+    ED25519_BASEPOINT_TABLE ⦃ (r : edwards.EdwardsBasepointTable.«x86_64-tables») =>
+      r.Represents basepoint ∧ r.LimbsLt 54 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms ED25519_BASEPOINT_TABLE_spec
+
+end Curve25519Dalek.backend.serial.u64.constants
+
 namespace Curve25519Dalek.constants
 
 /-- `ED25519_BASEPOINT_COMPRESSED`: RFC 8032's encoding of the basepoint. -/
@@ -119,5 +136,55 @@ recall X25519_BASEPOINT_spec :
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms X25519_BASEPOINT_spec
+
+end Curve25519Dalek.constants
+
+namespace Curve25519Dalek.constants
+
+/-- `RISTRETTO_BASEPOINT_COMPRESSED`: RFC 9496's encoding of the basepoint. -/
+recall RISTRETTO_BASEPOINT_COMPRESSED_spec :
+    RISTRETTO_BASEPOINT_COMPRESSED.asNat = Ristretto.encodeRep basepoint
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms RISTRETTO_BASEPOINT_COMPRESSED_spec
+
+namespace «x86_64-tables»
+
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^52`. -/
+recall RISTRETTO_BASEPOINT_POINT_spec :
+    RISTRETTO_BASEPOINT_POINT.«x86_64-tables» ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
+      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 52 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_POINT_spec
+
+end «x86_64-tables»
+
+namespace «x86_64-no-tables»
+
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^52`. -/
+recall RISTRETTO_BASEPOINT_POINT_spec :
+    RISTRETTO_BASEPOINT_POINT.«x86_64-no-tables»
+      ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
+        r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 52 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_POINT_spec
+
+end «x86_64-no-tables»
+
+namespace «x86_64-tables»
+
+/-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^54`. -/
+recall RISTRETTO_BASEPOINT_TABLE_spec :
+    RISTRETTO_BASEPOINT_TABLE.«x86_64-tables»
+      ⦃ (r : ristretto.RistrettoBasepointTable.«x86_64-tables») =>
+        r.Represents basepoint ∧ r.LimbsLt 54 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_TABLE_spec
+
+end «x86_64-tables»
 
 end Curve25519Dalek.constants

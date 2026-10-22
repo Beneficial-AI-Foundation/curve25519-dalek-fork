@@ -19,7 +19,8 @@ namespace Curve25519Dalek.backend
 
 namespace «x86_64-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.pippenger.Pippenger.Insts in
+open «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables» in
 /-- `pippenger_optional_multiscalar_mul`: the serial `Pippenger::optional_multiscalar_mul`. -/
 @[step]
 theorem pippenger_optional_multiscalar_mul_spec
@@ -45,15 +46,15 @@ theorem pippenger_optional_multiscalar_mul_spec
           R.LimbsLt 52 ⦄ := by
   unfold pippenger_optional_multiscalar_mul.«x86_64-tables»
   step
-  exact
-      serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_spec
+  exact optional_multiscalar_mul_spec
     _ _ _ _ _ xs ops ss hscalars hpoints hborrow_scalars hss hps hxs
 
 end «x86_64-tables»
 
 namespace «x86_64-no-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.pippenger.Pippenger.Insts in
+open «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables» in
 /-- `pippenger_optional_multiscalar_mul`: the serial `Pippenger::optional_multiscalar_mul`. -/
 @[step]
 theorem pippenger_optional_multiscalar_mul_spec
@@ -79,8 +80,7 @@ theorem pippenger_optional_multiscalar_mul_spec
           R.LimbsLt 52 ⦄ := by
   unfold pippenger_optional_multiscalar_mul.«x86_64-no-tables»
   step
-  exact
-      serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_spec
+  exact optional_multiscalar_mul_spec
     _ _ _ _ _ xs ops ss hscalars hpoints hborrow_scalars hss hps hxs
 
 end «x86_64-no-tables»

@@ -5,6 +5,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
+public import Defs.Scalar
+public import Curve25519.Edwards.Basepoint
+public import Subtle
 import Proofs.Edwards.Add
 public section
 
@@ -17,7 +20,7 @@ namespace Curve25519Dalek
 namespace «Shared0RistrettoPointx86_64-tables».Insts
 namespace «CoreOpsArithAddSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
 
-open edwards.EdwardsPoint.«x86_64-tables».Insts in
+open edwards.EdwardsPoint.«x86_64-tables» in
 /-- `Add<&RistrettoPoint> for &RistrettoPoint` on the represented points. -/
 @[step]
 theorem add_spec (self other : ristretto.RistrettoPoint.«x86_64-tables»)
@@ -26,7 +29,8 @@ theorem add_spec (self other : ristretto.RistrettoPoint.«x86_64-tables»)
     add self other ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold add
-  step with «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».add_spec_point
+  step with
+    Insts.«CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».add_spec_point
     self other hself hother hself_on hother_on as ⟨r, h1, h2, h3⟩
   exact ⟨h1, h2, h3⟩
 
@@ -87,7 +91,7 @@ end ristretto.RistrettoPoint.«x86_64-tables».Insts
 namespace «Shared0RistrettoPointx86_64-no-tables».Insts
 namespace «CoreOpsArithAddSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
 
-open edwards.EdwardsPoint.«x86_64-no-tables».Insts in
+open edwards.EdwardsPoint.«x86_64-no-tables» in
 /-- `Add<&RistrettoPoint> for &RistrettoPoint` on the represented points. -/
 @[step]
 theorem add_spec (self other : ristretto.RistrettoPoint.«x86_64-no-tables»)
@@ -96,7 +100,8 @@ theorem add_spec (self other : ristretto.RistrettoPoint.«x86_64-no-tables»)
     add self other ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 ⦄ := by
   unfold add
-  step with «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».add_spec_point
+  step with
+    Insts.«CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».add_spec_point
     self other hself hother hself_on hother_on as ⟨r, h1, h2, h3⟩
   exact ⟨h1, h2, h3⟩
 

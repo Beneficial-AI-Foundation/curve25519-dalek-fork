@@ -79,7 +79,7 @@ private theorem nafs_spec {It Clause0_Item : Type}
   rintro r ⟨zs, hr, hzs⟩
   simpa [hr] using hzs
 
-set_option linter.style.longLine false in
+open window.«NafLookupTable5ProjectiveNielsPointx86_64-tables».Insts in
 /-- The loop of `lookup_tables`: pushes the tables of the remaining points; `none` iff one of
 them is `none`. -/
 private theorem lookup_tables_loop_spec {It : Type}
@@ -112,8 +112,7 @@ private theorem lookup_tables_loop_spec {It : Type}
     rcases x with _ | P
     · simp
     · obtain ⟨hPb, hPon⟩ := hps P List.mem_cons_self
-      step with
-          window.«NafLookupTable5ProjectiveNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
+      step with «CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
         P hPb hPon as ⟨z, hz, hzb⟩
       step with alloc.vec.Vec.push_spec out z
         (by
@@ -284,7 +283,7 @@ private theorem optional_multiscalar_mul_loop0_spec
       exact ⟨hqon, hqb, hqp⟩
   · exact ⟨hstart, hend, hr, hrb, hrp⟩
 
-set_option linter.style.longLine false in
+open «VartimeMultiscalarMulStrausEdwardsPointx86_64-tables» in
 /-- `Straus::optional_multiscalar_mul`: `none` iff some point is `none` (all points are read);
 otherwise `∑ s_i • P_i` over the scalars and points, up to the shorter input (unreduced
 scalars `< 2^255`); limbs `< 2^52`. -/
@@ -313,12 +312,10 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  step with
-      «VartimeMultiscalarMulStrausEdwardsPointx86_64-tables».optional_multiscalar_mul.nafs_spec
+  step with optional_multiscalar_mul.nafs_spec
     _ _ it xs hit ss hborrow_scalars hss hxs as ⟨nafs, hnafs⟩
   step with hpoints' as ⟨it1, hit1⟩
-  step with
-      «VartimeMultiscalarMulStrausEdwardsPointx86_64-tables».optional_multiscalar_mul.lookup_tables_spec
+  step with optional_multiscalar_mul.lookup_tables_spec
     _ it1 ops hit1 hps hops as ⟨o, hnone, hsome⟩
   rcases o with _ | tables
   · dsimp only
@@ -392,7 +389,7 @@ private theorem nafs_spec {It Clause0_Item : Type}
   rintro r ⟨zs, hr, hzs⟩
   simpa [hr] using hzs
 
-set_option linter.style.longLine false in
+open window.«NafLookupTable5ProjectiveNielsPointx86_64-no-tables».Insts in
 /-- The loop of `lookup_tables`: pushes the tables of the remaining points; `none` iff one of
 them is `none`. -/
 private theorem lookup_tables_loop_spec {It : Type}
@@ -426,8 +423,7 @@ private theorem lookup_tables_loop_spec {It : Type}
     rcases x with _ | P
     · simp
     · obtain ⟨hPb, hPon⟩ := hps P List.mem_cons_self
-      step with
-          window.«NafLookupTable5ProjectiveNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
+      step with «CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
         P hPb hPon as ⟨z, hz, hzb⟩
       step with alloc.vec.Vec.push_spec out z
         (by
@@ -601,7 +597,7 @@ private theorem optional_multiscalar_mul_loop0_spec
       exact ⟨hqon, hqb, hqp⟩
   · exact ⟨hstart, hend, hr, hrb, hrp⟩
 
-set_option linter.style.longLine false in
+open «VartimeMultiscalarMulStrausEdwardsPointx86_64-no-tables» in
 /-- `Straus::optional_multiscalar_mul`: `none` iff some point is `none` (all points are read);
 otherwise `∑ s_i • P_i` over the scalars and points, up to the shorter input (unreduced
 scalars `< 2^255`); limbs `< 2^52`. -/
@@ -630,12 +626,10 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  step with
-      «VartimeMultiscalarMulStrausEdwardsPointx86_64-no-tables».optional_multiscalar_mul.nafs_spec
+  step with optional_multiscalar_mul.nafs_spec
     _ _ it xs hit ss hborrow_scalars hss hxs as ⟨nafs, hnafs⟩
   step with hpoints' as ⟨it1, hit1⟩
-  step with
-      «VartimeMultiscalarMulStrausEdwardsPointx86_64-no-tables».optional_multiscalar_mul.lookup_tables_spec
+  step with optional_multiscalar_mul.lookup_tables_spec
     _ it1 ops hit1 hps hops as ⟨o, hnone, hsome⟩
   rcases o with _ | tables
   · dsimp only

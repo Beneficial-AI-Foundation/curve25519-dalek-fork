@@ -18,7 +18,7 @@ namespace Curve25519Dalek.backend
 
 namespace «VartimePrecomputedStrausx86_64-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts in
 /-- `VartimePrecomputedStraus::new` (backend): the serial precomputation. -/
 @[step]
 theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
@@ -35,7 +35,7 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
   unfold new
   step
   step with
-      serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».new_spec
+      «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».new_spec
     _ _ _ ys ps hstatic_points hborrow hps hys as ⟨v, hv, hvb⟩
   exact ⟨hv, hvb⟩
 
@@ -43,7 +43,7 @@ end «VartimePrecomputedStrausx86_64-tables»
 
 namespace «VartimePrecomputedStrausx86_64-no-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts in
 /-- `VartimePrecomputedStraus::new` (backend): the serial precomputation. -/
 @[step]
 theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
@@ -60,7 +60,7 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
   unfold new
   step
   step with
-      serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».new_spec
+      «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».new_spec
     _ _ _ ys ps hstatic_points hborrow hps hys as ⟨v, hv, hvb⟩
   exact ⟨hv, hvb⟩
 

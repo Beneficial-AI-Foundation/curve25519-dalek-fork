@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Aeneas.Std.Alloc.Vec
+public import Aeneas.Std.Core.CoreOption
 public import Defs.Iterator
 import Aeneas.Tactic.Step.StepStar
 import Proofs.Helpers.Vec
@@ -17,7 +18,9 @@ loops pushing onto a `Vec` (aeneas#1057). They come in three shapes, defined her
 
 - `collectBody`: push each item;
 - `collectMapBody`: push `f (borrow x)` for each item `x`;
-- `collectOptBody`: for items `Option P`, push `f P`, and stop with `none` at the first `none`.
+- `collectOptBody`: for items `Option P`, push `f P`, and stop with `none` at the first `none`;
+- `collectApplyBody`: push `g x` for each item `x` (the Ristretto wrappers: `g` is `borrow`, or
+  `Option::map` with the identity closure).
 
 The iterator is described by `Iterator.Yields`, `borrow` by its results on the items. -/
 
@@ -64,6 +67,18 @@ variable {It T Y Z : Type}
       let z ← f P
       let out1 ← alloc.vec.Vec.push out z
       ok (cont (it1, out1))
+
+/-- Push `g x` for each item `x` of the iterator. -/
+@[expose] def collectApplyBody (iterInst : core.iter.traits.iterator.Iterator It T)
+    (g : T → Result Z) (it : It) (out : alloc.vec.Vec Z) :
+    Result (ControlFlow (It × alloc.vec.Vec Z) (alloc.vec.Vec Z)) := do
+  let (o, it1) ← iterInst.next it
+  match o with
+  | none => ok (done out)
+  | some x =>
+    let z ← g x
+    let out1 ← alloc.vec.Vec.push out z
+    ok (cont (it1, out1))
 
 theorem collectLoop_spec (iterInst : core.iter.traits.iterator.Iterator It T) (it : It)
     (xs : List T) (hit : iterInst.Yields it xs) (out : alloc.vec.Vec T)
@@ -134,6 +149,74 @@ theorem collectMapLoop_spec (iterInst : core.iter.traits.iterator.Iterator It T)
     exact ⟨z :: zs, by rw [hr, hout1, List.append_assoc, List.singleton_append],
       List.Forall₂.cons hz hzs⟩
 
+theorem collectApplyLoop_spec (iterInst : core.iter.traits.iterator.Iterator It T)
+    (g : T → Result Z) (it : It) (xs : List T) (hit : iterInst.Yields it xs) (zs : List Z)
+    (hg : List.Forall₂ (fun x z => g x ⦃ (z' : Z) => z' = z ⦄) xs zs) (out : alloc.vec.Vec Z)
+    (hlen : out.length + xs.length ≤ Usize.max) :
+    loop (fun ((it1, out1) : It × alloc.vec.Vec Z) => collectApplyBody iterInst g it1 out1)
+      (it, out) ⦃ (r : alloc.vec.Vec Z) => r.val = out.val ++ zs ⦄ := by
+  induction hit generalizing out zs with
+  | nil hnext =>
+    cases hg
+    unfold loop collectApplyBody
+    step with hnext as ⟨q, hq⟩
+    obtain ⟨o, it1⟩ := q
+    simp only at hq
+    subst hq
+    simp
+  | cons hnext _ ih =>
+    obtain _ | ⟨hx, hrest⟩ := hg
+    unfold loop collectApplyBody
+    step with hnext as ⟨q, ho, hit⟩
+    obtain ⟨o, it1⟩ := q
+    simp only at ho hit
+    subst ho hit
+    step with hx as ⟨z, hz⟩
+    subst hz
+    step with alloc.vec.Vec.push_spec out _
+      (by
+        have h : out.length < Usize.max := by simp only [List.length_cons] at hlen; omega
+        exact h) as ⟨out1, hout1⟩
+    apply WP.spec_mono (ih (out := out1) _ hrest (by
+      rw [alloc.vec.Vec.length_of_val_eq_append hout1]
+      simp only [List.length_cons] at hlen; omega))
+    intro r hr
+    rw [hr, hout1, List.append_assoc, List.singleton_append]
+
+/-- `collectApplyLoop_spec` with a property `Pg` of each result instead of its value. -/
+theorem collectApplyLoopP_spec (iterInst : core.iter.traits.iterator.Iterator It T)
+    (g : T → Result Z) (Pg : T → Z → Prop) (it : It) (xs : List T) (hit : iterInst.Yields it xs)
+    (hg : ∀ x ∈ xs, g x ⦃ (z : Z) => Pg x z ⦄) (out : alloc.vec.Vec Z)
+    (hlen : out.length + xs.length ≤ Usize.max) :
+    loop (fun ((it1, out1) : It × alloc.vec.Vec Z) => collectApplyBody iterInst g it1 out1)
+      (it, out) ⦃ (r : alloc.vec.Vec Z) =>
+        ∃ zs, r.val = out.val ++ zs ∧ List.Forall₂ Pg xs zs ⦄ := by
+  induction hit generalizing out with
+  | nil hnext =>
+    unfold loop collectApplyBody
+    step with hnext as ⟨q, hq⟩
+    obtain ⟨o, it1⟩ := q
+    simp only at hq
+    subst hq
+    simp
+  | @cons it it' x xs' hnext _ ih =>
+    unfold loop collectApplyBody
+    step with hnext as ⟨q, ho, hit⟩
+    obtain ⟨o, it1⟩ := q
+    simp only at ho hit
+    subst ho hit
+    step with hg x List.mem_cons_self as ⟨z, hz⟩
+    step with alloc.vec.Vec.push_spec out z
+      (by
+        have h : out.length < Usize.max := by simp only [List.length_cons] at hlen; omega
+        exact h) as ⟨out1, hout1⟩
+    apply WP.spec_mono (ih (fun y hy => hg y (List.mem_cons_of_mem _ hy)) out1 (by
+      rw [alloc.vec.Vec.length_of_val_eq_append hout1]
+      simp only [List.length_cons] at hlen; omega))
+    rintro r ⟨zs, hr, hzs⟩
+    exact ⟨z :: zs, by rw [hr, hout1, List.append_assoc, List.singleton_append],
+      List.Forall₂.cons hz hzs⟩
+
 theorem collectOptLoop_spec (iterInst : core.iter.traits.iterator.Iterator It (Option Y))
     (f : Y → Result Z) (Pf : Y → Z → Prop) (it : It) (xs : List (Option Y))
     (hit : iterInst.Yields it xs) (hf : ∀ y, some y ∈ xs → f y ⦃ (z : Z) => Pf y z ⦄)
@@ -172,5 +255,12 @@ theorem collectOptLoop_spec (iterInst : core.iter.traits.iterator.Iterator It (O
       obtain ⟨zs, hr, hzs⟩ := hsome v hv
       exact ⟨z :: zs, by rw [hr, hout1, List.append_assoc, List.singleton_append],
         by simpa using List.Forall₂.cons hz hzs⟩
+
+/-- `Option::map` with a closure that returns its argument leaves the option unchanged (the
+Ristretto wrappers' identity closures, for which `hf` holds by `rfl`). -/
+theorem optionMap_id_spec {F T : Type} (inst : core.ops.function.FnOnce F T T) (f : F)
+    (hf : ∀ x, inst.call_once f x = ok x) (o : Option T) :
+    core.option.Option.map inst o f ⦃ (o' : Option T) => o' = o ⦄ := by
+  rcases o with _ | x <;> simp [core.option.Option.map, hf]
 
 end Curve25519Dalek.collect

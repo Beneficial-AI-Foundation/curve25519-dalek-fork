@@ -24,7 +24,7 @@ open Aeneas Aeneas.Std Result Aeneas.Std.WP
 namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
 namespace «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables»
 
-set_option linter.style.longLine false in
+open «VartimeMultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables» in
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `EdwardsPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
 patched `assert_eq!`; Straus below `190` points, Pippenger from `190` on; unreduced scalars
@@ -55,9 +55,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  unfold
-      «VartimeMultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».optional_multiscalar_mul.collect
-    «VartimeMultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».optional_multiscalar_mul.collect_loop
+  unfold optional_multiscalar_mul.collect optional_multiscalar_mul.collect_loop
   apply spec_bind (collect.collectLoop_spec _ it xs hit (alloc.vec.Vec.new _) (by simpa using hxs))
   intro vs hvs
   replace hvs : vs.val = xs := by rw [hvs]; rfl
@@ -88,7 +86,7 @@ end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
 namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
 namespace «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables»
 
-set_option linter.style.longLine false in
+open «VartimeMultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables» in
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `EdwardsPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
 patched `assert_eq!`; Straus below `190` points, Pippenger from `190` on; unreduced scalars
@@ -119,9 +117,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  unfold
-      «VartimeMultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect
-    «VartimeMultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect_loop
+  unfold optional_multiscalar_mul.collect optional_multiscalar_mul.collect_loop
   apply spec_bind (collect.collectLoop_spec _ it xs hit (alloc.vec.Vec.new _) (by simpa using hxs))
   intro vs hvs
   replace hvs : vs.val = xs := by rw [hvs]; rfl

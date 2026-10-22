@@ -17,7 +17,7 @@ namespace Curve25519Dalek.backend
 
 namespace «x86_64-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.straus.Straus.Insts in
 /-- `straus_multiscalar_mul`: the serial `Straus::multiscalar_mul`, `∑ s_i • P_i` up to the
 shorter input; limbs `< 2^52`. -/
 @[step]
@@ -43,15 +43,14 @@ theorem straus_multiscalar_mul_spec
         r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄ := by
   unfold straus_multiscalar_mul.«x86_64-tables»
   step
-  exact
-      serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables».multiscalar_mul_spec
+  exact «Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables».multiscalar_mul_spec
     _ _ _ _ _ _ xs ys ss ps hscalars hpoints hborrow_scalars hborrow_points hss hps hxs hys
 
 end «x86_64-tables»
 
 namespace «x86_64-no-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.straus.Straus.Insts in
 /-- `straus_multiscalar_mul`: the serial `Straus::multiscalar_mul`, `∑ s_i • P_i` up to the
 shorter input; limbs `< 2^52`. -/
 @[step]
@@ -78,8 +77,7 @@ theorem straus_multiscalar_mul_spec
         r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄ := by
   unfold straus_multiscalar_mul.«x86_64-no-tables»
   step
-  exact
-      serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables».multiscalar_mul_spec
+  exact «Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables».multiscalar_mul_spec
     _ _ _ _ _ _ xs ys ss ps hscalars hpoints hborrow_scalars hborrow_points hss hps hxs hys
 
 end «x86_64-no-tables»

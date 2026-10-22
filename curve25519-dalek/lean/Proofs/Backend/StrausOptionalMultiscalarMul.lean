@@ -19,7 +19,8 @@ namespace Curve25519Dalek.backend
 
 namespace «x86_64-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.straus.Straus.Insts in
+open «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables» in
 /-- `straus_optional_multiscalar_mul`: the serial `Straus::optional_multiscalar_mul`. -/
 @[step]
 theorem straus_optional_multiscalar_mul_spec
@@ -43,15 +44,15 @@ theorem straus_optional_multiscalar_mul_spec
           R.LimbsLt 52 ⦄ := by
   unfold straus_optional_multiscalar_mul.«x86_64-tables»
   step
-  exact
-      serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_spec
+  exact optional_multiscalar_mul_spec
     _ _ _ _ _ xs ops ss hscalars hpoints hborrow_scalars hss hps hxs hops
 
 end «x86_64-tables»
 
 namespace «x86_64-no-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.straus.Straus.Insts in
+open «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables» in
 /-- `straus_optional_multiscalar_mul`: the serial `Straus::optional_multiscalar_mul`. -/
 @[step]
 theorem straus_optional_multiscalar_mul_spec
@@ -76,8 +77,7 @@ theorem straus_optional_multiscalar_mul_spec
           R.LimbsLt 52 ⦄ := by
   unfold straus_optional_multiscalar_mul.«x86_64-no-tables»
   step
-  exact
-      serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_spec
+  exact optional_multiscalar_mul_spec
     _ _ _ _ _ xs ops ss hscalars hpoints hborrow_scalars hss hps hxs hops
 
 end «x86_64-no-tables»

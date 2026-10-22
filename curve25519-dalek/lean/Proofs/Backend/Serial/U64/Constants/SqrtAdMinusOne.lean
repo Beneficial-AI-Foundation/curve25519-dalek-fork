@@ -35,4 +35,16 @@ theorem SQRT_AD_MINUS_ONE_spec :
   rw [ZMod.natCast_eq_zero_iff, Nat.dvd_iff_mod_eq_zero, mod_p_fold, mod_p_fold, mod_p_of_lt] <;>
     decide
 
+/-- `SQRT_AD_MINUS_ONE` is RFC 9496's root `sqrtAdMinusOne` of `a d - 1` (not only a root). -/
+theorem SQRT_AD_MINUS_ONE_spec_eq :
+    SQRT_AD_MINUS_ONE ⦃ (r : FieldElement51) =>
+      r.asNat = curve25519.sqrtAdMinusOne ∧ r.LimbsLt 51 ⦄ := by
+  unfold SQRT_AD_MINUS_ONE
+  simp only [field.FieldElement51.asNat_def, Array.asNat_def]
+  step*
+  subst_vars
+  refine ⟨?_, by decide⟩
+  rw [curve25519.sqrtAdMinusOne_def]
+  decide
+
 end Curve25519Dalek.backend.serial.u64.constants

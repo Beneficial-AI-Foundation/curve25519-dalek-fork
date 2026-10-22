@@ -267,4 +267,18 @@ theorem asNat_set_add {ty : UScalarTy} {n : Usize} (bits : ℕ) (a : Array (USca
   rw [hrest]
   ring
 
+/-- An array that is the concatenation of two byte arrays `b ++ c`: `b` holds its value modulo
+`2 ^ (8 |b|)`, `c` the quotient. -/
+theorem asNat_append_eq {n m k : Usize} (a : Array U8 n) (b : Array U8 m) (c : Array U8 k)
+    (h : a.val = b.val ++ c.val) :
+    b.asNat 8 = a.asNat 8 % 2 ^ (8 * m.val) ∧ c.asNat 8 = a.asNat 8 / 2 ^ (8 * m.val) := by
+  have hb := asNat_lt 8 b (fun i _ => (b[i]!).hBounds)
+  have hsplit : a.asNat 8 = b.asNat 8 + 2 ^ (8 * m.val) * c.asNat 8 := by
+    rw [asNat_def, asNat_def, asNat_def, h, List.map_append, Nat.ofDigits_append, List.length_map,
+      Array.length_eq, ← pow_mul]
+  have hpos : 0 < 2 ^ (8 * m.val) := Nat.two_pow_pos _
+  refine ⟨?_, ?_⟩
+  · rw [hsplit, Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt hb]
+  · rw [hsplit, Nat.add_mul_div_left _ _ hpos, Nat.div_eq_of_lt hb, zero_add]
+
 end Aeneas.Std.Array

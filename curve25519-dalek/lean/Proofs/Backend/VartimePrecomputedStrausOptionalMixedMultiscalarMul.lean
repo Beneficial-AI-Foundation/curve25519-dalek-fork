@@ -17,7 +17,9 @@ namespace Curve25519Dalek.backend
 
 namespace «VartimePrecomputedStrausx86_64-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts in
+open «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables» renaming
+  optional_mixed_multiscalar_mul_spec → serial_spec in
 /-- `VartimePrecomputedStraus::optional_mixed_multiscalar_mul` (backend): the serial one. -/
 @[step]
 theorem optional_mixed_multiscalar_mul_spec
@@ -54,8 +56,7 @@ theorem optional_mixed_multiscalar_mul_spec
           R.LimbsLt 52 ⦄ := by
   rcases self with ⟨inner⟩
   unfold optional_mixed_multiscalar_mul
-  exact
-      serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul_spec
+  exact serial_spec
     _ _ _ _ _ inner _ _ _ ps xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars
     hdynamic_points hborrow_static hborrow_dynamic hss hds hqs hxs hys hqops hstatic hdynamic
 
@@ -63,7 +64,9 @@ end «VartimePrecomputedStrausx86_64-tables»
 
 namespace «VartimePrecomputedStrausx86_64-no-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts in
+open «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables» renaming
+  optional_mixed_multiscalar_mul_spec → serial_spec in
 /-- `VartimePrecomputedStraus::optional_mixed_multiscalar_mul` (backend): the serial one. -/
 @[step]
 theorem optional_mixed_multiscalar_mul_spec
@@ -100,8 +103,7 @@ theorem optional_mixed_multiscalar_mul_spec
           R.LimbsLt 52 ⦄ := by
   rcases self with ⟨inner⟩
   unfold optional_mixed_multiscalar_mul
-  exact
-      serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul_spec
+  exact serial_spec
     _ _ _ _ _ inner _ _ _ ps xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars
     hdynamic_points hborrow_static hborrow_dynamic hss hds hqs hxs hys hqops hstatic hdynamic
 

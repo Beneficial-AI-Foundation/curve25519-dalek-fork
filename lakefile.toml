@@ -22,12 +22,12 @@ rev = "nightly-2026.10.22-f383079"
 # Hand-written library for the `subtle` crate.
 [[lean_lib]]
 name = "Subtle"
-srcDir = "curve25519-dalek/lean"
+srcDir = "."
 
 # Hand-written library for the `zeroize` crate.
 [[lean_lib]]
 name = "Zeroize"
-srcDir = "curve25519-dalek/lean"
+srcDir = "."
 
 # Aeneas-generated Lean translation.
 [[lean_lib]]

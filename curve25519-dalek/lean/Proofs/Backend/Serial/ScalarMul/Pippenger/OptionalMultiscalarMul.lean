@@ -148,7 +148,7 @@ namespace Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPo
 private def BucketsOK (v : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») (n : ℕ) : Prop :=
   v.length = n ∧ ∀ j < n, v.val[j]!.OnCurve ∧ v.val[j]!.LimbsLt 52
 
-set_option linter.style.longLine false in
+open edwards.EdwardsPoint.«x86_64-tables».Insts in
 /-- The first loop: `buckets_count` identities. -/
 @[local step]
 private theorem optional_multiscalar_mul_loop0_spec (bc : Usize)
@@ -166,8 +166,7 @@ private theorem optional_multiscalar_mul_loop0_spec (bc : Usize)
     unfold optional_multiscalar_mul_loop0.body
     by_cases hlt : b' < bc
     · simp only [hlt, ite_true]
-      step with
-          edwards.EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+      step with Curve25519_dalekTraitsIdentity.identity_spec_point
         as ⟨e, heon, he, heb⟩
       step as ⟨v1, hv1⟩
       step as ⟨b1, hb1⟩
@@ -181,7 +180,7 @@ private theorem optional_multiscalar_mul_loop0_spec (bc : Usize)
       exact ⟨this ▸ hl, fun j hj => ⟨(hv j (this ▸ hj)).1, (hv j (this ▸ hj)).2.1⟩⟩
   · exact ⟨hb, hlen, hbk⟩
 
-set_option linter.style.longLine false in
+open edwards.EdwardsPoint.«x86_64-tables».Insts in
 /-- The reset loop: every bucket becomes the identity. -/
 @[local step]
 private theorem optional_multiscalar_mul_loop1_loop0_spec (bc : Usize)
@@ -199,8 +198,7 @@ private theorem optional_multiscalar_mul_loop1_loop0_spec (bc : Usize)
     unfold optional_multiscalar_mul_loop1_loop0.body
     by_cases hlt : b' < bc
     · simp only [hlt, ite_true]
-      step with
-          edwards.EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+      step with Curve25519_dalekTraitsIdentity.identity_spec_point
         as ⟨e, heon, he, heb⟩
       step as ⟨x, back, hx, hback⟩
       step as ⟨b1, hb1⟩
@@ -221,7 +219,7 @@ private theorem optional_multiscalar_mul_loop1_loop0_spec (bc : Usize)
       exact ⟨⟨hl, hv⟩, fun j hj => hvz j (this ▸ hj)⟩
   · exact ⟨hb, hok, hz⟩
 
-set_option linter.style.longLine false in
+open edwards.EdwardsPoint.«x86_64-tables».Insts in
 /-- The running sums: `buckets_sum` ends as `∑_b (b + 1) • bucket_b`. -/
 @[local step]
 private theorem optional_multiscalar_mul_loop1_loop2_spec
@@ -251,11 +249,9 @@ private theorem optional_multiscalar_mul_loop1_loop2_spec
       rw [← getElem!_pos] at hep
       obtain ⟨hepon, hepb⟩ := hok.2 i1.val hi1b
       rw [← hep] at hepon hepb
-      step with
-          edwards.EdwardsPoint.«x86_64-tables».Insts.«CoreOpsArithAddAssignEdwardsPointx86_64-tables».add_assign_spec_point
+      step with «CoreOpsArithAddAssignEdwardsPointx86_64-tables».add_assign_spec_point
         it ep hitb hepb hiton hepon as ⟨it1, hit1on, hit1, hit1b⟩
-      step with
-          edwards.EdwardsPoint.«x86_64-tables».Insts.«CoreOpsArithAddAssignEdwardsPointx86_64-tables».add_assign_spec_point
+      step with «CoreOpsArithAddAssignEdwardsPointx86_64-tables».add_assign_spec_point
         sm it1 hsmb hit1b hsmon hit1on as ⟨sm1, hsm1on, hsm1, hsm1b⟩
       have hii : i'.val = i1.val + 1 := by scalar_tac
       have hsum1 : ∑ b ∈ Finset.Ico i1.val bc, buckets.val[b]!.toPoint =
@@ -390,7 +386,7 @@ private noncomputable def column
     (P : ℕ → curve25519.edwards.Point) (e : ℕ) : curve25519.edwards.Point :=
   ∑ k ∈ Finset.range sp.length, ((sp.val[k]!).1[e]!.val : ℤ) • P k
 
-set_option linter.style.longLine false in
+open edwards.EdwardsPoint.«x86_64-tables».Insts in
 open scoped Helpers.IndexStep in
 /-- The outer loop over the digit positions, from the top: the total is
 `∑_{j} 2^(w j) • column (di + j)` over the positions processed. -/
@@ -477,8 +473,7 @@ private theorem optional_multiscalar_mul_loop1_spec (w bc : Usize)
         step with edwards.«EdwardsPointx86_64-tables».mul_by_pow_2_spec T k hTb hTon
             (by rw [hkw]; exact hw.1)
           as ⟨T2, hT2on, hT2, hT2b⟩
-        step with
-            edwards.EdwardsPoint.«x86_64-tables».Insts.«CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».add_spec_point
+        step with «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».add_spec_point
           T2 c hT2b hcb hT2on hcon as ⟨T3, hT3on, hT3, hT3b⟩
         refine ⟨hv2, Nat.le_of_lt hd1lt,
           ⟨fun h => (by cases h), fun h => absurd h (Nat.ne_of_lt hd1lt)⟩,
@@ -641,7 +636,7 @@ end «VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multisc
 
 namespace Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables»
 
-set_option linter.style.longLine false in
+open «VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables» in
 /-- `Pippenger::optional_multiscalar_mul`: `none` iff a `none` point is paired with a scalar;
 otherwise `∑ s_i • P_i` over the pairs (up to the shorter input; unreduced scalars `< 2^255`);
 limbs `< 2^52`. -/
@@ -671,8 +666,8 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  unfold «VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.collect
-    «VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.collect_loop
+  unfold optional_multiscalar_mul.collect
+    optional_multiscalar_mul.collect_loop
   apply spec_bind (collect.collectLoop_spec _ it xs hit (alloc.vec.Vec.new _) (by simpa using hxs))
   intro vs hvs
   replace hvs : vs.val = xs := by rw [hvs]; rfl
@@ -707,8 +702,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     · rw [hdc7 h]; decide
     · rw [hdc8 h]; decide
   step with hpoints' as ⟨it1, hit1⟩
-  step with
-      «VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points_loop_spec
+  step with optional_multiscalar_mul.scalars_points_loop_spec
     _ _ _ ss (by rw [show (alloc.vec.Vec.deref vs).val = vs.val from Slice.from_val _ _, hvs]; exact
         hborrow_scalars) hss w
     ⟨by scalar_tac, hw.2⟩ ops hps it1 0#usize (by simpa using hit1) (Nat.zero_le _) (Nat.zero_le _)
@@ -769,7 +763,7 @@ namespace Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPo
 private def BucketsOK (v : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») (n : ℕ) : Prop :=
   v.length = n ∧ ∀ j < n, v.val[j]!.OnCurve ∧ v.val[j]!.LimbsLt 52
 
-set_option linter.style.longLine false in
+open edwards.EdwardsPoint.«x86_64-no-tables».Insts in
 /-- The first loop: `buckets_count` identities. -/
 @[local step]
 private theorem optional_multiscalar_mul_loop0_spec (bc : Usize)
@@ -788,8 +782,7 @@ private theorem optional_multiscalar_mul_loop0_spec (bc : Usize)
     unfold optional_multiscalar_mul_loop0.body
     by_cases hlt : b' < bc
     · simp only [hlt, ite_true]
-      step with
-          edwards.EdwardsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+      step with Curve25519_dalekTraitsIdentity.identity_spec_point
         as ⟨e, heon, he, heb⟩
       step as ⟨v1, hv1⟩
       step as ⟨b1, hb1⟩
@@ -803,7 +796,7 @@ private theorem optional_multiscalar_mul_loop0_spec (bc : Usize)
       exact ⟨this ▸ hl, fun j hj => ⟨(hv j (this ▸ hj)).1, (hv j (this ▸ hj)).2.1⟩⟩
   · exact ⟨hb, hlen, hbk⟩
 
-set_option linter.style.longLine false in
+open edwards.EdwardsPoint.«x86_64-no-tables».Insts in
 /-- The reset loop: every bucket becomes the identity. -/
 @[local step]
 private theorem optional_multiscalar_mul_loop1_loop0_spec (bc : Usize)
@@ -821,8 +814,7 @@ private theorem optional_multiscalar_mul_loop1_loop0_spec (bc : Usize)
     unfold optional_multiscalar_mul_loop1_loop0.body
     by_cases hlt : b' < bc
     · simp only [hlt, ite_true]
-      step with
-          edwards.EdwardsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+      step with Curve25519_dalekTraitsIdentity.identity_spec_point
         as ⟨e, heon, he, heb⟩
       step as ⟨x, back, hx, hback⟩
       step as ⟨b1, hb1⟩
@@ -843,7 +835,7 @@ private theorem optional_multiscalar_mul_loop1_loop0_spec (bc : Usize)
       exact ⟨⟨hl, hv⟩, fun j hj => hvz j (this ▸ hj)⟩
   · exact ⟨hb, hok, hz⟩
 
-set_option linter.style.longLine false in
+open edwards.EdwardsPoint.«x86_64-no-tables».Insts in
 /-- The running sums: `buckets_sum` ends as `∑_b (b + 1) • bucket_b`. -/
 @[local step]
 private theorem optional_multiscalar_mul_loop1_loop2_spec
@@ -873,11 +865,9 @@ private theorem optional_multiscalar_mul_loop1_loop2_spec
       rw [← getElem!_pos] at hep
       obtain ⟨hepon, hepb⟩ := hok.2 i1.val hi1b
       rw [← hep] at hepon hepb
-      step with
-          edwards.EdwardsPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddAssignEdwardsPointx86_64-no-tables».add_assign_spec_point
+      step with «CoreOpsArithAddAssignEdwardsPointx86_64-no-tables».add_assign_spec_point
         it ep hitb hepb hiton hepon as ⟨it1, hit1on, hit1, hit1b⟩
-      step with
-          edwards.EdwardsPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddAssignEdwardsPointx86_64-no-tables».add_assign_spec_point
+      step with «CoreOpsArithAddAssignEdwardsPointx86_64-no-tables».add_assign_spec_point
         sm it1 hsmb hit1b hsmon hit1on as ⟨sm1, hsm1on, hsm1, hsm1b⟩
       have hii : i'.val = i1.val + 1 := by scalar_tac
       have hsum1 : ∑ b ∈ Finset.Ico i1.val bc, buckets.val[b]!.toPoint =
@@ -1012,7 +1002,7 @@ private noncomputable def column
     (P : ℕ → curve25519.edwards.Point) (e : ℕ) : curve25519.edwards.Point :=
   ∑ k ∈ Finset.range sp.length, ((sp.val[k]!).1[e]!.val : ℤ) • P k
 
-set_option linter.style.longLine false in
+open edwards.EdwardsPoint.«x86_64-no-tables».Insts in
 open scoped Helpers.IndexStep in
 /-- The outer loop over the digit positions, from the top: the total is
 `∑_{j} 2^(w j) • column (di + j)` over the positions processed. -/
@@ -1100,7 +1090,7 @@ private theorem optional_multiscalar_mul_loop1_spec (w bc : Usize)
             (by rw [hkw]; exact hw.1)
           as ⟨T2, hT2on, hT2, hT2b⟩
         step with
-            edwards.EdwardsPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».add_spec_point
+            «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».add_spec_point
           T2 c hT2b hcb hT2on hcon as ⟨T3, hT3on, hT3, hT3b⟩
         refine ⟨hv2, Nat.le_of_lt hd1lt,
           ⟨fun h => (by cases h), fun h => absurd h (Nat.ne_of_lt hd1lt)⟩,
@@ -1265,7 +1255,7 @@ end «VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_mult
 
 namespace Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables»
 
-set_option linter.style.longLine false in
+open «VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables» in
 /-- `Pippenger::optional_multiscalar_mul`: `none` iff a `none` point is paired with a scalar;
 otherwise `∑ s_i • P_i` over the pairs (up to the shorter input; unreduced scalars `< 2^255`);
 limbs `< 2^52`. -/
@@ -1295,9 +1285,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  unfold
-      «VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect
-    «VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect_loop
+  unfold optional_multiscalar_mul.collect optional_multiscalar_mul.collect_loop
   apply spec_bind (collect.collectLoop_spec _ it xs hit (alloc.vec.Vec.new _) (by simpa using hxs))
   intro vs hvs
   replace hvs : vs.val = xs := by rw [hvs]; rfl
@@ -1332,8 +1320,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     · rw [hdc7 h]; decide
     · rw [hdc8 h]; decide
   step with hpoints' as ⟨it1, hit1⟩
-  step with
-      «VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points_loop_spec
+  step with optional_multiscalar_mul.scalars_points_loop_spec
     _ _ _ ss (by rw [show (alloc.vec.Vec.deref vs).val = vs.val from Slice.from_val _ _, hvs]; exact
         hborrow_scalars) hss w
     ⟨by scalar_tac, hw.2⟩ ops hps it1 0#usize (by simpa using hit1) (Nat.zero_le _) (Nat.zero_le _)

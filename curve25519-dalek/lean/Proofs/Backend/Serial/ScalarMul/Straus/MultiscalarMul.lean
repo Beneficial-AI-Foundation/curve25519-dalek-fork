@@ -63,7 +63,7 @@ open «CoreOpsArithAddSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_
 
 namespace «MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul
 
-set_option linter.style.longLine false in
+open window.«LookupTableProjectiveNielsPointx86_64-tables».Insts in
 /-- The points' lookup tables. -/
 @[local step]
 private theorem lookup_tables_spec {It Clause0_Item : Type}
@@ -80,10 +80,10 @@ private theorem lookup_tables_spec {It Clause0_Item : Type}
         List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) ps r.val ⦄ := by
   unfold lookup_tables lookup_tables_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
-    window.«LookupTableProjectiveNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
+    «CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
     (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) points ys hit ps hborrow
     (fun P hP =>
-        window.«LookupTableProjectiveNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
+        «CoreConvertFromSharedAEdwardsPointx86_64-tables».from_spec
       P (hps P hP).1 (hps P hP).2) _ (by simpa using hlen))
   rintro r ⟨zs, hr, hzs⟩
   simpa [hr] using hzs
@@ -289,7 +289,7 @@ open «CoreOpsArithAddSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx
 
 namespace «MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul
 
-set_option linter.style.longLine false in
+open window.«LookupTableProjectiveNielsPointx86_64-no-tables».Insts in
 /-- The points' lookup tables. -/
 @[local step]
 private theorem lookup_tables_spec {It Clause0_Item : Type}
@@ -306,10 +306,10 @@ private theorem lookup_tables_spec {It Clause0_Item : Type}
         List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) ps r.val ⦄ := by
   unfold lookup_tables lookup_tables_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
-    window.«LookupTableProjectiveNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».«from»
+    «CoreConvertFromSharedAEdwardsPointx86_64-no-tables».«from»
     (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) points ys hit ps hborrow
     (fun P hP =>
-        window.«LookupTableProjectiveNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
+        «CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from_spec
       P (hps P hP).1 (hps P hP).2) _ (by simpa using hlen))
   rintro r ⟨zs, hr, hzs⟩
   simpa [hr] using hzs
@@ -438,7 +438,7 @@ private theorem multiscalar_mul_loop0_spec
       exact ⟨hQ'on, hQ'b, hQ'p⟩
   · exact ⟨hstart, hend, hon, hQ, hQp⟩
 
-set_option linter.style.longLine false in
+open edwards.EdwardsPoint.«x86_64-no-tables».Insts in
 /-- `Straus::multiscalar_mul`: `∑ s_i • P_i` over the scalars and points the two inputs yield,
 up to the shorter one (unreduced scalars `< 2^255`); limbs `< 2^52`. -/
 @[step]
@@ -475,8 +475,7 @@ theorem multiscalar_mul_spec
   step with «MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.scalar_digits_spec _
       _ it1
     xs hit1 ss hborrow_scalars hss hxs as ⟨digits, hdigits⟩
-  step with
-      edwards.EdwardsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+  step with Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨Q, hQon, hQ, hQb⟩
   step as ⟨iter, hiter⟩
   obtain ⟨hTlen, hT⟩ := forall₂_getElem! htables

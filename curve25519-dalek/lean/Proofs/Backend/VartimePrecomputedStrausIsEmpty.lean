@@ -17,7 +17,9 @@ namespace Curve25519Dalek.backend
 
 namespace «VartimePrecomputedStrausx86_64-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts in
+open «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables» renaming
+  is_empty_spec → serial_is_empty_spec in
 /-- `VartimePrecomputedStraus::is_empty` (backend): whether there are no static points. -/
 @[step]
 theorem is_empty_spec (self : VartimePrecomputedStraus.«x86_64-tables»)
@@ -26,15 +28,15 @@ theorem is_empty_spec (self : VartimePrecomputedStraus.«x86_64-tables»)
     is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄ := by
   rcases self with ⟨inner⟩
   unfold is_empty
-  exact
-      serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».is_empty_spec
-      inner ps hself
+  exact serial_is_empty_spec inner ps hself
 
 end «VartimePrecomputedStrausx86_64-tables»
 
 namespace «VartimePrecomputedStrausx86_64-no-tables»
 
-set_option linter.style.longLine false in
+open serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts in
+open «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables» renaming
+  is_empty_spec → serial_is_empty_spec in
 /-- `VartimePrecomputedStraus::is_empty` (backend): whether there are no static points. -/
 @[step]
 theorem is_empty_spec (self : VartimePrecomputedStraus.«x86_64-no-tables»)
@@ -43,9 +45,7 @@ theorem is_empty_spec (self : VartimePrecomputedStraus.«x86_64-no-tables»)
     is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄ := by
   rcases self with ⟨inner⟩
   unfold is_empty
-  exact
-      serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».is_empty_spec
-      inner ps hself
+  exact serial_is_empty_spec inner ps hself
 
 end «VartimePrecomputedStrausx86_64-no-tables»
 

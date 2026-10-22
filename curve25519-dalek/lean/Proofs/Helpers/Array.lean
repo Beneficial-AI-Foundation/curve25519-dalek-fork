@@ -116,4 +116,11 @@ theorem _root_.Aeneas.Std.Slice.forall_ge_pred_set {α : Type} [Inhabited α] {P
   · rw [Slice.getElem!_Nat_set_ne _ _ _ _ (Nat.ne_of_lt hlt)]
     exact hh j hj (hkk ▸ hlt)
 
+/-- Indexing an array with `..` (`RangeFull`) gives the whole array as a slice. -/
+@[step]
+theorem index_rangeFull_spec {T : Type} {N : Usize} (a : Array T N) :
+    core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFullSlice T))
+      a () ⦃ (s : Slice T) => s = a.to_slice ⦄ := by
+  simp [core.array.Array.index, core.ops.index.IndexSlice, core.slice.index.Slice.index]
+
 end Aeneas.Std.Array
