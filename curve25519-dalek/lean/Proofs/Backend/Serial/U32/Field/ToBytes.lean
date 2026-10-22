@@ -81,6 +81,30 @@ add_decl_doc calcCanonical
 top bit of the last byte is clear. -/
 add_decl_doc toArray
 
+set_option linter.hashCommand false in
+#decompose calcCanonical calcCanonical_decomp
+  letRange 3 42 => roundsLow
+  letRange 4 32 => roundsHigh
+
+/-- Carry rounds 0 to 4 of `calcCanonical`, with the two mask constants. -/
+add_decl_doc roundsLow
+
+/-- Carry rounds 5 to 8 of `calcCanonical`. -/
+add_decl_doc roundsHigh
+
+set_option linter.hashCommand false in
+#decompose toArray toArray_decomp
+  letRange 1 61 => packLow
+  letRange 2 61 => packHigh
+
+/-- Bytes 0 to 15 of `toArray` (limbs 0 to 4). -/
+add_decl_doc packLow
+
+/-- Bytes 16 to 31 of `toArray` (limbs 5 to 9). -/
+add_decl_doc packHigh
+
+
+
 
 /-- First phase: the reduced limbs represent the same value modulo `p`, the even limbs are below
 `2^26` and the odd limbs below `2^25 + 2^18`. -/
@@ -292,21 +316,126 @@ private theorem mask_round {n R R' : Nat} {A A' A'' : Std.Array U32 10#usize} {i
     exact htail j (Nat.lt_of_succ_lt hj) hj10
 
 
-/- Heartbeat budget: with one `step*` call per round (each call has a sizeable cost of its own) and
-`-assumTac` the proof uses ~168k heartbeats of the default 200k (it took ~197.5k with two calls
-per round). Most of the cost is inside `step*`, whose every step re-simplifies the whole
-remaining program. If a future Aeneas or toolchain update pushes it over the limit:
-- Cheap fix (~4.6k saved): at the end of each round, clear the consumed step markers and posts,
-  e.g. `repeat clear ‹Step.prettyMonadEq _ _›` (the marker lives in `Aeneas.Step`, so the bare
-  name fails silently) and the used `‹UScalar.val _ = UScalar.val _ >>> _›`,
-  `‹UScalar.val _ = UScalar.val (_ &&& _)›` hypotheses.
-- Helper lemmas (~12k saved, measured at ~185k): moving the prefix invariants into a lemma taking
-  the array's defining equation and the final arithmetic (`q9 = 0` or `1`, top carry `= q9`,
-  remainder `= fe % p`) into a lemma about plain naturals.
-- Robust fix: `#decompose` `calcCanonical` into two halves (rounds 0 to 4 and 5 to 9), with the
-  round invariants `hcarry_old`, `hcur`, `htail`, `hP`, `hB` as the interface between them. -/
-set_option maxHeartbeats 1000000 in
--- One declaration steps through a long straight-line program (to be split with `#decompose`).
+/-- A bound on a shifted `u32`. -/
+private theorem shiftRight_le_two_pow (x : U32) (n : Nat) : x.val >>> n ≤ 2 ^ 32 / 2 ^ n := by
+  rewrite [Nat.shiftRight_eq_div_pow]
+  exact Nat.div_le_div_right (by apply Nat.le_of_lt (UScalar.hBounds _))
+
+/-- The state before carry round `n` of `calcCanonical`: the carry identity for the first `n`
+limbs plus `m` with the carry `q` into limb `n`; limb `n` of `A` holds `cur = fe[n] + q`, the limbs
+above are those of `fe`, and the limbs below are finished (their sum is the remainder, each limb
+within its radix). -/
+private def RoundInv (fe : FieldElement2625) (m n : ℕ) (A : Std.Array U32 10#usize) (cur : U32)
+    (q : ℕ) : Prop :=
+  (∑ i ∈ range n, limbWeight i * (fe[i]!).val) + m =
+      ((∑ i ∈ range n, limbWeight i * (fe[i]!).val) + m) % limbWeight n + q * limbWeight n ∧
+    A[n]! = cur ∧ cur.val = (fe[n]!).val + q ∧
+    (∀ j, n < j → j < 10 → A[j]! = fe[j]!) ∧
+    ∑ j ∈ range n, limbWeight j * (A[j]!).val =
+      ((∑ i ∈ range n, limbWeight i * (fe[i]!).val) + m) % limbWeight n ∧
+    ∀ j < n, (A[j]!).val < limbRadix j
+
+/-- Carry rounds 0 to 4 of `calcCanonical`, with the two mask constants. -/
+@[local step]
+private theorem roundsLow_spec (fe : FieldElement2625) (hfe : ∀ i < 10, fe[i]!.val < 2 ^ 26)
+    (m q : ℕ) (A : Std.Array U32 10#usize) (cur : U32) (hI : RoundInv fe m 0 A cur q) :
+    roundsLow A ⦃ (c26 : U32) (c25 : U32) (A' : Std.Array U32 10#usize) =>
+      c26.val = 2 ^ 26 - 1 ∧ c25.val = 2 ^ 25 - 1 ∧ ∃ cur' q', RoundInv fe m 5 A' cur' q' ⦄ := by
+  have hq_bound := shiftRight_le_two_pow
+  obtain ⟨hcarry_old, hcur, hadd, htail, hP, hB⟩ := hI
+  unfold roundsLow
+  iterate 2
+    step* 9 -assumTac
+    · subst ‹(_ : U32) = (_ : List U32)[_]'_›
+      simp (disch := decide) only [Array.getElem_val_eq_getElem!, htail]
+      apply Nat.le_trans (Nat.add_le_add (Nat.le_of_lt (hfe _ (by decide)))
+        (by rewrite [‹UScalar.val _ = UScalar.val _ >>> _›]; exact hq_bound _ _))
+        (by rewrite [U32.max_def, U32.numBits_eq]; decide)
+    have hpeel : ∀ {A B : Std.Array U32 10#usize} {k : Usize} {v : U32} {j : Nat},
+        A = B.set k v → k.val ≠ j → A[j]! = B[j]! := fun hA hk => by
+      rw [hA]; exact Array.getElem!_Nat_set_ne _ _ _ _ hk
+    subst ‹(_ : U32) = (_ : List U32)[_]'_›
+    subst ‹(_ : U32) = (_ : List U32)[_]'_›
+    subst ‹(_ : U32) = (_ : List U32)[_]'_›
+    simp only [Array.getElem_val_eq_getElem!, hcur] at ‹UScalar.val _ = UScalar.val _ >>> _›
+    simp (disch := decide) only [Array.getElem_val_eq_getElem!, htail]
+      at ‹UScalar.val _ = UScalar.val _ + UScalar.val _›
+    simp only [Array.getElem_val_eq_getElem!] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
+    rw [hpeel ‹_› (by decide), hcur] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
+    obtain ⟨hcarry, hM⟩ := carry_remainder fe hcarry_old ‹_› ‹_›
+      (Array.getElem_val_eq_getElem! _ _ (by
+        simp only [Array.length_eq, UScalar.ofNatCore_val_eq]; decide)).symm
+    obtain ⟨hcur', htail', hP', hB'⟩ :=
+      mask_round fe (by decide) htail hP hB ‹_› ‹_› (by decide) (by decide) ‹_› ‹_› hM
+    clear hpeel hcarry_old hcur htail hP hB hM ‹_ = Std.Array.set _ _ _›
+    clear ‹_ = Std.Array.set _ _ _›
+    rename' hcarry => hcarry_old, hcur' => hcur, htail' => htail, hP' => hP, hB' => hB
+  iterate 3
+    step* 8 -assumTac
+    · subst ‹(_ : U32) = (_ : List U32)[_]'_›
+      simp (disch := decide) only [Array.getElem_val_eq_getElem!, htail]
+      apply Nat.le_trans (Nat.add_le_add (Nat.le_of_lt (hfe _ (by decide)))
+        (by rewrite [‹UScalar.val _ = UScalar.val _ >>> _›]; exact hq_bound _ _))
+        (by rewrite [U32.max_def, U32.numBits_eq]; decide)
+    have hpeel : ∀ {A B : Std.Array U32 10#usize} {k : Usize} {v : U32} {j : Nat},
+        A = B.set k v → k.val ≠ j → A[j]! = B[j]! := fun hA hk => by
+      rw [hA]; exact Array.getElem!_Nat_set_ne _ _ _ _ hk
+    subst ‹(_ : U32) = (_ : List U32)[_]'_›
+    subst ‹(_ : U32) = (_ : List U32)[_]'_›
+    subst ‹(_ : U32) = (_ : List U32)[_]'_›
+    simp only [Array.getElem_val_eq_getElem!, hcur] at ‹UScalar.val _ = UScalar.val _ >>> _›
+    simp (disch := decide) only [Array.getElem_val_eq_getElem!, htail]
+      at ‹UScalar.val _ = UScalar.val _ + UScalar.val _›
+    simp only [Array.getElem_val_eq_getElem!] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
+    rw [hpeel ‹_› (by decide), hcur] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
+    obtain ⟨hcarry, hM⟩ := carry_remainder fe hcarry_old ‹_› ‹_›
+      (Array.getElem_val_eq_getElem! _ _ (by
+        simp only [Array.length_eq, UScalar.ofNatCore_val_eq]; decide)).symm
+    obtain ⟨hcur', htail', hP', hB'⟩ :=
+      mask_round fe (by decide) htail hP hB ‹_› ‹_› (by decide) (by decide) ‹_› ‹_› hM
+    clear hpeel hcarry_old hcur htail hP hB hM ‹_ = Std.Array.set _ _ _›
+    clear ‹_ = Std.Array.set _ _ _›
+    rename' hcarry => hcarry_old, hcur' => hcur, htail' => htail, hP' => hP, hB' => hB
+  exact ⟨by assumption, by assumption, _, _, hcarry_old, hcur, by assumption, htail, hP, hB⟩
+
+/-- Carry rounds 5 to 8 of `calcCanonical`. -/
+@[local step]
+private theorem roundsHigh_spec (fe : FieldElement2625) (hfe : ∀ i < 10, fe[i]!.val < 2 ^ 26)
+    (c26 c25 : U32) (hc26 : c26.val = 2 ^ 26 - 1) (hc25 : c25.val = 2 ^ 25 - 1)
+    (m q : ℕ) (A : Std.Array U32 10#usize) (cur : U32) (hI : RoundInv fe m 5 A cur q) :
+    roundsHigh c26 c25 A ⦃ (A' : Std.Array U32 10#usize) =>
+      ∃ cur' q', RoundInv fe m 9 A' cur' q' ⦄ := by
+  have hq_bound := shiftRight_le_two_pow
+  obtain ⟨hcarry_old, hcur, hadd, htail, hP, hB⟩ := hI
+  unfold roundsHigh
+  iterate 4
+    step* 8 -assumTac
+    · subst ‹(_ : U32) = (_ : List U32)[_]'_›
+      simp (disch := decide) only [Array.getElem_val_eq_getElem!, htail]
+      apply Nat.le_trans (Nat.add_le_add (Nat.le_of_lt (hfe _ (by decide)))
+        (by rewrite [‹UScalar.val _ = UScalar.val _ >>> _›]; exact hq_bound _ _))
+        (by rewrite [U32.max_def, U32.numBits_eq]; decide)
+    have hpeel : ∀ {A B : Std.Array U32 10#usize} {k : Usize} {v : U32} {j : Nat},
+        A = B.set k v → k.val ≠ j → A[j]! = B[j]! := fun hA hk => by
+      rw [hA]; exact Array.getElem!_Nat_set_ne _ _ _ _ hk
+    subst ‹(_ : U32) = (_ : List U32)[_]'_›
+    subst ‹(_ : U32) = (_ : List U32)[_]'_›
+    subst ‹(_ : U32) = (_ : List U32)[_]'_›
+    simp only [Array.getElem_val_eq_getElem!, hcur] at ‹UScalar.val _ = UScalar.val _ >>> _›
+    simp (disch := decide) only [Array.getElem_val_eq_getElem!, htail]
+      at ‹UScalar.val _ = UScalar.val _ + UScalar.val _›
+    simp only [Array.getElem_val_eq_getElem!] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
+    rw [hpeel ‹_› (by decide), hcur] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
+    obtain ⟨hcarry, hM⟩ := carry_remainder fe hcarry_old ‹_› ‹_›
+      (Array.getElem_val_eq_getElem! _ _ (by
+        simp only [Array.length_eq, UScalar.ofNatCore_val_eq]; decide)).symm
+    obtain ⟨hcur', htail', hP', hB'⟩ :=
+      mask_round fe (by decide) htail hP hB ‹_› ‹_› (by decide) (by decide) ‹_› ‹_› hM
+    clear hpeel hcarry_old hcur htail hP hB hM ‹_ = Std.Array.set _ _ _›
+    clear ‹_ = Std.Array.set _ _ _›
+    rename' hcarry => hcarry_old, hcur' => hcur, htail' => htail, hP' => hP, hB' => hB
+  exact ⟨_, _, hcarry_old, hcur, by assumption, htail, hP, hB⟩
+
 /-- Third phase: the result is the canonical representative `fe % p`, with every limb within its
 radix. -/
 @[local step]
@@ -318,10 +447,8 @@ private theorem calcCanonical_spec (fe : FieldElement2625) (i20 : U32) (q9 : USc
     calcCanonical fe i20 q9 ⦃ (h19 : FieldElement2625) =>
       h19.asNat = fe.asNat % p ∧
       (∀ i < 10, h19[i]!.val < limbRadix i) ⦄ := by
-  unfold calcCanonical
-  have hq_bound (x : U32) (n : Nat) : x.val >>> n ≤ 2 ^ 32 / 2 ^ n := by
-    rewrite [Nat.shiftRight_eq_div_pow]
-    exact Nat.div_le_div_right (by apply Nat.le_of_lt (UScalar.hBounds _))
+  rw [calcCanonical_decomp]
+  have hq_bound := shiftRight_le_two_pow
   --Prefix: `19 * q9` and `i20 + 19 * q9` written into limb 0 of a new array
   step* 3 -assumTac
   simp only [hi20, ‹UScalar.val _ = 19 * UScalar.val _›]
@@ -357,58 +484,12 @@ private theorem calcCanonical_spec (fe : FieldElement2625) (i20 : U32) (q9 : USc
     after the carry write is peeled off that write with `hpeel`,
   - propagates the carry identity with `carry_remainder` and the array invariants with
     `mask_round`. -/
-  iterate 2
-    step* 9 -assumTac
-    · subst ‹(_ : U32) = (_ : List U32)[_]'_›
-      simp (disch := decide) only [Array.getElem_val_eq_getElem!, htail]
-      apply Nat.le_trans (Nat.add_le_add (Nat.le_of_lt (hfe _ (by decide)))
-        (by rewrite [‹UScalar.val _ = UScalar.val _ >>> _›]; exact hq_bound _ _))
-        (by rewrite [U32.max_def, U32.numBits_eq]; decide)
-    have hpeel : ∀ {A B : Std.Array U32 10#usize} {k : Usize} {v : U32} {j : Nat},
-        A = B.set k v → k.val ≠ j → A[j]! = B[j]! := fun hA hk => by
-      rw [hA]; exact Array.getElem!_Nat_set_ne _ _ _ _ hk
-    subst ‹(_ : U32) = (_ : List U32)[_]'_›
-    subst ‹(_ : U32) = (_ : List U32)[_]'_›
-    subst ‹(_ : U32) = (_ : List U32)[_]'_›
-    simp only [Array.getElem_val_eq_getElem!, hcur] at ‹UScalar.val _ = UScalar.val _ >>> _›
-    simp (disch := decide) only [Array.getElem_val_eq_getElem!, htail]
-      at ‹UScalar.val _ = UScalar.val _ + UScalar.val _›
-    simp only [Array.getElem_val_eq_getElem!] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
-    rw [hpeel ‹_› (by decide), hcur] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
-    obtain ⟨hcarry, hM⟩ := carry_remainder fe hcarry_old ‹_› ‹_›
-      (Array.getElem_val_eq_getElem! _ _ (by
-        simp only [Array.length_eq, UScalar.ofNatCore_val_eq]; decide)).symm
-    obtain ⟨hcur', htail', hP', hB'⟩ :=
-      mask_round fe (by decide) htail hP hB ‹_› ‹_› (by decide) (by decide) ‹_› ‹_› hM
-    clear hpeel hcarry_old hcur htail hP hB hM ‹_ = Std.Array.set _ _ _›
-    clear ‹_ = Std.Array.set _ _ _›
-    rename' hcarry => hcarry_old, hcur' => hcur, htail' => htail, hP' => hP, hB' => hB
-  iterate 7
-    step* 8 -assumTac
-    · subst ‹(_ : U32) = (_ : List U32)[_]'_›
-      simp (disch := decide) only [Array.getElem_val_eq_getElem!, htail]
-      apply Nat.le_trans (Nat.add_le_add (Nat.le_of_lt (hfe _ (by decide)))
-        (by rewrite [‹UScalar.val _ = UScalar.val _ >>> _›]; exact hq_bound _ _))
-        (by rewrite [U32.max_def, U32.numBits_eq]; decide)
-    have hpeel : ∀ {A B : Std.Array U32 10#usize} {k : Usize} {v : U32} {j : Nat},
-        A = B.set k v → k.val ≠ j → A[j]! = B[j]! := fun hA hk => by
-      rw [hA]; exact Array.getElem!_Nat_set_ne _ _ _ _ hk
-    subst ‹(_ : U32) = (_ : List U32)[_]'_›
-    subst ‹(_ : U32) = (_ : List U32)[_]'_›
-    subst ‹(_ : U32) = (_ : List U32)[_]'_›
-    simp only [Array.getElem_val_eq_getElem!, hcur] at ‹UScalar.val _ = UScalar.val _ >>> _›
-    simp (disch := decide) only [Array.getElem_val_eq_getElem!, htail]
-      at ‹UScalar.val _ = UScalar.val _ + UScalar.val _›
-    simp only [Array.getElem_val_eq_getElem!] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
-    rw [hpeel ‹_› (by decide), hcur] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
-    obtain ⟨hcarry, hM⟩ := carry_remainder fe hcarry_old ‹_› ‹_›
-      (Array.getElem_val_eq_getElem! _ _ (by
-        simp only [Array.length_eq, UScalar.ofNatCore_val_eq]; decide)).symm
-    obtain ⟨hcur', htail', hP', hB'⟩ :=
-      mask_round fe (by decide) htail hP hB ‹_› ‹_› (by decide) (by decide) ‹_› ‹_› hM
-    clear hpeel hcarry_old hcur htail hP hB hM ‹_ = Std.Array.set _ _ _›
-    clear ‹_ = Std.Array.set _ _ _›
-    rename' hcarry => hcarry_old, hcur' => hcur, htail' => htail, hP' => hP, hB' => hB
+  have I0 : RoundInv fe (19 * q9.val) 0 _ _ (19 * q9.val) :=
+    ⟨hcarry_old, hcur, ‹_›, htail, hP, hB⟩
+  clear hcarry_old hcur htail hP hB
+  step with roundsLow_spec fe hfe _ _ _ _ I0 as ⟨c26, c25, A5, hc26, hc25, cur5, q5, I5⟩
+  step with roundsHigh_spec fe hfe c26 c25 hc26 hc25 _ _ _ _ I5 as ⟨A9, cur9, q9c, I9⟩
+  obtain ⟨hcarry_old, hcur, hadd, htail, hP, hB⟩ := I9
   --Round 9: the top carry out of limb 9
   step* 2 -assumTac
   subst ‹(_ : U32) = (_ : List U32)[_]'_›
@@ -462,11 +543,6 @@ private theorem calcCanonical_spec (fe : FieldElement2625) (i20 : U32) (q9 : USc
   --`q9 ≠ 0`: the assertion that the top carry is 1 holds as `q9 ≤ 1`
   next hne =>
     step* -assumTac
-    · simp only [Array.getElem_val_eq_getElem!, hcur] at ‹UScalar.val _ = UScalar.val _ >>> _›
-      rw [UScalar.val_eq_imp_iff, UScalar.ofNatCore_val_eq, ‹UScalar.val _ = UScalar.val _ >>> _›,
-        ← ‹UScalar.val q9 = _ >>> _›]
-      exact (Nat.le_one_iff_eq_zero_or_eq_one.mp hq9').resolve_left fun h0 => hne (by
-        rw [UScalar.val_eq_imp_iff, UScalar.ofNatCore_val_eq, h0])
     subst ‹_ = Std.Array.set _ _ _›
     simp only [Array.getElem_val_eq_getElem!, hcur] at ‹UScalar.val _ = UScalar.val (_ &&& _)›
     obtain ⟨hP', hB'⟩ := mask_step (k := 9#usize) (by decide) hP hB (by decide) ‹_› ‹_› hM
@@ -551,49 +627,17 @@ private theorem byte_join_step {h : FieldElement2625} {s s' : Std.Array U8 32#us
     Nat.mul_comm _ (2 ^ t), Nat.mul_assoc]
 
 
-/- `step*` runs through the whole program in one call: each `step*` call has a sizeable cost of its
-own on top of its steps, so this is much cheaper than stepping byte by byte. The invariant of
-`byte_step` and `byte_join_step` is then carried through the 32 bytes afterwards, every
-postcondition being picked up by `‹_›`. The inline statements below bind the bounds proofs of
-their list indices (`'h0`, ...) instead of leaving them to `get_elem_tactic`, which is costly. -/
-set_option maxHeartbeats 1000000 in
--- One declaration steps through a long straight-line program (to be split with `#decompose`).
-/-- Fourth phase: packing ten limbs within their radix into 32 bytes preserves the value, and the
-top bit of the last byte is clear. -/
+/-- Bytes 0 to 15 of `toArray`: limbs 0 to 4, which end exactly at bit 128. -/
 @[local step]
-private theorem toArray_spec (h19 : FieldElement2625)
-    (hbound : ∀ i < 10, h19[i]!.val < limbRadix i) :
-    toArray h19 ⦃ (result : Array U8 32#usize) =>
-      result.asNat 8 = h19.asNat ⦄ := by
-  unfold toArray
+private theorem packLow_spec (h19 : FieldElement2625)
+    (hbound : ∀ i < 10, h19[i]!.val < limbRadix i) (s : Std.Array U8 32#usize) :
+    packLow h19 s ⦃ (s16 : Std.Array U8 32#usize) =>
+      ∑ i ∈ range 16, 2 ^ (8 * i) * (s16[i]!).val =
+        ∑ i ∈ range 5, limbWeight i * (h19[i]!).val ⦄ := by
+  unfold packLow
   step* -assumTac
-  --The assertion: the top bit of the last byte is clear, as limb 9 has 25 bits
-  · have hlast : ∀ {s s' : Std.Array U8 32#usize} {x y : U32} {b c d : U8}
-        {h9 : 9 < (↑h19 : List U32).length} {hc' : 31 < (↑s' : List U8).length},
-        x = (↑h19 : List U32)[9]'h9 → y.val = x.val >>> 18 → b = UScalar.cast .U8 y →
-        s' = s.set 31#usize b → c = (↑s' : List U8)[31]'hc' → d.val = (c &&& 128#u8).val →
-        d = 0#u8 := fun hx hy hb hs hc hd => by
-      subst hs
-      apply UScalar.eq_of_val_eq
-      rw [hd, UScalar.val_and, hc, Array.getElem_val_eq_getElem!,
-        Array.getElem!_Nat_set_eq _ 31#usize 31 _ ⟨rfl, by
-          simp only [Std.Array.length, Array.length_eq]; decide⟩,
-        hb, UScalar.cast_val_eq, UScalarTy.U8_numBits_eq, hy, hx, Array.getElem_val_eq_getElem!]
-      have hlt : (h19[9]!.val >>> 18) % 2 ^ 8 < 2 ^ 7 := by
-        apply Nat.lt_of_le_of_lt (Nat.mod_le _ _)
-        rw [Nat.shiftRight_eq_div_pow, Nat.div_lt_iff_lt_mul (Nat.two_pow_pos 18), ← Nat.pow_add]
-        exact hbound 9 (by decide)
-      apply Nat.eq_of_testBit_eq
-      intro i
-      rw [Nat.testBit_and, show (128#u8).val = 2 ^ 7 from rfl, show (0#u8).val = 0 from rfl,
-        Nat.testBit_two_pow, Nat.zero_testBit]
-      by_cases hi : 7 = i
-      · rw [← hi, Nat.testBit_lt_two_pow hlt, Bool.false_and]
-      · rw [decide_eq_false hi, Bool.and_false]
-    exact hlast ‹_› ‹_› ‹_› ‹_› ‹_› ‹_›
-  --Bytes 0 to 15: limbs 0 to 4, starting with nothing written and limb 0 pending in full
   have hI0 : ∀ {x : U32} {h0 : 0 < (↑h19 : List U32).length}, x = (↑h19 : List U32)[0]'h0 →
-      ∑ i ∈ range 0, 2 ^ (8 * i) * ((Array.repeat 32#usize 0#u8)[i]!).val +
+      ∑ i ∈ range 0, 2 ^ (8 * i) * (s[i]!).val +
         2 ^ (8 * 0) * (x.val >>> 0) = ∑ i ∈ range (0 + 1), limbWeight i * (h19[i]!).val :=
     fun hx => by
       rw [hx, Array.getElem_val_eq_getElem!]
@@ -610,20 +654,37 @@ private theorem toArray_spec (h19 : FieldElement2625)
     replace hI := byte_join_step hbound hI ‹_› ‹_› ‹_› ‹_› ‹_› ‹_› ‹_›
   iterate 3
     replace hI := byte_step hI ‹_› ‹_› ‹_›
-  --Bytes 16 to 31: limbs 5 to 9, starting with limb 4 used up and limb 5 pending in full
-  have hswitch : ∀ {s : Std.Array U8 32#usize} {x x' : U32} {h4 : 4 < (↑h19 : List U32).length}
-      {h5 : 5 < (↑h19 : List U32).length}, x = (↑h19 : List U32)[4]'h4 →
-      x' = (↑h19 : List U32)[5]'h5 →
-      ∑ i ∈ range 16, 2 ^ (8 * i) * (s[i]!).val + 2 ^ (8 * 16) * (x.val >>> 26) =
+  --Limb 4 is used up
+  have hdone : ∀ {s' : Std.Array U8 32#usize} {x : U32} {h4 : 4 < (↑h19 : List U32).length},
+      x = (↑h19 : List U32)[4]'h4 →
+      ∑ i ∈ range 16, 2 ^ (8 * i) * (s'[i]!).val + 2 ^ (8 * 16) * (x.val >>> 26) =
         ∑ i ∈ range 5, limbWeight i * (h19[i]!).val →
-      ∑ i ∈ range 16, 2 ^ (8 * i) * (s[i]!).val + 2 ^ (8 * 16) * (x'.val >>> 0) =
-        ∑ i ∈ range 6, limbWeight i * (h19[i]!).val := fun hx hx' hI => by
+      ∑ i ∈ range 16, 2 ^ (8 * i) * (s'[i]!).val =
+        ∑ i ∈ range 5, limbWeight i * (h19[i]!).val := fun hx hI => by
     rw [hx, Array.getElem_val_eq_getElem!, Nat.shiftRight_eq_div_pow,
       Nat.div_eq_of_lt (by apply hbound 4 (by decide)), Nat.mul_zero, Nat.add_zero] at hI
-    rw [hx', Array.getElem_val_eq_getElem!, Nat.shiftRight_zero, sum_range_succ _ 5, ← hI]
+    exact hI
+  exact hdone ‹_› hI
+
+/-- Bytes 16 to 31 of `toArray`: limbs 5 to 9; the value of all 32 bytes, and the top bit of the
+last byte is clear, as limb 9 has 25 bits. -/
+@[local step]
+private theorem packHigh_spec (h19 : FieldElement2625)
+    (hbound : ∀ i < 10, h19[i]!.val < limbRadix i) (s16 : Std.Array U8 32#usize)
+    (hI16 : ∑ i ∈ range 16, 2 ^ (8 * i) * (s16[i]!).val =
+      ∑ i ∈ range 5, limbWeight i * (h19[i]!).val) :
+    packHigh h19 s16 ⦃ (s32 : Std.Array U8 32#usize) =>
+      s32.asNat 8 = h19.asNat ∧ (s32[31]!).val < 2 ^ 7 ⦄ := by
+  unfold packHigh
+  step* -assumTac
+  have hstart : ∀ {x' : U32} {h5 : 5 < (↑h19 : List U32).length},
+      x' = (↑h19 : List U32)[5]'h5 →
+      ∑ i ∈ range 16, 2 ^ (8 * i) * (s16[i]!).val + 2 ^ (8 * 16) * (x'.val >>> 0) =
+        ∑ i ∈ range 6, limbWeight i * (h19[i]!).val := fun hx' => by
+    rw [hx', Array.getElem_val_eq_getElem!, Nat.shiftRight_zero, sum_range_succ _ 5, ← hI16]
     rfl
-  replace hI := byte_step (hswitch ‹_› ‹_› hI) ‹_› ‹_› ‹_›
-  clear hswitch
+  have hI := byte_step (hstart ‹_›) ‹_› ‹_› ‹_›
+  clear hstart
   iterate 2
     replace hI := byte_step hI ‹_› ‹_› ‹_›
   replace hI := byte_join_step hbound hI ‹_› ‹_› ‹_› ‹_› ‹_› ‹_› ‹_›
@@ -633,7 +694,6 @@ private theorem toArray_spec (h19 : FieldElement2625)
     replace hI := byte_join_step hbound hI ‹_› ‹_› ‹_› ‹_› ‹_› ‹_› ‹_›
   iterate 3
     replace hI := byte_step hI ‹_› ‹_› ‹_›
-  --The value of the bytes: limb 9 is used up
   have hend : ∀ {s : Std.Array U8 32#usize} {x : U32} {h9 : 9 < (↑h19 : List U32).length},
       x = (↑h19 : List U32)[9]'h9 →
       ∑ i ∈ range 32, 2 ^ (8 * i) * (s[i]!).val + 2 ^ (8 * 32) * (x.val >>> 26) =
@@ -644,7 +704,43 @@ private theorem toArray_spec (h19 : FieldElement2625)
         Nat.add_zero] at hI
       rw [Array.asNat_eq_sum, UScalar.ofNatCore_val_eq, asNat_def, Array.asNat2625_eq_sum]
       exact hI
-  exact hend ‹_› hI
+  have hlast : ∀ {s s' : Std.Array U8 32#usize} {x y : U32} {b : U8}
+      {h9 : 9 < (↑h19 : List U32).length}, x = (↑h19 : List U32)[9]'h9 →
+      y.val = x.val >>> 18 → b = UScalar.cast .U8 y → s' = s.set 31#usize b →
+      (s'[31]!).val < 2 ^ 7 := fun hx hy hb hs => by
+    subst hs
+    rw [Array.getElem!_Nat_set_eq _ 31#usize 31 _ ⟨rfl, by
+        simp only [Std.Array.length, Array.length_eq]; decide⟩,
+      hb, UScalar.cast_val_eq, UScalarTy.U8_numBits_eq, hy, hx, Array.getElem_val_eq_getElem!]
+    apply Nat.lt_of_le_of_lt (Nat.mod_le _ _)
+    rw [Nat.shiftRight_eq_div_pow, Nat.div_lt_iff_lt_mul (Nat.two_pow_pos 18), ← Nat.pow_add]
+    exact hbound 9 (by decide)
+  exact ⟨hend ‹_› hI, hlast ‹_› ‹_› ‹_› ‹_›⟩
+
+/-- Fourth phase: packing ten limbs within their radix into 32 bytes preserves the value, and the
+top bit of the last byte is clear. -/
+@[local step]
+private theorem toArray_spec (h19 : FieldElement2625)
+    (hbound : ∀ i < 10, h19[i]!.val < limbRadix i) :
+    toArray h19 ⦃ (result : Array U8 32#usize) =>
+      result.asNat 8 = h19.asNat ⦄ := by
+  rw [toArray_decomp]
+  dsimp only
+  step with packLow_spec h19 hbound as ⟨s16, hs16⟩
+  step with packHigh_spec h19 hbound s16 hs16 as ⟨s32, hs32, hlt⟩
+  step as ⟨c, hc⟩
+  step as ⟨d, hd⟩
+  step
+  · apply UScalar.eq_of_val_eq
+    rw [hd, UScalar.val_and, hc, Array.getElem_val_eq_getElem!]
+    apply Nat.eq_of_testBit_eq
+    intro i
+    rw [Nat.testBit_and, show (128#u8).val = 2 ^ 7 from rfl, show (0#u8).val = 0 from rfl,
+      Nat.testBit_two_pow, Nat.zero_testBit]
+    by_cases hi : 7 = i
+    · rw [← hi, Nat.testBit_lt_two_pow hlt, Bool.false_and]
+    · rw [decide_eq_false hi, Bool.and_false]
+  exact hs32
 
 
 /-- `to_bytes` returns the little-endian encoding of the canonical representative of `self`: the 32

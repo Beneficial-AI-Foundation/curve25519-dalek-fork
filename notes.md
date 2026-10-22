@@ -639,14 +639,95 @@ depend on the generated types and are specific to this translation.
 - **Public imports.** `lake shake` misses `open`-only namespaces and `step` specs, so some files
   keep public imports they may not need; trim them by hand when touching a file.
 
-## Performance to-do (noted 2026-10-22)
+## Performance plan (2026-10-22)
 
-- Imports: `public import` only where a declaration's statement needs it; everything used only in
-  proofs is a plain `import` (fewer rebuilds, smaller public environments). Audit every file.
-- Other things to check: heavy `simp`/`step*` calls in the u32 field proofs (`SquareInner`,
-  `Mul`); the two `maxHeartbeats 1000000` overrides in `U32/Field/ToBytes.lean`
-  (`calcCanonical_spec`, `toArray_spec`: split them with `#decompose`); the fragile `step* N` /
-  `‹_›` style of the ported `ToBytes`/`FromBytes`; per-file build times.
+Out of scope for now: Aeneas `step*` improvements (in the Aeneas pipeline), CI (separate later
+work: caching Aeneas and `.lake/build`, parallel lint jobs), keeping it fast (Radar, budgets;
+another occasion).
+
+0. **Baseline.** Full rebuild of our modules under `lakeprof` (limited `LEAN_NUM_THREADS`, memory
+   cap): per-module times, critical path. A `LEAN=` wrapper with `/usr/bin/time` for wall time
+   and peak memory per module, and `--profile` categories. The fixed cost of an empty file
+   importing `Curve25519Dalek.Funs` (64k lines, 16 MB olean, imported by 328 proof files). Keep
+   the logs to compare with `lakeprof diff`. Old data (2026-10-21, old Aeneas, parallel load):
+   `PrecomputedStraus/OptionalMixedMultiscalarMul` 62 s, `Pippenger/OptionalMultiscalarMul`
+   43 s, U64 `Field/ToBytes` 30 s, `Straus/OptionalMultiscalarMul` 28 s, U64 `Scalar/ToBytes`
+   24 s, `VartimeDoubleBase.Mul` 23 s, `VartimeTripleBase` 22 s, ~30 more at 8–21 s.
+1. **Memory safety.** Start the lean-lsp MCP under `systemd-run -p MemoryMax=6G` (its workers
+   otherwise live in VS Code's scope; OOM on 2026-10-22). List modules peaking above ~3 GB (from
+   0) for step 3. Document a safe `LEAN_NUM_THREADS`/`-j` for 15 GB in "Building locally".
+2. **Imports.** `Proofs` has 1082 `public import`s against 1222 plain ones. Demote every
+   `public import` that no statement of the file needs (helpers and other proof files are proof
+   dependencies), so that a change to a proof body does not rebuild downstream modules; drop
+   unused imports. Tool: Lean's `shake` if it works here, else a demote-and-rebuild script.
+   Measure the rebuild set after touching a helper, before and after.
+3. **Heavy proofs** (worst first, by time and memory from 0). Split oversized declarations with
+   `#decompose` or helper lemmas: U32 `ToBytes` (`calcCanonical_spec`, `toArray_spec`; removes
+   both `maxHeartbeats 1000000`), both `ToBytes`, `Mul`, `MontgomeryReduce`, the scalar-mul
+   loops. One file per `«x86_64-tables»`/`«x86_64-no-tables»` variant where both are in one file
+   (`OptionalMixedMultiscalarMul` first), so they build in parallel. Keep `step*` contexts small;
+   replace `step* N`/`‹_›` chains (ported `ToBytes`/`FromBytes`) by named steps. Avoid the
+   `whnf` traps met in the u32 port: unifying literal `#usize` indices or long `set` chains with
+   `exact`, unfolding hidden definitions; work at the list level (`Array.set_val_eq`,
+   `Array.repeat_val`) instead.
+4. **Build structure.** From the critical path (`lakeprof -p`), break long sequential chains
+   (shared helpers, `Specs/*` importing all of `Proofs`).
+
+**Baseline (2026-10-22)**, full rebuild of our libraries (`LEAN_NUM_THREADS=4`, 4 cores, Lean
+v4.35.0, Aeneas nightly-2026.10.22). Tooling in `.scratch/perf/`: `sysroot/` is a copy of the
+toolchain (symlinks) whose `bin/lean` logs wall time and peak RSS per module (Lake only reads
+the prefix from `LEAN`, then calls `<prefix>/bin/lean`, so a plain `LEAN=` wrapper is not
+enough; `/usr/bin/time` is not installed). Run: `PERF_LOG=… LAKE_OVERRIDE_LEAN=true
+LEAN=.scratch/perf/sysroot/bin/lean lakeprof record -o … -- lake build` (lakeprof report from the
+repository root).
+- 432 modules, 4059 s of work, 1093 s wall; simulated: 2 cores 2032 s, 8 cores 670 s, 16 cores
+  506 s, critical path 468 s (`Funs` 214 s → U32 `Reduce` 74 s → U32 `ToBytes` 158 s). With few
+  cores the total work, not the critical path, decides the wall time.
+- Fixed cost per module (loading imports, mostly Aeneas and its Mathlib part; `Funs` adds
+  ~0.3 s): ~2.2 s, i.e. ~1000 s of the 4059 s. Median module 4.3 s; 71 modules ≥ 10 s.
+- Memory: every module ≤ 1.8 GB except `Funs` (5.2 GB). The OOM of 2026-10-22 came from the
+  uncapped language-server workers, not from builds.
+- Slowest: `Funs` 214, U32 `ToBytes` 158, `PrecomputedStraus/OptionalMixedMultiscalarMul` 136,
+  `Pippenger/OptionalMultiscalarMul` 109, `Ristretto/DoubleAndCompressBatch` 85, U32 `Reduce` 75,
+  U32 `FromBytes` 70, U32 `Mul` 67, `Ristretto/Elligator` 63, `Straus/OptionalMultiscalarMul` 56,
+  U64 `Field/ToBytes` 50, `VartimeDoubleBase/Mul` 49, U32 `SquareInner` 47,
+  `MontgomeryReduce` 45, `Ristretto/Compress` 43 (seconds).
+
+**Imports (step 2) findings.** Lake's early cutoff works: a comment-only change to
+`Proofs/Helpers/ToField.lean` rebuilds that module only. Adding a lemma (interface change)
+rebuilt 49 modules = the module + its 48 direct importers: no transitive spread through
+`public import`, so demoting public imports does not shrink such cascades. `lake shake` is not
+usable here: it drops imports needed only inside proofs or for `open` (e.g. `Proofs.Helpers.Array`
+for `Array.set_getElem_five`, `Curve25519.Basic` for `open curve25519`) and adds unrelated
+Mathlib modules (`Nat.Totient`, `Rat.Floor`, …); its changes were reverted. Remaining value is
+small: drop genuinely unused imports by hand when touching a file, and fix the structural edges
+`EllipticCurve/*/Defs` → `*/Lemmas` (Defs should import Defs only).
+
+**Heavy proofs (step 3) findings.** Standalone `lake env lean` times (all cores) per declaration
+via `-Dtrace.profiler=true -Dtrace.profiler.threshold=1000`, list in `.scratch/perf/top-decls.txt`.
+- The cost of a `step` grows with the context along a long chain (0.3 s → 1.4 s per step in
+  `elligator_ristretto_flavor_spec`), and the final `scalar_tac`s in a big context cost ~2.6 s
+  each. Moving a long straight-line chain out of a loop proof into its own lemma with a small
+  context (`#decompose … afterLets (branch 0 (letRange a n)) => helper`, `afterLets` skips the
+  leading pure `let`s, `dsimp only` before `rw [body_eq]` under the loop's `match`) halved
+  `DoubleAndCompressBatch.loop1_spec` (21.7 s → 8.2 + 2.1 s per variant; file 24 s → 11 s).
+- U32 `ToBytes`: `calcCanonical` split into `roundsLow`/`roundsHigh` (rounds 0–4, 5–8; interface
+  the predicate `RoundInv`), `toArray` into `packLow`/`packHigh` (bytes 0–15, 16–31). Module
+  74 s → 36 s (`lake build`, all cores), proof time ~87 s → 54 s, longest declaration
+  44 s → 11 s; both `maxHeartbeats 1000000` removed. (`lake env lean` cannot check this file: the
+  `#decompose` of `to_bytes` hits `maxRecDepth` without the native `AeneasMeta` plugin, so
+  profile it inside `lake build` with `set_option trace.profiler true` at the top.)
+- Generated `#decompose` definitions need `add_decl_doc` (docBlame linter).
+- Next candidates: U64 `ToBytes.pack_spec` (`step*` 15 s over 32 byte writes whose boundaries
+  do not match the 51-bit limbs: needs a prefix-sum invariant as in U32 `toArray`),
+  `Elligator` (2 × ~20 s, one long chain), U32 `Reduce` (`carry_spec` 12 s), U32 `FromBytes`
+  (`from_bytes_spec` 14 s, `load4_at_spec` 11.5 s), Pippenger `loop1_loop1` (2 × ~9 s).
+- Not effective: `step*` options (`-grind`, `-grind +scalarTac`, `-threadGrindState`: slower or
+  failing on `pack_spec`); clearing the `% p` equations after each step (−14% only).
+- Cheap local waste: `simp (disch := scalar_tac)` with many discharges in a big context (3.9 s in
+  `load4_at_spec`); prefer explicit bounds or `omega`.
+- Two x86_64 variants are proved twice (same proof text): everything costs double.
+
 
 ## Performance findings (2026-10-10)
 
