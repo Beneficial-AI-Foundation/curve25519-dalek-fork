@@ -73,7 +73,7 @@ masked, reduced modulo `p`; x86_64 targets). -/
 recall ct_eq_spec (self other : MontgomeryPoint) (htgt : OnX86_64) :
     ct_eq self other ⦃ (c : subtle.Choice) => c.IsValid ∧ (c = 1#u8 ↔ self.u = other.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.SubtleConstantTimeEq
@@ -86,7 +86,7 @@ recall conditional_select_spec (a b : MontgomeryPoint) (choice : subtle.Choice)
     conditional_select a b choice ⦃ (r : MontgomeryPoint) =>
       (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms conditional_select_spec
 
 end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.SubtleConditionallySelectable
@@ -97,7 +97,7 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreCmpPartialEqMontg
 recall eq_spec (self other : MontgomeryPoint) (htgt : OnX86_64) :
     eq self other ⦃ (b : Bool) => b = true ↔ self.u = other.u ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreCmpPartialEqMontgomeryPoint
@@ -119,7 +119,7 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.ZeroizeZeroize
 recall zeroize_spec_point (self : MontgomeryPoint) :
     zeroize self ⦃ (r : MontgomeryPoint) => r.asNat = 0 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
 
 end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.ZeroizeZeroize
@@ -133,7 +133,7 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
     mul_base scalar ⦃ (r : MontgomeryPoint) =>
       r.asNat = encodeU (scalar.asNat • montgomeryBasepoint).u ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, get_target,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, get_target,
   core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
@@ -143,7 +143,7 @@ recall mul_clamped_spec (self : MontgomeryPoint) (bytes : Array U8 32#usize) (ht
     mul_clamped self bytes ⦃ (r : MontgomeryPoint) =>
       r.asNat = x25519 (bytes.asNat 8) self.asNat ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
 
@@ -153,7 +153,7 @@ recall mul_base_clamped_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
     mul_base_clamped bytes ⦃ (r : MontgomeryPoint) =>
       r.asNat = x25519 (bytes.asNat 8) 9 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, get_target,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, get_target,
   core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
 
@@ -166,7 +166,7 @@ recall mul_bits_be_spec {T0 : Type} (inst : core.iter.traits.iterator.Iterator T
     mul_bits_be inst self bits ⦃ (r : MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladderBits bs self.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_bits_be_spec
 
@@ -197,7 +197,7 @@ recall to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
             (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_edwards.«x86_64-tables_spec»
 
 
@@ -212,7 +212,7 @@ recall to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8)
             (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms to_edwards.«x86_64-no-tables_spec»
 
@@ -226,7 +226,7 @@ recall mul_spec (self : montgomery.MontgomeryPoint) (s : scalar.Scalar) (htgt : 
     mul self s ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (s.asNat % 2 ^ 255) self.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
@@ -239,7 +239,7 @@ recall mul_assign_spec (self : MontgomeryPoint) (scalar : scalar.Scalar) (htgt :
     mul_assign self scalar ⦃ (r : MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (scalar.asNat % 2 ^ 255) self.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
@@ -253,7 +253,7 @@ recall mul_spec (self : montgomery.MontgomeryPoint) (rhs : scalar.Scalar) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
@@ -267,7 +267,7 @@ recall mul_spec (self : montgomery.MontgomeryPoint) (rhs : scalar.Scalar) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
@@ -280,7 +280,7 @@ recall mul_spec (self : montgomery.MontgomeryPoint) (rhs : scalar.Scalar) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
@@ -293,7 +293,7 @@ recall mul_spec (self : scalar.Scalar) (point : montgomery.MontgomeryPoint) (htg
     mul self point ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (self.asNat % 2 ^ 255) point.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
@@ -306,7 +306,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : montgomery.MontgomeryPoint) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
@@ -319,7 +319,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : montgomery.MontgomeryPoint) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
@@ -332,7 +332,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : montgomery.MontgomeryPoint) (htgt 
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
@@ -345,7 +345,7 @@ recall mul_assign_spec (self : MontgomeryPoint) (rhs : scalar.Scalar) (htgt : On
     mul_assign self rhs ⦃ (r : MontgomeryPoint) =>
       r.asNat = encodeU (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract,
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize,
   get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 

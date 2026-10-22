@@ -81,7 +81,7 @@ recall from_bytes_mod_order_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
     from_bytes_mod_order bytes ⦃ (r : Scalar) =>
       r.asNat = bytes.asNat 8 % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_bytes_mod_order_spec
 
 end Curve25519Dalek.scalar.Scalar
@@ -93,7 +93,7 @@ recall from_bytes_mod_order_wide_spec (input : Array U8 64#usize) (htgt : OnX86_
     from_bytes_mod_order_wide input ⦃ (r : Scalar) =>
       r.asNat = input.asNat 8 % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_bytes_mod_order_wide_spec
 
 end Curve25519Dalek.scalar.Scalar
@@ -106,7 +106,7 @@ recall from_canonical_bytes_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
       r.is_some.IsValid ∧ r.value.bytes = bytes ∧
       (bytes.asNat 8 < L → r.is_some = 1#u8) ∧ (L ≤ bytes.asNat 8 → r.is_some = 0#u8) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_canonical_bytes_spec
 
 end Curve25519Dalek.scalar.Scalar
@@ -118,7 +118,7 @@ recall eq_spec (self other : Scalar) :
     eq self other ⦃ (b : Bool) =>
       (b = true ↔ self = other) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreCmpPartialEqScalar
@@ -130,7 +130,7 @@ recall ct_eq_spec (self other : Scalar) :
     ct_eq self other ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (self = other → c = 1#u8) ∧ (self ≠ other → c = 0#u8) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.SubtleConstantTimeEq
@@ -154,7 +154,7 @@ recall mul_assign_spec (self rhs : Scalar) (htgt : OnX86_64) :
     mul_assign self rhs ⦃ (r : Scalar) =>
       r.asNat = self.asNat * rhs.asNat % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignSharedAScalar
@@ -166,7 +166,7 @@ recall mul_assign_spec (self rhs : Scalar) (htgt : OnX86_64) :
     mul_assign self rhs ⦃ (r : Scalar) =>
       r.asNat = self.asNat * rhs.asNat % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulAssignScalar
@@ -178,7 +178,7 @@ recall mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
     mul self rhs ⦃ (r : Scalar) =>
       r.asNat = self.asNat * rhs.asNat % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithMulSharedAScalarScalar
@@ -190,7 +190,7 @@ recall mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
     mul self rhs ⦃ (r : Scalar) =>
       r.asNat = self.asNat * rhs.asNat % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulSharedBScalarScalar
@@ -202,7 +202,7 @@ recall mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
     mul self rhs ⦃ (r : Scalar) =>
       r.asNat = self.asNat * rhs.asNat % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.SharedAScalar.Insts.CoreOpsArithMulScalarScalar
@@ -214,7 +214,7 @@ recall mul_spec (self rhs : Scalar) (htgt : OnX86_64) :
     mul self rhs ⦃ (r : Scalar) =>
       r.asNat = self.asNat * rhs.asNat % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithMulScalarScalar
@@ -227,7 +227,7 @@ recall add_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.
     add_assign self rhs ⦃ (r : Scalar) =>
       r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithAddAssignSharedAScalar
@@ -240,7 +240,7 @@ recall add_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.
     add_assign self rhs ⦃ (r : Scalar) =>
       r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithAddAssignScalar
@@ -253,7 +253,7 @@ recall add_spec (self rhs : Scalar) (hself : self.asNat < L)
     add self rhs ⦃ (r : Scalar) =>
       r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithAddSharedAScalarScalar
@@ -266,7 +266,7 @@ recall add_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
     add self rhs ⦃ (r : Scalar) =>
       r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithAddSharedBScalarScalar
@@ -279,7 +279,7 @@ recall add_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
     add self rhs ⦃ (r : Scalar) =>
       r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end Curve25519Dalek.SharedAScalar.Insts.CoreOpsArithAddScalarScalar
@@ -292,7 +292,7 @@ recall add_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
     add self rhs ⦃ (r : Scalar) =>
       r.asNat = (self.asNat + rhs.asNat) % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithAddScalarScalar
@@ -305,7 +305,7 @@ recall sub_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.
     sub_assign self rhs ⦃ (r : Scalar) =>
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubAssignSharedAScalar
@@ -318,7 +318,7 @@ recall sub_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.
     sub_assign self rhs ⦃ (r : Scalar) =>
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubAssignScalar
@@ -331,7 +331,7 @@ recall sub_spec (self rhs : Scalar) (hself : self.asNat < L)
     sub self rhs ⦃ (r : Scalar) =>
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithSubSharedAScalarScalar
@@ -344,7 +344,7 @@ recall sub_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
     sub self rhs ⦃ (r : Scalar) =>
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubSharedBScalarScalar
@@ -357,7 +357,7 @@ recall sub_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
     sub self rhs ⦃ (r : Scalar) =>
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end Curve25519Dalek.SharedAScalar.Insts.CoreOpsArithSubScalarScalar
@@ -370,7 +370,7 @@ recall sub_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat <
     sub self rhs ⦃ (r : Scalar) =>
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubScalarScalar
@@ -382,7 +382,7 @@ recall neg_spec (self : Scalar) (htgt : OnX86_64) :
     neg self ⦃ (r : Scalar) =>
       (r.asNat + self.asNat) % L = 0 ∧ r.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end Curve25519Dalek.Shared0Scalar.Insts.CoreOpsArithNegScalar
@@ -394,7 +394,7 @@ recall neg_spec (self : Scalar) (htgt : OnX86_64) :
     neg self ⦃ (r : Scalar) =>
       (r.asNat + self.asNat) % L = 0 ∧ r.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithNegScalar
@@ -407,7 +407,7 @@ recall conditional_select_spec (a b : Scalar) (choice : subtle.Choice)
     conditional_select a b choice ⦃ (r : Scalar) =>
       (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms conditional_select_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.SubtleConditionallySelectable
@@ -423,7 +423,7 @@ recall product_spec {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
     product borrowInst iterInst iter ⦃ (r : Scalar) =>
       r.asNat = (ss.map (·.asNat)).prod % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms product_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreIterTraitsAccumProduct
@@ -439,7 +439,7 @@ recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
     sum borrowInst iterInst iter ⦃ (r : Scalar) =>
       r.asNat = (ss.map (·.asNat)).sum % L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.CoreIterTraitsAccumSum
@@ -523,7 +523,7 @@ recall zeroize_spec (self : Scalar) :
     zeroize self ⦃ (r : Scalar) =>
       r = { bytes := Array.repeat 32#usize 0#u8 } ⦄
 
-/-- [propext, Classical.choice, Quot.sound, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.scalar.Scalar.Insts.ZeroizeZeroize
@@ -582,7 +582,7 @@ recall invert_spec (self : Scalar) (htgt : OnX86_64) :
       (self.asNat % L ≠ 0 → r.asNat * self.asNat % L = 1) ∧
       (self.asNat % L = 0 → r.asNat = 0) ∧ r.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms invert_spec
 
 end Curve25519Dalek.scalar.Scalar
@@ -597,7 +597,7 @@ recall invert_batch_spec {N : Usize} (inputs : Array Scalar N)
       ret.asNat * (∏ i ∈ Finset.range N.val, inputs[i]!.asNat) % L = 1 ∧
       ret.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, zeroize.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, RustAx.zeroize, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms invert_batch_spec
 
 end Curve25519Dalek.scalar.Scalar
@@ -613,7 +613,7 @@ recall invert_batch_alloc_spec (inputs : Slice Scalar)
       ret.asNat * (∏ i ∈ Finset.range inputs.length, inputs[i]!.asNat) % L = 1 ∧
       ret.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, zeroize.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, RustAx.zeroize, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms invert_batch_alloc_spec
 
 end Curve25519Dalek.scalar.Scalar
@@ -625,7 +625,7 @@ recall div_by_2_spec (self : Scalar) (hself : self.asNat < L) (htgt : OnX86_64) 
     div_by_2 self ⦃ (r : Scalar) =>
       2 * r.asNat % L = self.asNat ∧ r.asNat < L ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract, get_target] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle, get_target] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms div_by_2_spec
 
 end Curve25519Dalek.scalar.Scalar
@@ -661,7 +661,7 @@ recall eq_spec (self other : HalfWidthScalar) :
     eq self other ⦃ (b : Bool) =>
       (b = true ↔ self = other) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreCmpPartialEqHalfWidthScalar
@@ -815,7 +815,7 @@ recall zeroize_spec (self : HalfWidthScalar) :
     zeroize self ⦃ (r : HalfWidthScalar) =>
       r = { bytes := Array.repeat 32#usize 0#u8 } ⦄
 
-/-- [propext, Classical.choice, Quot.sound, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.scalar.HalfWidthScalar.Insts.ZeroizeZeroize

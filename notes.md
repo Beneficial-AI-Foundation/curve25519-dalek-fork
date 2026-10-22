@@ -50,7 +50,7 @@ Read `AGENTS.md` first (PRs to the curve25519-dalek repo must be written by huma
   `*External_Template.lean` files Aeneas emits, and update them by hand.
 - **External function signatures are `opaque`** wherever possible (the template prints `axiom`;
   replace it), so that they add no axiom. Their behaviour is then given by one predicate
-  `<function>.Contract : Prop` each and one axiom per crate (`core.contract`, `alloc.contract`, in
+  `<function>.Contract : Prop` each and one axiom per crate (`RustAx.core`, `RustAx.alloc`, in
   `FunsExternal.lean`) stating all of them, the only trusted additions; the theorems
   `<function>_spec` are projections, so `#print axioms` names the crate axioms.
 
@@ -110,7 +110,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 ```
 
 **External-crate libraries (`Subtle`, `Zeroize`):**
-- **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Basic.lean`. Basic holds `opaque` signatures with the template names, one predicate `<function>.Contract : Prop` per function (its contract, conditional on any trait-instance behaviour it relies on), a structure `<crate>.Contract` with one field per predicate, and the single axiom `<crate>.contract : <crate>.Contract`. The `@[step]` theorems `<function>_spec` are its projections, so a guard list names at most `subtle.contract` and `zeroize.contract`. (`Contract`, not `Spec`: Mathlib's `Spec` is the spectrum of a ring.) Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
+- **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Basic.lean`. Basic holds `opaque` signatures with the template names, one predicate `<function>.Contract : Prop` per function (its contract, conditional on any trait-instance behaviour it relies on), a structure `<crate>.Contract` with one field per predicate, and the single axiom `RustAx.<crate> : <crate>.Contract`. The `@[step]` theorems `<function>_spec` are its projections, so a guard list names at most `RustAx.subtle` and `RustAx.zeroize`. (`Contract`, not `Spec`: Mathlib's `Spec` is the spectrum of a ring.) Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
 - **Derived part:** `<Lib>/Lemmas.lean` (generic), `<Lib>/Instances.lean` (about instances in `Funs.lean`) and `Zeroize/Consistency.lean`. They add no axioms.
 - **Imports:** `FunsExternal.lean` imports only `<Lib>.Basic`.
 
@@ -200,7 +200,7 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   definitional equality. It adds no declaration.
 - **Pinned axioms:** `#guard_msgs` fixes the axioms each statement rests on.
   - `sorryAx` while the proof is pending (only on a working branch: CI rejects `sorry`).
-  - `subtle.contract`/`zeroize.contract` (the one axiom of each external crate) or std externals
+  - `RustAx.subtle`/`RustAx.zeroize` (the one axiom of each external crate) or std externals
     (`FunsExternal.lean`) that the proof uses.
   - For dispatched functions: `get_target` (the dispatchers compare it with string literals).
   - `core.fmt.Formatter`, a type Aeneas declares as an axiom, where a proof goes through the
@@ -481,9 +481,12 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   elements (`FieldElement51.LimbsLt`, 227 field-level bounds converted; the only raw form left is
   `reduce`'s `< 2^51 + 2^18`), and the scalar limbs (`Scalar52.LimbsLt`, 76 bounds; the 9-limb
   wide products stay raw).
-- One axiom per external crate (2026-10-21): `subtle.contract`, `zeroize.contract`,
-  `core.contract` and `alloc.contract` state all the per-function predicates; the per-function `@[step]` theorems are
+- One axiom per external crate (2026-10-21): `RustAx.subtle`, `RustAx.zeroize`,
+  `RustAx.core` and `RustAx.alloc` state all the per-function predicates; the per-function `@[step]` theorems are
   projections. Guard lists name only these (plus `get_target` and `core.fmt.Formatter`).
+- Axiom names (2026-10-22): `RustAx.<crate>` (`RustAx.core`, `RustAx.alloc`, `RustAx.subtle`,
+  `RustAx.zeroize`): the crate name verbatim, Rust named, one prefix to grep for every trusted
+  assumption beyond Lean's; the structures stay `<crate>.Contract` next to their functions.
 - `Vec::is_empty` has a contract (`alloc.vec.Vec.is_empty.Contract`: `b = decide (v.length = 0)`, no
   precondition), decided 2026-10-21, like the other std opaques.
 
@@ -508,7 +511,7 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
    The patched code collects each iterator into a `Vec` by `push`, and Aeneas's `Vec.push` fails
    (panics) once the length would exceed `Usize.max`, so without the hypothesis the statements are
    false for (unrealisable) longer inputs. Decided 2026-10-22: keep the hypothesis.
-3. **New std contract `core.borrow.Borrow.Blanket.borrow`** (2026-10-22, in `core.contract`):
+3. **New std contract `core.borrow.Borrow.Blanket.borrow`** (2026-10-22, in `RustAx.core`):
    `<T as Borrow<T>>::borrow` returns its argument. Needed by the Ristretto `multiscalar_mul` and
    `VartimeRistrettoPrecomputation::new`, which pass this instance to the Edwards functions;
    approved 2026-10-22 (field `borrow_blanket` of `core.Contract`, following the

@@ -85,7 +85,7 @@ opaque core.borrow.Borrow.Blanket.borrow {T : Type} : T → Result T
 
 The behaviour of the `opaque` functions above, as stated in the Rust standard library
 documentation: one predicate `….Contract : Prop` per function, and one axiom per crate
-(`core.contract`, `alloc.contract`) stating all of them. The axioms are the only trusted
+(`RustAx.core`, `RustAx.alloc`) stating all of them. The axioms are the only trusted
 additions of this file; the theorems `…_spec` used by the proofs are their projections. -/
 
 /-- `core::array::from_fn`: "Creates an array of type `[T; N]`, where each element `T` is the
@@ -154,7 +154,7 @@ structure core.Contract : Prop where
   borrow_blanket : core.borrow.Borrow.Blanket.borrow.Contract
 
 /-- The single trusted assumption about `core`: its functions meet their contracts. -/
-axiom core.contract : core.Contract
+axiom RustAx.core : core.Contract
 
 /-- The specification of the `alloc` functions used: one field per function, the predicates
 above. -/
@@ -162,9 +162,9 @@ structure alloc.Contract : Prop where
   vec_is_empty : alloc.vec.Vec.is_empty.Contract
 
 /-- The single trusted assumption about `alloc`: its functions meet their contracts. -/
-axiom alloc.contract : alloc.Contract
+axiom RustAx.alloc : alloc.Contract
 
-/-- `core.array.from_fn` meets its contract (`core.contract`). -/
+/-- `core.array.from_fn` meets its contract (`RustAx.core`). -/
 theorem core.array.from_fn_spec {T F : Type} (N : Std.Usize)
     (inst : core.ops.function.FnMut F Std.Usize T) (f : F)
     (inv : ℕ → F → Prop) (post : ℕ → T → Prop) (h0 : inv 0 f)
@@ -172,26 +172,26 @@ theorem core.array.from_fn_spec {T F : Type} (N : Std.Usize)
       inst.call_mut g i ⦃ (x : T) (g' : F) => post i.val x ∧ inv (i.val + 1) g' ⦄) :
     core.array.from_fn N inst f ⦃ (a : Array T N) =>
       ∀ (i : ℕ) (hi : i < a.val.length), post i a.val[i] ⦄ :=
-  core.contract.array_from_fn N inst f inv post h0 h
+  RustAx.core.array_from_fn N inst f inv post h0 h
 
-/-- `core.result.Result.map` meets its contract (`core.contract`). -/
+/-- `core.result.Result.map` meets its contract (`RustAx.core`). -/
 theorem core.result.Result.map_spec {T E U F : Type} (inst : core.ops.function.FnOnce F T U)
     (r : core.result.Result T E) (f : F)
     (h : ∀ x, r = .Ok x → ∃ y, inst.call_once f x = ok y) :
     core.result.Result.map inst r f ⦃ (r' : core.result.Result U E) =>
       (∀ x, r = .Ok x → ∃ y, inst.call_once f x = ok y ∧ r' = .Ok y) ∧
       (∀ e, r = .Err e → r' = .Err e) ⦄ :=
-  core.contract.result_map inst r f h
+  RustAx.core.result_map inst r f h
 
-/-- `core.num.Usize.div_ceil` meets its contract (`core.contract`). -/
+/-- `core.num.Usize.div_ceil` meets its contract (`RustAx.core`). -/
 @[step]
 theorem core.num.Usize.div_ceil_spec (self rhs : Std.Usize) (hrhs : rhs.val ≠ 0) :
     core.num.Usize.div_ceil self rhs ⦃ (r : Std.Usize) =>
       r.val = (self.val + rhs.val - 1) / rhs.val ⦄ :=
-  core.contract.usize_div_ceil self rhs hrhs
+  RustAx.core.usize_div_ceil self rhs hrhs
 
 /-- `MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter`
-    meets its contract (`core.contract`). -/
+    meets its contract (`RustAx.core`). -/
 @[step]
 theorem MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter_spec {T : Type}
     {N : Std.Usize} (a : Array T N) :
@@ -200,16 +200,16 @@ theorem MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter_
       it.slice.val = a.val ∧ it.i = 0 ∧
       ∀ it' : core.slice.iter.IterMut T, it'.slice.length = N.val →
         (back it').val = it'.slice.val ⦄ :=
-  core.contract.mutArray_into_iter a
+  RustAx.core.mutArray_into_iter a
 
-/-- `core.borrow.Borrow.Blanket.borrow` meets its contract (`core.contract`). -/
+/-- `core.borrow.Borrow.Blanket.borrow` meets its contract (`RustAx.core`). -/
 @[step]
 theorem core.borrow.Borrow.Blanket.borrow_spec {T : Type} (x : T) :
     core.borrow.Borrow.Blanket.borrow x ⦃ (y : T) => y = x ⦄ :=
-  core.contract.borrow_blanket x
+  RustAx.core.borrow_blanket x
 
-/-- `alloc.vec.Vec.is_empty` meets its contract (`alloc.contract`). -/
+/-- `alloc.vec.Vec.is_empty` meets its contract (`RustAx.alloc`). -/
 @[step]
 theorem alloc.vec.Vec.is_empty_spec {T : Type} (A : Type) (v : alloc.vec.Vec T) :
     alloc.vec.Vec.is_empty A v ⦃ (b : Bool) => b = decide (v.length = 0) ⦄ :=
-  alloc.contract.vec_is_empty A v
+  RustAx.alloc.vec_is_empty A v

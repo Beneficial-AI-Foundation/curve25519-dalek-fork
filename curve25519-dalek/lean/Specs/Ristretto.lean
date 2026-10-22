@@ -84,7 +84,7 @@ namespace Curve25519Dalek.ristretto.CompressedRistretto.Insts.CoreCmpPartialEqCo
 recall eq_spec (self other : CompressedRistretto) :
     eq self other ⦃ (b : Bool) => b = true ↔ self = other ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end Curve25519Dalek.ristretto.CompressedRistretto.Insts.CoreCmpPartialEqCompressedRistretto
@@ -95,7 +95,7 @@ namespace Curve25519Dalek.ristretto.CompressedRistretto.Insts.SubtleConstantTime
 recall ct_eq_spec (self other : CompressedRistretto) :
     ct_eq self other ⦃ (c : subtle.Choice) => c.IsValid ∧ (c = 1#u8 ↔ self = other) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end Curve25519Dalek.ristretto.CompressedRistretto.Insts.SubtleConstantTimeEq
@@ -124,7 +124,7 @@ recall from_slice_spec (bytes : Slice U8) :
       (bytes.length = 32 → ∃ a : CompressedRistretto, r = .Ok a ∧ a.val = bytes.val) ∧
       (bytes.length ≠ 32 → r = .Err ()) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_slice_spec
 
 end Curve25519Dalek.ristretto.CompressedRistretto
@@ -140,7 +140,7 @@ recall «x86_64-tables».decompress_spec (self : CompressedRistretto) :
       r.map edwards.EdwardsPoint.«x86_64-tables».toPoint = Ristretto.decodeRep self.asNat ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms «x86_64-tables».decompress_spec
 
 
@@ -152,7 +152,7 @@ recall «x86_64-no-tables».decompress_spec (self : CompressedRistretto) :
       r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint = Ristretto.decodeRep self.asNat ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms «x86_64-no-tables».decompress_spec
 
@@ -194,7 +194,7 @@ recall try_from_spec (slice : Slice U8) :
       (slice.length = 32 → ∃ a : CompressedRistretto, r = .Ok a ∧ a.val = slice.val) ∧
       (slice.length ≠ 32 → r = .Err ()) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms try_from_spec
 
 end Insts.CoreConvertTryFromShared0SliceU8TryFromSliceError
@@ -209,7 +209,7 @@ recall compress_spec (self : RistrettoPoint.«x86_64-tables») (hself : self.Lim
     compress self ⦃ (r : CompressedRistretto) =>
       r.asNat = Ristretto.encodeRep self.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
 
 end «RistrettoPointx86_64-tables»
@@ -224,7 +224,7 @@ recall compress_spec (self : RistrettoPoint.«x86_64-no-tables») (hself : self.
     compress self ⦃ (r : CompressedRistretto) =>
       r.asNat = Ristretto.encodeRep self.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
 
 end «RistrettoPointx86_64-no-tables»
@@ -245,7 +245,7 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       r.length = ps.length ∧
         ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms double_and_compress_batch_spec
 
 end «RistrettoPointx86_64-tables»
@@ -266,7 +266,7 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       r.length = ps.length ∧
         ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms double_and_compress_batch_spec
 
 end «RistrettoPointx86_64-no-tables»
@@ -281,7 +281,7 @@ recall from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = Ristretto.fromUniformRep (bytes.asNat 8) ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_uniform_bytes_spec
 
 end «RistrettoPointx86_64-tables»
@@ -296,7 +296,7 @@ recall from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = Ristretto.fromUniformRep (bytes.asNat 8) ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_uniform_bytes_spec
 
 end «RistrettoPointx86_64-no-tables»
@@ -368,7 +368,7 @@ recall eq_spec (self other : RistrettoPoint.«x86_64-tables») (hself : self.Lim
     eq self other ⦃ (b : Bool) =>
       b = true ↔ curve25519.edwards.Rel self.toPoint other.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end «CoreCmpPartialEqRistrettoPointx86_64-tables»
@@ -385,7 +385,7 @@ recall eq_spec (self other : RistrettoPoint.«x86_64-no-tables») (hself : self.
     eq self other ⦃ (b : Bool) =>
       b = true ↔ curve25519.edwards.Rel self.toPoint other.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end «CoreCmpPartialEqRistrettoPointx86_64-no-tables»
@@ -402,7 +402,7 @@ recall ct_eq_spec (self other : RistrettoPoint.«x86_64-tables») (hself : self.
     ct_eq self other ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (c = 1#u8 ↔ curve25519.edwards.Rel self.toPoint other.toPoint) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end RistrettoPoint.«x86_64-tables».Insts.SubtleConstantTimeEq
@@ -418,7 +418,7 @@ recall ct_eq_spec (self other : RistrettoPoint.«x86_64-no-tables») (hself : se
     ct_eq self other ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (c = 1#u8 ↔ curve25519.edwards.Rel self.toPoint other.toPoint) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end RistrettoPoint.«x86_64-no-tables».Insts.SubtleConstantTimeEq
@@ -435,7 +435,7 @@ recall add_spec (self other : ristretto.RistrettoPoint.«x86_64-tables»)
     add self other ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -453,7 +453,7 @@ recall add_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
     add self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -471,7 +471,7 @@ recall add_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
     add self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -489,7 +489,7 @@ recall add_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
     add self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -507,7 +507,7 @@ recall add_spec (self other : ristretto.RistrettoPoint.«x86_64-no-tables»)
     add self other ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -525,7 +525,7 @@ recall add_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»)
     add self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -543,7 +543,7 @@ recall add_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»)
     add self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -561,7 +561,7 @@ recall add_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»)
     add self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -579,7 +579,7 @@ recall add_assign_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
     add_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignShared0RistrettoPointx86_64-tables»
@@ -597,7 +597,7 @@ recall add_assign_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
     add_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignRistrettoPointx86_64-tables»
@@ -615,7 +615,7 @@ recall add_assign_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»
     add_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignShared0RistrettoPointx86_64-no-tables»
@@ -633,7 +633,7 @@ recall add_assign_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»
     add_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignRistrettoPointx86_64-no-tables»
@@ -651,7 +651,7 @@ recall sub_spec (self other : ristretto.RistrettoPoint.«x86_64-tables»)
     sub self other ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -669,7 +669,7 @@ recall sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
     sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -687,7 +687,7 @@ recall sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
     sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -705,7 +705,7 @@ recall sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
     sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -723,7 +723,7 @@ recall sub_spec (self other : ristretto.RistrettoPoint.«x86_64-no-tables»)
     sub self other ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -741,7 +741,7 @@ recall sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»)
     sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -759,7 +759,7 @@ recall sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»)
     sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -777,7 +777,7 @@ recall sub_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»)
     sub self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -795,7 +795,7 @@ recall sub_assign_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
     sub_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignShared0RistrettoPointx86_64-tables»
@@ -813,7 +813,7 @@ recall sub_assign_spec (self rhs : ristretto.RistrettoPoint.«x86_64-tables»)
     sub_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignRistrettoPointx86_64-tables»
@@ -831,7 +831,7 @@ recall sub_assign_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»
     sub_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignShared0RistrettoPointx86_64-no-tables»
@@ -849,7 +849,7 @@ recall sub_assign_spec (self rhs : ristretto.RistrettoPoint.«x86_64-no-tables»
     sub_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignRistrettoPointx86_64-no-tables»
@@ -870,7 +870,7 @@ recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T RistrettoPoint.�
     sum borrowInst iterInst iter ⦃ (r : RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec
 
 end CoreIterTraitsAccumSum
@@ -890,7 +890,7 @@ recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T RistrettoPoint.�
     sum borrowInst iterInst iter ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec
 
 end CoreIterTraitsAccumSum
@@ -905,7 +905,7 @@ recall neg_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (hself : sel
     neg self ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «Shared0RistrettoPointx86_64-tables».Insts.«CoreOpsArithNegRistrettoPointx86_64-tables»
@@ -921,7 +921,7 @@ recall neg_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (hself : sel
     neg self ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegRistrettoPointx86_64-tables»
@@ -938,7 +938,7 @@ recall neg_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables») (hself : 
     neg self ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegRistrettoPointx86_64-no-tables»
@@ -955,7 +955,7 @@ recall neg_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables») (hself : 
     neg self ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegRistrettoPointx86_64-no-tables»
@@ -971,7 +971,7 @@ recall mul_assign_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (scal
     mul_assign self scalar ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignSharedAScalar
@@ -987,7 +987,7 @@ recall mul_assign_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables»)
     mul_assign self scalar ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignSharedAScalar
@@ -1003,7 +1003,7 @@ recall mul_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (scalar : sc
     mul self scalar ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAScalarRistrettoPointx86_64-tables»
@@ -1020,7 +1020,7 @@ recall mul_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (rhs : scala
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarRistrettoPointx86_64-tables»
@@ -1037,7 +1037,7 @@ recall mul_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (rhs : scala
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulScalarRistrettoPointx86_64-tables»
@@ -1054,7 +1054,7 @@ recall mul_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (rhs : scala
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulScalarRistrettoPointx86_64-tables»
@@ -1071,7 +1071,7 @@ recall mul_spec (self : scalar.Scalar) (point : ristretto.RistrettoPoint.«x86_6
     mul self point ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -1088,7 +1088,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : ristretto.RistrettoPoint.«x86_64-
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -1105,7 +1105,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : ristretto.RistrettoPoint.«x86_64-
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -1122,7 +1122,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : ristretto.RistrettoPoint.«x86_64-
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -1139,7 +1139,7 @@ recall mul_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables») (scalar :
     mul self scalar ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAScalarRistrettoPointx86_64-no-tables»
@@ -1156,7 +1156,7 @@ recall mul_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables») (rhs : sc
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarRistrettoPointx86_64-no-tables»
@@ -1173,7 +1173,7 @@ recall mul_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables») (rhs : sc
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulScalarRistrettoPointx86_64-no-tables»
@@ -1190,7 +1190,7 @@ recall mul_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables») (rhs : sc
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulScalarRistrettoPointx86_64-no-tables»
@@ -1207,7 +1207,7 @@ recall mul_spec (self : scalar.Scalar) (point : ristretto.RistrettoPoint.«x86_6
     mul self point ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -1224,7 +1224,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : ristretto.RistrettoPoint.«x86_64-
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -1241,7 +1241,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : ristretto.RistrettoPoint.«x86_64-
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -1258,7 +1258,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : ristretto.RistrettoPoint.«x86_64-
     mul self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -1274,7 +1274,7 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
     mul_base scalar ⦃ (r : RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «RistrettoPointx86_64-tables»
@@ -1289,7 +1289,7 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
     mul_base scalar ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «RistrettoPointx86_64-no-tables»
@@ -1304,7 +1304,7 @@ recall mul_assign_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (rhs 
     mul_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignScalar
@@ -1319,7 +1319,7 @@ recall mul_assign_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables») (r
     mul_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignScalar
@@ -1353,7 +1353,7 @@ recall multiscalar_mul_spec
       ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») => r.OnCurve ∧
         r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables»
@@ -1387,7 +1387,7 @@ recall multiscalar_mul_spec
       ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») => r.OnCurve ∧
         r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables»
@@ -1419,7 +1419,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-tables»
@@ -1451,7 +1451,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-no-tables»
@@ -1478,7 +1478,7 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
       ⦃ (r : VartimeRistrettoPrecomputation.«x86_64-tables») =>
         r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms new_spec
 
 
@@ -1498,7 +1498,7 @@ recall is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-tables»)
     (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
     is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, alloc.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
 
 
@@ -1540,7 +1540,7 @@ recall optional_mixed_multiscalar_mul_spec
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms optional_mixed_multiscalar_mul_spec
 
@@ -1568,7 +1568,7 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
       ⦃ (r : VartimeRistrettoPrecomputation.«x86_64-no-tables») =>
         r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms new_spec
 
 
@@ -1588,7 +1588,7 @@ recall is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-no-tables»
     (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
     is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, alloc.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
 
 
@@ -1630,7 +1630,7 @@ recall optional_mixed_multiscalar_mul_spec
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms optional_mixed_multiscalar_mul_spec
 
@@ -1649,7 +1649,7 @@ recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
 
@@ -1668,7 +1668,7 @@ recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
 
@@ -1687,7 +1687,7 @@ recall mul_spec (self : ristretto.RistrettoBasepointTable.«x86_64-tables»)
     mul self scalar ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarRistrettoPointx86_64-tables»
@@ -1707,7 +1707,7 @@ recall mul_spec (self : scalar.Scalar)
     mul self basepoint_table ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedARistrettoBasepointTablex86_64-tablesRistrettoPointx86_64-tables»
@@ -1724,7 +1724,7 @@ recall create_spec (basepoint : ristretto.RistrettoPoint.«x86_64-tables»)
     create basepoint ⦃ (r : ristretto.RistrettoBasepointTable.«x86_64-tables») =>
       r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
 
 
@@ -1734,7 +1734,7 @@ recall basepoint_spec (self : ristretto.RistrettoBasepointTable.«x86_64-tables�
     basepoint self ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
 
 end ristretto.«RistrettoBasepointTablex86_64-tables»
@@ -1750,7 +1750,7 @@ recall conditional_select_spec (a b : ristretto.RistrettoPoint.«x86_64-tables»
     conditional_select a b choice ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms conditional_select_spec
 
 end ristretto.RistrettoPoint.«x86_64-tables».Insts.SubtleConditionallySelectable
@@ -1766,7 +1766,7 @@ recall conditional_select_spec (a b : ristretto.RistrettoPoint.«x86_64-no-table
     conditional_select a b choice ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms conditional_select_spec
 
 end ristretto.RistrettoPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable
@@ -1779,7 +1779,7 @@ element. -/
 recall zeroize_spec_point (self : CompressedRistretto) :
     zeroize self ⦃ (r : CompressedRistretto) => r.asNat = Ristretto.encodeRep 0 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
 
 end Curve25519Dalek.ristretto.CompressedRistretto.Insts.ZeroizeZeroize
@@ -1792,7 +1792,7 @@ recall zeroize_spec (self : ristretto.RistrettoPoint.«x86_64-tables») :
     zeroize self ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end ristretto.RistrettoPoint.«x86_64-tables».Insts.ZeroizeZeroize
@@ -1806,7 +1806,7 @@ recall zeroize_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables») :
     zeroize self ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end ristretto.RistrettoPoint.«x86_64-no-tables».Insts.ZeroizeZeroize
@@ -1823,7 +1823,7 @@ recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = Ristretto.mapRep (decodeU (bytes.asNat 8)) ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms map_to_curve_spec
 
 end «RistrettoPointx86_64-tables»
@@ -1838,7 +1838,7 @@ recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = Ristretto.mapRep (decodeU (bytes.asNat 8)) ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms map_to_curve_spec
 
 end «RistrettoPointx86_64-no-tables»

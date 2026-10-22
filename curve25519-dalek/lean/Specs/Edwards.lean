@@ -125,7 +125,7 @@ differ). -/
 recall ct_eq_spec (self other : CompressedEdwardsY) :
     ct_eq self other ⦃ (c : subtle.Choice) => c.IsValid ∧ (c = 1#u8 ↔ self = other) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end Curve25519Dalek.edwards.CompressedEdwardsY.Insts.SubtleConstantTimeEq
@@ -137,7 +137,7 @@ namespace CoreCmpPartialEqCompressedEdwardsY
 recall eq_spec (self other : CompressedEdwardsY) :
     eq self other ⦃ (b : Bool) => b = true ↔ self = other ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end CoreCmpPartialEqCompressedEdwardsY
@@ -171,7 +171,7 @@ recall decompress_spec (self : CompressedEdwardsY) :
       r.map EdwardsPoint.«x86_64-tables».toPoint = decodeLenient self.asNat ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms decompress_spec
 
 end Curve25519Dalek.edwards.CompressedEdwardsY.«x86_64-tables»
@@ -186,7 +186,7 @@ recall decompress_spec (self : CompressedEdwardsY) :
       r.map EdwardsPoint.«x86_64-no-tables».toPoint = decodeLenient self.asNat ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms decompress_spec
 
 end Curve25519Dalek.edwards.CompressedEdwardsY.«x86_64-no-tables»
@@ -200,7 +200,7 @@ recall try_from_spec (slice : Slice U8) :
       (slice.length = 32 → ∃ a : CompressedEdwardsY, r = .Ok a ∧ a.val = slice.val) ∧
       (slice.length ≠ 32 → r = .Err ()) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms try_from_spec
 
 end CoreConvertTryFromShared0SliceU8TryFromSliceError
@@ -236,7 +236,7 @@ recall from_slice_spec (bytes : Slice U8) :
       (bytes.length = 32 → ∃ a : CompressedEdwardsY, r = .Ok a ∧ a.val = bytes.val) ∧
       (bytes.length ≠ 32 → r = .Err ()) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_slice_spec
 
 end Curve25519Dalek.edwards.CompressedEdwardsY
@@ -247,7 +247,7 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.Insts.ZeroizeZeroize
 recall zeroize_spec_point (self : CompressedEdwardsY) :
     zeroize self ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
 
 end Curve25519Dalek.edwards.CompressedEdwardsY.Insts.ZeroizeZeroize
@@ -311,7 +311,7 @@ recall zeroize_spec_point (self : EdwardsPoint.«x86_64-tables») :
     zeroize self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
 
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts.ZeroizeZeroize
@@ -323,7 +323,7 @@ recall zeroize_spec_point (self : EdwardsPoint.«x86_64-no-tables») :
     zeroize self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
 
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize
@@ -338,7 +338,7 @@ recall conditional_select_spec (a b : EdwardsPoint.«x86_64-tables») (choice : 
     conditional_select a b choice ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms conditional_select_spec
 
 end SubtleConditionallySelectable
@@ -354,7 +354,7 @@ recall conditional_select_spec (a b : EdwardsPoint.«x86_64-no-tables») (choice
     conditional_select a b choice ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms conditional_select_spec
 
 end SubtleConditionallySelectable
@@ -368,7 +368,7 @@ recall ct_eq_spec_point (self other : EdwardsPoint.«x86_64-tables») (hself : s
     ct_eq self other ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (c = 1#u8 ↔ self.toPoint = other.toPoint) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec_point
 
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts.SubtleConstantTimeEq
@@ -382,7 +382,7 @@ recall ct_eq_spec_point (self other : EdwardsPoint.«x86_64-no-tables») (hself 
     ct_eq self other ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (c = 1#u8 ↔ self.toPoint = other.toPoint) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec_point
 
 end SubtleConstantTimeEq
@@ -396,7 +396,7 @@ recall eq_spec_point (self other : EdwardsPoint.«x86_64-tables») (hself : self
     (hother : other.LimbsLt 52) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     eq self other ⦃ (b : Bool) => b = true ↔ self.toPoint = other.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec_point
 
 end «CoreCmpPartialEqEdwardsPointx86_64-tables»
@@ -410,7 +410,7 @@ recall eq_spec_point (self other : EdwardsPoint.«x86_64-no-tables») (hself : s
     (hother : other.LimbsLt 52) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     eq self other ⦃ (b : Bool) => b = true ↔ self.toPoint = other.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec_point
 
 end «CoreCmpPartialEqEdwardsPointx86_64-no-tables»
@@ -426,7 +426,7 @@ recall to_montgomery_spec_point (self : EdwardsPoint.«x86_64-tables») (hself :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec_point
 
 end «EdwardsPointx86_64-tables»
@@ -442,7 +442,7 @@ recall to_montgomery_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hsel
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec_point
 
 end «EdwardsPointx86_64-no-tables»
@@ -459,7 +459,7 @@ recall to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«x86_64-tables�
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec_point
 
 end «EdwardsPointx86_64-tables»
@@ -476,7 +476,7 @@ recall to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«x86_64-no-tabl
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec_point
 
 end «EdwardsPointx86_64-no-tables»
@@ -489,7 +489,7 @@ recall compress_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec_point
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
@@ -501,7 +501,7 @@ recall compress_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : s
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec_point
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
@@ -515,7 +515,7 @@ recall compress_batch_spec_point {N : Usize} (inputs : Array EdwardsPoint.«x86_
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
       ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec_point
 
 end «EdwardsPointx86_64-tables»
@@ -530,7 +530,7 @@ recall compress_batch_spec_point {N : Usize} (inputs : Array EdwardsPoint.«x86_
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
       ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec_point
 
 end «EdwardsPointx86_64-no-tables»
@@ -547,7 +547,7 @@ recall compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«x86_64-tab
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec_point
 
 end «EdwardsPointx86_64-tables»
@@ -564,7 +564,7 @@ recall compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«x86_64-no-
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
-/-- [propext, Classical.choice, Quot.sound, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec_point
 
 end «EdwardsPointx86_64-no-tables»
@@ -580,7 +580,7 @@ recall add_spec_point (self other : edwards.EdwardsPoint.«x86_64-tables»)
     add self other ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
 
 end «CoreOpsArithAddSharedAEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -595,7 +595,7 @@ recall add_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
 
 end «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -610,7 +610,7 @@ recall add_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
 
 end «CoreOpsArithAddSharedBEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -625,7 +625,7 @@ recall add_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-tables») (hself
     add self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
 
 end «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -641,7 +641,7 @@ recall add_spec_point (self other : edwards.EdwardsPoint.«x86_64-no-tables»)
     add self other ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
 
 end «CoreOpsArithAddSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -656,7 +656,7 @@ recall add_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : se
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
 
 end «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -671,7 +671,7 @@ recall add_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : se
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
 
 end «CoreOpsArithAddSharedBEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -686,7 +686,7 @@ recall add_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-no-tables») (hs
     add self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
 
 end «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -701,7 +701,7 @@ recall add_assign_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself 
     add_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
 
 end «CoreOpsArithAddAssignSharedAEdwardsPointx86_64-tables»
@@ -716,7 +716,7 @@ recall add_assign_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself 
     add_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
 
 end «CoreOpsArithAddAssignEdwardsPointx86_64-tables»
@@ -731,7 +731,7 @@ recall add_assign_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hse
     add_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
 
 end «CoreOpsArithAddAssignSharedAEdwardsPointx86_64-no-tables»
@@ -746,7 +746,7 @@ recall add_assign_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hse
     add_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
 
 end «CoreOpsArithAddAssignEdwardsPointx86_64-no-tables»
@@ -762,7 +762,7 @@ recall sub_spec_point (self other : edwards.EdwardsPoint.«x86_64-tables»)
     sub self other ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
 
 end «CoreOpsArithSubSharedAEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -777,7 +777,7 @@ recall sub_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.
     sub self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
 
 end «CoreOpsArithSubEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -792,7 +792,7 @@ recall sub_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.
     sub self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
 
 end «CoreOpsArithSubSharedBEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -807,7 +807,7 @@ recall sub_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-tables») (hself
     sub self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
 
 end «CoreOpsArithSubEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -823,7 +823,7 @@ recall sub_spec_point (self other : edwards.EdwardsPoint.«x86_64-no-tables»)
     sub self other ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
 
 end «CoreOpsArithSubSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -838,7 +838,7 @@ recall sub_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : se
     sub self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
 
 end «CoreOpsArithSubEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -853,7 +853,7 @@ recall sub_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : se
     sub self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
 
 end «CoreOpsArithSubSharedBEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -868,7 +868,7 @@ recall sub_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-no-tables») (hs
     sub self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
 
 end «CoreOpsArithSubEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -883,7 +883,7 @@ recall sub_assign_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself 
     sub_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
 
 end «CoreOpsArithSubAssignSharedAEdwardsPointx86_64-tables»
@@ -898,7 +898,7 @@ recall sub_assign_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself 
     sub_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
 
 end «CoreOpsArithSubAssignEdwardsPointx86_64-tables»
@@ -913,7 +913,7 @@ recall sub_assign_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hse
     sub_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
 
 end «CoreOpsArithSubAssignSharedAEdwardsPointx86_64-no-tables»
@@ -928,7 +928,7 @@ recall sub_assign_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hse
     sub_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
 
 end «CoreOpsArithSubAssignEdwardsPointx86_64-no-tables»
@@ -948,7 +948,7 @@ recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«x
     sum borrowInst iterInst iter ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec
 
 end CoreIterTraitsAccumSum
@@ -968,7 +968,7 @@ recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«x
     sum borrowInst iterInst iter ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec
 
 end CoreIterTraitsAccumSum
@@ -983,7 +983,7 @@ recall neg_spec_point (self : edwards.EdwardsPoint.«x86_64-tables») (hself : s
     neg self ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
 
 end «CoreOpsArithNegEdwardsPointx86_64-tables»
@@ -998,7 +998,7 @@ recall neg_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.Limb
     neg self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
 
 end «CoreOpsArithNegEdwardsPointx86_64-tables»
@@ -1013,7 +1013,7 @@ recall neg_spec_point (self : edwards.EdwardsPoint.«x86_64-no-tables») (hself 
     neg self ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
 
 end «CoreOpsArithNegEdwardsPointx86_64-no-tables»
@@ -1028,7 +1028,7 @@ recall neg_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.L
     neg self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
 
 end «CoreOpsArithNegEdwardsPointx86_64-no-tables»
@@ -1043,7 +1043,7 @@ recall mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-tables») (scalar :
     mul_assign self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end CoreOpsArithMulAssignSharedAScalar
@@ -1058,7 +1058,7 @@ recall mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : sc
     mul_assign self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end CoreOpsArithMulAssignScalar
@@ -1073,7 +1073,7 @@ recall mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (scala
     mul_assign self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end CoreOpsArithMulAssignSharedAScalar
@@ -1088,7 +1088,7 @@ recall mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs :
     mul_assign self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
 
 end CoreOpsArithMulAssignScalar
@@ -1103,7 +1103,7 @@ recall mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Sc
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -1118,7 +1118,7 @@ recall mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Sc
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulScalarEdwardsPointx86_64-tables»
@@ -1133,7 +1133,7 @@ recall mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Sc
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulScalarEdwardsPointx86_64-tables»
@@ -1148,7 +1148,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-tabl
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -1163,7 +1163,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-tabl
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -1178,7 +1178,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-tabl
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -1193,7 +1193,7 @@ recall mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (scalar : scalar
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAScalarEdwardsPointx86_64-tables»
@@ -1208,7 +1208,7 @@ recall mul_spec (self : scalar.Scalar) (point : edwards.EdwardsPoint.«x86_64-ta
     mul self point ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -1223,7 +1223,7 @@ recall mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-no-tables»
@@ -1238,7 +1238,7 @@ recall mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulScalarEdwardsPointx86_64-no-tables»
@@ -1253,7 +1253,7 @@ recall mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulScalarEdwardsPointx86_64-no-tables»
@@ -1268,7 +1268,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-no-t
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -1283,7 +1283,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-no-t
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -1298,7 +1298,7 @@ recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-no-t
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -1313,7 +1313,7 @@ recall mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (scalar : sca
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAScalarEdwardsPointx86_64-no-tables»
@@ -1328,7 +1328,7 @@ recall mul_spec (self : scalar.Scalar) (point : edwards.EdwardsPoint.«x86_64-no
     mul self point ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -1342,7 +1342,7 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
     mul_base scalar ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
@@ -1355,7 +1355,7 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
     mul_base scalar ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
@@ -1369,7 +1369,7 @@ recall mul_clamped_spec (self : EdwardsPoint.«x86_64-tables») (bytes : Array U
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
@@ -1383,7 +1383,7 @@ recall mul_clamped_spec (self : EdwardsPoint.«x86_64-no-tables») (bytes : Arra
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
@@ -1396,7 +1396,7 @@ recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
@@ -1409,7 +1409,7 @@ recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
@@ -1442,7 +1442,7 @@ recall multiscalar_mul_spec
       ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
         r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables»
@@ -1476,7 +1476,7 @@ recall multiscalar_mul_spec
       ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧
         r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, zeroize.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -1509,7 +1509,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables»
@@ -1542,7 +1542,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -1566,7 +1566,7 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
       ⦃ (r : VartimeEdwardsPrecomputation.«x86_64-tables») =>
         r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms new_spec
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
@@ -1590,7 +1590,7 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
       ⦃ (r : VartimeEdwardsPrecomputation.«x86_64-no-tables») =>
         r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms new_spec
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -1635,7 +1635,7 @@ recall is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-tables»)
     (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
     is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, alloc.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
@@ -1650,7 +1650,7 @@ recall is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-no-tables»)
     (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
     is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, alloc.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -1697,7 +1697,7 @@ recall optional_mixed_multiscalar_mul_spec
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms optional_mixed_multiscalar_mul_spec
 
@@ -1746,7 +1746,7 @@ recall optional_mixed_multiscalar_mul_spec
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms optional_mixed_multiscalar_mul_spec
 
@@ -1764,7 +1764,7 @@ recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
 
@@ -1782,7 +1782,7 @@ recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
 
@@ -1804,7 +1804,7 @@ recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
         r.toPoint = a1.asNat • A1.toPoint + a2.asNat • A2.toPoint + b.asNat • basepoint ∧
         r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_triple_scalar_mul_basepoint_spec
 
@@ -1826,7 +1826,7 @@ recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
         r.toPoint = a1.asNat • A1.toPoint + a2.asNat • A2.toPoint + b.asNat • basepoint ∧
         r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_triple_scalar_mul_basepoint_spec
 
@@ -1844,7 +1844,7 @@ recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : ba
     create basepoint ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
       r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -1860,7 +1860,7 @@ recall basepoint_spec (self : EdwardsBasepointTable.«x86_64-tables»)
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -1877,7 +1877,7 @@ recall mul_base_spec (self : EdwardsBasepointTable.«x86_64-tables») (s : scala
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -1893,7 +1893,7 @@ recall mul_spec (self : edwards.EdwardsBasepointTable.«x86_64-tables»)
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -1910,7 +1910,7 @@ recall mul_spec
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsBasepointTablex86_64-tablesEdwardsPointx86_64-tables»
@@ -1927,7 +1927,7 @@ recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : ba
     create basepoint ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
       r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -1943,7 +1943,7 @@ recall basepoint_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables»)
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -1960,7 +1960,7 @@ recall mul_base_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables») (s 
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -1976,7 +1976,7 @@ recall mul_spec (self : edwards.EdwardsBasepointTableRadix32.«x86_64-tables»)
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -1993,7 +1993,7 @@ recall mul_spec
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsBasepointTableRadix32x86_64-tablesEdwardsPointx86_64-tables»
@@ -2010,7 +2010,7 @@ recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : ba
     create basepoint ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
       r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2026,7 +2026,7 @@ recall basepoint_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables»)
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2043,7 +2043,7 @@ recall mul_base_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables») (s 
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2059,7 +2059,7 @@ recall mul_spec (self : edwards.EdwardsBasepointTableRadix64.«x86_64-tables»)
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -2076,7 +2076,7 @@ recall mul_spec
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsBasepointTableRadix64x86_64-tablesEdwardsPointx86_64-tables»
@@ -2093,7 +2093,7 @@ recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : ba
     create basepoint ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
       r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2109,7 +2109,7 @@ recall basepoint_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables»)
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2126,7 +2126,7 @@ recall mul_base_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables») (s
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2142,7 +2142,7 @@ recall mul_spec (self : edwards.EdwardsBasepointTableRadix128.«x86_64-tables»)
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -2161,7 +2161,7 @@ recall mul_spec
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsBasepointTableRadix128x86_64-tablesEdwardsPointx86_64-tables»
@@ -2178,7 +2178,7 @@ recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : ba
     create basepoint ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
       r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2194,7 +2194,7 @@ recall basepoint_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables»)
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2211,7 +2211,7 @@ recall mul_base_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables») (s
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -2227,7 +2227,7 @@ recall mul_spec (self : edwards.EdwardsBasepointTableRadix256.«x86_64-tables»)
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -2246,7 +2246,7 @@ recall mul_spec
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedAEdwardsBasepointTableRadix256x86_64-tablesEdwardsPointx86_64-tables»
@@ -2262,7 +2262,7 @@ recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
@@ -2278,7 +2278,7 @@ recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
@@ -2294,7 +2294,7 @@ recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
@@ -2310,7 +2310,7 @@ recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
@@ -2326,7 +2326,7 @@ recall from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
@@ -2342,7 +2342,7 @@ recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
@@ -2358,7 +2358,7 @@ recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
@@ -2374,7 +2374,7 @@ recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
@@ -2390,7 +2390,7 @@ recall from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
@@ -2406,7 +2406,7 @@ recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
@@ -2422,7 +2422,7 @@ recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
@@ -2438,7 +2438,7 @@ recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
@@ -2454,7 +2454,7 @@ recall from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
@@ -2470,7 +2470,7 @@ recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
@@ -2486,7 +2486,7 @@ recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
@@ -2502,7 +2502,7 @@ recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
@@ -2518,7 +2518,7 @@ recall from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
@@ -2534,7 +2534,7 @@ recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
@@ -2550,7 +2550,7 @@ recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
@@ -2566,7 +2566,7 @@ recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
       r.Represents P ∧ r.LimbsLt 54 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
 
 end «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
@@ -2580,7 +2580,7 @@ recall mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-tables») (hself : sel
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_by_cofactor_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
@@ -2593,7 +2593,7 @@ recall mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : 
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_by_cofactor_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
@@ -2605,7 +2605,7 @@ recall is_small_order_spec (self : EdwardsPoint.«x86_64-tables») (hself : self
     (hon : self.OnCurve) :
     is_small_order self ⦃ (b : Bool) => b = true ↔ 8 • self.toPoint = 0 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_small_order_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
@@ -2617,7 +2617,7 @@ recall is_small_order_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : s
     (hon : self.OnCurve) :
     is_small_order self ⦃ (b : Bool) => b = true ↔ 8 • self.toPoint = 0 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_small_order_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
@@ -2630,7 +2630,7 @@ recall is_torsion_free_spec (self : EdwardsPoint.«x86_64-tables») (hself : sel
     (hon : self.OnCurve) :
     is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_torsion_free_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
@@ -2643,7 +2643,7 @@ recall is_torsion_free_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : 
     (hon : self.OnCurve) :
     is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, core.contract, subtle.contract] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_torsion_free_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»

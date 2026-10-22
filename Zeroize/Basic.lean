@@ -22,13 +22,13 @@ This file is the trusted base for `zeroize`. Nothing here is derived.
 * **Signatures.** Each external function that Aeneas expects (see the gitignored
   `Curve25519Dalek/FunsExternal_Template.lean`) is an `opaque` constant with the template's exact
   name, type and `@[rust_fun]` attribute. `opaque` adds no axiom, so `#print axioms` lists exactly
-  the axiom `zeroize.contract` below.
+  the axiom `RustAx.zeroize` below.
 * **Contracts.** Each function has one predicate `….Contract : Prop` that restates the Rust
   body/documentation. Every contract that relies on a trait method of the generic `Z`
   (`Default::default`, `Zeroize::zeroize`) is conditional on that method's behaviour. An
-  unconditional contract could prove `False`. The single axiom `zeroize.contract` (end of file)
+  unconditional contract could prove `False`. The single axiom `RustAx.zeroize` (end of file)
   states all the predicates; the theorems `…_spec`/`…_eq` used by the proofs are its
-  projections, so `#print axioms` lists `zeroize.contract`.
+  projections, so `#print axioms` lists `RustAx.zeroize`.
 
 Volatile writes, `atomic_fence` and the "best effort" caveats (e.g. earlier `Vec` reallocations)
 are not observable in the functional semantics. Zeroizing replaces the value by its zeroized
@@ -119,23 +119,23 @@ structure zeroize.Contract : Prop where
   vec_zeroize : alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize.Contract
 
 /-- The single trusted assumption about `zeroize`: its functions meet their contracts. -/
-axiom zeroize.contract : zeroize.Contract
+axiom RustAx.zeroize : zeroize.Contract
 
-/-- `zeroize.Zeroize.Blanket.zeroize` meets its contract (`zeroize.contract`). -/
+/-- `zeroize.Zeroize.Blanket.zeroize` meets its contract (`RustAx.zeroize`). -/
 theorem zeroize.Zeroize.Blanket.zeroize_eq
     {Z : Type} (inst : zeroize.DefaultIsZeroes Z) (x : Z) :
     zeroize.Zeroize.Blanket.zeroize inst x = inst.coredefaultDefaultInst.default :=
-  zeroize.contract.blanket_zeroize inst x
+  RustAx.zeroize.blanket_zeroize inst x
 
-/-- `Array.Insts.ZeroizeZeroize.zeroize` meets its contract (`zeroize.contract`). -/
+/-- `Array.Insts.ZeroizeZeroize.zeroize` meets its contract (`RustAx.zeroize`). -/
 theorem Array.Insts.ZeroizeZeroize.zeroize_spec
     {Z : Type} {N : Std.Usize} (inst : zeroize.Zeroize Z) (a : Array Z N) {post : Z → Prop}
     (h : ∀ x ∈ a.val, inst.zeroize x ⦃ post ⦄) :
     Array.Insts.ZeroizeZeroize.zeroize inst a ⦃ a' => ∀ y ∈ a'.val, post y ⦄ :=
-  zeroize.contract.array_zeroize inst a h
+  RustAx.zeroize.array_zeroize inst a h
 
 /-- `core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize`
-    meets its contract (`zeroize.contract`). -/
+    meets its contract (`RustAx.zeroize`). -/
 theorem core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize_spec
     {Z : Type} (inst : zeroize.Zeroize Z) (it : core.slice.iter.IterMut Z) {post : Z → Prop}
     (h : ∀ x ∈ it.slice.val.drop it.i, inst.zeroize x ⦃ post ⦄) :
@@ -143,12 +143,12 @@ theorem core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize_spec
       back = id ∧ it'.i = it.slice.length ∧ it'.slice.length = it.slice.length ∧
       it'.slice.val.take it.i = it.slice.val.take it.i ∧
       ∀ y ∈ it'.slice.val.drop it.i, post y ⦄ :=
-  zeroize.contract.iterMut_zeroize inst it h
+  RustAx.zeroize.iterMut_zeroize inst it h
 
-/-- `alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize` meets its contract (`zeroize.contract`). -/
+/-- `alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize` meets its contract (`RustAx.zeroize`). -/
 @[step]
 theorem alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize_spec
     {Z : Type} (inst : zeroize.Zeroize Z) (v : alloc.vec.Vec Z)
     (h : ∀ x ∈ v.val, inst.zeroize x ⦃ _ => True ⦄) :
     alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize inst v ⦃ v' => v' = alloc.vec.Vec.new Z ⦄ :=
-  zeroize.contract.vec_zeroize inst v h
+  RustAx.zeroize.vec_zeroize inst v h

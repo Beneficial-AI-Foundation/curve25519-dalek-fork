@@ -12,7 +12,7 @@ open Curve25519Dalek
 
 Concrete models of the four opaque `zeroize` functions. Each model satisfies its field of
 `zeroize.Contract` in `Zeroize/Basic.lean`, with the opaque constant replaced by the model.
-Replacing each opaque constant by its model therefore turns the axiom `zeroize.contract` into a
+Replacing each opaque constant by its model therefore turns the axiom `RustAx.zeroize` into a
 theorem, so it is satisfiable: it cannot prove `False`.
 -/
 
