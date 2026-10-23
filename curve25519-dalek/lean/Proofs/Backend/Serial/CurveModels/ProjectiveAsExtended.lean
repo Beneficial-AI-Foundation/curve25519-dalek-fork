@@ -37,7 +37,7 @@ theorem projectiveAsExtended_spec
   unfold projectiveAsExtended
   step with hmul X Z (B.red_mulIn hX) (B.red_mulIn hZ) as ⟨a, ha, ha'⟩
   step with hmul Y Z (B.red_mulIn hY) (B.red_mulIn hZ) as ⟨b, hb, hb'⟩
-  step with hsq Z (B.red_sum2 hZ) as ⟨c, hc, hc'⟩
+  step with hsq Z (B.red_sqIn hZ) as ⟨c, hc, hc'⟩
   step with hmul X Y (B.red_mulIn hX) (B.red_mulIn hY) as ⟨d, hd, hd'⟩
   exact ⟨a, b, c, d, rfl, by rw [ha, hb, hc, hd]; rfl, ha', hb', hc', hd'⟩
 

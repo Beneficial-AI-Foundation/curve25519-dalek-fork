@@ -39,6 +39,7 @@ import Proofs.Backend.Serial.U32.Field.Square
 import Proofs.Backend.Serial.U32.Field.Sub
 import Proofs.Backend.Serial.U32.Field.ToBytes
 import Proofs.Helpers.ToField2625
+public import Proofs.Field.Invsqrt
 public section
 
 /-! # `RistrettoPoint::double_and_compress_batch`
@@ -51,6 +52,181 @@ encodes each doubled point from its state and inverse
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
 open Curve25519Dalek.backend.serial.u32.field (FieldElement2625)
+
+namespace Curve25519Dalek.Backend
+
+variable (B : Backend)
+
+/-- `BatchCompressState::from` over a backend. -/
+@[expose] def batchStateBody {S : Type} (mk : B.F → B.F → B.F → B.F → B.F → B.F → S)
+    (X Y Z T : B.F) : Result S := do
+  let XX ← B.square X
+  let YY ← B.square Y
+  let ZZ ← B.square Z
+  let fe ← B.square T
+  let fe1 ← B.constEdwardsD
+  let dTT ← B.mul fe fe1
+  let fe2 ← B.add Y Y
+  let e ← B.mul X fe2
+  let f ← B.add ZZ dTT
+  let g ← B.add YY XX
+  let h ← B.sub ZZ dTT
+  let eg ← B.mul e g
+  let fh ← B.mul f h
+  ok (mk e f g h eg fh)
+
+/-- `batchStateBody`: the doubling quantities `e, f, g, h` of `(X : Y : Z : T)` and the products
+`e g`, `f h`. -/
+theorem batchStateBody_spec (hadd : B.AddSpec) (hsub : B.SubSpec) (hmul : B.MulSpec)
+    (hsq : B.SquareSpec) (hD : B.EdwardsDSpec) {S : Type}
+    (mk : B.F → B.F → B.F → B.F → B.F → B.F → S) (X Y Z T : B.F) (hX : B.Red X)
+    (hY : B.Red Y) (hZ : B.Red Z) (hT : B.Red T) :
+    B.batchStateBody mk X Y Z T ⦃ r => ∃ e f g h eg fh, r = mk e f g h eg fh ∧
+      B.toField e = B.toField X * (B.toField Y + B.toField Y) ∧
+      B.toField f = B.toField Z ^ 2 + B.toField T ^ 2 * d ∧
+      B.toField g = B.toField Y ^ 2 + B.toField X ^ 2 ∧
+      B.toField h = B.toField Z ^ 2 - B.toField T ^ 2 * d ∧
+      B.toField eg = B.toField e * B.toField g ∧ B.toField fh = B.toField f * B.toField h ∧
+      B.SqIn e ∧ B.SqIn f ∧ B.SqIn g ∧ B.SqIn h ∧ B.Red eg ∧ B.Red fh ⦄ := by
+  unfold batchStateBody
+  step with hsq X (B.red_sqIn hX) as ⟨XX, hXX, hXXb⟩
+  step with hsq Y (B.red_sqIn hY) as ⟨YY, hYY, hYYb⟩
+  step with hsq Z (B.red_sqIn hZ) as ⟨ZZ, hZZ, hZZb⟩
+  step with hsq T (B.red_sqIn hT) as ⟨TT, hTT, hTTb⟩
+  apply spec_bind hD
+  rintro fd ⟨Fd, hfdb⟩
+  step with hmul TT fd (B.red_mulIn hTTb) (B.red_mulIn hfdb) as ⟨dTT, hdTT, hdTTb⟩
+  step with hadd Y Y hY hY as ⟨Y2, hY2, hY2b⟩
+  step with hmul X Y2 (B.red_mulIn hX) (B.sum2_mulIn hY2b) as ⟨e, he, heb⟩
+  step with hadd ZZ dTT hZZb hdTTb as ⟨f, hf, hfb⟩
+  step with hadd YY XX hYYb hXXb as ⟨g, hg, hgb⟩
+  step with hsub ZZ dTT (B.red_mulIn hZZb) (B.red_mulIn hdTTb) as ⟨h, hh, hhb⟩
+  step with hmul e g (B.red_mulIn heb) (B.sum2_mulIn hgb) as ⟨eg, heg, hegb⟩
+  step with hmul f h (B.sum2_mulIn hfb) (B.red_mulIn hhb) as ⟨fh, hfh, hfhb⟩
+  refine ⟨e, f, g, h, eg, fh, rfl, by rw [he, hY2], by rw [hf, hZZ, hdTT, hTT, Fd],
+    by rw [hg, hYY, hXX], by rw [hh, hZZ, hdTT, hTT, Fd], heg, hfh, B.red_sqIn heb,
+    B.sum2_sqIn hfb, B.sum2_sqIn hgb, B.red_sqIn hhb, hegb, hfhb⟩
+
+/-- The encoding step of `double_and_compress_batch`'s second loop over a backend. -/
+@[expose] def compressStateBody (e f g h eg fh inv : B.F) : Result (Array U8 32#usize) := do
+  let Zinv ← B.mul eg inv
+  let Tinv ← B.mul fh inv
+  let magic ← B.constInvsqrtAMinusD
+  let fe ← B.mul eg Zinv
+  let negcheck1 ← B.isNegative fe
+  let minus_e ← B.neg e
+  let fe1 ← B.constSqrtM1
+  let f_times_sqrta ← B.mul f fe1
+  let e1 ← B.condAssign e g negcheck1
+  let g1 ← B.condAssign g minus_e negcheck1
+  let h1 ← B.condAssign h f_times_sqrta negcheck1
+  let magic1 ← B.condAssign magic fe1 negcheck1
+  let fe2 ← B.mul h1 e1
+  let fe3 ← B.mul fe2 Zinv
+  let negcheck2 ← B.isNegative fe3
+  let g2 ← B.condNeg g1 negcheck2
+  let fe4 ← B.sub h1 g2
+  let fe5 ← B.mul g2 Tinv
+  let fe6 ← B.mul magic1 fe5
+  let s ← B.mul fe4 fe6
+  let s_is_negative ← B.isNegative s
+  let s1 ← B.condNeg s s_is_negative
+  B.toBytes s1
+
+/-- `compressStateBody`: from the state of `P` and the inverse of `e g · f h`, the bytes of
+`2 P`. -/
+theorem compressStateBody_spec (hsub : B.SubSpec) (hmul : B.MulSpec) (hneg : B.NegSpec)
+    (hm1 : B.SqrtM1Spec) (hiad : B.InvsqrtAMinusDSpec) (hisn : B.IsNegativeSpec)
+    (hca : B.CondAssignSpec) (hcng : B.CondNegSpec) (htb : B.ToBytesSpec)
+    (e f g h eg fh inv : B.F) {X Y Z T : ZMod p}
+    (hP : (⟨X, Y, Z, T⟩ : edwards.Extended).OnCurve)
+    (Se : B.toField e = X * (Y + Y)) (Sf : B.toField f = Z ^ 2 + T ^ 2 * d)
+    (Sg : B.toField g = Y ^ 2 + X ^ 2) (Sh : B.toField h = Z ^ 2 - T ^ 2 * d)
+    (Seg : B.toField eg = B.toField e * B.toField g)
+    (Sfh : B.toField fh = B.toField f * B.toField h) (Seb : B.SqIn e) (Sfb : B.SqIn f)
+    (Sgb : B.SqIn g) (Shb : B.SqIn h) (Segb : B.Red eg) (Sfhb : B.Red fh)
+    (Inv : B.toField inv = (B.toField eg * B.toField fh)⁻¹) (Invb : B.Red inv) :
+    B.compressStateBody e f g h eg fh inv ⦃ (bytes : ristretto.CompressedRistretto) =>
+      bytes.asNat = Ristretto.encodeRep (2 • (⟨X, Y, Z, T⟩ : edwards.Extended).toPoint) ⦄ := by
+  have hx : (⟨X, Y, Z, T⟩ : edwards.Extended).toPoint.x = X / Z :=
+    TwistedEdwardsModel.Extended.toPoint_x hP
+  have hy : (⟨X, Y, Z, T⟩ : edwards.Extended).toPoint.y = Y / Z :=
+    TwistedEdwardsModel.Extended.toPoint_y hP
+  obtain ⟨hZ0, hXYZT, -⟩ := hP
+  unfold compressStateBody
+  step with hmul eg inv (B.red_mulIn Segb) (B.red_mulIn Invb) as ⟨Zinv, hZinv, hZinvb⟩
+  step with hmul fh inv (B.red_mulIn Sfhb) (B.red_mulIn Invb) as ⟨Tinv, hTinv, hTinvb⟩
+  apply spec_bind hiad
+  rintro magic ⟨Mg, hmb⟩
+  step with hmul eg Zinv (B.red_mulIn Segb) (B.red_mulIn hZinvb) as ⟨fe, hfe, hfeb⟩
+  step with hisn fe as ⟨n1, hn1v, hn1⟩
+  step with hneg e (B.sqIn_mulIn Seb) as ⟨me, hme, hmeb⟩
+  apply spec_bind hm1
+  rintro fi ⟨Fi, hfib⟩
+  step with hmul f fi (B.sqIn_mulIn Sfb) (B.red_mulIn hfib) as ⟨fts, hfts, hftsb⟩
+  step with hca e g n1 hn1v as ⟨e1, he10, he11⟩
+  step with hca g me n1 hn1v as ⟨g1, hg10, hg11⟩
+  step with hca h fts n1 hn1v as ⟨h1, hh10, hh11⟩
+  step with hca magic fi n1 hn1v as ⟨mg1, hmg10, hmg11⟩
+  have he1b : B.SqIn e1 := by
+    rcases hn1v with h | h
+    · rw [he10 h]; exact Seb
+    · rw [he11 h]; exact Sgb
+  have hg1b : B.SqIn g1 := by
+    rcases hn1v with h | h
+    · rw [hg10 h]; exact Sgb
+    · rw [hg11 h]; exact B.red_sqIn hmeb
+  have hh1b : B.SqIn h1 := by
+    rcases hn1v with h | h
+    · rw [hh10 h]; exact Shb
+    · rw [hh11 h]; exact B.red_sqIn hftsb
+  have hmg1b : B.Red mg1 := by
+    rcases hn1v with h | h
+    · rw [hmg10 h]; exact hmb
+    · rw [hmg11 h]; exact hfib
+  step with hmul h1 e1 (B.sqIn_mulIn hh1b) (B.sqIn_mulIn he1b) as ⟨fe2, hfe2, hfe2b⟩
+  step with hmul fe2 Zinv (B.red_mulIn hfe2b) (B.red_mulIn hZinvb) as ⟨fe3, hfe3, hfe3b⟩
+  step with hisn fe3 as ⟨n2, hn2v, hn2⟩
+  step with hcng g1 n2 hn2v (B.sqIn_mulIn hg1b) as ⟨g2, hg20, hg21⟩
+  have hg2b : B.SqIn g2 := by
+    rcases hn2v with h | h
+    · rw [hg20 h]; exact hg1b
+    · exact B.red_sqIn (hg21 h).2
+  step with hsub h1 g2 (B.sqIn_mulIn hh1b) (B.sqIn_mulIn hg2b) as ⟨fe4, hfe4, hfe4b⟩
+  step with hmul g2 Tinv (B.sqIn_mulIn hg2b) (B.red_mulIn hTinvb) as ⟨fe5, hfe5, hfe5b⟩
+  step with hmul mg1 fe5 (B.red_mulIn hmg1b) (B.red_mulIn hfe5b) as ⟨fe6, hfe6, hfe6b⟩
+  step with hmul fe4 fe6 (B.red_mulIn hfe4b) (B.red_mulIn hfe6b) as ⟨sv, hsv, hsvb⟩
+  step with hisn sv as ⟨sn, hsnv, hsn⟩
+  step with hcng sv sn hsnv (B.red_mulIn hsvb) as ⟨s1, hs10, hs11⟩
+  step with htb s1 as ⟨bytes, hbytes⟩
+  -- the field values
+  have C : B.toField magic ^ 2 * (a - d) = 1 := by rw [Mg, invsqrtAMinusD_sq_mul]
+  have Neg1 := eq_one_iff_isNeg hn1
+  have E1 : B.toField e1 = if (B.toField fe).isNeg then B.toField g else B.toField e :=
+    eq_ite_of_choice hn1v Neg1 (fun h => by rw [he10 h]) (fun h => by rw [he11 h])
+  have G1 : B.toField g1 = if (B.toField fe).isNeg then -B.toField e else B.toField g :=
+    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hg10 h]) (fun h => by rw [hg11 h]; exact hme)
+  have H1 : B.toField h1 =
+      if (B.toField fe).isNeg then B.toField f * sqrtM1 else B.toField h :=
+    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hh10 h])
+      (fun h => by rw [hh11 h, hfts, Fi])
+  have M1 : B.toField mg1 =
+      if (B.toField fe).isNeg then (sqrtM1 : ZMod p) else B.toField magic :=
+    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hmg10 h]) (fun h => by rw [hmg11 h, Fi])
+  have G2 : B.toField g2 = if (B.toField fe3).isNeg then -B.toField g1 else B.toField g1 :=
+    eq_ite_of_choice hn2v (eq_one_iff_isNeg hn2) (fun h => by rw [hg20 h])
+      (fun h => (hg21 h).1)
+  have S1 : B.toField s1 = (B.toField sv).abs :=
+    eq_ite_of_choice hsnv (eq_one_iff_isNeg hsn) (fun h => by rw [hs10 h])
+      (fun h => (hs11 h).1)
+  rw [ristretto.CompressedRistretto.asNat_def, hbytes, S1,
+    ← RistrettoCompress.doubleCompress_eq_encodeRep _ C hZ0 hXYZT hx hy, ← Se, ← Sf, ← Sg,
+    ← Sh]
+  congr 1
+  dsimp only [RistrettoCompress.doubleCompress]
+  rw [hsv, hfe4, hfe6, hfe5, G2, hfe3, hfe2, H1, E1, G1, M1, hfe, hZinv, hTinv, Inv, Seg, Sfh]
+
+end Curve25519Dalek.Backend
 
 namespace Curve25519Dalek.ristretto
 
@@ -68,36 +244,25 @@ private def StateOf (P : RistrettoPoint.«x86_64-tables») (st : BatchCompressSt
   st.e.LimbsLt 54 ∧ st.f.LimbsLt 54 ∧ st.g.LimbsLt 54 ∧ st.h.LimbsLt 54 ∧ st.eg.LimbsLt 52 ∧
   st.fh.LimbsLt 52
 
+private theorem from_eq (P : RistrettoPoint.«x86_64-tables») :
+    BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointx86_64-tables».from P =
+      Backend.batchStateBody Backend.U64
+        (fun e f g h eg fh => (⟨e, f, g, h, eg, fh⟩ : BatchCompressState))
+        P.X P.Y P.Z P.T := rfl
+
 open BatchCompressState.Insts in
 /-- `BatchCompressState::from`: the doubling quantities of `P`. -/
 private theorem from_spec (P : RistrettoPoint.«x86_64-tables») (hP : P.LimbsLt 52) :
     «CoreConvertFromSharedARistrettoPointx86_64-tables».from P
       ⦃ (st : BatchCompressState) => StateOf P st ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hP
-  unfold «CoreConvertFromSharedARistrettoPointx86_64-tables».from
-  step as ⟨XX, hXX, hXXb⟩
-  step as ⟨YY, hYY, hYYb⟩
-  step as ⟨ZZ, hZZ, hZZb⟩
-  step as ⟨TT, hTT, hTTb⟩
-  step as ⟨fd, hfd, hfdb⟩
-  step as ⟨dTT, hdTT, hdTTb⟩
-  step as ⟨Y2, hY2⟩
-  step as ⟨e, he, heb⟩
-  step as ⟨f, hf⟩
-  step as ⟨g, hg⟩
-  step as ⟨h, hh, hhb⟩
-  step as ⟨eg, heg, hegb⟩
-  step as ⟨fh, hfh, hfhb⟩
-  refine ⟨?_, ?_, ?_, ?_, toField_mul_of_mod heg, toField_mul_of_mod hfh,
-    limbs_lt_of_le (by decide) heb, ?_, ?_, limbs_lt_of_le (by decide) hhb, hegb, hfhb⟩
-  · rw [toField_mul_of_mod he, toField_add_of_limbs hY2]
-  · rw [toField_add_of_limbs hf, toField_sq_of_mod hZZ, toField_mul_of_mod hdTT,
-      toField_sq_of_mod hTT, toField_eq_d_of_asNat hfd]
-  · rw [toField_add_of_limbs hg, toField_sq_of_mod hYY, toField_sq_of_mod hXX]
-  · rw [toField_sub_of_mod hh, toField_sq_of_mod hZZ, toField_mul_of_mod hdTT,
-      toField_sq_of_mod hTT, toField_eq_d_of_asNat hfd]
-  · exact limbs_lt_of_le (by decide) (limbs_add_lt hf hZZb hdTTb)
-  · exact limbs_lt_of_le (by decide) (limbs_add_lt hg hYYb hXXb)
+  rw [from_eq]
+  apply spec_mono (Backend.batchStateBody_spec Backend.U64
+    Backend.U64.add_spec Backend.U64.sub_spec Backend.U64.mul_spec Backend.U64.square_spec
+    Backend.U64.edwardsD_spec _ _ _ _ _ hX hY hZ hT)
+  rintro _ ⟨e, f, g, h, eg, fh, rfl, h1, h2, h3, h4, h5, h6, b1, b2, b3, b4, b5, b6⟩
+  unfold StateOf
+  exact ⟨h1, h2, h3, h4, h5, h6, b1, b2, b3, b4, b5, b6⟩
 
 private instance : Inhabited BatchCompressState :=
   ⟨⟨default, default, default, default, default, default⟩⟩
@@ -184,36 +349,25 @@ private def StateOf (P : RistrettoPoint.«i686-tables») (st : BatchCompressStat
   st.e.LimbsLt 27 ∧ st.f.LimbsLt 27 ∧ st.g.LimbsLt 27 ∧ st.h.LimbsLt 27 ∧ st.eg.LimbsLt 26 ∧
   st.fh.LimbsLt 26
 
+private theorem from_eq (P : RistrettoPoint.«i686-tables») :
+    BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointi686-tables».from P =
+      Backend.batchStateBody Backend.U32
+        (fun e f g h eg fh => (⟨e, f, g, h, eg, fh⟩ : BatchCompressState))
+        P.X P.Y P.Z P.T := rfl
+
 open BatchCompressState.Insts in
 /-- `BatchCompressState::from`: the doubling quantities of `P`. -/
 private theorem from_spec (P : RistrettoPoint.«i686-tables») (hP : P.LimbsLt 26) :
     «CoreConvertFromSharedARistrettoPointi686-tables».from P
       ⦃ (st : BatchCompressState) => StateOf P st ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hP
-  unfold «CoreConvertFromSharedARistrettoPointi686-tables».from
-  step as ⟨XX, hXX, hXXb⟩
-  step as ⟨YY, hYY, hYYb⟩
-  step as ⟨ZZ, hZZ, hZZb⟩
-  step as ⟨TT, hTT, hTTb⟩
-  step as ⟨fd, hfd, hfdb⟩
-  step as ⟨dTT, hdTT, hdTTb⟩
-  step as ⟨Y2, hY2⟩
-  step as ⟨e, he, heb⟩
-  step as ⟨f, hf⟩
-  step as ⟨g, hg⟩
-  step as ⟨h, hh, hhb⟩
-  step as ⟨eg, heg, hegb⟩
-  step as ⟨fh, hfh, hfhb⟩
-  refine ⟨?_, ?_, ?_, ?_, toField_mul_of_mod heg, toField_mul_of_mod hfh,
-    limbs_lt_of_le (by decide) heb, ?_, ?_, limbs_lt_of_le (by decide) hhb, hegb, hfhb⟩
-  · rw [toField_mul_of_mod he, toField_add_of_limbs hY2]
-  · rw [toField_add_of_limbs hf, toField_sq_of_mod hZZ, toField_mul_of_mod hdTT,
-      toField_sq_of_mod hTT, toField_eq_d_of_asNat hfd]
-  · rw [toField_add_of_limbs hg, toField_sq_of_mod hYY, toField_sq_of_mod hXX]
-  · rw [toField_sub_of_mod hh, toField_sq_of_mod hZZ, toField_mul_of_mod hdTT,
-      toField_sq_of_mod hTT, toField_eq_d_of_asNat hfd]
-  · exact limbs_lt_of_le (by decide) (limbs_add_lt hf hZZb hdTTb)
-  · exact limbs_lt_of_le (by decide) (limbs_add_lt hg hYYb hXXb)
+  rw [from_eq]
+  apply spec_mono (Backend.batchStateBody_spec Backend.U32
+    Backend.U32.add_spec Backend.U32.sub_spec Backend.U32.mul_spec Backend.U32.square_spec
+    Backend.U32.edwardsD_spec _ _ _ _ _ hX hY hZ hT)
+  rintro _ ⟨e, f, g, h, eg, fh, rfl, h1, h2, h3, h4, h5, h6, b1, b2, b3, b4, b5, b6⟩
+  unfold StateOf
+  exact ⟨h1, h2, h3, h4, h5, h6, b1, b2, b3, b4, b5, b6⟩
 
 private instance : Inhabited BatchCompressState :=
   ⟨⟨default, default, default, default, default, default⟩⟩
@@ -343,6 +497,10 @@ set_option linter.hashCommand false in
 state of `P` and the inverse of `e g · f h`. -/
 add_decl_doc compressState
 
+private theorem compressState_eq (st : BatchCompressState) (inv : FieldElement51) :
+    compressState st inv =
+      Backend.compressStateBody Backend.U64 st.e st.f st.g st.h st.eg st.fh inv := rfl
+
 /-- The encoding step of the second loop: from the state of `P` and the inverse of `e g · f h`,
 the bytes of `2 P`. -/
 private theorem compressState_spec (P : RistrettoPoint.«x86_64-tables») (hP : P.OnCurve)
@@ -351,87 +509,15 @@ private theorem compressState_spec (P : RistrettoPoint.«x86_64-tables») (hP : 
     compressState st inv ⦃ (bytes : CompressedRistretto) =>
       bytes.asNat = Ristretto.encodeRep (2 • P.toPoint) ⦄ := by
   obtain ⟨Se, Sf, Sg, Sh, Seg, Sfh, Seb, Sfb, Sgb, Shb, Segb, Sfhb⟩ := hst
-  unfold compressState
-  step as ⟨Zinv, hZinv, hZinvb⟩
-  step as ⟨Tinv, hTinv, hTinvb⟩
-  step as ⟨magic, hmlt, hm, hmb⟩
-  step as ⟨fe, hfe, hfeb⟩
-  step as ⟨n1, hn1v, hn1⟩
-  step as ⟨me, hme, hmeb⟩
-  step as ⟨fi, hfi, hfib⟩
-  step as ⟨fts, hfts, hftsb⟩
-  step as ⟨e1, he10, he11⟩
-  step as ⟨g1, hg10, hg11⟩
-  step as ⟨h1, hh10, hh11⟩
-  step as ⟨mg1, hmg10, hmg11⟩
-  have he1b : e1.LimbsLt 54 := by
-    rcases hn1v with h | h
-    · rw [he10 h]; exact Seb
-    · rw [he11 h]; exact Sgb
-  have hg1b : g1.LimbsLt 54 := by
-    rcases hn1v with h | h
-    · rw [hg10 h]; exact Sgb
-    · rw [hg11 h]; exact limbs_lt_of_le (by decide) hmeb
-  have hh1b : h1.LimbsLt 54 := by
-    rcases hn1v with h | h
-    · rw [hh10 h]; exact Shb
-    · rw [hh11 h]; exact limbs_lt_of_le (by decide) hftsb
-  have hmg1b : mg1.LimbsLt 54 := by
-    rcases hn1v with h | h
-    · rw [hmg10 h]; exact limbs_lt_of_le (by decide) hmb
-    · rw [hmg11 h]; exact limbs_lt_of_le (by decide) hfib
-  step as ⟨fe2, hfe2, hfe2b⟩
-  step as ⟨fe3, hfe3, hfe3b⟩
-  step as ⟨n2, hn2v, hn2⟩
-  step as ⟨g2, hg20, hg21⟩
-  have hg2b : g2.LimbsLt 54 := by
-    rcases hn2v with h | h
-    · rw [hg20 h]; exact hg1b
-    · exact limbs_lt_of_le (by decide) (hg21 h).2
-  step as ⟨fe4, hfe4, hfe4b⟩
-  step as ⟨fe5, hfe5, hfe5b⟩
-  step as ⟨fe6, hfe6, hfe6b⟩
-  step as ⟨sv, hsv, hsvb⟩
-  step as ⟨sn, hsnv, hsn⟩
-  have hsvb' : sv.LimbsLt 54 := limbs_lt_of_le (by decide) hsvb
-  step as ⟨s1, hs10, hs11⟩
-  step as ⟨bytes, hbytes⟩
-  -- the field values
-  have Fi : fi.toField = sqrtM1 := by rw [toField_def, hfi]
-  have C : magic.toField ^ 2 * (a - d) = 1 := by
-    have h := natCast_eq_natCast_of_mod_eq (hm.trans one_mod_p.symm)
-    push_cast at h
-    rwa [ZMod.natCast_zmod_val, ← toField_def] at h
-  have Neg1 := eq_one_iff_isNeg_toField hn1
-  have E1 : e1.toField = if fe.toField.isNeg then st.g.toField else st.e.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [he10 h]) (fun h => by rw [he11 h])
-  have G1 : g1.toField = if fe.toField.isNeg then -st.e.toField else st.g.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hg10 h])
-      (fun h => by rw [hg11 h]; exact toField_neg_of_mod hme)
-  have H1 : h1.toField = if fe.toField.isNeg then st.f.toField * sqrtM1 else st.h.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hh10 h])
-      (fun h => by rw [hh11 h, toField_mul_of_mod hfts, Fi])
-  have M1 : mg1.toField = if fe.toField.isNeg then (sqrtM1 : ZMod p) else magic.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hmg10 h]) (fun h => by rw [hmg11 h, Fi])
-  have G2 : g2.toField = if fe3.toField.isNeg then -g1.toField else g1.toField :=
-    eq_ite_of_choice hn2v (eq_one_iff_isNeg_toField hn2) (fun h => by rw [hg20 h])
-      (fun h => toField_neg_of_mod (hg21 h).1)
-  have S1 : s1.toField = sv.toField.abs :=
-    eq_ite_of_choice hsnv (eq_one_iff_isNeg_toField hsn) (fun h => by rw [hs10 h])
-      (fun h => toField_neg_of_mod (hs11 h).1)
-  -- the point
-  obtain ⟨hZ0, hXYZT, -⟩ :=
-    (edwards.EdwardsPoint.«x86_64-tables».onCurve_iff_equation _).mp hP
-  rw [CompressedRistretto.asNat_def, hbytes, ← toField_val, S1,
-    ← RistrettoCompress.doubleCompress_eq_encodeRep _ C hZ0 hXYZT
-      (edwards.EdwardsPoint.«x86_64-tables».toPoint_x hP)
-      (edwards.EdwardsPoint.«x86_64-tables».toPoint_y hP), ← Se, ← Sf, ← Sg, ← Sh]
-  congr 1
-  dsimp only [RistrettoCompress.doubleCompress]
-  rw [toField_mul_of_mod hsv, toField_sub_of_mod hfe4, toField_mul_of_mod hfe6,
-    toField_mul_of_mod hfe5, G2, toField_mul_of_mod hfe3, toField_mul_of_mod hfe2, H1, E1, G1,
-    M1, toField_mul_of_mod hfe, toField_mul_of_mod hZinv, toField_mul_of_mod hTinv, Inv, Seg,
-    Sfh]
+  rw [edwards.EdwardsPoint.«x86_64-tables».onCurve_iff,
+    edwards.EdwardsPoint.«x86_64-tables».toExtended_def] at hP
+  rw [compressState_eq, edwards.EdwardsPoint.«x86_64-tables».toPoint_def,
+    edwards.EdwardsPoint.«x86_64-tables».toExtended_def]
+  exact Backend.compressStateBody_spec Backend.U64
+    Backend.U64.sub_spec Backend.U64.mul_spec Backend.U64.neg_spec Backend.U64.sqrtM1_spec
+    Backend.U64.invsqrtAMinusD_spec Backend.U64.is_negative_spec Backend.U64.conditional_assign_spec
+    Backend.U64.conditional_negate_spec Backend.U64.to_bytes_spec _ _ _ _ _ _ _ hP Se Sf Sg Sh Seg
+    Sfh Seb Sfb Sgb Shb Segb Sfhb Inv Invb
 
 
 open scoped Helpers.IndexStep in
@@ -598,6 +684,10 @@ set_option linter.hashCommand false in
 state of `P` and the inverse of `e g · f h`. -/
 add_decl_doc compressState
 
+private theorem compressState_eq (st : BatchCompressState) (inv : FieldElement2625) :
+    compressState st inv =
+      Backend.compressStateBody Backend.U32 st.e st.f st.g st.h st.eg st.fh inv := rfl
+
 /-- The encoding step of the second loop: from the state of `P` and the inverse of `e g · f h`,
 the bytes of `2 P`. -/
 private theorem compressState_spec (P : RistrettoPoint.«i686-tables») (hP : P.OnCurve)
@@ -606,87 +696,15 @@ private theorem compressState_spec (P : RistrettoPoint.«i686-tables») (hP : P.
     compressState st inv ⦃ (bytes : CompressedRistretto) =>
       bytes.asNat = Ristretto.encodeRep (2 • P.toPoint) ⦄ := by
   obtain ⟨Se, Sf, Sg, Sh, Seg, Sfh, Seb, Sfb, Sgb, Shb, Segb, Sfhb⟩ := hst
-  unfold compressState
-  step as ⟨Zinv, hZinv, hZinvb⟩
-  step as ⟨Tinv, hTinv, hTinvb⟩
-  step as ⟨magic, hmlt, hm, hmb⟩
-  step as ⟨fe, hfe, hfeb⟩
-  step as ⟨n1, hn1v, hn1⟩
-  step as ⟨me, hme, hmeb⟩
-  step as ⟨fi, hfi, hfib⟩
-  step as ⟨fts, hfts, hftsb⟩
-  step as ⟨e1, he10, he11⟩
-  step as ⟨g1, hg10, hg11⟩
-  step as ⟨h1, hh10, hh11⟩
-  step as ⟨mg1, hmg10, hmg11⟩
-  have he1b : e1.LimbsLt 27 := by
-    rcases hn1v with h | h
-    · rw [he10 h]; exact Seb
-    · rw [he11 h]; exact Sgb
-  have hg1b : g1.LimbsLt 27 := by
-    rcases hn1v with h | h
-    · rw [hg10 h]; exact Sgb
-    · rw [hg11 h]; exact limbs_lt_of_le (by decide) hmeb
-  have hh1b : h1.LimbsLt 27 := by
-    rcases hn1v with h | h
-    · rw [hh10 h]; exact Shb
-    · rw [hh11 h]; exact limbs_lt_of_le (by decide) hftsb
-  have hmg1b : mg1.LimbsLt 27 := by
-    rcases hn1v with h | h
-    · rw [hmg10 h]; exact limbs_lt_of_le (by decide) hmb
-    · rw [hmg11 h]; exact limbs_lt_of_le (by decide) hfib
-  step as ⟨fe2, hfe2, hfe2b⟩
-  step as ⟨fe3, hfe3, hfe3b⟩
-  step as ⟨n2, hn2v, hn2⟩
-  step as ⟨g2, hg20, hg21⟩
-  have hg2b : g2.LimbsLt 27 := by
-    rcases hn2v with h | h
-    · rw [hg20 h]; exact hg1b
-    · exact limbs_lt_of_le (by decide) (hg21 h).2
-  step as ⟨fe4, hfe4, hfe4b⟩
-  step as ⟨fe5, hfe5, hfe5b⟩
-  step as ⟨fe6, hfe6, hfe6b⟩
-  step as ⟨sv, hsv, hsvb⟩
-  step as ⟨sn, hsnv, hsn⟩
-  have hsvb' : sv.LimbsLt 27 := limbs_lt_of_le (by decide) hsvb
-  step as ⟨s1, hs10, hs11⟩
-  step as ⟨bytes, hbytes⟩
-  -- the field values
-  have Fi : fi.toField = sqrtM1 := by rw [toField_def, hfi]
-  have C : magic.toField ^ 2 * (a - d) = 1 := by
-    have h := natCast_eq_natCast_of_mod_eq (hm.trans one_mod_p.symm)
-    push_cast at h
-    rwa [ZMod.natCast_zmod_val, ← toField_def] at h
-  have Neg1 := eq_one_iff_isNeg_toField hn1
-  have E1 : e1.toField = if fe.toField.isNeg then st.g.toField else st.e.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [he10 h]) (fun h => by rw [he11 h])
-  have G1 : g1.toField = if fe.toField.isNeg then -st.e.toField else st.g.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hg10 h])
-      (fun h => by rw [hg11 h]; exact toField_neg_of_mod hme)
-  have H1 : h1.toField = if fe.toField.isNeg then st.f.toField * sqrtM1 else st.h.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hh10 h])
-      (fun h => by rw [hh11 h, toField_mul_of_mod hfts, Fi])
-  have M1 : mg1.toField = if fe.toField.isNeg then (sqrtM1 : ZMod p) else magic.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hmg10 h]) (fun h => by rw [hmg11 h, Fi])
-  have G2 : g2.toField = if fe3.toField.isNeg then -g1.toField else g1.toField :=
-    eq_ite_of_choice hn2v (eq_one_iff_isNeg_toField hn2) (fun h => by rw [hg20 h])
-      (fun h => toField_neg_of_mod (hg21 h).1)
-  have S1 : s1.toField = sv.toField.abs :=
-    eq_ite_of_choice hsnv (eq_one_iff_isNeg_toField hsn) (fun h => by rw [hs10 h])
-      (fun h => toField_neg_of_mod (hs11 h).1)
-  -- the point
-  obtain ⟨hZ0, hXYZT, -⟩ :=
-    (edwards.EdwardsPoint.«i686-tables».onCurve_iff_equation _).mp hP
-  rw [CompressedRistretto.asNat_def, hbytes, ← toField_val, S1,
-    ← RistrettoCompress.doubleCompress_eq_encodeRep _ C hZ0 hXYZT
-      (edwards.EdwardsPoint.«i686-tables».toPoint_x hP)
-      (edwards.EdwardsPoint.«i686-tables».toPoint_y hP), ← Se, ← Sf, ← Sg, ← Sh]
-  congr 1
-  dsimp only [RistrettoCompress.doubleCompress]
-  rw [toField_mul_of_mod hsv, toField_sub_of_mod hfe4, toField_mul_of_mod hfe6,
-    toField_mul_of_mod hfe5, G2, toField_mul_of_mod hfe3, toField_mul_of_mod hfe2, H1, E1, G1,
-    M1, toField_mul_of_mod hfe, toField_mul_of_mod hZinv, toField_mul_of_mod hTinv, Inv, Seg,
-    Sfh]
+  rw [edwards.EdwardsPoint.«i686-tables».onCurve_iff,
+    edwards.EdwardsPoint.«i686-tables».toExtended_def] at hP
+  rw [compressState_eq, edwards.EdwardsPoint.«i686-tables».toPoint_def,
+    edwards.EdwardsPoint.«i686-tables».toExtended_def]
+  exact Backend.compressStateBody_spec Backend.U32
+    Backend.U32.sub_spec Backend.U32.mul_spec Backend.U32.neg_spec Backend.U32.sqrtM1_spec
+    Backend.U32.invsqrtAMinusD_spec Backend.U32.is_negative_spec Backend.U32.conditional_assign_spec
+    Backend.U32.conditional_negate_spec Backend.U32.to_bytes_spec _ _ _ _ _ _ _ hP Se Sf Sg Sh Seg
+    Sfh Seb Sfb Sgb Shb Segb Sfhb Inv Invb
 
 
 open scoped Helpers.IndexStep in
@@ -810,36 +828,25 @@ private def StateOf (P : RistrettoPoint.«x86_64-no-tables») (st : BatchCompres
   st.e.LimbsLt 54 ∧ st.f.LimbsLt 54 ∧ st.g.LimbsLt 54 ∧ st.h.LimbsLt 54 ∧ st.eg.LimbsLt 52 ∧
   st.fh.LimbsLt 52
 
+private theorem from_eq (P : RistrettoPoint.«x86_64-no-tables») :
+    BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointx86_64-no-tables».from P =
+      Backend.batchStateBody Backend.U64
+        (fun e f g h eg fh => (⟨e, f, g, h, eg, fh⟩ : BatchCompressState))
+        P.X P.Y P.Z P.T := rfl
+
 open BatchCompressState.Insts in
 /-- `BatchCompressState::from`: the doubling quantities of `P`. -/
 private theorem from_spec (P : RistrettoPoint.«x86_64-no-tables») (hP : P.LimbsLt 52) :
     «CoreConvertFromSharedARistrettoPointx86_64-no-tables».from P
       ⦃ (st : BatchCompressState) => StateOf P st ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hP
-  unfold «CoreConvertFromSharedARistrettoPointx86_64-no-tables».from
-  step as ⟨XX, hXX, hXXb⟩
-  step as ⟨YY, hYY, hYYb⟩
-  step as ⟨ZZ, hZZ, hZZb⟩
-  step as ⟨TT, hTT, hTTb⟩
-  step as ⟨fd, hfd, hfdb⟩
-  step as ⟨dTT, hdTT, hdTTb⟩
-  step as ⟨Y2, hY2⟩
-  step as ⟨e, he, heb⟩
-  step as ⟨f, hf⟩
-  step as ⟨g, hg⟩
-  step as ⟨h, hh, hhb⟩
-  step as ⟨eg, heg, hegb⟩
-  step as ⟨fh, hfh, hfhb⟩
-  refine ⟨?_, ?_, ?_, ?_, toField_mul_of_mod heg, toField_mul_of_mod hfh,
-    limbs_lt_of_le (by decide) heb, ?_, ?_, limbs_lt_of_le (by decide) hhb, hegb, hfhb⟩
-  · rw [toField_mul_of_mod he, toField_add_of_limbs hY2]
-  · rw [toField_add_of_limbs hf, toField_sq_of_mod hZZ, toField_mul_of_mod hdTT,
-      toField_sq_of_mod hTT, toField_eq_d_of_asNat hfd]
-  · rw [toField_add_of_limbs hg, toField_sq_of_mod hYY, toField_sq_of_mod hXX]
-  · rw [toField_sub_of_mod hh, toField_sq_of_mod hZZ, toField_mul_of_mod hdTT,
-      toField_sq_of_mod hTT, toField_eq_d_of_asNat hfd]
-  · exact limbs_lt_of_le (by decide) (limbs_add_lt hf hZZb hdTTb)
-  · exact limbs_lt_of_le (by decide) (limbs_add_lt hg hYYb hXXb)
+  rw [from_eq]
+  apply spec_mono (Backend.batchStateBody_spec Backend.U64
+    Backend.U64.add_spec Backend.U64.sub_spec Backend.U64.mul_spec Backend.U64.square_spec
+    Backend.U64.edwardsD_spec _ _ _ _ _ hX hY hZ hT)
+  rintro _ ⟨e, f, g, h, eg, fh, rfl, h1, h2, h3, h4, h5, h6, b1, b2, b3, b4, b5, b6⟩
+  unfold StateOf
+  exact ⟨h1, h2, h3, h4, h5, h6, b1, b2, b3, b4, b5, b6⟩
 
 private instance : Inhabited BatchCompressState :=
   ⟨⟨default, default, default, default, default, default⟩⟩
@@ -926,36 +933,25 @@ private def StateOf (P : RistrettoPoint.«i686-no-tables») (st : BatchCompressS
   st.e.LimbsLt 27 ∧ st.f.LimbsLt 27 ∧ st.g.LimbsLt 27 ∧ st.h.LimbsLt 27 ∧ st.eg.LimbsLt 26 ∧
   st.fh.LimbsLt 26
 
+private theorem from_eq (P : RistrettoPoint.«i686-no-tables») :
+    BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointi686-no-tables».from P =
+      Backend.batchStateBody Backend.U32
+        (fun e f g h eg fh => (⟨e, f, g, h, eg, fh⟩ : BatchCompressState))
+        P.X P.Y P.Z P.T := rfl
+
 open BatchCompressState.Insts in
 /-- `BatchCompressState::from`: the doubling quantities of `P`. -/
 private theorem from_spec (P : RistrettoPoint.«i686-no-tables») (hP : P.LimbsLt 26) :
     «CoreConvertFromSharedARistrettoPointi686-no-tables».from P
       ⦃ (st : BatchCompressState) => StateOf P st ⦄ := by
   obtain ⟨hX, hY, hZ, hT⟩ := hP
-  unfold «CoreConvertFromSharedARistrettoPointi686-no-tables».from
-  step as ⟨XX, hXX, hXXb⟩
-  step as ⟨YY, hYY, hYYb⟩
-  step as ⟨ZZ, hZZ, hZZb⟩
-  step as ⟨TT, hTT, hTTb⟩
-  step as ⟨fd, hfd, hfdb⟩
-  step as ⟨dTT, hdTT, hdTTb⟩
-  step as ⟨Y2, hY2⟩
-  step as ⟨e, he, heb⟩
-  step as ⟨f, hf⟩
-  step as ⟨g, hg⟩
-  step as ⟨h, hh, hhb⟩
-  step as ⟨eg, heg, hegb⟩
-  step as ⟨fh, hfh, hfhb⟩
-  refine ⟨?_, ?_, ?_, ?_, toField_mul_of_mod heg, toField_mul_of_mod hfh,
-    limbs_lt_of_le (by decide) heb, ?_, ?_, limbs_lt_of_le (by decide) hhb, hegb, hfhb⟩
-  · rw [toField_mul_of_mod he, toField_add_of_limbs hY2]
-  · rw [toField_add_of_limbs hf, toField_sq_of_mod hZZ, toField_mul_of_mod hdTT,
-      toField_sq_of_mod hTT, toField_eq_d_of_asNat hfd]
-  · rw [toField_add_of_limbs hg, toField_sq_of_mod hYY, toField_sq_of_mod hXX]
-  · rw [toField_sub_of_mod hh, toField_sq_of_mod hZZ, toField_mul_of_mod hdTT,
-      toField_sq_of_mod hTT, toField_eq_d_of_asNat hfd]
-  · exact limbs_lt_of_le (by decide) (limbs_add_lt hf hZZb hdTTb)
-  · exact limbs_lt_of_le (by decide) (limbs_add_lt hg hYYb hXXb)
+  rw [from_eq]
+  apply spec_mono (Backend.batchStateBody_spec Backend.U32
+    Backend.U32.add_spec Backend.U32.sub_spec Backend.U32.mul_spec Backend.U32.square_spec
+    Backend.U32.edwardsD_spec _ _ _ _ _ hX hY hZ hT)
+  rintro _ ⟨e, f, g, h, eg, fh, rfl, h1, h2, h3, h4, h5, h6, b1, b2, b3, b4, b5, b6⟩
+  unfold StateOf
+  exact ⟨h1, h2, h3, h4, h5, h6, b1, b2, b3, b4, b5, b6⟩
 
 private instance : Inhabited BatchCompressState :=
   ⟨⟨default, default, default, default, default, default⟩⟩
@@ -1085,6 +1081,10 @@ set_option linter.hashCommand false in
 state of `P` and the inverse of `e g · f h`. -/
 add_decl_doc compressState
 
+private theorem compressState_eq (st : BatchCompressState) (inv : FieldElement51) :
+    compressState st inv =
+      Backend.compressStateBody Backend.U64 st.e st.f st.g st.h st.eg st.fh inv := rfl
+
 /-- The encoding step of the second loop: from the state of `P` and the inverse of `e g · f h`,
 the bytes of `2 P`. -/
 private theorem compressState_spec (P : RistrettoPoint.«x86_64-no-tables») (hP : P.OnCurve)
@@ -1093,87 +1093,15 @@ private theorem compressState_spec (P : RistrettoPoint.«x86_64-no-tables») (hP
     compressState st inv ⦃ (bytes : CompressedRistretto) =>
       bytes.asNat = Ristretto.encodeRep (2 • P.toPoint) ⦄ := by
   obtain ⟨Se, Sf, Sg, Sh, Seg, Sfh, Seb, Sfb, Sgb, Shb, Segb, Sfhb⟩ := hst
-  unfold compressState
-  step as ⟨Zinv, hZinv, hZinvb⟩
-  step as ⟨Tinv, hTinv, hTinvb⟩
-  step as ⟨magic, hmlt, hm, hmb⟩
-  step as ⟨fe, hfe, hfeb⟩
-  step as ⟨n1, hn1v, hn1⟩
-  step as ⟨me, hme, hmeb⟩
-  step as ⟨fi, hfi, hfib⟩
-  step as ⟨fts, hfts, hftsb⟩
-  step as ⟨e1, he10, he11⟩
-  step as ⟨g1, hg10, hg11⟩
-  step as ⟨h1, hh10, hh11⟩
-  step as ⟨mg1, hmg10, hmg11⟩
-  have he1b : e1.LimbsLt 54 := by
-    rcases hn1v with h | h
-    · rw [he10 h]; exact Seb
-    · rw [he11 h]; exact Sgb
-  have hg1b : g1.LimbsLt 54 := by
-    rcases hn1v with h | h
-    · rw [hg10 h]; exact Sgb
-    · rw [hg11 h]; exact limbs_lt_of_le (by decide) hmeb
-  have hh1b : h1.LimbsLt 54 := by
-    rcases hn1v with h | h
-    · rw [hh10 h]; exact Shb
-    · rw [hh11 h]; exact limbs_lt_of_le (by decide) hftsb
-  have hmg1b : mg1.LimbsLt 54 := by
-    rcases hn1v with h | h
-    · rw [hmg10 h]; exact limbs_lt_of_le (by decide) hmb
-    · rw [hmg11 h]; exact limbs_lt_of_le (by decide) hfib
-  step as ⟨fe2, hfe2, hfe2b⟩
-  step as ⟨fe3, hfe3, hfe3b⟩
-  step as ⟨n2, hn2v, hn2⟩
-  step as ⟨g2, hg20, hg21⟩
-  have hg2b : g2.LimbsLt 54 := by
-    rcases hn2v with h | h
-    · rw [hg20 h]; exact hg1b
-    · exact limbs_lt_of_le (by decide) (hg21 h).2
-  step as ⟨fe4, hfe4, hfe4b⟩
-  step as ⟨fe5, hfe5, hfe5b⟩
-  step as ⟨fe6, hfe6, hfe6b⟩
-  step as ⟨sv, hsv, hsvb⟩
-  step as ⟨sn, hsnv, hsn⟩
-  have hsvb' : sv.LimbsLt 54 := limbs_lt_of_le (by decide) hsvb
-  step as ⟨s1, hs10, hs11⟩
-  step as ⟨bytes, hbytes⟩
-  -- the field values
-  have Fi : fi.toField = sqrtM1 := by rw [toField_def, hfi]
-  have C : magic.toField ^ 2 * (a - d) = 1 := by
-    have h := natCast_eq_natCast_of_mod_eq (hm.trans one_mod_p.symm)
-    push_cast at h
-    rwa [ZMod.natCast_zmod_val, ← toField_def] at h
-  have Neg1 := eq_one_iff_isNeg_toField hn1
-  have E1 : e1.toField = if fe.toField.isNeg then st.g.toField else st.e.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [he10 h]) (fun h => by rw [he11 h])
-  have G1 : g1.toField = if fe.toField.isNeg then -st.e.toField else st.g.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hg10 h])
-      (fun h => by rw [hg11 h]; exact toField_neg_of_mod hme)
-  have H1 : h1.toField = if fe.toField.isNeg then st.f.toField * sqrtM1 else st.h.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hh10 h])
-      (fun h => by rw [hh11 h, toField_mul_of_mod hfts, Fi])
-  have M1 : mg1.toField = if fe.toField.isNeg then (sqrtM1 : ZMod p) else magic.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hmg10 h]) (fun h => by rw [hmg11 h, Fi])
-  have G2 : g2.toField = if fe3.toField.isNeg then -g1.toField else g1.toField :=
-    eq_ite_of_choice hn2v (eq_one_iff_isNeg_toField hn2) (fun h => by rw [hg20 h])
-      (fun h => toField_neg_of_mod (hg21 h).1)
-  have S1 : s1.toField = sv.toField.abs :=
-    eq_ite_of_choice hsnv (eq_one_iff_isNeg_toField hsn) (fun h => by rw [hs10 h])
-      (fun h => toField_neg_of_mod (hs11 h).1)
-  -- the point
-  obtain ⟨hZ0, hXYZT, -⟩ :=
-    (edwards.EdwardsPoint.«x86_64-no-tables».onCurve_iff_equation _).mp hP
-  rw [CompressedRistretto.asNat_def, hbytes, ← toField_val, S1,
-    ← RistrettoCompress.doubleCompress_eq_encodeRep _ C hZ0 hXYZT
-      (edwards.EdwardsPoint.«x86_64-no-tables».toPoint_x hP)
-      (edwards.EdwardsPoint.«x86_64-no-tables».toPoint_y hP), ← Se, ← Sf, ← Sg, ← Sh]
-  congr 1
-  dsimp only [RistrettoCompress.doubleCompress]
-  rw [toField_mul_of_mod hsv, toField_sub_of_mod hfe4, toField_mul_of_mod hfe6,
-    toField_mul_of_mod hfe5, G2, toField_mul_of_mod hfe3, toField_mul_of_mod hfe2, H1, E1, G1,
-    M1, toField_mul_of_mod hfe, toField_mul_of_mod hZinv, toField_mul_of_mod hTinv, Inv, Seg,
-    Sfh]
+  rw [edwards.EdwardsPoint.«x86_64-no-tables».onCurve_iff,
+    edwards.EdwardsPoint.«x86_64-no-tables».toExtended_def] at hP
+  rw [compressState_eq, edwards.EdwardsPoint.«x86_64-no-tables».toPoint_def,
+    edwards.EdwardsPoint.«x86_64-no-tables».toExtended_def]
+  exact Backend.compressStateBody_spec Backend.U64
+    Backend.U64.sub_spec Backend.U64.mul_spec Backend.U64.neg_spec Backend.U64.sqrtM1_spec
+    Backend.U64.invsqrtAMinusD_spec Backend.U64.is_negative_spec Backend.U64.conditional_assign_spec
+    Backend.U64.conditional_negate_spec Backend.U64.to_bytes_spec _ _ _ _ _ _ _ hP Se Sf Sg Sh Seg
+    Sfh Seb Sfb Sgb Shb Segb Sfhb Inv Invb
 
 
 open scoped Helpers.IndexStep in
@@ -1340,6 +1268,10 @@ set_option linter.hashCommand false in
 state of `P` and the inverse of `e g · f h`. -/
 add_decl_doc compressState
 
+private theorem compressState_eq (st : BatchCompressState) (inv : FieldElement2625) :
+    compressState st inv =
+      Backend.compressStateBody Backend.U32 st.e st.f st.g st.h st.eg st.fh inv := rfl
+
 /-- The encoding step of the second loop: from the state of `P` and the inverse of `e g · f h`,
 the bytes of `2 P`. -/
 private theorem compressState_spec (P : RistrettoPoint.«i686-no-tables») (hP : P.OnCurve)
@@ -1348,87 +1280,15 @@ private theorem compressState_spec (P : RistrettoPoint.«i686-no-tables») (hP :
     compressState st inv ⦃ (bytes : CompressedRistretto) =>
       bytes.asNat = Ristretto.encodeRep (2 • P.toPoint) ⦄ := by
   obtain ⟨Se, Sf, Sg, Sh, Seg, Sfh, Seb, Sfb, Sgb, Shb, Segb, Sfhb⟩ := hst
-  unfold compressState
-  step as ⟨Zinv, hZinv, hZinvb⟩
-  step as ⟨Tinv, hTinv, hTinvb⟩
-  step as ⟨magic, hmlt, hm, hmb⟩
-  step as ⟨fe, hfe, hfeb⟩
-  step as ⟨n1, hn1v, hn1⟩
-  step as ⟨me, hme, hmeb⟩
-  step as ⟨fi, hfi, hfib⟩
-  step as ⟨fts, hfts, hftsb⟩
-  step as ⟨e1, he10, he11⟩
-  step as ⟨g1, hg10, hg11⟩
-  step as ⟨h1, hh10, hh11⟩
-  step as ⟨mg1, hmg10, hmg11⟩
-  have he1b : e1.LimbsLt 27 := by
-    rcases hn1v with h | h
-    · rw [he10 h]; exact Seb
-    · rw [he11 h]; exact Sgb
-  have hg1b : g1.LimbsLt 27 := by
-    rcases hn1v with h | h
-    · rw [hg10 h]; exact Sgb
-    · rw [hg11 h]; exact limbs_lt_of_le (by decide) hmeb
-  have hh1b : h1.LimbsLt 27 := by
-    rcases hn1v with h | h
-    · rw [hh10 h]; exact Shb
-    · rw [hh11 h]; exact limbs_lt_of_le (by decide) hftsb
-  have hmg1b : mg1.LimbsLt 27 := by
-    rcases hn1v with h | h
-    · rw [hmg10 h]; exact limbs_lt_of_le (by decide) hmb
-    · rw [hmg11 h]; exact limbs_lt_of_le (by decide) hfib
-  step as ⟨fe2, hfe2, hfe2b⟩
-  step as ⟨fe3, hfe3, hfe3b⟩
-  step as ⟨n2, hn2v, hn2⟩
-  step as ⟨g2, hg20, hg21⟩
-  have hg2b : g2.LimbsLt 27 := by
-    rcases hn2v with h | h
-    · rw [hg20 h]; exact hg1b
-    · exact limbs_lt_of_le (by decide) (hg21 h).2
-  step as ⟨fe4, hfe4, hfe4b⟩
-  step as ⟨fe5, hfe5, hfe5b⟩
-  step as ⟨fe6, hfe6, hfe6b⟩
-  step as ⟨sv, hsv, hsvb⟩
-  step as ⟨sn, hsnv, hsn⟩
-  have hsvb' : sv.LimbsLt 27 := limbs_lt_of_le (by decide) hsvb
-  step as ⟨s1, hs10, hs11⟩
-  step as ⟨bytes, hbytes⟩
-  -- the field values
-  have Fi : fi.toField = sqrtM1 := by rw [toField_def, hfi]
-  have C : magic.toField ^ 2 * (a - d) = 1 := by
-    have h := natCast_eq_natCast_of_mod_eq (hm.trans one_mod_p.symm)
-    push_cast at h
-    rwa [ZMod.natCast_zmod_val, ← toField_def] at h
-  have Neg1 := eq_one_iff_isNeg_toField hn1
-  have E1 : e1.toField = if fe.toField.isNeg then st.g.toField else st.e.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [he10 h]) (fun h => by rw [he11 h])
-  have G1 : g1.toField = if fe.toField.isNeg then -st.e.toField else st.g.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hg10 h])
-      (fun h => by rw [hg11 h]; exact toField_neg_of_mod hme)
-  have H1 : h1.toField = if fe.toField.isNeg then st.f.toField * sqrtM1 else st.h.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hh10 h])
-      (fun h => by rw [hh11 h, toField_mul_of_mod hfts, Fi])
-  have M1 : mg1.toField = if fe.toField.isNeg then (sqrtM1 : ZMod p) else magic.toField :=
-    eq_ite_of_choice hn1v Neg1 (fun h => by rw [hmg10 h]) (fun h => by rw [hmg11 h, Fi])
-  have G2 : g2.toField = if fe3.toField.isNeg then -g1.toField else g1.toField :=
-    eq_ite_of_choice hn2v (eq_one_iff_isNeg_toField hn2) (fun h => by rw [hg20 h])
-      (fun h => toField_neg_of_mod (hg21 h).1)
-  have S1 : s1.toField = sv.toField.abs :=
-    eq_ite_of_choice hsnv (eq_one_iff_isNeg_toField hsn) (fun h => by rw [hs10 h])
-      (fun h => toField_neg_of_mod (hs11 h).1)
-  -- the point
-  obtain ⟨hZ0, hXYZT, -⟩ :=
-    (edwards.EdwardsPoint.«i686-no-tables».onCurve_iff_equation _).mp hP
-  rw [CompressedRistretto.asNat_def, hbytes, ← toField_val, S1,
-    ← RistrettoCompress.doubleCompress_eq_encodeRep _ C hZ0 hXYZT
-      (edwards.EdwardsPoint.«i686-no-tables».toPoint_x hP)
-      (edwards.EdwardsPoint.«i686-no-tables».toPoint_y hP), ← Se, ← Sf, ← Sg, ← Sh]
-  congr 1
-  dsimp only [RistrettoCompress.doubleCompress]
-  rw [toField_mul_of_mod hsv, toField_sub_of_mod hfe4, toField_mul_of_mod hfe6,
-    toField_mul_of_mod hfe5, G2, toField_mul_of_mod hfe3, toField_mul_of_mod hfe2, H1, E1, G1,
-    M1, toField_mul_of_mod hfe, toField_mul_of_mod hZinv, toField_mul_of_mod hTinv, Inv, Seg,
-    Sfh]
+  rw [edwards.EdwardsPoint.«i686-no-tables».onCurve_iff,
+    edwards.EdwardsPoint.«i686-no-tables».toExtended_def] at hP
+  rw [compressState_eq, edwards.EdwardsPoint.«i686-no-tables».toPoint_def,
+    edwards.EdwardsPoint.«i686-no-tables».toExtended_def]
+  exact Backend.compressStateBody_spec Backend.U32
+    Backend.U32.sub_spec Backend.U32.mul_spec Backend.U32.neg_spec Backend.U32.sqrtM1_spec
+    Backend.U32.invsqrtAMinusD_spec Backend.U32.is_negative_spec Backend.U32.conditional_assign_spec
+    Backend.U32.conditional_negate_spec Backend.U32.to_bytes_spec _ _ _ _ _ _ _ hP Se Sf Sg Sh Seg
+    Sfh Seb Sfb Sgb Shb Segb Sfhb Inv Invb
 
 
 open scoped Helpers.IndexStep in

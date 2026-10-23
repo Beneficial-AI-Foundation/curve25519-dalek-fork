@@ -38,6 +38,7 @@ import Proofs.Backend.Serial.U32.Field.Square
 import Proofs.Backend.Serial.U32.Field.Sub
 import Proofs.Backend.Serial.U32.Field.ToBytes
 import Proofs.Helpers.ToField2625
+public import Proofs.Field.Invsqrt
 public section
 
 /-! # `CompressedRistretto::decompress`
@@ -91,6 +92,113 @@ private theorem candidate_facts {s : ZMod p} (h : (sqrtRatioM1 1 (dW s)).1 = tru
   unfold dY dV dU1 dU2 at *
   linear_combination (1 - s ^ 2) * hr
 
+
+/-- `decompress::step_2` over a backend. -/
+@[expose] def step2Body (B : Backend) {P : Type} (mk : B.F → B.F → B.F → B.F → P) (s : B.F) :
+    Result (subtle.Choice × subtle.Choice × subtle.Choice × P) := do
+  let one ← B.constOne
+  let ss ← B.square s
+  let u1 ← B.sub one ss
+  let u2 ← B.add one ss
+  let u2_sqr ← B.square u2
+  let fe ← B.constEdwardsD
+  let fe1 ← B.neg fe
+  let fe2 ← B.square u1
+  let fe3 ← B.mul fe1 fe2
+  let v ← B.sub fe3 u2_sqr
+  let fe4 ← B.mul v u2_sqr
+  let (ok1, I) ← B.invsqrt fe4
+  let Dx ← B.mul I u2
+  let fe5 ← B.mul Dx v
+  let Dy ← B.mul I fe5
+  let fe6 ← B.add s s
+  let x ← B.mul fe6 Dx
+  let x_neg ← B.isNegative x
+  let x1 ← B.condNeg x x_neg
+  let y ← B.mul u1 Dy
+  let t ← B.mul x1 y
+  let c ← B.isNegative t
+  let c1 ← B.isZero y
+  ok (ok1, c, c1, mk x1 y one t)
+
+/-- `step2Body`: the candidate point `(x, y, 1, x y)` of RFC 9496 §4.3.1 and its three tests. -/
+private theorem step2Body_spec (B : Backend) (hadd : B.AddSpec) (hsub : B.SubSpec)
+    (hmul : B.MulSpec) (hsq : B.SquareSpec) (hneg : B.NegSpec) (hD : B.EdwardsDSpec)
+    (hone : B.OneSpec) (hinv : B.InvsqrtSpec) (hisn : B.IsNegativeSpec) (hcng : B.CondNegSpec)
+    (hisz : B.IsZeroSpec) {P : Type} (mk : B.F → B.F → B.F → B.F → P) (s : B.F)
+    (hs : B.Red s) :
+    step2Body B mk s ⦃ (ok1 : subtle.Choice) (tn : subtle.Choice) (yz : subtle.Choice)
+        (res : P) =>
+      ok1.IsValid ∧ (ok1 = 1#u8 ↔ (sqrtRatioM1 1 (dW (B.toField s))).1 = true) ∧
+      tn.IsValid ∧ (tn = 1#u8 ↔ (dX (B.toField s) * dY (B.toField s)).isNeg) ∧
+      yz.IsValid ∧ (yz = 1#u8 ↔ dY (B.toField s) = 0) ∧
+      ∃ a b c d, res = mk a b c d ∧
+        (⟨B.toField a, B.toField b, B.toField c, B.toField d⟩ : edwards.Extended) =
+          ⟨dX (B.toField s), dY (B.toField s), 1, dX (B.toField s) * dY (B.toField s)⟩ ∧
+        B.Red a ∧ B.Red b ∧ B.Red c ∧ B.Red d ⦄ := by
+  unfold step2Body
+  apply spec_bind hone
+  rintro one ⟨F1, honeb⟩
+  step with hsq s (B.red_sqIn hs) as ⟨ss, hss, hssb⟩
+  step with hsub one ss (B.red_mulIn honeb) (B.red_mulIn hssb) as ⟨u1, hu1, hu1b⟩
+  step with hadd one ss honeb hssb as ⟨u2, hu2, hu2b⟩
+  step with hsq u2 (B.sum2_sqIn hu2b) as ⟨u2s, hu2s, hu2sb⟩
+  apply spec_bind hD
+  rintro fd ⟨Fd, hfdb⟩
+  step with hneg fd (B.red_mulIn hfdb) as ⟨fe1, hfe1, hfe1b⟩
+  step with hsq u1 (B.red_sqIn hu1b) as ⟨fe2, hfe2, hfe2b⟩
+  step with hmul fe1 fe2 (B.red_mulIn hfe1b) (B.red_mulIn hfe2b) as ⟨fe3, hfe3, hfe3b⟩
+  step with hsub fe3 u2s (B.red_mulIn hfe3b) (B.red_mulIn hu2sb) as ⟨v, hv, hvb⟩
+  step with hmul v u2s (B.red_mulIn hvb) (B.red_mulIn hu2sb) as ⟨fe4, hfe4, hfe4b⟩
+  step with hinv fe4 (B.red_sqIn hfe4b) as ⟨ok1, I, hInv, hokv, hIb⟩
+  step with hmul I u2 (B.red_mulIn hIb) (B.sum2_mulIn hu2b) as ⟨Dx, hDx, hDxb⟩
+  step with hmul Dx v (B.red_mulIn hDxb) (B.red_mulIn hvb) as ⟨fe5, hfe5, hfe5b⟩
+  step with hmul I fe5 (B.red_mulIn hIb) (B.red_mulIn hfe5b) as ⟨Dy, hDy, hDyb⟩
+  step with hadd s s hs hs as ⟨fe6, hfe6, hfe6b⟩
+  step with hmul fe6 Dx (B.sum2_mulIn hfe6b) (B.red_mulIn hDxb) as ⟨x, hx, hxb⟩
+  step with hisn x as ⟨xn, hxnv, hxn⟩
+  step with hcng x xn hxnv (B.red_mulIn hxb) as ⟨x1, hx10, hx11⟩
+  step with hmul u1 Dy (B.red_mulIn hu1b) (B.red_mulIn hDyb) as ⟨y, hy, hyb⟩
+  have hx1b : B.Red x1 := by
+    rcases hxnv with h | h
+    · rw [hx10 h]; exact hxb
+    · exact (hx11 h).2
+  step with hmul x1 y (B.red_mulIn hx1b) (B.red_mulIn hyb) as ⟨t, ht, htb⟩
+  step with hisn t as ⟨c, hcv, hc⟩
+  step with hisz y as ⟨c1, hc1v, hc11, hc10⟩
+  have U1 : B.toField u1 = 1 - B.toField s ^ 2 := by rw [hu1, F1, hss]
+  have U2 : B.toField u2 = 1 + B.toField s ^ 2 := by rw [hu2, F1, hss]
+  have V : B.toField v = dV (B.toField s) := by
+    rw [hv, hfe3, hfe1, Fd, hfe2, hu2s, U1, U2]
+    unfold dV dU1 dU2
+    ring
+  have W : B.toField fe4 = dW (B.toField s) := by
+    rw [hfe4, V, hu2s, U2]
+    rfl
+  rw [W] at hInv
+  have R : B.toField I = dR (B.toField s) := by unfold dR; rw [hInv]
+  have X1 : B.toField x1 = dX (B.toField s) := by
+    have h := Backend.eq_ite_of_choice hxnv (Backend.eq_one_iff_isNeg hxn)
+      (fun h => by rw [hx10 h]) (fun h => (hx11 h).1)
+    rw [h, show (if (B.toField x).isNeg then -B.toField x else B.toField x) =
+      (B.toField x).abs from rfl, hx, hfe6, hDx, R, U2]
+    unfold dX dU2
+    ring_nf
+  have Y : B.toField y = dY (B.toField s) := by
+    rw [hy, hDy, hfe5, hDx, R, U1, U2, V]
+    unfold dY dU1 dU2
+    ring
+  refine ⟨hokv, ?_, hcv, ?_, hc1v, ?_, x1, y, one, t, rfl, ?_, hx1b, hyb, honeb, htb⟩
+  · rw [hInv]
+    simp
+  · rw [Backend.eq_one_iff_isNeg hc, ht, X1, Y]
+  · rw [← Y]
+    refine ⟨fun h => ?_, hc11⟩
+    by_contra hne
+    rw [hc10 hne] at h
+    exact absurd h (by decide)
+  · rw [ht, X1, Y, F1]
+
 end decompress
 
 namespace decompress.«x86_64-tables»
@@ -127,6 +235,10 @@ private theorem step_1_spec (repr : CompressedRistretto) :
       exact hc1 (by rw [h])
   · rw [toField_def, hs, CompressedRistretto.asNat_def]
 
+private theorem step_2_eq (s : FieldElement51) :
+    step_2.«x86_64-tables» s = decompress.step2Body Backend.U64
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : edwards.EdwardsPoint.«x86_64-tables»)) s := rfl
+
 open decompress in
 /-- `decompress::step_2`: the candidate point `(x, y, 1, x y)` of RFC 9496 §4.3.1 and its three
 tests (`was_square`, `x y` negative, `y = 0`); limbs `< 2^52`. -/
@@ -138,69 +250,16 @@ private theorem step_2_spec (s : FieldElement51) (hs : s.LimbsLt 52) :
       yz.IsValid ∧ (yz = 1#u8 ↔ dY s.toField = 0) ∧
       res.toExtended = ⟨dX s.toField, dY s.toField, 1, dX s.toField * dY s.toField⟩ ∧
       res.LimbsLt 52 ⦄ := by
-  unfold step_2.«x86_64-tables»
-  step as ⟨one, hone, honeb⟩
-  step as ⟨ss, hss, hssb⟩
-  step as ⟨u1, hu1, hu1b⟩
-  step as ⟨u2, hu2⟩
-  step as ⟨u2s, hu2s, hu2sb⟩
-  step as ⟨fd, hfd, hfdb⟩
-  step as ⟨fe1, hfe1, hfe1b⟩
-  step as ⟨fe2, hfe2, hfe2b⟩
-  step as ⟨fe3, hfe3, hfe3b⟩
-  step as ⟨v, hv, hvb⟩
-  step as ⟨fe4, hfe4, hfe4b⟩
-  step as ⟨ok1, I, hokv, hi0, hi1, hi2, hpar, hIb⟩
-  step as ⟨Dx, hDx, hDxb⟩
-  step as ⟨fe5, hfe5, hfe5b⟩
-  step as ⟨Dy, hDy, hDyb⟩
-  step as ⟨fe6, hfe6⟩
-  step as ⟨x, hx, hxb⟩
-  step as ⟨xn, hxnv, hxn⟩
-  step as ⟨x1, hx10, hx11⟩
-  step as ⟨y, hy, hyb⟩
-  have hx1b : x1.LimbsLt 52 := by
-    rcases hxnv with h | h
-    · rw [hx10 h]; exact hxb
-    · exact (hx11 h).2
-  step as ⟨t, ht, htb⟩
-  step as ⟨c, hcv, hc⟩
-  step as ⟨c1, hc1v, hc11, hc10⟩
-  have F1 : one.toField = 1 := toField_eq_one_of_asNat hone
-  have U1 : u1.toField = 1 - s.toField ^ 2 := by
-    rw [toField_sub_of_mod hu1, F1, toField_sq_of_mod hss]
-  have U2 : u2.toField = 1 + s.toField ^ 2 := by
-    rw [toField_add_of_limbs hu2, F1, toField_sq_of_mod hss]
-  have V : v.toField = dV s.toField := by
-    rw [toField_sub_of_mod hv, toField_mul_of_mod hfe3, toField_neg_of_mod hfe1,
-      toField_eq_d_of_asNat hfd, toField_sq_of_mod hfe2, toField_sq_of_mod hu2s, U1, U2]
-    unfold dV dU1 dU2
-    ring
-  have W : fe4.toField = dW s.toField := by
-    rw [toField_mul_of_mod hfe4, V, toField_sq_of_mod hu2s, U2]
-    rfl
-  have Inv := sqrtRatioM1_one_eq_of_spec hi0 (fun h ⟨x, hx⟩ => hi1 h x hx) hi2 hpar
-  rw [W] at Inv
-  have R : I.toField = dR s.toField := by unfold dR; rw [Inv]
-  have X1 : x1.toField = dX s.toField := by
-    have h := eq_ite_of_choice hxnv (eq_one_iff_isNeg_toField hxn) (fun h => by rw [hx10 h])
-      (fun h => toField_neg_of_mod (hx11 h).1)
-    rw [h, show (if x.toField.isNeg then -x.toField else x.toField) = x.toField.abs from rfl,
-      toField_mul_of_mod hx, toField_add_of_limbs hfe6, toField_mul_of_mod hDx, R, U2]
-    unfold dX dU2
-    ring_nf
-  have Y : y.toField = dY s.toField := by
-    rw [toField_mul_of_mod hy, toField_mul_of_mod hDy, toField_mul_of_mod hfe5,
-      toField_mul_of_mod hDx, R, U1, U2, V]
-    unfold dY dU1 dU2
-    ring
-  refine ⟨hokv, ?_, hcv, ?_, hc1v, ?_, ?_, ⟨hx1b, hyb, limbs_lt_of_le (by decide) honeb, htb⟩⟩
-  · rw [Inv]
-    simp
-  · rw [eq_one_iff_isNeg_toField hc, toField_mul_of_mod ht, X1, Y]
-  · rw [eq_one_iff_toField_eq_zero hc11 hc10, Y]
-  · rw [edwards.EdwardsPoint.«x86_64-tables».toExtended_def]
-    simp only [X1, Y, F1, toField_mul_of_mod ht]
+  rw [step_2_eq]
+  apply spec_mono (decompress.step2Body_spec Backend.U64
+    Backend.U64.add_spec Backend.U64.sub_spec Backend.U64.mul_spec Backend.U64.square_spec
+    Backend.U64.neg_spec Backend.U64.edwardsD_spec Backend.U64.one_spec Backend.U64.invsqrt_spec
+    Backend.U64.is_negative_spec Backend.U64.conditional_negate_spec Backend.U64.is_zero_spec _ s
+    hs)
+  rintro ⟨ok1, tn, yz, res⟩ ⟨h1, h2, h3, h4, h5, h6, a, b, c, d, rfl, he, ha, hb, hc, hd⟩
+  refine ⟨h1, h2, h3, h4, h5, h6, ?_, ha, hb, hc, hd⟩
+  rw [edwards.EdwardsPoint.«x86_64-tables».toExtended_def]
+  exact he
 
 /-- The point `(x : y : 1 : x y)` with `(x, y)` on the curve: on the curve, with these
 coordinates. -/
@@ -257,6 +316,10 @@ private theorem step_1_spec (repr : CompressedRistretto) :
   · rw [toField_def, CompressedRistretto.asNat_def]
     exact (ZMod.natCast_eq_natCast_iff' _ _ _).mpr hs
 
+private theorem step_2_eq (s : FieldElement2625) :
+    step_2.«i686-tables» s = decompress.step2Body Backend.U32
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : edwards.EdwardsPoint.«i686-tables»)) s := rfl
+
 open decompress in
 /-- `decompress::step_2`: the candidate point `(x, y, 1, x y)` of RFC 9496 §4.3.1 and its three
 tests (`was_square`, `x y` negative, `y = 0`); limbs `< 2^26`. -/
@@ -268,69 +331,16 @@ private theorem step_2_spec (s : FieldElement2625) (hs : s.LimbsLt 26) :
       yz.IsValid ∧ (yz = 1#u8 ↔ dY s.toField = 0) ∧
       res.toExtended = ⟨dX s.toField, dY s.toField, 1, dX s.toField * dY s.toField⟩ ∧
       res.LimbsLt 26 ⦄ := by
-  unfold step_2.«i686-tables»
-  step as ⟨one, hone, honeb⟩
-  step as ⟨ss, hss, hssb⟩
-  step as ⟨u1, hu1, hu1b⟩
-  step as ⟨u2, hu2⟩
-  step as ⟨u2s, hu2s, hu2sb⟩
-  step as ⟨fd, hfd, hfdb⟩
-  step as ⟨fe1, hfe1, hfe1b⟩
-  step as ⟨fe2, hfe2, hfe2b⟩
-  step as ⟨fe3, hfe3, hfe3b⟩
-  step as ⟨v, hv, hvb⟩
-  step as ⟨fe4, hfe4, hfe4b⟩
-  step as ⟨ok1, I, hokv, hi0, hi1, hi2, hpar, hIb⟩
-  step as ⟨Dx, hDx, hDxb⟩
-  step as ⟨fe5, hfe5, hfe5b⟩
-  step as ⟨Dy, hDy, hDyb⟩
-  step as ⟨fe6, hfe6⟩
-  step as ⟨x, hx, hxb⟩
-  step as ⟨xn, hxnv, hxn⟩
-  step as ⟨x1, hx10, hx11⟩
-  step as ⟨y, hy, hyb⟩
-  have hx1b : x1.LimbsLt 26 := by
-    rcases hxnv with h | h
-    · rw [hx10 h]; exact hxb
-    · exact (hx11 h).2
-  step as ⟨t, ht, htb⟩
-  step as ⟨c, hcv, hc⟩
-  step as ⟨c1, hc1v, hc11, hc10⟩
-  have F1 : one.toField = 1 := toField_eq_one_of_asNat hone
-  have U1 : u1.toField = 1 - s.toField ^ 2 := by
-    rw [toField_sub_of_mod hu1, F1, toField_sq_of_mod hss]
-  have U2 : u2.toField = 1 + s.toField ^ 2 := by
-    rw [toField_add_of_limbs hu2, F1, toField_sq_of_mod hss]
-  have V : v.toField = dV s.toField := by
-    rw [toField_sub_of_mod hv, toField_mul_of_mod hfe3, toField_neg_of_mod hfe1,
-      toField_eq_d_of_asNat hfd, toField_sq_of_mod hfe2, toField_sq_of_mod hu2s, U1, U2]
-    unfold dV dU1 dU2
-    ring
-  have W : fe4.toField = dW s.toField := by
-    rw [toField_mul_of_mod hfe4, V, toField_sq_of_mod hu2s, U2]
-    rfl
-  have Inv := sqrtRatioM1_one_eq_of_spec hi0 (fun h ⟨x, hx⟩ => hi1 h x hx) hi2 hpar
-  rw [W] at Inv
-  have R : I.toField = dR s.toField := by unfold dR; rw [Inv]
-  have X1 : x1.toField = dX s.toField := by
-    have h := eq_ite_of_choice hxnv (eq_one_iff_isNeg_toField hxn) (fun h => by rw [hx10 h])
-      (fun h => toField_neg_of_mod (hx11 h).1)
-    rw [h, show (if x.toField.isNeg then -x.toField else x.toField) = x.toField.abs from rfl,
-      toField_mul_of_mod hx, toField_add_of_limbs hfe6, toField_mul_of_mod hDx, R, U2]
-    unfold dX dU2
-    ring_nf
-  have Y : y.toField = dY s.toField := by
-    rw [toField_mul_of_mod hy, toField_mul_of_mod hDy, toField_mul_of_mod hfe5,
-      toField_mul_of_mod hDx, R, U1, U2, V]
-    unfold dY dU1 dU2
-    ring
-  refine ⟨hokv, ?_, hcv, ?_, hc1v, ?_, ?_, ⟨hx1b, hyb, limbs_lt_of_le (by decide) honeb, htb⟩⟩
-  · rw [Inv]
-    simp
-  · rw [eq_one_iff_isNeg_toField hc, toField_mul_of_mod ht, X1, Y]
-  · rw [eq_one_iff_toField_eq_zero hc11 hc10, Y]
-  · rw [edwards.EdwardsPoint.«i686-tables».toExtended_def]
-    simp only [X1, Y, F1, toField_mul_of_mod ht]
+  rw [step_2_eq]
+  apply spec_mono (decompress.step2Body_spec Backend.U32
+    Backend.U32.add_spec Backend.U32.sub_spec Backend.U32.mul_spec Backend.U32.square_spec
+    Backend.U32.neg_spec Backend.U32.edwardsD_spec Backend.U32.one_spec Backend.U32.invsqrt_spec
+    Backend.U32.is_negative_spec Backend.U32.conditional_negate_spec Backend.U32.is_zero_spec _ s
+    hs)
+  rintro ⟨ok1, tn, yz, res⟩ ⟨h1, h2, h3, h4, h5, h6, a, b, c, d, rfl, he, ha, hb, hc, hd⟩
+  refine ⟨h1, h2, h3, h4, h5, h6, ?_, ha, hb, hc, hd⟩
+  rw [edwards.EdwardsPoint.«i686-tables».toExtended_def]
+  exact he
 
 /-- The point `(x : y : 1 : x y)` with `(x, y)` on the curve: on the curve, with these
 coordinates. -/
@@ -386,6 +396,10 @@ private theorem step_1_spec (repr : CompressedRistretto) :
       exact hc1 (by rw [h])
   · rw [toField_def, hs, CompressedRistretto.asNat_def]
 
+private theorem step_2_eq (s : FieldElement51) :
+    step_2.«x86_64-no-tables» s = decompress.step2Body Backend.U64
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : edwards.EdwardsPoint.«x86_64-no-tables»)) s := rfl
+
 open decompress in
 /-- `decompress::step_2`: the candidate point `(x, y, 1, x y)` of RFC 9496 §4.3.1 and its three
 tests (`was_square`, `x y` negative, `y = 0`); limbs `< 2^52`. -/
@@ -397,69 +411,16 @@ private theorem step_2_spec (s : FieldElement51) (hs : s.LimbsLt 52) :
       yz.IsValid ∧ (yz = 1#u8 ↔ dY s.toField = 0) ∧
       res.toExtended = ⟨dX s.toField, dY s.toField, 1, dX s.toField * dY s.toField⟩ ∧
       res.LimbsLt 52 ⦄ := by
-  unfold step_2.«x86_64-no-tables»
-  step as ⟨one, hone, honeb⟩
-  step as ⟨ss, hss, hssb⟩
-  step as ⟨u1, hu1, hu1b⟩
-  step as ⟨u2, hu2⟩
-  step as ⟨u2s, hu2s, hu2sb⟩
-  step as ⟨fd, hfd, hfdb⟩
-  step as ⟨fe1, hfe1, hfe1b⟩
-  step as ⟨fe2, hfe2, hfe2b⟩
-  step as ⟨fe3, hfe3, hfe3b⟩
-  step as ⟨v, hv, hvb⟩
-  step as ⟨fe4, hfe4, hfe4b⟩
-  step as ⟨ok1, I, hokv, hi0, hi1, hi2, hpar, hIb⟩
-  step as ⟨Dx, hDx, hDxb⟩
-  step as ⟨fe5, hfe5, hfe5b⟩
-  step as ⟨Dy, hDy, hDyb⟩
-  step as ⟨fe6, hfe6⟩
-  step as ⟨x, hx, hxb⟩
-  step as ⟨xn, hxnv, hxn⟩
-  step as ⟨x1, hx10, hx11⟩
-  step as ⟨y, hy, hyb⟩
-  have hx1b : x1.LimbsLt 52 := by
-    rcases hxnv with h | h
-    · rw [hx10 h]; exact hxb
-    · exact (hx11 h).2
-  step as ⟨t, ht, htb⟩
-  step as ⟨c, hcv, hc⟩
-  step as ⟨c1, hc1v, hc11, hc10⟩
-  have F1 : one.toField = 1 := toField_eq_one_of_asNat hone
-  have U1 : u1.toField = 1 - s.toField ^ 2 := by
-    rw [toField_sub_of_mod hu1, F1, toField_sq_of_mod hss]
-  have U2 : u2.toField = 1 + s.toField ^ 2 := by
-    rw [toField_add_of_limbs hu2, F1, toField_sq_of_mod hss]
-  have V : v.toField = dV s.toField := by
-    rw [toField_sub_of_mod hv, toField_mul_of_mod hfe3, toField_neg_of_mod hfe1,
-      toField_eq_d_of_asNat hfd, toField_sq_of_mod hfe2, toField_sq_of_mod hu2s, U1, U2]
-    unfold dV dU1 dU2
-    ring
-  have W : fe4.toField = dW s.toField := by
-    rw [toField_mul_of_mod hfe4, V, toField_sq_of_mod hu2s, U2]
-    rfl
-  have Inv := sqrtRatioM1_one_eq_of_spec hi0 (fun h ⟨x, hx⟩ => hi1 h x hx) hi2 hpar
-  rw [W] at Inv
-  have R : I.toField = dR s.toField := by unfold dR; rw [Inv]
-  have X1 : x1.toField = dX s.toField := by
-    have h := eq_ite_of_choice hxnv (eq_one_iff_isNeg_toField hxn) (fun h => by rw [hx10 h])
-      (fun h => toField_neg_of_mod (hx11 h).1)
-    rw [h, show (if x.toField.isNeg then -x.toField else x.toField) = x.toField.abs from rfl,
-      toField_mul_of_mod hx, toField_add_of_limbs hfe6, toField_mul_of_mod hDx, R, U2]
-    unfold dX dU2
-    ring_nf
-  have Y : y.toField = dY s.toField := by
-    rw [toField_mul_of_mod hy, toField_mul_of_mod hDy, toField_mul_of_mod hfe5,
-      toField_mul_of_mod hDx, R, U1, U2, V]
-    unfold dY dU1 dU2
-    ring
-  refine ⟨hokv, ?_, hcv, ?_, hc1v, ?_, ?_, ⟨hx1b, hyb, limbs_lt_of_le (by decide) honeb, htb⟩⟩
-  · rw [Inv]
-    simp
-  · rw [eq_one_iff_isNeg_toField hc, toField_mul_of_mod ht, X1, Y]
-  · rw [eq_one_iff_toField_eq_zero hc11 hc10, Y]
-  · rw [edwards.EdwardsPoint.«x86_64-no-tables».toExtended_def]
-    simp only [X1, Y, F1, toField_mul_of_mod ht]
+  rw [step_2_eq]
+  apply spec_mono (decompress.step2Body_spec Backend.U64
+    Backend.U64.add_spec Backend.U64.sub_spec Backend.U64.mul_spec Backend.U64.square_spec
+    Backend.U64.neg_spec Backend.U64.edwardsD_spec Backend.U64.one_spec Backend.U64.invsqrt_spec
+    Backend.U64.is_negative_spec Backend.U64.conditional_negate_spec Backend.U64.is_zero_spec _ s
+    hs)
+  rintro ⟨ok1, tn, yz, res⟩ ⟨h1, h2, h3, h4, h5, h6, a, b, c, d, rfl, he, ha, hb, hc, hd⟩
+  refine ⟨h1, h2, h3, h4, h5, h6, ?_, ha, hb, hc, hd⟩
+  rw [edwards.EdwardsPoint.«x86_64-no-tables».toExtended_def]
+  exact he
 
 /-- The point `(x : y : 1 : x y)` with `(x, y)` on the curve: on the curve, with these
 coordinates. -/
@@ -516,6 +477,10 @@ private theorem step_1_spec (repr : CompressedRistretto) :
   · rw [toField_def, CompressedRistretto.asNat_def]
     exact (ZMod.natCast_eq_natCast_iff' _ _ _).mpr hs
 
+private theorem step_2_eq (s : FieldElement2625) :
+    step_2.«i686-no-tables» s = decompress.step2Body Backend.U32
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : edwards.EdwardsPoint.«i686-no-tables»)) s := rfl
+
 open decompress in
 /-- `decompress::step_2`: the candidate point `(x, y, 1, x y)` of RFC 9496 §4.3.1 and its three
 tests (`was_square`, `x y` negative, `y = 0`); limbs `< 2^26`. -/
@@ -527,69 +492,16 @@ private theorem step_2_spec (s : FieldElement2625) (hs : s.LimbsLt 26) :
       yz.IsValid ∧ (yz = 1#u8 ↔ dY s.toField = 0) ∧
       res.toExtended = ⟨dX s.toField, dY s.toField, 1, dX s.toField * dY s.toField⟩ ∧
       res.LimbsLt 26 ⦄ := by
-  unfold step_2.«i686-no-tables»
-  step as ⟨one, hone, honeb⟩
-  step as ⟨ss, hss, hssb⟩
-  step as ⟨u1, hu1, hu1b⟩
-  step as ⟨u2, hu2⟩
-  step as ⟨u2s, hu2s, hu2sb⟩
-  step as ⟨fd, hfd, hfdb⟩
-  step as ⟨fe1, hfe1, hfe1b⟩
-  step as ⟨fe2, hfe2, hfe2b⟩
-  step as ⟨fe3, hfe3, hfe3b⟩
-  step as ⟨v, hv, hvb⟩
-  step as ⟨fe4, hfe4, hfe4b⟩
-  step as ⟨ok1, I, hokv, hi0, hi1, hi2, hpar, hIb⟩
-  step as ⟨Dx, hDx, hDxb⟩
-  step as ⟨fe5, hfe5, hfe5b⟩
-  step as ⟨Dy, hDy, hDyb⟩
-  step as ⟨fe6, hfe6⟩
-  step as ⟨x, hx, hxb⟩
-  step as ⟨xn, hxnv, hxn⟩
-  step as ⟨x1, hx10, hx11⟩
-  step as ⟨y, hy, hyb⟩
-  have hx1b : x1.LimbsLt 26 := by
-    rcases hxnv with h | h
-    · rw [hx10 h]; exact hxb
-    · exact (hx11 h).2
-  step as ⟨t, ht, htb⟩
-  step as ⟨c, hcv, hc⟩
-  step as ⟨c1, hc1v, hc11, hc10⟩
-  have F1 : one.toField = 1 := toField_eq_one_of_asNat hone
-  have U1 : u1.toField = 1 - s.toField ^ 2 := by
-    rw [toField_sub_of_mod hu1, F1, toField_sq_of_mod hss]
-  have U2 : u2.toField = 1 + s.toField ^ 2 := by
-    rw [toField_add_of_limbs hu2, F1, toField_sq_of_mod hss]
-  have V : v.toField = dV s.toField := by
-    rw [toField_sub_of_mod hv, toField_mul_of_mod hfe3, toField_neg_of_mod hfe1,
-      toField_eq_d_of_asNat hfd, toField_sq_of_mod hfe2, toField_sq_of_mod hu2s, U1, U2]
-    unfold dV dU1 dU2
-    ring
-  have W : fe4.toField = dW s.toField := by
-    rw [toField_mul_of_mod hfe4, V, toField_sq_of_mod hu2s, U2]
-    rfl
-  have Inv := sqrtRatioM1_one_eq_of_spec hi0 (fun h ⟨x, hx⟩ => hi1 h x hx) hi2 hpar
-  rw [W] at Inv
-  have R : I.toField = dR s.toField := by unfold dR; rw [Inv]
-  have X1 : x1.toField = dX s.toField := by
-    have h := eq_ite_of_choice hxnv (eq_one_iff_isNeg_toField hxn) (fun h => by rw [hx10 h])
-      (fun h => toField_neg_of_mod (hx11 h).1)
-    rw [h, show (if x.toField.isNeg then -x.toField else x.toField) = x.toField.abs from rfl,
-      toField_mul_of_mod hx, toField_add_of_limbs hfe6, toField_mul_of_mod hDx, R, U2]
-    unfold dX dU2
-    ring_nf
-  have Y : y.toField = dY s.toField := by
-    rw [toField_mul_of_mod hy, toField_mul_of_mod hDy, toField_mul_of_mod hfe5,
-      toField_mul_of_mod hDx, R, U1, U2, V]
-    unfold dY dU1 dU2
-    ring
-  refine ⟨hokv, ?_, hcv, ?_, hc1v, ?_, ?_, ⟨hx1b, hyb, limbs_lt_of_le (by decide) honeb, htb⟩⟩
-  · rw [Inv]
-    simp
-  · rw [eq_one_iff_isNeg_toField hc, toField_mul_of_mod ht, X1, Y]
-  · rw [eq_one_iff_toField_eq_zero hc11 hc10, Y]
-  · rw [edwards.EdwardsPoint.«i686-no-tables».toExtended_def]
-    simp only [X1, Y, F1, toField_mul_of_mod ht]
+  rw [step_2_eq]
+  apply spec_mono (decompress.step2Body_spec Backend.U32
+    Backend.U32.add_spec Backend.U32.sub_spec Backend.U32.mul_spec Backend.U32.square_spec
+    Backend.U32.neg_spec Backend.U32.edwardsD_spec Backend.U32.one_spec Backend.U32.invsqrt_spec
+    Backend.U32.is_negative_spec Backend.U32.conditional_negate_spec Backend.U32.is_zero_spec _ s
+    hs)
+  rintro ⟨ok1, tn, yz, res⟩ ⟨h1, h2, h3, h4, h5, h6, a, b, c, d, rfl, he, ha, hb, hc, hd⟩
+  refine ⟨h1, h2, h3, h4, h5, h6, ?_, ha, hb, hc, hd⟩
+  rw [edwards.EdwardsPoint.«i686-no-tables».toExtended_def]
+  exact he
 
 /-- The point `(x : y : 1 : x y)` with `(x, y)` on the curve: on the curve, with these
 coordinates. -/

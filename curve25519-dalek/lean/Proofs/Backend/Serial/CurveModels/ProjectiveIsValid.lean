@@ -25,7 +25,7 @@ variable (B : Backend)
   let ZZZZ ← B.square ZZ
   let fe ← B.sub YY XX
   let lhs ← B.mul fe ZZ
-  let fe1 ← B.edwardsD
+  let fe1 ← B.constEdwardsD
   let fe2 ← B.mul XX YY
   let fe3 ← B.mul fe1 fe2
   let rhs ← B.add ZZZZ fe3
@@ -40,10 +40,10 @@ theorem projectiveIsValid_spec
       b = true ↔ (B.toField Y ^ 2 - B.toField X ^ 2) * B.toField Z ^ 2 =
         B.toField Z ^ 4 + d * B.toField X ^ 2 * B.toField Y ^ 2 ⦄ := by
   unfold projectiveIsValid
-  step with hsq X (B.red_sum2 hX) as ⟨xx, hxx, hxx'⟩
-  step with hsq Y (B.red_sum2 hY) as ⟨yy, hyy, hyy'⟩
-  step with hsq Z (B.red_sum2 hZ) as ⟨zz, hzz, hzz'⟩
-  step with hsq zz (B.red_sum2 hzz') as ⟨z4, hz4, hz4'⟩
+  step with hsq X (B.red_sqIn hX) as ⟨xx, hxx, hxx'⟩
+  step with hsq Y (B.red_sqIn hY) as ⟨yy, hyy, hyy'⟩
+  step with hsq Z (B.red_sqIn hZ) as ⟨zz, hzz, hzz'⟩
+  step with hsq zz (B.red_sqIn hzz') as ⟨z4, hz4, hz4'⟩
   step with hsub yy xx (B.red_mulIn hyy') (B.red_mulIn hxx') as ⟨yx, hyx, hyx'⟩
   step with hmul yx zz (B.red_mulIn hyx') (B.red_mulIn hzz') as ⟨lhs, hlhs, _⟩
   apply spec_bind hD

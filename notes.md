@@ -774,9 +774,23 @@ data, bounds, weakenings only) and the instances `Proofs/Helpers/Backend/{U64,U3
   `ProjectiveIsValid`, `ProjectiveAsExtended`, `CompletedAsExtended`, `CompletedAsProjective`.
   Statements unchanged; `Specs` guards unchanged. `lake env lean` instructions 590 G → 122 G
   (most of the rest is loading imports, ~11 G per module).
-- Next: a `FieldBackend` with the `field.rs` operations (`sqrt_ratio_i`, `invert`,
-  `is_negative`, conditional ops, constants) for Ristretto/Montgomery/Edwards, with
-  `Proofs/Field/*` made generic over `Backend` first.
+- One `Backend` carries every operation as data (the backend's, the constants under their Rust
+  names `B.SQRT_M1`, `B.EDWARDS_D`, … so that they never shadow `curve25519.sqrtM1` & co., and
+  the `field.rs` functions `B.sqrtRatioI`, `B.invsqrt`, …). Since the specs are propositions, a
+  spec's proof lives wherever its imports are: backend specs in `Backend/{U64,U32}.lean`, the
+  `field.rs` ones next to their generic proofs (`Backend.U64.sqrtRatioI_spec` in
+  `Proofs/Field/SqrtRatioI.lean`, …). A fifth bound `SqIn` (`square`/`pow2k` input: 54 / 27).
+- `#decompose`d slices bridge too (`compressState st inv = compressStateBody U64 st.e … inv`),
+  once the generic body matches the slice exactly (it ends in `s1.to_bytes`, not `ok a`; print it
+  with `#print` in a truncated copy of the file).
+- Converted so far, `lake env lean` instructions before → after: CurveModels (9 files)
+  590 → 122 G; `Field/Pow22501` 91 → 17, `PowP58` 12 → 11, `SqrtRatioI` 101 → 33; Ristretto
+  `Elligator` 372 → 30, `Compress` 237 → 16, `Decompress` (only `step_2`) 245 → 50,
+  `DoubleAndCompressBatch` (`from`, `compressState`) 456 → 139; Montgomery
+  `DifferentialAddAndDouble` 185 → 17. Generators and generic blocks in `.scratch/generic/`.
+- Left in the duplicated layer: loop proofs over `Vec`s (`ToMontgomeryBatch`,
+  `CompressBatchAlloc`, Montgomery `Mul`, the scalar-mul loops, 3–7 s per configuration each);
+  they need a generic loop/`Vec` layer.
 
 
 ## Performance findings (2026-10-10)

@@ -9,7 +9,7 @@ public import Defs.FieldElement2625
 public import Defs.FieldElement51
 import Proofs.Backend.Serial.U64.Field.One
 import Proofs.Helpers.Field
-import Proofs.Field.SqrtRatioI
+public import Proofs.Field.SqrtRatioI
 import Proofs.Backend.Serial.U32.Field.One
 public import Curve25519.Basic
 public section
@@ -65,3 +65,31 @@ theorem invsqrt_spec (self : FieldElement2625) (hself : self.LimbsLt 27) :
   exact ⟨hc, rfl⟩
 
 end Curve25519Dalek.field.FieldElement2625
+
+namespace Curve25519Dalek.Backend
+
+variable (B : Backend)
+
+/-- `FieldElement::invsqrt` over a backend. -/
+@[expose] def invsqrtBody (x : B.F) : Result (subtle.Choice × B.F) := do
+  let fe ← B.constOne
+  B.sqrtRatioI fe x
+
+/-- `invsqrtBody` is RFC 9496's `SQRT_RATIO_M1(1, x)`. -/
+theorem invsqrtBody_spec (hone : B.OneSpec) (hsr : B.SqrtRatioISpec) (x : B.F)
+    (hx : B.SqIn x) :
+    B.invsqrtBody x ⦃ (c : subtle.Choice) (r : B.F) =>
+      sqrtRatioM1 1 (B.toField x) = (decide (c = 1#u8), B.toField r) ∧ c.IsValid ∧ B.Red r ⦄ := by
+  unfold invsqrtBody
+  apply spec_bind hone
+  rintro one ⟨One, honeb⟩
+  apply spec_mono (hsr one x (B.red_sqIn honeb) hx)
+  rintro ⟨c, r⟩ ⟨hv, h0, h1, h2, h3, hpar, hrb⟩
+  rw [One] at h0 h1 h2 h3
+  exact ⟨sqrtRatioM1_eq h0 h1 h2 h3 hpar, hv, hrb⟩
+
+theorem U64.invsqrt_spec : U64.InvsqrtSpec := invsqrtBody_spec U64 U64.one_spec U64.sqrtRatioI_spec
+
+theorem U32.invsqrt_spec : U32.InvsqrtSpec := invsqrtBody_spec U32 U32.one_spec U32.sqrtRatioI_spec
+
+end Curve25519Dalek.Backend

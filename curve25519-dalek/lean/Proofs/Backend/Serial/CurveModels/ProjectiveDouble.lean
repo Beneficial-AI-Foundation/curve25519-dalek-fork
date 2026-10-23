@@ -40,11 +40,11 @@ theorem projectiveDouble_spec
         (⟨B.toField X, B.toField Y, B.toField Z⟩ : edwards.Projective).double ∧
       B.MulIn a ∧ B.MulIn b ∧ B.MulIn c ∧ B.MulIn d ⦄ := by
   unfold projectiveDouble
-  step with hsq X (B.red_sum2 hX) as ⟨xx, hxx, hxx'⟩
-  step with hsq Y (B.red_sum2 hY) as ⟨yy, hyy, hyy'⟩
-  step with hsq2 Z (B.red_sum2 hZ) as ⟨zz2, hzz2, hzz2'⟩
+  step with hsq X (B.red_sqIn hX) as ⟨xx, hxx, hxx'⟩
+  step with hsq Y (B.red_sqIn hY) as ⟨yy, hyy, hyy'⟩
+  step with hsq2 Z (B.red_sqIn hZ) as ⟨zz2, hzz2, hzz2'⟩
   step with hadd X Y hX hY as ⟨xy, hxy, hxy'⟩
-  step with hsq xy hxy' as ⟨xysq, hxysq, hxysq'⟩
+  step with hsq xy (B.sum2_sqIn hxy') as ⟨xysq, hxysq, hxysq'⟩
   step with hadd yy xx hyy' hxx' as ⟨b, hb, hb'⟩
   step with hsub yy xx (B.red_mulIn hyy') (B.red_mulIn hxx') as ⟨c, hc, hc'⟩
   step with hsub xysq b (B.red_mulIn hxysq') (B.sum2_mulIn hb') as ⟨a, ha, ha'⟩
