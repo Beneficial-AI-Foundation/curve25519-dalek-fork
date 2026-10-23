@@ -61,6 +61,12 @@ theorem getElem!_repeat {α : Type} [Inhabited α] {n : Usize} (x : α) {j : ℕ
     (Array.repeat n x)[j]! = x := by
   rw [Array.getElem!_Nat_eq, Array.repeat_val, List.getElem!_replicate _ hj]
 
+/-- Checked indexing into the underlying list of an `Std.Array` agrees with `getElem!`. Unlike
+`List.Inhabited_getElem_eq_getElem!` (a `def`) this can be used by `simp`. -/
+theorem getElem_val_eq_getElem! {α : Type} [Inhabited α] {N : Usize} (a : Std.Array α N)
+    (j : Nat) (h : j < (↑a : List α).length) : (↑a : List α)[j] = a[j]! := by
+  rw [Array.getElem!_Nat_eq, List.Inhabited_getElem_eq_getElem! _ _ h]
+
 /-- Overwriting all five elements of `a` with those of `b` gives `b`. -/
 theorem set_getElem_five {α : Type} (a b : Array α 5#usize) :
     ((((a.set 0#usize b.val[0]).set 1#usize b.val[1]).set 2#usize b.val[2]).set 3#usize

@@ -20,7 +20,7 @@ open Curve25519Dalek.scalar (Scalar)
 namespace Curve25519Dalek.scalar.Scalar
 
 @[step]
-theorem from_canonical_bytes_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
+theorem from_canonical_bytes_spec (bytes : Array U8 32#usize) :
     from_canonical_bytes bytes ⦃ (r : subtle.CtOption Scalar) =>
       r.is_some.IsValid ∧ r.value.bytes = bytes ∧
       (bytes.asNat 8 < L → r.is_some = 1#u8) ∧ (L ≤ bytes.asNat 8 → r.is_some = 0#u8) ⦄ := by

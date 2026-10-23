@@ -6,6 +6,7 @@ Authors: András Némedy Varga, Wojciech Aleksander Wołoszyn
 module
 public import Defs.FieldElement2625
 public import Aeneas
+public import Proofs.Helpers.Array
 public section
 
 /-! # Lemmas about `FieldElement2625` values
@@ -20,12 +21,6 @@ open Aeneas Aeneas.Std Finset curve25519
 /-! ## Arrays -/
 
 namespace Aeneas.Std
-
-/-- Checked indexing into the underlying list of an `Std.Array` agrees with `getElem!`. Unlike
-`List.Inhabited_getElem_eq_getElem!` (a `def`) this can be used by `simp`. -/
-theorem Array.getElem_val_eq_getElem! {α : Type} [Inhabited α] {N : Usize} (a : Std.Array α N)
-    (j : Nat) (h : j < (↑a : List α).length) : (↑a : List α)[j] = a[j]! := by
-  rw [Array.getElem!_Nat_eq, List.Inhabited_getElem_eq_getElem! _ _ h]
 
 /-- Overwriting all ten elements of `a` with those of `b` gives `b`. -/
 theorem Array.set_getElem_ten {α : Type} (a b : Array α 10#usize) :

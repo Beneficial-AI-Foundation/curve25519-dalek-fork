@@ -381,8 +381,11 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 ## Done
 
 **Translation, field and scalar layers:**
-- `src/scalar.rs`: all public items specified and proved, for 64-bit targets (`OnX86_64`); spec
-  summary `Specs/Scalar.lean`.
+- `src/scalar.rs`: all public items specified and proved for all four targets (2026-10-23: the
+  i686 variants added and `OnX86_64` dropped from the statements, signed off by the owner); spec
+  summary `Specs/Scalar.lean`. Dispatchers via `dispatch_all_spec` (`Proofs/Helpers/Target.lean`),
+  which uses the Aeneas axiom `get_target.spec` (now in the axiom lists). `Scalar29::pack`,
+  `invert`, `montgomery_invert` in `Proofs/Scalar/Scalar29*.lean`.
 - Proved but not public (no spec summary): `src/backend/serial/u64/field.rs`, `scalar.rs`,
   `constants.rs` and `src/field.rs`.
 - Primality of `p`, `L`: Lucas certificates, Mathlib only.
@@ -461,6 +464,11 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   overflows `19 * y[i]`, the Rust `b < 1.75`). `reduce` also states the parity bound
   `< 2 ^ (26 - i % 2) + (i % 2) · 2 ^ 18` used by `to_bytes`. Their 4 axioms are covered by our
   contracts. `zeroize` is in `Zeroize/Instances.lean`.
+- `backend/serial/u32/scalar.rs` and its constants (2026-10-23): all items, in
+  `Proofs/Backend/Serial/U32/{Scalar,Constants}/`, statements as for u64 (`Defs/Scalar29.lean`:
+  `asNat`, `LimbsLt`, `montgomeryRadix = 2 ^ 261`). Mostly converted from the u64 proofs; the
+  Karatsuba `mul_internal` and `square_internal` follow the BAIF proofs. Long functions are
+  decomposed (`mul_internal` 5 blocks, `montgomery_reduce` 17 rows, `from_bytes_wide` 2 halves).
 - `traits.rs`: generic `is_identity` (`Proofs/Traits/IsIdentity.lean`, `Specs/Traits.lean`).
 - Point constants: `ED25519_BASEPOINT_POINT`, `EIGHT_TORSION`, `BASEPOINT_ORDER`,
   `ED25519_BASEPOINT_COMPRESSED`, `X25519_BASEPOINT` (`Specs/Constants.lean`).
@@ -477,7 +485,7 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   `vartime_double_scalar_mul_basepoint` of `x86_64-tables` are therefore unconditional and in
   `Specs/Edwards.lean`.
 - All x86_64 items are stated for both `«x86_64-tables»` and `«x86_64-no-tables»`; the i686
-  variants wait for the u32 backend.
+  variants outside `scalar.rs` wait for the rest of the u32 backend.
 
 ## Decisions taken
 
@@ -565,7 +573,8 @@ emit constants as literals (no longer needed).
 
 ## Plan
 
-1. The u32 backend (below): `field.rs` done; next `scalar.rs` (`Scalar29`), then the rest.
+1. The u32 backend (below): `field.rs` and `scalar.rs` done (with the i686 `scalar.rs` variants);
+   next the remaining files.
 2. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
@@ -573,11 +582,9 @@ emit constants as literals (no longer needed).
 
 ### u32 backend
 
-`OnX86_64` stands in for the 32-bit branches of every `get_target` dispatcher. Specifying and
-proving `src/backend/serial/u32/scalar.rs` (`Scalar29`), its constants, and the `i686` variants of
-the `scalar.rs` functions lets the hypothesis be dropped from the `scalar.rs` statements (a change
-of frozen statements: sign-off needed), and allows `Scalar29::pack`, `Scalar29::invert` and
-`Scalar29::montgomery_invert` to be specified.
+`OnX86_64` stands in for the 32-bit branches of the `get_target` dispatchers outside
+`scalar.rs` (dropped there 2026-10-23). Each further file follows the same pattern: prove the i686
+variants, switch the dispatcher to `dispatch_all_spec`, drop the hypothesis (sign-off needed).
 The i686 table constants (`backend.serial.u32.constants.ED25519_BASEPOINT_TABLE`, the two
 `AFFINE_ODD_MULTIPLES_OF_BASEPOINT` tables) are chains of `FieldElement2625.from_limbs` binds
 over `Array U32 10`; `Proofs/Helpers/TableCertificate.lean` is written for `FieldElement51`

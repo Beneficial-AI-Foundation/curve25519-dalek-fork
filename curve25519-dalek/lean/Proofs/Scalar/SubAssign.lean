@@ -16,8 +16,7 @@ open Curve25519Dalek.scalar (Scalar)
 namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubAssignSharedAScalar
 
 @[step]
-theorem sub_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L)
-    (htgt : OnX86_64) :
+theorem sub_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L) :
     sub_assign self rhs ⦃ (r : Scalar) =>
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄ := by
   unfold sub_assign
@@ -30,8 +29,7 @@ namespace Curve25519Dalek.scalar.Scalar.Insts.CoreOpsArithSubAssignScalar
 /-- `SubAssign<Scalar> for Scalar` (from `define_sub_assign_variants!`): forwards to the
 `&Scalar` version. -/
 @[step]
-theorem sub_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L)
-    (htgt : OnX86_64) :
+theorem sub_assign_spec (self rhs : Scalar) (hself : self.asNat < L) (hrhs : rhs.asNat < L) :
     sub_assign self rhs ⦃ (r : Scalar) =>
       (r.asNat + rhs.asNat) % L = self.asNat ∧ r.asNat < L ⦄ := by
   unfold sub_assign

@@ -19,7 +19,7 @@ open Curve25519Dalek.scalar (Scalar)
 namespace Curve25519Dalek.scalar.Scalar
 
 @[step]
-theorem is_canonical_spec (self : Scalar) (htgt : OnX86_64) :
+theorem is_canonical_spec (self : Scalar) :
     is_canonical self ⦃ (c : subtle.Choice) =>
       c.IsValid ∧ (self.asNat < L → c = 1#u8) ∧ (L ≤ self.asNat → c = 0#u8) ⦄ := by
   unfold is_canonical

@@ -22,7 +22,7 @@ private theorem sum_loop_spec {T I : Type} (borrowInst : core.borrow.Borrow T Sc
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (hiter : iterInst.Yields iter xs) (ss : List Scalar)
     (hborrow : List.Forall₂ (fun x s => borrowInst.borrow x ⦃ (s' : Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < L) (acc : Scalar) (hacc : acc.asNat < L) (htgt : OnX86_64) :
+    (hss : ∀ s ∈ ss, s.asNat < L) (acc : Scalar) (hacc : acc.asNat < L) :
     sum_loop borrowInst iterInst iter acc ⦃ (r : Scalar) =>
       r.asNat = (acc.asNat + (ss.map (·.asNat)).sum) % L ⦄ := by
   induction hiter generalizing acc ss with
@@ -44,7 +44,7 @@ private theorem sum_loop_spec {T I : Type} (borrowInst : core.borrow.Borrow T Sc
     step with hb as ⟨s, hs⟩
     subst hs
     step with Scalar.Insts.CoreOpsArithAddSharedBScalarScalar.add_spec acc s hacc
-      (hss s List.mem_cons_self) htgt as ⟨acc1, hacc1⟩
+      (hss s List.mem_cons_self) as ⟨acc1, hacc1⟩
     apply WP.spec_mono (ih _ hrest (fun t ht => hss t (List.mem_cons_of_mem _ ht)) acc1
       (hacc1 ▸ Nat.mod_lt _ L_pos))
     intro r hr
@@ -55,13 +55,13 @@ theorem sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T) (ss : List Scalar)
     (hiter : iterInst.Yields iter xs)
     (hborrow : List.Forall₂ (fun x s => borrowInst.borrow x ⦃ (s' : Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < L) (htgt : OnX86_64) :
+    (hss : ∀ s ∈ ss, s.asNat < L) :
     sum borrowInst iterInst iter ⦃ (r : Scalar) =>
       r.asNat = (ss.map (·.asNat)).sum % L ⦄ := by
   unfold sum
   have hzero := ZERO_spec
   have := sum_loop_spec borrowInst iterInst iter xs hiter ss hborrow hss ZERO
-    (by rw [hzero]; exact L_pos) htgt
+    (by rw [hzero]; exact L_pos)
   apply WP.spec_mono this
   intro r hr
   rw [hr, hzero, Nat.zero_add]

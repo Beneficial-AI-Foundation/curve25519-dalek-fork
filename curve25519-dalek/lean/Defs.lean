@@ -8,6 +8,7 @@ public import Defs.Iterator
 public import Defs.Montgomery
 public import Defs.Ristretto
 public import Defs.Scalar
+public import Defs.Scalar29
 public import Defs.Scalar52
 public import Defs.ScalarMul
 public import Defs.Target

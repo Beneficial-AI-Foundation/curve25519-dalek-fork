@@ -18,7 +18,7 @@ open Curve25519Dalek.scalar (Scalar)
 namespace Curve25519Dalek.scalar.Scalar
 
 @[step]
-theorem from_bytes_mod_order_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
+theorem from_bytes_mod_order_spec (bytes : Array U8 32#usize) :
     from_bytes_mod_order bytes ⦃ (r : Scalar) =>
       r.asNat = bytes.asNat 8 % L ⦄ := by
   unfold from_bytes_mod_order

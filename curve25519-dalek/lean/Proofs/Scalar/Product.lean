@@ -22,7 +22,7 @@ private theorem product_loop_spec {T I : Type} (borrowInst : core.borrow.Borrow 
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (hiter : iterInst.Yields iter xs) (ss : List Scalar)
     (hborrow : List.Forall₂ (fun x s => borrowInst.borrow x ⦃ (s' : Scalar) => s' = s ⦄) xs ss)
-    (acc : Scalar) (hacc : acc.asNat < L) (htgt : OnX86_64) :
+    (acc : Scalar) (hacc : acc.asNat < L) :
     product_loop borrowInst iterInst iter acc ⦃ (r : Scalar) =>
       r.asNat = acc.asNat * (ss.map (·.asNat)).prod % L ⦄ := by
   induction hiter generalizing acc ss with
@@ -52,14 +52,13 @@ private theorem product_loop_spec {T I : Type} (borrowInst : core.borrow.Borrow 
 theorem product_spec {T I : Type} (borrowInst : core.borrow.Borrow T Scalar)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T) (ss : List Scalar)
     (hiter : iterInst.Yields iter xs)
-    (hborrow : List.Forall₂ (fun x s => borrowInst.borrow x ⦃ (s' : Scalar) => s' = s ⦄) xs ss)
-    (htgt : OnX86_64) :
+    (hborrow : List.Forall₂ (fun x s => borrowInst.borrow x ⦃ (s' : Scalar) => s' = s ⦄) xs ss) :
     product borrowInst iterInst iter ⦃ (r : Scalar) =>
       r.asNat = (ss.map (·.asNat)).prod % L ⦄ := by
   unfold product
   have hone := ONE_spec
   have := product_loop_spec borrowInst iterInst iter xs hiter ss hborrow ONE
-    (by rw [hone]; exact (Nat.one_lt_two_pow (by decide)).trans two_pow_252_lt_L) htgt
+    (by rw [hone]; exact (Nat.one_lt_two_pow (by decide)).trans two_pow_252_lt_L)
   apply WP.spec_mono this
   intro r hr
   rw [hr, hone, Nat.one_mul]
