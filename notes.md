@@ -376,10 +376,9 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
     `Proofs`, one step each, each run even after a failure (`runLinter` stops at the first failing
     module);
   - a manual run (`workflow_dispatch`) builds without a push;
-  - elan at a pinned release, no `lean-action`; one build cache per branch (`.lake` without
-    the package builds but with the `cache` and `runLinter` executables, saved even on failure,
-    older entries deleted; restored from any earlier pin as a last resort), Mathlib's oleans from
-    `lake exe cache get`; pushes and pull requests both build (a pull request builds the merge
+  - elan at a pinned release, no `lean-action`; one build cache per branch (`.lake/build` and
+    the Aeneas package, saved even on failure, older entries deleted; restored from any earlier pin
+    as a last resort); the other packages and Mathlib's oleans from `lake exe cache get`; pushes and pull requests both build (a pull request builds the merge
     with the base branch).
 - **`workspace.yml`:** the `typos` spell check skips `*.lean` (`.typos.toml`) but reads Markdown,
   so Lean identifiers in this file can trip it.

@@ -54,19 +54,14 @@ jobs:
           rm elan-init elan.tar.gz
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
-      # Cache: project build, Aeneas build, compiled `cache` (Mathlib) and `runLinter` (Batteries) executables
-      # mathlib and its dependencies' oleans come from Mathlib's own cache.
+      # Cache: project build and Aeneas package. Other packages and their oleans come from Mathlib's cache.
       - name: Restore build cache
         id: cache
         uses: actions/cache/restore@v6.1.0
         with:
           path: &cache-paths |
-            .lake
-            !.lake/packages/*/.lake/build
-            .lake/packages/mathlib/.lake/build/bin
-            .lake/packages/mathlib/.lake/build/ir
-            .lake/packages/batteries/.lake/build/bin
-            .lake/packages/batteries/.lake/build/ir
+            .lake/build
+            .lake/packages/aeneas
           key: &cache-key lean-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
             lean-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.ref_name }}-
