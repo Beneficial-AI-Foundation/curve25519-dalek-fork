@@ -5,28 +5,65 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519Dalek.Funs
 public import Defs.CurveModels
-import Proofs.Backend.Serial.U64.Field.Add
-import Proofs.Backend.Serial.U64.Field.Square
-import Proofs.Backend.Serial.U64.Field.Square2
-import Proofs.Backend.Serial.U64.Field.Sub
 public import Proofs.Helpers.Coords
-import Proofs.Helpers.ToField
-import Proofs.Backend.Serial.U32.Field.Add
-import Proofs.Backend.Serial.U32.Field.Square
-import Proofs.Backend.Serial.U32.Field.Square2
-import Proofs.Backend.Serial.U32.Field.Sub
-import Proofs.Helpers.ToField2625
+public import Proofs.Helpers.Backend.U32
+public import Proofs.Helpers.Backend.U64
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519 TwistedEdwardsModel
-open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
-open Curve25519Dalek.backend.serial.u32.field (FieldElement2625)
+
+namespace Curve25519Dalek.Backend
+
+variable (B : Backend)
+
+/-- `ProjectivePoint::double` over a backend. -/
+@[expose] def projectiveDouble {P : Type} (mk : B.F → B.F → B.F → B.F → P) (X Y Z : B.F) :
+    Result P := do
+  let XX ← B.square X
+  let YY ← B.square Y
+  let ZZ2 ← B.square2 Z
+  let X_plus_Y ← B.add X Y
+  let X_plus_Y_sq ← B.square X_plus_Y
+  let YY_plus_XX ← B.add YY XX
+  let YY_minus_XX ← B.sub YY XX
+  let fe ← B.sub X_plus_Y_sq YY_plus_XX
+  let fe1 ← B.sub ZZ2 YY_minus_XX
+  ok (mk fe YY_plus_XX YY_minus_XX fe1)
+
+/-- `projectiveDouble` computes `Projective.double`. -/
+theorem projectiveDouble_spec
+    (hadd : B.AddSpec) (hsub : B.SubSpec) (hsq : B.SquareSpec) (hsq2 : B.Square2Spec)
+    {P : Type} (mk : B.F → B.F → B.F → B.F → P) (X Y Z : B.F)
+    (hX : B.Red X) (hY : B.Red Y) (hZ : B.Red Z) :
+    B.projectiveDouble mk X Y Z ⦃ r => ∃ a b c d, r = mk a b c d ∧
+      (⟨B.toField a, B.toField b, B.toField c, B.toField d⟩ : edwards.Completed) =
+        (⟨B.toField X, B.toField Y, B.toField Z⟩ : edwards.Projective).double ∧
+      B.MulIn a ∧ B.MulIn b ∧ B.MulIn c ∧ B.MulIn d ⦄ := by
+  unfold projectiveDouble
+  step with hsq X (B.red_sum2 hX) as ⟨xx, hxx, hxx'⟩
+  step with hsq Y (B.red_sum2 hY) as ⟨yy, hyy, hyy'⟩
+  step with hsq2 Z (B.red_sum2 hZ) as ⟨zz2, hzz2, hzz2'⟩
+  step with hadd X Y hX hY as ⟨xy, hxy, hxy'⟩
+  step with hsq xy hxy' as ⟨xysq, hxysq, hxysq'⟩
+  step with hadd yy xx hyy' hxx' as ⟨b, hb, hb'⟩
+  step with hsub yy xx (B.red_mulIn hyy') (B.red_mulIn hxx') as ⟨c, hc, hc'⟩
+  step with hsub xysq b (B.red_mulIn hxysq') (B.sum2_mulIn hb') as ⟨a, ha, ha'⟩
+  step with hsub zz2 c (B.sum2_mulIn hzz2') (B.red_mulIn hc') as ⟨d, hd, hd'⟩
+  refine ⟨a, b, c, d, rfl, ?_, B.red_mulIn ha', B.sum2_mulIn hb', B.red_mulIn hc',
+    B.red_mulIn hd'⟩
+  rw [ha, hd, hb, hc, hxysq, hzz2, hxy, hxx, hyy]
+  rfl
+
+end Curve25519Dalek.Backend
 
 namespace Curve25519Dalek.backend.serial.curve_models
 
 namespace «ProjectivePointx86_64-tables»
 
-open Curve25519Dalek.backend.serial.u64.field.FieldElement51
+theorem double_eq (self : ProjectivePoint.«x86_64-tables») :
+    double self = Backend.projectiveDouble Backend.U64
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : CompletedPoint.«x86_64-tables»))
+      self.X self.Y self.Z := rfl
 
 /-- `ProjectivePoint::double`: the "dbl-2008-bbjlp" formula `Projective.double`; limbs `< 2^52`
 in, `< 2^54` out. -/
@@ -34,27 +71,14 @@ in, `< 2^54` out. -/
 theorem double_spec (self : ProjectivePoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     double self ⦃ (r : CompletedPoint.«x86_64-tables») =>
       r.toCompleted = self.toProjective.double ∧ r.LimbsLt 54 ⦄ := by
-  obtain ⟨hX, hY, hZ⟩ := hself
-  unfold double
-  step as ⟨XX, hXX, hXX_lt⟩
-  step as ⟨YY, hYY, hYY_lt⟩
-  step as ⟨ZZ2, hZZ2, hZZ2_lt⟩
-  step as ⟨X_plus_Y, hX_plus_Y⟩
-  step as ⟨X_plus_Y_sq, hX_plus_Y_sq, hX_plus_Y_sq_lt⟩
-  step as ⟨YY_plus_XX, hYY_plus_XX⟩
-  step as ⟨YY_minus_XX, hYY_minus_XX, hYY_minus_XX_lt⟩
-  step as ⟨X', hX', hX'_lt⟩
-  step as ⟨T', hT', hT'_lt⟩
-  refine ⟨?_, ?_⟩
-  · simp only [CompletedPoint.«x86_64-tables».toCompleted_def,
-      ProjectivePoint.«x86_64-tables».toProjective_def, Projective.double,
-      toField_sub_of_mod hX', toField_sq_of_mod hX_plus_Y_sq, toField_add_of_limbs hX_plus_Y,
-      toField_add_of_limbs hYY_plus_XX, toField_sub_of_mod hYY_minus_XX,
-      toField_sub_of_mod hT', toField_two_mul_sq_of_mod hZZ2, toField_sq_of_mod hXX,
-      toField_sq_of_mod hYY]
-  · exact ⟨limbs_lt_of_le (by decide) hX'_lt,
-      limbs_lt_of_le (by decide) (limbs_add_lt hYY_plus_XX hYY_lt hXX_lt),
-      limbs_lt_of_le (by decide) hYY_minus_XX_lt, limbs_lt_of_le (by decide) hT'_lt⟩
+  obtain ⟨h1, h2, h3⟩ := hself
+  rw [double_eq]
+  apply spec_mono (Backend.projectiveDouble_spec Backend.U64
+    Backend.U64.add_spec Backend.U64.sub_spec Backend.U64.square_spec Backend.U64.square2_spec _ _ _
+    _ h1 h2 h3)
+  rintro _ ⟨a, b, c, d, rfl, h, ha, hb, hc, hd⟩
+  exact ⟨by rw [CompletedPoint.«x86_64-tables».toCompleted_def,
+    ProjectivePoint.«x86_64-tables».toProjective_def]; exact h, ha, hb, hc, hd⟩
 
 /-- `ProjectivePoint::double` doubles the represented point. -/
 theorem double_spec_point (self : ProjectivePoint.«x86_64-tables») (hself : self.LimbsLt 52)
@@ -72,7 +96,10 @@ end «ProjectivePointx86_64-tables»
 
 namespace «ProjectivePointi686-tables»
 
-open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
+theorem double_eq (self : ProjectivePoint.«i686-tables») :
+    double self = Backend.projectiveDouble Backend.U32
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : CompletedPoint.«i686-tables»))
+      self.X self.Y self.Z := rfl
 
 /-- `ProjectivePoint::double`: the "dbl-2008-bbjlp" formula `Projective.double`; limbs `< 2^26`
 in, `< 3 · 2^26` out. -/
@@ -80,28 +107,14 @@ in, `< 3 · 2^26` out. -/
 theorem double_spec (self : ProjectivePoint.«i686-tables») (hself : self.LimbsLt 26) :
     double self ⦃ (r : CompletedPoint.«i686-tables») =>
       r.toCompleted = self.toProjective.double ∧ r.MulBounded ⦄ := by
-  obtain ⟨hX, hY, hZ⟩ := hself
-  unfold double
-  step as ⟨XX, hXX, hXX_lt⟩
-  step as ⟨YY, hYY, hYY_lt⟩
-  step as ⟨ZZ2, hZZ2, hZZ2_lt⟩
-  step as ⟨X_plus_Y, hX_plus_Y⟩
-  step as ⟨X_plus_Y_sq, hX_plus_Y_sq, hX_plus_Y_sq_lt⟩
-  step as ⟨YY_plus_XX, hYY_plus_XX⟩
-  step as ⟨YY_minus_XX, hYY_minus_XX, hYY_minus_XX_lt⟩
-  step as ⟨X', hX', hX'_lt⟩
-  step as ⟨T', hT', hT'_lt⟩
-  refine ⟨?_, ?_⟩
-  · simp only [CompletedPoint.«i686-tables».toCompleted_def,
-      ProjectivePoint.«i686-tables».toProjective_def, Projective.double,
-      toField_sub_of_mod hX', toField_sq_of_mod hX_plus_Y_sq, toField_add_of_limbs hX_plus_Y,
-      toField_add_of_limbs hYY_plus_XX, toField_sub_of_mod hYY_minus_XX,
-      toField_sub_of_mod hT', toField_two_mul_sq_of_mod hZZ2, toField_sq_of_mod hXX,
-      toField_sq_of_mod hYY]
-  · exact ⟨mulBounded_of_limbsLt (limbs_lt_of_le (by decide) hX'_lt),
-      mulBounded_of_limbsLt (limbs_lt_of_le (by decide) (limbs_add_lt hYY_plus_XX hYY_lt hXX_lt)),
-      mulBounded_of_limbsLt (limbs_lt_of_le (by decide) hYY_minus_XX_lt),
-      mulBounded_of_limbsLt (limbs_lt_of_le (by decide) hT'_lt)⟩
+  obtain ⟨h1, h2, h3⟩ := hself
+  rw [double_eq]
+  apply spec_mono (Backend.projectiveDouble_spec Backend.U32
+    Backend.U32.add_spec Backend.U32.sub_spec Backend.U32.square_spec Backend.U32.square2_spec _ _ _
+    _ h1 h2 h3)
+  rintro _ ⟨a, b, c, d, rfl, h, ha, hb, hc, hd⟩
+  exact ⟨by rw [CompletedPoint.«i686-tables».toCompleted_def,
+    ProjectivePoint.«i686-tables».toProjective_def]; exact h, ha, hb, hc, hd⟩
 
 /-- `ProjectivePoint::double` doubles the represented point. -/
 theorem double_spec_point (self : ProjectivePoint.«i686-tables») (hself : self.LimbsLt 26)
@@ -119,7 +132,10 @@ end «ProjectivePointi686-tables»
 
 namespace «ProjectivePointx86_64-no-tables»
 
-open Curve25519Dalek.backend.serial.u64.field.FieldElement51
+theorem double_eq (self : ProjectivePoint.«x86_64-no-tables») :
+    double self = Backend.projectiveDouble Backend.U64
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : CompletedPoint.«x86_64-no-tables»))
+      self.X self.Y self.Z := rfl
 
 /-- `ProjectivePoint::double`: the "dbl-2008-bbjlp" formula `Projective.double`; limbs `< 2^52`
 in, `< 2^54` out. -/
@@ -127,27 +143,14 @@ in, `< 2^54` out. -/
 theorem double_spec (self : ProjectivePoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     double self ⦃ (r : CompletedPoint.«x86_64-no-tables») =>
       r.toCompleted = self.toProjective.double ∧ r.LimbsLt 54 ⦄ := by
-  obtain ⟨hX, hY, hZ⟩ := hself
-  unfold double
-  step as ⟨XX, hXX, hXX_lt⟩
-  step as ⟨YY, hYY, hYY_lt⟩
-  step as ⟨ZZ2, hZZ2, hZZ2_lt⟩
-  step as ⟨X_plus_Y, hX_plus_Y⟩
-  step as ⟨X_plus_Y_sq, hX_plus_Y_sq, hX_plus_Y_sq_lt⟩
-  step as ⟨YY_plus_XX, hYY_plus_XX⟩
-  step as ⟨YY_minus_XX, hYY_minus_XX, hYY_minus_XX_lt⟩
-  step as ⟨X', hX', hX'_lt⟩
-  step as ⟨T', hT', hT'_lt⟩
-  refine ⟨?_, ?_⟩
-  · simp only [CompletedPoint.«x86_64-no-tables».toCompleted_def,
-      ProjectivePoint.«x86_64-no-tables».toProjective_def, Projective.double,
-      toField_sub_of_mod hX', toField_sq_of_mod hX_plus_Y_sq, toField_add_of_limbs hX_plus_Y,
-      toField_add_of_limbs hYY_plus_XX, toField_sub_of_mod hYY_minus_XX,
-      toField_sub_of_mod hT', toField_two_mul_sq_of_mod hZZ2, toField_sq_of_mod hXX,
-      toField_sq_of_mod hYY]
-  · exact ⟨limbs_lt_of_le (by decide) hX'_lt,
-      limbs_lt_of_le (by decide) (limbs_add_lt hYY_plus_XX hYY_lt hXX_lt),
-      limbs_lt_of_le (by decide) hYY_minus_XX_lt, limbs_lt_of_le (by decide) hT'_lt⟩
+  obtain ⟨h1, h2, h3⟩ := hself
+  rw [double_eq]
+  apply spec_mono (Backend.projectiveDouble_spec Backend.U64
+    Backend.U64.add_spec Backend.U64.sub_spec Backend.U64.square_spec Backend.U64.square2_spec _ _ _
+    _ h1 h2 h3)
+  rintro _ ⟨a, b, c, d, rfl, h, ha, hb, hc, hd⟩
+  exact ⟨by rw [CompletedPoint.«x86_64-no-tables».toCompleted_def,
+    ProjectivePoint.«x86_64-no-tables».toProjective_def]; exact h, ha, hb, hc, hd⟩
 
 /-- `ProjectivePoint::double` doubles the represented point. -/
 theorem double_spec_point (self : ProjectivePoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
@@ -165,7 +168,10 @@ end «ProjectivePointx86_64-no-tables»
 
 namespace «ProjectivePointi686-no-tables»
 
-open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
+theorem double_eq (self : ProjectivePoint.«i686-no-tables») :
+    double self = Backend.projectiveDouble Backend.U32
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : CompletedPoint.«i686-no-tables»))
+      self.X self.Y self.Z := rfl
 
 /-- `ProjectivePoint::double`: the "dbl-2008-bbjlp" formula `Projective.double`; limbs `< 2^26`
 in, `< 3 · 2^26` out. -/
@@ -173,28 +179,14 @@ in, `< 3 · 2^26` out. -/
 theorem double_spec (self : ProjectivePoint.«i686-no-tables») (hself : self.LimbsLt 26) :
     double self ⦃ (r : CompletedPoint.«i686-no-tables») =>
       r.toCompleted = self.toProjective.double ∧ r.MulBounded ⦄ := by
-  obtain ⟨hX, hY, hZ⟩ := hself
-  unfold double
-  step as ⟨XX, hXX, hXX_lt⟩
-  step as ⟨YY, hYY, hYY_lt⟩
-  step as ⟨ZZ2, hZZ2, hZZ2_lt⟩
-  step as ⟨X_plus_Y, hX_plus_Y⟩
-  step as ⟨X_plus_Y_sq, hX_plus_Y_sq, hX_plus_Y_sq_lt⟩
-  step as ⟨YY_plus_XX, hYY_plus_XX⟩
-  step as ⟨YY_minus_XX, hYY_minus_XX, hYY_minus_XX_lt⟩
-  step as ⟨X', hX', hX'_lt⟩
-  step as ⟨T', hT', hT'_lt⟩
-  refine ⟨?_, ?_⟩
-  · simp only [CompletedPoint.«i686-no-tables».toCompleted_def,
-      ProjectivePoint.«i686-no-tables».toProjective_def, Projective.double,
-      toField_sub_of_mod hX', toField_sq_of_mod hX_plus_Y_sq, toField_add_of_limbs hX_plus_Y,
-      toField_add_of_limbs hYY_plus_XX, toField_sub_of_mod hYY_minus_XX,
-      toField_sub_of_mod hT', toField_two_mul_sq_of_mod hZZ2, toField_sq_of_mod hXX,
-      toField_sq_of_mod hYY]
-  · exact ⟨mulBounded_of_limbsLt (limbs_lt_of_le (by decide) hX'_lt),
-      mulBounded_of_limbsLt (limbs_lt_of_le (by decide) (limbs_add_lt hYY_plus_XX hYY_lt hXX_lt)),
-      mulBounded_of_limbsLt (limbs_lt_of_le (by decide) hYY_minus_XX_lt),
-      mulBounded_of_limbsLt (limbs_lt_of_le (by decide) hT'_lt)⟩
+  obtain ⟨h1, h2, h3⟩ := hself
+  rw [double_eq]
+  apply spec_mono (Backend.projectiveDouble_spec Backend.U32
+    Backend.U32.add_spec Backend.U32.sub_spec Backend.U32.square_spec Backend.U32.square2_spec _ _ _
+    _ h1 h2 h3)
+  rintro _ ⟨a, b, c, d, rfl, h, ha, hb, hc, hd⟩
+  exact ⟨by rw [CompletedPoint.«i686-no-tables».toCompleted_def,
+    ProjectivePoint.«i686-no-tables».toProjective_def]; exact h, ha, hb, hc, hd⟩
 
 /-- `ProjectivePoint::double` doubles the represented point. -/
 theorem double_spec_point (self : ProjectivePoint.«i686-no-tables») (hself : self.LimbsLt 26)

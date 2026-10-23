@@ -5,29 +5,75 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
-import Proofs.Backend.Serial.U64.Field.Add
-import Proofs.Backend.Serial.U64.Field.Mul
-import Proofs.Backend.Serial.U64.Field.Sub
 public import Proofs.Helpers.Coords
-import Proofs.Helpers.ToField
-import Proofs.Backend.Serial.U32.Field.Add
-import Proofs.Backend.Serial.U32.Field.Mul
-import Proofs.Backend.Serial.U32.Field.Sub
-import Proofs.Helpers.ToField2625
+public import Proofs.Helpers.Backend.U32
+public import Proofs.Helpers.Backend.U64
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519 TwistedEdwardsModel
-open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
-open Curve25519Dalek.backend.serial.u32.field (FieldElement2625)
 open Curve25519Dalek.backend.serial.curve_models
+
+namespace Curve25519Dalek.Backend
+
+variable (B : Backend)
+
+/-- `&EdwardsPoint - &ProjectiveNielsPoint` over a backend. -/
+@[expose] def subProjectiveNiels {P : Type} (mk : B.F → B.F → B.F → B.F → P)
+    (X Y Z T YpX YmX Z' T2d : B.F) : Result P := do
+  let Y_plus_X ← B.add Y X
+  let Y_minus_X ← B.sub Y X
+  let PM ← B.mul Y_plus_X YmX
+  let MP ← B.mul Y_minus_X YpX
+  let TT2d ← B.mul T T2d
+  let ZZ ← B.mul Z Z'
+  let ZZ2 ← B.add ZZ ZZ
+  let fe ← B.sub PM MP
+  let fe1 ← B.add PM MP
+  let fe2 ← B.sub ZZ2 TT2d
+  let fe3 ← B.add ZZ2 TT2d
+  ok (mk fe fe1 fe2 fe3)
+
+/-- `subProjectiveNiels` computes `Extended.subProjectiveNiels`. -/
+theorem subProjectiveNiels_spec
+    (hadd : B.AddSpec) (hadd2 : B.AddSum2Spec) (hsub : B.SubSpec) (hmul : B.MulSpec)
+    {P : Type} (mk : B.F → B.F → B.F → B.F → P)
+    (X Y Z T YpX YmX Z' T2d : B.F) (hX : B.Red X) (hY : B.Red Y) (hZ : B.Red Z) (hT : B.Red T)
+    (hYpX : B.Niels YpX) (hYmX : B.Niels YmX) (hZ' : B.Niels Z') (hT2d : B.Niels T2d) :
+    B.subProjectiveNiels mk X Y Z T YpX YmX Z' T2d ⦃ r => ∃ a b c d, r = mk a b c d ∧
+      (⟨B.toField a, B.toField b, B.toField c, B.toField d⟩ : edwards.Completed) =
+        (⟨B.toField X, B.toField Y, B.toField Z, B.toField T⟩ :
+          edwards.Extended).subProjectiveNiels
+          ⟨B.toField YpX, B.toField YmX, B.toField Z', B.toField T2d⟩ ∧
+      B.MulIn a ∧ B.MulIn b ∧ B.MulIn c ∧ B.MulIn d ⦄ := by
+  unfold subProjectiveNiels
+  step with hadd Y X hY hX as ⟨ypx, hypx, hypx'⟩
+  step with hsub Y X (B.red_mulIn hY) (B.red_mulIn hX) as ⟨ymx, hymx, hymx'⟩
+  step with hmul ypx YmX (B.sum2_mulIn hypx') (B.niels_mulIn hYmX) as ⟨pm, hpm, hpm'⟩
+  step with hmul ymx YpX (B.red_mulIn hymx') (B.niels_mulIn hYpX) as ⟨mp, hmp, hmp'⟩
+  step with hmul T T2d (B.red_mulIn hT) (B.niels_mulIn hT2d) as ⟨tt, htt, htt'⟩
+  step with hmul Z Z' (B.red_mulIn hZ) (B.niels_mulIn hZ') as ⟨zz, hzz, hzz'⟩
+  step with hadd zz zz hzz' hzz' as ⟨zz2, hzz2, hzz2'⟩
+  step with hsub pm mp (B.red_mulIn hpm') (B.red_mulIn hmp') as ⟨a, ha, ha'⟩
+  step with hadd pm mp hpm' hmp' as ⟨b, hb, hb'⟩
+  step with hsub zz2 tt (B.sum2_mulIn hzz2') (B.red_mulIn htt') as ⟨c, hc, hc'⟩
+  step with hadd2 zz2 tt hzz2' htt' as ⟨d, hd, hd'⟩
+  refine ⟨a, b, c, d, rfl, ?_, B.red_mulIn ha', B.sum2_mulIn hb', B.red_mulIn hc', hd'⟩
+  rw [ha, hb, hc, hd, hpm, hmp, hzz2, htt, hzz, hypx, hymx]
+  rfl
+
+end Curve25519Dalek.Backend
 
 namespace Curve25519Dalek
 
 namespace «Shared0EdwardsPointx86_64-tables».Insts
 
-open Curve25519Dalek.backend.serial.u64.field.FieldElement51
-
 namespace «CoreOpsArithSubSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables»
+
+theorem sub_eq (self : edwards.EdwardsPoint.«x86_64-tables»)
+    (other : ProjectiveNielsPoint.«x86_64-tables») :
+    sub self other = Backend.subProjectiveNiels Backend.U64
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : CompletedPoint.«x86_64-tables»))
+      self.X self.Y self.Z self.T other.Y_plus_X other.Y_minus_X other.Z other.T2d := rfl
 
 /-- `Sub<&ProjectiveNielsPoint> for &EdwardsPoint`: the mixed formula
 `Extended.subProjectiveNiels`; limbs `< 2^52` and `< 2^54` in, `< 2^54` out. -/
@@ -38,32 +84,16 @@ theorem sub_spec (self : edwards.EdwardsPoint.«x86_64-tables»)
     sub self other ⦃ (r : CompletedPoint.«x86_64-tables») =>
       r.toCompleted = self.toExtended.subProjectiveNiels other.toProjectiveNiels ∧
         r.LimbsLt 54 ⦄ := by
-  obtain ⟨hX, hY, hZ, hT⟩ := hself
-  obtain ⟨hYpX, hYmX, hZo, hT2d⟩ := hother
-  unfold sub
-  step as ⟨Y_plus_X, hY_plus_X⟩
-  step as ⟨Y_minus_X, hY_minus_X, hY_minus_X_lt⟩
-  step as ⟨PM, hPM, hPM_lt⟩
-  step as ⟨MP, hMP, hMP_lt⟩
-  step as ⟨TT2d, hTT2d, hTT2d_lt⟩
-  step as ⟨ZZ, hZZ, hZZ_lt⟩
-  step as ⟨ZZ2, hZZ2⟩
-  step as ⟨X', hX', hX'_lt⟩
-  step as ⟨Y', hY'⟩
-  step as ⟨Z', hZ', hZ'_lt⟩
-  step as ⟨T', hT'⟩
-  refine ⟨?_, ?_⟩
-  · simp only [CompletedPoint.«x86_64-tables».toCompleted_def,
-      edwards.EdwardsPoint.«x86_64-tables».toExtended_def,
-      ProjectiveNielsPoint.«x86_64-tables».toProjectiveNiels_def, Extended.subProjectiveNiels,
-      toField_sub_of_mod hX', toField_add_of_limbs hY', toField_sub_of_mod hZ',
-      toField_add_of_limbs hT', toField_mul_of_mod hPM, toField_mul_of_mod hMP,
-      toField_mul_of_mod hTT2d, toField_mul_of_mod hZZ, toField_add_of_limbs hZZ2,
-      toField_add_of_limbs hY_plus_X, toField_sub_of_mod hY_minus_X]
-  · exact ⟨limbs_lt_of_le (by decide) hX'_lt,
-      limbs_lt_of_le (by decide) (limbs_add_lt hY' hPM_lt hMP_lt),
-      limbs_lt_of_le (by decide) hZ'_lt,
-      limbs_add_lt hT' (limbs_add_lt hZZ2 hZZ_lt hZZ_lt) (limbs_lt_of_le (by decide) hTT2d_lt)⟩
+  obtain ⟨h1, h2, h3, h4⟩ := hself
+  obtain ⟨h5, h6, h7, h8⟩ := hother
+  rw [sub_eq]
+  apply spec_mono (Backend.subProjectiveNiels_spec Backend.U64
+    Backend.U64.add_spec Backend.U64.add_sum2_spec Backend.U64.sub_spec Backend.U64.mul_spec _ _ _ _
+    _ _ _ _ _ h1 h2 h3 h4 h5 h6 h7 h8)
+  rintro _ ⟨a, b, c, d, rfl, h, ha, hb, hc, hd⟩
+  exact ⟨by rw [CompletedPoint.«x86_64-tables».toCompleted_def,
+    edwards.EdwardsPoint.«x86_64-tables».toExtended_def,
+    ProjectiveNielsPoint.«x86_64-tables».toProjectiveNiels_def]; exact h, ha, hb, hc, hd⟩
 
 /-- `Sub<&ProjectiveNielsPoint> for &EdwardsPoint` subtracts the represented points. -/
 theorem sub_spec_point (self : edwards.EdwardsPoint.«x86_64-tables»)
@@ -84,9 +114,13 @@ end «Shared0EdwardsPointx86_64-tables».Insts
 
 namespace «Shared0EdwardsPointi686-tables».Insts
 
-open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
-
 namespace «CoreOpsArithSubSharedAProjectiveNielsPointi686-tablesCompletedPointi686-tables»
+
+theorem sub_eq (self : edwards.EdwardsPoint.«i686-tables»)
+    (other : ProjectiveNielsPoint.«i686-tables») :
+    sub self other = Backend.subProjectiveNiels Backend.U32
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : CompletedPoint.«i686-tables»))
+      self.X self.Y self.Z self.T other.Y_plus_X other.Y_minus_X other.Z other.T2d := rfl
 
 /-- `Sub<&ProjectiveNielsPoint> for &EdwardsPoint`: the mixed formula
 `Extended.subProjectiveNiels`; limbs `< 2^26` and `< 2^27` in, `< 3 · 2^26` out. -/
@@ -97,32 +131,16 @@ theorem sub_spec (self : edwards.EdwardsPoint.«i686-tables»)
     sub self other ⦃ (r : CompletedPoint.«i686-tables») =>
       r.toCompleted = self.toExtended.subProjectiveNiels other.toProjectiveNiels ∧
         r.MulBounded ⦄ := by
-  obtain ⟨hX, hY, hZ, hT⟩ := hself
-  obtain ⟨hYpX, hYmX, hZo, hT2d⟩ := hother
-  unfold sub
-  step as ⟨Y_plus_X, hY_plus_X⟩
-  step as ⟨Y_minus_X, hY_minus_X, hY_minus_X_lt⟩
-  step as ⟨PM, hPM, hPM_lt⟩
-  step as ⟨MP, hMP, hMP_lt⟩
-  step as ⟨TT2d, hTT2d, hTT2d_lt⟩
-  step as ⟨ZZ, hZZ, hZZ_lt⟩
-  step as ⟨ZZ2, hZZ2⟩
-  step as ⟨X', hX', hX'_lt⟩
-  step as ⟨Y', hY'⟩
-  step as ⟨Z', hZ', hZ'_lt⟩
-  step as ⟨T', hT'⟩
-  refine ⟨?_, ?_⟩
-  · simp only [CompletedPoint.«i686-tables».toCompleted_def,
-      edwards.EdwardsPoint.«i686-tables».toExtended_def,
-      ProjectiveNielsPoint.«i686-tables».toProjectiveNiels_def, Extended.subProjectiveNiels,
-      toField_sub_of_mod hX', toField_add_of_limbs hY', toField_sub_of_mod hZ',
-      toField_add_of_limbs hT', toField_mul_of_mod hPM, toField_mul_of_mod hMP,
-      toField_mul_of_mod hTT2d, toField_mul_of_mod hZZ, toField_add_of_limbs hZZ2,
-      toField_add_of_limbs hY_plus_X, toField_sub_of_mod hY_minus_X]
-  · exact ⟨mulBounded_of_limbsLt (limbs_lt_of_le (by decide) hX'_lt),
-      mulBounded_of_limbsLt (limbs_lt_of_le (by decide) (limbs_add_lt hY' hPM_lt hMP_lt)),
-      mulBounded_of_limbsLt (limbs_lt_of_le (by decide) hZ'_lt),
-      mulBounded_add hT' (limbs_add_lt hZZ2 hZZ_lt hZZ_lt) hTT2d_lt⟩
+  obtain ⟨h1, h2, h3, h4⟩ := hself
+  obtain ⟨h5, h6, h7, h8⟩ := hother
+  rw [sub_eq]
+  apply spec_mono (Backend.subProjectiveNiels_spec Backend.U32
+    Backend.U32.add_spec Backend.U32.add_sum2_spec Backend.U32.sub_spec Backend.U32.mul_spec _ _ _ _
+    _ _ _ _ _ h1 h2 h3 h4 h5 h6 h7 h8)
+  rintro _ ⟨a, b, c, d, rfl, h, ha, hb, hc, hd⟩
+  exact ⟨by rw [CompletedPoint.«i686-tables».toCompleted_def,
+    edwards.EdwardsPoint.«i686-tables».toExtended_def,
+    ProjectiveNielsPoint.«i686-tables».toProjectiveNiels_def]; exact h, ha, hb, hc, hd⟩
 
 /-- `Sub<&ProjectiveNielsPoint> for &EdwardsPoint` subtracts the represented points. -/
 theorem sub_spec_point (self : edwards.EdwardsPoint.«i686-tables»)
@@ -143,9 +161,13 @@ end «Shared0EdwardsPointi686-tables».Insts
 
 namespace «Shared0EdwardsPointx86_64-no-tables».Insts
 
-open Curve25519Dalek.backend.serial.u64.field.FieldElement51
-
 namespace «CoreOpsArithSubSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables»
+
+theorem sub_eq (self : edwards.EdwardsPoint.«x86_64-no-tables»)
+    (other : ProjectiveNielsPoint.«x86_64-no-tables») :
+    sub self other = Backend.subProjectiveNiels Backend.U64
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : CompletedPoint.«x86_64-no-tables»))
+      self.X self.Y self.Z self.T other.Y_plus_X other.Y_minus_X other.Z other.T2d := rfl
 
 /-- `Sub<&ProjectiveNielsPoint> for &EdwardsPoint`: the mixed formula
 `Extended.subProjectiveNiels`; limbs `< 2^52` and `< 2^54` in, `< 2^54` out. -/
@@ -156,32 +178,16 @@ theorem sub_spec (self : edwards.EdwardsPoint.«x86_64-no-tables»)
     sub self other ⦃ (r : CompletedPoint.«x86_64-no-tables») =>
       r.toCompleted = self.toExtended.subProjectiveNiels other.toProjectiveNiels ∧
         r.LimbsLt 54 ⦄ := by
-  obtain ⟨hX, hY, hZ, hT⟩ := hself
-  obtain ⟨hYpX, hYmX, hZo, hT2d⟩ := hother
-  unfold sub
-  step as ⟨Y_plus_X, hY_plus_X⟩
-  step as ⟨Y_minus_X, hY_minus_X, hY_minus_X_lt⟩
-  step as ⟨PM, hPM, hPM_lt⟩
-  step as ⟨MP, hMP, hMP_lt⟩
-  step as ⟨TT2d, hTT2d, hTT2d_lt⟩
-  step as ⟨ZZ, hZZ, hZZ_lt⟩
-  step as ⟨ZZ2, hZZ2⟩
-  step as ⟨X', hX', hX'_lt⟩
-  step as ⟨Y', hY'⟩
-  step as ⟨Z', hZ', hZ'_lt⟩
-  step as ⟨T', hT'⟩
-  refine ⟨?_, ?_⟩
-  · simp only [CompletedPoint.«x86_64-no-tables».toCompleted_def,
-      edwards.EdwardsPoint.«x86_64-no-tables».toExtended_def,
-      ProjectiveNielsPoint.«x86_64-no-tables».toProjectiveNiels_def, Extended.subProjectiveNiels,
-      toField_sub_of_mod hX', toField_add_of_limbs hY', toField_sub_of_mod hZ',
-      toField_add_of_limbs hT', toField_mul_of_mod hPM, toField_mul_of_mod hMP,
-      toField_mul_of_mod hTT2d, toField_mul_of_mod hZZ, toField_add_of_limbs hZZ2,
-      toField_add_of_limbs hY_plus_X, toField_sub_of_mod hY_minus_X]
-  · exact ⟨limbs_lt_of_le (by decide) hX'_lt,
-      limbs_lt_of_le (by decide) (limbs_add_lt hY' hPM_lt hMP_lt),
-      limbs_lt_of_le (by decide) hZ'_lt,
-      limbs_add_lt hT' (limbs_add_lt hZZ2 hZZ_lt hZZ_lt) (limbs_lt_of_le (by decide) hTT2d_lt)⟩
+  obtain ⟨h1, h2, h3, h4⟩ := hself
+  obtain ⟨h5, h6, h7, h8⟩ := hother
+  rw [sub_eq]
+  apply spec_mono (Backend.subProjectiveNiels_spec Backend.U64
+    Backend.U64.add_spec Backend.U64.add_sum2_spec Backend.U64.sub_spec Backend.U64.mul_spec _ _ _ _
+    _ _ _ _ _ h1 h2 h3 h4 h5 h6 h7 h8)
+  rintro _ ⟨a, b, c, d, rfl, h, ha, hb, hc, hd⟩
+  exact ⟨by rw [CompletedPoint.«x86_64-no-tables».toCompleted_def,
+    edwards.EdwardsPoint.«x86_64-no-tables».toExtended_def,
+    ProjectiveNielsPoint.«x86_64-no-tables».toProjectiveNiels_def]; exact h, ha, hb, hc, hd⟩
 
 /-- `Sub<&ProjectiveNielsPoint> for &EdwardsPoint` subtracts the represented points. -/
 theorem sub_spec_point (self : edwards.EdwardsPoint.«x86_64-no-tables»)
@@ -202,9 +208,13 @@ end «Shared0EdwardsPointx86_64-no-tables».Insts
 
 namespace «Shared0EdwardsPointi686-no-tables».Insts
 
-open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
-
 namespace «CoreOpsArithSubSharedAProjectiveNielsPointi686-no-tablesCompletedPointi686-no-tables»
+
+theorem sub_eq (self : edwards.EdwardsPoint.«i686-no-tables»)
+    (other : ProjectiveNielsPoint.«i686-no-tables») :
+    sub self other = Backend.subProjectiveNiels Backend.U32
+      (fun X Y Z T => (⟨X, Y, Z, T⟩ : CompletedPoint.«i686-no-tables»))
+      self.X self.Y self.Z self.T other.Y_plus_X other.Y_minus_X other.Z other.T2d := rfl
 
 /-- `Sub<&ProjectiveNielsPoint> for &EdwardsPoint`: the mixed formula
 `Extended.subProjectiveNiels`; limbs `< 2^26` and `< 2^27` in, `< 3 · 2^26` out. -/
@@ -215,32 +225,16 @@ theorem sub_spec (self : edwards.EdwardsPoint.«i686-no-tables»)
     sub self other ⦃ (r : CompletedPoint.«i686-no-tables») =>
       r.toCompleted = self.toExtended.subProjectiveNiels other.toProjectiveNiels ∧
         r.MulBounded ⦄ := by
-  obtain ⟨hX, hY, hZ, hT⟩ := hself
-  obtain ⟨hYpX, hYmX, hZo, hT2d⟩ := hother
-  unfold sub
-  step as ⟨Y_plus_X, hY_plus_X⟩
-  step as ⟨Y_minus_X, hY_minus_X, hY_minus_X_lt⟩
-  step as ⟨PM, hPM, hPM_lt⟩
-  step as ⟨MP, hMP, hMP_lt⟩
-  step as ⟨TT2d, hTT2d, hTT2d_lt⟩
-  step as ⟨ZZ, hZZ, hZZ_lt⟩
-  step as ⟨ZZ2, hZZ2⟩
-  step as ⟨X', hX', hX'_lt⟩
-  step as ⟨Y', hY'⟩
-  step as ⟨Z', hZ', hZ'_lt⟩
-  step as ⟨T', hT'⟩
-  refine ⟨?_, ?_⟩
-  · simp only [CompletedPoint.«i686-no-tables».toCompleted_def,
-      edwards.EdwardsPoint.«i686-no-tables».toExtended_def,
-      ProjectiveNielsPoint.«i686-no-tables».toProjectiveNiels_def, Extended.subProjectiveNiels,
-      toField_sub_of_mod hX', toField_add_of_limbs hY', toField_sub_of_mod hZ',
-      toField_add_of_limbs hT', toField_mul_of_mod hPM, toField_mul_of_mod hMP,
-      toField_mul_of_mod hTT2d, toField_mul_of_mod hZZ, toField_add_of_limbs hZZ2,
-      toField_add_of_limbs hY_plus_X, toField_sub_of_mod hY_minus_X]
-  · exact ⟨mulBounded_of_limbsLt (limbs_lt_of_le (by decide) hX'_lt),
-      mulBounded_of_limbsLt (limbs_lt_of_le (by decide) (limbs_add_lt hY' hPM_lt hMP_lt)),
-      mulBounded_of_limbsLt (limbs_lt_of_le (by decide) hZ'_lt),
-      mulBounded_add hT' (limbs_add_lt hZZ2 hZZ_lt hZZ_lt) hTT2d_lt⟩
+  obtain ⟨h1, h2, h3, h4⟩ := hself
+  obtain ⟨h5, h6, h7, h8⟩ := hother
+  rw [sub_eq]
+  apply spec_mono (Backend.subProjectiveNiels_spec Backend.U32
+    Backend.U32.add_spec Backend.U32.add_sum2_spec Backend.U32.sub_spec Backend.U32.mul_spec _ _ _ _
+    _ _ _ _ _ h1 h2 h3 h4 h5 h6 h7 h8)
+  rintro _ ⟨a, b, c, d, rfl, h, ha, hb, hc, hd⟩
+  exact ⟨by rw [CompletedPoint.«i686-no-tables».toCompleted_def,
+    edwards.EdwardsPoint.«i686-no-tables».toExtended_def,
+    ProjectiveNielsPoint.«i686-no-tables».toProjectiveNiels_def]; exact h, ha, hb, hc, hd⟩
 
 /-- `Sub<&ProjectiveNielsPoint> for &EdwardsPoint` subtracts the represented points. -/
 theorem sub_spec_point (self : edwards.EdwardsPoint.«i686-no-tables»)

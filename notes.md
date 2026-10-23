@@ -733,6 +733,51 @@ via `-Dtrace.profiler=true -Dtrace.profiler.threshold=1000`, list in `.scratch/p
   `load4_at_spec`); prefer explicit bounds or `omega`.
 - Two x86_64 variants are proved twice (same proof text): everything costs double.
 
+**Radar-suite baseline (2026-10-23)**, after the i686 port: the radar build benchmark
+(`lean-bench-scripts` `scripts/bench/run`, clone in `.scratch/radar/bench`, output
+`.scratch/radar/runs/baseline.*`), run locally under `.scratch/u32s/lk` (12 cores, lowest
+priority). Local patches: `measure.py` sums the `cpu_core/…` and `cpu_atom/…` events of the
+hybrid CPU; the fake `lean` adds `-m maxrss` per module.
+- 19.2 T instructions, 10665 s task-clock, 1049 s wall, build maxrss 5.16 GB. Longest build path
+  1011 s (`Funs` → U32 `Reduce` → U32 `Mul` → `AddProjectiveNiels` → `Edwards.Add` →
+  `Pippenger` → `Specs`), longest rebuild path 655 s.
+- `Proofs` 16.3 T (405 modules, median 13 G). Top (G): `Funs` 976, `Pippenger` 630,
+  `DoubleAndCompressBatch` 486, `Elligator` 483, U32 `Field/ToBytes` 427, Ristretto `Compress`
+  345, U32 `Field/Mul` 334, U32 `MulInternal` 327, U32 `Field/Reduce` 292, Straus `Optional` 291,
+  Ristretto `Decompress` 282, `VartimeTripleBase` 269, `VartimeDoubleBase` 264.
+
+**Generic point layer, prototype (2026-10-23)**, `.scratch/generic/{Proto,AddPN}.lean`. A
+`structure Backend` (field type `F`, `toField`, `add`/`sub`/`mul` as `Result` functions, bound
+predicates `Red`/`Sum2`/`MulIn`/`Niels` with their weakenings, and the operation specs stated
+with them); instances `U64` (52/53/54/54) and `U32` (26/27/`MulBounded`/27). A generic program
+per point function takes the backend and the result constructor `mk`; the translated function is
+`rfl`-equal to it (`add self other = addProjectiveNiels U64 (fun X Y Z T => ⟨X, Y, Z, T⟩) …`),
+and each configuration's existing `@[step]` statement follows in a few lines (`rw [add_eq]`,
+`spec_mono (generic_spec U64 …)`, unfold the `to*_def`s). Measured with `perf stat` on
+`lake env lean`: `AddProjectiveNiels.lean` 112.5 G → 21.1 G for the same four statements, of
+which 12.4 G is loading imports, so 100 G → 8.7 G. The generic proof is cheaper than even one
+concrete copy: `step with B.mul_spec …` names the spec (no search), and the opaque `F` keeps
+`simp`/`scalar_tac` away from limb arrays.
+
+**Generic point layer, in place (2026-10-23).** `Proofs/Helpers/Backend.lean` (structure:
+data, bounds, weakenings only) and the instances `Proofs/Helpers/Backend/{U64,U32}.lean`.
+- The operations' specs are propositions (`B.AddSpec`, `B.MulSpec`, …), not structure fields: a
+  generic theorem takes exactly the specs it uses (`(hmul : B.MulSpec)`), and the instantiation
+  passes `Backend.U64.mul_spec`. With the specs as fields, every instantiated theorem depended
+  on the axioms of all of them (`RustAx.subtle` via `eq`), which broke the `Specs` axiom guards.
+- Module system: the instances and the generic programs are `@[expose]` (the `rfl` bridges and
+  the bounds must unfold in importers), so their bodies may only mention public imports. The
+  instance specs are therefore separate theorems (`Backend.U64.mul_spec`, proved with the
+  privately imported field specs); the generic proof files `public import` the instances.
+- Converted (generator `.scratch/generic/gen_cm.py`, generic blocks `.scratch/generic/cm/`):
+  CurveModels `Add`/`Sub` × `ProjectiveNiels`/`AffineNiels`, `ProjectiveDouble`,
+  `ProjectiveIsValid`, `ProjectiveAsExtended`, `CompletedAsExtended`, `CompletedAsProjective`.
+  Statements unchanged; `Specs` guards unchanged. `lake env lean` instructions 590 G → 122 G
+  (most of the rest is loading imports, ~11 G per module).
+- Next: a `FieldBackend` with the `field.rs` operations (`sqrt_ratio_i`, `invert`,
+  `is_negative`, conditional ops, constants) for Ristretto/Montgomery/Edwards, with
+  `Proofs/Field/*` made generic over `Backend` first.
+
 
 ## Performance findings (2026-10-10)
 
