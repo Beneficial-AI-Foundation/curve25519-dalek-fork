@@ -29,7 +29,7 @@ Read `AGENTS.md` first (PRs to the curve25519-dalek repo must be written by huma
   `Type`, which still elaborates).
 
 - **No post-translation tweaks.** `curve25519-dalek/lean/Curve25519Dalek/{Types,Funs}.lean` and
-  `translation.json` are exactly what Aeneas emits. CI (`lean-translation.yml`) re-translates and
+  `translation.json` are exactly what Aeneas emits. CI (`aeneas-translation.yml`) re-translates and
   fails if they differ from the committed files.
 - **Configurations.** One translation covers four configurations, merged by Charon's
   multi-target mode: {64-bit, 32-bit} × {with, without `precomputed-tables`}. Items that differ
@@ -369,12 +369,16 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 
 ## CI
 
-- **`lean-translation.yml`:** the translation is current.
+- **`aeneas-translation.yml`:** the translation is current.
 - **`lean-build.yml`:**
   - `lake build --wfail` on every default target: any warning, including `sorry`, fails the build;
   - `runLinter` on `Subtle`, `Zeroize`, `EllipticCurve`, `Curve25519`, `Defs`, `Specs` and
     `Proofs`, one step each
-    (`runLinter` stops at the first failing module).
+    (`runLinter` stops at the first failing module);
+  - elan at a pinned release, no `lean-action`; one build cache per branch
+    (`.lake` without the package builds, saved even on failure, older entries deleted), Mathlib's
+    oleans from `lake exe cache get`; pushes and pull requests both build (a pull request
+    builds the merge with the base branch).
 - **`workspace.yml`:** the `typos` spell check skips `*.lean` (`.typos.toml`) but reads Markdown,
   so Lean identifiers in this file can trip it.
 
