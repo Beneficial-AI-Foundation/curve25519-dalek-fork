@@ -4,6 +4,7 @@ extend-exclude = [
     "*.svg",
     "TESTVECTORS",
     "*.lean",
+    "notes.md",
 ]
 
 [default]
