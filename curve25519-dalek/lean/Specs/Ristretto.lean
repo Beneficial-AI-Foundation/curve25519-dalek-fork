@@ -2205,7 +2205,7 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
     mul_base scalar ⦃ (r : RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «RistrettoPointx86_64-tables»
@@ -2218,7 +2218,7 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
     mul_base scalar ⦃ (r : RistrettoPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 26 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 end «RistrettoPointi686-tables»
@@ -2470,7 +2470,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-tables»
@@ -2502,7 +2502,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
           R.LimbsLt 26 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-tables»
@@ -2534,7 +2534,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-no-tables»
@@ -2566,7 +2566,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
           R.LimbsLt 26 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
 
 end «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-no-tables»
@@ -2655,7 +2655,7 @@ recall optional_mixed_multiscalar_mul_spec
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms optional_mixed_multiscalar_mul_spec
 
@@ -2745,7 +2745,7 @@ recall optional_mixed_multiscalar_mul_spec
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 26 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms optional_mixed_multiscalar_mul_spec
 
@@ -2835,7 +2835,7 @@ recall optional_mixed_multiscalar_mul_spec
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms optional_mixed_multiscalar_mul_spec
 
@@ -2925,7 +2925,7 @@ recall optional_mixed_multiscalar_mul_spec
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 26 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms optional_mixed_multiscalar_mul_spec
 
@@ -2944,7 +2944,7 @@ recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
 
@@ -2961,7 +2961,7 @@ recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 26 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
 
@@ -2980,7 +2980,7 @@ recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
 
@@ -2997,7 +2997,7 @@ recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : ristretto.RistrettoPoint.«i686-no-tables») =>
       r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 26 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms vartime_double_scalar_mul_basepoint_spec
 
@@ -3016,7 +3016,7 @@ recall mul_spec (self : ristretto.RistrettoBasepointTable.«x86_64-tables»)
     mul self scalar ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarRistrettoPointx86_64-tables»
@@ -3033,7 +3033,7 @@ recall mul_spec (self : ristretto.RistrettoBasepointTable.«i686-tables»)
     mul self scalar ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 26 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedBScalarRistrettoPointi686-tables»
@@ -3053,7 +3053,7 @@ recall mul_spec (self : scalar.Scalar)
     mul self basepoint_table ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedARistrettoBasepointTablex86_64-tablesRistrettoPointx86_64-tables»
@@ -3069,7 +3069,7 @@ recall mul_spec (self : scalar.Scalar)
     mul self basepoint_table ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 26 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
 
 end «CoreOpsArithMulSharedARistrettoBasepointTablei686-tablesRistrettoPointi686-tables»

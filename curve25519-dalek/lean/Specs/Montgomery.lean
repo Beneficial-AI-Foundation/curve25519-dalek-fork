@@ -132,8 +132,8 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
     mul_base scalar ⦃ (r : MontgomeryPoint) =>
       r.asNat = encodeU (scalar.asNat • montgomeryBasepoint).u ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, get_target, get_target.spec,
-  core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, get_target,
+  get_target.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
 
@@ -152,8 +152,8 @@ recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : MontgomeryPoint) =>
       r.asNat = x25519 (bytes.asNat 8) 9 ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, get_target, get_target.spec,
-  core.fmt.Formatter] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, get_target,
+  get_target.spec] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
 
 

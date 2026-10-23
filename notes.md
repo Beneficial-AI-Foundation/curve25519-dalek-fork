@@ -20,7 +20,9 @@ Read `AGENTS.md` first (PRs to the curve25519-dalek repo must be written by huma
   to Aeneas's pin); `lake build aeneas:release`; `./scripts/aeneas-install.sh` (copies Aeneas's
   `lean-toolchain`); `./scripts/aeneas-translate.sh`; compare the `*External_Template.lean` files
   with the External files; then the full strict build, `scripts/fill-guards.py` on every spec
-  summary, the linters and `typos`. Last done 2026-10-22 (nightly-2026.10.13 → nightly-2026.10.22,
+  summary, the linters and `typos`. Last done 2026-10-23 (nightly-2026.10.22 → nightly-2026.10.23:
+  `core.fmt.Formatter` is an `opaque`, no longer an axiom; translation unchanged). Before that
+  2026-10-22 (nightly-2026.10.13 → nightly-2026.10.22,
   Lean v4.35.0-rc4 → v4.35.0): `get_target` returns a `String` (`dispatch_all_spec`), the
   `Vec` models moved to `Aeneas.Std.Alloc`, integer comparisons are `Bool` functions under
   `liftFun2` (four iterator proofs), type parameters are `Type _` (the External files keep
@@ -530,27 +532,17 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 
 ## Open decisions (for the owner) and known gaps
 
-1. **`core.fmt.Formatter` in guard lists:** Aeneas declares this type as an axiom
-   (`Aeneas/Std/Core/Fmt.lean`). The one place it enters is the formatted panic message of
-   `scalar::read_le_u64_into` (`assert!(…, "src.len() = {}, dst.len() = {}", …)`, translated with
-   `Argument.new_display` on `usize`'s `Display`, whose `fmt` mentions `Formatter`); it reaches
-   every spec whose proof goes through `as_radix_2w` (basepoint tables, `mul_base`,
-   `mul_base_clamped`, Pippenger) or `non_adjacent_form`. It only asserts that some type exists;
-   acceptable? (The `…_native.decide.ax_*` axioms of Aeneas's
-   `toStr` are gone since Aeneas nightly-2026.10.22, which proves the bound with `decide +kernel`
-   and no longer uses `toStr` in the dispatchers.)
-2. **Iterator lengths:** the multiscalar and precomputation statements (and
+1. **Iterator lengths:** the multiscalar and precomputation statements (and
    `double_and_compress_batch`) assume `length ≤ Usize.max` for the lists the iterators yield.
    The patched code collects each iterator into a `Vec` by `push`, and Aeneas's `Vec.push` fails
    (panics) once the length would exceed `Usize.max`, so without the hypothesis the statements are
    false for (unrealisable) longer inputs. Decided 2026-10-22: keep the hypothesis.
-3. **New std contract `core.borrow.Borrow.Blanket.borrow`** (2026-10-22, in `RustAx.core`):
+2. **New std contract `core.borrow.Borrow.Blanket.borrow`** (2026-10-22, in `RustAx.core`):
    `<T as Borrow<T>>::borrow` returns its argument. Needed by the Ristretto `multiscalar_mul` and
    `VartimeRistrettoPrecomputation::new`, which pass this instance to the Edwards functions;
    approved 2026-10-22 (field `borrow_blanket` of `core.Contract`, following the
    one-axiom-per-crate convention).
-4. Minor: `PrecomputedStraus/OptionalMixedMultiscalarMul.lean` takes 18–23 s (split the two
-   variants into two files); window tables' `Default`/`Clone`/`Zeroize` not specified (low
+3. Minor: window tables' `Default`/`Clone`/`Zeroize` not specified (low
    value); naming ambiguity `encode`/`decode`/`basepoint` between `curve25519` and
    `curve25519.Ristretto` under a double `open`; `twistL` and `ZMod.abs` names unconfirmed.
 
