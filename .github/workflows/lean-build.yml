@@ -71,6 +71,10 @@ jobs:
       - name: Mathlib cache
         run: lake exe cache get
 
+      # Aeneas's prebuilt oleans from its GitHub release
+      - name: Aeneas release build
+        run: lake build aeneas:release
+
       # Strict: warnings are errors.
       - name: Build
         id: build
