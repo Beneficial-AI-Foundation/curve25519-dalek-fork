@@ -7,6 +7,14 @@ on:
     branches: [ '**' ]
     paths: &paths
       - 'curve25519-dalek/lean/**'
+      - 'EllipticCurve/**'
+      - 'EllipticCurve.lean'
+      - 'Curve25519/**'
+      - 'Curve25519.lean'
+      - 'Subtle/**'
+      - 'Subtle.lean'
+      - 'Zeroize/**'
+      - 'Zeroize.lean'
       - 'lakefile.toml'
       - 'lake-manifest.json'
       - 'lean-toolchain'

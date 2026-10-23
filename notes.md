@@ -60,8 +60,8 @@ Read `AGENTS.md` first (PRs to the curve25519-dalek repo must be written by huma
 
 | lean_lib | Namespace | Content | Audited |
 |---|---|---|---|
-| `EllipticCurve` | top level (`Curve`, `MontgomeryModel`, …) | Elliptic-curve models over a field, independent of any curve; Mathlib-bound | yes, except `EllipticCurve/Proofs/**` and `Curve/Impl.lean` |
-| `Curve25519` | `curve25519` | Curve25519 in general (`p`, `L`, `a`, `d`, `A`, its models and facts), independent of dalek | yes |
+| `EllipticCurve` | top level (`Curve`, `MontgomeryModel`, …) | Elliptic-curve models over a field, independent of any curve; Mathlib-bound; at the repository root (`EllipticCurve.lean` + `EllipticCurve/`) | yes, except `EllipticCurve/Proofs/**` and `Curve/Impl.lean` |
+| `Curve25519` | `curve25519` | Curve25519 in general (`p`, `L`, `a`, `d`, `A`, its models and facts), independent of dalek; at the repository root (`Curve25519.lean` + `Curve25519/`) | yes |
 | `Curve25519Dalek` | `Curve25519Dalek` | Generated translation + hand-written External files | External files |
 | `Subtle`, `Zeroize` | as generated | Models of external crates; at the repository root (`Subtle.lean` + `Subtle/`, `Zeroize.lean` + `Zeroize/`) | `Subtle/Types.lean`, `Basic.lean` |
 | `Defs` | `Curve25519Dalek` (extensions of Aeneas types: their namespace) | Definitions needed to state the specs | yes |
@@ -583,8 +583,6 @@ emit constants as literals (no longer needed).
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
 3. Add std lib models to Aeneas.
-4. Move `EllipticCurve` and `Curve25519` to separate `lean_lib`s at the repository root (like
-   `Subtle` and `Zeroize`), out of the `curve25519-dalek` library.
 
 ### Primality certificates
 

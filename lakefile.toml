@@ -37,12 +37,12 @@ srcDir = "curve25519-dalek/lean"
 # Elliptic-curve models over a field, independent of any curve.
 [[lean_lib]]
 name = "EllipticCurve"
-srcDir = "curve25519-dalek/lean"
+srcDir = "."
 
 # Curve25519 in general (parameters, later the curve models), independent of dalek.
 [[lean_lib]]
 name = "Curve25519"
-srcDir = "curve25519-dalek/lean"
+srcDir = "."
 
 # Definitions needed to state the specs (audited). See notes.md.
 [[lean_lib]]
