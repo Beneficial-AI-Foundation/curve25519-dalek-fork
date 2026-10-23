@@ -11,6 +11,8 @@ import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointPoint
 import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointTable
 import Proofs.Edwards.BasepointTableMul
 import Proofs.Edwards.Mul
+import Proofs.Backend.Serial.U32.Constants.Ed25519BasepointPoint
+import Proofs.Backend.Serial.U32.Constants.Ed25519BasepointTable
 public section
 
 /-! # `EdwardsPoint::mul_base`
@@ -36,6 +38,19 @@ theorem mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255
 
 end «EdwardsPointx86_64-tables»
 
+namespace «EdwardsPointi686-tables»
+
+/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
+limbs `< 2^26`. -/
+@[step]
+theorem mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
+    mul_base scalar ⦃ (r : EdwardsPoint.«i686-tables») =>
+      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold mul_base
+  step*
+
+end «EdwardsPointi686-tables»
+
 namespace «EdwardsPointx86_64-no-tables»
 
 /-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
@@ -51,5 +66,21 @@ theorem mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255
   exact ⟨hron, hep ▸ hr, hrb⟩
 
 end «EdwardsPointx86_64-no-tables»
+
+namespace «EdwardsPointi686-no-tables»
+
+/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
+limbs `< 2^26`. -/
+@[step]
+theorem mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
+    mul_base scalar ⦃ (r : EdwardsPoint.«i686-no-tables») =>
+      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold mul_base
+  step with backend.serial.u32.constants.«i686-no-tables».ED25519_BASEPOINT_POINT_spec_point
+    as ⟨ep, hepon, hep, hepb⟩
+  step as ⟨r, hron, hr, hrb⟩
+  exact ⟨hron, hep ▸ hr, hrb⟩
+
+end «EdwardsPointi686-no-tables»
 
 end Curve25519Dalek.edwards

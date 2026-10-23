@@ -21,7 +21,7 @@ Read `AGENTS.md` first (PRs to the curve25519-dalek repo must be written by huma
   `lean-toolchain`); `./scripts/aeneas-translate.sh`; compare the `*External_Template.lean` files
   with the External files; then the full strict build, `scripts/fill-guards.py` on every spec
   summary, the linters and `typos`. Last done 2026-10-22 (nightly-2026.10.13 → nightly-2026.10.22,
-  Lean v4.35.0-rc4 → v4.35.0): `get_target` returns a `String` (`OnX86_64`, `dispatch_spec`), the
+  Lean v4.35.0-rc4 → v4.35.0): `get_target` returns a `String` (`dispatch_all_spec`), the
   `Vec` models moved to `Aeneas.Std.Alloc`, integer comparisons are `Bool` functions under
   `liftFun2` (four iterator proofs), type parameters are `Type _` (the External files keep
   `Type`, which still elaborates).
@@ -71,7 +71,7 @@ All hand-written files use the Lean module system: `module` and `public section`
 **Exposing and hiding definitions:** a public definition is hidden unless marked `@[expose]`:
 importing modules cannot unfold it at all (neither `unfold`, `simp`, `rfl`, `decide` nor the
 kernel), only use the lemmas its own module proves about it. Mark `@[expose]` on each definition
-that proofs in other modules must unfold (`OnX86_64`, for `dispatch_spec`), never on a whole
+that proofs in other modules must unfold (e.g. the table predicates), never on a whole
 section, and hide everything else.
 
 - **Defining equation:** each hidden definition `X` has `X_def : X = <body>`, proved by tactic in
@@ -484,8 +484,20 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   axioms only, 3–6 s per file including imports, < 2 GB). `mul_base`, `mul_base_clamped` and
   `vartime_double_scalar_mul_basepoint` of `x86_64-tables` are therefore unconditional and in
   `Specs/Edwards.lean`.
-- All x86_64 items are stated for both `«x86_64-tables»` and `«x86_64-no-tables»`; the i686
-  variants outside `scalar.rs` wait for the rest of the u32 backend.
+- i686 point layer (2026-10-23): every x86_64 item is now also stated and proved for
+  `«i686-tables»` and `«i686-no-tables»` (u32 backend), in the same files: the i686 `Defs` (copies
+  of the x86_64 blocks), the u32 field constants and point constants, the `field.rs` layer, curve
+  models, Edwards, Montgomery, Ristretto, window tables, scalar multiplication and the three
+  precomputed tables (`Proofs/Helpers/TableCertificate2625.lean`, the limb-specific half of the
+  certificate; the point-generic half is shared). Bridges: `Proofs/Helpers/ToField2625.lean`.
+  i686 bounds: `LimbsLt 26` for reduced values and Edwards/Projective points, `27` for Niels points
+  and tables, and for completed points `MulBounded` (every limb `< 3 · 2^26`, the input bound of
+  u32 `mul`; `Z = 2 Z + T` exceeds `2^27`), defined in `Proofs/Helpers/Coords.lean`; the i686
+  completed `PointRepr.LimbsLt n` is `MulBounded` whatever `n` (to clean up: options in the
+  section below). All specs hold for the four targets: every dispatcher is proved with
+  `dispatch_all_spec` (2026-10-23, signed off by the owner); `OnX86_64` and `Defs/Target.lean` are
+  gone, and the spec summaries restate each per-target item four times. Conversion scripts in
+  `.scratch/u32s/` (`redo.py` replays them from the originals in `.scratch/u32s/orig`).
 
 ## Decisions taken
 
@@ -573,24 +585,24 @@ emit constants as literals (no longer needed).
 
 ## Plan
 
-1. The u32 backend (below): `field.rs` and `scalar.rs` done (with the i686 `scalar.rs` variants);
-   next the remaining files.
+1. The u32 backend: done (2026-10-23). Left: a cleaner shape for the table lemmas (below).
 2. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
 3. Add std lib models to Aeneas.
+4. Move `EllipticCurve` and `Curve25519` to separate `lean_lib`s at the repository root (like
+   `Subtle` and `Zeroize`), out of the `curve25519-dalek` library.
 
-### u32 backend
+### Table lemmas (cleanup)
 
-`OnX86_64` stands in for the 32-bit branches of the `get_target` dispatchers outside
-`scalar.rs` (dropped there 2026-10-23). Each further file follows the same pattern: prove the i686
-variants, switch the dispatcher to `dispatch_all_spec`, drop the hypothesis (sign-off needed).
-The i686 table constants (`backend.serial.u32.constants.ED25519_BASEPOINT_TABLE`, the two
-`AFFINE_ODD_MULTIPLES_OF_BASEPOINT` tables) are chains of `FieldElement2625.from_limbs` binds
-over `Array U32 10`; `Proofs/Helpers/TableCertificate.lean` is written for `FieldElement51`
-(`collect_limbs`, `bindList`, `limbsNat`, the `«x86_64-tables»` checkers), so parametrise it over
-the limb type when the u32 `Defs` (`FieldElement2625.toField`) exist. Mechanical; the method and
-costs carry over.
+The generic loop lemmas of `Proofs/Helpers/Window.lean` (`fromLoop_spec`, …) take
+`PointRepr.LimbsLt n` bounds for the intermediate completed and extended points too; for the i686
+completed points that field is `MulBounded` whatever `n`, so call sites pass `(nC := 0)`. Options:
+(1, preferred) take the intermediate bounds as predicate arguments `{BC : C → Prop}` inferred from
+the `add`/`as_extended` specs, keeping `PointRepr.LimbsLt n` only for table entries (no `Defs`
+change); (2) `PointRepr.Bounded : T → Prop`, one fixed bound per type (changes the table predicates
+of `Defs/Window.lean`); (3) a general `LimbsLe B` in `Defs` with `LimbsLt n := LimbsLe (2 ^ n)` and
+completed points at `LimbsLe (3 * 2 ^ 26)`.
 
 ### Primality certificates
 

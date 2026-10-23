@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
+public import Proofs.Helpers.Coords
 import Proofs.Helpers.StepSpecs
 public section
 
@@ -31,11 +32,23 @@ noncomputable instance edwards.EdwardsPoint.«x86_64-tables».instPointRepr :
   toPoint := edwards.EdwardsPoint.«x86_64-tables».toPoint
   LimbsLt := edwards.EdwardsPoint.«x86_64-tables».LimbsLt
 
+noncomputable instance edwards.EdwardsPoint.«i686-tables».instPointRepr :
+    PointRepr edwards.EdwardsPoint.«i686-tables» where
+  OnCurve := edwards.EdwardsPoint.«i686-tables».OnCurve
+  toPoint := edwards.EdwardsPoint.«i686-tables».toPoint
+  LimbsLt := edwards.EdwardsPoint.«i686-tables».LimbsLt
+
 noncomputable instance edwards.EdwardsPoint.«x86_64-no-tables».instPointRepr :
     PointRepr edwards.EdwardsPoint.«x86_64-no-tables» where
   OnCurve := edwards.EdwardsPoint.«x86_64-no-tables».OnCurve
   toPoint := edwards.EdwardsPoint.«x86_64-no-tables».toPoint
   LimbsLt := edwards.EdwardsPoint.«x86_64-no-tables».LimbsLt
+
+noncomputable instance edwards.EdwardsPoint.«i686-no-tables».instPointRepr :
+    PointRepr edwards.EdwardsPoint.«i686-no-tables» where
+  OnCurve := edwards.EdwardsPoint.«i686-no-tables».OnCurve
+  toPoint := edwards.EdwardsPoint.«i686-no-tables».toPoint
+  LimbsLt := edwards.EdwardsPoint.«i686-no-tables».LimbsLt
 
 noncomputable instance CompletedPoint.«x86_64-tables».instPointRepr :
     PointRepr CompletedPoint.«x86_64-tables» where
@@ -43,11 +56,25 @@ noncomputable instance CompletedPoint.«x86_64-tables».instPointRepr :
   toPoint := CompletedPoint.«x86_64-tables».toPoint
   LimbsLt := CompletedPoint.«x86_64-tables».LimbsLt
 
+/-- The i686 completed points carry the input bound of `mul`, whatever `n`. -/
+noncomputable instance CompletedPoint.«i686-tables».instPointRepr :
+    PointRepr CompletedPoint.«i686-tables» where
+  OnCurve := CompletedPoint.«i686-tables».OnCurve
+  toPoint := CompletedPoint.«i686-tables».toPoint
+  LimbsLt := fun _ c => c.MulBounded
+
 noncomputable instance CompletedPoint.«x86_64-no-tables».instPointRepr :
     PointRepr CompletedPoint.«x86_64-no-tables» where
   OnCurve := CompletedPoint.«x86_64-no-tables».OnCurve
   toPoint := CompletedPoint.«x86_64-no-tables».toPoint
   LimbsLt := CompletedPoint.«x86_64-no-tables».LimbsLt
+
+/-- The i686 completed points carry the input bound of `mul`, whatever `n`. -/
+noncomputable instance CompletedPoint.«i686-no-tables».instPointRepr :
+    PointRepr CompletedPoint.«i686-no-tables» where
+  OnCurve := CompletedPoint.«i686-no-tables».OnCurve
+  toPoint := CompletedPoint.«i686-no-tables».toPoint
+  LimbsLt := fun _ c => c.MulBounded
 
 namespace window
 

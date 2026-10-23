@@ -31,6 +31,20 @@ theorem mul_assign_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (sca
 
 end ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignSharedAScalar
 
+namespace ristretto.RistrettoPoint.«i686-tables».Insts.CoreOpsArithMulAssignSharedAScalar
+
+/-- `MulAssign<&Scalar> for RistrettoPoint`: as `Mul`. -/
+@[step]
+theorem mul_assign_spec (self : ristretto.RistrettoPoint.«i686-tables») (scalar : scalar.Scalar)
+    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    mul_assign self scalar ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold mul_assign
+  step as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end ristretto.RistrettoPoint.«i686-tables».Insts.CoreOpsArithMulAssignSharedAScalar
+
 namespace ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignScalar
 
 /-- `MulAssign<Scalar> for RistrettoPoint`: as `Mul`. -/
@@ -44,6 +58,20 @@ theorem mul_assign_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (rhs
   exact ⟨h1, h2, h3⟩
 
 end ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignScalar
+
+namespace ristretto.RistrettoPoint.«i686-tables».Insts.CoreOpsArithMulAssignScalar
+
+/-- `MulAssign<Scalar> for RistrettoPoint`: as `Mul`. -/
+@[step]
+theorem mul_assign_spec (self : ristretto.RistrettoPoint.«i686-tables») (rhs : scalar.Scalar)
+    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    mul_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold mul_assign
+  step as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end ristretto.RistrettoPoint.«i686-tables».Insts.CoreOpsArithMulAssignScalar
 
 namespace ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignSharedAScalar
 
@@ -60,6 +88,21 @@ theorem mul_assign_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables»)
 
 end ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignSharedAScalar
 
+namespace ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreOpsArithMulAssignSharedAScalar
+
+/-- `MulAssign<&Scalar> for RistrettoPoint`: as `Mul`. -/
+@[step]
+theorem mul_assign_spec (self : ristretto.RistrettoPoint.«i686-no-tables»)
+    (scalar : scalar.Scalar)
+    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    mul_assign self scalar ⦃ (r : ristretto.RistrettoPoint.«i686-no-tables») =>
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold mul_assign
+  step as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreOpsArithMulAssignSharedAScalar
+
 namespace ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignScalar
 
 /-- `MulAssign<Scalar> for RistrettoPoint`: as `Mul`. -/
@@ -73,5 +116,19 @@ theorem mul_assign_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables») (
   exact ⟨h1, h2, h3⟩
 
 end ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignScalar
+
+namespace ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreOpsArithMulAssignScalar
+
+/-- `MulAssign<Scalar> for RistrettoPoint`: as `Mul`. -/
+@[step]
+theorem mul_assign_spec (self : ristretto.RistrettoPoint.«i686-no-tables») (rhs : scalar.Scalar)
+    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    mul_assign self rhs ⦃ (r : ristretto.RistrettoPoint.«i686-no-tables») =>
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold mul_assign
+  step as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreOpsArithMulAssignScalar
 
 end Curve25519Dalek

@@ -30,6 +30,22 @@ theorem variable_base_mul_spec (point : edwards.EdwardsPoint.«x86_64-tables»)
 
 end «x86_64-tables»
 
+namespace «i686-tables»
+
+/-- `variable_base_mul`: the serial `variable_base::mul`, `scalar • P` for
+`scalar.asNat < 2^255`; limbs `< 2^26`. -/
+@[step]
+theorem variable_base_mul_spec (point : edwards.EdwardsPoint.«i686-tables»)
+    (scalar : scalar.Scalar) (hpoint : point.LimbsLt 26) (hon : point.OnCurve)
+    (hscalar : scalar.asNat < 2 ^ 255) :
+    variable_base_mul.«i686-tables» point scalar
+      ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
+        r.OnCurve ∧ r.toPoint = scalar.asNat • point.toPoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold variable_base_mul.«i686-tables»
+  step*
+
+end «i686-tables»
+
 namespace «x86_64-no-tables»
 
 /-- `variable_base_mul`: the serial `variable_base::mul`, `scalar • P` for
@@ -45,5 +61,21 @@ theorem variable_base_mul_spec (point : edwards.EdwardsPoint.«x86_64-no-tables�
   step*
 
 end «x86_64-no-tables»
+
+namespace «i686-no-tables»
+
+/-- `variable_base_mul`: the serial `variable_base::mul`, `scalar • P` for
+`scalar.asNat < 2^255`; limbs `< 2^26`. -/
+@[step]
+theorem variable_base_mul_spec (point : edwards.EdwardsPoint.«i686-no-tables»)
+    (scalar : scalar.Scalar) (hpoint : point.LimbsLt 26) (hon : point.OnCurve)
+    (hscalar : scalar.asNat < 2 ^ 255) :
+    variable_base_mul.«i686-no-tables» point scalar
+      ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
+        r.OnCurve ∧ r.toPoint = scalar.asNat • point.toPoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold variable_base_mul.«i686-no-tables»
+  step*
+
+end «i686-no-tables»
 
 end Curve25519Dalek.backend

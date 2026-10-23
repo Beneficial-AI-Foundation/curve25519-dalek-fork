@@ -28,6 +28,21 @@ theorem is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-tables»)
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«x86_64-tables».Insts
 
+namespace Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«i686-tables».Insts
+namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
+
+/-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeEdwardsPrecomputation`: whether
+there are no static points. -/
+@[step]
+theorem is_empty_spec (self : VartimeEdwardsPrecomputation.«i686-tables»)
+    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
+    is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄ := by
+  unfold is_empty
+  exact backend.«VartimePrecomputedStrausi686-tables».is_empty_spec self ps hself
+
+end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
+end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«i686-tables».Insts
+
 namespace Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
 
@@ -42,3 +57,18 @@ theorem is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-no-tables»)
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts
+
+namespace Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«i686-no-tables».Insts
+namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»
+
+/-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeEdwardsPrecomputation`: whether
+there are no static points. -/
+@[step]
+theorem is_empty_spec (self : VartimeEdwardsPrecomputation.«i686-no-tables»)
+    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
+    is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄ := by
+  unfold is_empty
+  exact backend.«VartimePrecomputedStrausi686-no-tables».is_empty_spec self ps hself
+
+end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»
+end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«i686-no-tables».Insts

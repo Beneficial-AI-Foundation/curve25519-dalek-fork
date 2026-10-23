@@ -154,6 +154,98 @@ end «x86_64-tables»
 end
 
 section
+open «Shared0EdwardsPointi686-tables».Insts
+open «CoreOpsArithAddSharedAProjectiveNielsPointi686-tablesCompletedPointi686-tables»
+  (add_spec_point)
+open edwards.EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity
+  (identity_spec_point)
+
+namespace «i686-tables»
+
+open scoped Helpers.IndexStep in
+/-- The loop of `mul`: after the digits `d[e], …, d[62]`, the accumulator represents
+`digitSum d e • P`. -/
+@[local step]
+private theorem mul_loop_spec (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (lookup_table : window.LookupTable ProjectiveNielsPoint.«i686-tables»)
+    (scalar_digits : Array I8 64#usize) (tmp3 : edwards.EdwardsPoint.«i686-tables»)
+    (tmp1 : CompletedPoint.«i686-tables») (P : curve25519.edwards.Point)
+    (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 63)
+    (htab : lookup_table.LimbsLt 27) (hP : lookup_table.Represents P)
+    (hd : ∀ i < 64, -8 ≤ scalar_digits[i]!.val ∧ scalar_digits[i]!.val ≤ 8)
+    (hon : tmp1.OnCurve) (hb : tmp1.MulBounded)
+    (h1 : tmp1.toPoint = digitSum scalar_digits iter.iter.end.val • P) :
+    mul.«i686-tables_loop» iter lookup_table scalar_digits tmp3 tmp1
+      ⦃ (r : CompletedPoint.«i686-tables») =>
+        r.OnCurve ∧ r.toPoint = digitSum scalar_digits 0 • P ∧ r.MulBounded ⦄ := by
+  unfold mul.«i686-tables_loop»
+  apply loop.spec_decr_nat (measure := fun (it, _, _) => it.iter.end.val)
+    (inv := fun (it, _, t) => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 63 ∧ t.OnCurve ∧
+      t.MulBounded ∧ t.toPoint = digitSum scalar_digits it.iter.end.val • P)
+  · rintro ⟨it, t3, t⟩ ⟨hst, hen, hton, htb, htp⟩
+    unfold mul.«i686-tables_loop».body
+    by_cases hlt : 0 < it.iter.end.val
+    · step with core.iter.adapters.rev.Rev.next_Usize_some_spec
+        as ⟨o, it1, i, ho, hi, hstart1, hend1⟩
+      subst ho
+      step with «CompletedPointi686-tables».as_projective_spec_point as ⟨p1, hp1on, hp1, hp1b⟩
+      step with «ProjectivePointi686-tables».double_spec_point as ⟨c1, hc1on, hc1, hc1b⟩
+      step with «CompletedPointi686-tables».as_projective_spec_point as ⟨p2, hp2on, hp2, hp2b⟩
+      step with «ProjectivePointi686-tables».double_spec_point as ⟨c2, hc2on, hc2, hc2b⟩
+      step with «CompletedPointi686-tables».as_projective_spec_point as ⟨p3, hp3on, hp3, hp3b⟩
+      step with «ProjectivePointi686-tables».double_spec_point as ⟨c3, hc3on, hc3, hc3b⟩
+      step with «CompletedPointi686-tables».as_projective_spec_point as ⟨p4, hp4on, hp4, hp4b⟩
+      step with «ProjectivePointi686-tables».double_spec_point as ⟨c4, hc4on, hc4, hc4b⟩
+      step with «CompletedPointi686-tables».as_extended_spec_point as ⟨e, heon, he, heb⟩
+      step as ⟨di, hdi⟩
+      step with window.«LookupTableProjectiveNielsPointi686-tables».select_spec (P := P)
+        as ⟨q, hqon, hq, hqb⟩
+      step with add_spec_point as ⟨t', ht'on, ht', ht'b⟩
+      refine ⟨by rw [hstart1, hst], by scalar_tac, ht'on, ht'b, ?_, by scalar_tac⟩
+      rw [ht', he, hc4, hp4, hc3, hp3, hc2, hp2, hc1, hp1, htp, hq, hdi, horner_step, hend1, ← hi,
+        digitSum_eq _ i.val (by scalar_tac)]
+    · step with core.iter.adapters.rev.Rev.next_Usize_none_spec as ⟨o, it1, ho⟩
+      subst ho
+      simp only [WP.spec_ok]
+      rw [show it.iter.end.val = 0 by omega] at htp
+      exact ⟨hton, htp, htb⟩
+  · exact ⟨hstart, hend, hon, hb, h1⟩
+
+open scoped Helpers.IndexStep in
+/-- `variable_base::mul`: `s • P` for the unreduced value of `s` (`s.asNat < 2^255`, the
+precondition of `as_radix_16`); limbs `< 2^26`. -/
+@[step]
+theorem mul_spec (point : edwards.EdwardsPoint.«i686-tables») (s : scalar.Scalar)
+    (hpoint : point.LimbsLt 26) (hon : point.OnCurve) (hs : s.asNat < 2 ^ 255) :
+    mul.«i686-tables» point s ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
+      r.OnCurve ∧ r.toPoint = s.asNat • point.toPoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold mul.«i686-tables»
+  step as ⟨table, hrep, htab⟩
+  step as ⟨d, hval, hlow, h63l, h63u⟩
+  have hd : ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8 := fun i hi => by
+    rcases Nat.lt_or_ge i 63 with h | h
+    · exact ⟨(hlow i h).1, (hlow i h).2.le⟩
+    · rw [show i = 63 by omega]; exact ⟨h63l, h63u⟩
+  step with identity_spec_point as ⟨t3, ht3on, ht3, ht3b⟩
+  step as ⟨d63, hd63⟩
+  step with window.«LookupTableProjectiveNielsPointi686-tables».select_spec (P := point.toPoint)
+    as ⟨q, hqon, hq, hqb⟩
+  step with add_spec_point as ⟨t1, ht1on, ht1, ht1b⟩
+  step as ⟨iter, hiter⟩
+  have h1 : t1.toPoint = digitSum d iter.iter.end.val • point.toPoint := by
+    rw [ht1, ht3, hq, hd63, zero_add, hiter]
+    exact congrArg (· • point.toPoint) (digitSum_sixtyThree d).symm
+  step with mul_loop_spec iter table d t3 t1 point.toPoint (by rw [hiter]; rfl)
+    (by rw [hiter]; decide) htab hrep hd ht1on ht1b h1 as ⟨t, hton, htp, htb⟩
+  step with «CompletedPointi686-tables».as_extended_spec_point as ⟨r, hron, hr, hrb⟩
+  refine ⟨hron, ?_, hrb⟩
+  rw [hr, htp, digitSum_zero, hval, natCast_zsmul]
+
+end «i686-tables»
+
+end
+
+section
 open «Shared0EdwardsPointx86_64-no-tables».Insts
 open «CoreOpsArithAddSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables»
   (add_spec_point)
@@ -242,6 +334,98 @@ theorem mul_spec (point : edwards.EdwardsPoint.«x86_64-no-tables») (s : scalar
   rw [hr, htp, digitSum_zero, hval, natCast_zsmul]
 
 end «x86_64-no-tables»
+
+end
+
+section
+open «Shared0EdwardsPointi686-no-tables».Insts
+open «CoreOpsArithAddSharedAProjectiveNielsPointi686-no-tablesCompletedPointi686-no-tables»
+  (add_spec_point)
+open edwards.EdwardsPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity
+  (identity_spec_point)
+
+namespace «i686-no-tables»
+
+open scoped Helpers.IndexStep in
+/-- The loop of `mul`: after the digits `d[e], …, d[62]`, the accumulator represents
+`digitSum d e • P`. -/
+@[local step]
+private theorem mul_loop_spec (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (lookup_table : window.LookupTable ProjectiveNielsPoint.«i686-no-tables»)
+    (scalar_digits : Array I8 64#usize) (tmp3 : edwards.EdwardsPoint.«i686-no-tables»)
+    (tmp1 : CompletedPoint.«i686-no-tables») (P : curve25519.edwards.Point)
+    (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 63)
+    (htab : lookup_table.LimbsLt 27) (hP : lookup_table.Represents P)
+    (hd : ∀ i < 64, -8 ≤ scalar_digits[i]!.val ∧ scalar_digits[i]!.val ≤ 8)
+    (hon : tmp1.OnCurve) (hb : tmp1.MulBounded)
+    (h1 : tmp1.toPoint = digitSum scalar_digits iter.iter.end.val • P) :
+    mul.«i686-no-tables_loop» iter lookup_table scalar_digits tmp3 tmp1
+      ⦃ (r : CompletedPoint.«i686-no-tables») =>
+        r.OnCurve ∧ r.toPoint = digitSum scalar_digits 0 • P ∧ r.MulBounded ⦄ := by
+  unfold mul.«i686-no-tables_loop»
+  apply loop.spec_decr_nat (measure := fun (it, _, _) => it.iter.end.val)
+    (inv := fun (it, _, t) => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 63 ∧ t.OnCurve ∧
+      t.MulBounded ∧ t.toPoint = digitSum scalar_digits it.iter.end.val • P)
+  · rintro ⟨it, t3, t⟩ ⟨hst, hen, hton, htb, htp⟩
+    unfold mul.«i686-no-tables_loop».body
+    by_cases hlt : 0 < it.iter.end.val
+    · step with core.iter.adapters.rev.Rev.next_Usize_some_spec
+        as ⟨o, it1, i, ho, hi, hstart1, hend1⟩
+      subst ho
+      step with «CompletedPointi686-no-tables».as_projective_spec_point as ⟨p1, hp1on, hp1, hp1b⟩
+      step with «ProjectivePointi686-no-tables».double_spec_point as ⟨c1, hc1on, hc1, hc1b⟩
+      step with «CompletedPointi686-no-tables».as_projective_spec_point as ⟨p2, hp2on, hp2, hp2b⟩
+      step with «ProjectivePointi686-no-tables».double_spec_point as ⟨c2, hc2on, hc2, hc2b⟩
+      step with «CompletedPointi686-no-tables».as_projective_spec_point as ⟨p3, hp3on, hp3, hp3b⟩
+      step with «ProjectivePointi686-no-tables».double_spec_point as ⟨c3, hc3on, hc3, hc3b⟩
+      step with «CompletedPointi686-no-tables».as_projective_spec_point as ⟨p4, hp4on, hp4, hp4b⟩
+      step with «ProjectivePointi686-no-tables».double_spec_point as ⟨c4, hc4on, hc4, hc4b⟩
+      step with «CompletedPointi686-no-tables».as_extended_spec_point as ⟨e, heon, he, heb⟩
+      step as ⟨di, hdi⟩
+      step with window.«LookupTableProjectiveNielsPointi686-no-tables».select_spec (P := P)
+        as ⟨q, hqon, hq, hqb⟩
+      step with add_spec_point as ⟨t', ht'on, ht', ht'b⟩
+      refine ⟨by rw [hstart1, hst], by scalar_tac, ht'on, ht'b, ?_, by scalar_tac⟩
+      rw [ht', he, hc4, hp4, hc3, hp3, hc2, hp2, hc1, hp1, htp, hq, hdi, horner_step, hend1, ← hi,
+        digitSum_eq _ i.val (by scalar_tac)]
+    · step with core.iter.adapters.rev.Rev.next_Usize_none_spec as ⟨o, it1, ho⟩
+      subst ho
+      simp only [WP.spec_ok]
+      rw [show it.iter.end.val = 0 by omega] at htp
+      exact ⟨hton, htp, htb⟩
+  · exact ⟨hstart, hend, hon, hb, h1⟩
+
+open scoped Helpers.IndexStep in
+/-- `variable_base::mul`: `s • P` for the unreduced value of `s` (`s.asNat < 2^255`, the
+precondition of `as_radix_16`); limbs `< 2^26`. -/
+@[step]
+theorem mul_spec (point : edwards.EdwardsPoint.«i686-no-tables») (s : scalar.Scalar)
+    (hpoint : point.LimbsLt 26) (hon : point.OnCurve) (hs : s.asNat < 2 ^ 255) :
+    mul.«i686-no-tables» point s ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
+      r.OnCurve ∧ r.toPoint = s.asNat • point.toPoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold mul.«i686-no-tables»
+  step as ⟨table, hrep, htab⟩
+  step as ⟨d, hval, hlow, h63l, h63u⟩
+  have hd : ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8 := fun i hi => by
+    rcases Nat.lt_or_ge i 63 with h | h
+    · exact ⟨(hlow i h).1, (hlow i h).2.le⟩
+    · rw [show i = 63 by omega]; exact ⟨h63l, h63u⟩
+  step with identity_spec_point as ⟨t3, ht3on, ht3, ht3b⟩
+  step as ⟨d63, hd63⟩
+  step with window.«LookupTableProjectiveNielsPointi686-no-tables».select_spec
+    (P := point.toPoint) as ⟨q, hqon, hq, hqb⟩
+  step with add_spec_point as ⟨t1, ht1on, ht1, ht1b⟩
+  step as ⟨iter, hiter⟩
+  have h1 : t1.toPoint = digitSum d iter.iter.end.val • point.toPoint := by
+    rw [ht1, ht3, hq, hd63, zero_add, hiter]
+    exact congrArg (· • point.toPoint) (digitSum_sixtyThree d).symm
+  step with mul_loop_spec iter table d t3 t1 point.toPoint (by rw [hiter]; rfl)
+    (by rw [hiter]; decide) htab hrep hd ht1on ht1b h1 as ⟨t, hton, htp, htb⟩
+  step with «CompletedPointi686-no-tables».as_extended_spec_point as ⟨r, hron, hr, hrb⟩
+  refine ⟨hron, ?_, hrb⟩
+  rw [hr, htp, digitSum_zero, hval, natCast_zsmul]
+
+end «i686-no-tables»
 
 end
 

@@ -4,14 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.FieldElement2625
 public import Defs.FieldElement51
 import Proofs.Backend.Serial.U64.Field.One
 import Proofs.Field.InternalInvertBatch
+import Proofs.Backend.Serial.U32.Field.One
 public import Curve25519.Basic
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
+open Curve25519Dalek.backend.serial.u32.field (FieldElement2625)
 
 namespace Curve25519Dalek.field.FieldElement51
 
@@ -36,3 +39,27 @@ theorem invert_batch_alloc_spec (inputs : Slice FieldElement51)
   exact ⟨hrlen, hr⟩
 
 end Curve25519Dalek.field.FieldElement51
+
+namespace Curve25519Dalek.field.FieldElement2625
+
+@[step]
+theorem invert_batch_alloc_spec (inputs : Slice FieldElement2625)
+    (hinputs : ∀ i < inputs.length, (inputs[i]!).LimbsLt 27) :
+    invert_batch_alloc inputs ⦃ (r : Slice FieldElement2625) =>
+      r.length = inputs.length ∧
+      ∀ i < inputs.length,
+        (inputs[i]!.asNat % p = 0 → r[i]! = inputs[i]!) ∧
+        (inputs[i]!.asNat % p ≠ 0 → r[i]!.asNat * inputs[i]!.asNat % p = 1 ∧
+          (r[i]!).LimbsLt 26) ⦄ := by
+  unfold invert_batch_alloc
+  step as ⟨one, hone, honeb⟩
+  step with alloc.vec.from_elem_spec
+    backend.serial.u32.field.FieldElement2625.Insts.CoreCloneClone one inputs.len rfl
+    as ⟨scratch, hsc, hsclen⟩
+  simp only [alloc.vec.Vec.deref_mut, lift]
+  have hslen : scratch.slice.length = inputs.length := by
+    rw [show scratch.slice.length = scratch.length from rfl, hsclen, Slice.len_val]
+  step as ⟨r, scratch', hrlen, hr⟩
+  exact ⟨hrlen, hr⟩
+
+end Curve25519Dalek.field.FieldElement2625

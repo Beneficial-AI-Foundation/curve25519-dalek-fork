@@ -54,6 +54,35 @@ end «LookupTableRadix32ProjectiveNielsPointx86_64-tables»
 end
 
 section
+open ProjectiveNielsPoint.«i686-tables».Insts
+open «Shared0ProjectiveNielsPointi686-tables».Insts
+
+namespace «LookupTableRadix32ProjectiveNielsPointi686-tables»
+
+/-- `LookupTableRadix32::select` on projective Niels points: a representative of `x • P`, for
+`-16 ≤ x ≤ 16`; limbs `< 2^27`. -/
+@[step]
+theorem select_spec (self : LookupTableRadix32 ProjectiveNielsPoint.«i686-tables») (x : I8)
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P)
+    (hx : -16 ≤ x.val ∧ x.val ≤ 16) :
+    LookupTableRadix32.select Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
+      (subtle.ConditionallyNegatable.Blanket SubtleConditionallySelectable
+        «CoreOpsArithNegProjectiveNielsPointi686-tables»)
+      self x ⦃ (r : ProjectiveNielsPoint.«i686-tables») =>
+        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.LimbsLt 27 ⦄ :=
+  window.select_spec (-16)#i8 16#i16 17#usize (by decide) (by decide) (by decide) (by decide)
+    Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
+    «CoreOpsArithNegProjectiveNielsPointi686-tables»
+    Curve25519_dalekTraitsIdentity.identity_spec_point
+    SubtleConditionallySelectable.conditional_assign_spec
+    «CoreOpsArithNegProjectiveNielsPointi686-tables».neg_spec_point
+    self P hself hP x hx
+
+end «LookupTableRadix32ProjectiveNielsPointi686-tables»
+
+end
+
+section
 open AffineNielsPoint.«x86_64-tables».Insts
 open «Shared0AffineNielsPointx86_64-tables».Insts
 
@@ -79,6 +108,35 @@ theorem select_spec (self : LookupTableRadix32 AffineNielsPoint.«x86_64-tables�
     self P hself hP x hx
 
 end «LookupTableRadix32AffineNielsPointx86_64-tables»
+
+end
+
+section
+open AffineNielsPoint.«i686-tables».Insts
+open «Shared0AffineNielsPointi686-tables».Insts
+
+namespace «LookupTableRadix32AffineNielsPointi686-tables»
+
+/-- `LookupTableRadix32::select` on affine Niels points: a representative of `x • P`, for
+`-16 ≤ x ≤ 16`; limbs `< 2^27`. -/
+@[step]
+theorem select_spec (self : LookupTableRadix32 AffineNielsPoint.«i686-tables») (x : I8)
+    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P)
+    (hx : -16 ≤ x.val ∧ x.val ≤ 16) :
+    LookupTableRadix32.select Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
+      (subtle.ConditionallyNegatable.Blanket SubtleConditionallySelectable
+        «CoreOpsArithNegAffineNielsPointi686-tables»)
+      self x ⦃ (r : AffineNielsPoint.«i686-tables») =>
+        r.OnCurve ∧ r.toPoint = x.val • P ∧ r.LimbsLt 27 ⦄ :=
+  window.select_spec (-16)#i8 16#i16 17#usize (by decide) (by decide) (by decide) (by decide)
+    Curve25519_dalekTraitsIdentity SubtleConditionallySelectable
+    «CoreOpsArithNegAffineNielsPointi686-tables»
+    Curve25519_dalekTraitsIdentity.identity_spec_point
+    SubtleConditionallySelectable.conditional_assign_spec
+    «CoreOpsArithNegAffineNielsPointi686-tables».neg_spec_point
+    self P hself hP x hx
+
+end «LookupTableRadix32AffineNielsPointi686-tables»
 
 end
 

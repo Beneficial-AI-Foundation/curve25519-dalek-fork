@@ -21,17 +21,21 @@ import Proofs.Constants.Ed25519BasepointCompressed
 import Proofs.Constants.RistrettoBasepoint
 import Proofs.Constants.X25519Basepoint
 import Proofs.Constants.X25519LowOrderPoints
+import Proofs.Backend.Serial.U32.Constants.Ed25519BasepointPoint
+import Proofs.Backend.Serial.U32.Constants.Ed25519BasepointTable
+import Proofs.Backend.Serial.U32.Constants.EightTorsion
 public section
 
 /-! # Specs of `src/constants.rs`
 
 Spec summary: the public point constants of `constants.rs` with their spec statements, restated
 with `recall` from the theorems proved in `Proofs/`, and the axioms they depend on. Items appear
-in the order of `constants.rs`, starting with the constants it re-exports from the 64-bit backend
-(`backend/serial/u64/constants.rs`); those are per-configuration, so each has two statements.
+in the order of `constants.rs`, starting with the constants it re-exports from the backend
+(`backend/serial/u64/constants.rs`, `backend/serial/u32/constants.rs`); those are
+per-configuration, so each has four statements.
 
-The tables `ED25519_BASEPOINT_TABLE` and `RISTRETTO_BASEPOINT_TABLE` exist only with
-precomputed tables (`x86_64-tables`). Not restated here: `BASEPOINT_ORDER` (`pub(crate)`, proved
+The tables `ED25519_BASEPOINT_TABLE` and `RISTRETTO_BASEPOINT_TABLE` exist only with precomputed
+tables (`x86_64-tables`, `i686-tables`). Not restated here: `BASEPOINT_ORDER` (`pub(crate)`, proved
 in `Proofs/Constants/BasepointOrder.lean`).
 
 Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `LimbsLt`, `CompressedEdwardsY.asNat`
@@ -58,7 +62,24 @@ recall ED25519_BASEPOINT_POINT_spec_point :
 #print axioms ED25519_BASEPOINT_POINT_spec_point
 
 end «x86_64-tables»
+
 end Curve25519Dalek.backend.serial.u64.constants
+
+namespace Curve25519Dalek.backend.serial.u32.constants
+namespace «i686-tables»
+
+/-- `ED25519_BASEPOINT_POINT` represents the basepoint. -/
+recall ED25519_BASEPOINT_POINT_spec_point :
+    ED25519_BASEPOINT_POINT.«i686-tables» ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
+      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms ED25519_BASEPOINT_POINT_spec_point
+
+end «i686-tables»
+end Curve25519Dalek.backend.serial.u32.constants
+
 
 namespace Curve25519Dalek.backend.serial.u64.constants
 namespace «x86_64-no-tables»
@@ -73,7 +94,24 @@ recall ED25519_BASEPOINT_POINT_spec_point :
 #print axioms ED25519_BASEPOINT_POINT_spec_point
 
 end «x86_64-no-tables»
+
 end Curve25519Dalek.backend.serial.u64.constants
+
+namespace Curve25519Dalek.backend.serial.u32.constants
+namespace «i686-no-tables»
+
+/-- `ED25519_BASEPOINT_POINT` represents the basepoint. -/
+recall ED25519_BASEPOINT_POINT_spec_point :
+    ED25519_BASEPOINT_POINT.«i686-no-tables» ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
+      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms ED25519_BASEPOINT_POINT_spec_point
+
+end «i686-no-tables»
+end Curve25519Dalek.backend.serial.u32.constants
+
 
 namespace Curve25519Dalek.backend.serial.u64.constants
 namespace «x86_64-tables»
@@ -88,7 +126,24 @@ recall EIGHT_TORSION_spec_point :
 #guard_msgs (whitespace := lax, substring := true) in #print axioms EIGHT_TORSION_spec_point
 
 end «x86_64-tables»
+
 end Curve25519Dalek.backend.serial.u64.constants
+
+namespace Curve25519Dalek.backend.serial.u32.constants
+namespace «i686-tables»
+
+/-- `EIGHT_TORSION`: entry `i` represents `eightTorsion i = i • torsion8`. -/
+recall EIGHT_TORSION_spec_point :
+    EIGHT_TORSION.«i686-tables»
+      ⦃ (r : Array edwards.EdwardsPoint.«i686-tables» 8#usize) =>
+      ∀ i : Fin 8, r[i.val]!.OnCurve ∧ r[i.val]!.toPoint = eightTorsion i ∧ r[i.val]!.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms EIGHT_TORSION_spec_point
+
+end «i686-tables»
+end Curve25519Dalek.backend.serial.u32.constants
+
 
 namespace Curve25519Dalek.backend.serial.u64.constants
 namespace «x86_64-no-tables»
@@ -103,7 +158,24 @@ recall EIGHT_TORSION_spec_point :
 #guard_msgs (whitespace := lax, substring := true) in #print axioms EIGHT_TORSION_spec_point
 
 end «x86_64-no-tables»
+
 end Curve25519Dalek.backend.serial.u64.constants
+
+namespace Curve25519Dalek.backend.serial.u32.constants
+namespace «i686-no-tables»
+
+/-- `EIGHT_TORSION`: entry `i` represents `eightTorsion i = i • torsion8`. -/
+recall EIGHT_TORSION_spec_point :
+    EIGHT_TORSION.«i686-no-tables»
+      ⦃ (r : Array edwards.EdwardsPoint.«i686-no-tables» 8#usize) =>
+      ∀ i : Fin 8, r[i.val]!.OnCurve ∧ r[i.val]!.toPoint = eightTorsion i ∧ r[i.val]!.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms EIGHT_TORSION_spec_point
+
+end «i686-no-tables»
+end Curve25519Dalek.backend.serial.u32.constants
+
 
 namespace Curve25519Dalek.backend.serial.u64.constants
 
@@ -163,6 +235,18 @@ recall RISTRETTO_BASEPOINT_POINT_spec :
 
 end «x86_64-tables»
 
+namespace «i686-tables»
+
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^26`. -/
+recall RISTRETTO_BASEPOINT_POINT_spec :
+    RISTRETTO_BASEPOINT_POINT.«i686-tables» ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
+      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_POINT_spec
+
+end «i686-tables»
+
 namespace «x86_64-no-tables»
 
 /-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^52`. -/
@@ -176,6 +260,19 @@ recall RISTRETTO_BASEPOINT_POINT_spec :
 
 end «x86_64-no-tables»
 
+namespace «i686-no-tables»
+
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^26`. -/
+recall RISTRETTO_BASEPOINT_POINT_spec :
+    RISTRETTO_BASEPOINT_POINT.«i686-no-tables»
+      ⦃ (r : ristretto.RistrettoPoint.«i686-no-tables») =>
+        r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_POINT_spec
+
+end «i686-no-tables»
+
 namespace «x86_64-tables»
 
 /-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^54`. -/
@@ -188,6 +285,19 @@ recall RISTRETTO_BASEPOINT_TABLE_spec :
 #guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_TABLE_spec
 
 end «x86_64-tables»
+
+namespace «i686-tables»
+
+/-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^27`. -/
+recall RISTRETTO_BASEPOINT_TABLE_spec :
+    RISTRETTO_BASEPOINT_TABLE.«i686-tables»
+      ⦃ (r : ristretto.RistrettoBasepointTable.«i686-tables») =>
+        r.Represents basepoint ∧ r.LimbsLt 27 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_TABLE_spec
+
+end «i686-tables»
 
 /-- `X25519_LOW_ORDER_POINTS`: X25519 sends each of the seven points to `0`, whatever the
 scalar ("The output of any scalar multiplied by these points is zero"; true for clamped

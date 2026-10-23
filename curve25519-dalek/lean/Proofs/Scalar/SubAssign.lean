@@ -6,7 +6,6 @@ module
 public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar
-public import Defs.Target
 import Proofs.Scalar.Sub
 public section
 

@@ -6,7 +6,6 @@ module
 public import Curve25519.X25519
 public import Curve25519Dalek.Funs
 public import Defs.Montgomery
-public import Defs.Target
 import Proofs.Montgomery.CtEq
 public section
 
@@ -20,10 +19,10 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreCmpPartialEqMontg
 
 /-- `PartialEq for MontgomeryPoint`: equality of the encoded `u`-coordinates (x86_64 targets). -/
 @[step]
-theorem eq_spec (self other : MontgomeryPoint) (htgt : OnX86_64) :
+theorem eq_spec (self other : MontgomeryPoint) :
     eq self other ⦃ (b : Bool) => b = true ↔ self.u = other.u ⦄ := by
   unfold eq
-  step with SubtleConstantTimeEq.ct_eq_spec self other htgt as ⟨c, hcv, hc⟩
+  step with SubtleConstantTimeEq.ct_eq_spec self other as ⟨c, hcv, hc⟩
   step as ⟨b, hb⟩
   rw [hb, ← hc]
   rcases hcv with rfl | rfl <;> decide

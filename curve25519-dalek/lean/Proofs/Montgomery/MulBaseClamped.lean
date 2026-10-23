@@ -6,7 +6,6 @@ module
 public import Curve25519.Montgomery
 public import Curve25519Dalek.Funs
 public import Defs.Montgomery
-public import Defs.Target
 import Proofs.Montgomery.MulBase
 import Proofs.Scalar.ClampInteger
 public section
@@ -23,7 +22,7 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint
 
 /-- `MontgomeryPoint::mul_base_clamped`: RFC 7748 `X25519(bytes, 9)`. -/
 @[step]
-theorem mul_base_clamped_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
+theorem mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : MontgomeryPoint) =>
       r.asNat = x25519 (bytes.asNat 8) 9 ⦄ := by
   unfold mul_base_clamped
@@ -33,7 +32,7 @@ theorem mul_base_clamped_spec (bytes : Array U8 32#usize) (htgt : OnX86_64) :
     rw [scalar.Scalar.asNat_def]
     change a.asNat 8 = _
     omega
-  step with mul_base_spec { bytes := a } (hca ▸ clamp_lt _) htgt as ⟨r, hr⟩
+  step with mul_base_spec { bytes := a } (hca ▸ clamp_lt _) as ⟨r, hr⟩
   rw [hr, hca, x25519_basepoint]
 
 end Curve25519Dalek.montgomery.MontgomeryPoint

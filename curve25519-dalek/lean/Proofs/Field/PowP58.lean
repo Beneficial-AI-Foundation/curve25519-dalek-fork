@@ -5,15 +5,19 @@ Authors: Markus Dablander, Hoang Le Truong
 -/
 module
 public import Curve25519Dalek.Funs
+public import Defs.FieldElement2625
 public import Defs.FieldElement51
 import Proofs.Backend.Serial.U64.Field.Mul
 import Proofs.Backend.Serial.U64.Field.Pow2k
 import Proofs.Field.Pow22501
+import Proofs.Backend.Serial.U32.Field.Mul
+import Proofs.Backend.Serial.U32.Field.Pow2k
 public import Curve25519.Basic
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
+open Curve25519Dalek.backend.serial.u32.field (FieldElement2625)
 
 namespace Curve25519Dalek.field.FieldElement51
 
@@ -41,3 +45,30 @@ theorem pow_p58_spec (self : FieldElement51) (hself : self.LimbsLt 54) :
   rwa [← pow_mul, ← pow_succ', two_pow_sub_one_mul_four_add_one 250 252 rfl] at h
 
 end Curve25519Dalek.field.FieldElement51
+
+namespace Curve25519Dalek.field.FieldElement2625
+
+private theorem two_pow_sub_one_mul_four_add_one (a c : ℕ) (hc : a + 2 = c) :
+    (2 ^ a - 1) * 2 ^ 2 + 1 = 2 ^ c - 3 := by
+  subst hc
+  have ha : 1 ≤ 2 ^ a := Nat.one_le_two_pow
+  have hc : 3 ≤ 2 ^ (a + 2) := by rw [pow_add]; omega
+  zify [ha, hc]
+  ring
+
+@[step]
+theorem pow_p58_spec (self : FieldElement2625) (hself : self.LimbsLt 27) :
+    pow_p58 self ⦃ (r : FieldElement2625) =>
+      r.asNat % p = self.asNat ^ (2 ^ 252 - 3) % p ∧ r.LimbsLt 26 ⦄ := by
+  unfold pow_p58
+  step as ⟨t19, t3, h19, h3, h19b, h3b⟩
+  generalize hn : 2 ^ 250 - 1 = n at h19
+  step as ⟨t20, h20, h20b⟩
+  step as ⟨r, hr, hrb⟩
+  refine ⟨?_, hrb⟩
+  subst hn
+  have h : r.asNat ≡ self.asNat * (self.asNat ^ (2 ^ 250 - 1)) ^ 2 ^ 2 [MOD p] :=
+    Nat.ModEq.trans hr (Nat.ModEq.mul_left _ (Nat.ModEq.trans h20 (Nat.ModEq.pow _ h19)))
+  rwa [← pow_mul, ← pow_succ', two_pow_sub_one_mul_four_add_one 250 252 rfl] at h
+
+end Curve25519Dalek.field.FieldElement2625

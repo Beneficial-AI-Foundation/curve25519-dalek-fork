@@ -7,7 +7,6 @@ public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar
 public import Defs.Scalar29
-public import Defs.Target
 import Proofs.Backend.Serial.U64.Scalar.ConditionalAddL
 import Proofs.Backend.Serial.U64.Scalar.Shr1Assign
 import Proofs.Helpers.AsNat

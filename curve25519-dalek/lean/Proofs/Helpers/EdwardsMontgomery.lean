@@ -31,12 +31,28 @@ theorem EdwardsPoint.«x86_64-tables».u_edwardsToMontgomery {self : EdwardsPoin
   rw [curve25519.u_edwardsToMontgomery, EdwardsPoint.«x86_64-tables».toPoint_y hon,
     div_eq_one_add_div_one_sub hZ]
 
+theorem EdwardsPoint.«i686-tables».u_edwardsToMontgomery {self : EdwardsPoint.«i686-tables»}
+    (hon : self.OnCurve) :
+    (edwardsToMontgomery self.toPoint).u =
+      (self.Z.toField + self.Y.toField) / (self.Z.toField - self.Y.toField) := by
+  obtain ⟨hZ, -, -⟩ := (EdwardsPoint.«i686-tables».onCurve_iff_equation self).mp hon
+  rw [curve25519.u_edwardsToMontgomery, EdwardsPoint.«i686-tables».toPoint_y hon,
+    div_eq_one_add_div_one_sub hZ]
+
 theorem EdwardsPoint.«x86_64-no-tables».u_edwardsToMontgomery
     {self : EdwardsPoint.«x86_64-no-tables»} (hon : self.OnCurve) :
     (edwardsToMontgomery self.toPoint).u =
       (self.Z.toField + self.Y.toField) / (self.Z.toField - self.Y.toField) := by
   obtain ⟨hZ, -, -⟩ := (EdwardsPoint.«x86_64-no-tables».onCurve_iff_equation self).mp hon
   rw [curve25519.u_edwardsToMontgomery, EdwardsPoint.«x86_64-no-tables».toPoint_y hon,
+    div_eq_one_add_div_one_sub hZ]
+
+theorem EdwardsPoint.«i686-no-tables».u_edwardsToMontgomery
+    {self : EdwardsPoint.«i686-no-tables»} (hon : self.OnCurve) :
+    (edwardsToMontgomery self.toPoint).u =
+      (self.Z.toField + self.Y.toField) / (self.Z.toField - self.Y.toField) := by
+  obtain ⟨hZ, -, -⟩ := (EdwardsPoint.«i686-no-tables».onCurve_iff_equation self).mp hon
+  rw [curve25519.u_edwardsToMontgomery, EdwardsPoint.«i686-no-tables».toPoint_y hon,
     div_eq_one_add_div_one_sub hZ]
 
 end Curve25519Dalek.edwards

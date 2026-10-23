@@ -9,6 +9,8 @@ public import Defs.Edwards
 public import Defs.Ristretto
 import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointPoint
 import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointTable
+import Proofs.Backend.Serial.U32.Constants.Ed25519BasepointPoint
+import Proofs.Backend.Serial.U32.Constants.Ed25519BasepointTable
 public section
 
 /-! # The Ristretto basepoint constants
@@ -53,6 +55,30 @@ theorem RISTRETTO_BASEPOINT_TABLE_spec :
 
 end «x86_64-tables»
 
+namespace «i686-tables»
+
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^26`. -/
+@[step]
+theorem RISTRETTO_BASEPOINT_POINT_spec :
+    RISTRETTO_BASEPOINT_POINT.«i686-tables» ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
+      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold RISTRETTO_BASEPOINT_POINT.«i686-tables»
+  step with backend.serial.u32.constants.«i686-tables».ED25519_BASEPOINT_POINT_spec_point
+    as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+/-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^27`. -/
+@[step]
+theorem RISTRETTO_BASEPOINT_TABLE_spec :
+    RISTRETTO_BASEPOINT_TABLE.«i686-tables»
+      ⦃ (r : ristretto.RistrettoBasepointTable.«i686-tables») =>
+        r.Represents basepoint ∧ r.LimbsLt 27 ⦄ := by
+  unfold RISTRETTO_BASEPOINT_TABLE.«i686-tables»
+  step with backend.serial.u32.constants.ED25519_BASEPOINT_TABLE_spec as ⟨r, h1, h2⟩
+  exact ⟨h1, h2⟩
+
+end «i686-tables»
+
 namespace «x86_64-no-tables»
 
 /-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^52`. -/
@@ -67,5 +93,20 @@ theorem RISTRETTO_BASEPOINT_POINT_spec :
   exact ⟨h1, h2, h3⟩
 
 end «x86_64-no-tables»
+
+namespace «i686-no-tables»
+
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^26`. -/
+@[step]
+theorem RISTRETTO_BASEPOINT_POINT_spec :
+    RISTRETTO_BASEPOINT_POINT.«i686-no-tables»
+      ⦃ (r : ristretto.RistrettoPoint.«i686-no-tables») =>
+        r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 26 ⦄ := by
+  unfold RISTRETTO_BASEPOINT_POINT.«i686-no-tables»
+  step with backend.serial.u32.constants.«i686-no-tables».ED25519_BASEPOINT_POINT_spec_point
+    as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
+
+end «i686-no-tables»
 
 end Curve25519Dalek.constants

@@ -7,7 +7,6 @@ public import Curve25519.Basic
 public import Curve25519Dalek.Funs
 public import Defs.Scalar
 public import Defs.Scalar29
-public import Defs.Target
 import Proofs.Backend.Serial.U64.Scalar.AsMontgomery
 import Proofs.Helpers.Target
 import Proofs.Scalar.InvertBatchInternal

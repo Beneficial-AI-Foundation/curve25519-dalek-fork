@@ -11,7 +11,6 @@ public import Defs.Scalar
 public import Defs.Scalar29
 public import Defs.Scalar52
 public import Defs.ScalarMul
-public import Defs.Target
 public import Defs.Window
 
 /-! # Definitions for the specs of curve25519-dalek

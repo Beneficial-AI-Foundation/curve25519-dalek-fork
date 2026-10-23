@@ -11,7 +11,7 @@ public section
 A table is an array of Niels points (`LookupTable T = Array T 8`, `LookupTableRadix32/64/128/256
 T = Array T 16/32/64/128`, `NafLookupTable5 T = Array T 8`, `NafLookupTable8 T = Array T 64`),
 generic in the entry type `T`. The entry types are the four Niels structures of `Defs.CurveModels`
-(`ProjectiveNielsPoint`, `AffineNielsPoint`, in both x86_64 configurations); the class
+(`ProjectiveNielsPoint`, `AffineNielsPoint`, in all four configurations); the class
 `PointRepr` collects their `OnCurve`, `toPoint` and `LimbsLt`, so that each table predicate is
 stated once:
 
@@ -48,11 +48,23 @@ noncomputable instance ProjectiveNielsPoint.«x86_64-tables».instPointRepr :
   toPoint := ProjectiveNielsPoint.«x86_64-tables».toPoint
   LimbsLt := ProjectiveNielsPoint.«x86_64-tables».LimbsLt
 
+noncomputable instance ProjectiveNielsPoint.«i686-tables».instPointRepr :
+    PointRepr ProjectiveNielsPoint.«i686-tables» where
+  OnCurve := ProjectiveNielsPoint.«i686-tables».OnCurve
+  toPoint := ProjectiveNielsPoint.«i686-tables».toPoint
+  LimbsLt := ProjectiveNielsPoint.«i686-tables».LimbsLt
+
 noncomputable instance ProjectiveNielsPoint.«x86_64-no-tables».instPointRepr :
     PointRepr ProjectiveNielsPoint.«x86_64-no-tables» where
   OnCurve := ProjectiveNielsPoint.«x86_64-no-tables».OnCurve
   toPoint := ProjectiveNielsPoint.«x86_64-no-tables».toPoint
   LimbsLt := ProjectiveNielsPoint.«x86_64-no-tables».LimbsLt
+
+noncomputable instance ProjectiveNielsPoint.«i686-no-tables».instPointRepr :
+    PointRepr ProjectiveNielsPoint.«i686-no-tables» where
+  OnCurve := ProjectiveNielsPoint.«i686-no-tables».OnCurve
+  toPoint := ProjectiveNielsPoint.«i686-no-tables».toPoint
+  LimbsLt := ProjectiveNielsPoint.«i686-no-tables».LimbsLt
 
 noncomputable instance AffineNielsPoint.«x86_64-tables».instPointRepr :
     PointRepr AffineNielsPoint.«x86_64-tables» where
@@ -60,11 +72,23 @@ noncomputable instance AffineNielsPoint.«x86_64-tables».instPointRepr :
   toPoint := AffineNielsPoint.«x86_64-tables».toPoint
   LimbsLt := AffineNielsPoint.«x86_64-tables».LimbsLt
 
+noncomputable instance AffineNielsPoint.«i686-tables».instPointRepr :
+    PointRepr AffineNielsPoint.«i686-tables» where
+  OnCurve := AffineNielsPoint.«i686-tables».OnCurve
+  toPoint := AffineNielsPoint.«i686-tables».toPoint
+  LimbsLt := AffineNielsPoint.«i686-tables».LimbsLt
+
 noncomputable instance AffineNielsPoint.«x86_64-no-tables».instPointRepr :
     PointRepr AffineNielsPoint.«x86_64-no-tables» where
   OnCurve := AffineNielsPoint.«x86_64-no-tables».OnCurve
   toPoint := AffineNielsPoint.«x86_64-no-tables».toPoint
   LimbsLt := AffineNielsPoint.«x86_64-no-tables».LimbsLt
+
+noncomputable instance AffineNielsPoint.«i686-no-tables».instPointRepr :
+    PointRepr AffineNielsPoint.«i686-no-tables» where
+  OnCurve := AffineNielsPoint.«i686-no-tables».OnCurve
+  toPoint := AffineNielsPoint.«i686-no-tables».toPoint
+  LimbsLt := AffineNielsPoint.«i686-no-tables».LimbsLt
 
 end backend.serial.curve_models
 
