@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
-public import Proofs.Helpers.Coords
 import Proofs.Helpers.StepSpecs
 public section
 
@@ -56,12 +55,11 @@ noncomputable instance CompletedPoint.«x86_64-tables».instPointRepr :
   toPoint := CompletedPoint.«x86_64-tables».toPoint
   LimbsLt := CompletedPoint.«x86_64-tables».LimbsLt
 
-/-- The i686 completed points carry the input bound of `mul`, whatever `n`. -/
 noncomputable instance CompletedPoint.«i686-tables».instPointRepr :
     PointRepr CompletedPoint.«i686-tables» where
   OnCurve := CompletedPoint.«i686-tables».OnCurve
   toPoint := CompletedPoint.«i686-tables».toPoint
-  LimbsLt := fun _ c => c.MulBounded
+  LimbsLt := CompletedPoint.«i686-tables».LimbsLt
 
 noncomputable instance CompletedPoint.«x86_64-no-tables».instPointRepr :
     PointRepr CompletedPoint.«x86_64-no-tables» where
@@ -69,12 +67,11 @@ noncomputable instance CompletedPoint.«x86_64-no-tables».instPointRepr :
   toPoint := CompletedPoint.«x86_64-no-tables».toPoint
   LimbsLt := CompletedPoint.«x86_64-no-tables».LimbsLt
 
-/-- The i686 completed points carry the input bound of `mul`, whatever `n`. -/
 noncomputable instance CompletedPoint.«i686-no-tables».instPointRepr :
     PointRepr CompletedPoint.«i686-no-tables» where
   OnCurve := CompletedPoint.«i686-no-tables».OnCurve
   toPoint := CompletedPoint.«i686-no-tables».toPoint
-  LimbsLt := fun _ c => c.MulBounded
+  LimbsLt := CompletedPoint.«i686-no-tables».LimbsLt
 
 namespace window
 
@@ -332,15 +329,17 @@ theorem select_spec {N : Usize} (lo : I8) (hi : I16) (e : Usize) (hlo : lo.val =
 
 open scoped Helpers.IndexStep Helpers.UpdateStep in
 /-- The loop of the `From<&EdwardsPoint>` impls over `0..N-1`: entry `k` represents
-`entry 0 + k • Q`. -/
-theorem fromLoop_spec {C E : Type} [PointRepr C] [PointRepr E] {nC nE : ℕ} {N : Usize}
+`entry 0 + k • Q`. The bounds `BC`, `BE` of the intermediate completed and extended points are
+those of the specs passed in. -/
+theorem fromLoop_spec {C E : Type} [PointRepr C] [PointRepr E] {BC : C → Prop} {BE : E → Prop}
+    {N : Usize}
     (add : T → Result C) (asExt : C → Result E) (asNiels : E → Result T)
     (Q : curve25519.edwards.Point)
     (hadd : ∀ q, LimbsLt n q → OnCurve q →
-      add q ⦃ (c : C) => OnCurve c ∧ toPoint c = Q + toPoint q ∧ LimbsLt nC c ⦄)
-    (hext : ∀ c : C, LimbsLt nC c → OnCurve c →
-      asExt c ⦃ (e : E) => OnCurve e ∧ toPoint e = toPoint c ∧ LimbsLt nE e ⦄)
-    (hniels : ∀ e : E, LimbsLt nE e → OnCurve e →
+      add q ⦃ (c : C) => OnCurve c ∧ toPoint c = Q + toPoint q ∧ BC c ⦄)
+    (hext : ∀ c : C, BC c → OnCurve c →
+      asExt c ⦃ (e : E) => OnCurve e ∧ toPoint e = toPoint c ∧ BE e ⦄)
+    (hniels : ∀ e : E, BE e → OnCurve e →
       asNiels e ⦃ (r : T) => OnCurve r ∧ toPoint r = toPoint e ∧ LimbsLt n r ⦄)
     (iter : core.ops.range.Range Usize) (hstart : iter.start.val = 0)
     (hend : iter.end.val + 1 = N.val) (points : Array T N)

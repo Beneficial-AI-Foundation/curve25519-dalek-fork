@@ -93,7 +93,7 @@ private theorem from_loop_spec (P : edwards.EdwardsPoint.«i686-tables»)
       ⦃ (r : Array ProjectiveNielsPoint.«i686-tables» 8#usize) => ∀ k < 8,
         r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • P.toPoint ∧ r[k]!.LimbsLt 27 ⦄ := by
   unfold from_loop
-  have h := fromLoop_spec (nC := 0) (N := 8#usize) (add P) as_extended as_projective_niels P.toPoint
+  have h := fromLoop_spec (N := 8#usize) (add P) as_extended as_projective_niels P.toPoint
     (fun q hq hqon => add_spec_point P q hP hq hon hqon)
     (fun c hc hcon => as_extended_spec_point c hc hcon)
     (fun e he heon => as_projective_niels_spec_point e he heon)
@@ -190,7 +190,7 @@ private theorem from_loop_spec (P : edwards.EdwardsPoint.«i686-no-tables»)
       ⦃ (r : Array ProjectiveNielsPoint.«i686-no-tables» 8#usize) => ∀ k < 8,
         r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • P.toPoint ∧ r[k]!.LimbsLt 27 ⦄ := by
   unfold from_loop
-  have h := fromLoop_spec (nC := 0) (N := 8#usize) (add P) as_extended as_projective_niels P.toPoint
+  have h := fromLoop_spec (N := 8#usize) (add P) as_extended as_projective_niels P.toPoint
     (fun q hq hqon => add_spec_point P q hP hq hon hqon)
     (fun c hc hcon => as_extended_spec_point c hc hcon)
     (fun e he heon => as_projective_niels_spec_point e he heon)
@@ -287,7 +287,7 @@ private theorem from_loop_spec (P : edwards.EdwardsPoint.«i686-tables»)
       ⦃ (r : Array AffineNielsPoint.«i686-tables» 8#usize) => ∀ k < 8,
         r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • P.toPoint ∧ r[k]!.LimbsLt 27 ⦄ := by
   unfold from_loop
-  have h := fromLoop_spec (nC := 0) (N := 8#usize) (add P) as_extended as_affine_niels P.toPoint
+  have h := fromLoop_spec (N := 8#usize) (add P) as_extended as_affine_niels P.toPoint
     (fun q hq hqon => add_spec_point P q hP hq hon hqon)
     (fun c hc hcon => as_extended_spec_point c hc hcon)
     (fun e he heon => as_affine_niels_spec_point e he heon)
@@ -384,7 +384,7 @@ private theorem from_loop_spec (P : edwards.EdwardsPoint.«i686-no-tables»)
       ⦃ (r : Array AffineNielsPoint.«i686-no-tables» 8#usize) => ∀ k < 8,
         r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • P.toPoint ∧ r[k]!.LimbsLt 27 ⦄ := by
   unfold from_loop
-  have h := fromLoop_spec (nC := 0) (N := 8#usize) (add P) as_extended as_affine_niels P.toPoint
+  have h := fromLoop_spec (N := 8#usize) (add P) as_extended as_affine_niels P.toPoint
     (fun q hq hqon => add_spec_point P q hP hq hon hqon)
     (fun c hc hcon => as_extended_spec_point c hc hcon)
     (fun e he heon => as_affine_niels_spec_point e he heon)

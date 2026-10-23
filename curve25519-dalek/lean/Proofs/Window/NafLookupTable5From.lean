@@ -93,8 +93,7 @@ private theorem from_loop_spec (A2 : edwards.EdwardsPoint.«i686-tables»)
       ⦃ (r : Array ProjectiveNielsPoint.«i686-tables» 8#usize) => ∀ k < 8,
         r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • A2.toPoint ∧ r[k]!.LimbsLt 27 ⦄ := by
   unfold from_loop
-  have h := fromLoop_spec (nC := 0) (N := 8#usize) (add A2) as_extended as_projective_niels
-    A2.toPoint
+  have h := fromLoop_spec (N := 8#usize) (add A2) as_extended as_projective_niels A2.toPoint
     (fun q hq hqon => add_spec_point A2 q hA2 hq hA2on hqon)
     (fun c hc hcon => as_extended_spec_point c hc hcon)
     (fun e he heon => as_projective_niels_spec_point e he heon)
@@ -193,8 +192,7 @@ private theorem from_loop_spec (A2 : edwards.EdwardsPoint.«i686-no-tables»)
       ⦃ (r : Array ProjectiveNielsPoint.«i686-no-tables» 8#usize) => ∀ k < 8,
         r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • A2.toPoint ∧ r[k]!.LimbsLt 27 ⦄ := by
   unfold from_loop
-  have h := fromLoop_spec (nC := 0) (N := 8#usize) (add A2) as_extended as_projective_niels
-    A2.toPoint
+  have h := fromLoop_spec (N := 8#usize) (add A2) as_extended as_projective_niels A2.toPoint
     (fun q hq hqon => add_spec_point A2 q hA2 hq hA2on hqon)
     (fun c hc hcon => as_extended_spec_point c hc hcon)
     (fun e he heon => as_projective_niels_spec_point e he heon)

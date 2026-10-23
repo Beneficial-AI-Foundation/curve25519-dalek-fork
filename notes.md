@@ -492,9 +492,10 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   certificate; the point-generic half is shared). Bridges: `Proofs/Helpers/ToField2625.lean`.
   i686 bounds: `LimbsLt 26` for reduced values and Edwards/Projective points, `27` for Niels points
   and tables, and for completed points `MulBounded` (every limb `< 3 · 2^26`, the input bound of
-  u32 `mul`; `Z = 2 Z + T` exceeds `2^27`), defined in `Proofs/Helpers/Coords.lean`; the i686
-  completed `PointRepr.LimbsLt n` is `MulBounded` whatever `n` (to clean up: options in the
-  section below). All specs hold for the four targets: every dispatcher is proved with
+  u32 `mul`; `Z = 2 Z + T` exceeds `2^27`), defined in `Proofs/Helpers/Coords.lean`, internal
+  only (no spec summary mentions it). The generic table loop `fromLoop_spec` takes the bounds of
+  the intermediate completed and extended points as predicates inferred from the specs passed in,
+  so each backend uses its own. All specs hold for the four targets: every dispatcher is proved with
   `dispatch_all_spec` (2026-10-23, signed off by the owner); `OnX86_64` and `Defs/Target.lean` are
   gone, and the spec summaries restate each per-target item four times. Conversion scripts in
   `.scratch/u32s/` (`redo.py` replays them from the originals in `.scratch/u32s/orig`).
@@ -585,24 +586,13 @@ emit constants as literals (no longer needed).
 
 ## Plan
 
-1. The u32 backend: done (2026-10-23). Left: a cleaner shape for the table lemmas (below).
+1. The u32 backend: done (2026-10-23).
 2. Improve the hidden construction of `Curve F` (quotient of Weierstrass models today) to the
    j-invariant / twist-datum description; nothing outside `EllipticCurve/Curve/*` and the
    `Proofs` modules changes.
 3. Add std lib models to Aeneas.
 4. Move `EllipticCurve` and `Curve25519` to separate `lean_lib`s at the repository root (like
    `Subtle` and `Zeroize`), out of the `curve25519-dalek` library.
-
-### Table lemmas (cleanup)
-
-The generic loop lemmas of `Proofs/Helpers/Window.lean` (`fromLoop_spec`, …) take
-`PointRepr.LimbsLt n` bounds for the intermediate completed and extended points too; for the i686
-completed points that field is `MulBounded` whatever `n`, so call sites pass `(nC := 0)`. Options:
-(1, preferred) take the intermediate bounds as predicate arguments `{BC : C → Prop}` inferred from
-the `add`/`as_extended` specs, keeping `PointRepr.LimbsLt n` only for table entries (no `Defs`
-change); (2) `PointRepr.Bounded : T → Prop`, one fixed bound per type (changes the table predicates
-of `Defs/Window.lean`); (3) a general `LimbsLe B` in `Defs` with `LimbsLt n := LimbsLe (2 ^ n)` and
-completed points at `LimbsLe (3 * 2 ^ 26)`.
 
 ### Primality certificates
 
