@@ -1,5 +1,5 @@
 {
-  "aeneas_version": "nightly-2026.10.22-f383079",
+  "aeneas_version": "nightly-2026.10.23-fdebf20",
   "charon_version": "0.1.293",
   "crate": "curve25519_dalek",
   "functions": [
