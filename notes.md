@@ -818,6 +818,26 @@ data, bounds, weakenings only) and the instances `Proofs/Helpers/Backend/{U64,U3
 - Converted (plain `lean`): Edwards `ToMontgomeryBatch` 178 → 33, `CompressBatchAlloc`
   134 → 30, `Decompress` 97 → 28, `AsAffineNiels` 55 → 12; Montgomery `Mul` (the ladder loop)
   97 → 40, `ToEdwards` 66 → 19.
+- The scalar-mul generic proofs are in their own modules (`…Generic.lean` next to each file,
+  split by `.scratch/generic/split_generic.py`), importing `EdwardsOps` but not its instances:
+  they build in parallel with the `Funs → U32 Reduce → Mul → Backend.U32 → … → Instances` chain,
+  and only the bridges wait for the instances. The generic specs the bridges use are public;
+  preamble `abbrev`s they need carry `@[nolint defsWithUnderscore]` (underscored namespaces).
+- Where the time goes (radar run 3, `lean --profile` categories summed over modules, 19 018 s):
+  waiting 22%, import 20% (1.6–1.7 s per module standalone whatever the module, nearly all
+  Mathlib through `Funs`, so trimming project imports does not change it), interpretation
+  17.5% (the `Aeneas` library's tactics, `step`, `scalar_tac`, `simp_lists`, …, run in the
+  interpreter: only `AeneasMeta` is precompiled, and precompiling `Aeneas` would need its Mathlib
+  imports compiled natively; an upstream matter), simp 11.5%, typeclass inference 5.8%. Modules
+  are kept separate (owner's decision), so the per-module import cost stays.
+- Heaviest single declarations (standalone): U64 `to_bytes.pack_spec` 20 s, U32
+  `from_bytes_spec` 14 s, `isOverP_spec` / `packHigh_spec` / `load4_at_spec` 10 s, U32
+  `from_bytes_wide` `lo`/`hi` 9 s, `reduce.carry_spec` 9 s: long `step*` chains, whose per-step
+  cost grows with the context. `step*` options (`grind := false`, `scalarTac := true`,
+  `threadGrindState := false`) break the proofs and save < 30%; the remaining fix is splitting
+  these chains by `#decompose` with intermediate specs, about 1% of the build for the byte family.
+- Radar runs measure module times under full contention (U32 `Reduce` 221 s in the build,
+  30 s standalone), so the lakeprof critical path overstates the chain; total work decides.
 
 
 ## Performance findings (2026-10-10)
