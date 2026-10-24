@@ -27,6 +27,7 @@ import Proofs.Window.NafLookupTable8Select
 import Proofs.Backend.Serial.U64.Constants.AffineOddMultiplesOfBasepoint
 import Proofs.Backend.Serial.U32.Constants.Ed25519BasepointPoint
 import Proofs.Backend.Serial.U32.Constants.AffineOddMultiplesOfBasepoint
+public import Proofs.Helpers.EdwardsOps.Instances
 public section
 
 /-! # `vartime_double_base::mul`
@@ -49,31 +50,57 @@ private theorem horner_step (x y d e : ℤ) (A B : curve25519.edwards.Point) :
   push_cast
   abel
 
-section
-open «Shared0EdwardsPointx86_64-tables».Insts
-open «CoreOpsArithAddSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables»
-  (add_spec_point)
-open «CoreOpsArithSubSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables»
-  (sub_spec_point)
 
-namespace «x86_64-tables»
+end Curve25519Dalek.backend.serial.scalar_mul.vartime_double_base
+
+/-! ## The loops over a configuration's point operations -/
+
+namespace Curve25519Dalek.EdwardsOps
+
+open Curve25519Dalek.backend.serial.scalar_mul.vartime_double_base
+
+open ControlFlow
+
+/-- `mul_loop0.body`, the same in every configuration. -/
+@[expose] def vdbLoop0Body (a_naf b_naf : Array I8 256#usize)
+    (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize)) (i : Usize) :
+    Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range Usize)) × Usize)
+      Usize) := do
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done i)
+  | some j =>
+    let i1 ← Array.index_usize a_naf j
+    if i1 != 0#i8
+    then ok (done j)
+    else
+      let i2 ← Array.index_usize b_naf j
+      if i2 != 0#i8
+      then ok (done j)
+      else ok (cont (iter1, j))
+
+/-- `mul_loop0`, the same in every configuration. -/
+@[expose] def vdbLoop0 (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (a_naf b_naf : Array I8 256#usize) (i : Usize) : Result Usize := do
+  loop (fun (iter1, i1) => vdbLoop0Body a_naf b_naf iter1 i1) (iter, i)
 
 open scoped Helpers.IndexStep in
 /-- The first loop of `mul`: the highest index at which a digit of `a` or `b` is nonzero (`0` if
 there is none). -/
-@[local step]
-private theorem mul_loop0_spec (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+private theorem vdbLoop0_spec (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
     (a_naf b_naf : Array I8 256#usize) (i : Usize) (hstart : iter.iter.start.val = 0)
     (hend : iter.iter.end.val ≤ 256) (hi : i.val < 256)
     (hz : ∀ k, iter.iter.end.val ≤ k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0) :
-    mul.«x86_64-tables_loop0» iter a_naf b_naf i ⦃ (r : Usize) =>
+    vdbLoop0 iter a_naf b_naf i ⦃ (r : Usize) =>
       r.val < 256 ∧ ∀ k, r.val < k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0 ⦄ := by
-  unfold mul.«x86_64-tables_loop0»
+  unfold vdbLoop0
   apply loop.spec_decr_nat (measure := fun (it, _) => it.iter.end.val)
     (inv := fun (it, j) => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 256 ∧ j.val < 256 ∧
       ∀ k, it.iter.end.val ≤ k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0)
   · rintro ⟨it, j⟩ ⟨hst, hen, hj, hzk⟩
-    unfold mul.«x86_64-tables_loop0».body
+    unfold vdbLoop0Body
     by_cases hlt : 0 < it.iter.end.val
     · step with core.iter.adapters.rev.Rev.next_Usize_some_spec
         as ⟨o, it1, e, ho, he, hstart1, hend1⟩
@@ -107,9 +134,376 @@ private theorem mul_loop0_spec (iter : core.iter.adapters.rev.Rev (core.ops.rang
       exact ⟨hj, fun k _ hk' => hzk k (by omega) hk'⟩
   · exact ⟨hstart, hend, hi, hz⟩
 
-open «CoreOpsArithAddSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables» in
-open «CoreOpsArithSubSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables» in
+variable (O : EdwardsOps)
+
+/-- `mul_loop1.body` over the point operations (vdbLoop1T). -/
+@[expose] def vdbLoop1TBody (a_naf b_naf : Array I8 256#usize)
+    (table_A : window.NafLookupTable5 O.N) (table_B : window.NafLookupTable8 O.An) (i : Usize)
+    (r : O.Pr) :
+    Result (ControlFlow (Usize × O.Pr) O.E) := do
+  let t ← O.pDouble r
+  let digit ← Array.index_usize a_naf i
+  let o ← lift (core.cmp.impls.OrdI8.cmp digit 0#i8)
+  let t1 ←
+    match o with
+    | Ordering.lt =>
+      do
+      let ep ← O.asExtended t
+      let i1 ← -. digit
+      let i2 ← lift (IScalar.hcast .Usize i1)
+      let pnp ← window.NafLookupTable5.select O.copyN table_A i2
+      O.subN ep pnp
+    | Ordering.eq => ok t
+    | Ordering.gt =>
+      do
+      let ep ← O.asExtended t
+      let i1 ← lift (IScalar.hcast .Usize digit)
+      let pnp ← window.NafLookupTable5.select O.copyN table_A i1
+      O.addN ep pnp
+  let digit1 ← Array.index_usize b_naf i
+  let o1 ← lift (core.cmp.impls.OrdI8.cmp digit1 0#i8)
+  let t2 ←
+    match o1 with
+    | Ordering.lt =>
+      do
+      let ep ← O.asExtended t1
+      let i1 ← -. digit1
+      let i2 ← lift (IScalar.hcast .Usize i1)
+      let anp ← window.NafLookupTable8.select O.copyA table_B i2
+      O.subA ep anp
+    | Ordering.eq => ok t1
+    | Ordering.gt =>
+      do
+      let ep ← O.asExtended t1
+      let i1 ← lift (IScalar.hcast .Usize digit1)
+      let anp ← window.NafLookupTable8.select O.copyA table_B i1
+      O.addA ep anp
+  let r1 ← O.cAsProjective t2
+  if i = 0#usize
+  then
+    let ep ← O.pAsExtended r1
+    ok (done ep)
+  else let i1 ← i - 1#usize
+       ok (cont (i1, r1))
+
+/-- `mul_loop1` over the point operations (vdbLoop1T). -/
+@[expose] def vdbLoop1T (a_naf b_naf : Array I8 256#usize) (i : Usize)
+    (table_A : window.NafLookupTable5 O.N) (table_B : window.NafLookupTable8 O.An) (r : O.Pr) :
+    Result O.E := do
+  loop (fun (i1, r1) => O.vdbLoop1TBody a_naf b_naf table_A table_B i1 r1) (i, r)
+
+/-- `mul_loop1.body` over the point operations (vdbLoop1N). -/
+@[expose] def vdbLoop1NBody (a_naf b_naf : Array I8 256#usize)
+    (table_A : window.NafLookupTable5 O.N) (table_B : window.NafLookupTable5 O.N) (i : Usize)
+    (r : O.Pr) :
+    Result (ControlFlow (Usize × O.Pr) O.E) := do
+  let t ← O.pDouble r
+  let digit ← Array.index_usize a_naf i
+  let o ← lift (core.cmp.impls.OrdI8.cmp digit 0#i8)
+  let t1 ←
+    match o with
+    | Ordering.lt =>
+      do
+      let ep ← O.asExtended t
+      let i1 ← -. digit
+      let i2 ← lift (IScalar.hcast .Usize i1)
+      let pnp ← window.NafLookupTable5.select O.copyN table_A i2
+      O.subN ep pnp
+    | Ordering.eq => ok t
+    | Ordering.gt =>
+      do
+      let ep ← O.asExtended t
+      let i1 ← lift (IScalar.hcast .Usize digit)
+      let pnp ← window.NafLookupTable5.select O.copyN table_A i1
+      O.addN ep pnp
+  let digit1 ← Array.index_usize b_naf i
+  let o1 ← lift (core.cmp.impls.OrdI8.cmp digit1 0#i8)
+  let t2 ←
+    match o1 with
+    | Ordering.lt =>
+      do
+      let ep ← O.asExtended t1
+      let i1 ← -. digit1
+      let i2 ← lift (IScalar.hcast .Usize i1)
+      let anp ← window.NafLookupTable5.select O.copyN table_B i2
+      O.subN ep anp
+    | Ordering.eq => ok t1
+    | Ordering.gt =>
+      do
+      let ep ← O.asExtended t1
+      let i1 ← lift (IScalar.hcast .Usize digit1)
+      let anp ← window.NafLookupTable5.select O.copyN table_B i1
+      O.addN ep anp
+  let r1 ← O.cAsProjective t2
+  if i = 0#usize
+  then
+    let ep ← O.pAsExtended r1
+    ok (done ep)
+  else let i1 ← i - 1#usize
+       ok (cont (i1, r1))
+
+/-- `mul_loop1` over the point operations (vdbLoop1N). -/
+@[expose] def vdbLoop1N (a_naf b_naf : Array I8 256#usize) (i : Usize)
+    (table_A : window.NafLookupTable5 O.N) (table_B : window.NafLookupTable5 O.N) (r : O.Pr) :
+    Result O.E := do
+  loop (fun (i1, r1) => O.vdbLoop1NBody a_naf b_naf table_A table_B i1 r1) (i, r)
+
 open scoped Helpers.IndexStep in
+/-- The second loop of `mul`: after the digits `i, …, 255`, the accumulator represents
+`nafTail a i • A + nafTail b i • B`. -/
+private theorem vdbLoop1T_spec (haddN : O.AddNSpec) (hsubN : O.SubNSpec) (haddA : O.AddASpec)
+    (hsubA : O.SubASpec) (hasE : O.AsExtendedSpec)
+    (hdbl : O.PDoubleSpec) (hasP : O.CAsProjectiveSpec) (hpasE : O.PAsExtendedSpec)
+    (a_naf b_naf : Array I8 256#usize) (i : Usize)
+    (table_A : window.NafLookupTable5 O.N) (table_B : window.NafLookupTable8 O.An)
+    (r : O.Pr) (A B : curve25519.edwards.Point)
+    (hA : table_A.Represents A) (hAb : table_A.LimbsLt O.nB)
+    (hB : table_B.Represents B) (hBb : table_B.LimbsLt O.aB)
+    (ha : ∀ k < 256, a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧ 2 * |a_naf[k]!.val| < 2 ^ 5)
+    (hb : ∀ k < 256, b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧ 2 * |b_naf[k]!.val| < 2 ^ 8)
+    (hi : i.val < 256) (hr : O.pOnCurve r) (hrb : O.pBnd r)
+    (hrp : O.pToPoint r = nafTail a_naf (i.val + 1) • A + nafTail b_naf (i.val + 1) • B) :
+    O.vdbLoop1T a_naf b_naf i table_A table_B r ⦃ (res : O.E) => O.OnCurve res ∧
+        O.toPoint res = nafTail a_naf 0 • A + nafTail b_naf 0 • B ∧ O.Bnd res ⦄ := by
+  unfold vdbLoop1T
+  apply loop.spec_decr_nat (measure := fun (j, _) => j.val)
+    (inv := fun (j, q) => j.val < 256 ∧ O.pOnCurve q ∧ O.pBnd q ∧
+      O.pToPoint q = nafTail a_naf (j.val + 1) • A + nafTail b_naf (j.val + 1) • B)
+  · rintro ⟨j, q⟩ ⟨hj, hq, hqb, hqp⟩
+    unfold vdbLoop1TBody
+    step with hdbl q hqb hq as ⟨t, hton, htp, htb⟩
+    step as ⟨d, hd⟩
+    rw [show lift (core.cmp.impls.OrdI8.cmp d 0#i8) = ok (compare d.val 0) from rfl, bind_ok]
+    apply spec_bind (Pₘ := fun t1 => O.cOnCurve t1 ∧ O.cToPoint t1 = O.cToPoint t + d.val • A ∧
+      O.cBnd t1)
+    · rcases lt_trichotomy d.val 0 with hneg | hzero | hpos
+      · rw [(compare_lt_iff_lt).mpr hneg]
+        simp only
+        step with hasE t htb hton as ⟨ep, hepon, hep, hepb⟩
+        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
+        rw [← hd, abs_of_neg hneg] at hk
+        step as ⟨i1, hi1⟩
+        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
+        step with window.NafLookupTable5.select_spec (P := A) _ table_A i2 hAb hA
+            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
+        step with hsubN ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
+        refine ⟨ht1on, ?_, ht1b⟩
+        rw [ht1p, hep, show O.nToPoint pnp = PointRepr.toPoint pnp from rfl, hpp]
+        exact sub_nsmul_eq _ _ _ _ (by omega)
+      · rw [(compare_eq_iff_eq).mpr hzero]
+        simp only [WP.spec_ok]
+        rw [hzero, zero_smul, add_zero]
+        exact ⟨hton, rfl, htb⟩
+      · rw [(compare_gt_iff_gt).mpr hpos]
+        simp only
+        step with hasE t htb hton as ⟨ep, hepon, hep, hepb⟩
+        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
+        rw [← hd, abs_of_pos hpos] at hk
+        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
+        step with window.NafLookupTable5.select_spec (P := A) _ table_A i1 hAb hA
+            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
+        step with haddN ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
+        refine ⟨ht1on, ?_, ht1b⟩
+        rw [ht1p, hep, show O.nToPoint pnp = PointRepr.toPoint pnp from rfl, hpp]
+        exact add_nsmul_eq _ _ _ _ (by omega)
+    rintro t1 ⟨ht1on, ht1p, ht1b⟩
+    step as ⟨e, he⟩
+    rw [show lift (core.cmp.impls.OrdI8.cmp e 0#i8) = ok (compare e.val 0) from rfl, bind_ok]
+    apply spec_bind (Pₘ := fun t2 => O.cOnCurve t2 ∧ O.cToPoint t2 = O.cToPoint t1 + e.val • B ∧
+      O.cBnd t2)
+    · rcases lt_trichotomy e.val 0 with hneg | hzero | hpos
+      · rw [(compare_lt_iff_lt).mpr hneg]
+        simp only
+        step with hasE t1 ht1b ht1on as ⟨ep, hepon, hep, hepb⟩
+        have hk := naf_digit_abs (w := 8) (by norm_num) (hb j.val hj (by rw [← he]; omega))
+        rw [← he, abs_of_neg hneg] at hk
+        step as ⟨i1, hi1⟩
+        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
+        step with window.NafLookupTable8.select_spec (P := B) _ table_B i2 hBb hB
+            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
+        step with hsubA ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
+        refine ⟨ht2on, ?_, ht2b⟩
+        rw [ht2p, hep, show O.aToPoint pnp = PointRepr.toPoint pnp from rfl, hpp]
+        exact sub_nsmul_eq _ _ _ _ (by omega)
+      · rw [(compare_eq_iff_eq).mpr hzero]
+        simp only [WP.spec_ok]
+        rw [hzero, zero_smul, add_zero]
+        exact ⟨ht1on, rfl, ht1b⟩
+      · rw [(compare_gt_iff_gt).mpr hpos]
+        simp only
+        step with hasE t1 ht1b ht1on as ⟨ep, hepon, hep, hepb⟩
+        have hk := naf_digit_abs (w := 8) (by norm_num) (hb j.val hj (by rw [← he]; omega))
+        rw [← he, abs_of_pos hpos] at hk
+        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
+        step with window.NafLookupTable8.select_spec (P := B) _ table_B i1 hBb hB
+            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
+        step with haddA ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
+        refine ⟨ht2on, ?_, ht2b⟩
+        rw [ht2p, hep, show O.aToPoint pnp = PointRepr.toPoint pnp from rfl, hpp]
+        exact add_nsmul_eq _ _ _ _ (by omega)
+    rintro t2 ⟨ht2on, ht2p, ht2b⟩
+    step with hasP t2 ht2b ht2on as ⟨r1, hr1on, hr1p, hr1b⟩
+    have hval : O.pToPoint r1 = nafTail a_naf j.val • A + nafTail b_naf j.val • B := by
+      rw [hr1p, ht2p, ht1p, htp, hqp, horner_step, nafTail_eq _ _ hj, nafTail_eq _ _ hj, ← hd, ← he]
+    split
+    · step with hpasE r1 hr1b hr1on as ⟨res, hreson, hresp, hresb⟩
+      have hj0 : j.val = 0 := by scalar_tac
+      refine ⟨hreson, ?_, hresb⟩
+      rw [hresp, hval, hj0]
+    · step as ⟨j1, hj1⟩
+      have hj1' : j1.val + 1 = j.val := by scalar_tac
+      refine ⟨by scalar_tac, hr1on, hr1b, ?_, by scalar_tac⟩
+      rw [hval, hj1']
+  · exact ⟨hi, hr, hrb, hrp⟩
+
+open scoped Helpers.IndexStep in
+/-- The second loop of `mul`: after the digits `i, …, 255`, the accumulator represents
+`nafTail a i • A + nafTail b i • B`. -/
+private theorem vdbLoop1N_spec (haddN : O.AddNSpec) (hsubN : O.SubNSpec) (hasE : O.AsExtendedSpec)
+    (hdbl : O.PDoubleSpec) (hasP : O.CAsProjectiveSpec) (hpasE : O.PAsExtendedSpec)
+    (a_naf b_naf : Array I8 256#usize) (i : Usize)
+    (table_A : window.NafLookupTable5 O.N) (table_B : window.NafLookupTable5 O.N)
+    (r : O.Pr) (A B : curve25519.edwards.Point)
+    (hA : table_A.Represents A) (hAb : table_A.LimbsLt O.nB)
+    (hB : table_B.Represents B) (hBb : table_B.LimbsLt O.nB)
+    (ha : ∀ k < 256, a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧ 2 * |a_naf[k]!.val| < 2 ^ 5)
+    (hb : ∀ k < 256, b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧ 2 * |b_naf[k]!.val| < 2 ^ 5)
+    (hi : i.val < 256) (hr : O.pOnCurve r) (hrb : O.pBnd r)
+    (hrp : O.pToPoint r = nafTail a_naf (i.val + 1) • A + nafTail b_naf (i.val + 1) • B) :
+    O.vdbLoop1N a_naf b_naf i table_A table_B r ⦃ (res : O.E) => O.OnCurve res ∧
+        O.toPoint res = nafTail a_naf 0 • A + nafTail b_naf 0 • B ∧ O.Bnd res ⦄ := by
+  unfold vdbLoop1N
+  apply loop.spec_decr_nat (measure := fun (j, _) => j.val)
+    (inv := fun (j, q) => j.val < 256 ∧ O.pOnCurve q ∧ O.pBnd q ∧
+      O.pToPoint q = nafTail a_naf (j.val + 1) • A + nafTail b_naf (j.val + 1) • B)
+  · rintro ⟨j, q⟩ ⟨hj, hq, hqb, hqp⟩
+    unfold vdbLoop1NBody
+    step with hdbl q hqb hq as ⟨t, hton, htp, htb⟩
+    step as ⟨d, hd⟩
+    rw [show lift (core.cmp.impls.OrdI8.cmp d 0#i8) = ok (compare d.val 0) from rfl, bind_ok]
+    apply spec_bind (Pₘ := fun t1 => O.cOnCurve t1 ∧ O.cToPoint t1 = O.cToPoint t + d.val • A ∧
+      O.cBnd t1)
+    · rcases lt_trichotomy d.val 0 with hneg | hzero | hpos
+      · rw [(compare_lt_iff_lt).mpr hneg]
+        simp only
+        step with hasE t htb hton as ⟨ep, hepon, hep, hepb⟩
+        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
+        rw [← hd, abs_of_neg hneg] at hk
+        step as ⟨i1, hi1⟩
+        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
+        step with window.NafLookupTable5.select_spec (P := A) _ table_A i2 hAb hA
+            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
+        step with hsubN ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
+        refine ⟨ht1on, ?_, ht1b⟩
+        rw [ht1p, hep, show O.nToPoint pnp = PointRepr.toPoint pnp from rfl, hpp]
+        exact sub_nsmul_eq _ _ _ _ (by omega)
+      · rw [(compare_eq_iff_eq).mpr hzero]
+        simp only [WP.spec_ok]
+        rw [hzero, zero_smul, add_zero]
+        exact ⟨hton, rfl, htb⟩
+      · rw [(compare_gt_iff_gt).mpr hpos]
+        simp only
+        step with hasE t htb hton as ⟨ep, hepon, hep, hepb⟩
+        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
+        rw [← hd, abs_of_pos hpos] at hk
+        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
+        step with window.NafLookupTable5.select_spec (P := A) _ table_A i1 hAb hA
+            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
+        step with haddN ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
+        refine ⟨ht1on, ?_, ht1b⟩
+        rw [ht1p, hep, show O.nToPoint pnp = PointRepr.toPoint pnp from rfl, hpp]
+        exact add_nsmul_eq _ _ _ _ (by omega)
+    rintro t1 ⟨ht1on, ht1p, ht1b⟩
+    step as ⟨e, he⟩
+    rw [show lift (core.cmp.impls.OrdI8.cmp e 0#i8) = ok (compare e.val 0) from rfl, bind_ok]
+    apply spec_bind (Pₘ := fun t2 => O.cOnCurve t2 ∧ O.cToPoint t2 = O.cToPoint t1 + e.val • B ∧
+      O.cBnd t2)
+    · rcases lt_trichotomy e.val 0 with hneg | hzero | hpos
+      · rw [(compare_lt_iff_lt).mpr hneg]
+        simp only
+        step with hasE t1 ht1b ht1on as ⟨ep, hepon, hep, hepb⟩
+        have hk := naf_digit_abs (w := 5) (by norm_num) (hb j.val hj (by rw [← he]; omega))
+        rw [← he, abs_of_neg hneg] at hk
+        step as ⟨i1, hi1⟩
+        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
+        step with window.NafLookupTable5.select_spec (P := B) _ table_B i2 hBb hB
+            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
+        step with hsubN ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
+        refine ⟨ht2on, ?_, ht2b⟩
+        rw [ht2p, hep, show O.nToPoint pnp = PointRepr.toPoint pnp from rfl, hpp]
+        exact sub_nsmul_eq _ _ _ _ (by omega)
+      · rw [(compare_eq_iff_eq).mpr hzero]
+        simp only [WP.spec_ok]
+        rw [hzero, zero_smul, add_zero]
+        exact ⟨ht1on, rfl, ht1b⟩
+      · rw [(compare_gt_iff_gt).mpr hpos]
+        simp only
+        step with hasE t1 ht1b ht1on as ⟨ep, hepon, hep, hepb⟩
+        have hk := naf_digit_abs (w := 5) (by norm_num) (hb j.val hj (by rw [← he]; omega))
+        rw [← he, abs_of_pos hpos] at hk
+        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
+        step with window.NafLookupTable5.select_spec (P := B) _ table_B i1 hBb hB
+            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
+        step with haddN ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
+        refine ⟨ht2on, ?_, ht2b⟩
+        rw [ht2p, hep, show O.nToPoint pnp = PointRepr.toPoint pnp from rfl, hpp]
+        exact add_nsmul_eq _ _ _ _ (by omega)
+    rintro t2 ⟨ht2on, ht2p, ht2b⟩
+    step with hasP t2 ht2b ht2on as ⟨r1, hr1on, hr1p, hr1b⟩
+    have hval : O.pToPoint r1 = nafTail a_naf j.val • A + nafTail b_naf j.val • B := by
+      rw [hr1p, ht2p, ht1p, htp, hqp, horner_step, nafTail_eq _ _ hj, nafTail_eq _ _ hj, ← hd, ← he]
+    split
+    · step with hpasE r1 hr1b hr1on as ⟨res, hreson, hresp, hresb⟩
+      have hj0 : j.val = 0 := by scalar_tac
+      refine ⟨hreson, ?_, hresb⟩
+      rw [hresp, hval, hj0]
+    · step as ⟨j1, hj1⟩
+      have hj1' : j1.val + 1 = j.val := by scalar_tac
+      refine ⟨by scalar_tac, hr1on, hr1b, ?_, by scalar_tac⟩
+      rw [hval, hj1']
+  · exact ⟨hi, hr, hrb, hrp⟩
+
+end Curve25519Dalek.EdwardsOps
+
+namespace Curve25519Dalek.backend.serial.scalar_mul.vartime_double_base
+
+section
+open «Shared0EdwardsPointx86_64-tables».Insts
+open «CoreOpsArithAddSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables»
+  (add_spec_point)
+open «CoreOpsArithSubSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables»
+  (sub_spec_point)
+
+namespace «x86_64-tables»
+
+private theorem mul_loop0_eq
+    (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (a_naf b_naf : Array I8 256#usize) (i : Usize) :
+    mul.«x86_64-tables_loop0» iter a_naf b_naf i = EdwardsOps.vdbLoop0 iter a_naf b_naf i := by
+  unfold mul.«x86_64-tables_loop0» EdwardsOps.vdbLoop0
+  congr 1
+
+private theorem mul_loop1_eq (a_naf b_naf : Array I8 256#usize) (i : Usize)
+    (table_A : window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-tables»)
+    (table_B : window.NafLookupTable8 AffineNielsPoint.«x86_64-tables»)
+    (r : ProjectivePoint.«x86_64-tables») :
+    mul.«x86_64-tables_loop1» a_naf b_naf i table_A table_B r =
+      EdwardsOps.X86Tables.vdbLoop1T a_naf b_naf i table_A table_B r := by
+  unfold mul.«x86_64-tables_loop1» EdwardsOps.vdbLoop1T
+  congr 1
+
+/-- The first loop of `mul`: the highest index at which a digit of `a` or `b` is nonzero (`0` if
+there is none). -/
+@[local step]
+private theorem mul_loop0_spec (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (a_naf b_naf : Array I8 256#usize) (i : Usize) (hstart : iter.iter.start.val = 0)
+    (hend : iter.iter.end.val ≤ 256) (hi : i.val < 256)
+    (hz : ∀ k, iter.iter.end.val ≤ k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0) :
+    mul.«x86_64-tables_loop0» iter a_naf b_naf i ⦃ (r : Usize) =>
+      r.val < 256 ∧ ∀ k, r.val < k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0 ⦄ := by
+  rw [mul_loop0_eq]
+  exact EdwardsOps.vdbLoop0_spec iter a_naf b_naf i hstart hend hi hz
+
 /-- The second loop of `mul`: after the digits `i, …, 255`, the accumulator represents
 `nafTail a i • A + nafTail b i • B`. -/
 @[local step]
@@ -126,102 +520,13 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     mul.«x86_64-tables_loop1» a_naf b_naf i table_A table_B r
       ⦃ (res : edwards.EdwardsPoint.«x86_64-tables») => res.OnCurve ∧
         res.toPoint = nafTail a_naf 0 • A + nafTail b_naf 0 • B ∧ res.LimbsLt 52 ⦄ := by
-  unfold mul.«x86_64-tables_loop1»
-  apply loop.spec_decr_nat (measure := fun (j, _) => j.val)
-    (inv := fun (j, q) => j.val < 256 ∧ q.OnCurve ∧ q.LimbsLt 52 ∧
-      q.toPoint = nafTail a_naf (j.val + 1) • A + nafTail b_naf (j.val + 1) • B)
-  · rintro ⟨j, q⟩ ⟨hj, hq, hqb, hqp⟩
-    unfold mul.«x86_64-tables_loop1».body
-    step with «ProjectivePointx86_64-tables».double_spec_point as ⟨t, hton, htp, htb⟩
-    step as ⟨d, hd⟩
-    rw [show lift (core.cmp.impls.OrdI8.cmp d 0#i8) = ok (compare d.val 0) from rfl, bind_ok]
-    apply spec_bind (Pₘ := fun t1 => t1.OnCurve ∧ t1.toPoint = t.toPoint + d.val • A ∧
-      t1.LimbsLt 54)
-    · rcases lt_trichotomy d.val 0 with hneg | hzero | hpos
-      · rw [(compare_lt_iff_lt).mpr hneg]
-        simp only
-        step with «CompletedPointx86_64-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
-        rw [← hd, abs_of_neg hneg] at hk
-        step as ⟨i1, hi1⟩
-        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
-        step with window.NafLookupTable5.select_spec (P := A) _ table_A i2 hAb hA
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with sub_spec_point ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
-        refine ⟨ht1on, ?_, ht1b⟩
-        rw [ht1p, hep, show ProjectiveNielsPoint.«x86_64-tables».toPoint pnp = PointRepr.toPoint pnp
-            from rfl, hpp]
-        exact sub_nsmul_eq _ _ _ _ (by omega)
-      · rw [(compare_eq_iff_eq).mpr hzero]
-        simp only [WP.spec_ok]
-        rw [hzero, zero_smul, add_zero]
-        exact ⟨hton, rfl, htb⟩
-      · rw [(compare_gt_iff_gt).mpr hpos]
-        simp only
-        step with «CompletedPointx86_64-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
-        rw [← hd, abs_of_pos hpos] at hk
-        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
-        step with window.NafLookupTable5.select_spec (P := A) _ table_A i1 hAb hA
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with add_spec_point ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
-        refine ⟨ht1on, ?_, ht1b⟩
-        rw [ht1p, hep, show ProjectiveNielsPoint.«x86_64-tables».toPoint pnp = PointRepr.toPoint pnp
-            from rfl, hpp]
-        exact add_nsmul_eq _ _ _ _ (by omega)
-    rintro t1 ⟨ht1on, ht1p, ht1b⟩
-    step as ⟨e, he⟩
-    rw [show lift (core.cmp.impls.OrdI8.cmp e 0#i8) = ok (compare e.val 0) from rfl, bind_ok]
-    apply spec_bind (Pₘ := fun t2 => t2.OnCurve ∧ t2.toPoint = t1.toPoint + e.val • B ∧
-      t2.LimbsLt 54)
-    · rcases lt_trichotomy e.val 0 with hneg | hzero | hpos
-      · rw [(compare_lt_iff_lt).mpr hneg]
-        simp only
-        step with «CompletedPointx86_64-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 8) (by norm_num) (hb j.val hj (by rw [← he]; omega))
-        rw [← he, abs_of_neg hneg] at hk
-        step as ⟨i1, hi1⟩
-        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
-        step with window.NafLookupTable8.select_spec (P := B) _ table_B i2 hBb hB
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with sub_spec_point
-          ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
-        refine ⟨ht2on, ?_, ht2b⟩
-        rw [ht2p, hep, show AffineNielsPoint.«x86_64-tables».toPoint pnp = PointRepr.toPoint pnp
-            from rfl, hpp]
-        exact sub_nsmul_eq _ _ _ _ (by omega)
-      · rw [(compare_eq_iff_eq).mpr hzero]
-        simp only [WP.spec_ok]
-        rw [hzero, zero_smul, add_zero]
-        exact ⟨ht1on, rfl, ht1b⟩
-      · rw [(compare_gt_iff_gt).mpr hpos]
-        simp only
-        step with «CompletedPointx86_64-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 8) (by norm_num) (hb j.val hj (by rw [← he]; omega))
-        rw [← he, abs_of_pos hpos] at hk
-        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
-        step with window.NafLookupTable8.select_spec (P := B) _ table_B i1 hBb hB
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with add_spec_point
-          ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
-        refine ⟨ht2on, ?_, ht2b⟩
-        rw [ht2p, hep, show AffineNielsPoint.«x86_64-tables».toPoint pnp = PointRepr.toPoint pnp
-            from rfl, hpp]
-        exact add_nsmul_eq _ _ _ _ (by omega)
-    rintro t2 ⟨ht2on, ht2p, ht2b⟩
-    step with «CompletedPointx86_64-tables».as_projective_spec_point as ⟨r1, hr1on, hr1p, hr1b⟩
-    have hval : r1.toPoint = nafTail a_naf j.val • A + nafTail b_naf j.val • B := by
-      rw [hr1p, ht2p, ht1p, htp, hqp, horner_step, nafTail_eq _ _ hj, nafTail_eq _ _ hj, ← hd, ← he]
-    split
-    · step with «ProjectivePointx86_64-tables».as_extended_spec_point as ⟨res, hreson, hresp, hresb⟩
-      have hj0 : j.val = 0 := by scalar_tac
-      refine ⟨hreson, ?_, hresb⟩
-      rw [hresp, hval, hj0]
-    · step as ⟨j1, hj1⟩
-      have hj1' : j1.val + 1 = j.val := by scalar_tac
-      refine ⟨by scalar_tac, hr1on, hr1b, ?_, by scalar_tac⟩
-      rw [hval, hj1']
-  · exact ⟨hi, hr, hrb, hrp⟩
+  rw [mul_loop1_eq]
+  exact EdwardsOps.X86Tables.vdbLoop1T_spec
+    EdwardsOps.X86Tables.addN_spec EdwardsOps.X86Tables.subN_spec EdwardsOps.X86Tables.addA_spec
+    EdwardsOps.X86Tables.subA_spec EdwardsOps.X86Tables.asExtended_spec
+    EdwardsOps.X86Tables.pDouble_spec EdwardsOps.X86Tables.cAsProjective_spec
+    EdwardsOps.X86Tables.pAsExtended_spec a_naf b_naf i table_A table_B r A B hA hAb hB hBb ha hb hi
+    hr hrb hrp
 
 open window.«NafLookupTable5ProjectiveNielsPointx86_64-tables».Insts in
 open scoped Helpers.IndexStep in
@@ -268,7 +573,22 @@ open «CoreOpsArithSubSharedAProjectiveNielsPointi686-tablesCompletedPointi686-t
 
 namespace «i686-tables»
 
-open scoped Helpers.IndexStep in
+private theorem mul_loop0_eq
+    (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (a_naf b_naf : Array I8 256#usize) (i : Usize) :
+    mul.«i686-tables_loop0» iter a_naf b_naf i = EdwardsOps.vdbLoop0 iter a_naf b_naf i := by
+  unfold mul.«i686-tables_loop0» EdwardsOps.vdbLoop0
+  congr 1
+
+private theorem mul_loop1_eq (a_naf b_naf : Array I8 256#usize) (i : Usize)
+    (table_A : window.NafLookupTable5 ProjectiveNielsPoint.«i686-tables»)
+    (table_B : window.NafLookupTable8 AffineNielsPoint.«i686-tables»)
+    (r : ProjectivePoint.«i686-tables») :
+    mul.«i686-tables_loop1» a_naf b_naf i table_A table_B r =
+      EdwardsOps.I686Tables.vdbLoop1T a_naf b_naf i table_A table_B r := by
+  unfold mul.«i686-tables_loop1» EdwardsOps.vdbLoop1T
+  congr 1
+
 /-- The first loop of `mul`: the highest index at which a digit of `a` or `b` is nonzero (`0` if
 there is none). -/
 @[local step]
@@ -278,48 +598,9 @@ private theorem mul_loop0_spec (iter : core.iter.adapters.rev.Rev (core.ops.rang
     (hz : ∀ k, iter.iter.end.val ≤ k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0) :
     mul.«i686-tables_loop0» iter a_naf b_naf i ⦃ (r : Usize) =>
       r.val < 256 ∧ ∀ k, r.val < k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0 ⦄ := by
-  unfold mul.«i686-tables_loop0»
-  apply loop.spec_decr_nat (measure := fun (it, _) => it.iter.end.val)
-    (inv := fun (it, j) => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 256 ∧ j.val < 256 ∧
-      ∀ k, it.iter.end.val ≤ k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0)
-  · rintro ⟨it, j⟩ ⟨hst, hen, hj, hzk⟩
-    unfold mul.«i686-tables_loop0».body
-    by_cases hlt : 0 < it.iter.end.val
-    · step with core.iter.adapters.rev.Rev.next_Usize_some_spec
-        as ⟨o, it1, e, ho, he, hstart1, hend1⟩
-      subst ho
-      step as ⟨x, hx⟩
-      by_cases hx0 : x.val = 0
-      · have hx' : (x != 0#i8) = false := by
-          rw [bne_eq_false_iff_eq]; scalar_tac
-        simp only [hx', Bool.false_eq_true, ↓reduceIte]
-        step as ⟨y, hy⟩
-        by_cases hy0 : y.val = 0
-        · have hy' : (y != 0#i8) = false := by
-            rw [bne_eq_false_iff_eq]; scalar_tac
-          simp only [hy', Bool.false_eq_true, ↓reduceIte, WP.spec_ok]
-          refine ⟨by rw [hstart1, hst], by scalar_tac, by scalar_tac, fun k hk hk' => ?_,
-            by scalar_tac⟩
-          rcases Nat.eq_or_lt_of_le (hend1 ▸ hk) with h | h
-          · subst h; exact ⟨hx ▸ hx0, hy ▸ hy0⟩
-          · exact hzk k (by omega) hk'
-        · have hy' : (y != 0#i8) = true := by
-            rw [bne_iff_ne]; intro h; apply hy0; rw [h]; rfl
-          simp only [hy', ↓reduceIte, WP.spec_ok]
-          exact ⟨by scalar_tac, fun k hk hk' => hzk k (by omega) hk'⟩
-      · have hx' : (x != 0#i8) = true := by
-          rw [bne_iff_ne]; intro h; apply hx0; rw [h]; rfl
-        simp only [hx', ↓reduceIte, WP.spec_ok]
-        exact ⟨by scalar_tac, fun k hk hk' => hzk k (by omega) hk'⟩
-    · step with core.iter.adapters.rev.Rev.next_Usize_none_spec as ⟨o, it1, ho⟩
-      subst ho
-      simp only [WP.spec_ok]
-      exact ⟨hj, fun k _ hk' => hzk k (by omega) hk'⟩
-  · exact ⟨hstart, hend, hi, hz⟩
+  rw [mul_loop0_eq]
+  exact EdwardsOps.vdbLoop0_spec iter a_naf b_naf i hstart hend hi hz
 
-open «CoreOpsArithAddSharedAAffineNielsPointi686-tablesCompletedPointi686-tables» in
-open «CoreOpsArithSubSharedAAffineNielsPointi686-tablesCompletedPointi686-tables» in
-open scoped Helpers.IndexStep in
 /-- The second loop of `mul`: after the digits `i, …, 255`, the accumulator represents
 `nafTail a i • A + nafTail b i • B`. -/
 @[local step]
@@ -336,102 +617,13 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     mul.«i686-tables_loop1» a_naf b_naf i table_A table_B r
       ⦃ (res : edwards.EdwardsPoint.«i686-tables») => res.OnCurve ∧
         res.toPoint = nafTail a_naf 0 • A + nafTail b_naf 0 • B ∧ res.LimbsLt 26 ⦄ := by
-  unfold mul.«i686-tables_loop1»
-  apply loop.spec_decr_nat (measure := fun (j, _) => j.val)
-    (inv := fun (j, q) => j.val < 256 ∧ q.OnCurve ∧ q.LimbsLt 26 ∧
-      q.toPoint = nafTail a_naf (j.val + 1) • A + nafTail b_naf (j.val + 1) • B)
-  · rintro ⟨j, q⟩ ⟨hj, hq, hqb, hqp⟩
-    unfold mul.«i686-tables_loop1».body
-    step with «ProjectivePointi686-tables».double_spec_point as ⟨t, hton, htp, htb⟩
-    step as ⟨d, hd⟩
-    rw [show lift (core.cmp.impls.OrdI8.cmp d 0#i8) = ok (compare d.val 0) from rfl, bind_ok]
-    apply spec_bind (Pₘ := fun t1 => t1.OnCurve ∧ t1.toPoint = t.toPoint + d.val • A ∧
-      t1.MulBounded)
-    · rcases lt_trichotomy d.val 0 with hneg | hzero | hpos
-      · rw [(compare_lt_iff_lt).mpr hneg]
-        simp only
-        step with «CompletedPointi686-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
-        rw [← hd, abs_of_neg hneg] at hk
-        step as ⟨i1, hi1⟩
-        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
-        step with window.NafLookupTable5.select_spec (P := A) _ table_A i2 hAb hA
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with sub_spec_point ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
-        refine ⟨ht1on, ?_, ht1b⟩
-        rw [ht1p, hep, show ProjectiveNielsPoint.«i686-tables».toPoint pnp = PointRepr.toPoint pnp
-            from rfl, hpp]
-        exact sub_nsmul_eq _ _ _ _ (by omega)
-      · rw [(compare_eq_iff_eq).mpr hzero]
-        simp only [WP.spec_ok]
-        rw [hzero, zero_smul, add_zero]
-        exact ⟨hton, rfl, htb⟩
-      · rw [(compare_gt_iff_gt).mpr hpos]
-        simp only
-        step with «CompletedPointi686-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
-        rw [← hd, abs_of_pos hpos] at hk
-        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
-        step with window.NafLookupTable5.select_spec (P := A) _ table_A i1 hAb hA
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with add_spec_point ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
-        refine ⟨ht1on, ?_, ht1b⟩
-        rw [ht1p, hep, show ProjectiveNielsPoint.«i686-tables».toPoint pnp = PointRepr.toPoint pnp
-            from rfl, hpp]
-        exact add_nsmul_eq _ _ _ _ (by omega)
-    rintro t1 ⟨ht1on, ht1p, ht1b⟩
-    step as ⟨e, he⟩
-    rw [show lift (core.cmp.impls.OrdI8.cmp e 0#i8) = ok (compare e.val 0) from rfl, bind_ok]
-    apply spec_bind (Pₘ := fun t2 => t2.OnCurve ∧ t2.toPoint = t1.toPoint + e.val • B ∧
-      t2.MulBounded)
-    · rcases lt_trichotomy e.val 0 with hneg | hzero | hpos
-      · rw [(compare_lt_iff_lt).mpr hneg]
-        simp only
-        step with «CompletedPointi686-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 8) (by norm_num) (hb j.val hj (by rw [← he]; omega))
-        rw [← he, abs_of_neg hneg] at hk
-        step as ⟨i1, hi1⟩
-        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
-        step with window.NafLookupTable8.select_spec (P := B) _ table_B i2 hBb hB
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with sub_spec_point
-          ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
-        refine ⟨ht2on, ?_, ht2b⟩
-        rw [ht2p, hep, show AffineNielsPoint.«i686-tables».toPoint pnp = PointRepr.toPoint pnp
-            from rfl, hpp]
-        exact sub_nsmul_eq _ _ _ _ (by omega)
-      · rw [(compare_eq_iff_eq).mpr hzero]
-        simp only [WP.spec_ok]
-        rw [hzero, zero_smul, add_zero]
-        exact ⟨ht1on, rfl, ht1b⟩
-      · rw [(compare_gt_iff_gt).mpr hpos]
-        simp only
-        step with «CompletedPointi686-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 8) (by norm_num) (hb j.val hj (by rw [← he]; omega))
-        rw [← he, abs_of_pos hpos] at hk
-        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
-        step with window.NafLookupTable8.select_spec (P := B) _ table_B i1 hBb hB
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with add_spec_point
-          ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
-        refine ⟨ht2on, ?_, ht2b⟩
-        rw [ht2p, hep, show AffineNielsPoint.«i686-tables».toPoint pnp = PointRepr.toPoint pnp
-            from rfl, hpp]
-        exact add_nsmul_eq _ _ _ _ (by omega)
-    rintro t2 ⟨ht2on, ht2p, ht2b⟩
-    step with «CompletedPointi686-tables».as_projective_spec_point as ⟨r1, hr1on, hr1p, hr1b⟩
-    have hval : r1.toPoint = nafTail a_naf j.val • A + nafTail b_naf j.val • B := by
-      rw [hr1p, ht2p, ht1p, htp, hqp, horner_step, nafTail_eq _ _ hj, nafTail_eq _ _ hj, ← hd, ← he]
-    split
-    · step with «ProjectivePointi686-tables».as_extended_spec_point as ⟨res, hreson, hresp, hresb⟩
-      have hj0 : j.val = 0 := by scalar_tac
-      refine ⟨hreson, ?_, hresb⟩
-      rw [hresp, hval, hj0]
-    · step as ⟨j1, hj1⟩
-      have hj1' : j1.val + 1 = j.val := by scalar_tac
-      refine ⟨by scalar_tac, hr1on, hr1b, ?_, by scalar_tac⟩
-      rw [hval, hj1']
-  · exact ⟨hi, hr, hrb, hrp⟩
+  rw [mul_loop1_eq]
+  exact EdwardsOps.I686Tables.vdbLoop1T_spec
+    EdwardsOps.I686Tables.addN_spec EdwardsOps.I686Tables.subN_spec EdwardsOps.I686Tables.addA_spec
+    EdwardsOps.I686Tables.subA_spec EdwardsOps.I686Tables.asExtended_spec
+    EdwardsOps.I686Tables.pDouble_spec EdwardsOps.I686Tables.cAsProjective_spec
+    EdwardsOps.I686Tables.pAsExtended_spec a_naf b_naf i table_A table_B r A B hA hAb hB hBb ha hb
+    hi hr hrb hrp
 
 open window.«NafLookupTable5ProjectiveNielsPointi686-tables».Insts in
 open scoped Helpers.IndexStep in
@@ -478,7 +670,22 @@ open «CoreOpsArithSubSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx
 
 namespace «x86_64-no-tables»
 
-open scoped Helpers.IndexStep in
+private theorem mul_loop0_eq
+    (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (a_naf b_naf : Array I8 256#usize) (i : Usize) :
+    mul.«x86_64-no-tables_loop0» iter a_naf b_naf i = EdwardsOps.vdbLoop0 iter a_naf b_naf i := by
+  unfold mul.«x86_64-no-tables_loop0» EdwardsOps.vdbLoop0
+  congr 1
+
+private theorem mul_loop1_eq (a_naf b_naf : Array I8 256#usize) (i : Usize)
+    (table_A : window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-no-tables»)
+    (table_B : window.NafLookupTable5 ProjectiveNielsPoint.«x86_64-no-tables»)
+    (r : ProjectivePoint.«x86_64-no-tables») :
+    mul.«x86_64-no-tables_loop1» a_naf b_naf i table_A table_B r =
+      EdwardsOps.X86NoTables.vdbLoop1N a_naf b_naf i table_A table_B r := by
+  unfold mul.«x86_64-no-tables_loop1» EdwardsOps.vdbLoop1N
+  congr 1
+
 /-- The first loop of `mul`: the highest index at which a digit of `a` or `b` is nonzero (`0` if
 there is none). -/
 @[local step]
@@ -488,46 +695,9 @@ private theorem mul_loop0_spec (iter : core.iter.adapters.rev.Rev (core.ops.rang
     (hz : ∀ k, iter.iter.end.val ≤ k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0) :
     mul.«x86_64-no-tables_loop0» iter a_naf b_naf i ⦃ (r : Usize) =>
       r.val < 256 ∧ ∀ k, r.val < k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0 ⦄ := by
-  unfold mul.«x86_64-no-tables_loop0»
-  apply loop.spec_decr_nat (measure := fun (it, _) => it.iter.end.val)
-    (inv := fun (it, j) => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 256 ∧ j.val < 256 ∧
-      ∀ k, it.iter.end.val ≤ k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0)
-  · rintro ⟨it, j⟩ ⟨hst, hen, hj, hzk⟩
-    unfold mul.«x86_64-no-tables_loop0».body
-    by_cases hlt : 0 < it.iter.end.val
-    · step with core.iter.adapters.rev.Rev.next_Usize_some_spec
-        as ⟨o, it1, e, ho, he, hstart1, hend1⟩
-      subst ho
-      step as ⟨x, hx⟩
-      by_cases hx0 : x.val = 0
-      · have hx' : (x != 0#i8) = false := by
-          rw [bne_eq_false_iff_eq]; scalar_tac
-        simp only [hx', Bool.false_eq_true, ↓reduceIte]
-        step as ⟨y, hy⟩
-        by_cases hy0 : y.val = 0
-        · have hy' : (y != 0#i8) = false := by
-            rw [bne_eq_false_iff_eq]; scalar_tac
-          simp only [hy', Bool.false_eq_true, ↓reduceIte, WP.spec_ok]
-          refine ⟨by rw [hstart1, hst], by scalar_tac, by scalar_tac, fun k hk hk' => ?_,
-            by scalar_tac⟩
-          rcases Nat.eq_or_lt_of_le (hend1 ▸ hk) with h | h
-          · subst h; exact ⟨hx ▸ hx0, hy ▸ hy0⟩
-          · exact hzk k (by omega) hk'
-        · have hy' : (y != 0#i8) = true := by
-            rw [bne_iff_ne]; intro h; apply hy0; rw [h]; rfl
-          simp only [hy', ↓reduceIte, WP.spec_ok]
-          exact ⟨by scalar_tac, fun k hk hk' => hzk k (by omega) hk'⟩
-      · have hx' : (x != 0#i8) = true := by
-          rw [bne_iff_ne]; intro h; apply hx0; rw [h]; rfl
-        simp only [hx', ↓reduceIte, WP.spec_ok]
-        exact ⟨by scalar_tac, fun k hk hk' => hzk k (by omega) hk'⟩
-    · step with core.iter.adapters.rev.Rev.next_Usize_none_spec as ⟨o, it1, ho⟩
-      subst ho
-      simp only [WP.spec_ok]
-      exact ⟨hj, fun k _ hk' => hzk k (by omega) hk'⟩
-  · exact ⟨hstart, hend, hi, hz⟩
+  rw [mul_loop0_eq]
+  exact EdwardsOps.vdbLoop0_spec iter a_naf b_naf i hstart hend hi hz
 
-open scoped Helpers.IndexStep in
 /-- The second loop of `mul`: after the digits `i, …, 255`, the accumulator represents
 `nafTail a i • A + nafTail b i • B`. -/
 @[local step]
@@ -543,101 +713,12 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     mul.«x86_64-no-tables_loop1» a_naf b_naf i table_A table_B r
       ⦃ (res : edwards.EdwardsPoint.«x86_64-no-tables») => res.OnCurve ∧
         res.toPoint = nafTail a_naf 0 • A + nafTail b_naf 0 • B ∧ res.LimbsLt 52 ⦄ := by
-  unfold mul.«x86_64-no-tables_loop1»
-  apply loop.spec_decr_nat (measure := fun (j, _) => j.val)
-    (inv := fun (j, q) => j.val < 256 ∧ q.OnCurve ∧ q.LimbsLt 52 ∧
-      q.toPoint = nafTail a_naf (j.val + 1) • A + nafTail b_naf (j.val + 1) • B)
-  · rintro ⟨j, q⟩ ⟨hj, hq, hqb, hqp⟩
-    unfold mul.«x86_64-no-tables_loop1».body
-    step with «ProjectivePointx86_64-no-tables».double_spec_point as ⟨t, hton, htp, htb⟩
-    step as ⟨d, hd⟩
-    rw [show lift (core.cmp.impls.OrdI8.cmp d 0#i8) = ok (compare d.val 0) from rfl, bind_ok]
-    apply spec_bind (Pₘ := fun t1 => t1.OnCurve ∧ t1.toPoint = t.toPoint + d.val • A ∧
-      t1.LimbsLt 54)
-    · rcases lt_trichotomy d.val 0 with hneg | hzero | hpos
-      · rw [(compare_lt_iff_lt).mpr hneg]
-        simp only
-        step with «CompletedPointx86_64-no-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
-        rw [← hd, abs_of_neg hneg] at hk
-        step as ⟨i1, hi1⟩
-        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
-        step with window.NafLookupTable5.select_spec (P := A) _ table_A i2 hAb hA
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with sub_spec_point ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
-        refine ⟨ht1on, ?_, ht1b⟩
-        rw [ht1p, hep, show ProjectiveNielsPoint.«x86_64-no-tables».toPoint pnp = PointRepr.toPoint
-            pnp from rfl, hpp]
-        exact sub_nsmul_eq _ _ _ _ (by omega)
-      · rw [(compare_eq_iff_eq).mpr hzero]
-        simp only [WP.spec_ok]
-        rw [hzero, zero_smul, add_zero]
-        exact ⟨hton, rfl, htb⟩
-      · rw [(compare_gt_iff_gt).mpr hpos]
-        simp only
-        step with «CompletedPointx86_64-no-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
-        rw [← hd, abs_of_pos hpos] at hk
-        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
-        step with window.NafLookupTable5.select_spec (P := A) _ table_A i1 hAb hA
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with add_spec_point ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
-        refine ⟨ht1on, ?_, ht1b⟩
-        rw [ht1p, hep, show ProjectiveNielsPoint.«x86_64-no-tables».toPoint pnp = PointRepr.toPoint
-            pnp from rfl, hpp]
-        exact add_nsmul_eq _ _ _ _ (by omega)
-    rintro t1 ⟨ht1on, ht1p, ht1b⟩
-    step as ⟨e, he⟩
-    rw [show lift (core.cmp.impls.OrdI8.cmp e 0#i8) = ok (compare e.val 0) from rfl, bind_ok]
-    apply spec_bind (Pₘ := fun t2 => t2.OnCurve ∧ t2.toPoint = t1.toPoint + e.val • B ∧
-      t2.LimbsLt 54)
-    · rcases lt_trichotomy e.val 0 with hneg | hzero | hpos
-      · rw [(compare_lt_iff_lt).mpr hneg]
-        simp only
-        step with «CompletedPointx86_64-no-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (hb j.val hj (by rw [← he]; omega))
-        rw [← he, abs_of_neg hneg] at hk
-        step as ⟨i1, hi1⟩
-        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
-        step with window.NafLookupTable5.select_spec (P := B) _ table_B i2 hBb hB
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with sub_spec_point ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
-        refine ⟨ht2on, ?_, ht2b⟩
-        rw [ht2p, hep, show ProjectiveNielsPoint.«x86_64-no-tables».toPoint pnp = PointRepr.toPoint
-            pnp from rfl, hpp]
-        exact sub_nsmul_eq _ _ _ _ (by omega)
-      · rw [(compare_eq_iff_eq).mpr hzero]
-        simp only [WP.spec_ok]
-        rw [hzero, zero_smul, add_zero]
-        exact ⟨ht1on, rfl, ht1b⟩
-      · rw [(compare_gt_iff_gt).mpr hpos]
-        simp only
-        step with «CompletedPointx86_64-no-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (hb j.val hj (by rw [← he]; omega))
-        rw [← he, abs_of_pos hpos] at hk
-        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
-        step with window.NafLookupTable5.select_spec (P := B) _ table_B i1 hBb hB
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with add_spec_point ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
-        refine ⟨ht2on, ?_, ht2b⟩
-        rw [ht2p, hep, show ProjectiveNielsPoint.«x86_64-no-tables».toPoint pnp = PointRepr.toPoint
-            pnp from rfl, hpp]
-        exact add_nsmul_eq _ _ _ _ (by omega)
-    rintro t2 ⟨ht2on, ht2p, ht2b⟩
-    step with «CompletedPointx86_64-no-tables».as_projective_spec_point as ⟨r1, hr1on, hr1p, hr1b⟩
-    have hval : r1.toPoint = nafTail a_naf j.val • A + nafTail b_naf j.val • B := by
-      rw [hr1p, ht2p, ht1p, htp, hqp, horner_step, nafTail_eq _ _ hj, nafTail_eq _ _ hj, ← hd, ← he]
-    split
-    · step with «ProjectivePointx86_64-no-tables».as_extended_spec_point as
-        ⟨res, hreson, hresp, hresb⟩
-      have hj0 : j.val = 0 := by scalar_tac
-      refine ⟨hreson, ?_, hresb⟩
-      rw [hresp, hval, hj0]
-    · step as ⟨j1, hj1⟩
-      have hj1' : j1.val + 1 = j.val := by scalar_tac
-      refine ⟨by scalar_tac, hr1on, hr1b, ?_, by scalar_tac⟩
-      rw [hval, hj1']
-  · exact ⟨hi, hr, hrb, hrp⟩
+  rw [mul_loop1_eq]
+  exact EdwardsOps.X86NoTables.vdbLoop1N_spec
+    EdwardsOps.X86NoTables.addN_spec EdwardsOps.X86NoTables.subN_spec
+    EdwardsOps.X86NoTables.asExtended_spec EdwardsOps.X86NoTables.pDouble_spec
+    EdwardsOps.X86NoTables.cAsProjective_spec EdwardsOps.X86NoTables.pAsExtended_spec a_naf b_naf i
+    table_A table_B r A B hA hAb hB hBb ha hb hi hr hrb hrp
 
 open window.«NafLookupTable5ProjectiveNielsPointx86_64-no-tables».Insts in
 open scoped Helpers.IndexStep in
@@ -688,7 +769,22 @@ open «CoreOpsArithSubSharedAProjectiveNielsPointi686-no-tablesCompletedPointi68
 
 namespace «i686-no-tables»
 
-open scoped Helpers.IndexStep in
+private theorem mul_loop0_eq
+    (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (a_naf b_naf : Array I8 256#usize) (i : Usize) :
+    mul.«i686-no-tables_loop0» iter a_naf b_naf i = EdwardsOps.vdbLoop0 iter a_naf b_naf i := by
+  unfold mul.«i686-no-tables_loop0» EdwardsOps.vdbLoop0
+  congr 1
+
+private theorem mul_loop1_eq (a_naf b_naf : Array I8 256#usize) (i : Usize)
+    (table_A : window.NafLookupTable5 ProjectiveNielsPoint.«i686-no-tables»)
+    (table_B : window.NafLookupTable5 ProjectiveNielsPoint.«i686-no-tables»)
+    (r : ProjectivePoint.«i686-no-tables») :
+    mul.«i686-no-tables_loop1» a_naf b_naf i table_A table_B r =
+      EdwardsOps.I686NoTables.vdbLoop1N a_naf b_naf i table_A table_B r := by
+  unfold mul.«i686-no-tables_loop1» EdwardsOps.vdbLoop1N
+  congr 1
+
 /-- The first loop of `mul`: the highest index at which a digit of `a` or `b` is nonzero (`0` if
 there is none). -/
 @[local step]
@@ -698,46 +794,9 @@ private theorem mul_loop0_spec (iter : core.iter.adapters.rev.Rev (core.ops.rang
     (hz : ∀ k, iter.iter.end.val ≤ k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0) :
     mul.«i686-no-tables_loop0» iter a_naf b_naf i ⦃ (r : Usize) =>
       r.val < 256 ∧ ∀ k, r.val < k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0 ⦄ := by
-  unfold mul.«i686-no-tables_loop0»
-  apply loop.spec_decr_nat (measure := fun (it, _) => it.iter.end.val)
-    (inv := fun (it, j) => it.iter.start.val = 0 ∧ it.iter.end.val ≤ 256 ∧ j.val < 256 ∧
-      ∀ k, it.iter.end.val ≤ k → k < 256 → a_naf[k]!.val = 0 ∧ b_naf[k]!.val = 0)
-  · rintro ⟨it, j⟩ ⟨hst, hen, hj, hzk⟩
-    unfold mul.«i686-no-tables_loop0».body
-    by_cases hlt : 0 < it.iter.end.val
-    · step with core.iter.adapters.rev.Rev.next_Usize_some_spec
-        as ⟨o, it1, e, ho, he, hstart1, hend1⟩
-      subst ho
-      step as ⟨x, hx⟩
-      by_cases hx0 : x.val = 0
-      · have hx' : (x != 0#i8) = false := by
-          rw [bne_eq_false_iff_eq]; scalar_tac
-        simp only [hx', Bool.false_eq_true, ↓reduceIte]
-        step as ⟨y, hy⟩
-        by_cases hy0 : y.val = 0
-        · have hy' : (y != 0#i8) = false := by
-            rw [bne_eq_false_iff_eq]; scalar_tac
-          simp only [hy', Bool.false_eq_true, ↓reduceIte, WP.spec_ok]
-          refine ⟨by rw [hstart1, hst], by scalar_tac, by scalar_tac, fun k hk hk' => ?_,
-            by scalar_tac⟩
-          rcases Nat.eq_or_lt_of_le (hend1 ▸ hk) with h | h
-          · subst h; exact ⟨hx ▸ hx0, hy ▸ hy0⟩
-          · exact hzk k (by omega) hk'
-        · have hy' : (y != 0#i8) = true := by
-            rw [bne_iff_ne]; intro h; apply hy0; rw [h]; rfl
-          simp only [hy', ↓reduceIte, WP.spec_ok]
-          exact ⟨by scalar_tac, fun k hk hk' => hzk k (by omega) hk'⟩
-      · have hx' : (x != 0#i8) = true := by
-          rw [bne_iff_ne]; intro h; apply hx0; rw [h]; rfl
-        simp only [hx', ↓reduceIte, WP.spec_ok]
-        exact ⟨by scalar_tac, fun k hk hk' => hzk k (by omega) hk'⟩
-    · step with core.iter.adapters.rev.Rev.next_Usize_none_spec as ⟨o, it1, ho⟩
-      subst ho
-      simp only [WP.spec_ok]
-      exact ⟨hj, fun k _ hk' => hzk k (by omega) hk'⟩
-  · exact ⟨hstart, hend, hi, hz⟩
+  rw [mul_loop0_eq]
+  exact EdwardsOps.vdbLoop0_spec iter a_naf b_naf i hstart hend hi hz
 
-open scoped Helpers.IndexStep in
 /-- The second loop of `mul`: after the digits `i, …, 255`, the accumulator represents
 `nafTail a i • A + nafTail b i • B`. -/
 @[local step]
@@ -753,101 +812,12 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     mul.«i686-no-tables_loop1» a_naf b_naf i table_A table_B r
       ⦃ (res : edwards.EdwardsPoint.«i686-no-tables») => res.OnCurve ∧
         res.toPoint = nafTail a_naf 0 • A + nafTail b_naf 0 • B ∧ res.LimbsLt 26 ⦄ := by
-  unfold mul.«i686-no-tables_loop1»
-  apply loop.spec_decr_nat (measure := fun (j, _) => j.val)
-    (inv := fun (j, q) => j.val < 256 ∧ q.OnCurve ∧ q.LimbsLt 26 ∧
-      q.toPoint = nafTail a_naf (j.val + 1) • A + nafTail b_naf (j.val + 1) • B)
-  · rintro ⟨j, q⟩ ⟨hj, hq, hqb, hqp⟩
-    unfold mul.«i686-no-tables_loop1».body
-    step with «ProjectivePointi686-no-tables».double_spec_point as ⟨t, hton, htp, htb⟩
-    step as ⟨d, hd⟩
-    rw [show lift (core.cmp.impls.OrdI8.cmp d 0#i8) = ok (compare d.val 0) from rfl, bind_ok]
-    apply spec_bind (Pₘ := fun t1 => t1.OnCurve ∧ t1.toPoint = t.toPoint + d.val • A ∧
-      t1.MulBounded)
-    · rcases lt_trichotomy d.val 0 with hneg | hzero | hpos
-      · rw [(compare_lt_iff_lt).mpr hneg]
-        simp only
-        step with «CompletedPointi686-no-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
-        rw [← hd, abs_of_neg hneg] at hk
-        step as ⟨i1, hi1⟩
-        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
-        step with window.NafLookupTable5.select_spec (P := A) _ table_A i2 hAb hA
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with sub_spec_point ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
-        refine ⟨ht1on, ?_, ht1b⟩
-        rw [ht1p, hep, show ProjectiveNielsPoint.«i686-no-tables».toPoint pnp = PointRepr.toPoint
-            pnp from rfl, hpp]
-        exact sub_nsmul_eq _ _ _ _ (by omega)
-      · rw [(compare_eq_iff_eq).mpr hzero]
-        simp only [WP.spec_ok]
-        rw [hzero, zero_smul, add_zero]
-        exact ⟨hton, rfl, htb⟩
-      · rw [(compare_gt_iff_gt).mpr hpos]
-        simp only
-        step with «CompletedPointi686-no-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (ha j.val hj (by rw [← hd]; omega))
-        rw [← hd, abs_of_pos hpos] at hk
-        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
-        step with window.NafLookupTable5.select_spec (P := A) _ table_A i1 hAb hA
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with add_spec_point ep pnp hepb hpb hepon hpon as ⟨t1, ht1on, ht1p, ht1b⟩
-        refine ⟨ht1on, ?_, ht1b⟩
-        rw [ht1p, hep, show ProjectiveNielsPoint.«i686-no-tables».toPoint pnp = PointRepr.toPoint
-            pnp from rfl, hpp]
-        exact add_nsmul_eq _ _ _ _ (by omega)
-    rintro t1 ⟨ht1on, ht1p, ht1b⟩
-    step as ⟨e, he⟩
-    rw [show lift (core.cmp.impls.OrdI8.cmp e 0#i8) = ok (compare e.val 0) from rfl, bind_ok]
-    apply spec_bind (Pₘ := fun t2 => t2.OnCurve ∧ t2.toPoint = t1.toPoint + e.val • B ∧
-      t2.MulBounded)
-    · rcases lt_trichotomy e.val 0 with hneg | hzero | hpos
-      · rw [(compare_lt_iff_lt).mpr hneg]
-        simp only
-        step with «CompletedPointi686-no-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (hb j.val hj (by rw [← he]; omega))
-        rw [← he, abs_of_neg hneg] at hk
-        step as ⟨i1, hi1⟩
-        step with IScalar.hcast_inBounds_spec as ⟨i2, hi2⟩
-        step with window.NafLookupTable5.select_spec (P := B) _ table_B i2 hBb hB
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with sub_spec_point ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
-        refine ⟨ht2on, ?_, ht2b⟩
-        rw [ht2p, hep, show ProjectiveNielsPoint.«i686-no-tables».toPoint pnp = PointRepr.toPoint
-            pnp from rfl, hpp]
-        exact sub_nsmul_eq _ _ _ _ (by omega)
-      · rw [(compare_eq_iff_eq).mpr hzero]
-        simp only [WP.spec_ok]
-        rw [hzero, zero_smul, add_zero]
-        exact ⟨ht1on, rfl, ht1b⟩
-      · rw [(compare_gt_iff_gt).mpr hpos]
-        simp only
-        step with «CompletedPointi686-no-tables».as_extended_spec_point as ⟨ep, hepon, hep, hepb⟩
-        have hk := naf_digit_abs (w := 5) (by norm_num) (hb j.val hj (by rw [← he]; omega))
-        rw [← he, abs_of_pos hpos] at hk
-        step with IScalar.hcast_inBounds_spec as ⟨i1, hi1⟩
-        step with window.NafLookupTable5.select_spec (P := B) _ table_B i1 hBb hB
-            ⟨by omega, by omega⟩ as ⟨pnp, hpon, hpp, hpb⟩
-        step with add_spec_point ep pnp hepb hpb hepon hpon as ⟨t2, ht2on, ht2p, ht2b⟩
-        refine ⟨ht2on, ?_, ht2b⟩
-        rw [ht2p, hep, show ProjectiveNielsPoint.«i686-no-tables».toPoint pnp = PointRepr.toPoint
-            pnp from rfl, hpp]
-        exact add_nsmul_eq _ _ _ _ (by omega)
-    rintro t2 ⟨ht2on, ht2p, ht2b⟩
-    step with «CompletedPointi686-no-tables».as_projective_spec_point as ⟨r1, hr1on, hr1p, hr1b⟩
-    have hval : r1.toPoint = nafTail a_naf j.val • A + nafTail b_naf j.val • B := by
-      rw [hr1p, ht2p, ht1p, htp, hqp, horner_step, nafTail_eq _ _ hj, nafTail_eq _ _ hj, ← hd, ← he]
-    split
-    · step with «ProjectivePointi686-no-tables».as_extended_spec_point as
-        ⟨res, hreson, hresp, hresb⟩
-      have hj0 : j.val = 0 := by scalar_tac
-      refine ⟨hreson, ?_, hresb⟩
-      rw [hresp, hval, hj0]
-    · step as ⟨j1, hj1⟩
-      have hj1' : j1.val + 1 = j.val := by scalar_tac
-      refine ⟨by scalar_tac, hr1on, hr1b, ?_, by scalar_tac⟩
-      rw [hval, hj1']
-  · exact ⟨hi, hr, hrb, hrp⟩
+  rw [mul_loop1_eq]
+  exact EdwardsOps.I686NoTables.vdbLoop1N_spec
+    EdwardsOps.I686NoTables.addN_spec EdwardsOps.I686NoTables.subN_spec
+    EdwardsOps.I686NoTables.asExtended_spec EdwardsOps.I686NoTables.pDouble_spec
+    EdwardsOps.I686NoTables.cAsProjective_spec EdwardsOps.I686NoTables.pAsExtended_spec a_naf b_naf
+    i table_A table_B r A B hA hAb hB hBb ha hb hi hr hrb hrp
 
 open window.«NafLookupTable5ProjectiveNielsPointi686-no-tables».Insts in
 open scoped Helpers.IndexStep in

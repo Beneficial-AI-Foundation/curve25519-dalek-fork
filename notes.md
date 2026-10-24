@@ -788,9 +788,23 @@ data, bounds, weakenings only) and the instances `Proofs/Helpers/Backend/{U64,U3
   `Elligator` 372 → 30, `Compress` 237 → 16, `Decompress` (only `step_2`) 245 → 50,
   `DoubleAndCompressBatch` (`from`, `compressState`) 456 → 139; Montgomery
   `DifferentialAddAndDouble` 185 → 17. Generators and generic blocks in `.scratch/generic/`.
-- Left in the duplicated layer: loop proofs over `Vec`s (`ToMontgomeryBatch`,
-  `CompressBatchAlloc`, Montgomery `Mul`, the scalar-mul loops, 3–7 s per configuration each);
-  they need a generic loop/`Vec` layer.
+- The point layer above `Backend`: `Proofs/Helpers/EdwardsOps.lean` (`EdwardsOps`: the point
+  types `E`, `N`, `C`, `Pr`, `An` of a configuration, their models and bounds, the point
+  operations as data; `N`, `An` through their `PointRepr` instances so that the tables' generic
+  `select_spec`s apply) and the four instances `Proofs/Helpers/EdwardsOps/Instances.lean`, whose
+  specs are the configurations' `*_spec_point` theorems used as they are.
+- Loop bridges: `unfold loop genericLoop; congr 1` closes most of them (the nested matchers on
+  `Ordering`/`Option` unify). Where it does not (a `match` on a loop-state component or on a
+  `next` result), go down the binds with `congr 1; funext x` and split the matched value
+  (`cases t <;> rfl`); first rewrite the inner loops with their own bridges.
+- Converted (plain `lean` instructions before → after, without `lake env`): Pippenger 519 → 194,
+  Straus `OptionalMultiscalarMul` 223 → 112, `MultiscalarMul` 159 → 77, `VartimeDoubleBase`
+  213 → 117, `VartimeTripleBase` 205 → 122, precomputed Straus (four files + the shared
+  `OptionalMixedMultiscalarMul/Generic.lean`) 525 → 282, `VariableBase/Mul` 75 → 35. Generators
+  in `.scratch/generic/gen_*.py`.
+- Left in the duplicated layer: Montgomery `Mul` (a ladder over Montgomery
+  points: needs a Montgomery analogue of `EdwardsOps`), Edwards `ToMontgomeryBatch`,
+  `CompressBatchAlloc` (2–7 s per configuration each).
 
 
 ## Performance findings (2026-10-10)
