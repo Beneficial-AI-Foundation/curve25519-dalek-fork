@@ -14,6 +14,8 @@ import Mathlib.Tactic.ReduceModChar
 import Proofs.Helpers.ZMod
 public import Curve25519.Ristretto.Encoding.Defs
 public import Curve25519.Basic
+import Proofs.Helpers.Backend.U32.Bytes
+import Proofs.Helpers.Backend.U64.Bytes
 public section
 
 /-! # `FieldElement::sqrt_ratio_i`

@@ -28,6 +28,7 @@ import Proofs.Window.NafLookupTable5Select
 import Proofs.Window.NafLookupTable8Select
 import Proofs.Backend.Serial.ScalarMul.PrecomputedStraus.OptionalMixedMultiscalarMul.Lemmas
 import Proofs.Backend.Serial.ScalarMul.PrecomputedStraus.OptionalMixedMultiscalarMul.Generic
+import Proofs.Helpers.EdwardsOps.Instances
 public section
 
 /-! # `VartimePrecomputedStraus::optional_mixed_multiscalar_mul` (`i686-no-tables`)

@@ -9,6 +9,8 @@ import Mathlib.Tactic.LinearCombination
 public import Proofs.Helpers.Coords
 public import Proofs.Helpers.Backend.U32
 public import Proofs.Helpers.Backend.U64
+import Proofs.Helpers.Backend.U32.Bytes
+import Proofs.Helpers.Backend.U64.Bytes
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519 TwistedEdwardsModel

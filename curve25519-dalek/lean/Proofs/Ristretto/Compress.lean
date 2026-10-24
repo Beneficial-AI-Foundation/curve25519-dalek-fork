@@ -10,6 +10,8 @@ public import Defs.Ristretto
 import Proofs.Helpers.Coords
 import Proofs.Helpers.RistrettoCompress
 public import Proofs.Field.Invsqrt
+import Proofs.Helpers.Backend.U32.Bytes
+import Proofs.Helpers.Backend.U64.Bytes
 public section
 
 /-! # `RistrettoPoint::compress`

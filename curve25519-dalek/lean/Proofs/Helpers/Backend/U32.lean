@@ -14,11 +14,8 @@ import Proofs.Backend.Serial.U32.Field.Neg
 import Proofs.Backend.Serial.U32.Field.Square
 import Proofs.Backend.Serial.U32.Field.Square2
 import Proofs.Backend.Serial.U32.Field.Sub
-import Proofs.Field.Eq
 import Proofs.Backend.Serial.U32.Constants.Aplus2OverFour
-import Proofs.Field.IsZero
 import Proofs.Backend.Serial.U32.Constants.InvsqrtAMinusD
-import Proofs.Backend.Serial.U32.Field.ToBytes
 import Proofs.Backend.Serial.U32.Constants.EdwardsDMinusOneSquared
 import Proofs.Backend.Serial.U32.Constants.MinusOne
 import Proofs.Backend.Serial.U32.Constants.OneMinusEdwardsDSquared
@@ -28,8 +25,6 @@ import Proofs.Backend.Serial.U32.Constants.SqrtM1
 import Proofs.Backend.Serial.U32.Field.ConditionalAssign
 import Proofs.Backend.Serial.U32.Field.ConditionalNegate
 import Proofs.Backend.Serial.U32.Field.Pow2k
-import Proofs.Field.CtEq
-import Proofs.Field.IsNegative
 import Mathlib.Tactic.LinearCombination
 public section
 
@@ -38,7 +33,8 @@ public section
 `FieldElement2625`, the backend of `«i686-tables»` and `«i686-no-tables»`, as a `Backend`:
 `Red`, `Sum2`, `MulIn`, `Niels` are `LimbsLt 26`, `27`, `MulBounded`, `LimbsLt 27`. The specs
 are stated first on `FieldElement2625` (their proofs use the field specs, imported privately),
-then bundled.
+then bundled; those through the encoding (`eq`, `ct_eq`, `is_negative`, `is_zero`, `to_bytes`)
+are in `Backend/U32/Bytes.lean`.
 `Backend.U32.mul_spec : Backend.U32.MulSpec`, … by definition. -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
@@ -90,12 +86,6 @@ theorem neg_spec (a : FieldElement2625) (ha : a.MulBounded) :
   spec_mono (CoreOpsArithNegFieldElement2625.neg_spec a (limbsLt_of_mulBounded ha))
     fun _ ⟨h, hr⟩ => ⟨toField_neg_of_mod h, hr⟩
 
-theorem eq_spec (a b : FieldElement2625) :
-    FieldElement2625.Insts.CoreCmpPartialEqFieldElement2625.eq a b ⦃ c =>
-      (c = true ↔ a.toField = b.toField) ⦄ :=
-  spec_mono (FieldElement2625.Insts.CoreCmpPartialEqFieldElement2625.eq_spec a b)
-    fun _ h => h.trans FieldElement2625.toField_eq_toField_iff.symm
-
 theorem edwardsD_spec :
     backend.serial.u32.constants.EDWARDS_D ⦃ (r : FieldElement2625) =>
       r.toField = d ∧ r.LimbsLt 26 ⦄ :=
@@ -111,13 +101,6 @@ theorem sum2_mulIn {a : FieldElement2625} (h : a.LimbsLt 27) : a.MulBounded :=
 theorem pow2k_spec (a : FieldElement2625) (k : U32) (hk : 0 < k.val) (ha : a.LimbsLt 27) :
     FieldElement2625.pow2k a k ⦃ r => r.toField = a.toField ^ 2 ^ k.val ∧ r.LimbsLt 26 ⦄ :=
   spec_mono (FieldElement2625.pow2k_spec a k hk ha) fun _ ⟨h, hr⟩ => ⟨toField_pow_of_mod h, hr⟩
-
-theorem ct_eq_spec (a b : FieldElement2625) :
-    FieldElement2625.Insts.SubtleConstantTimeEq.ct_eq a b ⦃ c =>
-      c.IsValid ∧ (a.toField = b.toField → c = 1#u8) ∧ (a.toField ≠ b.toField → c = 0#u8) ⦄ :=
-  spec_mono (FieldElement2625.Insts.SubtleConstantTimeEq.ct_eq_spec a b) fun _ ⟨hv, h1, h0⟩ =>
-    ⟨hv, fun h => h1 (FieldElement2625.toField_eq_toField_iff.mp h),
-      fun h => h0 fun h' => h (FieldElement2625.toField_eq_toField_iff.mpr h')⟩
 
 theorem conditional_assign_spec (a b : FieldElement2625) (c : subtle.Choice) (hc : c.IsValid) :
     FieldElement2625.Insts.SubtleConditionallySelectable.conditional_assign a b c ⦃ r =>
@@ -139,11 +122,6 @@ theorem sqrtM1_spec :
       r.toField = (curve25519.sqrtM1 : ZMod p) ∧ r.LimbsLt 26 ⦄ :=
   spec_mono backend.serial.u32.constants.SQRT_M1_spec fun _ ⟨h, hr⟩ =>
     ⟨by rw [toField_def, h], hr⟩
-
-theorem is_negative_spec (a : FieldElement2625) :
-    field.FieldElement2625.is_negative a ⦃ c => c.IsValid ∧ c.val = a.toField.val % 2 ⦄ :=
-  spec_mono (field.FieldElement2625.is_negative_spec a)
-    fun _ ⟨hv, h⟩ => ⟨hv, by rw [h, FieldElement2625.toField_val]⟩
 
 theorem one_spec :
     FieldElement2625.ONE ⦃ (r : FieldElement2625) => r.toField = 1 ∧ r.LimbsLt 26 ⦄ :=
@@ -192,17 +170,6 @@ theorem invsqrtAMinusD_spec :
     apply mul_right_cancel₀ had
     rw [h, invsqrtAMinusD_sq_mul]
 
-theorem to_bytes_spec (a : FieldElement2625) :
-    FieldElement2625.to_bytes a ⦃ r => r.asNat 8 = a.toField.val ⦄ :=
-  spec_mono (FieldElement2625.to_bytes_spec a) fun _ h => by rw [h, FieldElement2625.toField_val]
-
-theorem is_zero_spec (a : FieldElement2625) :
-    field.FieldElement2625.is_zero a ⦃ c =>
-      c.IsValid ∧ (a.toField = 0 → c = 1#u8) ∧ (a.toField ≠ 0 → c = 0#u8) ⦄ :=
-  spec_mono (field.FieldElement2625.is_zero_spec a) fun _ ⟨hv, h1, h0⟩ =>
-    ⟨hv, fun h => h1 (FieldElement2625.toField_eq_zero_iff.mp h),
-      fun h => h0 fun h' => h (FieldElement2625.toField_eq_zero_iff.mpr h')⟩
-
 theorem aplus2OverFour_spec :
     backend.serial.u32.constants.APLUS2_OVER_FOUR ⦃ (r : FieldElement2625) =>
       r.toField * 4 = (A : ZMod p) + 2 ∧ r.LimbsLt 26 ⦄ :=
@@ -219,6 +186,7 @@ namespace Curve25519Dalek.Backend
   asNat a := a.asNat
   toField a := a.toField
   toField_eq a := a.toField_def
+  inhF := inferInstance
   Red a := a.LimbsLt 26
   Sum2 a := a.LimbsLt 27
   SqIn a := a.LimbsLt 27
@@ -253,6 +221,7 @@ namespace Curve25519Dalek.Backend
   invert := field.FieldElement2625.invert
   sqrtRatioI := field.FieldElement2625.sqrt_ratio_i
   invsqrt := field.FieldElement2625.invsqrt
+  invertBatchAlloc := field.FieldElement2625.invert_batch_alloc
   red_sum2 := U32.red_sum2
   sum2_sqIn h := h
   sqIn_mulIn := U32.sum2_mulIn

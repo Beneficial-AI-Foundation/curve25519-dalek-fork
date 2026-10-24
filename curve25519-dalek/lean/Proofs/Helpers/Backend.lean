@@ -50,6 +50,8 @@ structure Backend where
   /-- the represented element of `ZMod p` -/
   toField : F → ZMod p
   toField_eq : ∀ a, toField a = (asNat a : ZMod p)
+  /-- for `getElem!` on slices of field elements -/
+  inhF : Inhabited F
   /-- output bound of `mul`, `sub`, `square`, `neg` -/
   Red : F → Prop
   /-- bound of the sum of two `Red` elements -/
@@ -116,6 +118,8 @@ structure Backend where
   sqrtRatioI : F → F → Result (subtle.Choice × F)
   /-- `FieldElement::invsqrt` -/
   invsqrt : F → Result (subtle.Choice × F)
+  /-- `FieldElement::invert_batch_alloc` -/
+  invertBatchAlloc : Slice F → Result (Slice F)
   red_sum2 : ∀ {a}, Red a → Sum2 a
   sum2_sqIn : ∀ {a}, Sum2 a → SqIn a
   sqIn_mulIn : ∀ {a}, SqIn a → MulIn a
@@ -125,6 +129,8 @@ structure Backend where
 namespace Backend
 
 variable (B : Backend)
+
+instance : Inhabited B.F := B.inhF
 
 theorem red_sqIn {a : B.F} (h : B.Red a) : B.SqIn a := B.sum2_sqIn (B.red_sum2 h)
 
@@ -254,6 +260,11 @@ abbrev SqrtRatioISpec : Prop := ∀ u v, B.SqIn u → B.SqIn v →
 /-- `invsqrt a` is RFC 9496's `SQRT_RATIO_M1(1, a)`. -/
 abbrev InvsqrtSpec : Prop := ∀ a, B.SqIn a → B.invsqrt a ⦃ (c : subtle.Choice) (r : B.F) =>
   sqrtRatioM1 1 (B.toField a) = (decide (c = 1#u8), B.toField r) ∧ c.IsValid ∧ B.Red r ⦄
+
+/-- `invertBatchAlloc` inverts every entry (`0` stays `0`). -/
+abbrev InvertBatchAllocSpec : Prop := ∀ (s : Slice B.F), (∀ i < s.length, B.Red s[i]!) →
+  B.invertBatchAlloc s ⦃ r => r.length = s.length ∧
+    ∀ i < s.length, B.toField r[i]! = (B.toField s[i]!)⁻¹ ∧ B.Red r[i]! ⦄
 
 /-! ### From `toField` back to the specs' `asNat % p` form -/
 

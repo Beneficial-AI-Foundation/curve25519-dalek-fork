@@ -7,6 +7,8 @@ public import Curve25519.X25519
 public import Curve25519Dalek.Funs
 public import Defs.Montgomery
 public import Defs.Scalar
+public import Proofs.Helpers.Backend.U32
+public import Proofs.Helpers.Backend.U64
 import Proofs.Backend.Serial.U64.Field.FromBytes
 import Proofs.Backend.Serial.U64.Field.One
 import Proofs.Helpers.AsNat
@@ -66,10 +68,141 @@ private theorem testBit_asNat (bytes : Array U8 32#usize) (j : ℕ) :
   congr 1
   omega
 
+end Curve25519Dalek.montgomery
+
+namespace Curve25519Dalek.Backend
+
+variable (B : Backend)
+
+open ControlFlow
+
+/-- The loop body of `Mul<&Scalar> for &MontgomeryPoint` over a backend: `swap` is
+`conditional_swap` and `dad` is `differential_add_and_double` on the projective points `P`. -/
+@[expose] def mulLadderBody {P : Type} (swap : P → P → subtle.Choice → Result (P × P))
+    (dad : P → P → B.F → Result (P × P)) (bytes : Array U8 32#usize) (affine_u : B.F)
+    (x0 x1 : P) (prev_bit : Bool) (i : Usize) :
+    Result (ControlFlow (P × P × Bool × Usize) (P × P × Bool)) := do
+  if i > 0#usize
+  then
+    let i1 ← i - 1#usize
+    let i2 ← i1 >>> 3#i32
+    let i3 ← Array.index_usize bytes i2
+    let i4 ← lift (i1 &&& 7#usize)
+    let i5 ← i3 >>> i4
+    let i6 ← lift (i5 &&& 1#u8)
+    let choice ← lift (UScalar.cast_fromBool .U8 (prev_bit ^^ (i6 = 1#u8)))
+    massert ((choice = 0#u8) || (choice = 1#u8))
+    let c ← core.convert.IntoFrom.into subtle.Choice.Insts.CoreConvertFromU8 choice
+    let (x01, x11) ← swap x0 x1 c
+    let (x02, x12) ← dad x01 x11 affine_u
+    ok (cont (x02, x12, i6 = 1#u8, i1))
+  else ok (done (x0, x1, prev_bit))
+
+/-- The loop of `Mul<&Scalar> for &MontgomeryPoint` over a backend. -/
+@[expose] def mulLadder {P : Type} (swap : P → P → subtle.Choice → Result (P × P))
+    (dad : P → P → B.F → Result (P × P)) (bytes : Array U8 32#usize) (affine_u : B.F)
+    (x0 x1 : P) (prev_bit : Bool) (i : Usize) : Result (P × P × Bool) := do
+  loop (fun (x01, x11, prev_bit1, i1) =>
+      B.mulLadderBody swap dad bytes affine_u x01 x11 prev_bit1 i1)
+    (x0, x1, prev_bit, i)
+
+open scoped Helpers.IndexStep in
+/-- `mulLadder`: from bit `i - 1` down to bit `0`, the ladder's loop body, for points with
+coordinates `toXZ` and bounds `Bnd` preserved by `dad`. -/
+private theorem mulLadder_spec {P : Type} (toXZ : P → XZ (ZMod p)) (Bnd : P → Prop)
+    (swap : P → P → subtle.Choice → Result (P × P)) (dad : P → P → B.F → Result (P × P))
+    (hswap : ∀ a b (c : subtle.Choice), c.IsValid →
+      swap a b c ⦃ (r : P × P) => (c = 0#u8 → r = (a, b)) ∧ (c = 1#u8 → r = (b, a)) ⦄)
+    (hdad : ∀ a b u, Bnd a → Bnd b → B.SqIn u → dad a b u ⦃ (a' b' : P) =>
+      toXZ a' = XZ.dbl montgomery.a24 (toXZ a) ∧ toXZ b' = XZ.add (toXZ a) (toXZ b) (B.toField u) ∧
+        Bnd a' ∧ Bnd b' ⦄)
+    (bytes : Array U8 32#usize) (affine_u : B.F) (x0 x1 : P) (prev_bit : Bool) (i : Usize)
+    (hi : i.val ≤ 255) (hu : B.SqIn affine_u) (h0 : Bnd x0) (h1 : Bnd x1) :
+    B.mulLadder swap dad bytes affine_u x0 x1 prev_bit i ⦃ (y0 y1 : P) (b : Bool) =>
+      Bnd y0 ∧ Bnd y1 ∧
+      (⟨toXZ y0, toXZ y1, b⟩ : XZ.LadderState (ZMod p)) =
+        XZ.ladderLoop montgomery.a24 (B.toField affine_u) (bytes.asNat 8) i.val
+          ⟨toXZ x0, toXZ x1, prev_bit⟩ ⦄ := by
+  unfold mulLadder
+  apply loop.spec_decr_nat (measure := fun (_, _, _, j) => j.val)
+    (inv := fun (y0, y1, b, j) => j.val ≤ 255 ∧ Bnd y0 ∧ Bnd y1 ∧
+      XZ.ladderLoop montgomery.a24 (B.toField affine_u) (bytes.asNat 8) j.val
+          ⟨toXZ y0, toXZ y1, b⟩ =
+        XZ.ladderLoop montgomery.a24 (B.toField affine_u) (bytes.asNat 8) i.val
+          ⟨toXZ x0, toXZ x1, prev_bit⟩)
+  · rintro ⟨y0, y1, b, j⟩ ⟨hj, hy0, hy1, hinv⟩
+    simp only
+    unfold mulLadderBody
+    split
+    next hgt =>
+      have hpos : 0 < j.val := by scalar_tac
+      step as ⟨j1, hj1, _⟩
+      step as ⟨q, hq, _⟩
+      · rcases System.Platform.numBits_eq with h | h <;> simp [h]
+      step as ⟨byte, hbyte⟩
+      step as ⟨r, hr, _⟩
+      have hr8 : r.val < 8 := by
+        rw [hr, UScalar.val_and]
+        exact Nat.lt_of_le_of_lt Nat.and_le_right (by decide)
+      step as ⟨sh, hsh, _⟩
+      step as ⟨bit, hbit, _⟩
+      -- the bit read is bit `j - 1` of the scalar
+      have hcur : decide (bit = 1#u8) = (bytes.asNat 8).testBit j1.val := by
+        rw [montgomery.testBit_asNat, Nat.testBit_eq_decide_div_mod_eq]
+        have hq' : q.val = j1.val / 8 := by rw [hq, Nat.shiftRight_eq_div_pow]
+        have hr' : r.val = j1.val % 8 := by
+          rw [hr, UScalar.val_and, show (7#usize).val = 2 ^ 3 - 1 from rfl,
+              Nat.and_two_pow_sub_one_eq_mod]
+        have hbit' : bit.val = byte.val / 2 ^ (j1.val % 8) % 2 := by
+          rw [hbit, UScalar.val_and, show (1#u8).val = 2 ^ 1 - 1 from rfl,
+            Nat.and_two_pow_sub_one_eq_mod, hsh, Nat.shiftRight_eq_div_pow, hr', pow_one]
+        rw [hbyte, hq'] at hbit'
+        rw [← hbit']
+        cases hb : decide (bit = 1#u8) <;> simp_all [UScalar.eq_equiv]
+      generalize hcurdef : decide (bit = 1#u8) = cur at hcur ⊢
+      step as ⟨choice, hchoice⟩
+      have hchoice01 : choice = 0#u8 ∨ choice = 1#u8 := by
+        cases hbc : b ^^ cur <;> simp [hbc] at hchoice <;> scalar_tac
+      step
+      step as ⟨c, hc_valid, hc⟩
+      have hj' : j.val = j1.val + 1 := by scalar_tac
+      cases hsw : b ^^ cur
+      · have hc0 : c = 0#u8 := by
+          rw [hc, UScalar.eq_equiv]
+          simpa [hsw] using hchoice
+        step with hswap y0 y1 c hc_valid as ⟨x01, x11, hpr0, hpr1⟩
+        obtain ⟨hx01, hx11⟩ := hpr0 hc0
+        rw [hx01, hx11]
+        step with hdad y0 y1 affine_u hy0 hy1 hu as ⟨P', Q', hP', hQ', hP'_lt, hQ'_lt⟩
+        refine ⟨by omega, hP'_lt, hQ'_lt, ?_, by omega⟩
+        rw [← hinv, hj', XZ.ladderLoop, ← hcur]
+        simp only [XZ.ladderStep, hsw, XZ.cswap, Bool.false_eq_true, ↓reduceIte, hP', hQ']
+      · have hc1 : c = 1#u8 := by
+          rw [hc, UScalar.eq_equiv]
+          simpa [hsw] using hchoice
+        step with hswap y0 y1 c hc_valid as ⟨x01, x11, hpr0, hpr1⟩
+        obtain ⟨hx01, hx11⟩ := hpr1 hc1
+        rw [hx01, hx11]
+        step with hdad y1 y0 affine_u hy1 hy0 hu as ⟨P', Q', hP', hQ', hP'_lt, hQ'_lt⟩
+        refine ⟨by omega, hP'_lt, hQ'_lt, ?_, by omega⟩
+        rw [← hinv, hj', XZ.ladderLoop, ← hcur]
+        simp only [XZ.ladderStep, hsw, XZ.cswap, ↓reduceIte, hP', hQ']
+    next hgt =>
+      simp only [WP.spec_ok]
+      have hj0 : j.val = 0 := by scalar_tac
+      rw [hj0, XZ.ladderLoop] at hinv
+      exact ⟨hy0, hy1, hinv⟩
+  · exact ⟨hi, h0, h1, rfl⟩
+
+end Curve25519Dalek.Backend
+
+namespace Curve25519Dalek.montgomery
+
 namespace MulShared1MontgomeryPointShared0ScalarMontgomeryPoint
 
 open scoped Helpers.IndexStep in
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
+open ProjectivePoint.«x86_64-tables».Insts in
 /-- The loop of `mul`: from bit `i - 1` down to bit `0`, the ladder's loop body. -/
 @[local step]
 private theorem mul.«x86_64-tables_loop_spec» (bytes : Array U8 32#usize)
@@ -82,80 +215,17 @@ private theorem mul.«x86_64-tables_loop_spec» (bytes : Array U8 32#usize)
         (⟨y0.toXZ, y1.toXZ, b⟩ : XZ.LadderState (ZMod p)) =
           XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) i.val
             ⟨x0.toXZ, x1.toXZ, prev_bit⟩ ⦄ := by
-  unfold mul.«x86_64-tables_loop»
-  apply loop.spec_decr_nat (measure := fun (_, _, _, j) => j.val)
-    (inv := fun (y0, y1, b, j) => j.val ≤ 255 ∧ y0.LimbsLt 52 ∧ y1.LimbsLt 52 ∧
-      XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) j.val ⟨y0.toXZ, y1.toXZ, b⟩ =
-        XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) i.val
-          ⟨x0.toXZ, x1.toXZ, prev_bit⟩)
-  · rintro ⟨y0, y1, b, j⟩ ⟨hj, hy0, hy1, hinv⟩
-    simp only
-    unfold mul.«x86_64-tables_loop».body
-    split
-    next hgt =>
-      have hpos : 0 < j.val := by scalar_tac
-      step as ⟨j1, hj1, _⟩
-      step as ⟨q, hq, _⟩
-      · rcases System.Platform.numBits_eq with h | h <;> simp [h]
-      step as ⟨byte, hbyte⟩
-      step as ⟨r, hr, _⟩
-      have hr8 : r.val < 8 := by
-        rw [hr, UScalar.val_and]
-        exact Nat.lt_of_le_of_lt Nat.and_le_right (by decide)
-      step as ⟨sh, hsh, _⟩
-      step as ⟨bit, hbit, _⟩
-      -- the bit read is bit `j - 1` of the scalar
-      have hcur : decide (bit = 1#u8) = (bytes.asNat 8).testBit j1.val := by
-        rw [testBit_asNat, Nat.testBit_eq_decide_div_mod_eq]
-        have hq' : q.val = j1.val / 8 := by rw [hq, Nat.shiftRight_eq_div_pow]
-        have hr' : r.val = j1.val % 8 := by
-          rw [hr, UScalar.val_and, show (7#usize).val = 2 ^ 3 - 1 from rfl,
-              Nat.and_two_pow_sub_one_eq_mod]
-        have hbit' : bit.val = byte.val / 2 ^ (j1.val % 8) % 2 := by
-          rw [hbit, UScalar.val_and, show (1#u8).val = 2 ^ 1 - 1 from rfl,
-            Nat.and_two_pow_sub_one_eq_mod, hsh, Nat.shiftRight_eq_div_pow, hr', pow_one]
-        rw [hbyte, hq'] at hbit'
-        rw [← hbit']
-        cases hb : decide (bit = 1#u8) <;> simp_all [UScalar.eq_equiv]
-      generalize hcurdef : decide (bit = 1#u8) = cur at hcur ⊢
-      step as ⟨choice, hchoice⟩
-      have hchoice01 : choice = 0#u8 ∨ choice = 1#u8 := by
-        cases hbc : b ^^ cur <;> simp [hbc] at hchoice <;> scalar_tac
-      step
-      step as ⟨c, hc_valid, hc⟩
-      have hj' : j.val = j1.val + 1 := by scalar_tac
-      cases hsw : b ^^ cur
-      · have hc0 : c = 0#u8 := by
-          rw [hc, UScalar.eq_equiv]
-          simpa [hsw] using hchoice
-        step as ⟨x01, x11, hpr0, hpr1⟩
-        obtain ⟨hx01, hx11⟩ := hpr0 hc0
-        rw [hx01, hx11]
-        step with «x86_64-tables».differential_add_and_double_spec y0 y1 affine_u hy0 hy1 hu
-          as ⟨P', Q', hP', hQ', hP'_lt, hQ'_lt⟩
-        refine ⟨by omega, hP'_lt, hQ'_lt, ?_, by omega⟩
-        rw [← hinv, hj', XZ.ladderLoop, ← hcur]
-        simp only [XZ.ladderStep, hsw, XZ.cswap, Bool.false_eq_true, ↓reduceIte, hP', hQ']
-      · have hc1 : c = 1#u8 := by
-          rw [hc, UScalar.eq_equiv]
-          simpa [hsw] using hchoice
-        step as ⟨x01, x11, hpr0, hpr1⟩
-        obtain ⟨hx01, hx11⟩ := hpr1 hc1
-        rw [hx01, hx11]
-        step with «x86_64-tables».differential_add_and_double_spec y1 y0 affine_u hy1 hy0 hu
-          as ⟨P', Q', hP', hQ', hP'_lt, hQ'_lt⟩
-        refine ⟨by omega, hP'_lt, hQ'_lt, ?_, by omega⟩
-        rw [← hinv, hj', XZ.ladderLoop, ← hcur]
-        simp only [XZ.ladderStep, hsw, XZ.cswap, ↓reduceIte, hP', hQ']
-    next hgt =>
-      simp only [WP.spec_ok]
-      have hj0 : j.val = 0 := by scalar_tac
-      rw [hj0, XZ.ladderLoop] at hinv
-      exact ⟨hy0, hy1, hinv⟩
-  · exact ⟨hi, h0, h1, rfl⟩
+  rw [show mul.«x86_64-tables_loop» bytes affine_u x0 x1 prev_bit i =
+      Backend.U64.mulLadder
+        (subtle.ConditionallySelectable.conditional_swap.default SubtleConditionallySelectable)
+        differential_add_and_double.«x86_64-tables» bytes affine_u x0 x1 prev_bit i from rfl]
+  exact Backend.mulLadder_spec Backend.U64 ProjectivePoint.«x86_64-tables».toXZ
+    (·.LimbsLt 52) _ _ SubtleConditionallySelectable.conditional_swap_spec
+    «x86_64-tables».differential_add_and_double_spec bytes affine_u x0 x1 prev_bit i hi hu h0 h1
 
 open scoped Helpers.IndexStep in
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
+open ProjectivePoint.«i686-tables».Insts in
 /-- The loop of `mul`: from bit `i - 1` down to bit `0`, the ladder's loop body. -/
 @[local step]
 private theorem mul.«i686-tables_loop_spec» (bytes : Array U8 32#usize)
@@ -168,77 +238,13 @@ private theorem mul.«i686-tables_loop_spec» (bytes : Array U8 32#usize)
         (⟨y0.toXZ, y1.toXZ, b⟩ : XZ.LadderState (ZMod p)) =
           XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) i.val
             ⟨x0.toXZ, x1.toXZ, prev_bit⟩ ⦄ := by
-  unfold mul.«i686-tables_loop»
-  apply loop.spec_decr_nat (measure := fun (_, _, _, j) => j.val)
-    (inv := fun (y0, y1, b, j) => j.val ≤ 255 ∧ y0.LimbsLt 26 ∧ y1.LimbsLt 26 ∧
-      XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) j.val ⟨y0.toXZ, y1.toXZ, b⟩ =
-        XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) i.val
-          ⟨x0.toXZ, x1.toXZ, prev_bit⟩)
-  · rintro ⟨y0, y1, b, j⟩ ⟨hj, hy0, hy1, hinv⟩
-    simp only
-    unfold mul.«i686-tables_loop».body
-    split
-    next hgt =>
-      have hpos : 0 < j.val := by scalar_tac
-      step as ⟨j1, hj1, _⟩
-      step as ⟨q, hq, _⟩
-      · rcases System.Platform.numBits_eq with h | h <;> simp [h]
-      step as ⟨byte, hbyte⟩
-      step as ⟨r, hr, _⟩
-      have hr8 : r.val < 8 := by
-        rw [hr, UScalar.val_and]
-        exact Nat.lt_of_le_of_lt Nat.and_le_right (by decide)
-      step as ⟨sh, hsh, _⟩
-      step as ⟨bit, hbit, _⟩
-      -- the bit read is bit `j - 1` of the scalar
-      have hcur : decide (bit = 1#u8) = (bytes.asNat 8).testBit j1.val := by
-        rw [testBit_asNat, Nat.testBit_eq_decide_div_mod_eq]
-        have hq' : q.val = j1.val / 8 := by rw [hq, Nat.shiftRight_eq_div_pow]
-        have hr' : r.val = j1.val % 8 := by
-          rw [hr, UScalar.val_and, show (7#usize).val = 2 ^ 3 - 1 from rfl,
-              Nat.and_two_pow_sub_one_eq_mod]
-        have hbit' : bit.val = byte.val / 2 ^ (j1.val % 8) % 2 := by
-          rw [hbit, UScalar.val_and, show (1#u8).val = 2 ^ 1 - 1 from rfl,
-            Nat.and_two_pow_sub_one_eq_mod, hsh, Nat.shiftRight_eq_div_pow, hr', pow_one]
-        rw [hbyte, hq'] at hbit'
-        rw [← hbit']
-        cases hb : decide (bit = 1#u8) <;> simp_all [UScalar.eq_equiv]
-      generalize hcurdef : decide (bit = 1#u8) = cur at hcur ⊢
-      step as ⟨choice, hchoice⟩
-      have hchoice01 : choice = 0#u8 ∨ choice = 1#u8 := by
-        cases hbc : b ^^ cur <;> simp [hbc] at hchoice <;> scalar_tac
-      step
-      step as ⟨c, hc_valid, hc⟩
-      have hj' : j.val = j1.val + 1 := by scalar_tac
-      cases hsw : b ^^ cur
-      · have hc0 : c = 0#u8 := by
-          rw [hc, UScalar.eq_equiv]
-          simpa [hsw] using hchoice
-        step as ⟨x01, x11, hpr0, hpr1⟩
-        obtain ⟨hx01, hx11⟩ := hpr0 hc0
-        rw [hx01, hx11]
-        step with «i686-tables».differential_add_and_double_spec y0 y1 affine_u hy0 hy1 hu
-          as ⟨P', Q', hP', hQ', hP'_lt, hQ'_lt⟩
-        refine ⟨by omega, hP'_lt, hQ'_lt, ?_, by omega⟩
-        rw [← hinv, hj', XZ.ladderLoop, ← hcur]
-        simp only [XZ.ladderStep, hsw, XZ.cswap, Bool.false_eq_true, ↓reduceIte, hP', hQ']
-      · have hc1 : c = 1#u8 := by
-          rw [hc, UScalar.eq_equiv]
-          simpa [hsw] using hchoice
-        step as ⟨x01, x11, hpr0, hpr1⟩
-        obtain ⟨hx01, hx11⟩ := hpr1 hc1
-        rw [hx01, hx11]
-        step with «i686-tables».differential_add_and_double_spec y1 y0 affine_u hy1 hy0 hu
-          as ⟨P', Q', hP', hQ', hP'_lt, hQ'_lt⟩
-        refine ⟨by omega, hP'_lt, hQ'_lt, ?_, by omega⟩
-        rw [← hinv, hj', XZ.ladderLoop, ← hcur]
-        simp only [XZ.ladderStep, hsw, XZ.cswap, ↓reduceIte, hP', hQ']
-    next hgt =>
-      simp only [WP.spec_ok]
-      have hj0 : j.val = 0 := by scalar_tac
-      rw [hj0, XZ.ladderLoop] at hinv
-      exact ⟨hy0, hy1, hinv⟩
-  · exact ⟨hi, h0, h1, rfl⟩
+  rw [show mul.«i686-tables_loop» bytes affine_u x0 x1 prev_bit i =
+      Backend.U32.mulLadder
+        (subtle.ConditionallySelectable.conditional_swap.default SubtleConditionallySelectable)
+        differential_add_and_double.«i686-tables» bytes affine_u x0 x1 prev_bit i from rfl]
+  exact Backend.mulLadder_spec Backend.U32 ProjectivePoint.«i686-tables».toXZ
+    (·.LimbsLt 26) _ _ SubtleConditionallySelectable.conditional_swap_spec
+    «i686-tables».differential_add_and_double_spec bytes affine_u x0 x1 prev_bit i hi hu h0 h1
 
 open scoped Helpers.IndexStep in
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
@@ -339,6 +345,7 @@ theorem mul.«i686-tables_spec» (self : MontgomeryPoint) (s : scalar.Scalar) :
 
 open scoped Helpers.IndexStep in
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
+open ProjectivePoint.«x86_64-no-tables».Insts in
 /-- The loop of `mul`: from bit `i - 1` down to bit `0`, the ladder's loop body. -/
 @[local step]
 private theorem mul.«x86_64-no-tables_loop_spec» (bytes : Array U8 32#usize)
@@ -351,80 +358,17 @@ private theorem mul.«x86_64-no-tables_loop_spec» (bytes : Array U8 32#usize)
         (⟨y0.toXZ, y1.toXZ, b⟩ : XZ.LadderState (ZMod p)) =
           XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) i.val
             ⟨x0.toXZ, x1.toXZ, prev_bit⟩ ⦄ := by
-  unfold mul.«x86_64-no-tables_loop»
-  apply loop.spec_decr_nat (measure := fun (_, _, _, j) => j.val)
-    (inv := fun (y0, y1, b, j) => j.val ≤ 255 ∧ y0.LimbsLt 52 ∧ y1.LimbsLt 52 ∧
-      XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) j.val ⟨y0.toXZ, y1.toXZ, b⟩ =
-        XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) i.val
-          ⟨x0.toXZ, x1.toXZ, prev_bit⟩)
-  · rintro ⟨y0, y1, b, j⟩ ⟨hj, hy0, hy1, hinv⟩
-    simp only
-    unfold mul.«x86_64-no-tables_loop».body
-    split
-    next hgt =>
-      have hpos : 0 < j.val := by scalar_tac
-      step as ⟨j1, hj1, _⟩
-      step as ⟨q, hq, _⟩
-      · rcases System.Platform.numBits_eq with h | h <;> simp [h]
-      step as ⟨byte, hbyte⟩
-      step as ⟨r, hr, _⟩
-      have hr8 : r.val < 8 := by
-        rw [hr, UScalar.val_and]
-        exact Nat.lt_of_le_of_lt Nat.and_le_right (by decide)
-      step as ⟨sh, hsh, _⟩
-      step as ⟨bit, hbit, _⟩
-      -- the bit read is bit `j - 1` of the scalar
-      have hcur : decide (bit = 1#u8) = (bytes.asNat 8).testBit j1.val := by
-        rw [testBit_asNat, Nat.testBit_eq_decide_div_mod_eq]
-        have hq' : q.val = j1.val / 8 := by rw [hq, Nat.shiftRight_eq_div_pow]
-        have hr' : r.val = j1.val % 8 := by
-          rw [hr, UScalar.val_and, show (7#usize).val = 2 ^ 3 - 1 from rfl,
-              Nat.and_two_pow_sub_one_eq_mod]
-        have hbit' : bit.val = byte.val / 2 ^ (j1.val % 8) % 2 := by
-          rw [hbit, UScalar.val_and, show (1#u8).val = 2 ^ 1 - 1 from rfl,
-            Nat.and_two_pow_sub_one_eq_mod, hsh, Nat.shiftRight_eq_div_pow, hr', pow_one]
-        rw [hbyte, hq'] at hbit'
-        rw [← hbit']
-        cases hb : decide (bit = 1#u8) <;> simp_all [UScalar.eq_equiv]
-      generalize hcurdef : decide (bit = 1#u8) = cur at hcur ⊢
-      step as ⟨choice, hchoice⟩
-      have hchoice01 : choice = 0#u8 ∨ choice = 1#u8 := by
-        cases hbc : b ^^ cur <;> simp [hbc] at hchoice <;> scalar_tac
-      step
-      step as ⟨c, hc_valid, hc⟩
-      have hj' : j.val = j1.val + 1 := by scalar_tac
-      cases hsw : b ^^ cur
-      · have hc0 : c = 0#u8 := by
-          rw [hc, UScalar.eq_equiv]
-          simpa [hsw] using hchoice
-        step as ⟨x01, x11, hpr0, hpr1⟩
-        obtain ⟨hx01, hx11⟩ := hpr0 hc0
-        rw [hx01, hx11]
-        step with «x86_64-no-tables».differential_add_and_double_spec y0 y1 affine_u hy0 hy1 hu
-          as ⟨P', Q', hP', hQ', hP'_lt, hQ'_lt⟩
-        refine ⟨by omega, hP'_lt, hQ'_lt, ?_, by omega⟩
-        rw [← hinv, hj', XZ.ladderLoop, ← hcur]
-        simp only [XZ.ladderStep, hsw, XZ.cswap, Bool.false_eq_true, ↓reduceIte, hP', hQ']
-      · have hc1 : c = 1#u8 := by
-          rw [hc, UScalar.eq_equiv]
-          simpa [hsw] using hchoice
-        step as ⟨x01, x11, hpr0, hpr1⟩
-        obtain ⟨hx01, hx11⟩ := hpr1 hc1
-        rw [hx01, hx11]
-        step with «x86_64-no-tables».differential_add_and_double_spec y1 y0 affine_u hy1 hy0 hu
-          as ⟨P', Q', hP', hQ', hP'_lt, hQ'_lt⟩
-        refine ⟨by omega, hP'_lt, hQ'_lt, ?_, by omega⟩
-        rw [← hinv, hj', XZ.ladderLoop, ← hcur]
-        simp only [XZ.ladderStep, hsw, XZ.cswap, ↓reduceIte, hP', hQ']
-    next hgt =>
-      simp only [WP.spec_ok]
-      have hj0 : j.val = 0 := by scalar_tac
-      rw [hj0, XZ.ladderLoop] at hinv
-      exact ⟨hy0, hy1, hinv⟩
-  · exact ⟨hi, h0, h1, rfl⟩
+  rw [show mul.«x86_64-no-tables_loop» bytes affine_u x0 x1 prev_bit i =
+      Backend.U64.mulLadder
+        (subtle.ConditionallySelectable.conditional_swap.default SubtleConditionallySelectable)
+        differential_add_and_double.«x86_64-no-tables» bytes affine_u x0 x1 prev_bit i from rfl]
+  exact Backend.mulLadder_spec Backend.U64 ProjectivePoint.«x86_64-no-tables».toXZ
+    (·.LimbsLt 52) _ _ SubtleConditionallySelectable.conditional_swap_spec
+    «x86_64-no-tables».differential_add_and_double_spec bytes affine_u x0 x1 prev_bit i hi hu h0 h1
 
 open scoped Helpers.IndexStep in
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
+open ProjectivePoint.«i686-no-tables».Insts in
 /-- The loop of `mul`: from bit `i - 1` down to bit `0`, the ladder's loop body. -/
 @[local step]
 private theorem mul.«i686-no-tables_loop_spec» (bytes : Array U8 32#usize)
@@ -437,77 +381,13 @@ private theorem mul.«i686-no-tables_loop_spec» (bytes : Array U8 32#usize)
         (⟨y0.toXZ, y1.toXZ, b⟩ : XZ.LadderState (ZMod p)) =
           XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) i.val
             ⟨x0.toXZ, x1.toXZ, prev_bit⟩ ⦄ := by
-  unfold mul.«i686-no-tables_loop»
-  apply loop.spec_decr_nat (measure := fun (_, _, _, j) => j.val)
-    (inv := fun (y0, y1, b, j) => j.val ≤ 255 ∧ y0.LimbsLt 26 ∧ y1.LimbsLt 26 ∧
-      XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) j.val ⟨y0.toXZ, y1.toXZ, b⟩ =
-        XZ.ladderLoop montgomery.a24 affine_u.toField (bytes.asNat 8) i.val
-          ⟨x0.toXZ, x1.toXZ, prev_bit⟩)
-  · rintro ⟨y0, y1, b, j⟩ ⟨hj, hy0, hy1, hinv⟩
-    simp only
-    unfold mul.«i686-no-tables_loop».body
-    split
-    next hgt =>
-      have hpos : 0 < j.val := by scalar_tac
-      step as ⟨j1, hj1, _⟩
-      step as ⟨q, hq, _⟩
-      · rcases System.Platform.numBits_eq with h | h <;> simp [h]
-      step as ⟨byte, hbyte⟩
-      step as ⟨r, hr, _⟩
-      have hr8 : r.val < 8 := by
-        rw [hr, UScalar.val_and]
-        exact Nat.lt_of_le_of_lt Nat.and_le_right (by decide)
-      step as ⟨sh, hsh, _⟩
-      step as ⟨bit, hbit, _⟩
-      -- the bit read is bit `j - 1` of the scalar
-      have hcur : decide (bit = 1#u8) = (bytes.asNat 8).testBit j1.val := by
-        rw [testBit_asNat, Nat.testBit_eq_decide_div_mod_eq]
-        have hq' : q.val = j1.val / 8 := by rw [hq, Nat.shiftRight_eq_div_pow]
-        have hr' : r.val = j1.val % 8 := by
-          rw [hr, UScalar.val_and, show (7#usize).val = 2 ^ 3 - 1 from rfl,
-              Nat.and_two_pow_sub_one_eq_mod]
-        have hbit' : bit.val = byte.val / 2 ^ (j1.val % 8) % 2 := by
-          rw [hbit, UScalar.val_and, show (1#u8).val = 2 ^ 1 - 1 from rfl,
-            Nat.and_two_pow_sub_one_eq_mod, hsh, Nat.shiftRight_eq_div_pow, hr', pow_one]
-        rw [hbyte, hq'] at hbit'
-        rw [← hbit']
-        cases hb : decide (bit = 1#u8) <;> simp_all [UScalar.eq_equiv]
-      generalize hcurdef : decide (bit = 1#u8) = cur at hcur ⊢
-      step as ⟨choice, hchoice⟩
-      have hchoice01 : choice = 0#u8 ∨ choice = 1#u8 := by
-        cases hbc : b ^^ cur <;> simp [hbc] at hchoice <;> scalar_tac
-      step
-      step as ⟨c, hc_valid, hc⟩
-      have hj' : j.val = j1.val + 1 := by scalar_tac
-      cases hsw : b ^^ cur
-      · have hc0 : c = 0#u8 := by
-          rw [hc, UScalar.eq_equiv]
-          simpa [hsw] using hchoice
-        step as ⟨x01, x11, hpr0, hpr1⟩
-        obtain ⟨hx01, hx11⟩ := hpr0 hc0
-        rw [hx01, hx11]
-        step with «i686-no-tables».differential_add_and_double_spec y0 y1 affine_u hy0 hy1 hu
-          as ⟨P', Q', hP', hQ', hP'_lt, hQ'_lt⟩
-        refine ⟨by omega, hP'_lt, hQ'_lt, ?_, by omega⟩
-        rw [← hinv, hj', XZ.ladderLoop, ← hcur]
-        simp only [XZ.ladderStep, hsw, XZ.cswap, Bool.false_eq_true, ↓reduceIte, hP', hQ']
-      · have hc1 : c = 1#u8 := by
-          rw [hc, UScalar.eq_equiv]
-          simpa [hsw] using hchoice
-        step as ⟨x01, x11, hpr0, hpr1⟩
-        obtain ⟨hx01, hx11⟩ := hpr1 hc1
-        rw [hx01, hx11]
-        step with «i686-no-tables».differential_add_and_double_spec y1 y0 affine_u hy1 hy0 hu
-          as ⟨P', Q', hP', hQ', hP'_lt, hQ'_lt⟩
-        refine ⟨by omega, hP'_lt, hQ'_lt, ?_, by omega⟩
-        rw [← hinv, hj', XZ.ladderLoop, ← hcur]
-        simp only [XZ.ladderStep, hsw, XZ.cswap, ↓reduceIte, hP', hQ']
-    next hgt =>
-      simp only [WP.spec_ok]
-      have hj0 : j.val = 0 := by scalar_tac
-      rw [hj0, XZ.ladderLoop] at hinv
-      exact ⟨hy0, hy1, hinv⟩
-  · exact ⟨hi, h0, h1, rfl⟩
+  rw [show mul.«i686-no-tables_loop» bytes affine_u x0 x1 prev_bit i =
+      Backend.U32.mulLadder
+        (subtle.ConditionallySelectable.conditional_swap.default SubtleConditionallySelectable)
+        differential_add_and_double.«i686-no-tables» bytes affine_u x0 x1 prev_bit i from rfl]
+  exact Backend.mulLadder_spec Backend.U32 ProjectivePoint.«i686-no-tables».toXZ
+    (·.LimbsLt 26) _ _ SubtleConditionallySelectable.conditional_swap_spec
+    «i686-no-tables».differential_add_and_double_spec bytes affine_u x0 x1 prev_bit i hi hu h0 h1
 
 open scoped Helpers.IndexStep in
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in

@@ -13,11 +13,8 @@ import Proofs.Backend.Serial.U64.Field.Neg
 import Proofs.Backend.Serial.U64.Field.Square
 import Proofs.Backend.Serial.U64.Field.Square2
 import Proofs.Backend.Serial.U64.Field.Sub
-import Proofs.Field.Eq
 import Proofs.Backend.Serial.U64.Constants.Aplus2OverFour
-import Proofs.Field.IsZero
 import Proofs.Backend.Serial.U64.Constants.InvsqrtAMinusD
-import Proofs.Backend.Serial.U64.Field.ToBytes
 import Proofs.Backend.Serial.U64.Constants.EdwardsDMinusOneSquared
 import Proofs.Backend.Serial.U64.Constants.MinusOne
 import Proofs.Backend.Serial.U64.Constants.OneMinusEdwardsDSquared
@@ -27,8 +24,6 @@ import Proofs.Backend.Serial.U64.Constants.SqrtM1
 import Proofs.Backend.Serial.U64.Field.ConditionalAssign
 import Proofs.Backend.Serial.U64.Field.ConditionalNegate
 import Proofs.Backend.Serial.U64.Field.Pow2k
-import Proofs.Field.CtEq
-import Proofs.Field.IsNegative
 import Proofs.Helpers.ToField
 import Mathlib.Tactic.LinearCombination
 public section
@@ -36,8 +31,10 @@ public section
 /-! # The `u64` field backend
 
 `FieldElement51`, the backend of `«x86_64-tables»` and `«x86_64-no-tables»`, as a `Backend`:
-`Red`, `Sum2`, `MulIn`, `Niels` are `LimbsLt 52`, `53`, `54`, `54`. The specs are stated first
-on `FieldElement51` (their proofs use the field specs, imported privately), then bundled.
+`Red`, `Sum2`, `MulIn`, `Niels` are `LimbsLt 52`, `53`, `54`, `54`. The specs are stated first on
+`FieldElement51` (their proofs use the field specs, imported privately), then bundled; those
+through the encoding (`eq`, `ct_eq`, `is_negative`, `is_zero`, `to_bytes`) are in
+`Backend/U64/Bytes.lean`.
 `Backend.U64.mul_spec : Backend.U64.MulSpec`, … by definition. -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
@@ -88,12 +85,6 @@ theorem neg_spec (a : FieldElement51) (ha : a.LimbsLt 54) :
   spec_mono (CoreOpsArithNegFieldElement51.neg_spec a ha)
     fun _ ⟨h, hr⟩ => ⟨toField_neg_of_mod h, hr⟩
 
-theorem eq_spec (a b : FieldElement51) :
-    FieldElement51.Insts.CoreCmpPartialEqFieldElement51.eq a b ⦃ c =>
-      (c = true ↔ a.toField = b.toField) ⦄ :=
-  spec_mono (FieldElement51.Insts.CoreCmpPartialEqFieldElement51.eq_spec a b)
-    fun _ h => h.trans FieldElement51.toField_eq_toField_iff.symm
-
 theorem edwardsD_spec :
     backend.serial.u64.constants.EDWARDS_D ⦃ (r : FieldElement51) =>
       r.toField = d ∧ r.LimbsLt 52 ⦄ :=
@@ -107,13 +98,6 @@ theorem limbs_lt_mono {a : FieldElement51} {k l : ℕ} (hkl : k ≤ l) (h : a.Li
 theorem pow2k_spec (a : FieldElement51) (k : U32) (hk : 0 < k.val) (ha : a.LimbsLt 54) :
     FieldElement51.pow2k a k ⦃ r => r.toField = a.toField ^ 2 ^ k.val ∧ r.LimbsLt 52 ⦄ :=
   spec_mono (FieldElement51.pow2k_spec a k hk ha) fun _ ⟨h, hr⟩ => ⟨toField_pow_of_mod h, hr⟩
-
-theorem ct_eq_spec (a b : FieldElement51) :
-    FieldElement51.Insts.SubtleConstantTimeEq.ct_eq a b ⦃ c =>
-      c.IsValid ∧ (a.toField = b.toField → c = 1#u8) ∧ (a.toField ≠ b.toField → c = 0#u8) ⦄ :=
-  spec_mono (FieldElement51.Insts.SubtleConstantTimeEq.ct_eq_spec a b) fun _ ⟨hv, h1, h0⟩ =>
-    ⟨hv, fun h => h1 (FieldElement51.toField_eq_toField_iff.mp h),
-      fun h => h0 fun h' => h (FieldElement51.toField_eq_toField_iff.mpr h')⟩
 
 theorem conditional_assign_spec (a b : FieldElement51) (c : subtle.Choice) (hc : c.IsValid) :
     FieldElement51.Insts.SubtleConditionallySelectable.conditional_assign a b c ⦃ r =>
@@ -133,11 +117,6 @@ theorem sqrtM1_spec :
       r.toField = (curve25519.sqrtM1 : ZMod p) ∧ r.LimbsLt 52 ⦄ :=
   spec_mono backend.serial.u64.constants.SQRT_M1_spec fun _ ⟨h, hr⟩ =>
     ⟨by rw [toField_def, h], limbs_lt_of_le (by decide) hr⟩
-
-theorem is_negative_spec (a : FieldElement51) :
-    field.FieldElement51.is_negative a ⦃ c => c.IsValid ∧ c.val = a.toField.val % 2 ⦄ :=
-  spec_mono (field.FieldElement51.is_negative_spec a)
-    fun _ ⟨hv, h⟩ => ⟨hv, by rw [h, FieldElement51.toField_val]⟩
 
 theorem one_spec :
     FieldElement51.ONE ⦃ (r : FieldElement51) => r.toField = 1 ∧ r.LimbsLt 52 ⦄ :=
@@ -187,17 +166,6 @@ theorem invsqrtAMinusD_spec :
     apply mul_right_cancel₀ had
     rw [h, invsqrtAMinusD_sq_mul]
 
-theorem to_bytes_spec (a : FieldElement51) :
-    FieldElement51.to_bytes a ⦃ r => r.asNat 8 = a.toField.val ⦄ :=
-  spec_mono (FieldElement51.to_bytes_spec a) fun _ h => by rw [h, FieldElement51.toField_val]
-
-theorem is_zero_spec (a : FieldElement51) :
-    field.FieldElement51.is_zero a ⦃ c =>
-      c.IsValid ∧ (a.toField = 0 → c = 1#u8) ∧ (a.toField ≠ 0 → c = 0#u8) ⦄ :=
-  spec_mono (field.FieldElement51.is_zero_spec a) fun _ ⟨hv, h1, h0⟩ =>
-    ⟨hv, fun h => h1 (FieldElement51.toField_eq_zero_iff.mp h),
-      fun h => h0 fun h' => h (FieldElement51.toField_eq_zero_iff.mpr h')⟩
-
 theorem aplus2OverFour_spec :
     backend.serial.u64.constants.APLUS2_OVER_FOUR ⦃ (r : FieldElement51) =>
       r.toField * 4 = (A : ZMod p) + 2 ∧ r.LimbsLt 52 ⦄ :=
@@ -215,6 +183,7 @@ namespace Curve25519Dalek.Backend
   asNat a := a.asNat
   toField a := a.toField
   toField_eq a := a.toField_def
+  inhF := inferInstance
   Red a := a.LimbsLt 52
   Sum2 a := a.LimbsLt 53
   SqIn a := a.LimbsLt 54
@@ -249,6 +218,7 @@ namespace Curve25519Dalek.Backend
   invert := field.FieldElement51.invert
   sqrtRatioI := field.FieldElement51.sqrt_ratio_i
   invsqrt := field.FieldElement51.invsqrt
+  invertBatchAlloc := field.FieldElement51.invert_batch_alloc
   red_sum2 := U64.limbs_lt_mono (by decide)
   sum2_sqIn := U64.limbs_lt_mono (by decide)
   sqIn_mulIn h := h

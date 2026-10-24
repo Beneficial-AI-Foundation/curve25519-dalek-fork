@@ -14,6 +14,8 @@ import Proofs.Backend.Serial.U32.Field.FromBytes
 import Proofs.Helpers.ToField2625
 public import Proofs.Backend.Serial.CurveModels.CompletedAsExtended
 public import Proofs.Field.SqrtRatioI
+import Proofs.Helpers.Backend.U32.Bytes
+import Proofs.Helpers.Backend.U64.Bytes
 public section
 
 /-! # The Ristretto Elligator map (`ristretto/elligator.rs`)

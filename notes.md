@@ -802,9 +802,22 @@ data, bounds, weakenings only) and the instances `Proofs/Helpers/Backend/{U64,U3
   213 → 117, `VartimeTripleBase` 205 → 122, precomputed Straus (four files + the shared
   `OptionalMixedMultiscalarMul/Generic.lean`) 525 → 282, `VariableBase/Mul` 75 → 35. Generators
   in `.scratch/generic/gen_*.py`.
-- Left in the duplicated layer: Montgomery `Mul` (a ladder over Montgomery
-  points: needs a Montgomery analogue of `EdwardsOps`), Edwards `ToMontgomeryBatch`,
-  `CompressBatchAlloc` (2–7 s per configuration each).
+- Critical path (radar run 2): the `Backend` instances no longer import the byte-level field
+  specs (`U32` `ToBytes` is the slowest module): `eq`, `ct_eq`, `is_negative`, `is_zero`,
+  `to_bytes` in Backend form are in `Proofs/Helpers/Backend/{U64,U32}/Bytes.lean`, imported by
+  their users. The precomputed-Straus `Generic.lean` is split (`Loop00.lean`, `Loop01.lean`, in
+  parallel, then `Generic.lean`), and imports `EdwardsOps`, not its instances.
+- `Backend` gained `inhF` (for `s[i]!`) and `invertBatchAlloc` (`InvertBatchAllocSpec`, Backend
+  form in `Proofs/Field/InvertBatchAlloc.lean`); Backend-form `invert` specs are in
+  `Proofs/Field/Invert.lean`. Per-configuration functions outside `Backend` enter a generic body
+  as parameters with their spec as a hypothesis (`AffinePoint::compress`, `decompress`,
+  `conditional_swap`, `differential_add_and_double`, `EDWARDS_D2`, `FieldElement::MINUS_ONE`,
+  which is not the `constants::MINUS_ONE` of the instance). Where `from_bytes` starts a function
+  (its specs differ in shape), only the tail after it is generic: `unfold`, two `step`s, then
+  `apply spec_mono (tail_spec …)` unifies the rest by defeq.
+- Converted (plain `lean`): Edwards `ToMontgomeryBatch` 178 → 33, `CompressBatchAlloc`
+  134 → 30, `Decompress` 97 → 28, `AsAffineNiels` 55 → 12; Montgomery `Mul` (the ladder loop)
+  97 → 40, `ToEdwards` 66 → 19.
 
 
 ## Performance findings (2026-10-10)

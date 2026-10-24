@@ -40,6 +40,8 @@ import Proofs.Backend.Serial.U32.Field.Sub
 import Proofs.Backend.Serial.U32.Field.ToBytes
 import Proofs.Helpers.ToField2625
 public import Proofs.Field.Invsqrt
+import Proofs.Helpers.Backend.U32.Bytes
+import Proofs.Helpers.Backend.U64.Bytes
 public section
 
 /-! # `RistrettoPoint::double_and_compress_batch`

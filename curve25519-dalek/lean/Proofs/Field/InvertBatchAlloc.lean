@@ -10,6 +10,10 @@ import Proofs.Backend.Serial.U64.Field.One
 import Proofs.Field.InternalInvertBatch
 import Proofs.Backend.Serial.U32.Field.One
 public import Curve25519.Basic
+public import Proofs.Helpers.Backend.U64
+public import Proofs.Helpers.Backend.U32
+import Proofs.Helpers.ToField
+import Proofs.Helpers.ToField2625
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
@@ -63,3 +67,22 @@ theorem invert_batch_alloc_spec (inputs : Slice FieldElement2625)
   exact ⟨hrlen, hr⟩
 
 end Curve25519Dalek.field.FieldElement2625
+
+namespace Curve25519Dalek.Backend
+
+theorem U64.invertBatchAlloc_spec : U64.InvertBatchAllocSpec := by
+  intro s hs
+  apply spec_mono (field.FieldElement51.invert_batch_alloc_spec s
+    fun i hi => U64.red_mulIn (hs i hi))
+  rintro r ⟨hlen, hr⟩
+  exact ⟨hlen, fun i hi => FieldElement51.toField_inv_of_batch (hr i hi).1 (hr i hi).2 (hs i hi)⟩
+
+theorem U32.invertBatchAlloc_spec : U32.InvertBatchAllocSpec := by
+  intro s hs
+  apply spec_mono (field.FieldElement2625.invert_batch_alloc_spec s
+    fun i hi => U32.red_sqIn (hs i hi))
+  rintro r ⟨hlen, hr⟩
+  exact ⟨hlen, fun i hi =>
+    FieldElement2625.toField_inv_of_batch (hr i hi).1 (hr i hi).2 (hs i hi)⟩
+
+end Curve25519Dalek.Backend
