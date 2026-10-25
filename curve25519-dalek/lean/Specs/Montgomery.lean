@@ -201,6 +201,21 @@ recall to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
 
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
+recall to_edwards.«i686-tables_spec» (self : MontgomeryPoint) (sign : U8) :
+    to_edwards.«i686-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-tables»)) =>
+      (self.u = -1 → r = none) ∧
+      (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-tables».toPoint =
+        Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
+            (sign.val % 2))) ∧
+      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms to_edwards.«i686-tables_spec»
+
+
+/-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
+`CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
 recall to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-no-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-no-tables»))
         =>
@@ -213,6 +228,22 @@ recall to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8)
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms to_edwards.«x86_64-no-tables_spec»
+
+
+/-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
+`CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
+recall to_edwards.«i686-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
+    to_edwards.«i686-no-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-no-tables»))
+        =>
+      (self.u = -1 → r = none) ∧
+      (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
+        Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
+            (sign.val % 2))) ∧
+      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms to_edwards.«i686-no-tables_spec»
 
 end Curve25519Dalek.montgomery.MontgomeryPoint
 

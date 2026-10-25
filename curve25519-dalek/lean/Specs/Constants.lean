@@ -15,6 +15,7 @@ public import Defs.Montgomery
 public import Defs.Ristretto
 public import Defs.ScalarMul
 import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointPoint
+import Proofs.Backend.Serial.U64.Constants.Ed25519Basepoint128Point
 import Proofs.Backend.Serial.U64.Constants.Ed25519BasepointTable
 import Proofs.Backend.Serial.U64.Constants.EightTorsion
 import Proofs.Constants.Ed25519BasepointCompressed
@@ -22,6 +23,7 @@ import Proofs.Constants.RistrettoBasepoint
 import Proofs.Constants.X25519Basepoint
 import Proofs.Constants.X25519LowOrderPoints
 import Proofs.Backend.Serial.U32.Constants.Ed25519BasepointPoint
+import Proofs.Backend.Serial.U32.Constants.Ed25519Basepoint128Point
 import Proofs.Backend.Serial.U32.Constants.Ed25519BasepointTable
 import Proofs.Backend.Serial.U32.Constants.EightTorsion
 public section
@@ -112,6 +114,70 @@ recall ED25519_BASEPOINT_POINT_spec_point :
 end «i686-no-tables»
 end Curve25519Dalek.backend.serial.u32.constants
 
+
+namespace Curve25519Dalek.backend.serial.u64.constants
+namespace «x86_64-tables»
+
+/-- `ED25519_BASEPOINT_128_POINT` represents `2^128 • basepoint`. -/
+recall ED25519_BASEPOINT_128_POINT_spec :
+    ED25519_BASEPOINT_128_POINT.«x86_64-tables»
+      ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
+        r.OnCurve ∧ r.toPoint = 2 ^ 128 • basepoint ∧ r.LimbsLt 52 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms ED25519_BASEPOINT_128_POINT_spec
+
+end «x86_64-tables»
+end Curve25519Dalek.backend.serial.u64.constants
+
+namespace Curve25519Dalek.backend.serial.u32.constants
+namespace «i686-tables»
+
+/-- `ED25519_BASEPOINT_128_POINT` represents `2^128 • basepoint`. -/
+recall ED25519_BASEPOINT_128_POINT_spec :
+    ED25519_BASEPOINT_128_POINT.«i686-tables»
+      ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
+        r.OnCurve ∧ r.toPoint = 2 ^ 128 • basepoint ∧ r.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms ED25519_BASEPOINT_128_POINT_spec
+
+end «i686-tables»
+end Curve25519Dalek.backend.serial.u32.constants
+
+namespace Curve25519Dalek.backend.serial.u64.constants
+namespace «x86_64-no-tables»
+
+/-- `ED25519_BASEPOINT_128_POINT` represents `2^128 • basepoint`. -/
+recall ED25519_BASEPOINT_128_POINT_spec :
+    ED25519_BASEPOINT_128_POINT.«x86_64-no-tables»
+      ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
+        r.OnCurve ∧ r.toPoint = 2 ^ 128 • basepoint ∧ r.LimbsLt 52 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms ED25519_BASEPOINT_128_POINT_spec
+
+end «x86_64-no-tables»
+end Curve25519Dalek.backend.serial.u64.constants
+
+namespace Curve25519Dalek.backend.serial.u32.constants
+namespace «i686-no-tables»
+
+/-- `ED25519_BASEPOINT_128_POINT` represents `2^128 • basepoint`. -/
+recall ED25519_BASEPOINT_128_POINT_spec :
+    ED25519_BASEPOINT_128_POINT.«i686-no-tables»
+      ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
+        r.OnCurve ∧ r.toPoint = 2 ^ 128 • basepoint ∧ r.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms ED25519_BASEPOINT_128_POINT_spec
+
+end «i686-no-tables»
+end Curve25519Dalek.backend.serial.u32.constants
 
 namespace Curve25519Dalek.backend.serial.u64.constants
 namespace «x86_64-tables»

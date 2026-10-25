@@ -148,6 +148,19 @@ recall «x86_64-tables».decompress_spec (self : CompressedRistretto) :
 
 /-- `CompressedRistretto::decompress`: RFC 9496's decoding of the bytes' value (`none` unless it
 is the canonical, non-negative encoding of a point of the class); the point is on the curve with
+limbs `< 2^26`. -/
+recall «i686-tables».decompress_spec (self : CompressedRistretto) :
+    decompress.«i686-tables» self ⦃ (r : Option RistrettoPoint.«i686-tables») =>
+      r.map edwards.EdwardsPoint.«i686-tables».toPoint = Ristretto.decodeRep self.asNat ∧
+      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms «i686-tables».decompress_spec
+
+
+/-- `CompressedRistretto::decompress`: RFC 9496's decoding of the bytes' value (`none` unless it
+is the canonical, non-negative encoding of a point of the class); the point is on the curve with
 limbs `< 2^52`. -/
 recall «x86_64-no-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«x86_64-no-tables» self ⦃ (r : Option RistrettoPoint.«x86_64-no-tables») =>
@@ -157,6 +170,19 @@ recall «x86_64-no-tables».decompress_spec (self : CompressedRistretto) :
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms «x86_64-no-tables».decompress_spec
+
+
+/-- `CompressedRistretto::decompress`: RFC 9496's decoding of the bytes' value (`none` unless it
+is the canonical, non-negative encoding of a point of the class); the point is on the curve with
+limbs `< 2^26`. -/
+recall «i686-no-tables».decompress_spec (self : CompressedRistretto) :
+    decompress.«i686-no-tables» self ⦃ (r : Option RistrettoPoint.«i686-no-tables») =>
+      r.map edwards.EdwardsPoint.«i686-no-tables».toPoint = Ristretto.decodeRep self.asNat ∧
+      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄
+
+/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms «i686-no-tables».decompress_spec
 
 end CompressedRistretto
 end Curve25519Dalek.ristretto
