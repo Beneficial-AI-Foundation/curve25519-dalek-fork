@@ -571,6 +571,12 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
    the twist parameter of `xMul`; document what `Curve` can and cannot say; the `Defs`/`Lemmas`
    split; missing docstrings; upstream `Weierstrass/PointEquiv` to Mathlib. `Curve25519` still to
    be reviewed.
+7. **Release steps**, in order:
+   1. Update this repo's `main` to match upstream curve25519-dalek.
+   2. PR `add-verification` into that `main` as one squash commit, with nothing included that
+      does not belong, and a `Co-authored-by:` trailer for every contributor.
+   3. Move the repo to the BAIF GitHub organisation and set up the radar service on it.
+   4. Invite colleagues to review and contribute improvements.
 
 ### Certifying the precomputed tables (done 2026-10-21)
 
