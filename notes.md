@@ -505,8 +505,9 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
   the intermediate completed and extended points as predicates inferred from the specs passed in,
   so each backend uses its own. All specs hold for the four targets: every dispatcher is proved with
   `dispatch_all_spec` (2026-10-23, signed off by the owner); `OnX86_64` and `Defs/Target.lean` are
-  gone, and the spec summaries restate each per-target item four times. Conversion scripts in
-  `.scratch/u32s/` (`redo.py` replays them from the originals in `.scratch/u32s/orig`).
+  gone, and the spec summaries restate each per-target item four times. The conversion scripts
+  are retired to `.scratch/u32s/retired/` (no file needs them since the generic layer); only the
+  build wrapper `.scratch/u32s/lk` remains in use.
 
 ## Decisions taken
 
