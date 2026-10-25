@@ -564,6 +564,13 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
    and for `Hash for MontgomeryPoint`. Charon's `--targets` mode seems to drop provided methods;
    the `Hash` cause is unknown (2026-10-25).
 5. **Before completing the PR upstream:** clean out working files such as `notes.md`.
+6. **Improve the `EllipticCurve` and `Curve25519` libraries** (API review of `EllipticCurve`,
+   2026-10-25): missing `Finite`/`DecidableEq` instances on `TwistedEdwardsModel.Point`, and
+   instances moved to their model's `Defs`; unconditional `ladder_eq_u_nsmul`; drop the unused
+   `nsmulBinary`; naming fixes (`toMontgomeryEquiv_of_x_eq_zero`, Niels field names, `ZMod.abs`);
+   the twist parameter of `xMul`; document what `Curve` can and cannot say; the `Defs`/`Lemmas`
+   split; missing docstrings; upstream `Weierstrass/PointEquiv` to Mathlib. `Curve25519` still to
+   be reviewed.
 
 ### Certifying the precomputed tables (done 2026-10-21)
 
