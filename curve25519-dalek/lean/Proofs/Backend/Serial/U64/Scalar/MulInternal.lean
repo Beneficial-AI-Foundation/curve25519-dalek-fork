@@ -42,7 +42,7 @@ private theorem mul_coeffs_lt {a0 a1 a2 a3 a4 b0 b1 b2 b3 b4 : ℕ} (ha0 : a0 < 
 theorem mul_internal_spec (a b : Scalar52) (ha : a.LimbsLt 52)
     (hb : b.LimbsLt 52) :
     mul_internal a b ⦃ (r : Array U128 9#usize) =>
-      r.asNat 52 = a.asNat * b.asNat ∧ ∀ i < 9, r[i]!.val < 2 ^ 107 ⦄ := by
+      r.asNat 52 = a.asNat * b.asNat ∧ ∀ i : ℕ, i < 9 → r[i]!.val < 2 ^ 107 ⦄ := by
   unfold mul_internal
   obtain ⟨ha0, ha1, ha2, ha3, ha4⟩ := Nat.forall_lt_five.mp ha
   obtain ⟨hb0, hb1, hb2, hb3, hb4⟩ := Nat.forall_lt_five.mp hb

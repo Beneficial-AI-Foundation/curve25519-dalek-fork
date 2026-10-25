@@ -112,8 +112,8 @@ add_decl_doc packHigh
 private theorem initReduce_spec (self : FieldElement2625) :
     initReduce self ⦃ (fe : FieldElement2625) =>
       self.asNat % p = fe.asNat % p ∧
-      (∀ i < 10, fe[i]!.val < limbRadix i + i % 2 * 2 ^ 18) ∧
-      (∀ i < 10, fe[i]!.val < 2 ^ 26) ⦄ := by
+      (∀ i : ℕ, i < 10 → fe[i]!.val < limbRadix i + i % 2 * 2 ^ 18) ∧
+      (∀ i : ℕ, i < 10 → fe[i]!.val < 2 ^ 26) ⦄ := by
   unfold initReduce
   step* 21
   · refine getElem!_make_le _ _ _ _ _ _ _ _ _ _ _ _ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ <;>
@@ -185,7 +185,7 @@ private theorem carry_remainder {n m q q1 q' : Nat} {x : U32} (z : FieldElement2
 bounds left by the first phase. -/
 @[local step]
 private theorem isOverP_spec (fe : FieldElement2625)
-    (hfe : ∀ i < 10, fe[i]!.val < limbRadix i + i % 2 * 2 ^ 18) :
+    (hfe : ∀ i : ℕ, i < 10 → fe[i]!.val < limbRadix i + i % 2 * 2 ^ 18) :
     isOverP fe ⦃ (i20 : U32) (q9 : UScalar UScalarTy.U32) =>
       i20 = fe[0]! ∧
       q9.val = fe.asNat / p ∧
@@ -337,7 +337,7 @@ private def RoundInv (fe : FieldElement2625) (m n : ℕ) (A : Std.Array U32 10#u
 
 /-- Carry rounds 0 to 4 of `calcCanonical`, with the two mask constants. -/
 @[local step]
-private theorem roundsLow_spec (fe : FieldElement2625) (hfe : ∀ i < 10, fe[i]!.val < 2 ^ 26)
+private theorem roundsLow_spec (fe : FieldElement2625) (hfe : ∀ i : ℕ, i < 10 → fe[i]!.val < 2 ^ 26)
     (m q : ℕ) (A : Std.Array U32 10#usize) (cur : U32) (hI : RoundInv fe m 0 A cur q) :
     roundsLow A ⦃ (c26 : U32) (c25 : U32) (A' : Std.Array U32 10#usize) =>
       c26.val = 2 ^ 26 - 1 ∧ c25.val = 2 ^ 25 - 1 ∧ ∃ cur' q', RoundInv fe m 5 A' cur' q' ⦄ := by
@@ -400,7 +400,8 @@ private theorem roundsLow_spec (fe : FieldElement2625) (hfe : ∀ i < 10, fe[i]!
 
 /-- Carry rounds 5 to 8 of `calcCanonical`. -/
 @[local step]
-private theorem roundsHigh_spec (fe : FieldElement2625) (hfe : ∀ i < 10, fe[i]!.val < 2 ^ 26)
+private theorem roundsHigh_spec (fe : FieldElement2625)
+  (hfe : ∀ i : ℕ, i < 10 → fe[i]!.val < 2 ^ 26)
     (c26 c25 : U32) (hc26 : c26.val = 2 ^ 26 - 1) (hc25 : c25.val = 2 ^ 25 - 1)
     (m q : ℕ) (A : Std.Array U32 10#usize) (cur : U32) (hI : RoundInv fe m 5 A cur q) :
     roundsHigh c26 c25 A ⦃ (A' : Std.Array U32 10#usize) =>
@@ -441,12 +442,12 @@ radix. -/
 @[local step]
 private theorem calcCanonical_spec (fe : FieldElement2625) (i20 : U32) (q9 : UScalar UScalarTy.U32)
     (hi20 : i20 = fe[0]!)
-    (hfe : ∀ i < 10, fe[i]!.val < 2 ^ 26)
+    (hfe : ∀ i : ℕ, i < 10 → fe[i]!.val < 2 ^ 26)
     (hq9 : q9.val = fe.asNat / p)
     (hq9' : q9.val ≤ 1) :
     calcCanonical fe i20 q9 ⦃ (h19 : FieldElement2625) =>
       h19.asNat = fe.asNat % p ∧
-      (∀ i < 10, h19[i]!.val < limbRadix i) ⦄ := by
+      (∀ i : ℕ, i < 10 → h19[i]!.val < limbRadix i) ⦄ := by
   rw [calcCanonical_decomp]
   have hq_bound := shiftRight_le_two_pow
   --Prefix: `19 * q9` and `i20 + 19 * q9` written into limb 0 of a new array
@@ -465,10 +466,10 @@ private theorem calcCanonical_spec (fe : FieldElement2625) (i20 : U32) (q9 : USc
     (Array.getElem!_Nat_set_eq _ _ _ _ ⟨rfl, by
       simp only [Std.Array.length, Array.length_eq]; decide⟩)
   obtain ⟨htail, hP, hB⟩ := (congrArg (fun A : Std.Array U32 10#usize =>
-      (∀ j, 0 < j → j < 10 → A[j]! = fe[j]!) ∧
+      (∀ j : ℕ, 0 < j → j < 10 → A[j]! = fe[j]!) ∧
       ∑ j ∈ range 0, limbWeight j * (A[j]!).val =
         ((∑ i ∈ range 0, limbWeight i * (fe[i]!).val) + 19 * q9.val) % limbWeight 0 ∧
-      ∀ j < 0, (A[j]!).val < limbRadix j) ‹_ = Std.Array.set _ _ _›).mpr
+      ∀ j : ℕ, j < 0 → (A[j]!).val < limbRadix j) ‹_ = Std.Array.set _ _ _›).mpr
     ⟨fun j hj _ => Array.getElem!_Nat_set_ne _ _ _ _ (by
         rw [UScalar.ofNatCore_val_eq]; exact Nat.ne_of_lt hj),
       by simp only [range_zero, sum_empty, limbWeight, Nat.zero_add, Nat.reduceDiv, Nat.reduceMul,
@@ -582,7 +583,7 @@ say that the remaining bits of `x` are exactly `t` (given the limb bounds), that
 private theorem byte_join_step {h : FieldElement2625} {s s' : Std.Array U8 32#usize} {k : Usize}
     {l n r t : Nat} {x y w z o : U32} {b : U8}
     {hl : l < (↑h : List U32).length} {hl' : l + 1 < (↑h : List U32).length}
-    (hbound : ∀ i < 10, h[i]!.val < limbRadix i)
+    (hbound : ∀ i : ℕ, i < 10 → h[i]!.val < limbRadix i)
     (hI : ∑ i ∈ range n, 2 ^ (8 * i) * (s[i]!).val + 2 ^ (8 * n) * (x.val >>> r) =
       ∑ i ∈ range (l + 1), limbWeight i * (h[i]!).val)
     (hs : s' = s.set k b) (hb : b = UScalar.cast .U8 o) (ho : o.val = (y ||| z).val)
@@ -630,7 +631,7 @@ private theorem byte_join_step {h : FieldElement2625} {s s' : Std.Array U8 32#us
 /-- Bytes 0 to 15 of `toArray`: limbs 0 to 4, which end exactly at bit 128. -/
 @[local step]
 private theorem packLow_spec (h19 : FieldElement2625)
-    (hbound : ∀ i < 10, h19[i]!.val < limbRadix i) (s : Std.Array U8 32#usize) :
+    (hbound : ∀ i : ℕ, i < 10 → h19[i]!.val < limbRadix i) (s : Std.Array U8 32#usize) :
     packLow h19 s ⦃ (s16 : Std.Array U8 32#usize) =>
       ∑ i ∈ range 16, 2 ^ (8 * i) * (s16[i]!).val =
         ∑ i ∈ range 5, limbWeight i * (h19[i]!).val ⦄ := by
@@ -670,7 +671,7 @@ private theorem packLow_spec (h19 : FieldElement2625)
 last byte is clear, as limb 9 has 25 bits. -/
 @[local step]
 private theorem packHigh_spec (h19 : FieldElement2625)
-    (hbound : ∀ i < 10, h19[i]!.val < limbRadix i) (s16 : Std.Array U8 32#usize)
+    (hbound : ∀ i : ℕ, i < 10 → h19[i]!.val < limbRadix i) (s16 : Std.Array U8 32#usize)
     (hI16 : ∑ i ∈ range 16, 2 ^ (8 * i) * (s16[i]!).val =
       ∑ i ∈ range 5, limbWeight i * (h19[i]!).val) :
     packHigh h19 s16 ⦃ (s32 : Std.Array U8 32#usize) =>
@@ -721,7 +722,7 @@ private theorem packHigh_spec (h19 : FieldElement2625)
 top bit of the last byte is clear. -/
 @[local step]
 private theorem toArray_spec (h19 : FieldElement2625)
-    (hbound : ∀ i < 10, h19[i]!.val < limbRadix i) :
+    (hbound : ∀ i : ℕ, i < 10 → h19[i]!.val < limbRadix i) :
     toArray h19 ⦃ (result : Array U8 32#usize) =>
       result.asNat 8 = h19.asNat ⦄ := by
   rw [toArray_decomp]

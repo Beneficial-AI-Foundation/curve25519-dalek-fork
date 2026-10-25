@@ -257,7 +257,7 @@ theorem getElem!_drop (l : List FieldElement51) (n i : ℕ) : (l.drop n)[i]! = l
 `(j + 1) • 2^(8 i) • P`. -/
 theorem checkTable_sound :
     ∀ {n : ℕ} {P : edwards.Extended} {fes : List FieldElement51}, P.OnCurve →
-      checkTable edwards P fes n = true → fes.length = 24 * n → ∀ i < n, ∀ j < 8,
+      checkTable edwards P fes n = true → fes.length = 24 * n → ∀ i < n, ∀ j : ℕ, j < 8 →
       (⟨fes[24 * i + 3 * j]!, fes[24 * i + 3 * j + 1]!, fes[24 * i + 3 * j + 2]!⟩ :
         AffineNielsPoint.«x86_64-tables»).OnCurve ∧
       (⟨fes[24 * i + 3 * j]!, fes[24 * i + 3 * j + 1]!, fes[24 * i + 3 * j + 2]!⟩ :

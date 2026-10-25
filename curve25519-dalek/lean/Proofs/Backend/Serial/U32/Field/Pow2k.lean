@@ -32,7 +32,7 @@ private def Invariant (x : FieldElement2625) (k : U32) (iter : core.ops.range.Ra
   iter.end = k ∧
   1 ≤ iter.start.val ∧
   iter.start.val ≤ k.val ∧
-  (∀ i < 10, z[i]!.val < 2 ^ 26) ∧
+  (∀ i : ℕ, i < 10 → z[i]!.val < 2 ^ 26) ∧
   z.asNat % p = x.asNat ^ (2 ^ iter.start.val) % p
 
 end Pow2k
@@ -73,7 +73,7 @@ private theorem pow2k_loop_spec (iter : core.ops.range.Range U32) (z : FieldElem
     (x : FieldElement2625) (k : U32)
     (h_inv : Pow2k.Invariant x k iter z) :
     pow2k_loop iter z ⦃ (result : FieldElement2625) =>
-      (∀ i < 10, result[i]!.val < 2 ^ 26) ∧
+      (∀ i : ℕ, i < 10 → result[i]!.val < 2 ^ 26) ∧
       result.asNat % p = x.asNat ^ (2 ^ k.val) % p ⦄ := by
   unfold pow2k_loop
   refine loop.spec_decr_nat

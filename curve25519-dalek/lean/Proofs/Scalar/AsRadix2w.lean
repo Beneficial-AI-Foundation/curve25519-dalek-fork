@@ -357,10 +357,10 @@ private theorem radix_tail8_spec (w : Usize) (X : ℕ) (hX255 : X < 2 ^ 255) (hw
       let i2 ← i1 + i
       digits.update dc i2) ⦃ (r : Array I8 64#usize) =>
       r.asInt w.val = X ∧
-      (∀ i < 64, (i + 1) * w.val < 256 →
+      (∀ i : ℕ, i < 64 → (i + 1) * w.val < 256 →
         -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val < 2 ^ w.val) ∧
-      (∀ i < 64, -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val ≤ 2 ^ w.val) ∧
-      ∀ i < 64, 256 < i * w.val → r[i]!.val = 0 ⦄ := by
+      (∀ i : ℕ, i < 64 → -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val ≤ 2 ^ w.val) ∧
+      ∀ i : ℕ, i < 64 → 256 < i * w.val → r[i]!.val = 0 ⦄ := by
   obtain ⟨hc, -, hval, hlow, hzero⟩ := hinv
   rw [hw8] at hval hlow ⊢
   rw [hdc] at hval hlow hzero
@@ -408,10 +408,10 @@ private theorem radix_tail_spec (w : Usize) (X : ℕ) (hX255 : X < 2 ^ 255)
       let i4 ← i3 + i1
       digits.update i2 i4) ⦃ (r : Array I8 64#usize) =>
       r.asInt w.val = X ∧
-      (∀ i < 64, (i + 1) * w.val < 256 →
+      (∀ i : ℕ, i < 64 → (i + 1) * w.val < 256 →
         -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val < 2 ^ w.val) ∧
-      (∀ i < 64, -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val ≤ 2 ^ w.val) ∧
-      ∀ i < 64, 256 < i * w.val → r[i]!.val = 0 ⦄ := by
+      (∀ i : ℕ, i < 64 → -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val ≤ 2 ^ w.val) ∧
+      ∀ i : ℕ, i < 64 → 256 < i * w.val → r[i]!.val = 0 ⦄ := by
   have hw1 : 1 ≤ w.val := le_trans (by norm_num) hw.1
   obtain ⟨h256, h64, -, h252⟩ :=
     digits_count_facts (w := w.val) ⟨Nat.le_of_succ_le hw.1, Nat.le_of_lt hw.2⟩
@@ -488,9 +488,10 @@ theorem as_radix_2w_spec (self : Scalar) (w : Usize) (hw : 4 ≤ w.val ∧ w.val
     (hself : self.asNat < 2 ^ 255) :
     as_radix_2w self w ⦃ (r : Array I8 64#usize) =>
       r.asInt w.val = self.asNat ∧
-      (∀ i < 64, (i + 1) * w.val < 256 → -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val < 2 ^ w.val) ∧
-      (∀ i < 64, -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val ≤ 2 ^ w.val) ∧
-      ∀ i < 64, 256 < i * w.val → r[i]!.val = 0 ⦄ := by
+      (∀ i : ℕ, i < 64 → (i + 1) * w.val < 256 → -2 ^ w.val ≤ 2 * r[i]!.val ∧
+        2 * r[i]!.val < 2 ^ w.val) ∧
+      (∀ i : ℕ, i < 64 → -2 ^ w.val ≤ 2 * r[i]!.val ∧ 2 * r[i]!.val ≤ 2 ^ w.val) ∧
+      ∀ i : ℕ, i < 64 → 256 < i * w.val → r[i]!.val = 0 ⦄ := by
   unfold as_radix_2w
   step
   step

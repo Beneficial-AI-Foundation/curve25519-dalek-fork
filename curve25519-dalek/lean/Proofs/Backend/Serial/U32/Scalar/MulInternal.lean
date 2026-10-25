@@ -188,11 +188,11 @@ private def S5 (a b : Scalar29) : List Z :=
 
 /-- The first block: coefficients 0 to 8 of the low halves. -/
 private theorem mulLow_spec (a b : Scalar29) (ha : a.LimbsLt 29) (hb : b.LimbsLt 29)
-    (z : Array U64 17#usize) (hz : ∀ i < 17, z[i]!.val = 0) :
+    (z : Array U64 17#usize) (hz : ∀ i : ℕ, i < 17 → z[i]!.val = 0) :
     mulLow a b z ⦃ (a0 b0 b1 a1 b2 a2 b3 a3 b4 a4 : U32) (z' : Array U64 17#usize) =>
       a0 = a[0]! ∧ a1 = a[1]! ∧ a2 = a[2]! ∧ a3 = a[3]! ∧ a4 = a[4]! ∧
       b0 = b[0]! ∧ b1 = b[1]! ∧ b2 = b[2]! ∧ b3 = b[3]! ∧ b4 = b[4]! ∧
-      ∀ i < 17, ((z'[i]!).val : Z) = (S1 a b)[i]! ⦄ := by
+      ∀ i : ℕ, i < 17 → ((z'[i]!).val : Z) = (S1 a b)[i]! ⦄ := by
   have := ha 0 (by decide); have := ha 1 (by decide); have := ha 2 (by decide)
   have := ha 3 (by decide); have := ha 4 (by decide); have := hb 0 (by decide)
   have := hb 1 (by decide); have := hb 2 (by decide); have := hb 3 (by decide)
@@ -215,11 +215,11 @@ private theorem mulLow_spec (a b : Scalar29) (ha : a.LimbsLt 29) (hb : b.LimbsLt
 
 /-- The second block: coefficients 10 to 16 of the high halves. -/
 private theorem mulHigh_spec (a b : Scalar29) (ha : a.LimbsLt 29) (hb : b.LimbsLt 29)
-    (z : Array U64 17#usize) (hS : ∀ i < 17, ((z[i]!).val : Z) = (S1 a b)[i]!) :
+    (z : Array U64 17#usize) (hS : ∀ i : ℕ, i < 17 → ((z[i]!).val : Z) = (S1 a b)[i]!) :
     mulHigh a b z ⦃ (a5 b5 b6 a6 b7 a7 b8 a8 : U32) (z' : Array U64 17#usize) =>
       a5 = a[5]! ∧ a6 = a[6]! ∧ a7 = a[7]! ∧ a8 = a[8]! ∧
       b5 = b[5]! ∧ b6 = b[6]! ∧ b7 = b[7]! ∧ b8 = b[8]! ∧
-      ∀ i < 17, ((z'[i]!).val : Z) = (S2 a b)[i]! ⦄ := by
+      ∀ i : ℕ, i < 17 → ((z'[i]!).val : Z) = (S2 a b)[i]! ⦄ := by
   have := ha 5 (by decide); have := ha 6 (by decide); have := ha 7 (by decide)
   have := ha 8 (by decide); have := hb 5 (by decide); have := hb 6 (by decide)
   have := hb 7 (by decide); have := hb 8 (by decide)
@@ -240,8 +240,9 @@ private theorem mulHigh_spec (a b : Scalar29) (ha : a.LimbsLt 29) (hb : b.LimbsL
 
 /-- The third block: the wrapping corrections. -/
 private theorem mulFix_spec (a b : Scalar29) (z : Array U64 17#usize)
-    (hS : ∀ i < 17, ((z[i]!).val : Z) = (S2 a b)[i]!) :
-    mulFix z ⦃ (z' : Array U64 17#usize) => ∀ i < 17, ((z'[i]!).val : Z) = (S3 a b)[i]! ⦄ := by
+    (hS : ∀ i : ℕ, i < 17 → ((z[i]!).val : Z) = (S2 a b)[i]!) :
+    mulFix z ⦃ (z' : Array U64 17#usize) => ∀ i : ℕ, i < 17 →
+      ((z'[i]!).val : Z) = (S3 a b)[i]! ⦄ := by
   unfold mulFix
   step*
   interval_cases i <;>
@@ -268,14 +269,14 @@ private theorem mulMidLow_spec (a b : Scalar29) (ha : a.LimbsLt 29) (hb : b.Limb
     (ha2 : a2 = a[2]!) (hb3 : b3 = b[3]!) (ha3 : a3 = a[3]!) (ha5 : a5 = a[5]!) (hb5 : b5 = b[5]!)
     (hb6 : b6 = b[6]!) (ha6 : a6 = a[6]!) (hb7 : b7 = b[7]!) (ha7 : a7 = a[7]!) (hb8 : b8 = b[8]!)
     (ha8 : a8 = a[8]!)
-    (z : Array U64 17#usize) (hS : ∀ i < 17, ((z[i]!).val : Z) = (S3 a b)[i]!) :
+    (z : Array U64 17#usize) (hS : ∀ i : ℕ, i < 17 → ((z[i]!).val : Z) = (S3 a b)[i]!) :
     mulMidLow a0 b0 b1 a1 b2 a2 b3 a3 a5 b5 b6 a6 b7 a7 b8 a8 z ⦃
       (aa0 bb0 bb1 aa1 bb2 aa2 bb3 aa3 : U32) (z' : Array U64 17#usize) =>
       aa0.val = a[0]!.val + a[5]!.val ∧ aa1.val = a[1]!.val + a[6]!.val ∧
       aa2.val = a[2]!.val + a[7]!.val ∧ aa3.val = a[3]!.val + a[8]!.val ∧
       bb0.val = b[0]!.val + b[5]!.val ∧ bb1.val = b[1]!.val + b[6]!.val ∧
       bb2.val = b[2]!.val + b[7]!.val ∧ bb3.val = b[3]!.val + b[8]!.val ∧
-      ∀ i < 17, ((z'[i]!).val : Z) = (S4 a b)[i]! ⦄ := by
+      ∀ i : ℕ, i < 17 → ((z'[i]!).val : Z) = (S4 a b)[i]! ⦄ := by
   subst ha0 hb0 hb1 ha1 hb2 ha2 hb3 ha3
   subst ha5 hb5 hb6 ha6 hb7 ha7 hb8 ha8
   have := ha 0 (by decide); have := ha 1 (by decide); have := ha 2 (by decide)
@@ -307,10 +308,10 @@ private theorem mulMidHigh_spec (a b : Scalar29) (ha : a.LimbsLt 29) (hb : b.Lim
     (haa2 : aa2.val = a[2]!.val + a[7]!.val) (haa3 : aa3.val = a[3]!.val + a[8]!.val)
     (hbb0 : bb0.val = b[0]!.val + b[5]!.val) (hbb1 : bb1.val = b[1]!.val + b[6]!.val)
     (hbb2 : bb2.val = b[2]!.val + b[7]!.val) (hbb3 : bb3.val = b[3]!.val + b[8]!.val)
-    (z : Array U64 17#usize) (hS : ∀ i < 17, ((z[i]!).val : Z) = (S4 a b)[i]!) :
+    (z : Array U64 17#usize) (hS : ∀ i : ℕ, i < 17 → ((z[i]!).val : Z) = (S4 a b)[i]!) :
     mulMidHigh b4 a4 aa0 bb0 bb1 aa1 bb2 aa2 bb3 aa3 z ⦃
       (z' : Array U64 17#usize) (x y : U64) =>
-      (∀ i < 17, ((z'[i]!).val : Z) = (S5 a b)[i]!) ∧
+      (∀ i : ℕ, i < 17 → ((z'[i]!).val : Z) = (S5 a b)[i]!) ∧
       (x.val : Z) = (L a 3 + L a 8) * L b 4 + L a 4 * (L b 3 + L b 8) ∧ y = z'[12]! ⦄ := by
   have := ha 0 (by decide); have := ha 1 (by decide); have := ha 2 (by decide)
   have := ha 3 (by decide); have := ha 4 (by decide); have := ha 5 (by decide)
@@ -375,7 +376,7 @@ private def productCoefficients (a b : Scalar29) : List ℕ :=
    a[8]!.val * b[8]!.val]
 
 private theorem productCoefficients_lt (a b : Scalar29) (ha : a.LimbsLt 29) (hb : b.LimbsLt 29) :
-    ∀ i < 17, (productCoefficients a b)[i]! < 2 ^ 62 := by
+    ∀ i : ℕ, i < 17 → (productCoefficients a b)[i]! < 2 ^ 62 := by
   have h (i : ℕ) (hi : i < 9) (j : ℕ) (hj : j < 9) : a[i]!.val * b[j]!.val ≤ 2 ^ 58 :=
     (Nat.mul_le_mul (ha i hi).le (hb j hj).le).trans_eq (by norm_num)
   simp only [Nat.forall_lt_succ_right] at h
@@ -395,7 +396,7 @@ private theorem productCoefficients_value (a b : Scalar29) :
 
 /-- The Karatsuba coefficients modulo `2^64` are the schoolbook ones. -/
 private theorem karatsuba_eq (a b : Scalar29) :
-    ∀ i < 17, (if i = 12 then
+    ∀ i : ℕ, i < 17 → (if i = 12 then
         (L a 3 + L a 8) * L b 4 + L a 4 * (L b 3 + L b 8) - (S5 a b)[12]!
       else (S5 a b)[i]!) = (((productCoefficients a b)[i]! : ℕ) : Z) := by
   intro i hi
@@ -415,9 +416,9 @@ private theorem val_eq_of_cast_eq (x : U64) {n : ℕ} (hn : n < 2 ^ 64)
 @[step]
 theorem mul_internal_spec (a b : Scalar29) (ha : a.LimbsLt 29) (hb : b.LimbsLt 29) :
     mul_internal a b ⦃ (r : Array U64 17#usize) =>
-      r.asNat 29 = a.asNat * b.asNat ∧ ∀ i < 17, r[i]!.val < 2 ^ 62 ⦄ := by
+      r.asNat 29 = a.asNat * b.asNat ∧ ∀ i : ℕ, i < 17 → r[i]!.val < 2 ^ 62 ⦄ := by
   rw [mul_internal_eq]
-  have hz : ∀ i < 17, (Array.repeat 17#usize (0#u64))[i]!.val = 0 := by
+  have hz : ∀ i : ℕ, i < 17 → (Array.repeat 17#usize (0#u64))[i]!.val = 0 := by
     intro i hi
     interval_cases i <;> rfl
   step with mulLow_spec a b ha hb _ hz as ⟨a0, b0, b1, a1, b2, a2, b3, a3, b4, a4, z1,
@@ -432,7 +433,7 @@ theorem mul_internal_spec (a b : Scalar29) (ha : a.LimbsLt 29) (hb : b.LimbsLt 2
   step with mulMidHigh_spec a b ha hb b4 a4 aa0 bb0 bb1 aa1 bb2 aa2 bb3 aa3 hb4 ha4
     haa0 haa1 haa2 haa3 hbb0 hbb1 hbb2 hbb3 z4 h4 as ⟨z5, x, y, h5, hx, hy⟩
   simp only [lift, bind_ok, Array.update_eq z5 12#usize _ (by decide), WP.spec_ok]
-  have hr : ∀ i < 17, ((z5.set 12#usize (core.num.U64.wrapping_sub x y))[i]!).val =
+  have hr : ∀ i : ℕ, i < 17 → ((z5.set 12#usize (core.num.U64.wrapping_sub x y))[i]!).val =
       (productCoefficients a b)[i]! := by
     intro i hi
     apply val_eq_of_cast_eq _ ((productCoefficients_lt a b ha hb i hi).trans (by decide))

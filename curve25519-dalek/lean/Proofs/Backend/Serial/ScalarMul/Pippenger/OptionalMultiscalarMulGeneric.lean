@@ -64,7 +64,7 @@ private theorem sum_zipWith_filterMap {α β G : Type} [Inhabited α] [Inhabited
 
 /-- The digits of position `< dc` give the value, if the others vanish. -/
 private theorem sum_digits (d : Array I8 64#usize) (w dc : ℕ) (hdc : dc ≤ 64)
-    (hz : ∀ j < 64, dc ≤ j → d[j]!.val = 0) :
+    (hz : ∀ j : ℕ, j < 64 → dc ≤ j → d[j]!.val = 0) :
     ∑ j ∈ Finset.range dc, 2 ^ (w * j) * d[j]!.val = d.asInt w := by
   rw [Array.asInt_eq_sum, show (64#usize).val = 64 from rfl,
     ← Finset.sum_range_add_sum_Ico _ hdc]
@@ -517,7 +517,7 @@ private theorem pippengerLoop1_spec (hid : O.IdentitySpec) (hadd : O.AddSpec)
     (hbc1 : 1 ≤ bc.val) (hbc : bc.val ≤ 128) (hdc : dc ≤ 64)
     (hsp : ∀ k < sp.length, O.nOnCurve (sp.val[k]!).2 ∧ O.nBnd (sp.val[k]!).2 ∧
       O.nToPoint (sp.val[k]!).2 = P k)
-    (hdig : ∀ k < sp.length, ∀ e < 64, -(bc.val : ℤ) ≤ (sp.val[k]!).1[e]!.val ∧
+    (hdig : ∀ k < sp.length, ∀ e : ℕ, e < 64 → -(bc.val : ℤ) ≤ (sp.val[k]!).1[e]!.val ∧
       (sp.val[k]!).1[e]!.val ≤ (bc.val : ℤ))
     (hok : O.BucketsOK buckets bc.val) (hdi : di.val ≤ dc)
     (hnone : total = none ↔ di.val = dc)
@@ -620,8 +620,8 @@ def PairsOK (w : ℕ) (ss : List scalar.Scalar) (ops : List (Option O.E))
   v.length = m ∧ ∀ j < m, ∃ P, ops[j]! = some P ∧
     O.nOnCurve (v.val[j]!).2 ∧ O.nBnd (v.val[j]!).2 ∧ O.nToPoint (v.val[j]!).2 = O.toPoint P ∧
     (v.val[j]!).1.asInt w = ss[j]!.asNat ∧
-    (∀ i < 64, -2 ^ w ≤ 2 * (v.val[j]!).1[i]!.val ∧ 2 * (v.val[j]!).1[i]!.val ≤ 2 ^ w) ∧
-    ∀ i < 64, 256 < i * w → (v.val[j]!).1[i]!.val = 0
+    (∀ i : ℕ, i < 64 → -2 ^ w ≤ 2 * (v.val[j]!).1[i]!.val ∧ 2 * (v.val[j]!).1[i]!.val ≤ 2 ^ w) ∧
+    ∀ i : ℕ, i < 64 → 256 < i * w → (v.val[j]!).1[i]!.val = 0
 
 /-- `optional_multiscalar_mul.scalars_points_loop.body` over the point operations. -/
 @[expose] def pippengerScalarsPointsBody {S It : Type}
@@ -887,7 +887,7 @@ theorem pippengerMain_spec (hid : O.IdentitySpec) (hadd : O.AddSpec)
       obtain ⟨Q, hQ, hon, hb, hp, -⟩ := hsp k (hsplen ▸ hk)
       exact ⟨hon, hb, by
         rw [hp]; change O.toPoint Q = O.toPoint ((ops[k]!).getD default); rw [hQ]; rfl⟩
-    have hdig : ∀ k < sp.length, ∀ e < 64, -(bc.val : ℤ) ≤ (sp.val[k]!).1[e]!.val ∧
+    have hdig : ∀ k < sp.length, ∀ e : ℕ, e < 64 → -(bc.val : ℤ) ≤ (sp.val[k]!).1[e]!.val ∧
         (sp.val[k]!).1[e]!.val ≤ (bc.val : ℤ) := fun k hk e he => by
       obtain ⟨Q, -, -, -, -, -, hb, -⟩ := hsp k (hsplen ▸ hk)
       have := hb e he

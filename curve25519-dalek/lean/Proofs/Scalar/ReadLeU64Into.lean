@@ -50,11 +50,12 @@ private theorem read_le_u64_into_loop_spec (src : Slice U8) (dst : Slice U64)
     (hsrc : src.length = 8 * dst.length) :
     read_le_u64_into_loop src dst 0#usize ⦃ (r : Slice U64) =>
       r.length = dst.length ∧
-      ∀ i < dst.length, ∀ j < 8, r[i]!.val / 2 ^ (8 * j) % 2 ^ 8 = src[8 * i + j]!.val ⦄ := by
+      ∀ i < dst.length, ∀ j : ℕ, j < 8 →
+        r[i]!.val / 2 ^ (8 * j) % 2 ^ 8 = src[8 * i + j]!.val ⦄ := by
   unfold read_le_u64_into_loop
   apply loop.spec_decr_nat (measure := fun (d, i) => d.length - i.val)
     (inv := fun (d, k) => d.length = dst.length ∧ k.val ≤ dst.length ∧
-      ∀ i < k.val, ∀ j < 8, d[i]!.val / 2 ^ (8 * j) % 2 ^ 8 = src[8 * i + j]!.val)
+      ∀ i < k.val, ∀ j : ℕ, j < 8 → d[i]!.val / 2 ^ (8 * j) % 2 ^ 8 = src[8 * i + j]!.val)
   · rintro ⟨d, k⟩ ⟨hd, hk, hdone⟩
     unfold read_le_u64_into_loop.body
     by_cases hlt : k.val < d.length
@@ -100,7 +101,8 @@ theorem read_le_u64_into_spec (src : Slice U8) (dst : Slice U64)
     (hsrc : src.length = 8 * dst.length) :
     read_le_u64_into src dst ⦃ (r : Slice U64) =>
       r.length = dst.length ∧
-      ∀ i < dst.length, ∀ j < 8, r[i]!.val / 2 ^ (8 * j) % 2 ^ 8 = src[8 * i + j]!.val ⦄ := by
+      ∀ i < dst.length, ∀ j : ℕ, j < 8 →
+        r[i]!.val / 2 ^ (8 * j) % 2 ^ 8 = src[8 * i + j]!.val ⦄ := by
   unfold read_le_u64_into
   step*
 

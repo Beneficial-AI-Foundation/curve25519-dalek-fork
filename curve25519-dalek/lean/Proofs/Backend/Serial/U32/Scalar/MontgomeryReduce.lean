@@ -385,7 +385,8 @@ private theorem reduce_mod {N n R T r : ℕ} (h : N + n * L = R * T)
 - The result is `limbs / R` modulo `L`, reduced below `L`, with limbs below `2 ^ 29`. -/
 @[step]
 theorem montgomery_reduce_spec (limbs : Array U64 17#usize)
-    (hlimbs : ∀ i < 17, limbs[i]!.val < 2 ^ 63) (hlimbs' : limbs.asNat 29 < montgomeryRadix * L) :
+    (hlimbs : ∀ i : ℕ, i < 17 → limbs[i]!.val < 2 ^ 63)
+    (hlimbs' : limbs.asNat 29 < montgomeryRadix * L) :
     montgomery_reduce limbs ⦃ (r : Scalar29) =>
       r.asNat * montgomeryRadix % L = limbs.asNat 29 % L ∧ r.asNat < L ∧ r.LimbsLt 29 ⦄ := by
   rw [montgomery_reduce_eq]

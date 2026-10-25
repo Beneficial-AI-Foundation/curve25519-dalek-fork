@@ -79,7 +79,7 @@ theorem pstLoop01_spec (haddA : O.AddASpec) (hsubA : O.SubASpec) (hasE : O.AsExt
     (j : Usize) (R : O.C) (P : ℕ → curve25519.edwards.Point)
     (hj : j.val < 256) (hn : iter.end.val ≤ static_nafs.length ∧ iter.end.val ≤ v.length)
     (hT : ∀ m < iter.end.val, v.val[m]!.Represents (P m) ∧ v.val[m]!.LimbsLt O.aB)
-    (hD : ∀ m < iter.end.val, ∀ e < 256, (static_nafs.val[m]!)[e]!.val ≠ 0 →
+    (hD : ∀ m < iter.end.val, ∀ e : ℕ, e < 256 → (static_nafs.val[m]!)[e]!.val ≠ 0 →
       (static_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(static_nafs.val[m]!)[e]!.val| < 2 ^ 8)
     (hk : iter.start.val ≤ iter.end.val) (hR : O.cOnCurve R) (hRb : O.cBnd R) :
     O.pstLoop01 iter v static_nafs j R

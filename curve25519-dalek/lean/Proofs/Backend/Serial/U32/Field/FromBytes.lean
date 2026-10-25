@@ -108,9 +108,9 @@ namespace Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 value `x` of the form `x = y <<< m % U64.size`, where `y < 2 ^ n` and `n + m ≤ 32`, then each term
 of the resulting array is still bounded by 2 ^ 32. -/
 private theorem set_bound {a a' : Array U64 10#usize} {x y : U64} {k : Usize} {n m : Nat}
-    (heq : (a' = a.set k x)) (ha : ∀ j, j < 10 → a[j]!.val < 2 ^ 32)
+    (heq : (a' = a.set k x)) (ha : ∀ j : ℕ, j < 10 → a[j]!.val < 2 ^ 32)
     (hx : x.val = y.val <<< m % U64.size) (hy : y.val < 2 ^ n) (hexp : n + m ≤ 32) :
-    ∀ j, j < 10 → a'[j]!.val < 2 ^ 32 := by
+    ∀ j : ℕ, j < 10 → a'[j]!.val < 2 ^ 32 := by
   intro j hj; subst a'; by_cases j = k.val
   --The non-trivial case when a'[j] is a[j] replaced by x:
   · simp_lists
@@ -131,9 +131,9 @@ private theorem set_bound {a a' : Array U64 10#usize} {x y : U64} {k : Usize} {n
 /-- If all 10 elements of a 10-long array are bounded by `2 ^ 32` and we update an element by a
 value `x`, where `x < 2 ^ 32`, then each term of the resulting array is still bounded by 2 ^ 32. -/
 private theorem set_bound' {a a' : Array U64 10#usize} {x : U64} {k : Usize}
-    (heq : (a' = a.set k x)) (ha : ∀ j, j < 10 → a[j]!.val < 2 ^ 32)
+    (heq : (a' = a.set k x)) (ha : ∀ j : ℕ, j < 10 → a[j]!.val < 2 ^ 32)
     (hx : x.val < 2 ^ 32) :
-    ∀ j, j < 10 → a'[j]!.val < 2 ^ 32 := by
+    ∀ j : ℕ, j < 10 → a'[j]!.val < 2 ^ 32 := by
   --This can be viewed as a special case of set_bound
   have h : x.val = x.val <<< 0 % U64.size := by scalar_tac
   exact set_bound heq ha h hx (by decide)
@@ -174,7 +174,7 @@ theorem from_bytes_spec (data : Array U8 32#usize) :
   unfold from_bytes
   have hlen : data.to_slice.length = 32 := by simp
   --Initializing
-  have hinit_bound : ∀ j, j < 10 → (Array.repeat 10#usize 0#u64)[j]!.val < 2^32 := by
+  have hinit_bound : ∀ j : ℕ, j < 10 → (Array.repeat 10#usize 0#u64)[j]!.val < 2^32 := by
     simp_lists [Array.repeat_val]; decide
   have hinit_toNat : Array.asNat2625 (Array.repeat 10#usize 0#u64) = 0 := by
     rw [Array.asNat2625_expand]

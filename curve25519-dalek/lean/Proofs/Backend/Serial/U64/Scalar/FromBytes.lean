@@ -81,13 +81,13 @@ private theorem from_bytes_loop0_loop0_spec (bytes : Array U8 32#usize) (words :
 private theorem from_bytes_loop0_spec (bytes : Array U8 32#usize) :
     from_bytes_loop0 { start := 0#usize, «end» := 4#usize } bytes (Array.repeat 4#usize 0#u64)
     ⦃ (w : Array U64 4#usize) =>
-      ∀ k < 4, w[k]!.val = ∑ j ∈ Finset.range 8, 2 ^ (8 * j) * bytes[8 * k + j]!.val ⦄ := by
+      ∀ k : ℕ, k < 4 → w[k]!.val = ∑ j ∈ Finset.range 8, 2 ^ (8 * j) * bytes[8 * k + j]!.val ⦄ := by
   unfold from_bytes_loop0
   apply loop.spec_decr_nat (measure := fun (iter, _) => 4 - iter.start.val)
     (inv := fun (iter, w) => iter.end = 4#usize ∧ iter.start.val ≤ 4 ∧
       (∀ k < iter.start.val,
         w[k]!.val = ∑ j ∈ Finset.range 8, 2 ^ (8 * j) * bytes[8 * k + j]!.val) ∧
-      ∀ k < 4, iter.start.val ≤ k → w[k]!.val = 0)
+      ∀ k : ℕ, k < 4 → iter.start.val ≤ k → w[k]!.val = 0)
   · rintro ⟨iter, w⟩ ⟨hend, hstart, hdone, hzero⟩
     unfold from_bytes_loop0.body
     by_cases hlt : iter.start.val < 4

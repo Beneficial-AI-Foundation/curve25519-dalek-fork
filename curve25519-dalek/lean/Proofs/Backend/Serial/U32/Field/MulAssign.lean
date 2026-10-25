@@ -26,7 +26,8 @@ namespace CoreOpsArithMulAssignSharedBFieldElement2625
 
 @[step]
 theorem mul_assign_spec (self rhs : FieldElement2625)
-    (hself : ∀ i < 10, self[i]!.val < 3 * 2 ^ 26) (hrhs : ∀ i < 10, rhs[i]!.val < 3 * 2 ^ 26) :
+    (hself : ∀ i : ℕ, i < 10 → self[i]!.val < 3 * 2 ^ 26)
+    (hrhs : ∀ i : ℕ, i < 10 → rhs[i]!.val < 3 * 2 ^ 26) :
     mul_assign self rhs ⦃ (r : FieldElement2625) =>
       r.asNat % p = self.asNat * rhs.asNat % p ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_assign

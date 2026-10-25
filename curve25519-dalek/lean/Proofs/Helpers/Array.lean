@@ -85,7 +85,7 @@ theorem eq_of_to_slice_eq {α : Type} {n : Usize} {a b : Array α n}
 
 /-- A bound on five limbs, unfolded into its five instances (for `simp_lists`). -/
 theorem _root_.Nat.forall_lt_five {P : ℕ → Prop} :
-    (∀ i < 5, P i) ↔ P 0 ∧ P 1 ∧ P 2 ∧ P 3 ∧ P 4 := by
+    (∀ i : ℕ, i < 5 → P i) ↔ P 0 ∧ P 1 ∧ P 2 ∧ P 3 ∧ P 4 := by
   constructor
   · intro h
     exact ⟨h 0 (by decide), h 1 (by decide), h 2 (by decide), h 3 (by decide), h 4 (by decide)⟩

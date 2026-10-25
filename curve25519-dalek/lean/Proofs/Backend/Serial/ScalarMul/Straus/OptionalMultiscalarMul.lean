@@ -60,12 +60,12 @@ private theorem nafs_spec {It Clause0_Item : Type}
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hlen : xs.length ≤ Usize.max) :
     nafs iterInst borrowInst scalars
       ⦃ (r : alloc.vec.Vec (Array I8 256#usize)) =>
-        List.Forall₂ (fun s d => d.asInt 1 = s.asNat ∧ ∀ i < 256, d[i]!.val ≠ 0 →
+        List.Forall₂ (fun s d => d.asInt 1 = s.asNat ∧ ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 →
           d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5) ss r.val ⦄ := by
   unfold nafs nafs_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     (fun s => scalar.Scalar.non_adjacent_form s 5#usize)
-    (fun s d => d.asInt 1 = s.asNat ∧ ∀ i < 256, d[i]!.val ≠ 0 →
+    (fun s d => d.asInt 1 = s.asNat ∧ ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 →
       d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5)
     scalars xs hit ss hborrow (fun s hs =>
       spec_mono (scalar.Scalar.non_adjacent_form_spec s 5#usize (by decide) (hss s hs))
@@ -177,7 +177,7 @@ private theorem optional_multiscalar_mul_loop0_spec
     (r : ProjectivePoint.«x86_64-tables») (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min nafs.length lookup_tables.length)
     (hT : ∀ m < n, lookup_tables.val[m]!.Represents (P m) ∧ lookup_tables.val[m]!.LimbsLt 54)
-    (hD : ∀ m < n, ∀ e < 256, (nafs.val[m]!)[e]!.val ≠ 0 →
+    (hD : ∀ m < n, ∀ e : ℕ, e < 256 → (nafs.val[m]!)[e]!.val ≠ 0 →
       (nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(nafs.val[m]!)[e]!.val| < 2 ^ 5)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 256)
     (hr : r.OnCurve) (hrb : r.LimbsLt 52)
@@ -285,12 +285,12 @@ private theorem nafs_spec {It Clause0_Item : Type}
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hlen : xs.length ≤ Usize.max) :
     nafs iterInst borrowInst scalars
       ⦃ (r : alloc.vec.Vec (Array I8 256#usize)) =>
-        List.Forall₂ (fun s d => d.asInt 1 = s.asNat ∧ ∀ i < 256, d[i]!.val ≠ 0 →
+        List.Forall₂ (fun s d => d.asInt 1 = s.asNat ∧ ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 →
           d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5) ss r.val ⦄ := by
   unfold nafs nafs_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     (fun s => scalar.Scalar.non_adjacent_form s 5#usize)
-    (fun s d => d.asInt 1 = s.asNat ∧ ∀ i < 256, d[i]!.val ≠ 0 →
+    (fun s d => d.asInt 1 = s.asNat ∧ ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 →
       d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5)
     scalars xs hit ss hborrow (fun s hs =>
       spec_mono (scalar.Scalar.non_adjacent_form_spec s 5#usize (by decide) (hss s hs))
@@ -402,7 +402,7 @@ private theorem optional_multiscalar_mul_loop0_spec
     (r : ProjectivePoint.«i686-tables») (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min nafs.length lookup_tables.length)
     (hT : ∀ m < n, lookup_tables.val[m]!.Represents (P m) ∧ lookup_tables.val[m]!.LimbsLt 27)
-    (hD : ∀ m < n, ∀ e < 256, (nafs.val[m]!)[e]!.val ≠ 0 →
+    (hD : ∀ m < n, ∀ e : ℕ, e < 256 → (nafs.val[m]!)[e]!.val ≠ 0 →
       (nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(nafs.val[m]!)[e]!.val| < 2 ^ 5)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 256)
     (hr : r.OnCurve) (hrb : r.LimbsLt 26)
@@ -510,12 +510,12 @@ private theorem nafs_spec {It Clause0_Item : Type}
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hlen : xs.length ≤ Usize.max) :
     nafs iterInst borrowInst scalars
       ⦃ (r : alloc.vec.Vec (Array I8 256#usize)) =>
-        List.Forall₂ (fun s d => d.asInt 1 = s.asNat ∧ ∀ i < 256, d[i]!.val ≠ 0 →
+        List.Forall₂ (fun s d => d.asInt 1 = s.asNat ∧ ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 →
           d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5) ss r.val ⦄ := by
   unfold nafs nafs_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     (fun s => scalar.Scalar.non_adjacent_form s 5#usize)
-    (fun s d => d.asInt 1 = s.asNat ∧ ∀ i < 256, d[i]!.val ≠ 0 →
+    (fun s d => d.asInt 1 = s.asNat ∧ ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 →
       d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5)
     scalars xs hit ss hborrow (fun s hs =>
       spec_mono (scalar.Scalar.non_adjacent_form_spec s 5#usize (by decide) (hss s hs))
@@ -629,7 +629,7 @@ private theorem optional_multiscalar_mul_loop0_spec
     (r : ProjectivePoint.«x86_64-no-tables») (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min nafs.length lookup_tables.length)
     (hT : ∀ m < n, lookup_tables.val[m]!.Represents (P m) ∧ lookup_tables.val[m]!.LimbsLt 54)
-    (hD : ∀ m < n, ∀ e < 256, (nafs.val[m]!)[e]!.val ≠ 0 →
+    (hD : ∀ m < n, ∀ e : ℕ, e < 256 → (nafs.val[m]!)[e]!.val ≠ 0 →
       (nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(nafs.val[m]!)[e]!.val| < 2 ^ 5)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 256)
     (hr : r.OnCurve) (hrb : r.LimbsLt 52)
@@ -737,12 +737,12 @@ private theorem nafs_spec {It Clause0_Item : Type}
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hlen : xs.length ≤ Usize.max) :
     nafs iterInst borrowInst scalars
       ⦃ (r : alloc.vec.Vec (Array I8 256#usize)) =>
-        List.Forall₂ (fun s d => d.asInt 1 = s.asNat ∧ ∀ i < 256, d[i]!.val ≠ 0 →
+        List.Forall₂ (fun s d => d.asInt 1 = s.asNat ∧ ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 →
           d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5) ss r.val ⦄ := by
   unfold nafs nafs_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     (fun s => scalar.Scalar.non_adjacent_form s 5#usize)
-    (fun s d => d.asInt 1 = s.asNat ∧ ∀ i < 256, d[i]!.val ≠ 0 →
+    (fun s d => d.asInt 1 = s.asNat ∧ ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 →
       d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5)
     scalars xs hit ss hborrow (fun s hs =>
       spec_mono (scalar.Scalar.non_adjacent_form_spec s 5#usize (by decide) (hss s hs))
@@ -856,7 +856,7 @@ private theorem optional_multiscalar_mul_loop0_spec
     (r : ProjectivePoint.«i686-no-tables») (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min nafs.length lookup_tables.length)
     (hT : ∀ m < n, lookup_tables.val[m]!.Represents (P m) ∧ lookup_tables.val[m]!.LimbsLt 27)
-    (hD : ∀ m < n, ∀ e < 256, (nafs.val[m]!)[e]!.val ≠ 0 →
+    (hD : ∀ m < n, ∀ e : ℕ, e < 256 → (nafs.val[m]!)[e]!.val ≠ 0 →
       (nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(nafs.val[m]!)[e]!.val| < 2 ^ 5)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 256)
     (hr : r.OnCurve) (hrb : r.LimbsLt 26)

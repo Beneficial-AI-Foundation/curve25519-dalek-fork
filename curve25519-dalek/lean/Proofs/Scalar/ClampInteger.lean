@@ -21,11 +21,11 @@ open Curve25519Dalek.backend.serial.u64.scalar (montgomeryRadix)
 namespace Curve25519Dalek.scalar
 
 /-- Clearing the low 3 bits of a byte. -/
-private theorem and_248_add : ∀ x < 2 ^ 8, (x &&& 248) + x % 8 = x := by
+private theorem and_248_add : ∀ x : ℕ, x < 2 ^ 8 → (x &&& 248) + x % 8 = x := by
   decide +kernel
 
 /-- Clearing bit 7 and setting bit 6 of a byte. -/
-private theorem and_127_or_64 : ∀ x < 2 ^ 8, (x &&& 127) ||| 64 = x % 64 + 64 := by
+private theorem and_127_or_64 : ∀ x : ℕ, x < 2 ^ 8 → (x &&& 127) ||| 64 = x % 64 + 64 := by
   decide +kernel
 
 /-- The arithmetic of `clamp_integer`: the three byte updates, read on the value `X` of `bytes`

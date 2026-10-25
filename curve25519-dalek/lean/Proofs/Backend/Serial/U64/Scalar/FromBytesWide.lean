@@ -82,13 +82,13 @@ private theorem from_bytes_wide_loop0_loop0_spec (bytes : Array U8 64#usize)
 private theorem from_bytes_wide_loop0_spec (bytes : Array U8 64#usize) :
     from_bytes_wide_loop0 { start := 0#usize, «end» := 8#usize } bytes (Array.repeat 8#usize 0#u64)
     ⦃ (w : Array U64 8#usize) =>
-      ∀ k < 8, w[k]!.val = ∑ j ∈ Finset.range 8, 2 ^ (8 * j) * bytes[8 * k + j]!.val ⦄ := by
+      ∀ k : ℕ, k < 8 → w[k]!.val = ∑ j ∈ Finset.range 8, 2 ^ (8 * j) * bytes[8 * k + j]!.val ⦄ := by
   unfold from_bytes_wide_loop0
   apply loop.spec_decr_nat (measure := fun (iter, _) => 8 - iter.start.val)
     (inv := fun (iter, w) => iter.end = 8#usize ∧ iter.start.val ≤ 8 ∧
       (∀ k < iter.start.val,
         w[k]!.val = ∑ j ∈ Finset.range 8, 2 ^ (8 * j) * bytes[8 * k + j]!.val) ∧
-      ∀ k < 8, iter.start.val ≤ k → w[k]!.val = 0)
+      ∀ k : ℕ, k < 8 → iter.start.val ≤ k → w[k]!.val = 0)
   · rintro ⟨iter, w⟩ ⟨hend, hstart, hdone, hzero⟩
     unfold from_bytes_wide_loop0.body
     by_cases hlt : iter.start.val < 8
@@ -246,7 +246,7 @@ private theorem from_bytes_wide.mod_L_eq {r hi lo H Lo x : ℕ} (hr : r = (hi + 
 
 /-- The 64 bytes as eight little-endian words, in Horner form. -/
 private theorem from_bytes_wide.bytes_eq (bytes : Array U8 64#usize) (w : Array U64 8#usize)
-    (hw : ∀ k < 8, w[k]!.val = ∑ j ∈ Finset.range 8, 2 ^ (8 * j) * bytes[8 * k + j]!.val) :
+    (hw : ∀ k : ℕ, k < 8 → w[k]!.val = ∑ j ∈ Finset.range 8, 2 ^ (8 * j) * bytes[8 * k + j]!.val) :
     bytes.asNat 8 = w[0]!.val + 2 ^ 64 * (w[1]!.val + 2 ^ 64 * (w[2]!.val + 2 ^ 64 * (w[3]!.val
       + 2 ^ 64 * (w[4]!.val + 2 ^ 64 * (w[5]!.val + 2 ^ 64 * (w[6]!.val
       + 2 ^ 64 * w[7]!.val)))))) := by

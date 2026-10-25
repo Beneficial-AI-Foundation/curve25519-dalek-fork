@@ -130,7 +130,7 @@ private def nafPrefix (e : ℕ) : ℤ := ∑ k ∈ Finset.range e, 2 ^ k * d[k]!
 /-- Below a nonzero digit at `e` the four digits `e - 4, …, e - 1` vanish, so the prefix up to `e`
 is the prefix up to `e - 4`. -/
 private theorem nafPrefix_eq_of_ne_zero
-    (hnaf : ∀ i < 256, ∀ j < 256, i < j → j < i + 5 → d[i]!.val ≠ 0 → d[j]!.val = 0)
+    (hnaf : ∀ i : ℕ, i < 256 → ∀ j : ℕ, j < 256 → i < j → j < i + 5 → d[i]!.val ≠ 0 → d[j]!.val = 0)
     {e : ℕ} (he : e < 256) (hd : d[e]!.val ≠ 0) : nafPrefix d e = nafPrefix d (e - 4) := by
   unfold nafPrefix
   rw [← Finset.sum_range_add_sum_Ico _ (Nat.sub_le e 4), add_eq_left]
@@ -143,8 +143,9 @@ private theorem nafPrefix_eq_of_ne_zero
 
 /-- The lowest `e` digits of a width-`5` NAF have absolute value `< 2^(e + 3)`. -/
 private theorem abs_nafPrefix_lt
-    (hdig : ∀ i < 256, d[i]!.val ≠ 0 → d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5)
-    (hnaf : ∀ i < 256, ∀ j < 256, i < j → j < i + 5 → d[i]!.val ≠ 0 → d[j]!.val = 0) :
+    (hdig : ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 → d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5)
+    (hnaf : ∀ i : ℕ, i < 256 → ∀ j : ℕ, j < 256 → i < j → j < i + 5 → d[i]!.val ≠ 0 →
+      d[j]!.val = 0) :
     ∀ e ≤ 256, |nafPrefix d e| < 2 ^ (e + 3) := by
   intro e
   induction e using Nat.strong_induction_on with
@@ -179,8 +180,9 @@ private theorem abs_nafPrefix_lt
 /-- In a width-`5` non-adjacent form (the digit properties of `non_adjacent_form`) of a value
 `x < 2^n`, the digits above index `n` vanish. -/
 theorem naf5_digits_eq_zero_of_lt {x n : ℕ} (hval : d.asInt 1 = x) (hx : x < 2 ^ n)
-    (hdig : ∀ i < 256, d[i]!.val ≠ 0 → d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5)
-    (hnaf : ∀ i < 256, ∀ j < 256, i < j → j < i + 5 → d[i]!.val ≠ 0 → d[j]!.val = 0) :
+    (hdig : ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 → d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5)
+    (hnaf : ∀ i : ℕ, i < 256 → ∀ j : ℕ, j < 256 → i < j → j < i + 5 → d[i]!.val ≠ 0 →
+      d[j]!.val = 0) :
     ∀ k, n < k → k < 256 → d[k]!.val = 0 := by
   by_contra hcon
   push Not at hcon

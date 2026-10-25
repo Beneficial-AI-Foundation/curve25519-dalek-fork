@@ -124,7 +124,7 @@ value of `b`. -/
 theorem asNat_limbs_eq {tyL tyB : UScalarTy} {n m : Usize} (bits k : ℕ)
     (L : Array (UScalar tyL) n) (b : Array (UScalar tyB) m) (hm : m.val = 8 * k) (hk : k ≤ n.val)
     (hL : ∀ i < n.val, L[i]!.val < 2 ^ (8 * bits))
-    (hLb : ∀ i < k, ∀ j < 8, L[i]!.val / 2 ^ (bits * j) % 2 ^ bits = b[8 * i + j]!.val)
+    (hLb : ∀ i < k, ∀ j : ℕ, j < 8 → L[i]!.val / 2 ^ (bits * j) % 2 ^ bits = b[8 * i + j]!.val)
     (hz : ∀ i, k ≤ i → i < n.val → L[i]!.val = 0) :
     L.asNat (8 * bits) = b.asNat bits := by
   rw [asNat_eq_sum_blocks bits 8 k b (by rw [hm]), asNat_eq_sum,

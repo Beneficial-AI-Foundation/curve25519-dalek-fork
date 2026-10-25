@@ -90,8 +90,10 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     (r : ProjectivePoint.«x86_64-tables») (A B : curve25519.edwards.Point)
     (hA : table_A.Represents A) (hAb : table_A.LimbsLt 54)
     (hB : table_B.Represents B) (hBb : table_B.LimbsLt 54)
-    (ha : ∀ k < 256, a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧ 2 * |a_naf[k]!.val| < 2 ^ 5)
-    (hb : ∀ k < 256, b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧ 2 * |b_naf[k]!.val| < 2 ^ 8)
+    (ha : ∀ k : ℕ, k < 256 → a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧
+      2 * |a_naf[k]!.val| < 2 ^ 5)
+    (hb : ∀ k : ℕ, k < 256 → b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧
+      2 * |b_naf[k]!.val| < 2 ^ 8)
     (hi : i.val < 256) (hr : r.OnCurve) (hrb : r.LimbsLt 52)
     (hrp : r.toPoint = nafTail a_naf (i.val + 1) • A + nafTail b_naf (i.val + 1) • B) :
     mul.«x86_64-tables_loop1» a_naf b_naf i table_A table_B r
@@ -187,8 +189,10 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     (r : ProjectivePoint.«i686-tables») (A B : curve25519.edwards.Point)
     (hA : table_A.Represents A) (hAb : table_A.LimbsLt 27)
     (hB : table_B.Represents B) (hBb : table_B.LimbsLt 27)
-    (ha : ∀ k < 256, a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧ 2 * |a_naf[k]!.val| < 2 ^ 5)
-    (hb : ∀ k < 256, b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧ 2 * |b_naf[k]!.val| < 2 ^ 8)
+    (ha : ∀ k : ℕ, k < 256 → a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧
+      2 * |a_naf[k]!.val| < 2 ^ 5)
+    (hb : ∀ k : ℕ, k < 256 → b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧
+      2 * |b_naf[k]!.val| < 2 ^ 8)
     (hi : i.val < 256) (hr : r.OnCurve) (hrb : r.LimbsLt 26)
     (hrp : r.toPoint = nafTail a_naf (i.val + 1) • A + nafTail b_naf (i.val + 1) • B) :
     mul.«i686-tables_loop1» a_naf b_naf i table_A table_B r
@@ -283,8 +287,10 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     (r : ProjectivePoint.«x86_64-no-tables») (A B : curve25519.edwards.Point)
     (hA : table_A.Represents A) (hAb : table_A.LimbsLt 54)
     (hB : table_B.Represents B) (hBb : table_B.LimbsLt 54)
-    (ha : ∀ k < 256, a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧ 2 * |a_naf[k]!.val| < 2 ^ 5)
-    (hb : ∀ k < 256, b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧ 2 * |b_naf[k]!.val| < 2 ^ 5)
+    (ha : ∀ k : ℕ, k < 256 → a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧
+      2 * |a_naf[k]!.val| < 2 ^ 5)
+    (hb : ∀ k : ℕ, k < 256 → b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧
+      2 * |b_naf[k]!.val| < 2 ^ 5)
     (hi : i.val < 256) (hr : r.OnCurve) (hrb : r.LimbsLt 52)
     (hrp : r.toPoint = nafTail a_naf (i.val + 1) • A + nafTail b_naf (i.val + 1) • B) :
     mul.«x86_64-no-tables_loop1» a_naf b_naf i table_A table_B r
@@ -382,8 +388,10 @@ private theorem mul_loop1_spec (a_naf b_naf : Array I8 256#usize) (i : Usize)
     (r : ProjectivePoint.«i686-no-tables») (A B : curve25519.edwards.Point)
     (hA : table_A.Represents A) (hAb : table_A.LimbsLt 27)
     (hB : table_B.Represents B) (hBb : table_B.LimbsLt 27)
-    (ha : ∀ k < 256, a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧ 2 * |a_naf[k]!.val| < 2 ^ 5)
-    (hb : ∀ k < 256, b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧ 2 * |b_naf[k]!.val| < 2 ^ 5)
+    (ha : ∀ k : ℕ, k < 256 → a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧
+      2 * |a_naf[k]!.val| < 2 ^ 5)
+    (hb : ∀ k : ℕ, k < 256 → b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧
+      2 * |b_naf[k]!.val| < 2 ^ 5)
     (hi : i.val < 256) (hr : r.OnCurve) (hrb : r.LimbsLt 26)
     (hrp : r.toPoint = nafTail a_naf (i.val + 1) • A + nafTail b_naf (i.val + 1) • B) :
     mul.«i686-no-tables_loop1» a_naf b_naf i table_A table_B r

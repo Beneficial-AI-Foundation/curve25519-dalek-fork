@@ -14,7 +14,8 @@ open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
 namespace Curve25519Dalek.backend.serial.u64.field
 theorem SIXTEEN_P_spec :
     FieldElement51.asNat SIXTEEN_P = 16 * p ∧
-      (∀ i < 5, 2 ^ 55 ≤ SIXTEEN_P[i]!.val + 304) ∧ FieldElement51.LimbsLt 55 SIXTEEN_P := by
+      (∀ i : ℕ, i < 5 → 2 ^ 55 ≤ SIXTEEN_P[i]!.val + 304) ∧
+        FieldElement51.LimbsLt 55 SIXTEEN_P := by
   unfold SIXTEEN_P
   simp only [field.FieldElement51.asNat_def, Array.asNat_def]
   refine ⟨?_, by decide⟩

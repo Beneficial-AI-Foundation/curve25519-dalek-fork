@@ -30,7 +30,8 @@ open backend.serial.u32.field
 theorem add_spec (self rhs : FieldElement2625)
     (hself : self.LimbsLt 31) (hrhs : rhs.LimbsLt 31) :
     add self rhs ⦃ (r : FieldElement2625) =>
-      (∀ i < 10, r[i]!.val = self[i]!.val + rhs[i]!.val) ∧ r.asNat = self.asNat + rhs.asNat ⦄ := by
+      (∀ i : ℕ, i < 10 → r[i]!.val = self[i]!.val + rhs[i]!.val) ∧
+        r.asNat = self.asNat + rhs.asNat ⦄ := by
   unfold add
   step*
 

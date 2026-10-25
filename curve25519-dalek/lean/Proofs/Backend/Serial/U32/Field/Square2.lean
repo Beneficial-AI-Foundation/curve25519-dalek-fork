@@ -42,7 +42,7 @@ private def Invariant (coeffs : Array U64 10#usize) (iter : core.slice.iter.Iter
   iter.i ≤ 10 ∧
   ∀ im : core.slice.iter.IterMut U64, im.slice.val.length = 10 →
     (back im).slice.val.length = 10 ∧
-    ∀ j < 10, (back im).slice.val[j]!.val =
+    ∀ j : ℕ, j < 10 → (back im).slice.val[j]!.val =
       if j < iter.i then 2 * coeffs[j]!.val else im.slice.val[j]!.val
 
 end Square2
@@ -52,7 +52,7 @@ end Square2
 private theorem square2_loop.body_spec (iter : core.slice.iter.IterMut U64)
     (back : core.slice.iter.IterMut U64 → core.slice.iter.IterMut U64)
     (coeffs : Array U64 10#usize)
-    (h_coeffs : ∀ i < 10, coeffs[i]!.val < 2 ^ 63)
+    (h_coeffs : ∀ i : ℕ, i < 10 → coeffs[i]!.val < 2 ^ 63)
     (h_inv : Square2.Invariant coeffs iter back) :
     square2_loop.body iter back ⦃
       (result : ControlFlow (core.slice.iter.IterMut U64 ×
@@ -61,7 +61,7 @@ private theorem square2_loop.body_spec (iter : core.slice.iter.IterMut U64)
       match result with
       | .done r =>
         r.slice.val.length = 10 ∧
-        ∀ i < 10, r.slice.val[i]!.val = 2 * coeffs[i]!.val
+        ∀ i : ℕ, i < 10 → r.slice.val[i]!.val = 2 * coeffs[i]!.val
       | .cont (iter', back') =>
         Square2.Invariant coeffs iter' back' ∧ iter'.i = iter.i + 1 ⦄ := by
   obtain ⟨h_slice, h_le, h_back⟩ := h_inv
@@ -102,11 +102,11 @@ private theorem square2_loop.body_spec (iter : core.slice.iter.IterMut U64)
 private theorem square2_loop_spec (iter : core.slice.iter.IterMut U64)
     (back : core.slice.iter.IterMut U64 → core.slice.iter.IterMut U64)
     (coeffs : Array U64 10#usize)
-    (h_coeffs : ∀ i < 10, coeffs[i]!.val < 2 ^ 63)
+    (h_coeffs : ∀ i : ℕ, i < 10 → coeffs[i]!.val < 2 ^ 63)
     (h_inv : Square2.Invariant coeffs iter back) :
     square2_loop iter back ⦃ (r : core.slice.iter.IterMut U64) =>
       r.slice.val.length = 10 ∧
-      ∀ i < 10, r.slice.val[i]!.val = 2 * coeffs[i]!.val ⦄ := by
+      ∀ i : ℕ, i < 10 → r.slice.val[i]!.val = 2 * coeffs[i]!.val ⦄ := by
   unfold square2_loop
   refine loop.spec_decr_nat
     (fun state : core.slice.iter.IterMut U64 ×
@@ -132,13 +132,13 @@ theorem square2_spec (self : FieldElement2625) (hself : self.LimbsLt 27) :
   unfold square2
   step as ⟨coeffs, h_mod, h_bound⟩
   step as ⟨iter, into_iter_back, h_iter_slice, h_iter_i, h_into_back⟩
-  have h_coeffs : ∀ i < 10, coeffs[i]!.val < 2 ^ 63 := fun i hi => by
+  have h_coeffs : ∀ i : ℕ, i < 10 → coeffs[i]!.val < 2 ^ 63 := fun i hi => by
     have := h_bound i hi
     omega
   have h_inv : Square2.Invariant coeffs iter (fun im => im) :=
     ⟨h_iter_slice, by omega, fun im him => ⟨him, fun j _ => by simp [h_iter_i]⟩⟩
   step with square2_loop_spec iter (fun im => im) coeffs h_coeffs h_inv as ⟨r, h_r_len, h_r⟩
-  have h_doubled : ∀ i < 10, (into_iter_back r)[i]!.val = 2 * coeffs[i]!.val := by
+  have h_doubled : ∀ i : ℕ, i < 10 → (into_iter_back r)[i]!.val = 2 * coeffs[i]!.val := by
     intro i hi
     rw [Array.getElem!_Nat_eq, h_into_back r h_r_len, h_r i hi]
   step with reduce_spec as ⟨result, h_res_mod, h_res, _⟩

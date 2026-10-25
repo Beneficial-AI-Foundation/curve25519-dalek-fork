@@ -73,12 +73,12 @@ private theorem nafs_spec {It Clause0_Item : Type}
     (hw : 2 ≤ w.val ∧ w.val ≤ 8) :
     nafs iterInst borrowInst scalars w
       ⦃ (r : alloc.vec.Vec (Array I8 256#usize)) =>
-        List.Forall₂ (fun s d => d.asInt 1 = s.asNat ∧ ∀ i < 256, d[i]!.val ≠ 0 →
+        List.Forall₂ (fun s d => d.asInt 1 = s.asNat ∧ ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 →
           d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ w.val) ss r.val ⦄ := by
   unfold nafs nafs_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     (fun s => scalar.Scalar.non_adjacent_form s w)
-    (fun s d => d.asInt 1 = s.asNat ∧ ∀ i < 256, d[i]!.val ≠ 0 →
+    (fun s d => d.asInt 1 = s.asNat ∧ ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 →
       d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ w.val)
     scalars xs hit ss hborrow (fun s hs =>
       spec_mono (scalar.Scalar.non_adjacent_form_spec s w hw (hss s hs))
@@ -195,10 +195,10 @@ private theorem optional_mixed_multiscalar_mul_loop0_spec
     (hsl : static_nafs.length ≤ v.length)
     (hT : ∀ m < dp.val, dynamic_lookup_tables.val[m]!.Represents (Q m) ∧
       dynamic_lookup_tables.val[m]!.LimbsLt 54)
-    (hD : ∀ m < dp.val, ∀ e < 256, (dynamic_nafs.val[m]!)[e]!.val ≠ 0 →
+    (hD : ∀ m < dp.val, ∀ e : ℕ, e < 256 → (dynamic_nafs.val[m]!)[e]!.val ≠ 0 →
       (dynamic_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(dynamic_nafs.val[m]!)[e]!.val| < 2 ^ 5)
     (hV : ∀ m < static_nafs.length, v.val[m]!.Represents (P m) ∧ v.val[m]!.LimbsLt 54)
-    (hE : ∀ m < static_nafs.length, ∀ e < 256, (static_nafs.val[m]!)[e]!.val ≠ 0 →
+    (hE : ∀ m < static_nafs.length, ∀ e : ℕ, e < 256 → (static_nafs.val[m]!)[e]!.val ≠ 0 →
       (static_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(static_nafs.val[m]!)[e]!.val| < 2 ^ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 256)
     (hS : S.OnCurve) (hSb : S.LimbsLt 52)

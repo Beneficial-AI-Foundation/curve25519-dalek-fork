@@ -100,7 +100,7 @@ private theorem loop0_spec
 
 /-- The digit facts of `non_adjacent_form` at width `5`. -/
 private abbrev Naf5Digits (d : Array I8 256#usize) : Prop :=
-  ∀ k < 256, d[k]!.val ≠ 0 → d[k]!.val % 2 = 1 ∧ 2 * |d[k]!.val| < 2 ^ 5
+  ∀ k : ℕ, k < 256 → d[k]!.val ≠ 0 → d[k]!.val % 2 = 1 ∧ 2 * |d[k]!.val| < 2 ^ 5
 
 open scoped Helpers.IndexStep in
 /-- The second loop of `mul_128_128_256`: after the digits `i, …, 255`, the accumulator represents
@@ -245,7 +245,7 @@ private theorem loop0_spec
 
 /-- The digit facts of `non_adjacent_form` at width `5`. -/
 private abbrev Naf5Digits (d : Array I8 256#usize) : Prop :=
-  ∀ k < 256, d[k]!.val ≠ 0 → d[k]!.val % 2 = 1 ∧ 2 * |d[k]!.val| < 2 ^ 5
+  ∀ k : ℕ, k < 256 → d[k]!.val ≠ 0 → d[k]!.val % 2 = 1 ∧ 2 * |d[k]!.val| < 2 ^ 5
 
 open scoped Helpers.IndexStep in
 /-- The second loop of `mul_128_128_256`: after the digits `i, …, 255`, the accumulator represents
@@ -386,7 +386,7 @@ private theorem loop0_spec
 
 /-- The digit facts of `non_adjacent_form` at width `5`. -/
 private abbrev Naf5Digits (d : Array I8 256#usize) : Prop :=
-  ∀ k < 256, d[k]!.val ≠ 0 → d[k]!.val % 2 = 1 ∧ 2 * |d[k]!.val| < 2 ^ 5
+  ∀ k : ℕ, k < 256 → d[k]!.val ≠ 0 → d[k]!.val % 2 = 1 ∧ 2 * |d[k]!.val| < 2 ^ 5
 
 open scoped Helpers.IndexStep in
 /-- The second loop of `mul_128_128_256`: after the digits `i, …, 255`, the accumulator represents
@@ -532,7 +532,7 @@ private theorem loop0_spec
 
 /-- The digit facts of `non_adjacent_form` at width `5`. -/
 private abbrev Naf5Digits (d : Array I8 256#usize) : Prop :=
-  ∀ k < 256, d[k]!.val ≠ 0 → d[k]!.val % 2 = 1 ∧ 2 * |d[k]!.val| < 2 ^ 5
+  ∀ k : ℕ, k < 256 → d[k]!.val ≠ 0 → d[k]!.val % 2 = 1 ∧ 2 * |d[k]!.val| < 2 ^ 5
 
 open scoped Helpers.IndexStep in
 /-- The second loop of `mul_128_128_256`: after the digits `i, …, 255`, the accumulator represents

@@ -67,7 +67,7 @@ theorem createLoop_spec (fromF : EdwardsPoint.«i686-tables» → Result Tab)
         EdwardsPoint.«i686-tables») => createLoopBody fromF radix iter1 a1 P1)
       ({ start := 0#usize, «end» := 32#usize }, a, P)
       ⦃ (r : Array Tab 32#usize) =>
-        ∀ i < 32, Rep r[i]! (2 ^ (2 * w * i) • P.toPoint) ∧ Bnd r[i]! ⦄ := by
+        ∀ i : ℕ, i < 32 → Rep r[i]! (2 ^ (2 * w * i) • P.toPoint) ∧ Bnd r[i]! ⦄ := by
   apply loop.spec_decr_nat (measure := fun (it, _, _) => it.end.val - it.start.val)
     (inv := fun (it, t, Q) => it.end.val = 32 ∧ it.start.val ≤ 32 ∧ Q.LimbsLt 26 ∧ Q.OnCurve ∧
       Q.toPoint = 2 ^ (2 * w * it.start.val) • P.toPoint ∧
@@ -136,7 +136,7 @@ private theorem zsmul_nsmul (x : ℤ) (n : ℕ) (B : curve25519.edwards.Point) :
 `adds` on do. -/
 private theorem sum_range_eq_of_zero (a : Array I8 64#usize) (i0 m w : ℕ) (adds : ℕ)
     (hm : adds ≤ i0 + 2 * m) (hm32 : m ≤ 32) (hi0 : i0 < 2)
-    (hz : ∀ j < 64, adds ≤ j → a[j]!.val = 0) :
+    (hz : ∀ j : ℕ, j < 64 → adds ≤ j → a[j]!.val = 0) :
     ∑ k ∈ Finset.range m, a[i0 + 2 * k]!.val * 2 ^ (2 * w * k) =
       ∑ k ∈ Finset.range 32, a[i0 + 2 * k]!.val * 2 ^ (2 * w * k) := by
   rw [← Finset.sum_range_add_sum_Ico _ hm32]
@@ -155,7 +155,7 @@ theorem mulBaseLoop_spec (adds : Usize) (hadds : adds.val ≤ 64)
     (tables : Array Tab 32#usize) (B : curve25519.edwards.Point) (w : ℕ)
     (hsel : ∀ i < adds.val, sel tables[i / 2]! a[i]! ⦃ (q : AffineNielsPoint.«i686-tables») =>
       q.OnCurve ∧ q.toPoint = a[i]!.val • 2 ^ (2 * w * (i / 2)) • B ∧ q.LimbsLt 27 ⦄)
-    (hz : ∀ j < 64, adds.val ≤ j → a[j]!.val = 0) (i0 : Usize) (hi0 : i0.val < 2)
+    (hz : ∀ j : ℕ, j < 64 → adds.val ≤ j → a[j]!.val = 0) (i0 : Usize) (hi0 : i0.val < 2)
     (P : EdwardsPoint.«i686-tables») (hP : P.LimbsLt 26) (hon : P.OnCurve) :
     loop (fun ((P1, i1) : EdwardsPoint.«i686-tables» × Usize) =>
         mulBaseLoopBody adds sel a tables P1 i1) (P, i0)
@@ -227,7 +227,7 @@ theorem createLoop_spec (fromF : EdwardsPoint.«x86_64-tables» → Result Tab)
         EdwardsPoint.«x86_64-tables») => createLoopBody fromF radix iter1 a1 P1)
       ({ start := 0#usize, «end» := 32#usize }, a, P)
       ⦃ (r : Array Tab 32#usize) =>
-        ∀ i < 32, Rep r[i]! (2 ^ (2 * w * i) • P.toPoint) ∧ Bnd r[i]! ⦄ := by
+        ∀ i : ℕ, i < 32 → Rep r[i]! (2 ^ (2 * w * i) • P.toPoint) ∧ Bnd r[i]! ⦄ := by
   apply loop.spec_decr_nat (measure := fun (it, _, _) => it.end.val - it.start.val)
     (inv := fun (it, t, Q) => it.end.val = 32 ∧ it.start.val ≤ 32 ∧ Q.LimbsLt 52 ∧ Q.OnCurve ∧
       Q.toPoint = 2 ^ (2 * w * it.start.val) • P.toPoint ∧
@@ -296,7 +296,7 @@ private theorem zsmul_nsmul (x : ℤ) (n : ℕ) (B : curve25519.edwards.Point) :
 `adds` on do. -/
 private theorem sum_range_eq_of_zero (a : Array I8 64#usize) (i0 m w : ℕ) (adds : ℕ)
     (hm : adds ≤ i0 + 2 * m) (hm32 : m ≤ 32) (hi0 : i0 < 2)
-    (hz : ∀ j < 64, adds ≤ j → a[j]!.val = 0) :
+    (hz : ∀ j : ℕ, j < 64 → adds ≤ j → a[j]!.val = 0) :
     ∑ k ∈ Finset.range m, a[i0 + 2 * k]!.val * 2 ^ (2 * w * k) =
       ∑ k ∈ Finset.range 32, a[i0 + 2 * k]!.val * 2 ^ (2 * w * k) := by
   rw [← Finset.sum_range_add_sum_Ico _ hm32]
@@ -315,7 +315,7 @@ theorem mulBaseLoop_spec (adds : Usize) (hadds : adds.val ≤ 64)
     (tables : Array Tab 32#usize) (B : curve25519.edwards.Point) (w : ℕ)
     (hsel : ∀ i < adds.val, sel tables[i / 2]! a[i]! ⦃ (q : AffineNielsPoint.«x86_64-tables») =>
       q.OnCurve ∧ q.toPoint = a[i]!.val • 2 ^ (2 * w * (i / 2)) • B ∧ q.LimbsLt 54 ⦄)
-    (hz : ∀ j < 64, adds.val ≤ j → a[j]!.val = 0) (i0 : Usize) (hi0 : i0.val < 2)
+    (hz : ∀ j : ℕ, j < 64 → adds.val ≤ j → a[j]!.val = 0) (i0 : Usize) (hi0 : i0.val < 2)
     (P : EdwardsPoint.«x86_64-tables») (hP : P.LimbsLt 52) (hon : P.OnCurve) :
     loop (fun ((P1, i1) : EdwardsPoint.«x86_64-tables» × Usize) =>
         mulBaseLoopBody adds sel a tables P1 i1) (P, i0)

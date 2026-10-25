@@ -50,7 +50,7 @@ private theorem conditional_add_l_loop_spec (self : Scalar29) (condition : subtl
   apply loop.spec_decr_nat (measure := fun (iter, _, _) => 9 - iter.start.val)
     (inv := fun (iter, a, carry) => iter.end = 9#usize ∧ iter.start.val ≤ 9 ∧
       carry.val < 2 ^ 30 ∧ a.LimbsLt 29 ∧
-      (∀ i < 9, iter.start.val ≤ i → a[i]! = self[i]!) ∧
+      (∀ i : ℕ, i < 9 → iter.start.val ≤ i → a[i]! = self[i]!) ∧
       ∑ j ∈ Finset.range iter.start.val, 2 ^ (29 * j) * a[j]!.val
         + 2 ^ (29 * iter.start.val) * (carry.val / 2 ^ 29) =
         ∑ j ∈ Finset.range iter.start.val, 2 ^ (29 * j) * self[j]!.val

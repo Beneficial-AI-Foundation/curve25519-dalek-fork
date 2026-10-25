@@ -54,9 +54,10 @@ theorem split_smul (lo hi b : ℕ) (h : lo + 2 ^ 128 * hi = b)
 /-- The recoding of a value below `2^128` has no digit above index `128`. -/
 theorem naf_high_zero {d : Array I8 256#usize} {x : ℕ} (hx : x < 2 ^ 128)
     (hval : d.asInt 1 = x)
-    (hdig : ∀ i < 256, d[i]!.val ≠ 0 → d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5)
-    (hnaf : ∀ i < 256, ∀ j < 256, i < j → j < i + 5 → d[i]!.val ≠ 0 → d[j]!.val = 0) :
-    ∀ k, 129 < k → k < 256 → d[k]!.val = 0 :=
+    (hdig : ∀ i : ℕ, i < 256 → d[i]!.val ≠ 0 → d[i]!.val % 2 = 1 ∧ 2 * |d[i]!.val| < 2 ^ 5)
+    (hnaf : ∀ i : ℕ, i < 256 → ∀ j : ℕ, j < 256 → i < j → j < i + 5 → d[i]!.val ≠ 0 →
+      d[j]!.val = 0) :
+    ∀ k : ℕ, 129 < k → k < 256 → d[k]!.val = 0 :=
   fun k hk hk' => naf5_digits_eq_zero_of_lt d hval hx hdig hnaf k (by omega) hk'
 
 
@@ -202,7 +203,7 @@ theorem vtbLoop0_spec
 /-- The digit facts of `non_adjacent_form` at width `5`. -/
 @[nolint defsWithUnderscore]
 abbrev Naf5Digits (d : Array I8 256#usize) : Prop :=
-  ∀ k < 256, d[k]!.val ≠ 0 → d[k]!.val % 2 = 1 ∧ 2 * |d[k]!.val| < 2 ^ 5
+  ∀ k : ℕ, k < 256 → d[k]!.val ≠ 0 → d[k]!.val % 2 = 1 ∧ 2 * |d[k]!.val| < 2 ^ 5
 
 variable (O : EdwardsOps)
 

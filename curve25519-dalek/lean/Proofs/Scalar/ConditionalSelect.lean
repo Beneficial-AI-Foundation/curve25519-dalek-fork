@@ -20,7 +20,8 @@ open Curve25519Dalek.backend.serial.u64.scalar (montgomeryRadix)
 namespace Curve25519Dalek.scalar.Scalar.Insts.SubtleConditionallySelectable
 
 /-- Byte arrays with the same entries are equal. -/
-private theorem bytes_ext {x y : Array U8 32#usize} (h : ∀ i < 32, x[i]! = y[i]!) : x = y := by
+private theorem bytes_ext {x y : Array U8 32#usize} (h : ∀ i : ℕ, i < 32 →
+  x[i]! = y[i]!) : x = y := by
   refine Aeneas.Std.Array.ext _ _ (List.ext_getElem (by simp) fun i h1 h2 => ?_)
   have hi : i < 32 := by simpa using h1
   have := h i hi
@@ -34,7 +35,7 @@ private theorem conditional_select_loop_spec (a b : Scalar) (choice : subtle.Cho
     (hchoice : choice.IsValid) :
     conditional_select_loop { start := 0#usize, «end» := 32#usize } a b choice
       (Array.repeat 32#usize 0#u8) ⦃ (r : Array U8 32#usize) =>
-      ∀ i < 32, (choice = 0#u8 → r[i]! = a.bytes[i]!) ∧
+      ∀ i : ℕ, i < 32 → (choice = 0#u8 → r[i]! = a.bytes[i]!) ∧
         (choice = 1#u8 → r[i]! = b.bytes[i]!) ⦄ := by
   unfold conditional_select_loop
   apply loop.spec_decr_nat (measure := fun (iter, _) => 32 - iter.start.val)

@@ -26,7 +26,7 @@ namespace Curve25519Dalek.backend.serial.u32.scalar.Scalar29
 @[step]
 theorem square_internal_spec (a : Scalar29) (ha : a.LimbsLt 29) :
     square_internal a ⦃ (r : Array U64 17#usize) =>
-      r.asNat 29 = a.asNat ^ 2 ∧ ∀ i < 17, r[i]!.val < 2 ^ 62 ⦄ := by
+      r.asNat 29 = a.asNat ^ 2 ∧ ∀ i : ℕ, i < 17 → r[i]!.val < 2 ^ 62 ⦄ := by
   have h_a := ha
   clear ha
   simp only [Scalar29.LimbsLt, Array.getElem!_Nat_eq] at h_a

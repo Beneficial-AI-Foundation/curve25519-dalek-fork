@@ -24,12 +24,12 @@ open scoped Helpers.IndexStep in
 private theorem add_assign_loop_spec (self rhs : FieldElement51)
     (hself : self.LimbsLt 54) (hrhs : rhs.LimbsLt 54) :
     add_assign_loop { start := 0#usize, «end» := 5#usize } self rhs ⦃ (r : FieldElement51) =>
-      ∀ i < 5, r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
+      ∀ i : ℕ, i < 5 → r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
   unfold add_assign_loop
   apply loop.spec_decr_nat (measure := fun (iter, _, _) => 5 - iter.start.val)
     (inv := fun (iter, a, b) => b = rhs ∧ iter.end = 5#usize ∧ iter.start.val ≤ 5 ∧
       (∀ i < iter.start.val, a[i]!.val = self[i]!.val + rhs[i]!.val) ∧
-      ∀ i < 5, iter.start.val ≤ i → a[i]! = self[i]!)
+      ∀ i : ℕ, i < 5 → iter.start.val ≤ i → a[i]! = self[i]!)
   · rintro ⟨iter, a, b⟩ ⟨hb, hend, hstart, hlo, hhi⟩
     subst hb
     unfold add_assign_loop.body
@@ -53,7 +53,7 @@ private theorem add_assign_loop_spec (self rhs : FieldElement51)
 theorem add_assign_spec (self rhs : FieldElement51)
     (hself : self.LimbsLt 54) (hrhs : rhs.LimbsLt 54) :
     add_assign self rhs ⦃ (r : FieldElement51) =>
-      ∀ i < 5, r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
+      ∀ i : ℕ, i < 5 → r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
   unfold add_assign
   step*
 end CoreOpsArithAddAssignSharedAFieldElement51

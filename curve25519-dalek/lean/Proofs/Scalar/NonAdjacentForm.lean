@@ -78,7 +78,7 @@ private def NafInv (X w : ℕ) (naf : Array I8 256#usize) (pos carry : ℕ) : Pr
   carry ≤ 1 ∧ (256 ≤ pos → carry = 0) ∧
   naf.asInt 1 + 2 ^ pos * ((carry + X / 2 ^ pos : ℕ) : ℤ) = X ∧
   (∀ j, pos ≤ j → j < 256 → naf[j]!.val = 0) ∧
-  ∀ i < 256, naf[i]!.val ≠ 0 → (naf[i]!.val % 2 = 1 ∧ 2 * |naf[i]!.val| < 2 ^ w) ∧
+  ∀ i : ℕ, i < 256 → naf[i]!.val ≠ 0 → (naf[i]!.val % 2 = 1 ∧ 2 * |naf[i]!.val| < 2 ^ w) ∧
     i + w ≤ pos ∧ ∀ j, i < j → j < i + w → j < 256 → naf[j]!.val = 0
 
 /-- An even window: no digit, move to the next bit. -/
@@ -302,8 +302,8 @@ private theorem naf_loop_spec (w : Usize) (x : Array U64 5#usize) (width mask : 
     non_adjacent_form_loop w (Array.repeat 256#usize 0#i8) x width mask 0#usize 0#u64
     ⦃ (r : Array I8 256#usize) =>
       r.asInt 1 = X ∧
-      (∀ i < 256, r[i]!.val ≠ 0 → r[i]!.val % 2 = 1 ∧ 2 * |r[i]!.val| < 2 ^ w.val) ∧
-      ∀ i < 256, ∀ j < 256, i < j → j < i + w.val → r[i]!.val ≠ 0 →
+      (∀ i : ℕ, i < 256 → r[i]!.val ≠ 0 → r[i]!.val % 2 = 1 ∧ 2 * |r[i]!.val| < 2 ^ w.val) ∧
+      ∀ i : ℕ, i < 256 → ∀ j : ℕ, j < 256 → i < j → j < i + w.val → r[i]!.val ≠ 0 →
         r[j]!.val = 0 ⦄ := by
   unfold non_adjacent_form_loop
   apply loop.spec_decr_nat (measure := fun (_, pos, _) => 256 - pos.val)
@@ -330,8 +330,9 @@ theorem non_adjacent_form_spec (self : Scalar) (w : Usize) (hw : 2 ≤ w.val ∧
     (hself : self.asNat < 2 ^ 255) :
     non_adjacent_form self w ⦃ (r : Array I8 256#usize) =>
       r.asInt 1 = self.asNat ∧
-      (∀ i < 256, r[i]!.val ≠ 0 → r[i]!.val % 2 = 1 ∧ 2 * |r[i]!.val| < 2 ^ w.val) ∧
-      ∀ i < 256, ∀ j < 256, i < j → j < i + w.val → r[i]!.val ≠ 0 → r[j]!.val = 0 ⦄ := by
+      (∀ i : ℕ, i < 256 → r[i]!.val ≠ 0 → r[i]!.val % 2 = 1 ∧ 2 * |r[i]!.val| < 2 ^ w.val) ∧
+      ∀ i : ℕ, i < 256 → ∀ j : ℕ, j < 256 → i < j → j < i + w.val → r[i]!.val ≠ 0 →
+        r[j]!.val = 0 ⦄ := by
   unfold non_adjacent_form
   step
   step

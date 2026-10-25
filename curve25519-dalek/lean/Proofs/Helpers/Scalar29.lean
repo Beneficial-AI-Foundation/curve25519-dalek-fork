@@ -120,7 +120,7 @@ theorem Scalar29.getElem!_set_nine_lt {r : Scalar29} (a : Scalar29)
       4#usize x4).set 5#usize x5).set 6#usize x6).set 7#usize x7).set 8#usize x8)
     (h0 : x0.val < B) (h1 : x1.val < B) (h2 : x2.val < B) (h3 : x3.val < B) (h4 : x4.val < B)
     (h5 : x5.val < B) (h6 : x6.val < B) (h7 : x7.val < B) (h8 : x8.val < B) :
-    ∀ i < 9, r[i]!.val < B := by
+    ∀ i : ℕ, i < 9 → r[i]!.val < B := by
   intro i hi
   rw [hr]
   rcases i with _ | _ | _ | _ | _ | _ | _ | _ | _ | i

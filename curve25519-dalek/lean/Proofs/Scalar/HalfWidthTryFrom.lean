@@ -46,14 +46,14 @@ namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarT
 /-- The loop of `try_from` checks that the bytes from `i` to `31` are zero. -/
 @[local step]
 private theorem try_from_loop_spec (value : Scalar) (i : Usize) (hi : 16 ≤ i.val ∧ i.val ≤ 32)
-    (hz : ∀ j, 16 ≤ j → j < i.val → value.bytes[j]!.val = 0) :
+    (hz : ∀ j : ℕ, 16 ≤ j → j < i.val → value.bytes[j]!.val = 0) :
     try_from_loop value i ⦃ (r : core.result.Result HalfWidthScalar Unit) =>
-      ((∀ j, 16 ≤ j → j < 32 → value.bytes[j]!.val = 0) → r = .Ok value) ∧
-      (¬ (∀ j, 16 ≤ j → j < 32 → value.bytes[j]!.val = 0) → r = .Err ()) ⦄ := by
+      ((∀ j : ℕ, 16 ≤ j → j < 32 → value.bytes[j]!.val = 0) → r = .Ok value) ∧
+      (¬ (∀ j : ℕ, 16 ≤ j → j < 32 → value.bytes[j]!.val = 0) → r = .Err ()) ⦄ := by
   unfold try_from_loop
   apply loop.spec_decr_nat (measure := fun i => 32 - i.val)
     (inv := fun i => (16 ≤ i.val ∧ i.val ≤ 32) ∧
-      ∀ j, 16 ≤ j → j < i.val → value.bytes[j]!.val = 0)
+      ∀ j : ℕ, 16 ≤ j → j < i.val → value.bytes[j]!.val = 0)
   · rintro k ⟨hk, hzk⟩
     unfold try_from_loop.body
     by_cases hlt : k.val < 32

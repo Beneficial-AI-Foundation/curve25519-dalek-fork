@@ -126,7 +126,7 @@ private theorem strausMsLoop00_spec (haddN : O.AddNSpec) (hasE : O.AsExtendedSpe
     (hn : n.val ≤ lookup_tables.length ∧ n.val ≤ scalar_digits.length)
     (hT : ∀ k < n.val, lookup_tables.val[k]!.Represents (P k) ∧
       lookup_tables.val[k]!.LimbsLt O.nB)
-    (hD : ∀ k < n.val, ∀ e < 64, -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
+    (hD : ∀ k < n.val, ∀ e : ℕ, e < 64 → -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
       (scalar_digits.val[k]!)[e]!.val ≤ 8)
     (hi : i.val ≤ n.val) (hQ : O.Bnd Q) (hon : O.OnCurve Q) :
     O.strausMsLoop00 lookup_tables scalar_digits Q j n i ⦃ (r : O.E) => O.OnCurve r ∧ O.Bnd r ∧
@@ -170,7 +170,7 @@ theorem strausMsLoop0_spec (haddN : O.AddNSpec) (hasE : O.AsExtendedSpec)
     (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min scalar_digits.length lookup_tables.length)
     (hT : ∀ k < n, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.LimbsLt O.nB)
-    (hD : ∀ k < n, ∀ e < 64, -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
+    (hD : ∀ k < n, ∀ e : ℕ, e < 64 → -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
       (scalar_digits.val[k]!)[e]!.val ≤ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 64)
     (hQ : O.Bnd Q) (hon : O.OnCurve Q)

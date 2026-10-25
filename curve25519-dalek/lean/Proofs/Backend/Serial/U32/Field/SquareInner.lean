@@ -358,10 +358,10 @@ private theorem outArray_toNat (a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 : U64) :
 
 @[step]
 theorem square_inner_spec (self : FieldElement2625)
-    (h_self : ∀ i < 10, self[i]!.val < 2 ^ 27 + 2 ^ 25) :
+    (h_self : ∀ i : ℕ, i < 10 → self[i]!.val < 2 ^ 27 + 2 ^ 25) :
     square_inner self ⦃ (result : Array U64 10#usize) =>
       result.asNat2625 % p = self.asNat ^ 2 % p ∧
-      (∀ i < 10, result[i]!.val < 6675 * 2 ^ 50) ⦄ := by
+      (∀ i : ℕ, i < 10 → result[i]!.val < 6675 * 2 ^ 50) ⦄ := by
   have h0 : self[0]!.val ≤ 2 ^ 27 + 2 ^ 25 - 1 := Nat.le_pred_of_lt (h_self 0 (by decide))
   have h1 : self[1]!.val ≤ 2 ^ 27 + 2 ^ 25 - 1 := Nat.le_pred_of_lt (h_self 1 (by decide))
   have h2 : self[2]!.val ≤ 2 ^ 27 + 2 ^ 25 - 1 := Nat.le_pred_of_lt (h_self 2 (by decide))

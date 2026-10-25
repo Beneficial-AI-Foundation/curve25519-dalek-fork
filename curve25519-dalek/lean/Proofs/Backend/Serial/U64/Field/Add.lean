@@ -18,7 +18,7 @@ namespace CoreOpsArithAddSharedAFieldElement51FieldElement51
 theorem add_spec (self rhs : FieldElement51)
     (hself : self.LimbsLt 54) (hrhs : rhs.LimbsLt 54) :
     add self rhs ⦃ (r : FieldElement51) =>
-      ∀ i < 5, r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
+      ∀ i : ℕ, i < 5 → r[i]!.val = self[i]!.val + rhs[i]!.val ⦄ := by
   unfold add
   step*
 end Curve25519Dalek.Shared0FieldElement51.Insts.CoreOpsArithAddSharedAFieldElement51FieldElement51

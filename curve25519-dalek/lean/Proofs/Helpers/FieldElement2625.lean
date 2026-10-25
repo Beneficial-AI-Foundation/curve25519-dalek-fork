@@ -97,7 +97,7 @@ theorem Array.asNat2625_eq_sum {ty : UScalarTy} (a : Array (UScalar ty) 10#usize
 /-- Two arrays of ten limbs with pointwise-equal limb values have equal values. -/
 theorem Array.asNat2625_congr {ty ty' : UScalarTy}
     (x : Array (UScalar ty) 10#usize) (y : Array (UScalar ty') 10#usize)
-    (h : ∀ i, i < 10 → x[i]!.val = y[i]!.val) :
+    (h : ∀ i : ℕ, i < 10 → x[i]!.val = y[i]!.val) :
     x.asNat2625 = y.asNat2625 := by
   rw [Array.asNat2625_eq_sum, Array.asNat2625_eq_sum]
   exact sum_congr rfl fun i hi => by rw [mem_range] at hi; rw [h i hi]
@@ -152,7 +152,8 @@ theorem getElem!_make_le {ty : UScalarTy} (a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 : UScal
     (h0 : a0.val ≤ B) (h1 : a1.val ≤ B) (h2 : a2.val ≤ B) (h3 : a3.val ≤ B)
     (h4 : a4.val ≤ B) (h5 : a5.val ≤ B) (h6 : a6.val ≤ B) (h7 : a7.val ≤ B)
     (h8 : a8.val ≤ B) (h9 : a9.val ≤ B) :
-    ∀ i < 10, (Array.make 10#usize [a0, a1, a2, a3, a4, a5, a6, a7, a8, a9] hl)[i]!.val ≤ B := by
+    ∀ i : ℕ, i < 10 →
+      (Array.make 10#usize [a0, a1, a2, a3, a4, a5, a6, a7, a8, a9] hl)[i]!.val ≤ B := by
   intro i hi
   rewrite [← Finset.mem_range] at hi
   fin_cases hi <;> simpa [Array.make, Array.getElem!_Nat_eq]

@@ -73,10 +73,10 @@ theorem pstLoop0_spec (haddN : O.AddNSpec) (hsubN : O.SubNSpec) (haddA : O.AddAS
     (hsl : static_nafs.length ≤ v.length)
     (hT : ∀ m < dp.val, dynamic_lookup_tables.val[m]!.Represents (Q m) ∧
       dynamic_lookup_tables.val[m]!.LimbsLt O.nB)
-    (hD : ∀ m < dp.val, ∀ e < 256, (dynamic_nafs.val[m]!)[e]!.val ≠ 0 →
+    (hD : ∀ m < dp.val, ∀ e : ℕ, e < 256 → (dynamic_nafs.val[m]!)[e]!.val ≠ 0 →
       (dynamic_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(dynamic_nafs.val[m]!)[e]!.val| < 2 ^ 5)
     (hV : ∀ m < static_nafs.length, v.val[m]!.Represents (P m) ∧ v.val[m]!.LimbsLt O.aB)
-    (hE : ∀ m < static_nafs.length, ∀ e < 256, (static_nafs.val[m]!)[e]!.val ≠ 0 →
+    (hE : ∀ m < static_nafs.length, ∀ e : ℕ, e < 256 → (static_nafs.val[m]!)[e]!.val ≠ 0 →
       (static_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(static_nafs.val[m]!)[e]!.val| < 2 ^ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 256)
     (hS : O.pOnCurve S) (hSb : O.pBnd S)

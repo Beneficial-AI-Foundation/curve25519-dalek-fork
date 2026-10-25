@@ -131,7 +131,7 @@ private theorem as_radix_16_loop0_body_spec (self : Scalar) (iter : core.ops.ran
 @[local step]
 private theorem as_radix_16_loop0_spec (self : Scalar) :
     as_radix_16_loop0 { start := 0#usize, «end» := 32#usize } self (Array.repeat 64#usize 0#i8)
-    ⦃ (r : Array I8 64#usize) => ∀ i < 32,
+    ⦃ (r : Array I8 64#usize) => ∀ i : ℕ, i < 32 →
       r[2 * i]!.val = ((self.bytes[i]!.val % 16 : ℕ) : ℤ) ∧
       r[2 * i + 1]!.val = ((self.bytes[i]!.val / 16 : ℕ) : ℤ) ⦄ := by
   unfold as_radix_16_loop0
@@ -234,9 +234,9 @@ private theorem as_radix_16_loop1_body_spec (iter : core.ops.range.Range Usize)
 the next digit. -/
 @[local step]
 private theorem as_radix_16_loop1_spec (out : Array I8 64#usize)
-    (hout : ∀ j < 64, 0 ≤ out[j]!.val ∧ out[j]!.val ≤ 15) (h63 : out[63]!.val ≤ 7) :
+    (hout : ∀ j : ℕ, j < 64 → 0 ≤ out[j]!.val ∧ out[j]!.val ≤ 15) (h63 : out[63]!.val ≤ 7) :
     as_radix_16_loop1 { start := 0#usize, «end» := 63#usize } out ⦃ (r : Array I8 64#usize) =>
-      r.asInt 4 = out.asInt 4 ∧ (∀ i < 63, -8 ≤ r[i]!.val ∧ r[i]!.val < 8) ∧
+      r.asInt 4 = out.asInt 4 ∧ (∀ i : ℕ, i < 63 → -8 ≤ r[i]!.val ∧ r[i]!.val < 8) ∧
       -8 ≤ r[63]!.val ∧ r[63]!.val ≤ 8 ⦄ := by
   unfold as_radix_16_loop1
   apply loop.spec_decr_nat (measure := fun (iter, _) => 63 - iter.start.val)
@@ -301,14 +301,14 @@ private theorem nibbles_val (b : ℕ) :
 theorem as_radix_16_spec (self : Scalar) (hself : self.asNat < 2 ^ 255) :
     as_radix_16 self ⦃ (r : Array I8 64#usize) =>
       r.asInt 4 = self.asNat ∧
-      (∀ i < 63, -8 ≤ r[i]!.val ∧ r[i]!.val < 8) ∧ -8 ≤ r[63]!.val ∧ r[63]!.val ≤ 8 ⦄ := by
+      (∀ i : ℕ, i < 63 → -8 ≤ r[i]!.val ∧ r[i]!.val < 8) ∧ -8 ≤ r[63]!.val ∧ r[63]!.val ≤ 8 ⦄ := by
   have h31 : self.bytes[31]!.val ≤ 127 := Nat.lt_succ_iff.mp (Scalar.bytes_31_lt (k := 7) hself)
   clear hself
   unfold as_radix_16
   step as ⟨b31, hb31⟩
   step
   step as ⟨out, hout⟩
-  have hbounds : ∀ j < 64, 0 ≤ out[j]!.val ∧ out[j]!.val ≤ 15 := by
+  have hbounds : ∀ j : ℕ, j < 64 → 0 ≤ out[j]!.val ∧ out[j]!.val ≤ 15 := by
     intro j hj
     rcases Nat.even_or_odd' j with ⟨i, rfl | rfl⟩
     · rw [(hout i (Nat.lt_of_mul_lt_mul_left (a := 2) hj)).1]

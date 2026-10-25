@@ -129,7 +129,7 @@ private theorem vbLoop_spec (haddN : O.AddNSpec) (hasE : O.AsExtendedSpec) (hsel
     (tmp1 : O.C) (P : curve25519.edwards.Point)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 63)
     (htab : lookup_table.LimbsLt O.nB) (hP : lookup_table.Represents P)
-    (hd : ∀ i < 64, -8 ≤ scalar_digits[i]!.val ∧ scalar_digits[i]!.val ≤ 8)
+    (hd : ∀ i : ℕ, i < 64 → -8 ≤ scalar_digits[i]!.val ∧ scalar_digits[i]!.val ≤ 8)
     (hon : O.cOnCurve tmp1) (hb : O.cBnd tmp1)
     (h1 : O.cToPoint tmp1 = digitSum scalar_digits iter.iter.end.val • P) :
     O.vbLoop iter lookup_table scalar_digits tmp3 tmp1 ⦃ (r : O.C) =>
@@ -177,7 +177,7 @@ theorem vbMul_spec (hid : O.IdentitySpec) (haddN : O.AddNSpec) (hasE : O.AsExten
   unfold vbMul
   step with hfrom point hpoint hon as ⟨table, hrep, htab⟩
   step as ⟨d, hval, hlow, h63l, h63u⟩
-  have hd : ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8 := fun i hi => by
+  have hd : ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8 := fun i hi => by
     rcases Nat.lt_or_ge i 63 with h | h
     · exact ⟨(hlow i h).1, (hlow i h).2.le⟩
     · rw [show i = 63 by omega]; exact ⟨h63l, h63u⟩

@@ -140,7 +140,7 @@ private theorem low_eq {l0 l1 l2 l3 l4 n0 n1 n2 n3 n4 c0 c1 c2 c3 c4 L0 L1 L2 L4
 attribute [local step] montgomery_reduce.part1_lt_spec
 
 private theorem low_spec (limbs : Array U128 9#usize)
-    (hlimbs : ∀ i < 9, limbs[i]!.val < 2 ^ 127) :
+    (hlimbs : ∀ i : ℕ, i < 9 → limbs[i]!.val < 2 ^ 127) :
     montgomery_reduce.low limbs ⦃ (L1 n1 L2 n2 n3 L4 : U64) (c4 : U128) (n4 : U64) =>
       L1 = constants.L[1]! ∧ L2 = constants.L[2]! ∧ L4 = constants.L[4]! ∧
       n1.val < 2 ^ 52 ∧ n2.val < 2 ^ 52 ∧ n3.val < 2 ^ 52 ∧ n4.val < 2 ^ 52 ∧ c4.val < 2 ^ 76 ∧
@@ -215,7 +215,7 @@ private theorem reduce_mod {N n R T r : ℕ} (h : N + n * L = R * T)
     _ = N % L := Nat.add_mul_mod_self_right _ _ _
 
 private theorem high_spec (limbs : Array U128 9#usize) (L1 n1 L2 n2 n3 L4 : U64) (c4 : U128)
-    (n4 : U64) (hlimbs : ∀ i < 9, limbs[i]!.val < 2 ^ 127) (hL1 : L1.val < 2 ^ 52)
+    (n4 : U64) (hlimbs : ∀ i : ℕ, i < 9 → limbs[i]!.val < 2 ^ 127) (hL1 : L1.val < 2 ^ 52)
     (hL2 : L2.val < 2 ^ 52) (hL4 : L4.val < 2 ^ 52) (hn1 : n1.val < 2 ^ 52)
     (hn2 : n2.val < 2 ^ 52) (hn3 : n3.val < 2 ^ 52) (hn4 : n4.val < 2 ^ 52)
     (hc4 : c4.val < 2 ^ 76) :
@@ -237,7 +237,8 @@ private theorem high_spec (limbs : Array U128 9#usize) (L1 n1 L2 n2 n3 L4 : U64)
 
 @[step]
 theorem montgomery_reduce_spec (limbs : Array U128 9#usize)
-    (hlimbs : ∀ i < 9, limbs[i]!.val < 2 ^ 127) (hlimbs' : limbs.asNat 52 < montgomeryRadix * L) :
+    (hlimbs : ∀ i : ℕ, i < 9 → limbs[i]!.val < 2 ^ 127)
+    (hlimbs' : limbs.asNat 52 < montgomeryRadix * L) :
     montgomery_reduce limbs ⦃ (r : Scalar52) =>
       r.asNat * montgomeryRadix % L = limbs.asNat 52 % L ∧ r.asNat < L ∧
       r.LimbsLt 52 ⦄ := by

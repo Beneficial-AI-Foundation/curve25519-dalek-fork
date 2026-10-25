@@ -99,7 +99,8 @@ theorem toField_pow_of_mod {r a : FieldElement2625} {k : ℕ} (h : r.asNat % p =
 
 /-- The shape of `add_spec`: limbs add without reduction. -/
 theorem toField_add_of_limbs {r a b : FieldElement2625}
-    (h : ∀ i < 10, r[i]!.val = a[i]!.val + b[i]!.val) : r.toField = a.toField + b.toField := by
+    (h : ∀ i : ℕ, i < 10 → r[i]!.val = a[i]!.val + b[i]!.val) :
+    r.toField = a.toField + b.toField := by
   have h' : r.asNat = a.asNat + b.asNat := by
     simp only [asNat_def, Array.asNat2625_eq_sum, ← Finset.sum_add_distrib, ← mul_add]
     exact Finset.sum_congr rfl fun i hi => by rw [h i (Finset.mem_range.mp hi)]
@@ -165,7 +166,7 @@ theorem limbs_lt_of_le {a : FieldElement2625} {k l : ℕ} (hkl : k ≤ l)
 
 /-- The limbs of `add_spec`'s output: one bit more than its inputs. -/
 theorem limbs_add_lt {r a b : FieldElement2625} {k : ℕ}
-    (h : ∀ i < 10, r[i]!.val = a[i]!.val + b[i]!.val) (ha : a.LimbsLt k)
+    (h : ∀ i : ℕ, i < 10 → r[i]!.val = a[i]!.val + b[i]!.val) (ha : a.LimbsLt k)
     (hb : b.LimbsLt k) : r.LimbsLt (k + 1) := fun i hi => by
   rw [h i hi, pow_succ]
   have := ha i hi
@@ -174,14 +175,15 @@ theorem limbs_add_lt {r a b : FieldElement2625} {k : ℕ}
 
 /-- The input bound of `mul`: every limb `< 3 · 2^26`, the sum of three reduced elements. -/
 abbrev MulBounded (a : FieldElement2625) : Prop :=
-  ∀ i < 10, a[i]!.val < 3 * 2 ^ 26
+  ∀ i : ℕ, i < 10 → a[i]!.val < 3 * 2 ^ 26
 
 theorem mulBounded_of_limbsLt {a : FieldElement2625} (h : a.LimbsLt 27) : a.MulBounded :=
   fun i hi => (h i hi).trans (by norm_num)
 
 /-- The sum of a `LimbsLt 27` and a `LimbsLt 26` element, as `add` computes it. -/
 theorem mulBounded_add {r a b : FieldElement2625}
-    (h : ∀ i < 10, r[i]!.val = a[i]!.val + b[i]!.val) (ha : a.LimbsLt 27) (hb : b.LimbsLt 26) :
+    (h : ∀ i : ℕ, i < 10 → r[i]!.val = a[i]!.val + b[i]!.val) (ha : a.LimbsLt 27)
+    (hb : b.LimbsLt 26) :
     r.MulBounded := fun i hi => by
   rw [h i hi]
   have := ha i hi

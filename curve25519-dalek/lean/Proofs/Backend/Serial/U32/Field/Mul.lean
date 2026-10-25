@@ -400,7 +400,8 @@ private theorem mulCoeff9_spec (y1 y2 y3 y4 y5 y6 y7 y8 y9 x1 x3 x5 x7 x9 x0 y0 
 
 @[step]
 theorem mul_spec (self rhs : FieldElement2625)
-    (hself : ∀ i < 10, self[i]!.val < 3 * 2 ^ 26) (hrhs : ∀ i < 10, rhs[i]!.val < 3 * 2 ^ 26) :
+    (hself : ∀ i : ℕ, i < 10 → self[i]!.val < 3 * 2 ^ 26)
+    (hrhs : ∀ i : ℕ, i < 10 → rhs[i]!.val < 3 * 2 ^ 26) :
     mul self rhs ⦃ (r : FieldElement2625) =>
       r.asNat % p = self.asNat * rhs.asNat % p ∧ r.LimbsLt 26 ⦄ := by
   have hx0 : self[0]!.val ≤ 3 * 2 ^ 26 - 1 := Nat.le_pred_of_lt (hself 0 (by decide))

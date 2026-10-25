@@ -83,10 +83,10 @@ private theorem scalar_digits_spec {It Clause0_Item : Type}
     scalar_digits iterInst borrowInst scalars
       ⦃ (r : alloc.vec.Vec (Array I8 64#usize)) =>
         List.Forall₂ (fun s d => d.asInt 4 = s.asNat ∧
-          ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
+          ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
   unfold scalar_digits scalar_digits_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow scalar.Scalar.as_radix_16
-    (fun s d => d.asInt 4 = s.asNat ∧ ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
+    (fun s d => d.asInt 4 = s.asNat ∧ ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
     scalars xs hit ss hborrow (fun s hs => spec_mono (scalar.Scalar.as_radix_16_spec s (hss s hs))
       fun d ⟨hval, hlow, h63l, h63u⟩ => ⟨hval, fun i hi => by
         rcases Nat.lt_or_ge i 63 with h | h
@@ -128,7 +128,7 @@ private theorem multiscalar_mul_loop0_spec
     (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min scalar_digits.length lookup_tables.length)
     (hT : ∀ k < n, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.LimbsLt 54)
-    (hD : ∀ k < n, ∀ e < 64, -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
+    (hD : ∀ k < n, ∀ e : ℕ, e < 64 → -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
       (scalar_digits.val[k]!)[e]!.val ≤ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 64)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve)
@@ -260,10 +260,10 @@ private theorem scalar_digits_spec {It Clause0_Item : Type}
     scalar_digits iterInst borrowInst scalars
       ⦃ (r : alloc.vec.Vec (Array I8 64#usize)) =>
         List.Forall₂ (fun s d => d.asInt 4 = s.asNat ∧
-          ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
+          ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
   unfold scalar_digits scalar_digits_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow scalar.Scalar.as_radix_16
-    (fun s d => d.asInt 4 = s.asNat ∧ ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
+    (fun s d => d.asInt 4 = s.asNat ∧ ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
     scalars xs hit ss hborrow (fun s hs => spec_mono (scalar.Scalar.as_radix_16_spec s (hss s hs))
       fun d ⟨hval, hlow, h63l, h63u⟩ => ⟨hval, fun i hi => by
         rcases Nat.lt_or_ge i 63 with h | h
@@ -305,7 +305,7 @@ private theorem multiscalar_mul_loop0_spec
     (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min scalar_digits.length lookup_tables.length)
     (hT : ∀ k < n, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.LimbsLt 27)
-    (hD : ∀ k < n, ∀ e < 64, -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
+    (hD : ∀ k < n, ∀ e : ℕ, e < 64 → -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
       (scalar_digits.val[k]!)[e]!.val ≤ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 64)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve)
@@ -437,10 +437,10 @@ private theorem scalar_digits_spec {It Clause0_Item : Type}
     scalar_digits iterInst borrowInst scalars
       ⦃ (r : alloc.vec.Vec (Array I8 64#usize)) =>
         List.Forall₂ (fun s d => d.asInt 4 = s.asNat ∧
-          ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
+          ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
   unfold scalar_digits scalar_digits_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow scalar.Scalar.as_radix_16
-    (fun s d => d.asInt 4 = s.asNat ∧ ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
+    (fun s d => d.asInt 4 = s.asNat ∧ ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
     scalars xs hit ss hborrow (fun s hs => spec_mono (scalar.Scalar.as_radix_16_spec s (hss s hs))
       fun d ⟨hval, hlow, h63l, h63u⟩ => ⟨hval, fun i hi => by
         rcases Nat.lt_or_ge i 63 with h | h
@@ -483,7 +483,7 @@ private theorem multiscalar_mul_loop0_spec
     (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min scalar_digits.length lookup_tables.length)
     (hT : ∀ k < n, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.LimbsLt 54)
-    (hD : ∀ k < n, ∀ e < 64, -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
+    (hD : ∀ k < n, ∀ e : ℕ, e < 64 → -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
       (scalar_digits.val[k]!)[e]!.val ≤ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 64)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve)
@@ -615,10 +615,10 @@ private theorem scalar_digits_spec {It Clause0_Item : Type}
     scalar_digits iterInst borrowInst scalars
       ⦃ (r : alloc.vec.Vec (Array I8 64#usize)) =>
         List.Forall₂ (fun s d => d.asInt 4 = s.asNat ∧
-          ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
+          ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
   unfold scalar_digits scalar_digits_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow scalar.Scalar.as_radix_16
-    (fun s d => d.asInt 4 = s.asNat ∧ ∀ i < 64, -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
+    (fun s d => d.asInt 4 = s.asNat ∧ ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
     scalars xs hit ss hborrow (fun s hs => spec_mono (scalar.Scalar.as_radix_16_spec s (hss s hs))
       fun d ⟨hval, hlow, h63l, h63u⟩ => ⟨hval, fun i hi => by
         rcases Nat.lt_or_ge i 63 with h | h
@@ -661,7 +661,7 @@ private theorem multiscalar_mul_loop0_spec
     (P : ℕ → curve25519.edwards.Point) (n : ℕ)
     (hn : n = min scalar_digits.length lookup_tables.length)
     (hT : ∀ k < n, lookup_tables.val[k]!.Represents (P k) ∧ lookup_tables.val[k]!.LimbsLt 27)
-    (hD : ∀ k < n, ∀ e < 64, -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
+    (hD : ∀ k < n, ∀ e : ℕ, e < 64 → -8 ≤ (scalar_digits.val[k]!)[e]!.val ∧
       (scalar_digits.val[k]!)[e]!.val ≤ 8)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 64)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve)

@@ -82,7 +82,7 @@ theorem pstLoop00_spec (haddN : O.AddNSpec) (hsubN : O.SubNSpec) (hasE : O.AsExt
         (hn : iter.end.val ≤ dynamic_nafs.length ∧ iter.end.val ≤ dynamic_lookup_tables.length)
     (hT : ∀ m < iter.end.val, dynamic_lookup_tables.val[m]!.Represents (P m) ∧
         dynamic_lookup_tables.val[m]!.LimbsLt O.nB)
-    (hD : ∀ m < iter.end.val, ∀ e < 256, (dynamic_nafs.val[m]!)[e]!.val ≠ 0 →
+    (hD : ∀ m < iter.end.val, ∀ e : ℕ, e < 256 → (dynamic_nafs.val[m]!)[e]!.val ≠ 0 →
       (dynamic_nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(dynamic_nafs.val[m]!)[e]!.val| < 2 ^ 5)
     (hk : iter.start.val ≤ iter.end.val) (hR : O.cOnCurve R) (hRb : O.cBnd R) :
     O.pstLoop00 iter dynamic_nafs dynamic_lookup_tables j R

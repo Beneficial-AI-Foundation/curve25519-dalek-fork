@@ -36,8 +36,8 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTable.«x86_64-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 54) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
-    (hz : ∀ j < 64, 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
+    (hz : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -63,8 +63,8 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
 private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTable.«x86_64-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 54) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
-    (hz : ∀ j < 64, 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
+    (hz : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -95,7 +95,7 @@ theorem mul_base_spec (self : EdwardsBasepointTable.«x86_64-tables») (s : scal
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_base
   step with scalar.Scalar.as_radix_2w_spec s 4#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
-  have hz' : ∀ j < 64, 64 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
+  have hz' : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
   step with EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨P0, hP0on, hP0, hP0b⟩
@@ -120,8 +120,8 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTable.«i686-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 27) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
-    (hz : ∀ j < 64, 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
+    (hz : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
     mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -147,8 +147,8 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
 private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTable.«i686-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 27) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
-    (hz : ∀ j < 64, 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
+    (hz : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
     mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -179,7 +179,7 @@ theorem mul_base_spec (self : EdwardsBasepointTable.«i686-tables») (s : scalar
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_base
   step with scalar.Scalar.as_radix_2w_spec s 4#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
-  have hz' : ∀ j < 64, 64 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
+  have hz' : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
   step with EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨P0, hP0on, hP0, hP0b⟩
@@ -202,8 +202,8 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix32.«x86_64-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 54) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
-    (hz : ∀ j < 64, 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
+    (hz : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -229,8 +229,8 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
 private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix32.«x86_64-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 54) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
-    (hz : ∀ j < 64, 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
+    (hz : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -261,7 +261,7 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables») (s
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_base
   step with scalar.Scalar.as_radix_2w_spec s 5#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
-  have hz' : ∀ j < 64, 52 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
+  have hz' : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
   step with EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨P0, hP0on, hP0, hP0b⟩
@@ -286,8 +286,8 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix32.«i686-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 27) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
-    (hz : ∀ j < 64, 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
+    (hz : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
     mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -313,8 +313,8 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
 private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix32.«i686-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 27) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
-    (hz : ∀ j < 64, 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
+    (hz : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
     mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -345,7 +345,7 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix32.«i686-tables») (s :
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_base
   step with scalar.Scalar.as_radix_2w_spec s 5#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
-  have hz' : ∀ j < 64, 52 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
+  have hz' : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
   step with EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨P0, hP0on, hP0, hP0b⟩
@@ -368,8 +368,8 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix64.«x86_64-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 54) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
-    (hz : ∀ j < 64, 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
+    (hz : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -395,8 +395,8 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
 private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix64.«x86_64-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 54) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
-    (hz : ∀ j < 64, 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
+    (hz : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -427,7 +427,7 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables») (s
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_base
   step with scalar.Scalar.as_radix_2w_spec s 6#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
-  have hz' : ∀ j < 64, 43 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
+  have hz' : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
   step with EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨P0, hP0on, hP0, hP0b⟩
@@ -452,8 +452,8 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix64.«i686-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 27) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
-    (hz : ∀ j < 64, 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
+    (hz : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
     mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -479,8 +479,8 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
 private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix64.«i686-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 27) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
-    (hz : ∀ j < 64, 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
+    (hz : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
     mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -511,7 +511,7 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix64.«i686-tables») (s :
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_base
   step with scalar.Scalar.as_radix_2w_spec s 6#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
-  have hz' : ∀ j < 64, 43 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
+  have hz' : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
   step with EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨P0, hP0on, hP0, hP0b⟩
@@ -534,8 +534,8 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix128.«x86_64-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 54) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
-    (hz : ∀ j < 64, 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
+    (hz : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -561,8 +561,8 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
 private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix128.«x86_64-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 54) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
-    (hz : ∀ j < 64, 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
+    (hz : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -593,7 +593,7 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables») (
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_base
   step with scalar.Scalar.as_radix_2w_spec s 7#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
-  have hz' : ∀ j < 64, 37 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
+  have hz' : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
   step with EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨P0, hP0on, hP0, hP0b⟩
@@ -618,8 +618,8 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix128.«i686-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 27) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
-    (hz : ∀ j < 64, 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
+    (hz : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
     mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -645,8 +645,8 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
 private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix128.«i686-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 27) (hP : self.Represents P)
-    (ha : ∀ i < 64, -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
-    (hz : ∀ j < 64, 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
+    (ha : ∀ i : ℕ, i < 64 → -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
+    (hz : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
     mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -677,7 +677,7 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix128.«i686-tables») (s 
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_base
   step with scalar.Scalar.as_radix_2w_spec s 7#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
-  have hz' : ∀ j < 64, 37 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
+  have hz' : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
   step with EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨P0, hP0on, hP0, hP0b⟩
@@ -700,7 +700,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix256.«x86_64-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 54) (hP : self.Represents P)
-    (hz : ∀ j < 64, 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
+    (hz : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -722,7 +722,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
 private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix256.«x86_64-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 54) (hP : self.Represents P)
-    (hz : ∀ j < 64, 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
+    (hz : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
     mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -749,7 +749,7 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables») (
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_base
   step with scalar.Scalar.as_radix_2w_spec s 8#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
-  have hz' : ∀ j < 64, 33 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
+  have hz' : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
   step with EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨P0, hP0on, hP0, hP0b⟩
@@ -774,7 +774,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix256.«i686-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 27) (hP : self.Represents P)
-    (hz : ∀ j < 64, 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
+    (hz : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
     mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -796,7 +796,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
 private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (self : EdwardsBasepointTableRadix256.«i686-tables») (P : curve25519.edwards.Point)
     (hself : self.LimbsLt 27) (hP : self.Represents P)
-    (hz : ∀ j < 64, 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
+    (hz : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
     mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
@@ -823,7 +823,7 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix256.«i686-tables») (s 
       r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_base
   step with scalar.Scalar.as_radix_2w_spec s 8#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
-  have hz' : ∀ j < 64, 33 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
+  have hz' : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
   step with EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
     as ⟨P0, hP0on, hP0, hP0b⟩

@@ -129,7 +129,7 @@ private theorem strausLoop00_spec (haddN : O.AddNSpec) (hsubN : O.SubNSpec)
     (hi : i.val < 256) (hn : n.val ≤ nafs.length ∧ n.val ≤ lookup_tables.length)
     (hT : ∀ m < n.val, lookup_tables.val[m]!.Represents (P m) ∧
       lookup_tables.val[m]!.LimbsLt O.nB)
-    (hD : ∀ m < n.val, ∀ e < 256, (nafs.val[m]!)[e]!.val ≠ 0 →
+    (hD : ∀ m < n.val, ∀ e : ℕ, e < 256 → (nafs.val[m]!)[e]!.val ≠ 0 →
       (nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(nafs.val[m]!)[e]!.val| < 2 ^ 5)
     (hk : k.val ≤ n.val) (ht : O.cOnCurve t) (htb : O.cBnd t) :
     O.strausLoop00 nafs lookup_tables i t n k ⦃ (r : O.C) => O.cOnCurve r ∧ O.cBnd r ∧
@@ -209,7 +209,7 @@ theorem strausLoop0_spec (haddN : O.AddNSpec) (hsubN : O.SubNSpec) (hasE : O.AsE
     (hn : n = min nafs.length lookup_tables.length)
     (hT : ∀ m < n, lookup_tables.val[m]!.Represents (P m) ∧
       lookup_tables.val[m]!.LimbsLt O.nB)
-    (hD : ∀ m < n, ∀ e < 256, (nafs.val[m]!)[e]!.val ≠ 0 →
+    (hD : ∀ m < n, ∀ e : ℕ, e < 256 → (nafs.val[m]!)[e]!.val ≠ 0 →
       (nafs.val[m]!)[e]!.val % 2 = 1 ∧ 2 * |(nafs.val[m]!)[e]!.val| < 2 ^ 5)
     (hstart : iter.iter.start.val = 0) (hend : iter.iter.end.val ≤ 256)
     (hr : O.pOnCurve r) (hrb : O.pBnd r)

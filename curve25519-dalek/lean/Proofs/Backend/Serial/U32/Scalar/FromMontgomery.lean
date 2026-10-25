@@ -25,12 +25,13 @@ namespace Curve25519Dalek.backend.serial.u32.scalar.Scalar29
 private theorem from_montgomery_loop_spec (self : Scalar29) :
     from_montgomery_loop { start := 0#usize, «end» := 9#usize } self
       (Array.repeat 17#usize 0#u64) ⦃ (limbs : Array U64 17#usize) =>
-      (∀ i < 9, limbs[i]!.val = self[i]!.val) ∧ ∀ i < 17, 9 ≤ i → limbs[i]!.val = 0 ⦄ := by
+      (∀ i : ℕ, i < 9 → limbs[i]!.val = self[i]!.val) ∧
+        ∀ i : ℕ, i < 17 → 9 ≤ i → limbs[i]!.val = 0 ⦄ := by
   unfold from_montgomery_loop
   apply loop.spec_decr_nat (measure := fun (iter, _) => 9 - iter.start.val)
     (inv := fun (iter, limbs) => iter.end = 9#usize ∧ iter.start.val ≤ 9 ∧
       (∀ i < iter.start.val, limbs[i]!.val = self[i]!.val) ∧
-      ∀ i < 17, iter.start.val ≤ i → limbs[i]!.val = 0)
+      ∀ i : ℕ, i < 17 → iter.start.val ≤ i → limbs[i]!.val = 0)
   · rintro ⟨iter, limbs⟩ ⟨hend, hstart, hlow, hhigh⟩
     unfold from_montgomery_loop.body
     by_cases hlt : iter.start.val < 9
@@ -80,7 +81,7 @@ theorem from_montgomery_spec (self : Scalar29) (hself : self.LimbsLt 29) :
       hhigh 13 (by decide) (by decide), hhigh 14 (by decide) (by decide),
       hhigh 15 (by decide) (by decide), hhigh 16 (by decide) (by decide)]
     simp only [mul_zero, add_zero, Nat.reduceMul, pow_zero, one_mul]
-  have hbound : ∀ i < 17, limbs[i]!.val < 2 ^ 63 := by
+  have hbound : ∀ i : ℕ, i < 17 → limbs[i]!.val < 2 ^ 63 := by
     intro i hi
     by_cases h9 : i < 9
     · rw [hlow i h9]

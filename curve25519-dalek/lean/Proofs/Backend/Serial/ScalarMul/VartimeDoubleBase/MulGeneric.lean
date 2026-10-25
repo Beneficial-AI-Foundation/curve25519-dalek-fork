@@ -247,8 +247,10 @@ theorem vdbLoop1T_spec (haddN : O.AddNSpec) (hsubN : O.SubNSpec) (haddA : O.AddA
     (r : O.Pr) (A B : curve25519.edwards.Point)
     (hA : table_A.Represents A) (hAb : table_A.LimbsLt O.nB)
     (hB : table_B.Represents B) (hBb : table_B.LimbsLt O.aB)
-    (ha : ∀ k < 256, a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧ 2 * |a_naf[k]!.val| < 2 ^ 5)
-    (hb : ∀ k < 256, b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧ 2 * |b_naf[k]!.val| < 2 ^ 8)
+    (ha : ∀ k : ℕ, k < 256 → a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧
+      2 * |a_naf[k]!.val| < 2 ^ 5)
+    (hb : ∀ k : ℕ, k < 256 → b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧
+      2 * |b_naf[k]!.val| < 2 ^ 8)
     (hi : i.val < 256) (hr : O.pOnCurve r) (hrb : O.pBnd r)
     (hrp : O.pToPoint r = nafTail a_naf (i.val + 1) • A + nafTail b_naf (i.val + 1) • B) :
     O.vdbLoop1T a_naf b_naf i table_A table_B r ⦃ (res : O.E) => O.OnCurve res ∧
@@ -354,8 +356,10 @@ theorem vdbLoop1N_spec (haddN : O.AddNSpec) (hsubN : O.SubNSpec) (hasE : O.AsExt
     (r : O.Pr) (A B : curve25519.edwards.Point)
     (hA : table_A.Represents A) (hAb : table_A.LimbsLt O.nB)
     (hB : table_B.Represents B) (hBb : table_B.LimbsLt O.nB)
-    (ha : ∀ k < 256, a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧ 2 * |a_naf[k]!.val| < 2 ^ 5)
-    (hb : ∀ k < 256, b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧ 2 * |b_naf[k]!.val| < 2 ^ 5)
+    (ha : ∀ k : ℕ, k < 256 → a_naf[k]!.val ≠ 0 → a_naf[k]!.val % 2 = 1 ∧
+      2 * |a_naf[k]!.val| < 2 ^ 5)
+    (hb : ∀ k : ℕ, k < 256 → b_naf[k]!.val ≠ 0 → b_naf[k]!.val % 2 = 1 ∧
+      2 * |b_naf[k]!.val| < 2 ^ 5)
     (hi : i.val < 256) (hr : O.pOnCurve r) (hrb : O.pBnd r)
     (hrp : O.pToPoint r = nafTail a_naf (i.val + 1) • A + nafTail b_naf (i.val + 1) • B) :
     O.vdbLoop1N a_naf b_naf i table_A table_B r ⦃ (res : O.E) => O.OnCurve res ∧

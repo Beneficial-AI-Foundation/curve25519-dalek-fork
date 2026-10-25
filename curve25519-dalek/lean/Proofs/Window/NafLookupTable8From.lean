@@ -41,7 +41,7 @@ private theorem from_loop_spec (A2 : edwards.EdwardsPoint.«x86_64-tables»)
     (x : AffineNielsPoint.«x86_64-tables») (hA2 : A2.LimbsLt 52) (hA2on : A2.OnCurve)
     (hx : x.LimbsLt 54) (hxon : x.OnCurve) :
     from_loop { start := 0#usize, «end» := 63#usize } (Array.repeat 64#usize x) A2
-      ⦃ (r : Array AffineNielsPoint.«x86_64-tables» 64#usize) => ∀ k < 64,
+      ⦃ (r : Array AffineNielsPoint.«x86_64-tables» 64#usize) => ∀ k : ℕ, k < 64 →
         r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • A2.toPoint ∧ r[k]!.LimbsLt 54 ⦄ := by
   unfold from_loop
   have h := fromLoop_spec (N := 64#usize) (add A2) as_extended as_affine_niels A2.toPoint
@@ -90,7 +90,7 @@ private theorem from_loop_spec (A2 : edwards.EdwardsPoint.«i686-tables»)
     (x : AffineNielsPoint.«i686-tables») (hA2 : A2.LimbsLt 26) (hA2on : A2.OnCurve)
     (hx : x.LimbsLt 27) (hxon : x.OnCurve) :
     from_loop { start := 0#usize, «end» := 63#usize } (Array.repeat 64#usize x) A2
-      ⦃ (r : Array AffineNielsPoint.«i686-tables» 64#usize) => ∀ k < 64,
+      ⦃ (r : Array AffineNielsPoint.«i686-tables» 64#usize) => ∀ k : ℕ, k < 64 →
         r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • A2.toPoint ∧ r[k]!.LimbsLt 27 ⦄ := by
   unfold from_loop
   have h := fromLoop_spec (N := 64#usize) (add A2) as_extended as_affine_niels A2.toPoint
@@ -139,7 +139,7 @@ private theorem from_loop_spec (A2 : edwards.EdwardsPoint.«x86_64-no-tables»)
     (x : AffineNielsPoint.«x86_64-no-tables») (hA2 : A2.LimbsLt 52) (hA2on : A2.OnCurve)
     (hx : x.LimbsLt 54) (hxon : x.OnCurve) :
     from_loop { start := 0#usize, «end» := 63#usize } (Array.repeat 64#usize x) A2
-      ⦃ (r : Array AffineNielsPoint.«x86_64-no-tables» 64#usize) => ∀ k < 64,
+      ⦃ (r : Array AffineNielsPoint.«x86_64-no-tables» 64#usize) => ∀ k : ℕ, k < 64 →
         r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • A2.toPoint ∧ r[k]!.LimbsLt 54 ⦄ := by
   unfold from_loop
   have h := fromLoop_spec (N := 64#usize) (add A2) as_extended as_affine_niels A2.toPoint
@@ -189,7 +189,7 @@ private theorem from_loop_spec (A2 : edwards.EdwardsPoint.«i686-no-tables»)
     (x : AffineNielsPoint.«i686-no-tables») (hA2 : A2.LimbsLt 26) (hA2on : A2.OnCurve)
     (hx : x.LimbsLt 27) (hxon : x.OnCurve) :
     from_loop { start := 0#usize, «end» := 63#usize } (Array.repeat 64#usize x) A2
-      ⦃ (r : Array AffineNielsPoint.«i686-no-tables» 64#usize) => ∀ k < 64,
+      ⦃ (r : Array AffineNielsPoint.«i686-no-tables» 64#usize) => ∀ k : ℕ, k < 64 →
         r[k]!.OnCurve ∧ r[k]!.toPoint = x.toPoint + k • A2.toPoint ∧ r[k]!.LimbsLt 27 ⦄ := by
   unfold from_loop
   have h := fromLoop_spec (N := 64#usize) (add A2) as_extended as_affine_niels A2.toPoint

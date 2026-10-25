@@ -52,7 +52,7 @@ theorem sub_spec (self rhs : FieldElement51)
     (fun i x => x.val + rhs[i]!.val = self[i]!.val + SIXTEEN_P[i]!.val) rfl
     fun i c hi hc => ?_)
   · rintro a ha
-    have hlimbs : ∀ i < 5, a[i]!.val + rhs[i]!.val = self[i]!.val + SIXTEEN_P[i]!.val :=
+    have hlimbs : ∀ i : ℕ, i < 5 → a[i]!.val + rhs[i]!.val = self[i]!.val + SIXTEEN_P[i]!.val :=
       fun i hi => by
         rw [Array.getElem!_Nat_eq, getElem!_pos a.val i (by simpa using hi)]
         exact ha i (by simpa using hi)

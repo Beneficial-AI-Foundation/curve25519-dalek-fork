@@ -76,14 +76,14 @@ theorem square2_spec (self : FieldElement51) (hself : self.LimbsLt 54) :
   step as ⟨sq, hsq, hsq_lt⟩
   step as ⟨it, back, hit, hi0, hback⟩
   have hlen5 : it.slice.length = 5 := by simp [Slice.length, hit]
-  have hsq' : ∀ j < 5, 2 * (it.slice.val[j]!).val < 2 ^ 53 := fun j hj => by
+  have hsq' : ∀ j : ℕ, j < 5 → 2 * (it.slice.val[j]!).val < 2 ^ 53 := fun j hj => by
     have := hsq_lt j hj
     rw [Array.getElem!_Nat_eq, ← hit] at this
     scalar_tac
   apply spec_bind (square2_loop_spec it (fun im => im) (by scalar_tac)
     (fun j hj _ => (hsq' j (by scalar_tac)).le.trans (by scalar_tac)))
   rintro r ⟨im, hr, hlen, hval⟩
-  have hdbl : ∀ i < 5, (back im)[i]!.val = 2 * sq[i]!.val := fun i hi => by
+  have hdbl : ∀ i : ℕ, i < 5 → (back im)[i]!.val = 2 * sq[i]!.val := fun i hi => by
     rw [Array.getElem!_Nat_eq, hback im (by scalar_tac), hval i (by scalar_tac), hi0,
       ite_eq_left (Nat.zero_le _), hit, ← Array.getElem!_Nat_eq]
   simp only [WP.spec_ok, hr]

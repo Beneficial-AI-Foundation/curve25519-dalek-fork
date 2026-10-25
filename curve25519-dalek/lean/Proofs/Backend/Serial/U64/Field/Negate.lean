@@ -37,7 +37,7 @@ theorem negate_spec (self : FieldElement51) (hself : self.LimbsLt 54) :
   apply spec_bind (core.array.from_fn_spec 5#usize _ self (fun _ c => c = self)
     (fun i x => x.val + self[i]!.val = SIXTEEN_P[i]!.val) rfl fun i c hi hc => ?_)
   · rintro a ha
-    have hlimbs : ∀ i < 5, a[i]!.val + self[i]!.val = SIXTEEN_P[i]!.val := fun i hi => by
+    have hlimbs : ∀ i : ℕ, i < 5 → a[i]!.val + self[i]!.val = SIXTEEN_P[i]!.val := fun i hi => by
       rw [Array.getElem!_Nat_eq, getElem!_pos a.val i (by simpa using hi)]
       exact ha i (by simpa using hi)
     step as ⟨r, hr, hr_lt, hr_2p⟩

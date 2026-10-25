@@ -97,7 +97,8 @@ theorem toField_pow_of_mod {r a : FieldElement51} {k : ℕ} (h : r.asNat % p = a
 
 /-- The shape of `add_spec`: limbs add without reduction. -/
 theorem toField_add_of_limbs {r a b : FieldElement51}
-    (h : ∀ i < 5, r[i]!.val = a[i]!.val + b[i]!.val) : r.toField = a.toField + b.toField := by
+    (h : ∀ i : ℕ, i < 5 → r[i]!.val = a[i]!.val + b[i]!.val) :
+    r.toField = a.toField + b.toField := by
   have h' := Array.asNat_add_eq 51 a b r fun i hi => (h i (by simpa using hi)).symm
   rw [toField_def, toField_def, toField_def, asNat_def, asNat_def, asNat_def, ← h']
   push_cast
@@ -160,7 +161,7 @@ theorem limbs_lt_of_le {a : FieldElement51} {k l : ℕ} (hkl : k ≤ l)
 
 /-- The limbs of `add_spec`'s output: one bit more than its inputs. -/
 theorem limbs_add_lt {r a b : FieldElement51} {k : ℕ}
-    (h : ∀ i < 5, r[i]!.val = a[i]!.val + b[i]!.val) (ha : a.LimbsLt k)
+    (h : ∀ i : ℕ, i < 5 → r[i]!.val = a[i]!.val + b[i]!.val) (ha : a.LimbsLt k)
     (hb : b.LimbsLt k) : r.LimbsLt (k + 1) := fun i hi => by
   rw [h i hi, pow_succ]
   have := ha i hi

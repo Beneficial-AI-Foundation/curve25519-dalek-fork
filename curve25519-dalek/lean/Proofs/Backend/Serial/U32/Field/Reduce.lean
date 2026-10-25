@@ -57,7 +57,7 @@ the limbs. -/
 private theorem carry_preserves_toNat (z z' : Array U64 10#usize) (k : Nat) (hk : k < 9)
     (hmask : z'[k]!.val = z[k]!.val % limbRadix k)
     (hcarry : z'[k + 1]!.val = z[k + 1]!.val + z[k]!.val / limbRadix k)
-    (hrest : ∀ j, j < 10 → j ≠ k → j ≠ k + 1 → z'[j]!.val = z[j]!.val) :
+    (hrest : ∀ j : ℕ, j < 10 → j ≠ k → j ≠ k + 1 → z'[j]!.val = z[j]!.val) :
     Array.asNat2625 z' = Array.asNat2625 z := by
   rw [Array.asNat2625_eq_sum, Array.asNat2625_eq_sum]
   exact sum_eq_sum_add_of_subset (d := 0) (t := {k, k + 1}) (s := range 10)
@@ -85,7 +85,7 @@ theorem reduce.carry_spec (z : Array U64 10#usize) (i : Usize)
       --Independent postconditions
       z'[i.val]!.val = z[i.val]!.val % limbRadix i.val ∧
       z'[i.val + 1]!.val = z[i.val + 1]!.val + z[i.val]!.val / limbRadix i.val ∧
-      (∀ j, j < 10 → j ≠ i.val → j ≠ i.val + 1 → z'[j]!.val = z[j]!.val) ⦄ := by
+      (∀ j : ℕ, j < 10 → j ≠ i.val → j ≠ i.val + 1 → z'[j]!.val = z[j]!.val) ⦄ := by
   unfold reduce.carry
   --Covering the odd and even cases with the same code
   cases Nat.mod_two_eq_zero_or_one i.val
@@ -160,7 +160,7 @@ private theorem carry_bounds {s1 s2 : Finset Nat} (z z' : Array U64 10#usize) (i
   --Postconditions from reduce.carry
   (hmask : z'[i]!.val = z[i]!.val % limbRadix i)
 --  (hcarry : z'[i + 1]!.val = z[i + 1]!.val + z[i]!.val / limbRadix i)
-  (hrest : ∀ j, j < 10 → j ≠ i → j ≠ i + 1 → z'[j]!.val = z[j]!.val)
+  (hrest : ∀ j : ℕ, j < 10 → j ≠ i → j ≠ i + 1 → z'[j]!.val = z[j]!.val)
   --Bound on the index
   (hi : i < 10) :
   --After a carry at `i` the masking bound holds for limb `i`, but we cannot guarantee it for `i+1`
@@ -209,11 +209,11 @@ for a bit of a leeway for limb 5, while keeping the represented value unchanged.
 propagating the available bounds one monadic step at a time, using `carry_bounds`. -/
 @[local step]
 private theorem reduceCarryChain_spec (z : Array U64 10#usize)
-    (hz : ∀ i, i < 10 → z[i]!.val ≤ 2 ^ 64 - 2 ^ 39) :
+    (hz : ∀ i : ℕ, i < 10 → z[i]!.val ≤ 2 ^ 64 - 2 ^ 39) :
     reduceCarryChain z ⦃ (z10 : Array U64 10#usize) =>
       --The first bound is redundant, but helps step* discharging goals later
-      (∀ j, j < 9 → z10[j]!.val < 2 ^ 26) ∧
-      (∀ j, j < 9 → j ≠ 5 → z10[j]!.val < limbRadix j) ∧
+      (∀ j : ℕ, j < 9 → z10[j]!.val < 2 ^ 26) ∧
+      (∀ j : ℕ, j < 9 → j ≠ 5 → z10[j]!.val < limbRadix j) ∧
       z10[5]!.val < limbRadix 5 + 2 ^ 14 ∧
       z10.asNat2625 = z.asNat2625 ⦄ := by
   unfold reduceCarryChain
@@ -270,9 +270,9 @@ private theorem reduceCarryChain_spec (z : Array U64 10#usize)
     = z8[5] + (z6[4] + z6[3] / 2 ^ 25) / 2 ^ 26 <
     2 ^ 25 + (2 ^ 26 + (2 ^ 64 - 2 ^ 39) / 2 ^ 25) / 2 ^ 26 < 2 ^ 25 + 2 ^ 14
     This is where the two hypotheses breaking the iterations are used.-/
-    have hz10 := ‹∀ j < 10, _ → _ → _ = _›
+    have hz10 := ‹∀ j : ℕ, j < 10 → _ → _ → _ = _›
     rewrite [hz10 5 (by decide) (by decide) (by decide) ]; simp only [*]
-    have hz7 := ‹∀ j < 10, j ≠ 7 → j ≠ 8 → _ = _›
+    have hz7 := ‹∀ j : ℕ, j < 10 → j ≠ 7 → j ≠ 8 → _ = _›
     rewrite [hz7 4 (by decide) (by decide) (by decide) ]; simp only [*]
     agrind
   · simp only [*]
@@ -290,7 +290,7 @@ private theorem reduceFoldIn_spec (z10 : Array U64 10#usize)
       z12.asNat2625 % p = z10.asNat2625 % p ∧
       z12[0]!.val = z10[0]!.val + 19 * (z10[9]!.val / limbRadix 9) ∧
       z12[9]!.val = z10[9]!.val % limbRadix 9 ∧
-      (∀ j, 0 < j → j < 9 → z12[j]!.val = z10[j]!.val) ⦄ := by
+      (∀ j : ℕ, 0 < j → j < 9 → z12[j]!.val = z10[j]!.val) ⦄ := by
   unfold reduceFoldIn
   step*
   --Proving that there is no overflow
@@ -329,11 +329,11 @@ represented as `U32`s without changing their values. This in particular keeps th
 value the same as well. -/
 @[local step]
 private theorem reduceCasts_spec (z13 : Array U64 10#usize)
-    (hbounds : ∀ i, i < 10 → z13[i]!.val < 2 ^ 32) :
+    (hbounds : ∀ i : ℕ, i < 10 → z13[i]!.val < 2 ^ 32) :
     reduceCasts z13 ⦃ (result : FieldElement2625) =>
       --This equality follows from the next one by a general congruence theorem
       result.asNat = z13.asNat2625 ∧
-      (∀ j, j < 10 → result[j]!.val = z13[j]!.val) ⦄ := by
+      (∀ j : ℕ, j < 10 → result[j]!.val = z13[j]!.val) ⦄ := by
   unfold reduceCasts
   step*
   refine (and_iff_right_of_imp (fun h => ?_)).mpr ?_
@@ -356,10 +356,10 @@ private theorem reduceCasts_spec (z13 : Array U64 10#usize)
 
 @[step]
 theorem reduce_spec (z : Array U64 10#usize)
-    (hz : ∀ i < 10, z[i]!.val ≤ 2 ^ 64 - 2 ^ 39) :
+    (hz : ∀ i : ℕ, i < 10 → z[i]!.val ≤ 2 ^ 64 - 2 ^ 39) :
     reduce z ⦃ (r : FieldElement2625) =>
       r.asNat % p = z.asNat2625 % p ∧ r.LimbsLt 26 ∧
-      ∀ i < 10, r[i]!.val < limbRadix i + i % 2 * 2 ^ 18 ⦄ := by
+      ∀ i : ℕ, i < 10 → r[i]!.val < limbRadix i + i % 2 * 2 ^ 18 ⦄ := by
   rewrite [reduce_decomp]
   --Aeneas has a setting of genLocal = 2 for step. Adding 1 to it here helps discharging a goal.
   step* (genLocal := 3)

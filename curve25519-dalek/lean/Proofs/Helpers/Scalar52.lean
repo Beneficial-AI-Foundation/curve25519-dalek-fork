@@ -79,7 +79,7 @@ theorem Scalar52.getElem!_set_five_lt {r : Scalar52} (a : Scalar52) (x0 x1 x2 x3
     {B : ℕ} (hr : r = ((((a.set 0#usize x0).set 1#usize x1).set 2#usize x2).set 3#usize x3).set
       4#usize x4)
     (h0 : x0.val < B) (h1 : x1.val < B) (h2 : x2.val < B) (h3 : x3.val < B) (h4 : x4.val < B) :
-    ∀ i < 5, r[i]!.val < B := by
+    ∀ i : ℕ, i < 5 → r[i]!.val < B := by
   rw [Nat.forall_lt_five, hr]
   simp_lists
   exact ⟨h0, h1, h2, h3, h4⟩

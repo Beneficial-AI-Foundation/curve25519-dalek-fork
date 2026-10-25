@@ -33,9 +33,9 @@ private def Invariant (initial rhs : FieldElement2625) (iter : core.ops.range.Ra
     (self : FieldElement2625) : Prop :=
   iter.end = 10#usize ∧
   iter.start.val ≤ 10 ∧
-  (∀ i < 10, initial[i]!.val + rhs[i]!.val ≤ U32.max) ∧
+  (∀ i : ℕ, i < 10 → initial[i]!.val + rhs[i]!.val ≤ U32.max) ∧
   (∀ i < iter.start.val, self[i]!.val = initial[i]!.val + rhs[i]!.val) ∧
-  (∀ i < 10, iter.start.val ≤ i → self[i]! = initial[i]!)
+  (∀ i : ℕ, i < 10 → iter.start.val ≤ i → self[i]! = initial[i]!)
 
 end AddAssign
 
@@ -88,7 +88,7 @@ private theorem add_assign_loop_spec (iter : core.ops.range.Range Usize)
     (self rhs initial : FieldElement2625)
     (h_inv : AddAssign.Invariant initial rhs iter self) :
     add_assign_loop iter self rhs ⦃ (result : FieldElement2625) =>
-      (∀ i < 10, result[i]!.val = initial[i]!.val + rhs[i]!.val) ∧
+      (∀ i : ℕ, i < 10 → result[i]!.val = initial[i]!.val + rhs[i]!.val) ∧
       result.asNat = initial.asNat + rhs.asNat ⦄ := by
   unfold add_assign_loop
   refine loop.spec_decr_nat
@@ -103,7 +103,7 @@ private theorem add_assign_loop_spec (iter : core.ops.range.Range Usize)
   cases flow with
   | done result =>
     obtain ⟨h_done, -, -, -, -, h_sums, -⟩ := h_flow
-    have h_limbs : ∀ i < 10, result[i]!.val = initial[i]!.val + rhs'[i]!.val :=
+    have h_limbs : ∀ i : ℕ, i < 10 → result[i]!.val = initial[i]!.val + rhs'[i]!.val :=
       fun i hi => h_sums i (by omega)
     refine ⟨h_limbs, ?_⟩
     simp only [asNat_def, Array.asNat2625_eq_sum]
@@ -121,8 +121,9 @@ private theorem add_assign_loop_spec (iter : core.ops.range.Range Usize)
 theorem add_assign_spec (self rhs : FieldElement2625)
     (hself : self.LimbsLt 31) (hrhs : rhs.LimbsLt 31) :
     add_assign self rhs ⦃ (r : FieldElement2625) =>
-      (∀ i < 10, r[i]!.val = self[i]!.val + rhs[i]!.val) ∧ r.asNat = self.asNat + rhs.asNat ⦄ := by
-  have h_sum : ∀ i < 10, self[i]!.val + rhs[i]!.val ≤ U32.max := fun i hi => by
+      (∀ i : ℕ, i < 10 → r[i]!.val = self[i]!.val + rhs[i]!.val) ∧
+        r.asNat = self.asNat + rhs.asNat ⦄ := by
+  have h_sum : ∀ i : ℕ, i < 10 → self[i]!.val + rhs[i]!.val ≤ U32.max := fun i hi => by
     have := hself i hi; have := hrhs i hi; scalar_tac
   unfold add_assign
   apply add_assign_loop_spec _ _ _ self

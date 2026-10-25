@@ -50,7 +50,7 @@ private theorem conditional_add_l_loop_spec (self : Scalar52) (condition : subtl
   apply loop.spec_decr_nat (measure := fun (iter, _, _) => 5 - iter.start.val)
     (inv := fun (iter, a, carry) => iter.end = 5#usize ∧ iter.start.val ≤ 5 ∧
       carry.val < 2 ^ 53 ∧ a.LimbsLt 52 ∧
-      (∀ i < 5, iter.start.val ≤ i → a[i]! = self[i]!) ∧
+      (∀ i : ℕ, i < 5 → iter.start.val ≤ i → a[i]! = self[i]!) ∧
       ∑ j ∈ Finset.range iter.start.val, 2 ^ (52 * j) * a[j]!.val
         + 2 ^ (52 * iter.start.val) * (carry.val / 2 ^ 52) =
         ∑ j ∈ Finset.range iter.start.val, 2 ^ (52 * j) * self[j]!.val

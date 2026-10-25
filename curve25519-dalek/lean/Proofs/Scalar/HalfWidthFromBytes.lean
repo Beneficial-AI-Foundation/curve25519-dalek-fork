@@ -41,7 +41,7 @@ private theorem from_bytes_loop_spec (bytes : Array U8 16#usize) (s_bytes : Arra
     (i : Usize) (hi : i.val ≤ 16) (hlo : ∀ j < i.val, s_bytes[j]! = bytes[j]!)
     (hhi : ∀ j, i.val ≤ j → j < 32 → s_bytes[j]! = 0#u8) :
     from_bytes_loop bytes s_bytes i ⦃ (r : Array U8 32#usize) =>
-      (∀ j < 16, r[j]! = bytes[j]!) ∧ ∀ j, 16 ≤ j → j < 32 → r[j]! = 0#u8 ⦄ := by
+      (∀ j : ℕ, j < 16 → r[j]! = bytes[j]!) ∧ ∀ j : ℕ, 16 ≤ j → j < 32 → r[j]! = 0#u8 ⦄ := by
   unfold from_bytes_loop
   apply loop.spec_decr_nat (measure := fun (_, i) => 16 - i.val)
     (inv := fun (s, i) => i.val ≤ 16 ∧ (∀ j < i.val, s[j]! = bytes[j]!) ∧
