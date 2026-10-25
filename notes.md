@@ -557,6 +557,12 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
 3. Minor: window tables' `Default`/`Clone`/`Zeroize` not specified (low
    value); naming ambiguity `encode`/`decode`/`basepoint` between `curve25519` and
    `curve25519.Ristretto` under a double `open`; `twistL` and `ZMod.abs` names unconfirmed.
+4. **Untranslated public items (owner: investigate, contact the Charon developers).** No
+   translation, hence no spec, for the provided trait methods `BasepointTable::mul_base_clamped`,
+   `VartimeMultiscalarMul::vartime_multiscalar_mul` and
+   `VartimePrecomputedMultiscalarMul::{vartime_multiscalar_mul, vartime_mixed_multiscalar_mul}`,
+   and for `Hash for MontgomeryPoint`. Charon's `--targets` mode seems to drop provided methods;
+   the `Hash` cause is unknown (2026-10-25).
 
 ### Certifying the precomputed tables (done 2026-10-21)
 
