@@ -280,6 +280,11 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
 - **Docstrings:** short. The function name (with its trait or type only when needed), then the
   content in a phrase (`limbs < 2^54 in, < 2^52 out`). No full Rust paths.
 - **No explanatory comments** on linter options or `nolint` attributes.
+- **Typed bounded binders:** write `∀ i : ℕ, i < 10 → a[i]!.val < B`, not `∀ i < 10, …` or
+  `∀ i, i < 10 → …` (also `∀ j : ℕ, 0 < j → …`). Without the type, `a[i]!` is first elaborated
+  against an unknown index type, fails, and is retried after numeral defaulting; the statement
+  takes seconds (up to 14 s) on the main thread and holds back the module's proofs. A binder
+  whose bound has a known type (`∀ i < v.length`) is fine. `Defs` and `Specs` keep their text.
 
 ## Proof quality
 
@@ -839,6 +844,22 @@ data, bounds, weakenings only) and the instances `Proofs/Helpers/Backend/{U64,U3
   these chains by `#decompose` with intermediate specs, about 1% of the build for the byte family.
 - Radar runs measure module times under full contention (U32 `Reduce` 221 s in the build,
   30 s standalone), so the lakeprof critical path overstates the chain; total work decides.
+- Slow statements (2026-10-25): `Elab.definition.header` in the profile, found build-wide by
+  rebuilding `Proofs` with a fake sysroot whose `lean` adds `-Dtrace.profiler=true`
+  (`.scratch/proflean/root/bin/lean`, `LAKE_OVERRIDE_LEAN=true LEAN=…`; it must answer
+  `--print-prefix` with its own root, else Lake uses the toolchain's `lean`; the traces land in the
+  modules' `.trace` logs, so rebuild normally afterwards). Untyped bounded binders cost up to
+  14 s per statement; typing 288 of them in 74 files (convention above) halved the wall time of
+  the heavy modules (`Reduce` 29 → 15 s, `MulInternal` 38 → 18 s, U32 `ToBytes` 39 → 22 s,
+  `BasepointTableMulBase` 20 → 3.4 s) at nearly unchanged instructions: the statements held the
+  main thread while the proofs waited. What remains above 0.3 s are statements with many numeric
+  bound hypotheses (U32 `Mul` coefficient specs ~0.8 s each), with no single hotspot.
+- Radar, baseline → run 5 (2026-10-25): instructions 19.2 → 15.0 T (−21.8%), task-clock −27%,
+  wall 1049 → 767 s, longest build path 1011 → 679 s, longest rebuild path 655 → 449 s, peak
+  memory 5.16 → 4.83 GB. Critical path: `Funs` 141 s → U32 `Reduce` 103 → U32 `Mul` 176 →
+  `Backend.U32` → `Pow22501` → `Invert` → `AsAffineNiels` → `LookupTableFrom` →
+  `EdwardsOps.Instances` → precomputed-Straus `X86Tables` 65 → dispatch → `Specs`. Perf and
+  lakeprof use a monotonic clock: a suspend during a run does not count.
 
 
 ## Performance findings (2026-10-10)
