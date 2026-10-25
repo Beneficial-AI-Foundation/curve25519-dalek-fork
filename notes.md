@@ -563,6 +563,7 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
    `VartimePrecomputedMultiscalarMul::{vartime_multiscalar_mul, vartime_mixed_multiscalar_mul}`,
    and for `Hash for MontgomeryPoint`. Charon's `--targets` mode seems to drop provided methods;
    the `Hash` cause is unknown (2026-10-25).
+5. **Before completing the PR upstream:** clean out working files such as `notes.md`.
 
 ### Certifying the precomputed tables (done 2026-10-21)
 
