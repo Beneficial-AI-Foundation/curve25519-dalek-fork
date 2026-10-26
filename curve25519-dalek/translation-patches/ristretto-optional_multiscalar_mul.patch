@@ -1,0 +1,48 @@
+Translation patch: <RistrettoPoint as VartimeMultiscalarMul>::optional_multiscalar_mul
+
+Change: the lazy `points.map(|o| o.map(|P| P.0))` becomes a `Vec` built by a helper.
+Why: Aeneas only models `Iterator::next` (aeneas#1057). Loops over a generic `IntoIterator` don't extract, hence the nested `It: Iterator` helper.
+Behaviour: same result for valid inputs. Alone, not identical: as ristretto-multiscalar_mul, and all
+points are read even after a `None`. With edwards-optional_multiscalar_mul.patch applied, the
+behaviour is as declared there.
+
+diff --git a/curve25519-dalek/src/ristretto.rs b/curve25519-dalek/src/ristretto.rs
+index 269662d..29f52a1 100644
+--- a/curve25519-dalek/src/ristretto.rs
++++ b/curve25519-dalek/src/ristretto.rs
+@@ -984,23 +984,34 @@ impl VartimeMultiscalarMul for RistrettoPoint {
+     fn optional_multiscalar_mul<I, J>(scalars: I, points: J) -> Option<RistrettoPoint>
+     where
+         I: IntoIterator,
+         I::Item: Borrow<Scalar>,
+         J: IntoIterator<Item = Option<RistrettoPoint>>,
+     {
+-        let extended_points = points.into_iter().map(|opt_P| opt_P.map(|P| P.0));
++        fn extended_points<It>(mut points: It) -> Vec<Option<EdwardsPoint>>
++        where
++            It: Iterator<Item = Option<RistrettoPoint>>,
++        {
++            let mut out = Vec::new();
++            while let Some(opt_P) = points.next() {
++                out.push(opt_P.map(|P| P.0));
++            }
++            out
++        }
++
++        let extended_points = extended_points(points.into_iter());
+ 
+         EdwardsPoint::optional_multiscalar_mul(scalars, extended_points).map(RistrettoPoint)
+     }
+ }
+ 
+ /// Precomputation for variable-time multiscalar multiplication with `RistrettoPoint`s.
+ ///
+ /// Note that for large numbers of `RistrettoPoint`s, this functionality may be less
+ /// efficient than the corresponding `VartimeMultiscalarMul` implementation.
+ // This wraps the inner implementation in a facade type so that we can
+ // decouple stability of the inner type from the stability of the
+ // outer type.
+ #[cfg(feature = "alloc")]
+ pub struct VartimeRistrettoPrecomputation(crate::backend::VartimePrecomputedStraus);
+ 
+ #[cfg(feature = "alloc")]

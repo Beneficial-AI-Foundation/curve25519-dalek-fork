@@ -1,0 +1,37 @@
+Translation patch: <VartimePrecomputedStraus as VartimePrecomputedMultiscalarMul>::new
+
+Change: `map`/`collect` becomes a helper.
+Why: Aeneas only models `Iterator::next` (aeneas#1057). Loops over a generic `IntoIterator` don't extract, hence the nested `It: Iterator` helper.
+Behaviour: identical.
+
+diff --git a/curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs b/curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs
+index 1f6a7f6..53f951f 100644
+--- a/curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs
++++ b/curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs
+@@ -36,13 +36,22 @@ impl VartimePrecomputedMultiscalarMul for VartimePrecomputedStraus {
+     fn new<I>(static_points: I) -> Self
+     where
+         I: IntoIterator,
+         I::Item: Borrow<Self::Point>,
+     {
++        fn static_lookup_tables<It>(mut static_points: It) -> Vec<NafLookupTable8<AffineNielsPoint>>
++        where
++            It: Iterator,
++            It::Item: Borrow<EdwardsPoint>,
++        {
++            let mut out = Vec::new();
++            while let Some(P) = static_points.next() {
++                out.push(NafLookupTable8::<AffineNielsPoint>::from(P.borrow()));
++            }
++            out
++        }
++
+         Self {
+-            static_lookup_tables: static_points
+-                .into_iter()
+-                .map(|P| NafLookupTable8::<AffineNielsPoint>::from(P.borrow()))
+-                .collect(),
++            static_lookup_tables: static_lookup_tables(static_points.into_iter()),
+         }
+     }
+ 
