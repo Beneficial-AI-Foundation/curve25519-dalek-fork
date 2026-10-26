@@ -7,7 +7,7 @@ public import Curve25519.Ristretto.Encoding.Defs
 public import Curve25519.X25519
 public import Defs.Array
 public import Defs.FieldElement2625
-public import Subtle.Basic
+public import Subtle.Contract
 import Proofs.Helpers.Array
 import Proofs.Helpers.AsNat
 import Proofs.Helpers.ZMod

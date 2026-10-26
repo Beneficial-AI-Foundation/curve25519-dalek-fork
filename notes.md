@@ -112,7 +112,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 ```
 
 **External-crate libraries (`Subtle`, `Zeroize`):**
-- **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Basic.lean`. Basic holds `opaque` signatures with the template names, one predicate `<function>.Contract : Prop` per function (its contract, conditional on any trait-instance behaviour it relies on), a structure `<crate>.Contract` with one field per predicate, and the single axiom `RustAx.<crate> : <crate>.Contract`. The `@[step]` theorems `<function>_spec` are its projections, so a guard list names at most `RustAx.subtle` and `RustAx.zeroize`. (`Contract`, not `Spec`: Mathlib's `Spec` is the spectrum of a ring.) Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
+- **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Contract.lean`. Contract holds `opaque` signatures with the template names, one predicate `<function>.Contract : Prop` per function (its contract, conditional on any trait-instance behaviour it relies on), a structure `<crate>.Contract` with one field per predicate, and the single axiom `RustAx.<crate> : <crate>.Contract`. The `@[step]` theorems `<function>_spec` are its projections, so a guard list names at most `RustAx.subtle` and `RustAx.zeroize`. (`Contract`, not `Spec`: Mathlib's `Spec` is the spectrum of a ring.) Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
 - **Derived part:** `<Lib>/Lemmas.lean` (generic), `<Lib>/Instances.lean` (about instances in `Funs.lean`). They add no axioms.
 - **Imports:** `FunsExternal.lean` imports only `<Lib>.Basic`.
 
@@ -214,8 +214,8 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
 - **Filling the guards:** `scripts/fill-guards.py` (`--strip`, then `lake env lean Specs/X.lean >
   out`, then fill; usage in its docstring).
 - **Auditing:** an auditor reads `Curve25519/**`, `Defs/**`, `Specs/**`, the External files
-  (`Curve25519Dalek/{Types,Funs}External.lean`), `Subtle/{Types,Basic}.lean` and
-  `Zeroize/Basic.lean`. Nothing else.
+  (`Curve25519Dalek/{Types,Funs}External.lean`), `Subtle/{Types,Contract}.lean` and
+  `Zeroize/Contract.lean`. Nothing else.
 
 ## Statement conventions
 
@@ -274,7 +274,7 @@ recall square_spec (self : FieldElement51) (hself : ∀ i < 5, self[i]!.val < 2 
   no `Is` for relations and point conditions (`Represents`, `ProjEq`, `OnCurve`, like Mathlib's
   `Equation`/`Nonsingular`).
 - **`Choice` validity:** the `subtle` crate maintains the invariant that a `Choice` is `0` or `1`
-  (`subtle.Choice.IsValid`, defined in `Subtle/Basic.lean`). Every spec (and `Subtle` spec
+  (`subtle.Choice.IsValid`, defined in `Subtle/Contract.lean`). Every spec (and `Subtle` spec
   axiom) with a `Choice` argument `c` assumes `(hc : c.IsValid)`, and every spec returning a
   `Choice` `c` states `c.IsValid` as its first conjunct.
 - **Docstrings:** short. The function name (with its trait or type only when needed), then the

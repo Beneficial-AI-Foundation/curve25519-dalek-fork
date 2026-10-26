@@ -6,7 +6,7 @@ module
 public import Curve25519.Basic
 public import Curve25519.Ristretto.Encoding.Defs
 public import Defs.Array
-public import Subtle.Basic
+public import Subtle.Contract
 public import Aeneas
 public section
 

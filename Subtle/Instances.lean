@@ -9,7 +9,7 @@ open Aeneas Aeneas.Std Result Aeneas.Std.WP
 
 /-! # `subtle` for the trait instances generated in `Curve25519Dalek/Funs.lean` (no axioms)
 
-The generic specs of `Subtle/Basic.lean` for `[T]` and `[T; N]` take the element instance's
+The generic specs of `Subtle/Contract.lean` for `[T]` and `[T; N]` take the element instance's
 contract as a hypothesis, and `step` cannot discharge that by itself. These versions are
 specialised to the `u8` instances (used by `CompressedEdwardsY`, `CompressedRistretto`,
 `MontgomeryPoint` and `Scalar`), so `step*` fires on them.

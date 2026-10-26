@@ -6,7 +6,7 @@ module
 public import Curve25519.X25519
 public import Curve25519Dalek.Funs
 public import Defs.Montgomery
-public import Subtle.Basic
+public import Subtle.Contract
 import Proofs.Backend.Serial.U64.Field.FromBytes
 import Proofs.Field.CtEq
 import Proofs.Helpers.Target

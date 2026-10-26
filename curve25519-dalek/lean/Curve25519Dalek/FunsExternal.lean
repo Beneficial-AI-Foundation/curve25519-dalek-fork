@@ -8,8 +8,8 @@ Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo,
 module
 public import Aeneas
 public import Curve25519Dalek.Types
-public import Subtle.Basic
-public import Zeroize.Basic
+public import Subtle.Contract
+public import Zeroize.Contract
 @[expose] public section
 open Aeneas Aeneas.Std Result ControlFlow Error
 set_option linter.dupNamespace false

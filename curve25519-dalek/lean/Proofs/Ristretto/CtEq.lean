@@ -6,7 +6,7 @@ module
 public import Curve25519Dalek.Funs
 public import Curve25519.Ristretto.Basic
 public import Defs.Edwards
-public import Subtle.Basic
+public import Subtle.Contract
 import Proofs.Backend.Serial.U64.Field.Mul
 import Proofs.Field.CtEq
 import Proofs.Helpers.Coords

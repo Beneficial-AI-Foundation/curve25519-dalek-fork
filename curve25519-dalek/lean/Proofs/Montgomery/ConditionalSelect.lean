@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519Dalek.Funs
 public import Defs.Montgomery
-public import Subtle.Basic
+public import Subtle.Contract
 public section
 
 /-! # `ConditionallySelectable for MontgomeryPoint` -/

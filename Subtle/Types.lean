@@ -15,7 +15,7 @@ open Aeneas Aeneas.Std
 
 Types only: this file is imported by `Curve25519Dalek/TypesExternal.lean`. They are what Aeneas
 emits when it translates the type definitions of `subtle`. Functions and their specs are in
-`Subtle/Basic.lean`. -/
+`Subtle/Contract.lean`. -/
 
 /-- [subtle::Choice]
     Source: 'subtle-2.6.1/src/lib.rs', lines 120:0-120:17
@@ -23,7 +23,7 @@ emits when it translates the type definitions of `subtle`. Functions and their s
 
 `pub struct Choice(u8);` Aeneas translates a single-field tuple struct to a reducible alias of
 the field type (cf. `edwards.CompressedEdwardsY := Array Std.U8 32#usize`). The 0/1 invariant
-is therefore not part of the type; see the module doc of `Subtle/Basic.lean`. -/
+is therefore not part of the type; see the module doc of `Subtle/Contract.lean`. -/
 @[reducible, rust_type "subtle::Choice"]
 def subtle.Choice : Type := Std.U8
 
