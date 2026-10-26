@@ -113,7 +113,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 
 **External-crate libraries (`Subtle`, `Zeroize`):**
 - **Trusted part:** `<Lib>/Types.lean` (types only) and `<Lib>/Basic.lean`. Basic holds `opaque` signatures with the template names, one predicate `<function>.Contract : Prop` per function (its contract, conditional on any trait-instance behaviour it relies on), a structure `<crate>.Contract` with one field per predicate, and the single axiom `RustAx.<crate> : <crate>.Contract`. The `@[step]` theorems `<function>_spec` are its projections, so a guard list names at most `RustAx.subtle` and `RustAx.zeroize`. (`Contract`, not `Spec`: Mathlib's `Spec` is the spectrum of a ring.) Verbatim bodies appear only where `impl_def` must unfold them (`@[trait_default]`).
-- **Derived part:** `<Lib>/Lemmas.lean` (generic), `<Lib>/Instances.lean` (about instances in `Funs.lean`) and `Zeroize/Consistency.lean`. They add no axioms.
+- **Derived part:** `<Lib>/Lemmas.lean` (generic), `<Lib>/Instances.lean` (about instances in `Funs.lean`). They add no axioms.
 - **Imports:** `FunsExternal.lean` imports only `<Lib>.Basic`.
 
 ## Curves (`EllipticCurve`, `Curve25519`)
@@ -577,6 +577,8 @@ gets low. Experiments that may blow up run in a capped scope, which kills only t
       does not belong, and a `Co-authored-by:` trailer for every contributor.
    3. Move the repo to the BAIF GitHub organisation and set up the radar service on it.
    4. Invite colleagues to review and contribute improvements.
+8. **Verify `zeroize` independently** (its consistency witness `Zeroize/Consistency.lean` was
+   removed 2026-10-26): `RustAx.zeroize` is then justified by that separate verification.
 
 ### Certifying the precomputed tables (done 2026-10-21)
 
