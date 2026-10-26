@@ -7,10 +7,7 @@ Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo,
 module
 public import Curve25519Dalek.Types
 @[expose] public section
--- The style linter misreads `@[rust_fun "..."]` attributes.
 set_option linter.style.whitespace false
--- Docstrings quote the Aeneas name patterns, which exceed 100 characters.
--- The contract predicates name their hypotheses, as the theorems do.
 set_option linter.unusedVariables false
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek
@@ -47,8 +44,8 @@ opaque zeroize.Zeroize.Blanket.zeroize
 
 set_option linter.dupNamespace false in
 /-- "Marker trait for types whose [`Default`] is the desired zeroization result" (lib.rs:281).
-    Body (lib.rs:301-304): `volatile_write(self, Z::default()); atomic_fence();`. The result is
-    exactly `Z::default()` (including its failure, if `default` fails). -/
+Body (lib.rs:301-304): `volatile_write(self, Z::default()); atomic_fence();`. The result is
+exactly `Z::default()` (including its failure, if `default` fails). -/
 def zeroize.Zeroize.Blanket.zeroize.Contract : Prop :=
   ∀ {Z : Type} (inst : zeroize.DefaultIsZeroes Z) (x : Z),
     zeroize.Zeroize.Blanket.zeroize inst x = inst.coredefaultDefaultInst.default
@@ -62,8 +59,8 @@ opaque Array.Insts.ZeroizeZeroize.zeroize
   Array Z N → Result (Array Z N)
 
 /-- "Impl [`Zeroize`] on arrays of types that impl [`Zeroize`]." (lib.rs:368). Body
-    (lib.rs:373-375): `self.iter_mut().zeroize();`. Every element is zeroized, so each element of
-    the result satisfies any postcondition that the element `zeroize` guarantees. -/
+(lib.rs:373-375): `self.iter_mut().zeroize();`. Every element is zeroized, so each element of
+the result satisfies any postcondition that the element `zeroize` guarantees. -/
 def Array.Insts.ZeroizeZeroize.zeroize.Contract : Prop :=
   ∀ {Z : Type} {N : Std.Usize} (inst : zeroize.Zeroize Z) (a : Array Z N) {post : Z → Prop}
     (h : ∀ x ∈ a.val, inst.zeroize x ⦃ post ⦄),
@@ -80,9 +77,9 @@ opaque core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize
     (core.slice.iter.IterMut Z → core.slice.iter.IterMut Z))
 
 /-- Body (lib.rs:385-389): `for elem in self { elem.zeroize(); }`. Every element the iterator has
-    not yet yielded (indices `it.i ..`) is zeroized, and the already-yielded prefix is unchanged.
-    The iterator ends exhausted. The zeroized slice is returned in the new iterator, so the
-    backward function (ending the `'0` borrow) is the identity. -/
+not yet yielded (indices `it.i ..`) is zeroized, and the already-yielded prefix is unchanged.
+The iterator ends exhausted. The zeroized slice is returned in the new iterator, so the
+backward function (ending the `'0` borrow) is the identity. -/
 def core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize.Contract : Prop :=
   ∀ {Z : Type} (inst : zeroize.Zeroize Z) (it : core.slice.iter.IterMut Z) {post : Z → Prop}
     (h : ∀ x ∈ it.slice.val.drop it.i, inst.zeroize x ⦃ post ⦄),
@@ -100,10 +97,10 @@ opaque alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize
   alloc.vec.Vec Z → Result (alloc.vec.Vec Z)
 
 /-- "\"Best effort\" zeroization for `Vec`. Ensures the entire capacity of the `Vec` is zeroed.
-    Cannot ensure that previous reallocations did not leave values on the heap." (lib.rs:547-550).
-    Body (lib.rs:551-560): zeroize the elements, `self.clear()`, zeroize the spare capacity.
-    Aeneas' `Vec` has no capacity, so the observable result is the empty vector. Only the success
-    of the element `zeroize` matters. -/
+Cannot ensure that previous reallocations did not leave values on the heap." (lib.rs:547-550).
+Body (lib.rs:551-560): zeroize the elements, `self.clear()`, zeroize the spare capacity.
+Aeneas' `Vec` has no capacity, so the observable result is the empty vector. Only the success
+of the element `zeroize` matters. -/
 def alloc.vec.Vec.Insts.ZeroizeZeroize.zeroize.Contract : Prop :=
   ∀ {Z : Type} (inst : zeroize.Zeroize Z) (v : alloc.vec.Vec Z)
     (h : ∀ x ∈ v.val, inst.zeroize x ⦃ _ => True ⦄),
@@ -135,7 +132,7 @@ theorem Array.Insts.ZeroizeZeroize.zeroize_spec
   RustAx.zeroize.array_zeroize inst a h
 
 /-- `core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize`
-    meets its contract (`RustAx.zeroize`). -/
+meets its contract (`RustAx.zeroize`). -/
 theorem core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize_spec
     {Z : Type} (inst : zeroize.Zeroize Z) (it : core.slice.iter.IterMut Z) {post : Z → Prop}
     (h : ∀ x ∈ it.slice.val.drop it.i, inst.zeroize x ⦃ post ⦄) :

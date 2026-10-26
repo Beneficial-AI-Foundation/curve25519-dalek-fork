@@ -191,7 +191,7 @@ theorem core.num.Usize.div_ceil_spec (self rhs : Std.Usize) (hrhs : rhs.val ≠ 
   RustAx.core.usize_div_ceil self rhs hrhs
 
 /-- `MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter`
-    meets its contract (`RustAx.core`). -/
+meets its contract (`RustAx.core`). -/
 @[step]
 theorem MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter_spec {T : Type}
     {N : Std.Usize} (a : Array T N) :

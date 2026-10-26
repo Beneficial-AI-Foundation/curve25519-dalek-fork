@@ -21,9 +21,9 @@ emits when it translates the type definitions of `subtle`. Functions and their s
     Source: 'subtle-2.6.1/src/lib.rs', lines 120:0-120:17
     Name pattern: [subtle::Choice]
 
-    `pub struct Choice(u8);` Aeneas translates a single-field tuple struct to a reducible alias of
-    the field type (cf. `edwards.CompressedEdwardsY := Array Std.U8 32#usize`). The 0/1 invariant
-    is therefore not part of the type; see the module doc of `Subtle/Basic.lean`. -/
+`pub struct Choice(u8);` Aeneas translates a single-field tuple struct to a reducible alias of
+the field type (cf. `edwards.CompressedEdwardsY := Array Std.U8 32#usize`). The 0/1 invariant
+is therefore not part of the type; see the module doc of `Subtle/Basic.lean`. -/
 @[reducible, rust_type "subtle::Choice"]
 def subtle.Choice : Type := Std.U8
 
@@ -31,7 +31,7 @@ def subtle.Choice : Type := Std.U8
     Source: 'subtle-2.6.1/src/lib.rs', lines 647:0-647:22
     Name pattern: [subtle::CtOption]
 
-    `pub struct CtOption<T> { value: T, is_some: Choice }` -/
+`pub struct CtOption<T> { value: T, is_some: Choice }` -/
 @[rust_type "subtle::CtOption"]
 structure subtle.CtOption (T : Type) where
   /-- The wrapped value; meaningful only when `is_some` is `Choice(1)`. -/
