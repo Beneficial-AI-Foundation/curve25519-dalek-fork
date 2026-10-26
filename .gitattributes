@@ -1,2 +1,0 @@
-# Function-level hunks for `git diff -W` (used to generate curve25519-dalek/translation-patches/).
-*.rs diff=rust
