@@ -16,4 +16,4 @@ public import Defs.Window
 /-! # Definitions for the specs of curve25519-dalek
 
 Root of the `Defs` library: the definitions needed to state the spec summaries (audited).
-See `notes.md` for the layout and conventions. -/
+See `README.md` for the layout. -/

@@ -10,4 +10,4 @@ public import Specs.Traits
 
 Root of the `Specs` library: imports the spec summary of every specified Rust file (the files with
 items in the crate's public API).
-See `notes.md` for the layout and conventions. -/
+See `README.md` for the layout. -/

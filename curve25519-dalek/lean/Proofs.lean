@@ -407,4 +407,4 @@ public import Proofs.Window.NafLookupTable8Select
 /-! # Proofs of the specs of curve25519-dalek
 
 Root of the `Proofs` library: one proof file per Rust item, and the helper theorems in
-`Proofs/Helpers`. See `notes.md` for the layout and conventions. -/
+`Proofs/Helpers`. See `README.md` for the layout. -/

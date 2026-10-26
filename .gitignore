@@ -17,6 +17,3 @@ build*.txt
 FunsExternal_Template.lean
 TypesExternal_Template.lean
 
-# Local settings
-*.local.json
-todo.local.md
