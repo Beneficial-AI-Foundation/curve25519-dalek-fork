@@ -114,6 +114,7 @@ pub mod spec {
         let table_B = &NafLookupTable5::<CachedPoint>::from(&constants::ED25519_BASEPOINT_POINT);
 
         // B' = B * 2^128 (precomputed constant point)
+        // TODO: For optimal performance, this should also use the wider lookup table when precomputed-tables is enabled
         #[cfg(feature = "precomputed-tables")]
         let table_B_128 = &BASEPOINT_128_ODD_LOOKUP_TABLE;
         #[cfg(not(feature = "precomputed-tables"))]
