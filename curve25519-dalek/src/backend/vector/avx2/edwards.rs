@@ -351,6 +351,17 @@ impl From<&edwards::EdwardsPoint> for NafLookupTable8<CachedPoint> {
 mod test {
     use super::*;
 
+    #[cfg(feature = "precomputed-tables")]
+    #[test]
+    fn basepoint_128_odd_lookup_table_verify() {
+        let expected =
+            NafLookupTable5::<CachedPoint>::from(&crate::constants::ED25519_BASEPOINT_128_POINT);
+        let actual = &constants::BASEPOINT_128_ODD_LOOKUP_TABLE;
+        for (actual, expected) in actual.0.iter().zip(expected.0.iter()) {
+            assert_eq!(actual.0.split(), expected.0.split());
+        }
+    }
+
     #[rustfmt::skip] // keep alignment of some S* calculations
     fn serial_add(P: edwards::EdwardsPoint, Q: edwards::EdwardsPoint) -> edwards::EdwardsPoint {
         use crate::backend::serial::u64::field::FieldElement51;

@@ -254,6 +254,20 @@ impl<'a> From<&'a edwards::EdwardsPoint> for NafLookupTable8<CachedPoint> {
 mod test {
     use super::*;
 
+    #[cfg(feature = "precomputed-tables")]
+    #[test]
+    fn basepoint_128_odd_lookup_table_verify() {
+        let expected =
+            NafLookupTable5::<CachedPoint>::from(&crate::constants::ED25519_BASEPOINT_128_POINT);
+        let actual = &constants::BASEPOINT_128_ODD_LOOKUP_TABLE;
+        for (actual, expected) in actual.0.iter().zip(expected.0.iter()) {
+            assert_eq!(
+                F51x4Unreduced::from(actual.0).split(),
+                F51x4Unreduced::from(expected.0).split(),
+            );
+        }
+    }
+
     fn addition_test_helper(P: edwards::EdwardsPoint, Q: edwards::EdwardsPoint) {
         // Test the serial implementation of the parallel addition formulas
         //let R_serial: edwards::EdwardsPoint = serial_add(P.into(), Q.into()).into();

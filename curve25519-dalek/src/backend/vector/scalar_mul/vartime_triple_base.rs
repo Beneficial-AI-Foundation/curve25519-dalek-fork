@@ -21,12 +21,18 @@ pub mod spec {
 
     #[cfg(feature = "precomputed-tables")]
     #[for_target_feature("avx2")]
-    use crate::backend::vector::avx2::constants::BASEPOINT_ODD_LOOKUP_TABLE;
+    use crate::backend::vector::avx2::constants::{
+        BASEPOINT_128_ODD_LOOKUP_TABLE, BASEPOINT_ODD_LOOKUP_TABLE,
+    };
 
+    #[cfg(feature = "precomputed-tables")]
     #[for_target_feature("avx512ifma")]
-    use crate::backend::vector::ifma::constants::BASEPOINT_ODD_LOOKUP_TABLE;
+    use crate::backend::vector::ifma::constants::{
+        BASEPOINT_128_ODD_LOOKUP_TABLE, BASEPOINT_ODD_LOOKUP_TABLE,
+    };
 
     use crate::backend::util::add_naf_digit;
+    #[cfg(not(feature = "precomputed-tables"))]
     use crate::constants;
     use crate::edwards::EdwardsPoint;
     use crate::scalar::HEEA_MAX_INDEX;
@@ -108,7 +114,9 @@ pub mod spec {
         let table_B = &NafLookupTable5::<CachedPoint>::from(&constants::ED25519_BASEPOINT_POINT);
 
         // B' = B * 2^128 (precomputed constant point)
-        // TODO: For optimal performance, this should also use the wider lookup table when precomputed-tables is enabled
+        #[cfg(feature = "precomputed-tables")]
+        let table_B_128 = &BASEPOINT_128_ODD_LOOKUP_TABLE;
+        #[cfg(not(feature = "precomputed-tables"))]
         let table_B_128 =
             &NafLookupTable5::<CachedPoint>::from(&constants::ED25519_BASEPOINT_128_POINT);
 
