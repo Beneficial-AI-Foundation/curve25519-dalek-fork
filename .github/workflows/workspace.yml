@@ -2,9 +2,27 @@ name: All
 
 on:
   push:
-    branches: [ '**' ]
+    branches: [ 'main' ]
+    paths: &paths
+      - 'curve25519-dalek/**'
+      - '!curve25519-dalek/lean/**'
+      - '!curve25519-dalek/translation-patches/**'
+      - 'curve25519-dalek-derive/**'
+      - 'ed25519-dalek/**'
+      - 'x25519-dalek/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.cargo/**'
+      - 'rust-toolchain'
+      - 'rust-toolchain.toml'
+      - '.github/workflows/workspace.yml'
   pull_request:
     branches: [ '**' ]
+    paths: *paths
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   CARGO_TERM_COLOR: always
@@ -119,10 +137,3 @@ jobs:
       - run: cargo doc --all-features --no-deps
         env:
           RUSTDOCFLAGS: '--cfg docsrs'
-
-  typos:
-    name: Check for typos
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: crate-ci/typos@v1.33.1

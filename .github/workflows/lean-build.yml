@@ -4,7 +4,7 @@ name: Lean build
 
 on:
   push:
-    branches: [ '**' ]
+    branches: [ 'main' ]
     paths: &paths
       - 'curve25519-dalek/lean/**'
       - 'EllipticCurve/**'
@@ -28,8 +28,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   ELAN_VERSION: v4.2.4

@@ -4,7 +4,7 @@ name: Aeneas translation
 
 on:
   push:
-    branches: [ '**' ]
+    branches: [ 'main' ]
     paths: &paths
       - 'Cargo.toml'
       - 'Cargo.lock'
@@ -26,8 +26,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   translation-is-current:
