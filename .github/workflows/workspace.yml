@@ -15,6 +15,10 @@ on:
       - '.cargo/**'
       - 'rust-toolchain'
       - 'rust-toolchain.toml'
+      - 'rustfmt.toml'
+      - '.rustfmt.toml'
+      - 'clippy.toml'
+      - '.clippy.toml'
       - '.github/workflows/workspace.yml'
   pull_request:
     branches: [ '**' ]
