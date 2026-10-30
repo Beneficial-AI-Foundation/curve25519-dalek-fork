@@ -2693,7 +2693,7 @@ def backend.serial.u64.field.SIXTEEN_P : Array Std.U64 5#usize :=
     36028797018963952#u64, 36028797018963952#u64
     ]
 
-/-- [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{impl core::ops::function::FnMut<(usize,), u64> for curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{closure}<'a, '_1, '_2, '_3>}::call_mut]:
+/-- [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{impl core::ops::function::FnMut<(usize,), u64> for curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{closure}<'a, '_1, '_2, '_3, '_4, '_5>}::call_mut]:
     Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 135:52-137:9 -/
 def
   backend.serial.u64.field.SubShared0FieldElement51SharedAFieldElement51FieldElement51.sub.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU64.call_mut
@@ -2711,7 +2711,7 @@ def
   let i4 ← i2 - i3
   ok (i4, (fe, fe1))
 
-/-- [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{impl core::ops::function::FnOnce<(usize,), u64> for curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{closure}<'a, '_1, '_2, '_3>}::call_once]:
+/-- [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{impl core::ops::function::FnOnce<(usize,), u64> for curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{closure}<'a, '_1, '_2, '_3, '_4, '_5>}::call_once]:
     Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 135:52-137:9 -/
 def
   backend.serial.u64.field.SubShared0FieldElement51SharedAFieldElement51FieldElement51.sub.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeU64.call_once
@@ -2725,7 +2725,7 @@ def
       c i
   ok i1
 
-/-- Trait implementation: [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{impl core::ops::function::FnOnce<(usize,), u64> for curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{closure}<'a, '_1, '_2, '_3>}]
+/-- Trait implementation: [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{impl core::ops::function::FnOnce<(usize,), u64> for curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{closure}<'a, '_1, '_2, '_3, '_4, '_5>}]
     Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 135:52-137:9 -/
 @[reducible]
 def
@@ -2737,7 +2737,7 @@ def
     backend.serial.u64.field.SubShared0FieldElement51SharedAFieldElement51FieldElement51.sub.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeU64.call_once
 }
 
-/-- Trait implementation: [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{impl core::ops::function::FnMut<(usize,), u64> for curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{closure}<'a, '_1, '_2, '_3>}]
+/-- Trait implementation: [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{impl core::ops::function::FnMut<(usize,), u64> for curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub::{closure}<'a, '_1, '_2, '_3, '_4, '_5>}]
     Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 135:52-137:9 -/
 @[reducible]
 def
@@ -7061,6 +7061,27 @@ def
         "should have more than zero digits")
     ok (some ep)
 
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::x86_64-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-203:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables»
+  : traits.VartimeMultiscalarMul backend.serial.scalar_mul.pippenger.Pippenger
+  edwards.EdwardsPoint.«x86_64-tables» := {
+  optional_multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar)
+    («coreitertraitscollectIntoIteratorPOptionEdwardsPointx86_64-tablesPInst»
+    : core.iter.traits.collect.IntoIterator J (Option
+    edwards.EdwardsPoint.«x86_64-tables») Clause2_IntoIter) =>
+    backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    «coreitertraitscollectIntoIteratorPOptionEdwardsPointx86_64-tablesPInst»
+}
+
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::as_projective]:
     Source: 'curve25519-dalek/src/edwards.rs', lines 541:4-547:5 -/
 def edwards.«EdwardsPointx86_64-no-tables».as_projective
@@ -7665,6 +7686,27 @@ def
       core.option.Option.expect total (toStr
         "should have more than zero digits")
     ok (some ep)
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::x86_64-no-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-203:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables»
+  : traits.VartimeMultiscalarMul backend.serial.scalar_mul.pippenger.Pippenger
+  edwards.EdwardsPoint.«x86_64-no-tables» := {
+  optional_multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar)
+    («coreitertraitscollectIntoIteratorPOptionEdwardsPointx86_64-no-tablesPInst»
+    : core.iter.traits.collect.IntoIterator J (Option
+    edwards.EdwardsPoint.«x86_64-no-tables») Clause2_IntoIter) =>
+    backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    «coreitertraitscollectIntoIteratorPOptionEdwardsPointx86_64-no-tablesPInst»
+}
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-tables}::as_projective]:
     Source: 'curve25519-dalek/src/edwards.rs', lines 541:4-547:5 -/
@@ -8273,6 +8315,27 @@ def
         "should have more than zero digits")
     ok (some ep)
 
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::i686-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-203:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables»
+  : traits.VartimeMultiscalarMul backend.serial.scalar_mul.pippenger.Pippenger
+  edwards.EdwardsPoint.«i686-tables» := {
+  optional_multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar)
+    («coreitertraitscollectIntoIteratorPOptionEdwardsPointi686-tablesPInst» :
+    core.iter.traits.collect.IntoIterator J (Option
+    edwards.EdwardsPoint.«i686-tables») Clause2_IntoIter) =>
+    backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    «coreitertraitscollectIntoIteratorPOptionEdwardsPointi686-tablesPInst»
+}
+
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::as_projective]:
     Source: 'curve25519-dalek/src/edwards.rs', lines 541:4-547:5 -/
 def edwards.«EdwardsPointi686-no-tables».as_projective
@@ -8871,6 +8934,27 @@ def
       core.option.Option.expect total (toStr
         "should have more than zero digits")
     ok (some ep)
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::i686-no-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-203:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables»
+  : traits.VartimeMultiscalarMul backend.serial.scalar_mul.pippenger.Pippenger
+  edwards.EdwardsPoint.«i686-no-tables» := {
+  optional_multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar)
+    («coreitertraitscollectIntoIteratorPOptionEdwardsPointi686-no-tablesPInst»
+    : core.iter.traits.collect.IntoIterator J (Option
+    edwards.EdwardsPoint.«i686-no-tables») Clause2_IntoIter) =>
+    backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    «coreitertraitscollectIntoIteratorPOptionEdwardsPointi686-no-tablesPInst»
+}
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::clone]:
     Source: 'curve25519-dalek/src/edwards.rs', lines 388:15-388:20
@@ -12695,6 +12779,28 @@ def
       scalar_digits
   ok Q1
 
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::x86_64-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 49:0-165:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables»
+  : traits.MultiscalarMul backend.serial.scalar_mul.straus.Straus
+  edwards.EdwardsPoint.«x86_64-tables» := {
+  multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_Item : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar) (coreitertraitscollectIntoIteratorInst1 :
+    core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+    («coreborrowBorrowPEdwardsPointx86_64-tablesInst» : core.borrow.Borrow
+    Clause2_Item edwards.EdwardsPoint.«x86_64-tables») =>
+    backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables».multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    coreitertraitscollectIntoIteratorInst1
+    «coreborrowBorrowPEdwardsPointx86_64-tablesInst»
+}
+
 /-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits]: loop body 0:
     Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 132:12-134:13 -/
 @[rust_loop_body]
@@ -13048,6 +13154,28 @@ def
       scalar_digits
   ok Q1
 
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::x86_64-no-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 49:0-165:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables»
+  : traits.MultiscalarMul backend.serial.scalar_mul.straus.Straus
+  edwards.EdwardsPoint.«x86_64-no-tables» := {
+  multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_Item : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar) (coreitertraitscollectIntoIteratorInst1 :
+    core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+    («coreborrowBorrowPEdwardsPointx86_64-no-tablesInst» : core.borrow.Borrow
+    Clause2_Item edwards.EdwardsPoint.«x86_64-no-tables») =>
+    backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables».multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    coreitertraitscollectIntoIteratorInst1
+    «coreborrowBorrowPEdwardsPointx86_64-no-tablesInst»
+}
+
 /-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits]: loop body 0:
     Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 132:12-134:13 -/
 @[rust_loop_body]
@@ -13390,6 +13518,28 @@ def
       64#usize (zeroize.Zeroize.Blanket I8.Insts.ZeroizeDefaultIsZeroes))
       scalar_digits
   ok Q1
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::i686-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 49:0-165:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-tables»
+  : traits.MultiscalarMul backend.serial.scalar_mul.straus.Straus
+  edwards.EdwardsPoint.«i686-tables» := {
+  multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_Item : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar) (coreitertraitscollectIntoIteratorInst1 :
+    core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+    («coreborrowBorrowPEdwardsPointi686-tablesInst» : core.borrow.Borrow
+    Clause2_Item edwards.EdwardsPoint.«i686-tables») =>
+    backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-tables».multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    coreitertraitscollectIntoIteratorInst1
+    «coreborrowBorrowPEdwardsPointi686-tablesInst»
+}
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits]: loop body 0:
     Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 132:12-134:13 -/
@@ -13743,6 +13893,28 @@ def
       scalar_digits
   ok Q1
 
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::i686-no-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 49:0-165:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-no-tables»
+  : traits.MultiscalarMul backend.serial.scalar_mul.straus.Straus
+  edwards.EdwardsPoint.«i686-no-tables» := {
+  multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_Item : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar) (coreitertraitscollectIntoIteratorInst1 :
+    core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+    («coreborrowBorrowPEdwardsPointi686-no-tablesInst» : core.borrow.Borrow
+    Clause2_Item edwards.EdwardsPoint.«i686-no-tables») =>
+    backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-no-tables».multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    coreitertraitscollectIntoIteratorInst1
+    «coreborrowBorrowPEdwardsPointi686-no-tablesInst»
+}
+
 /-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::optional_multiscalar_mul::lookup_tables]: loop body 0:
     Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 208:12-215:9 -/
 @[rust_loop_body]
@@ -14053,6 +14225,27 @@ def
       backend.serial.curve_models.«ProjectivePointx86_64-tables».as_extended
         r1
     ok (some ep)
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::x86_64-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 167:0-241:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables»
+  : traits.VartimeMultiscalarMul backend.serial.scalar_mul.straus.Straus
+  edwards.EdwardsPoint.«x86_64-tables» := {
+  optional_multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar)
+    («coreitertraitscollectIntoIteratorPOptionEdwardsPointx86_64-tablesPInst»
+    : core.iter.traits.collect.IntoIterator J (Option
+    edwards.EdwardsPoint.«x86_64-tables») Clause2_IntoIter) =>
+    backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    «coreitertraitscollectIntoIteratorPOptionEdwardsPointx86_64-tablesPInst»
+}
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::optional_multiscalar_mul::lookup_tables]: loop body 0:
     Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 208:12-215:9 -/
@@ -14365,6 +14558,27 @@ def
         r1
     ok (some ep)
 
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::x86_64-no-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 167:0-241:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables»
+  : traits.VartimeMultiscalarMul backend.serial.scalar_mul.straus.Straus
+  edwards.EdwardsPoint.«x86_64-no-tables» := {
+  optional_multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar)
+    («coreitertraitscollectIntoIteratorPOptionEdwardsPointx86_64-no-tablesPInst»
+    : core.iter.traits.collect.IntoIterator J (Option
+    edwards.EdwardsPoint.«x86_64-no-tables») Clause2_IntoIter) =>
+    backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    «coreitertraitscollectIntoIteratorPOptionEdwardsPointx86_64-no-tablesPInst»
+}
+
 /-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::optional_multiscalar_mul::lookup_tables]: loop body 0:
     Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 208:12-215:9 -/
 @[rust_loop_body]
@@ -14673,6 +14887,27 @@ def
     let ep ←
       backend.serial.curve_models.«ProjectivePointi686-tables».as_extended r1
     ok (some ep)
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::i686-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 167:0-241:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables»
+  : traits.VartimeMultiscalarMul backend.serial.scalar_mul.straus.Straus
+  edwards.EdwardsPoint.«i686-tables» := {
+  optional_multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar)
+    («coreitertraitscollectIntoIteratorPOptionEdwardsPointi686-tablesPInst» :
+    core.iter.traits.collect.IntoIterator J (Option
+    edwards.EdwardsPoint.«i686-tables») Clause2_IntoIter) =>
+    backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    «coreitertraitscollectIntoIteratorPOptionEdwardsPointi686-tablesPInst»
+}
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::optional_multiscalar_mul::lookup_tables]: loop body 0:
     Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 208:12-215:9 -/
@@ -14984,6 +15219,27 @@ def
       backend.serial.curve_models.«ProjectivePointi686-no-tables».as_extended
         r1
     ok (some ep)
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::i686-no-tables]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 167:0-241:1 -/
+@[reducible]
+def
+  backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables»
+  : traits.VartimeMultiscalarMul backend.serial.scalar_mul.straus.Straus
+  edwards.EdwardsPoint.«i686-no-tables» := {
+  optional_multiscalar_mul := fun {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar)
+    («coreitertraitscollectIntoIteratorPOptionEdwardsPointi686-no-tablesPInst»
+    : core.iter.traits.collect.IntoIterator J (Option
+    edwards.EdwardsPoint.«i686-no-tables») Clause2_IntoIter) =>
+    backend.serial.scalar_mul.straus.Straus.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul
+    coreitertraitscollectIntoIteratorInst coreborrowBorrowPScalarInst
+    «coreitertraitscollectIntoIteratorPOptionEdwardsPointi686-no-tablesPInst»
+}
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::variable_base::mul::x86_64-tables]: loop body 0:
     Source: 'curve25519-dalek/src/backend/serial/scalar_mul/variable_base.rs', lines 34:4-46:5 -/
@@ -25718,6 +25974,61 @@ def backend.serial.u32.field.FieldElement2625.Insts.CoreMarkerCopy :
   cloneInst := backend.serial.u32.field.FieldElement2625.Insts.CoreCloneClone
 }
 
+/-- Trait implementation: [curve25519_dalek::backend::serial::u32::field::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::u32::field::FieldElement2625}]
+    Source: 'curve25519-dalek/src/backend/serial/u32/field.rs', lines 63:0-67:1 -/
+@[reducible]
+def backend.serial.u32.field.FieldElement2625.Insts.ZeroizeZeroize :
+  zeroize.Zeroize backend.serial.u32.field.FieldElement2625 := {
+  zeroize :=
+    backend.serial.u32.field.FieldElement2625.Insts.ZeroizeZeroize.zeroize
+}
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::u32::field::{impl core::ops::arith::AddAssign<&'b curve25519_dalek::backend::serial::u32::field::FieldElement2625> for curve25519_dalek::backend::serial::u32::field::FieldElement2625}]
+    Source: 'curve25519-dalek/src/backend/serial/u32/field.rs', lines 69:0-75:1 -/
+@[reducible]
+def
+  backend.serial.u32.field.FieldElement2625.Insts.CoreOpsArithAddAssignSharedBFieldElement2625
+  : core.ops.arith.AddAssign backend.serial.u32.field.FieldElement2625
+  backend.serial.u32.field.FieldElement2625 := {
+  add_assign :=
+    backend.serial.u32.field.FieldElement2625.Insts.CoreOpsArithAddAssignSharedBFieldElement2625.add_assign
+}
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::u32::field::{impl core::ops::arith::Add<&'b curve25519_dalek::backend::serial::u32::field::FieldElement2625, curve25519_dalek::backend::serial::u32::field::FieldElement2625> for &'a curve25519_dalek::backend::serial::u32::field::FieldElement2625}]
+    Source: 'curve25519-dalek/src/backend/serial/u32/field.rs', lines 77:0-84:1 -/
+@[reducible]
+def
+  SharedAFieldElement2625.Insts.CoreOpsArithAddSharedBFieldElement2625FieldElement2625
+  : core.ops.arith.Add backend.serial.u32.field.FieldElement2625
+  backend.serial.u32.field.FieldElement2625
+  backend.serial.u32.field.FieldElement2625 := {
+  add :=
+    SharedAFieldElement2625.Insts.CoreOpsArithAddSharedBFieldElement2625FieldElement2625.add
+}
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::u32::field::{impl core::ops::arith::SubAssign<&'b curve25519_dalek::backend::serial::u32::field::FieldElement2625> for curve25519_dalek::backend::serial::u32::field::FieldElement2625}]
+    Source: 'curve25519-dalek/src/backend/serial/u32/field.rs', lines 86:0-106:1 -/
+@[reducible]
+def
+  backend.serial.u32.field.FieldElement2625.Insts.CoreOpsArithSubAssignSharedBFieldElement2625
+  : core.ops.arith.SubAssign backend.serial.u32.field.FieldElement2625
+  backend.serial.u32.field.FieldElement2625 := {
+  sub_assign :=
+    backend.serial.u32.field.FieldElement2625.Insts.CoreOpsArithSubAssignSharedBFieldElement2625.sub_assign
+}
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::u32::field::{impl core::ops::arith::Sub<&'b curve25519_dalek::backend::serial::u32::field::FieldElement2625, curve25519_dalek::backend::serial::u32::field::FieldElement2625> for &'a curve25519_dalek::backend::serial::u32::field::FieldElement2625}]
+    Source: 'curve25519-dalek/src/backend/serial/u32/field.rs', lines 108:0-115:1 -/
+@[reducible]
+def
+  SharedAFieldElement2625.Insts.CoreOpsArithSubSharedBFieldElement2625FieldElement2625
+  : core.ops.arith.Sub backend.serial.u32.field.FieldElement2625
+  backend.serial.u32.field.FieldElement2625
+  backend.serial.u32.field.FieldElement2625 := {
+  sub :=
+    SharedAFieldElement2625.Insts.CoreOpsArithSubSharedBFieldElement2625FieldElement2625.sub
+}
+
 /-- [curve25519_dalek::backend::serial::u32::field::{impl core::ops::arith::MulAssign<&'b curve25519_dalek::backend::serial::u32::field::FieldElement2625> for curve25519_dalek::backend::serial::u32::field::FieldElement2625}::mul_assign]:
     Source: 'curve25519-dalek/src/backend/serial/u32/field.rs', lines 118:4-121:5
     Visibility: public -/
@@ -25741,6 +26052,18 @@ def
   backend.serial.u32.field.FieldElement2625 := {
   mul_assign :=
     backend.serial.u32.field.FieldElement2625.Insts.CoreOpsArithMulAssignSharedBFieldElement2625.mul_assign
+}
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::u32::field::{impl core::ops::arith::Mul<&'b curve25519_dalek::backend::serial::u32::field::FieldElement2625, curve25519_dalek::backend::serial::u32::field::FieldElement2625> for &'a curve25519_dalek::backend::serial::u32::field::FieldElement2625}]
+    Source: 'curve25519-dalek/src/backend/serial/u32/field.rs', lines 124:0-228:1 -/
+@[reducible]
+def
+  SharedAFieldElement2625.Insts.CoreOpsArithMulSharedBFieldElement2625FieldElement2625
+  : core.ops.arith.Mul backend.serial.u32.field.FieldElement2625
+  backend.serial.u32.field.FieldElement2625
+  backend.serial.u32.field.FieldElement2625 := {
+  mul :=
+    SharedAFieldElement2625.Insts.CoreOpsArithMulSharedBFieldElement2625FieldElement2625.mul
 }
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::u32::field::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::u32::field::FieldElement2625> for &'a curve25519_dalek::backend::serial::u32::field::FieldElement2625}]
@@ -25975,6 +26298,14 @@ def backend.serial.u32.scalar.Scalar29.Insts.CoreCloneClone.clone
 def backend.serial.u32.scalar.Scalar29.Insts.CoreCloneClone : core.clone.Clone
   backend.serial.u32.scalar.Scalar29 := {
   clone := backend.serial.u32.scalar.Scalar29.Insts.CoreCloneClone.clone
+}
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::u32::scalar::{impl core::marker::Copy for curve25519_dalek::backend::serial::u32::scalar::Scalar29}]
+    Source: 'curve25519-dalek/src/backend/serial/u32/scalar.rs', lines 24:9-24:13 -/
+@[reducible]
+def backend.serial.u32.scalar.Scalar29.Insts.CoreMarkerCopy : core.marker.Copy
+  backend.serial.u32.scalar.Scalar29 := {
+  cloneInst := backend.serial.u32.scalar.Scalar29.Insts.CoreCloneClone
 }
 
 /-- [curve25519_dalek::backend::serial::u32::scalar::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::u32::scalar::Scalar29}::zeroize]:
@@ -32933,6 +33264,38 @@ def backend.serial.u64.field.FieldElement51.Insts.CoreMarkerCopy :
   cloneInst := backend.serial.u64.field.FieldElement51.Insts.CoreCloneClone
 }
 
+/-- Trait implementation: [curve25519_dalek::backend::serial::u64::field::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::u64::field::FieldElement51}]
+    Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 61:0-65:1 -/
+@[reducible]
+def backend.serial.u64.field.FieldElement51.Insts.ZeroizeZeroize :
+  zeroize.Zeroize backend.serial.u64.field.FieldElement51 := {
+  zeroize :=
+    backend.serial.u64.field.FieldElement51.Insts.ZeroizeZeroize.zeroize
+}
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::AddAssign<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51> for curve25519_dalek::backend::serial::u64::field::FieldElement51}]
+    Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 67:0-80:1 -/
+@[reducible]
+def
+  backend.serial.u64.field.FieldElement51.Insts.CoreOpsArithAddAssignSharedAFieldElement51
+  : core.ops.arith.AddAssign backend.serial.u64.field.FieldElement51
+  backend.serial.u64.field.FieldElement51 := {
+  add_assign :=
+    backend.serial.u64.field.FieldElement51.Insts.CoreOpsArithAddAssignSharedAFieldElement51.add_assign
+}
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Add<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}]
+    Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 82:0-94:1 -/
+@[reducible]
+def
+  Shared0FieldElement51.Insts.CoreOpsArithAddSharedAFieldElement51FieldElement51
+  : core.ops.arith.Add backend.serial.u64.field.FieldElement51
+  backend.serial.u64.field.FieldElement51
+  backend.serial.u64.field.FieldElement51 := {
+  add :=
+    Shared0FieldElement51.Insts.CoreOpsArithAddSharedAFieldElement51FieldElement51.add
+}
+
 /-- [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::SubAssign<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51> for curve25519_dalek::backend::serial::u64::field::FieldElement51}::sub_assign]:
     Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 105:4-108:5
     Visibility: public -/
@@ -32958,6 +33321,18 @@ def
     backend.serial.u64.field.FieldElement51.Insts.CoreOpsArithSubAssignSharedAFieldElement51.sub_assign
 }
 
+/-- Trait implementation: [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}]
+    Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 111:0-139:1 -/
+@[reducible]
+def
+  Shared0FieldElement51.Insts.CoreOpsArithSubSharedAFieldElement51FieldElement51
+  : core.ops.arith.Sub backend.serial.u64.field.FieldElement51
+  backend.serial.u64.field.FieldElement51
+  backend.serial.u64.field.FieldElement51 := {
+  sub :=
+    Shared0FieldElement51.Insts.CoreOpsArithSubSharedAFieldElement51FieldElement51.sub
+}
+
 /-- [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::MulAssign<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51> for curve25519_dalek::backend::serial::u64::field::FieldElement51}::mul_assign]:
     Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 149:4-152:5
     Visibility: public -/
@@ -32981,6 +33356,18 @@ def
   backend.serial.u64.field.FieldElement51 := {
   mul_assign :=
     backend.serial.u64.field.FieldElement51.Insts.CoreOpsArithMulAssignSharedAFieldElement51.mul_assign
+}
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Mul<&'a curve25519_dalek::backend::serial::u64::field::FieldElement51, curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_1 curve25519_dalek::backend::serial::u64::field::FieldElement51}]
+    Source: 'curve25519-dalek/src/backend/serial/u64/field.rs', lines 155:0-265:1 -/
+@[reducible]
+def
+  Shared0FieldElement51.Insts.CoreOpsArithMulSharedAFieldElement51FieldElement51
+  : core.ops.arith.Mul backend.serial.u64.field.FieldElement51
+  backend.serial.u64.field.FieldElement51
+  backend.serial.u64.field.FieldElement51 := {
+  mul :=
+    Shared0FieldElement51.Insts.CoreOpsArithMulSharedAFieldElement51FieldElement51.mul
 }
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::u64::field::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::u64::field::FieldElement51> for &'_0 curve25519_dalek::backend::serial::u64::field::FieldElement51}]
@@ -33153,6 +33540,14 @@ def backend.serial.u64.scalar.Scalar52.Insts.CoreCloneClone.clone
 def backend.serial.u64.scalar.Scalar52.Insts.CoreCloneClone : core.clone.Clone
   backend.serial.u64.scalar.Scalar52 := {
   clone := backend.serial.u64.scalar.Scalar52.Insts.CoreCloneClone.clone
+}
+
+/-- Trait implementation: [curve25519_dalek::backend::serial::u64::scalar::{impl core::marker::Copy for curve25519_dalek::backend::serial::u64::scalar::Scalar52}]
+    Source: 'curve25519-dalek/src/backend/serial/u64/scalar.rs', lines 25:9-25:13 -/
+@[reducible]
+def backend.serial.u64.scalar.Scalar52.Insts.CoreMarkerCopy : core.marker.Copy
+  backend.serial.u64.scalar.Scalar52 := {
+  cloneInst := backend.serial.u64.scalar.Scalar52.Insts.CoreCloneClone
 }
 
 /-- [curve25519_dalek::backend::serial::u64::scalar::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::u64::scalar::Scalar52}::zeroize]:
