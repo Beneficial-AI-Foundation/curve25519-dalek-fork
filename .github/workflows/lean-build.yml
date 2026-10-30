@@ -71,7 +71,7 @@ jobs:
       - name: Mathlib cache
         run: lake exe cache get
 
-      # Not strict: Lake logs warningw.
+      # Not strict: Lake logs warnings.
       - name: Aeneas
         run: lake build Aeneas
 
