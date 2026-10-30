@@ -2,11 +2,26 @@ name: x25519 Rust
 
 on:
   push:
-    branches: [ '**' ]
-    paths: 'x25519-dalek/**'
+    branches: [ 'main' ]
+    paths: &paths
+      - 'curve25519-dalek/**'
+      - '!curve25519-dalek/lean/**'
+      - '!curve25519-dalek/translation-patches/**'
+      - 'curve25519-dalek-derive/**'
+      - 'x25519-dalek/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.cargo/**'
+      - 'rust-toolchain'
+      - 'rust-toolchain.toml'
+      - '.github/workflows/x25519-dalek.yml'
   pull_request:
     branches: [ '**' ]
-    paths: 'x25519-dalek/**'
+    paths: *paths
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 defaults:
   run:

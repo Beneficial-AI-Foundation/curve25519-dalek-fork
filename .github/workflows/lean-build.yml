@@ -4,7 +4,7 @@ name: Lean build
 
 on:
   push:
-    branches: [ '**' ]
+    branches: [ 'main' ]
     paths: &paths
       - 'curve25519-dalek/lean/**'
       - 'EllipticCurve/**'
@@ -28,8 +28,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   ELAN_VERSION: v4.2.4
@@ -88,9 +88,9 @@ jobs:
           path: *cache-paths
           key: *cache-key
 
-      # Keep only the newest build cache of this branch or pull request
+      # Keep only the newest build cache of this pull request
       - name: Delete superseded build caches
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}

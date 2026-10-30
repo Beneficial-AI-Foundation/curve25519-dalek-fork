@@ -2,9 +2,28 @@ name: Cross
 
 on:
   push:
-    branches: [ '**' ]
+    branches: [ 'main' ]
+    paths: &paths
+      - 'curve25519-dalek/**'
+      - '!curve25519-dalek/lean/**'
+      - '!curve25519-dalek/translation-patches/**'
+      - 'curve25519-dalek-derive/**'
+      - 'ed25519-dalek/**'
+      - 'x25519-dalek/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.cargo/**'
+      - 'rust-toolchain'
+      - 'rust-toolchain.toml'
+      - 'Cross.toml'
+      - '.github/workflows/cross.yml'
   pull_request:
     branches: [ '**' ]
+    paths: *paths
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   CARGO_TERM_COLOR: always
