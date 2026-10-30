@@ -360,6 +360,20 @@ def backend.serial.scalar_mul.pippenger.Pippenger := Unit
 structure scalar.Scalar where
   bytes : Array Std.U8 32#usize
 
+/-- Trait declaration: [curve25519_dalek::traits::VartimeMultiscalarMul]
+    Source: 'curve25519-dalek/src/traits.rs', lines 137:0-263:1
+    Visibility: public -/
+structure traits.VartimeMultiscalarMul (Self : Type _) (Self_Point : Type _)
+  where
+  optional_multiscalar_mul : forall {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar) (coreitertraitscollectIntoIteratorPOptionPInst :
+    core.iter.traits.collect.IntoIterator J (Option Self_Point)
+    Clause2_IntoIter), I → J → Result (Option Self_Point)
+
 /-- [curve25519_dalek::window::NafLookupTable8]
     Source: 'curve25519-dalek/src/window.rs', lines 229:0-229:57 -/
 @[reducible]
@@ -433,6 +447,20 @@ def window.NafLookupTable5 (T : Type _) := Array T 8#usize
     Visibility: public -/
 @[reducible]
 def backend.serial.scalar_mul.straus.Straus := Unit
+
+/-- Trait declaration: [curve25519_dalek::traits::MultiscalarMul]
+    Source: 'curve25519-dalek/src/traits.rs', lines 78:0-134:1
+    Visibility: public -/
+structure traits.MultiscalarMul (Self : Type _) (Self_Point : Type _) where
+  multiscalar_mul : forall {I : Type} {J : Type} {Clause0_Item : Type}
+    {Clause0_IntoIter : Type} {Clause2_Item : Type} {Clause2_IntoIter : Type}
+    (coreitertraitscollectIntoIteratorInst :
+    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
+    scalar.Scalar) (coreitertraitscollectIntoIteratorInst1 :
+    core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+    (coreborrowBorrowInst : core.borrow.Borrow Clause2_Item Self_Point), I →
+    J → Result Self_Point
 
 /-- [curve25519_dalek::window::LookupTable]
     Source: 'curve25519-dalek/src/window.rs', lines 47:8-47:51; this code is generated from a macro invocation at: 'curve25519-dalek/src/window.rs', lines 132:0-138:1
@@ -659,34 +687,6 @@ def edwards.«EdwardsPointi686-no-tables».compress_batch.closure_1 (N :
 def edwards.«EdwardsPointi686-no-tables».compress_batch.closure (N :
   Std.Usize) :=
   Array edwards.EdwardsPoint.«i686-no-tables» N
-
-/-- Trait declaration: [curve25519_dalek::traits::MultiscalarMul]
-    Source: 'curve25519-dalek/src/traits.rs', lines 78:0-134:1
-    Visibility: public -/
-structure traits.MultiscalarMul (Self : Type _) (Self_Point : Type _) where
-  multiscalar_mul : forall {I : Type} {J : Type} {Clause0_Item : Type}
-    {Clause0_IntoIter : Type} {Clause2_Item : Type} {Clause2_IntoIter : Type}
-    (coreitertraitscollectIntoIteratorInst :
-    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
-    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
-    scalar.Scalar) (coreitertraitscollectIntoIteratorInst1 :
-    core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
-    (coreborrowBorrowInst : core.borrow.Borrow Clause2_Item Self_Point), I →
-    J → Result Self_Point
-
-/-- Trait declaration: [curve25519_dalek::traits::VartimeMultiscalarMul]
-    Source: 'curve25519-dalek/src/traits.rs', lines 137:0-263:1
-    Visibility: public -/
-structure traits.VartimeMultiscalarMul (Self : Type _) (Self_Point : Type _)
-  where
-  optional_multiscalar_mul : forall {I : Type} {J : Type} {Clause0_Item : Type}
-    {Clause0_IntoIter : Type} {Clause2_IntoIter : Type}
-    (coreitertraitscollectIntoIteratorInst :
-    core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
-    (coreborrowBorrowPScalarInst : core.borrow.Borrow Clause0_Item
-    scalar.Scalar) (coreitertraitscollectIntoIteratorPOptionPInst :
-    core.iter.traits.collect.IntoIterator J (Option Self_Point)
-    Clause2_IntoIter), I → J → Result (Option Self_Point)
 
 /-- [curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-tables]
     Source: 'curve25519-dalek/src/edwards.rs', lines 1055:0-1055:82
