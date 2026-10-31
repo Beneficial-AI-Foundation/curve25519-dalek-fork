@@ -1,5 +1,5 @@
 /-
-Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Copyright 2025 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
@@ -15,14 +15,8 @@ not `@[step]`: `z` does not appear in the call, so `step` cannot infer it. Use t
 `step with … (z := …)`, or through the concrete `@[step]` lemmas in `Zeroize/Instances.lean`.
 -/
 
-/-- The blanket impl satisfies whatever `Z::default()` satisfies. -/
-theorem zeroize.Zeroize.Blanket.zeroize_spec {Z : Type} (inst : zeroize.DefaultIsZeroes Z) (x : Z)
-    {post : Z → Prop} (h : inst.coredefaultDefaultInst.default ⦃ post ⦄) :
-    zeroize.Zeroize.Blanket.zeroize inst x ⦃ post ⦄ := by
-  rw [zeroize.Zeroize.Blanket.zeroize_eq]; exact h
-
 /-- Zeroizing an `IterMut` whose element `zeroize` always returns `z` keeps the yielded prefix,
-    replaces the rest by `z` and exhausts the iterator. -/
+replaces the rest by `z` and exhausts the iterator. -/
 theorem core.slice.iter.IterMut.Insts.ZeroizeZeroize.zeroize_const_spec
     {Z : Type} (inst : zeroize.Zeroize Z) (z : Z) (hz : ∀ x, inst.zeroize x ⦃ r => r = z ⦄)
     (it : core.slice.iter.IterMut Z) :

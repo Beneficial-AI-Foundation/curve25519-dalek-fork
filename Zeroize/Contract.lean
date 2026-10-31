@@ -1,8 +1,8 @@
 /-
-Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Copyright 2025 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo,
-  Hoang Le Truong, Markus Ferdinand Dablander
+Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo, Hoang Le Truong,
+  Markus Ferdinand Dablander
 -/
 module
 public import Curve25519Dalek.Types
@@ -12,26 +12,16 @@ set_option linter.unusedVariables false
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek
 
-/-! # Functions of the `zeroize` crate (zeroize-1.8.2) — TRUSTED
+/-! # Functions of the `zeroize` crate (zeroize-1.8.2)
 
-This file is the trusted base for `zeroize`. Nothing here is derived.
+This file is the trusted base for `zeroize`.
 
-* **Signatures.** Each external function that Aeneas expects (see the gitignored
-  `Curve25519Dalek/FunsExternal_Template.lean`) is an `opaque` constant with the template's exact
-  name, type and `@[rust_fun]` attribute. `opaque` adds no axiom, so `#print axioms` lists exactly
-  the axiom `RustAx.zeroize` below.
-* **Contracts.** Each function has one predicate `….Contract : Prop` that restates the Rust
-  body/documentation. Every contract that relies on a trait method of the generic `Z`
-  (`Default::default`, `Zeroize::zeroize`) is conditional on that method's behaviour. An
-  unconditional contract could prove `False`. The single axiom `RustAx.zeroize` (end of file)
-  states all the predicates; the theorems `…_spec`/`…_eq` used by the proofs are its
-  projections, so `#print axioms` lists `RustAx.zeroize`.
-
-Volatile writes, `atomic_fence` and the "best effort" caveats (e.g. earlier `Vec` reallocations)
-are not observable in the functional semantics. Zeroizing replaces the value by its zeroized
-value. The trait structures `zeroize.Zeroize` / `zeroize.DefaultIsZeroes` are generated in
-`Curve25519Dalek/Types.lean` (namespace `Curve25519Dalek`), so this library is specific to this
-crate's translation. Derived results are in `Zeroize/Lemmas.lean` and `Zeroize/Instances.lean`.
+* Signatures: Each external function that Aeneas expects is an `opaque` constant with the
+  required name, type and `@[rust_fun]` attribute.
+* Contracts: Each function used by the proofs has one predicate `….Contract : Prop` that restates
+  the Rust documentation. Specs that call trait methods of a generic `Z` assume the behaviour of
+  those methods as a hypothesis.
+* Axiom: The single axiom `RustAx.zeroize` states that all the contracts hold.
 -/
 
 set_option linter.dupNamespace false in
