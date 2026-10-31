@@ -8,14 +8,7 @@ public import Subtle.Contract
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek
 
-/-! # Derived results for `subtle` (no axioms)
-
-* Closure lemmas for `subtle.Choice.IsValid`, the 0/1 invariant defined in `Subtle/Contract.lean`.
-  `IsValid` is reducible, so it unfolds to `c = 0#u8 ∨ c = 1#u8` and is decidable.
-* The Boolean view `subtle.Choice.toBool`.
-* Specs of the faithful bodies in `Subtle/Contract.lean`: the two `ConditionallySelectable` defaults
-  and `ConditionallyNegatable::conditional_negate`.
--/
+/-! # Derived results for `subtle` -/
 
 /-! ## Validity -/
 
