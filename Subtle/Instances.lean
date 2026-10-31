@@ -1,5 +1,5 @@
 /-
-Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Copyright 2025 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
@@ -18,15 +18,5 @@ theorem Slice.Insts.SubtleConstantTimeEq.ct_eq_U8_spec (a b : Slice Std.U8) :
       c.IsValid ∧ (a = b → c = 1#u8) ∧ (a ≠ b → c = 0#u8) ⦄ :=
   _root_.Slice.Insts.SubtleConstantTimeEq.ct_eq_spec _
     (fun x y => spec_mono (U8.Insts.SubtleConstantTimeEq.ct_eq_spec x y) (by grind)) a b
-
-/-- `conditional_select` on byte arrays, for a valid choice. -/
-@[step]
-theorem Array.Insts.SubtleConditionallySelectable.conditional_select_U8_spec
-    {N : Std.Usize} (a b : Array Std.U8 N) (c : subtle.Choice) (hc : c.IsValid) :
-    _root_.Array.Insts.SubtleConditionallySelectable.conditional_select
-      U8.Insts.SubtleConditionallySelectable a b c ⦃ r =>
-      (c = 0#u8 → r = a) ∧ (c = 1#u8 → r = b) ⦄ :=
-  _root_.Array.Insts.SubtleConditionallySelectable.conditional_select_spec _ a b c hc
-    (fun x y => U8.Insts.SubtleConditionallySelectable.conditional_assign_spec x y c hc)
 
 end Curve25519Dalek

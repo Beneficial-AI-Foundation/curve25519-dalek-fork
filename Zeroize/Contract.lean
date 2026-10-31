@@ -1,5 +1,5 @@
 /-
-Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Copyright 2025 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo, Hoang Le Truong,
   Markus Ferdinand Dablander
@@ -16,11 +16,12 @@ open Curve25519Dalek
 
 This file is the trusted base for `zeroize`.
 
-* Signatures: Each external function that Aeneas expects is an `opaque` constant with the template's
-  exact name, type and `@[rust_fun]` attribute.
-* Contracts: Each function has one predicate `….Contract : Prop` that restates the Rust
-  documentation.
-* Axiom: The single axiom `RustAx.zeroize` is the axiom that each function satisfies its contract.
+* Signatures: Each external function that Aeneas expects is an `opaque` constant with the
+  required name, type and `@[rust_fun]` attribute.
+* Contracts: Each function used by the proofs has one predicate `….Contract : Prop` that restates
+  the Rust documentation. Specs that call trait methods of a generic `Z` assume the behaviour of
+  those methods as a hypothesis.
+* Axiom: The single axiom `RustAx.zeroize` states that all the contracts hold.
 -/
 
 set_option linter.dupNamespace false in

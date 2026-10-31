@@ -1,5 +1,5 @@
 /-
-Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Copyright 2025 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo, Hoang Le Truong,
   Markus Ferdinand Dablander
@@ -18,9 +18,9 @@ This file and `Subtle/Types.lean` are the trusted base for `subtle`.
 
 * Signatures: Each external function that Aeneas expects is an `opaque` constant with the
   required name, type and `@[rust_fun]` attribute.
-* Contracts: Each function has one predicate `….Contract : Prop` that restates the Rust
-  documentation. Specs that call trait methods of a generic `T` assume the behaviour of those
-  methods as a hypothesis.
+* Contracts: Each function used by the proofs has one predicate `….Contract : Prop` that restates
+  the Rust documentation. Specs that call trait methods of a generic `T` assume the behaviour of
+  those methods as a hypothesis.
 * Axiom: The single axiom `RustAx.subtle` states that all the contracts hold.
 
 **`Choice` validity.** `Choice` is a plain `u8`. The crate maintains the invariant that it is `0` or
@@ -248,15 +248,6 @@ def U8.Insts.SubtleConditionallySelectable.conditional_assign.Contract : Prop :=
 opaque U8.Insts.SubtleConditionallySelectable.conditional_swap :
   Std.U8 → Std.U8 → subtle.Choice → Result (Std.U8 × Std.U8)
 
-/-- "Conditionally swap `self` and `other` if `choice == 1`; otherwise, reassign both unto
-themselves." (lib.rs:446-447). `-(choice as i8)` overflows for `choice = 128`, so the spec
-requires a valid choice. -/
-@[nolint defsWithUnderscore]
-def U8.Insts.SubtleConditionallySelectable.conditional_swap.Contract : Prop :=
-  ∀ (a b : Std.U8) (choice : subtle.Choice) (hc : choice.IsValid),
-    U8.Insts.SubtleConditionallySelectable.conditional_swap a b choice ⦃ r =>
-      (choice = 0#u8 → r = (a, b)) ∧ (choice = 1#u8 → r = (b, a)) ⦄
-
 /-- [subtle::{impl subtle::ConditionallySelectable for u32}::conditional_select]:
     Source: 'subtle-2.6.1/src/lib.rs', lines 513:12-513:77
     Name pattern: [subtle::{subtle::ConditionallySelectable<u32>}::conditional_select] -/
@@ -424,7 +415,6 @@ structure subtle.Contract : Prop where
   u16_ct_eq : U16.Insts.SubtleConstantTimeEq.ct_eq.Contract
   u8_conditional_select : U8.Insts.SubtleConditionallySelectable.conditional_select.Contract
   u8_conditional_assign : U8.Insts.SubtleConditionallySelectable.conditional_assign.Contract
-  u8_conditional_swap : U8.Insts.SubtleConditionallySelectable.conditional_swap.Contract
   u32_conditional_select : U32.Insts.SubtleConditionallySelectable.conditional_select.Contract
   u32_conditional_assign : U32.Insts.SubtleConditionallySelectable.conditional_assign.Contract
   u32_conditional_swap : U32.Insts.SubtleConditionallySelectable.conditional_swap.Contract
@@ -531,15 +521,6 @@ theorem U8.Insts.SubtleConditionallySelectable.conditional_assign_spec
     U8.Insts.SubtleConditionallySelectable.conditional_assign a b choice ⦃ r =>
       (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄ :=
   RustAx.subtle.u8_conditional_assign a b choice hc
-
-/-- `U8.Insts.SubtleConditionallySelectable.conditional_swap`
-meets its contract (`RustAx.subtle`). -/
-@[step]
-theorem U8.Insts.SubtleConditionallySelectable.conditional_swap_spec
-    (a b : Std.U8) (choice : subtle.Choice) (hc : choice.IsValid) :
-    U8.Insts.SubtleConditionallySelectable.conditional_swap a b choice ⦃ r =>
-      (choice = 0#u8 → r = (a, b)) ∧ (choice = 1#u8 → r = (b, a)) ⦄ :=
-  RustAx.subtle.u8_conditional_swap a b choice hc
 
 /-- `U32.Insts.SubtleConditionallySelectable.conditional_select`
 meets its contract (`RustAx.subtle`). -/

@@ -6,7 +6,7 @@ public import Subtle.Instances
 
 /-! # The `subtle` crate
 
-* `Subtle/Types.lean`, `Subtle/Contract.lean`: TRUSTED. Types, opaque signatures, spec axioms and
+* `Subtle/Types.lean`, `Subtle/Contract.lean`: TRUSTED. Types, opaque signatures, spec axiom and
   faithful bodies.
 * `Subtle/Lemmas.lean`: derived generic results (no axioms).
 * `Subtle/Instances.lean`: derived results about the instances generated in

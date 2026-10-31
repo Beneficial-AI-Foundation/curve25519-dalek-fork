@@ -5,7 +5,7 @@ public import Zeroize.Instances
 
 /-! # The `zeroize` crate (zeroize-1.8.2)
 
-* `Zeroize/Contract.lean`: TRUSTED. Opaque signatures and spec axioms.
+* `Zeroize/Contract.lean`: TRUSTED. Opaque signatures and spec axiom.
   `Curve25519Dalek/FunsExternal.lean` imports only this file.
 * `Zeroize/Lemmas.lean`: derived generic results (no axioms).
 * `Zeroize/Instances.lean`: derived results about the instances generated in

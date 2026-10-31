@@ -1,5 +1,5 @@
 /-
-Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Copyright 2025 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo,
   Hoang Le Truong, Markus Ferdinand Dablander
@@ -10,8 +10,7 @@ import Zeroize.Lemmas
 @[expose] public section
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 
-/-! # `zeroize` for the trait instances generated in `Curve25519Dalek/Funs.lean` (no axioms)
--/
+/-! # `zeroize` for the trait instances generated in `Curve25519Dalek/Funs.lean` (no axioms) -/
 
 namespace Curve25519Dalek
 
@@ -65,13 +64,6 @@ namespace Curve25519Dalek
   _root_.Array.Insts.ZeroizeZeroize.zeroize_const_spec _ _
     U64.Insts.ZeroizeDefaultIsZeroes.zeroize_spec a
 
-@[step] theorem Array.Insts.ZeroizeZeroize.zeroize_I8_spec {N : Std.Usize} (a : Array Std.I8 N) :
-    _root_.Array.Insts.ZeroizeZeroize.zeroize
-      (zeroize.Zeroize.Blanket I8.Insts.ZeroizeDefaultIsZeroes) a
-      ⦃ r => r = Array.repeat N 0#i8 ⦄ :=
-  _root_.Array.Insts.ZeroizeZeroize.zeroize_const_spec _ _
-    I8.Insts.ZeroizeDefaultIsZeroes.zeroize_spec a
-
 /-! ## Backend field elements and scalars -/
 
 @[step] theorem backend.serial.u64.field.FieldElement51.Insts.ZeroizeZeroize.zeroize_spec
@@ -97,100 +89,6 @@ namespace Curve25519Dalek
     backend.serial.u32.scalar.Scalar29.Insts.ZeroizeZeroize.zeroize x ⦃ r =>
       r = Array.repeat 9#usize 0#u32 ⦄ := by
   unfold backend.serial.u32.scalar.Scalar29.Insts.ZeroizeZeroize.zeroize; step*
-
-/-! ## Niels points (all coordinates zeroized) -/
-
-namespace backend.serial.curve_models
-
-namespace AffineNielsPoint.«x86_64-tables».Insts.ZeroizeZeroize
-
-@[step] theorem zeroize_spec (p : AffineNielsPoint.«x86_64-tables») :
-    zeroize p ⦃ r => r =
-        { y_plus_x := Array.repeat 5#usize 0#u64, y_minus_x := Array.repeat 5#usize 0#u64,
-          xy2d := Array.repeat 5#usize 0#u64 } ⦄ := by
-  unfold zeroize
-  step*
-
-end AffineNielsPoint.«x86_64-tables».Insts.ZeroizeZeroize
-
-namespace AffineNielsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize
-
-@[step] theorem zeroize_spec (p : AffineNielsPoint.«x86_64-no-tables») :
-    zeroize p ⦃ r => r =
-        { y_plus_x := Array.repeat 5#usize 0#u64, y_minus_x := Array.repeat 5#usize 0#u64,
-          xy2d := Array.repeat 5#usize 0#u64 } ⦄ := by
-  unfold zeroize
-  step*
-
-end AffineNielsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize
-
-namespace AffineNielsPoint.«i686-tables».Insts.ZeroizeZeroize
-
-@[step] theorem zeroize_spec (p : AffineNielsPoint.«i686-tables») :
-    zeroize p ⦃ r => r =
-        { y_plus_x := Array.repeat 10#usize 0#u32, y_minus_x := Array.repeat 10#usize 0#u32,
-          xy2d := Array.repeat 10#usize 0#u32 } ⦄ := by
-  unfold zeroize
-  step*
-
-end AffineNielsPoint.«i686-tables».Insts.ZeroizeZeroize
-
-namespace AffineNielsPoint.«i686-no-tables».Insts.ZeroizeZeroize
-
-@[step] theorem zeroize_spec (p : AffineNielsPoint.«i686-no-tables») :
-    zeroize p ⦃ r => r =
-        { y_plus_x := Array.repeat 10#usize 0#u32, y_minus_x := Array.repeat 10#usize 0#u32,
-          xy2d := Array.repeat 10#usize 0#u32 } ⦄ := by
-  unfold zeroize
-  step*
-
-end AffineNielsPoint.«i686-no-tables».Insts.ZeroizeZeroize
-
-namespace ProjectiveNielsPoint.«x86_64-tables».Insts.ZeroizeZeroize
-
-@[step] theorem zeroize_spec (p : ProjectiveNielsPoint.«x86_64-tables») :
-    zeroize p ⦃ r => r =
-        { Y_plus_X := Array.repeat 5#usize 0#u64, Y_minus_X := Array.repeat 5#usize 0#u64,
-          Z := Array.repeat 5#usize 0#u64, T2d := Array.repeat 5#usize 0#u64 } ⦄ := by
-  unfold zeroize
-  step*
-
-end ProjectiveNielsPoint.«x86_64-tables».Insts.ZeroizeZeroize
-
-namespace ProjectiveNielsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize
-
-@[step] theorem zeroize_spec (p : ProjectiveNielsPoint.«x86_64-no-tables») :
-    zeroize p ⦃ r => r =
-        { Y_plus_X := Array.repeat 5#usize 0#u64, Y_minus_X := Array.repeat 5#usize 0#u64,
-          Z := Array.repeat 5#usize 0#u64, T2d := Array.repeat 5#usize 0#u64 } ⦄ := by
-  unfold zeroize
-  step*
-
-end ProjectiveNielsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize
-
-namespace ProjectiveNielsPoint.«i686-tables».Insts.ZeroizeZeroize
-
-@[step] theorem zeroize_spec (p : ProjectiveNielsPoint.«i686-tables») :
-    zeroize p ⦃ r => r =
-        { Y_plus_X := Array.repeat 10#usize 0#u32, Y_minus_X := Array.repeat 10#usize 0#u32,
-          Z := Array.repeat 10#usize 0#u32, T2d := Array.repeat 10#usize 0#u32 } ⦄ := by
-  unfold zeroize
-  step*
-
-end ProjectiveNielsPoint.«i686-tables».Insts.ZeroizeZeroize
-
-namespace ProjectiveNielsPoint.«i686-no-tables».Insts.ZeroizeZeroize
-
-@[step] theorem zeroize_spec (p : ProjectiveNielsPoint.«i686-no-tables») :
-    zeroize p ⦃ r => r =
-        { Y_plus_X := Array.repeat 10#usize 0#u32, Y_minus_X := Array.repeat 10#usize 0#u32,
-          Z := Array.repeat 10#usize 0#u32, T2d := Array.repeat 10#usize 0#u32 } ⦄ := by
-  unfold zeroize
-  step*
-
-end ProjectiveNielsPoint.«i686-no-tables».Insts.ZeroizeZeroize
-
-end backend.serial.curve_models
 
 /-! ## Byte-array types -/
 
