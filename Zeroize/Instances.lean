@@ -11,11 +11,6 @@ import Zeroize.Lemmas
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 
 /-! # `zeroize` for the trait instances generated in `Curve25519Dalek/Funs.lean` (no axioms)
-
-Concrete `@[step]` specs: the blanket impl for the primitive `DefaultIsZeroes` types gives `0`
-(`false` for `bool`), arrays of those zeroize to all-zero arrays, and the backend field/scalar
-types and Niels points zeroize to their all-zero value. With these, `step*` handles zeroize call
-sites without having to supply the constant `z` of `Zeroize/Lemmas.lean`.
 -/
 
 namespace Curve25519Dalek
