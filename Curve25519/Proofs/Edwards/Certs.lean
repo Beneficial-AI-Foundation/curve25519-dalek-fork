@@ -22,7 +22,7 @@ namespace curve25519.Proofs
 open TwistedEdwardsModel
 
 /-- `edwards` with its coefficients as numerals, for the kernel. -/
-private theorem edwards_eq :
+theorem edwards_eq :
     edwards = ⟨-1, ((37095705934669439343138083508754565189542113879843219016388785533085940283555 :
       ℕ) : ZMod p)⟩ := by
   rw [edwards_def, a_def, d_eq_natCast]
@@ -30,7 +30,7 @@ private theorem edwards_eq :
 /-! ### From kernel computations to group facts -/
 
 /-- `n • P = Q` from projective equality of `n • P` and `Q` in extended coordinates. -/
-private theorem nsmul_eq_of_projEq {P Q : edwards.Point} {n : ℕ}
+theorem nsmul_eq_of_projEq {P Q : edwards.Point} {n : ℕ}
     (h : (Extended.nsmul n P.toExtended).ProjEq Q.toExtended) : n • P = Q :=
   calc n • P = n • P.toExtended.toPoint := by rw [Point.toPoint_toExtended]
     _ = (Extended.nsmul n P.toExtended).toPoint :=
@@ -81,7 +81,7 @@ private theorem nsmul_ne_zero_of_coords {x y : ZMod p} {n : ℕ} (P : edwards.Po
 
 /-- The coordinates of `n • P` for a point with given coordinates, from projective equality of
 the numeral extended points. -/
-private theorem nsmul_x_y_of_coords {x y x' y' : ZMod p} {n : ℕ} (P : edwards.Point)
+theorem nsmul_x_y_of_coords {x y x' y' : ZMod p} {n : ℕ} (P : edwards.Point)
     (hx : P.x = x) (hy : P.y = y) (h' : edwards.Equation x' y')
     (hc : (Extended.nsmul n (⟨x, y, 1, x * y⟩ : edwards.Extended)).ProjEq ⟨x', y', 1, x' * y'⟩) :
     (n • P).x = x' ∧ (n • P).y = y' := by
@@ -111,12 +111,25 @@ theorem basepoint_x_val_mod_two :
       ZMod p).val % 2 = 0 := by
   decide +kernel
 
-theorem five_ne_zero : (5 : ZMod p) ≠ 0 := by
-  decide +kernel
-
 theorem basepoint_y_mul_five :
     (46316835694926478169428394003475163141307993866256225615783033603165251855960 : ZMod p)
       * 5 = 4 := by
+  decide +kernel
+
+/-- `(1 - y) x ≠ 0` at the basepoint: the denominator of the Montgomery `v`-coordinate. -/
+theorem basepoint_den_ne_zero :
+    (1 - (46316835694926478169428394003475163141307993866256225615783033603165251855960 : ZMod p)) *
+      15112221349535400772501151409588531511454012693041857206046113283949847762202 ≠ 0 := by
+  decide +kernel
+
+/-- RFC 7748 §4.1: `V(P) · (1 - y) x = sqrtNegAAddTwo · (1 + y)` at the basepoint, i.e. the
+Montgomery base point has `v = V(P)`. -/
+theorem basepoint_v_mul_den :
+    (14781619447589544791020593568409986887264606134616475288964881837755586237401 : ZMod p) *
+      ((1 - 46316835694926478169428394003475163141307993866256225615783033603165251855960) *
+        15112221349535400772501151409588531511454012693041857206046113283949847762202) =
+      (sqrtNegAAddTwo : ZMod p) *
+        (1 + 46316835694926478169428394003475163141307993866256225615783033603165251855960) := by
   decide +kernel
 
 /-- `L • basepoint = 0`: the 253-step double-and-add chain in extended coordinates. -/
@@ -156,7 +169,7 @@ theorem four_nsmul_ne_zero (P : edwards.Point)
 numerals: `2 • T = (-sqrtM1, 0)`, `3 • T = (x, -y)`, `4 • T = (0, -1)`, `5 • T = (-x, -y)`,
 `6 • T = (sqrtM1, 0)`, `7 • T = (-x, y)`. -/
 
-theorem two_nsmul_x_y (P : edwards.Point)
+theorem two_nsmul_torsion8_x_y (P : edwards.Point)
     (hx : P.x = 14399317868200118260347934320527232580618823971194345261214217575416788799818)
     (hy : P.y = 55188659117513257062467267217118295137698188065244968500265048394206261417927) :
     (2 • P).x = 38214883241950591754978413199355411911188925816896391856984770930832735035197 ∧
@@ -164,7 +177,7 @@ theorem two_nsmul_x_y (P : edwards.Point)
   nsmul_x_y_of_coords P hx hy (by rw [edwards_eq]; decide +kernel)
     (by rw [edwards_eq]; decide +kernel)
 
-theorem three_nsmul_x_y (P : edwards.Point)
+theorem three_nsmul_torsion8_x_y (P : edwards.Point)
     (hx : P.x = 14399317868200118260347934320527232580618823971194345261214217575416788799818)
     (hy : P.y = 55188659117513257062467267217118295137698188065244968500265048394206261417927) :
     (3 • P).x = 14399317868200118260347934320527232580618823971194345261214217575416788799818 ∧
@@ -172,7 +185,7 @@ theorem three_nsmul_x_y (P : edwards.Point)
   nsmul_x_y_of_coords P hx hy (by rw [edwards_eq]; decide +kernel)
     (by rw [edwards_eq]; decide +kernel)
 
-theorem four_nsmul_x_y (P : edwards.Point)
+theorem four_nsmul_torsion8_x_y (P : edwards.Point)
     (hx : P.x = 14399317868200118260347934320527232580618823971194345261214217575416788799818)
     (hy : P.y = 55188659117513257062467267217118295137698188065244968500265048394206261417927) :
     (4 • P).x = 0 ∧
@@ -180,7 +193,7 @@ theorem four_nsmul_x_y (P : edwards.Point)
   nsmul_x_y_of_coords P hx hy (by rw [edwards_eq]; decide +kernel)
     (by rw [edwards_eq]; decide +kernel)
 
-theorem five_nsmul_x_y (P : edwards.Point)
+theorem five_nsmul_torsion8_x_y (P : edwards.Point)
     (hx : P.x = 14399317868200118260347934320527232580618823971194345261214217575416788799818)
     (hy : P.y = 55188659117513257062467267217118295137698188065244968500265048394206261417927) :
     (5 • P).x = 43496726750457979451437558183816721346016168361625936758514574428539776020131 ∧
@@ -188,7 +201,7 @@ theorem five_nsmul_x_y (P : edwards.Point)
   nsmul_x_y_of_coords P hx hy (by rw [edwards_eq]; decide +kernel)
     (by rw [edwards_eq]; decide +kernel)
 
-theorem six_nsmul_x_y (P : edwards.Point)
+theorem six_nsmul_torsion8_x_y (P : edwards.Point)
     (hx : P.x = 14399317868200118260347934320527232580618823971194345261214217575416788799818)
     (hy : P.y = 55188659117513257062467267217118295137698188065244968500265048394206261417927) :
     (6 • P).x = 19681161376707505956807079304988542015446066515923890162744021073123829784752 ∧
@@ -196,25 +209,12 @@ theorem six_nsmul_x_y (P : edwards.Point)
   nsmul_x_y_of_coords P hx hy (by rw [edwards_eq]; decide +kernel)
     (by rw [edwards_eq]; decide +kernel)
 
-theorem seven_nsmul_x_y (P : edwards.Point)
+theorem seven_nsmul_torsion8_x_y (P : edwards.Point)
     (hx : P.x = 14399317868200118260347934320527232580618823971194345261214217575416788799818)
     (hy : P.y = 55188659117513257062467267217118295137698188065244968500265048394206261417927) :
     (7 • P).x = 43496726750457979451437558183816721346016168361625936758514574428539776020131 ∧
       (7 • P).y = 55188659117513257062467267217118295137698188065244968500265048394206261417927 :=
   nsmul_x_y_of_coords P hx hy (by rw [edwards_eq]; decide +kernel)
     (by rw [edwards_eq]; decide +kernel)
-
-/-- `p - 1` as a numeral is `-1`. -/
-theorem neg_one_eq_numeral :
-    (-1 : ZMod p) =
-      57896044618658097711785492504343953926634992332820282019728792003956564819948 := by
-  decide +kernel
-
-/-- `sqrtM1` as a numeral is `-1`'s square root. -/
-theorem sqrtM1_eq_numeral :
-    (sqrtM1 : ZMod p) =
-      19681161376707505956807079304988542015446066515923890162744021073123829784752 := by
-  rw [sqrtM1_def]
-  rfl
 
 end curve25519.Proofs

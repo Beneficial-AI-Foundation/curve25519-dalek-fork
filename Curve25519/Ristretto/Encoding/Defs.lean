@@ -3,9 +3,8 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Curve25519.Ristretto.Basic
+public import Curve25519.Edwards.Basic
 import Curve25519.Proofs.Ristretto.Algebra
-import Mathlib.NumberTheory.LegendreSymbol.Basic
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Ring
 public section
@@ -13,7 +12,8 @@ public section
 /-! # The ristretto255 encoding (RFC 9496 §4.2, §4.3.1, §4.3.2): definitions
 
 The square-root helper `sqrtRatioM1 u v` (RFC 9496 §4.2 `SQRT_RATIO_M1`): `(true, √(u/v))` when
-`u/v` is a square, `(false, √(√-1 · u/v))` otherwise, the root being non-negative
+`v ≠ 0` and `u/v` is a square, `(true, 0)` when `u = v = 0`, `(false, 0)` when `u ≠ 0 = v`, and
+`(false, √(√-1 · u/v))` otherwise, the root being non-negative
 (`ZMod.isNeg`); it is exposed, with its characterisation `sqrtRatioM1_spec` and the uniqueness
 lemmas `sqrtRatioM1_eq_of_mul_sq_eq`, `sqrtRatioM1_eq_of_mul_sq_eq_sqrtM1_mul` (which is how
 the dalek field specification `sqrt_ratio_i_spec` connects to it). Its non-square branch rests on
@@ -23,45 +23,12 @@ The representative-level codec, hidden: `decodeRep s` (§4.3.1, the Edwards poin
 canonical non-negative field element `s < p`, or `none`) and `encodeRep P` (§4.3.2 on the
 extended representative `(x, y, 1, x y)` of a point, a natural number below `p`). Their
 properties, in particular the round trips and the invariance of `encodeRep` on the classes of
-`Ristretto`, are in `Curve25519.Ristretto.Encoding`. The field identities behind the on-curve
+`edwards.Rel`, are in `Curve25519.Ristretto.Encoding`. The field identities behind the on-curve
 proof of `decodeRep` are in `Curve25519.Proofs.Ristretto.Algebra` (not audited). -/
 
 namespace curve25519
 
 open TwistedEdwardsModel
-
-/-! ### Squares and `sqrtM1` -/
-
-/-- `sqrtM1 = √-1` is not a square modulo `p` (Euler's criterion, `sqrtM1_pow_p_div_two`:
-`p ≡ 5 (mod 8)`). -/
-theorem not_isSquare_sqrtM1 : ¬ IsSquare (sqrtM1 : ZMod p) := by
-  intro h
-  have hpow := (ZMod.euler_criterion p sqrtM1_ne_zero).mp h
-  rw [sqrtM1_pow_p_div_two] at hpow
-  exact ZMod.neg_one_ne_one hpow
-
-/-- `-d` is not a square: `-1` is one and `d` is not. -/
-theorem not_isSquare_neg_d : ¬ IsSquare (-d) :=
-  Proofs.not_isSquare_neg_d
-
-/-- `sqrtM1 · x` is a square when `x` is not (the product of two non-squares). -/
-theorem isSquare_sqrtM1_mul_of_not_isSquare {x : ZMod p} (hx : ¬ IsSquare x) :
-    IsSquare (sqrtM1 * x) := by
-  have hx0 : x ≠ 0 := fun h => hx ⟨0, by rw [h, mul_zero]⟩
-  have hpow : x ^ (p / 2) = -1 :=
-    (ZMod.pow_div_two_eq_neg_one_or_one p hx0).resolve_left
-      fun h => hx ((ZMod.euler_criterion p hx0).mpr h)
-  rw [ZMod.euler_criterion p (mul_ne_zero sqrtM1_ne_zero hx0), mul_pow, sqrtM1_pow_p_div_two,
-    hpow]
-  ring
-
-/-- `sqrtM1 · r²` is not a square for `r ≠ 0`. -/
-theorem not_isSquare_sqrtM1_mul_sq {r : ZMod p} (hr : r ≠ 0) : ¬ IsSquare (sqrtM1 * r ^ 2) := by
-  rintro ⟨t, ht⟩
-  apply not_isSquare_sqrtM1
-  refine ⟨t / r, ?_⟩
-  rw [div_mul_div_comm, eq_div_iff (mul_ne_zero hr hr)]
-  linear_combination ht
 
 /-! ### `SQRT_RATIO_M1` -/
 

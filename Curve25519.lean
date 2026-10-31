@@ -6,7 +6,7 @@ public import Curve25519.Edwards.Basepoint
 public import Curve25519.Edwards.Torsion
 public import Curve25519.Edwards.Order
 public import Curve25519.Edwards.Encoding
-public import Curve25519.Ristretto.Basic
+public import Curve25519.Ristretto.Even
 public import Curve25519.Ristretto.Encoding.Defs
 public import Curve25519.Ristretto.Encoding
 public import Curve25519.Ristretto.Map
@@ -14,6 +14,7 @@ public import Curve25519.X25519
 public import Curve25519.Montgomery
 import Curve25519.Proofs.X25519.TestVector
 import Curve25519.Proofs.Ristretto.TestVector
+import Curve25519.Proofs.Ristretto.InvalidVector
 import Curve25519.Proofs.Ristretto.MapVector
 
 /-! # Curve25519

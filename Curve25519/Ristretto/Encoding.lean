@@ -3,10 +3,12 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Curve25519.Edwards.Basepoint
 public import Curve25519.Ristretto.Encoding.Defs
 import all Curve25519.Ristretto.Encoding.Defs
 import Curve25519.Proofs.Ristretto.Algebra
 import Curve25519.Proofs.Ristretto.Certs
+import Curve25519.Ristretto.Even
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Ring
@@ -15,21 +17,21 @@ public section
 /-! # The ristretto255 encoding (RFC 9496 §4.3.1–4.3.2): properties
 
 The audited statements about the hidden `Ristretto.decodeRep` and `Ristretto.encodeRep` of
-`Curve25519.Ristretto.Encoding.Defs`, and the quotient-level `Ristretto.encode`/`Ristretto.decode`.
+`Curve25519.Ristretto.Encoding.Defs`. Both act on representatives: even Edwards points, two of
+them standing for the same element of ristretto255 when they are related by `edwards.Rel`
+(`Curve25519.Ristretto.Even`).
 
 * Decoding: `decodeRep_eq_some_iff` (`decodeRep s = some P` iff `s < p` is non-negative, `P` has
   `y = (1 - s²) / (1 + s²)`, `x` and `x y` non-negative and `y ≠ 0`), `decodeRep_eq_none_iff`
   (the rejection reasons of RFC 9496 §4.3.1), `even_decodeRep`, `decodeRep_y`, `decodeRep_x_sq`.
 * Encoding: `encodeRep_lt`, `not_isNeg_encodeRep`, the round trips `encodeRep_decodeRep` and
-  `decodeRep_encodeRep`, and the invariance `encodeRep_rel` on the classes of `Ristretto`
-  (`encodeRep_eq_iff`).
+  `decodeRep_encodeRep`, and **the encoding of ristretto255**: on even points, two
+  representatives have the same encoding iff they are related (`encodeRep_eq_iff`; one direction
+  is the invariance `encodeRep_rel`). The encoding of the basepoint is `encodeRep_basepoint`
+  (RFC 9496 §A.1, a kernel certificate in `Curve25519.Proofs.Ristretto.Certs`).
 * The classes in coordinates: `rel_iff_coords` (the four 4-torsion translates `(x, y)`,
   `(-x, -y)`, `(y √-1, x √-1)`, `(-(y √-1), -(x √-1))`) and the uniqueness of the canonical
   representative `eq_of_rel_of_canonical` (`x` and `x y` non-negative, `y ≠ 0`, `y ≠ -1`).
-* Quotient level: `encode : Ristretto → ℕ` with `encode_mk`, `decode : ℕ → Option Ristretto`
-  with `decode_eq_some_iff : decode s = some x ↔ encode x = s`, `encode_injective`,
-  `decode_encode`, `encode_lt`, `encode_zero`, and the encoding of the basepoint
-  `encode_basepoint` (RFC 9496 §A.1, a kernel certificate in `Curve25519.Proofs.Ristretto.Certs`).
 
 The proof of the round trips goes through the canonical representative of a class: every class
 with `x y ≠ 0` has exactly one representative with `x` and `x y` non-negative (`exists_canon`,
@@ -55,7 +57,7 @@ theorem rel_iff_coords (P Q : edwards.Point) :
   · intro h
     have hT : Q - P ∈ edwards.torsion4 := (rel_iff_sub_mem Q P).mp (rel_symm h)
     have hQ : Q = P + (Q - P) := by abel
-    rw [curve25519.mem_torsion4_iff] at hT
+    rw [mem_torsion4_iff_eightTorsion] at hT
     rcases hT with hT | hT | hT | hT <;> rw [hT] at hQ
     · left
       rw [hQ, add_zero]
@@ -313,7 +315,7 @@ theorem even_decodeRep {s : ℕ} {P : edwards.Point} (h : decodeRep s = some P) 
   field_simp
   ring
 
-/-- `decodeRep 0 = some 0`: the encoding of the identity is `0`. -/
+/-- `decodeRep 0 = some 0`: `0` decodes to the identity. -/
 theorem decodeRep_zero : decodeRep 0 = some 0 := by
   rw [decodeRep_eq_some_iff, zero_x, zero_y, Nat.cast_zero]
   refine ⟨p_pos, ZMod.isNeg_zero, by norm_num, ZMod.isNeg_zero, ?_, one_ne_zero⟩
@@ -502,7 +504,7 @@ theorem decodeRep_encodeRep {P : edwards.Point} (hP : Even P) :
   · obtain ⟨C, hrel, hCx, hCy⟩ := exists_canon P
     have hW := encW_mul_sq_eq_one hP hxy
     have hD := denC_sq hW
-    have hS := Proofs.sq_eq_div_of hD
+    have hS := Proofs.mul_one_sub_sq_eq_div hD
     have hy1 : 1 + yC P ≠ 0 := by
       intro h
       have h' : yC P = -1 := by linear_combination h
@@ -546,7 +548,7 @@ theorem encodeRep_decodeRep {s : ℕ} {P : edwards.Point} (h : decodeRep s = som
       exact ite_eq_right hxy
     have hD := denC_sq hW
     rw [hyC] at hD
-    have hS := Proofs.sq_eq_div_of hD
+    have hS := Proofs.mul_one_sub_sq_eq_div hD
     have h1y : 1 + P.y ≠ 0 := fun h' =>
       y_ne_neg_one_of_x_ne_zero P.equation hx0 (by linear_combination h')
     have hs2 : (s : ZMod p) ^ 2 = (1 - P.y) / (1 + P.y) := by
@@ -583,110 +585,6 @@ theorem encodeRep_eq_iff {P Q : edwards.Point} (hP : Even P) (hQ : Even Q) :
     exact rel_trans r₁ (h₁ ▸ rel_symm r₂)
   · exact encodeRep_rel hP
 
-/-! ### The quotient level -/
-
-/-- **The ristretto255 encoding** of a group element: the encoding of any representative
-(`encode_mk`), a natural number below `p` (`encode_lt`). Hidden. -/
-noncomputable def encode (x : Ristretto) : ℕ :=
-  encodeRep (Classical.choose (mk_surjective x))
-
-theorem encode_mk {P : edwards.Point} (hP : Even P) : encode (mk P hP) = encodeRep P := by
-  unfold encode
-  obtain ⟨h, hmk⟩ := Classical.choose_spec (mk_surjective (mk P hP))
-  exact encodeRep_rel h (mk_eq_mk_iff.mp hmk)
-
-theorem encode_lt (x : Ristretto) : encode x < p := by
-  obtain ⟨P, hP, rfl⟩ := mk_surjective x
-  rw [encode_mk]
-  exact encodeRep_lt P
-
-theorem not_isNeg_encode (x : Ristretto) : ¬ ((encode x : ℕ) : ZMod p).isNeg := by
-  obtain ⟨P, hP, rfl⟩ := mk_surjective x
-  rw [encode_mk]
-  exact not_isNeg_encodeRep P
-
-/-- **The ristretto255 decoding** of a natural number: the class of `decodeRep s`
-(`decode_eq_some_iff : decode s = some x ↔ encode x = s`). Hidden. -/
-noncomputable def decode (s : ℕ) : Option Ristretto :=
-  if h : ∃ P, decodeRep s = some P then
-    some (mk (Classical.choose h) (even_decodeRep (Classical.choose_spec h)))
-  else none
-
-/-- `decode s` is the class of `decodeRep s`. -/
-theorem decode_eq_some_iff_decodeRep {s : ℕ} {x : Ristretto} :
-    decode s = some x ↔ ∃ (P : edwards.Point) (h : decodeRep s = some P),
-      mk P (even_decodeRep h) = x := by
-  unfold decode
-  constructor
-  · intro hx
-    by_cases h : ∃ P, decodeRep s = some P
-    · rw [dite_eq_left h, Option.some.injEq] at hx
-      exact ⟨_, Classical.choose_spec h, hx⟩
-    · rw [dite_eq_right h] at hx
-      cases hx
-  · rintro ⟨P, hP, rfl⟩
-    have h : ∃ P, decodeRep s = some P := ⟨P, hP⟩
-    rw [dite_eq_left h]
-    congr 1
-    have hPQ : P = Classical.choose h := Option.some.inj (hP.symm.trans (Classical.choose_spec h))
-    rw [mk_eq_mk_iff]
-    exact rel_of_eq hPQ.symm
-
-theorem decode_eq_none_iff {s : ℕ} : decode s = none ↔ decodeRep s = none := by
-  unfold decode
-  by_cases h : ∃ P, decodeRep s = some P
-  · rw [dite_eq_left h]
-    refine iff_of_false (Option.some_ne_none _) fun h' => ?_
-    obtain ⟨P, hP⟩ := h
-    rw [h'] at hP
-    cases hP
-  · rw [dite_eq_right h]
-    refine iff_of_true rfl ?_
-    rcases hd : decodeRep s with _ | P
-    · rfl
-    · exact absurd ⟨P, hd⟩ h
-
-/-- **Decoding is the partial inverse of encoding**: `decode s = some x ↔ encode x = s`. -/
-theorem decode_eq_some_iff {s : ℕ} {x : Ristretto} : decode s = some x ↔ encode x = s := by
-  rw [decode_eq_some_iff_decodeRep]
-  constructor
-  · rintro ⟨P, hP, rfl⟩
-    rw [encode_mk]
-    exact encodeRep_decodeRep hP
-  · intro hs
-    obtain ⟨P, hP, rfl⟩ := mk_surjective x
-    rw [encode_mk] at hs
-    obtain ⟨Q, hQ, hrel⟩ := decodeRep_encodeRep hP
-    rw [hs] at hQ
-    exact ⟨Q, hQ, mk_eq_mk_iff.mpr (rel_symm hrel)⟩
-
-theorem decode_encode (x : Ristretto) : decode (encode x) = some x :=
-  decode_eq_some_iff.mpr rfl
-
-theorem encode_decode {s : ℕ} {x : Ristretto} (h : decode s = some x) : encode x = s :=
-  decode_eq_some_iff.mp h
-
-/-- **The encoding is injective.** -/
-theorem encode_injective : Function.Injective encode := by
-  intro x y h
-  have hx := decode_encode x
-  rw [h, decode_encode, Option.some.injEq] at hx
-  exact hx.symm
-
-theorem encode_inj {x y : Ristretto} : encode x = encode y ↔ x = y :=
-  encode_injective.eq_iff
-
-theorem decode_isSome_iff {s : ℕ} : (decode s).isSome ↔ ∃ x, encode x = s := by
-  rw [Option.isSome_iff_exists]
-  exact exists_congr fun x => decode_eq_some_iff
-
-/-- The identity encodes to `0`. -/
-theorem encode_zero : encode 0 = 0 := by
-  rw [← mk_zero Even.zero, encode_mk, encodeRep_zero]
-
-theorem decode_zero : decode 0 = some 0 :=
-  decode_eq_some_iff.mpr encode_zero
-
 /-! ### The basepoint -/
 
 /-- **The encoding of the basepoint** (RFC 9496 §A.1, dalek's `RISTRETTO_BASEPOINT_COMPRESSED`):
@@ -695,15 +593,6 @@ e0 8d 2d 76`, little-endian. -/
 theorem encodeRep_basepoint : encodeRep curve25519.basepoint =
     53453403443306840533278073560698739391446669128918427283046925944918568268514 :=
   Proofs.encodeRep_of_basepoint_coords _ basepoint_x_eq basepoint_y_eq
-
-theorem encode_basepoint : encode basepoint =
-    53453403443306840533278073560698739391446669128918427283046925944918568268514 := by
-  rw [basepoint_def, encode_mk, encodeRep_basepoint]
-
-theorem decode_basepoint : decode
-    53453403443306840533278073560698739391446669128918427283046925944918568268514 =
-      some basepoint :=
-  decode_eq_some_iff.mpr encode_basepoint
 
 end Ristretto
 

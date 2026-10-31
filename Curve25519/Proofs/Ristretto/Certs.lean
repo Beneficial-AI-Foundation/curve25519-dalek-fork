@@ -49,4 +49,29 @@ theorem encodeRep_of_basepoint_coords (P : edwards.Point)
   rw [hx, hy, sqrtRatioM1_one_eq_of_mul_sq_eq basepoint_invsqrt basepoint_invsqrt_not_isNeg]
   decide +kernel
 
+/-- `encodeRep` of a point with given coordinates, from the inverse square root `r` of
+`(1 + y)(1 - y)(x y)²` as a numeral and a kernel evaluation of the rest. -/
+theorem encodeRep_of_coords {x y r : ZMod p} {n : ℕ} (P : edwards.Point) (hx : P.x = x)
+    (hy : P.y = y) (hr : (1 + y) * (1 - y) * (x * y) ^ 2 * r ^ 2 = 1) (hneg : ¬ r.isNeg)
+    (hc : (let t := x * y
+      let u1 := (1 + y) * (1 - y)
+      let u2 := x * y
+      let den1 := r * u1
+      let den2 := r * u2
+      let zInv := den1 * den2 * t
+      let ix := x * sqrtM1
+      let iy := y * sqrtM1
+      let enchanted := den1 * invsqrtAMinusD
+      let rotate := (t * zInv).isNeg
+      let x' := if rotate then iy else x
+      let y' := if rotate then ix else y
+      let denInv := if rotate then enchanted else den2
+      let y'' := if (x' * zInv).isNeg then -y' else y'
+      (denInv * (1 - y'')).abs.val) = n) :
+    Ristretto.encodeRep P = n := by
+  rw [Ristretto.encodeRep_eq]
+  dsimp only
+  rw [hx, hy, sqrtRatioM1_one_eq_of_mul_sq_eq hr hneg]
+  exact hc
+
 end curve25519.Proofs

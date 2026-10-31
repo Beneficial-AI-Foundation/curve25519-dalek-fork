@@ -47,7 +47,7 @@ theorem basepoint_y_eq : basepoint.y =
 
 /-- The basepoint has `y = 4/5`. -/
 theorem basepoint_y : basepoint.y = 4 / 5 := by
-  rw [basepoint_y_eq, eq_div_iff Proofs.five_ne_zero]
+  rw [basepoint_y_eq, eq_div_iff five_ne_zero]
   exact Proofs.basepoint_y_mul_five
 
 /-- The basepoint has even `x` (RFC 8032: the "positive" square root). -/

@@ -8,6 +8,7 @@ public import Curve25519.Prime
 public import EllipticCurve
 public import Mathlib.Algebra.Field.ZMod
 import Mathlib.NumberTheory.LegendreSymbol.Basic
+import Mathlib.Tactic.LinearCombination
 public section
 
 /-! # The models of curve25519
@@ -54,6 +55,42 @@ theorem not_isSquare_d : ¬ IsSquare d := by
   have hd := (ZMod.euler_criterion p d_ne_zero).mp h
   rw [d_pow_p_div_two] at hd
   exact ZMod.neg_one_ne_one hd
+
+/-! ### Squares and `sqrtM1` -/
+
+/-- `sqrtM1 = √-1` is not a square modulo `p` (Euler's criterion, `sqrtM1_pow_p_div_two`:
+`p ≡ 5 (mod 8)`). -/
+theorem not_isSquare_sqrtM1 : ¬ IsSquare (sqrtM1 : ZMod p) := by
+  intro h
+  have hpow := (ZMod.euler_criterion p sqrtM1_ne_zero).mp h
+  rw [sqrtM1_pow_p_div_two] at hpow
+  exact ZMod.neg_one_ne_one hpow
+
+/-- `-d` is not a square: `-1` is one and `d` is not. -/
+theorem not_isSquare_neg_d : ¬ IsSquare (-d) := by
+  rintro ⟨r, hr⟩
+  apply not_isSquare_d
+  refine ⟨sqrtM1 * r, ?_⟩
+  linear_combination -hr - r ^ 2 * sqrtM1_sq
+
+/-- `sqrtM1 · x` is a square when `x` is not (the product of two non-squares). -/
+theorem isSquare_sqrtM1_mul_of_not_isSquare {x : ZMod p} (hx : ¬ IsSquare x) :
+    IsSquare (sqrtM1 * x) := by
+  have hx0 : x ≠ 0 := fun h => hx ⟨0, by rw [h, mul_zero]⟩
+  have hpow : x ^ (p / 2) = -1 :=
+    (ZMod.pow_div_two_eq_neg_one_or_one p hx0).resolve_left
+      fun h => hx ((ZMod.euler_criterion p hx0).mpr h)
+  rw [ZMod.euler_criterion p (mul_ne_zero sqrtM1_ne_zero hx0), mul_pow, sqrtM1_pow_p_div_two,
+    hpow]
+  ring
+
+/-- `sqrtM1 · r²` is not a square for `r ≠ 0`. -/
+theorem not_isSquare_sqrtM1_mul_sq {r : ZMod p} (hr : r ≠ 0) : ¬ IsSquare (sqrtM1 * r ^ 2) := by
+  rintro ⟨t, ht⟩
+  apply not_isSquare_sqrtM1
+  refine ⟨t / r, ?_⟩
+  rw [div_mul_div_comm, eq_div_iff (mul_ne_zero hr hr)]
+  linear_combination ht
 
 /-- `edwards` is complete: the affine points form the whole group and the addition formula has
 no exceptional case. -/

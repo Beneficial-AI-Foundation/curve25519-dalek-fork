@@ -101,66 +101,66 @@ theorem eightTorsion_injective : Function.Injective eightTorsion := by
 theorem eightTorsion_two_x_eq : (eightTorsion 2).x =
     38214883241950591754978413199355411911188925816896391856984770930832735035197 := by
   rw [eightTorsion_apply]
-  exact (Proofs.two_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
+  exact (Proofs.two_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
 
 theorem eightTorsion_two_y_eq : (eightTorsion 2).y = 0 := by
   rw [eightTorsion_apply]
-  exact (Proofs.two_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
+  exact (Proofs.two_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
 
 theorem eightTorsion_three_x_eq : (eightTorsion 3).x =
     14399317868200118260347934320527232580618823971194345261214217575416788799818 := by
   rw [eightTorsion_apply]
-  exact (Proofs.three_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
+  exact (Proofs.three_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
 
 theorem eightTorsion_three_y_eq : (eightTorsion 3).y =
     2707385501144840649318225287225658788936804267575313519463743609750303402022 := by
   rw [eightTorsion_apply]
-  exact (Proofs.three_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
+  exact (Proofs.three_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
 
 theorem eightTorsion_four_x_eq : (eightTorsion 4).x = 0 := by
   rw [eightTorsion_apply]
-  exact (Proofs.four_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
+  exact (Proofs.four_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
 
 theorem eightTorsion_four_y_eq : (eightTorsion 4).y =
     57896044618658097711785492504343953926634992332820282019728792003956564819948 := by
   rw [eightTorsion_apply]
-  exact (Proofs.four_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
+  exact (Proofs.four_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
 
 /-- `eightTorsion 4 = (0, -1)`, the point of order `2`. -/
 theorem eightTorsion_four_y : (eightTorsion 4).y = -1 := by
-  rw [eightTorsion_four_y_eq, Proofs.neg_one_eq_numeral]
+  rw [eightTorsion_four_y_eq, neg_one_eq_numeral]
 
 theorem eightTorsion_five_x_eq : (eightTorsion 5).x =
     43496726750457979451437558183816721346016168361625936758514574428539776020131 := by
   rw [eightTorsion_apply]
-  exact (Proofs.five_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
+  exact (Proofs.five_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
 
 theorem eightTorsion_five_y_eq : (eightTorsion 5).y =
     2707385501144840649318225287225658788936804267575313519463743609750303402022 := by
   rw [eightTorsion_apply]
-  exact (Proofs.five_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
+  exact (Proofs.five_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
 
 theorem eightTorsion_six_x_eq : (eightTorsion 6).x =
     19681161376707505956807079304988542015446066515923890162744021073123829784752 := by
   rw [eightTorsion_apply]
-  exact (Proofs.six_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
+  exact (Proofs.six_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
 
 /-- `eightTorsion 6 = (sqrtM1, 0)`. -/
 theorem eightTorsion_six_x : (eightTorsion 6).x = sqrtM1 := by
-  rw [eightTorsion_six_x_eq, Proofs.sqrtM1_eq_numeral]
+  rw [eightTorsion_six_x_eq, sqrtM1_eq_numeral]
 
 theorem eightTorsion_six_y_eq : (eightTorsion 6).y = 0 := by
   rw [eightTorsion_apply]
-  exact (Proofs.six_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
+  exact (Proofs.six_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
 
 theorem eightTorsion_seven_x_eq : (eightTorsion 7).x =
     43496726750457979451437558183816721346016168361625936758514574428539776020131 := by
   rw [eightTorsion_apply]
-  exact (Proofs.seven_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
+  exact (Proofs.seven_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).1
 
 theorem eightTorsion_seven_y_eq : (eightTorsion 7).y =
     55188659117513257062467267217118295137698188065244968500265048394206261417927 := by
   rw [eightTorsion_apply]
-  exact (Proofs.seven_nsmul_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
+  exact (Proofs.seven_nsmul_torsion8_x_y torsion8 torsion8_x_eq torsion8_y_eq).2
 
 end curve25519

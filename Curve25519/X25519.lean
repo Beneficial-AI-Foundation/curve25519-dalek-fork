@@ -24,7 +24,8 @@ The meaning: `x25519 k u` is the `u`-coordinate of `clamp k • Q` for any point
 `u`-coordinate `decodeU u` (`x25519_eq_xMul` with `MontgomeryModel.xMul_eq_u_nsmul`,
 `MontgomeryModel.xMul_eq_u_nsmul_twist`; `2` is not a square modulo `p`, `not_isSquare_two`).
 
-`clamp`, `decodeU`, `encodeU` and `x25519` are exposed (the kernel can evaluate them);
+`clamp`, `decodeU`, `encodeU` and `x25519` are exposed, so that they unfold (the kernel evaluates
+`x25519` only where `p` unfolds too: the test vectors import `Curve25519.Basic` with `import all`);
 `montgomeryTwist` is hidden (`montgomeryTwist_def`, `montgomeryTwist_A`, `montgomeryTwist_B`). -/
 
 namespace curve25519
@@ -113,10 +114,7 @@ theorem x25519_lt (k u : ℕ) : x25519 k u < p :=
 
 /-- The ladder constant of curve25519 is `121665`. -/
 theorem montgomery_a24_eq : montgomery.a24 = 121665 := by
-  have h4 : (4 : ZMod p) ≠ 0 := by
-    rw [show (4 : ZMod p) = 2 * 2 by norm_num]
-    exact mul_ne_zero two_ne_zero two_ne_zero
-  rw [MontgomeryModel.a24, montgomery_A_eq, div_eq_iff h4]
+  rw [MontgomeryModel.a24, montgomery_A_eq, div_eq_iff four_ne_zero]
   norm_num
 
 /-! ### The quadratic twist -/

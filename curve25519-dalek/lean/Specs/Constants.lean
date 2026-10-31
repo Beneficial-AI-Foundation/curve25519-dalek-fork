@@ -291,10 +291,11 @@ recall RISTRETTO_BASEPOINT_COMPRESSED_spec :
 
 namespace «x86_64-tables»
 
-/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^52`. -/
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative);
+limbs `< 2^52`. -/
 recall RISTRETTO_BASEPOINT_POINT_spec :
     RISTRETTO_BASEPOINT_POINT.«x86_64-tables» ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = basepoint ∧ r.LimbsLt 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_POINT_spec
@@ -303,10 +304,11 @@ end «x86_64-tables»
 
 namespace «i686-tables»
 
-/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^26`. -/
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative);
+limbs `< 2^26`. -/
 recall RISTRETTO_BASEPOINT_POINT_spec :
     RISTRETTO_BASEPOINT_POINT.«i686-tables» ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = basepoint ∧ r.LimbsLt 26 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_POINT_spec
@@ -315,11 +317,12 @@ end «i686-tables»
 
 namespace «x86_64-no-tables»
 
-/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^52`. -/
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative);
+limbs `< 2^52`. -/
 recall RISTRETTO_BASEPOINT_POINT_spec :
     RISTRETTO_BASEPOINT_POINT.«x86_64-no-tables»
       ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
-        r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 52 ⦄
+        r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = basepoint ∧ r.LimbsLt 52 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_POINT_spec
@@ -328,11 +331,12 @@ end «x86_64-no-tables»
 
 namespace «i686-no-tables»
 
-/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint; limbs `< 2^26`. -/
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative);
+limbs `< 2^26`. -/
 recall RISTRETTO_BASEPOINT_POINT_spec :
     RISTRETTO_BASEPOINT_POINT.«i686-no-tables»
       ⦃ (r : ristretto.RistrettoPoint.«i686-no-tables») =>
-        r.OnCurve ∧ r.toPoint = basepoint ∧ r.LimbsLt 26 ⦄
+        r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = basepoint ∧ r.LimbsLt 26 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms RISTRETTO_BASEPOINT_POINT_spec
