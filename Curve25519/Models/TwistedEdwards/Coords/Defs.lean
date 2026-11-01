@@ -28,8 +28,8 @@ characterised by `toPoint_x`, `toPoint_y`, `toPoint_of_not_onCurve`), and for th
 projective systems the exposed projective equality `ProjEq` (what `EdwardsPoint::ct_eq`
 computes), with `projEq_iff_toPoint_eq`. The conversions between the systems, the identities
 and the negations are the exposed formulas the code computes; their `onCurve_*` and
-`toPoint_*` lemmas are in `EllipticCurve.TwistedEdwards.Coords.Lemmas`. The group operations in
-coordinates are in `EllipticCurve.TwistedEdwards.Formulas.*`. -/
+`toPoint_*` lemmas are in `Curve25519.Models.TwistedEdwards.Coords.Lemmas`. The group operations in
+coordinates are in `Curve25519.Models.TwistedEdwards.Formulas.*`. -/
 
 universe u
 

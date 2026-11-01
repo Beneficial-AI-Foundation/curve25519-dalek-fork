@@ -3,19 +3,15 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import EllipticCurve.Montgomery.Lemmas
+public import EllipticCurve.Montgomery.XOnly.Defs
 import Mathlib.Algebra.GroupWithZero.Basic
 public section
 
-/-! # Montgomery models: x-only arithmetic, definitions
+/-! # Montgomery models: the x-only ladder, definitions
 
-The x-only arithmetic of a Montgomery model `M`, i.e. everything that depends only on the
-`u`-coordinate (RFC 7748 §5):
+The projective x-only arithmetic of a Montgomery model `M` (RFC 7748 §5); the x-only scalar
+multiplication `M.xMul c n u` it computes is in `EllipticCurve.Montgomery.XOnly`.
 
-- the nonsingularity of the twist `M.twist c` (`isNonsingular_twist`);
-- the hidden x-only scalar multiplication `M.xMul c n u`, defined through any lift of `u` to a
-  point of `M` or, failing that, of the twist `M.twist c`, and characterised by
-  `xMul_eq_u_nsmul`, `xMul_eq_u_nsmul_twist` (`EllipticCurve.Montgomery.XOnly.Lemmas`);
 - the projective x-only points `XZ F` (`(U : W)`, with `W = 0` for `∞`), the exposed RFC 7748
   formulas `XZ.dbl`, `XZ.add` (`xDBL`, `xADD`) with the ladder constant `a24 = (A - 2) / 4`,
   and the Montgomery ladder `XZ.ladder` written as the RFC's pseudocode (conditional swaps,
@@ -24,42 +20,13 @@ The x-only arithmetic of a Montgomery model `M`, i.e. everything that depends on
   `M.xDBL`, `M.xADD`, `M.ladder` instantiate them at `M.a24`.
 - the representation predicate `XZ.Represents`: `(U : W)` represents the point `Q`.
 
-Only `xMul` is hidden; the formulas are exposed so that the kernel can evaluate them. -/
+The formulas are exposed so that the kernel can evaluate them. -/
 
 universe u
 
 namespace MontgomeryModel
 
 variable {F : Type u} [Field F] (M : MontgomeryModel F)
-
-/-! ### The twist -/
-
-/-- The twist of a nonsingular model by `c ≠ 0` is nonsingular. Not an instance, since `c ≠ 0`
-is a hypothesis. -/
-theorem isNonsingular_twist [M.IsNonsingular] {c : F} (hc : c ≠ 0) :
-    (M.twist c).IsNonsingular where
-  two_ne_zero := IsNonsingular.two_ne_zero (M := M)
-  B_ne_zero := by
-    rw [twist_B]
-    exact mul_ne_zero IsNonsingular.B_ne_zero hc
-  A_sq_ne_four := by
-    rw [twist_A]
-    exact IsNonsingular.A_sq_ne_four
-
-/-! ### x-only scalar multiplication -/
-
-open Classical in
-/-- x-only scalar multiplication `u ↦ u(n • Q)`, total in `u`: through a point `Q` of `M` with
-`Q.u = u` if one exists, else through a point of the twist `M.twist c` with that `u` if one
-exists, else `0`. Hidden construction, characterised by `xMul_eq_u_nsmul` and
-`xMul_eq_u_nsmul_twist` (for `c` a non-square); for a finite field every `u` lifts to `M` or to
-the twist (`exists_point_u_or_twist`). -/
-noncomputable def xMul [M.IsNonsingular] (c : F) (n : ℕ) (u : F) : F :=
-  if h : ∃ Q : M.Point, Q.u = u then (n • h.choose).u
-  else if hc : c = 0 then 0
-  else
-    haveI := M.isNonsingular_twist hc
-    if h' : ∃ Q : (M.twist c).Point, Q.u = u then (n • h'.choose).u else 0
 
 /-! ### Projective x-only points and the RFC 7748 formulas -/
 

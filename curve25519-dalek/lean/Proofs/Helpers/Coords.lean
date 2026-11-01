@@ -14,7 +14,7 @@ For each point structure of `Defs.CurveModels`, `Defs.Edwards` and `Defs.Montgom
 `OnCurve` on the limbs' values (`onCurve_iff_equation`, `onCurve_iff_homogeneous`), the
 coordinates of `toPoint` (`toPoint_x`, `toPoint_y`, `toPoint_of_not_onCurve`), and projective
 equality as point equality (`projEq_iff_toPoint_eq`). Everything is the corresponding lemma of
-`EllipticCurve.TwistedEdwards.Coords` rewritten through the `_def` lemmas. -/
+`Curve25519.Models.TwistedEdwards.Coords` rewritten through the `_def` lemmas. -/
 
 open curve25519 TwistedEdwardsModel
 

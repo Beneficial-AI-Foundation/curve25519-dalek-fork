@@ -3,15 +3,15 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import EllipticCurve.TwistedEdwards.Formulas.Defs
-import all EllipticCurve.TwistedEdwards.Formulas.Defs
+public import Curve25519.Models.TwistedEdwards.Formulas.Defs
+import all Curve25519.Models.TwistedEdwards.Formulas.Defs
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Ring
 public section
 
 /-! # Twisted Edwards models: formulas in coordinates, correctness
 
-The audited statements about the formulas of `EllipticCurve.TwistedEdwards.Formulas.Defs`, on a
+The audited statements about the formulas of `Curve25519.Models.TwistedEdwards.Formulas.Defs`, on a
 complete model: each operation sends points on the curve to points on the curve
 (`double_onCurve`, `addProjectiveNiels_onCurve`, …, `nsmul_onCurve`) and represents the group
 operation on the represented points (`toPoint_double`, `toPoint_addProjectiveNiels`, …,
@@ -27,14 +27,14 @@ the shape of its coordinate system), whose point is `p + q` by the group law in 
 (`add_x`, `add_y` of `EllipticCurve.TwistedEdwards.Lemmas`); this is
 `Completed.onCurve_and_toPoint_eq_add` and `Extended.onCurve_and_toPoint_eq_add`. The
 coordinates of the inputs are eliminated through `X_eq_toPoint_x_mul_Z`, `YplusX_eq`, … of
-`EllipticCurve.TwistedEdwards.Coords.Lemmas`, after which each identity is polynomial (`ring`),
+`Curve25519.Models.TwistedEdwards.Coords.Lemmas`, after which each identity is polynomial (`ring`),
 except for `Projective.double`, which uses the curve equation of `p` once. -/
 
 universe u
 
 namespace TwistedEdwardsModel
 
-variable {F : Type u} [Field F] {E : TwistedEdwardsModel F} [E.IsComplete]
+variable {F : Type u} [Field F] [NeZero (6 : F)] {E : TwistedEdwardsModel F} [E.IsComplete]
 
 /-! ### Recognising a sum -/
 
@@ -281,6 +281,7 @@ theorem toPoint_nsmul (hP : P.OnCurve) (n : ℕ) : (nsmul n P).toPoint = n • P
 
 /-! ### The zero test -/
 
+omit [NeZero (6 : F)] in
 /-- `(X : Y : Z : T)` on the curve represents `0` exactly when `X = 0` and `Y = Z`. -/
 theorem isZero_iff (hP : P.OnCurve) : P.IsZero ↔ P.toPoint = 0 := by
   rw [Point.ext_iff, toPoint_x hP, toPoint_y hP, zero_x, zero_y, div_eq_zero_iff,

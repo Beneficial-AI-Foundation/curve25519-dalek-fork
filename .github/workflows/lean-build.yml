@@ -7,8 +7,6 @@ on:
     branches: [ '**' ]
     paths: &paths
       - 'curve25519-dalek/lean/**'
-      - 'EllipticCurve/**'
-      - 'EllipticCurve.lean'
       - 'Curve25519/**'
       - 'Curve25519.lean'
       - 'Subtle/**'
@@ -106,9 +104,6 @@ jobs:
       - name: Lint Zeroize
         if: ${{ !cancelled() }}
         run: lake exe runLinter Zeroize
-      - name: Lint EllipticCurve
-        if: ${{ !cancelled() }}
-        run: lake exe runLinter EllipticCurve
       - name: Lint Curve25519
         if: ${{ !cancelled() }}
         run: lake exe runLinter Curve25519

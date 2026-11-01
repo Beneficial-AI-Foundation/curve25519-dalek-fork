@@ -3,7 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import EllipticCurve.Field.Sign
+public import Curve25519.Models.Field.Sign
 public import EllipticCurve.TwistedEdwards.Defs
 public section
 
@@ -21,7 +21,7 @@ the sign bit `s := n / 2 ^ bits`; reject (`none`) if `n` has more than `bits + 1
 there is no square root, or if the only root is `x = 0` while `s = 1`; otherwise return the
 root whose sign is `s`. The hidden body phrases this as "the `x` with `(x, y)` on the model and
 sign `s`", which is unique (`decode_eq_some_iff` in
-`EllipticCurve.TwistedEdwards.Encoding.Lemmas`); the characterisation by the rejection reasons
+`Curve25519.Models.TwistedEdwards.Encoding.Lemmas`); the characterisation by the rejection reasons
 is `decode_eq_none_iff`. The strict decoder accepts exactly the encodings:
 `decode n = some P ↔ encode P = n` (`decode_eq_some_iff_encode_eq`).
 

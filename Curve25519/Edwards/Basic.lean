@@ -6,6 +6,7 @@ module
 public import Curve25519.Basic
 public import Curve25519.Prime
 public import EllipticCurve
+public import Curve25519.Models
 public import Mathlib.Algebra.Field.ZMod
 import Mathlib.NumberTheory.LegendreSymbol.Basic
 import Mathlib.Tactic.LinearCombination

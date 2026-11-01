@@ -3,12 +3,12 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import EllipticCurve.TwistedEdwards.Coords.Lemmas
+public import Curve25519.Models.TwistedEdwards.Coords.Lemmas
 public section
 
 /-! # Twisted Edwards models: formulas in coordinates
 
-The group operations in the coordinate systems of `EllipticCurve.TwistedEdwards.Coords.Defs`,
+The group operations in the coordinate systems of `Curve25519.Models.TwistedEdwards.Coords.Defs`,
 as exposed formulas, exactly as curve25519-dalek's `curve_models.rs` computes them:
 
 * `Projective.double` ("dbl-2008-bbjlp", `ProjectivePoint::double`), the four mixed
@@ -16,13 +16,13 @@ as exposed formulas, exactly as curve25519-dalek's `curve_models.rs` computes th
   `Extended.subAffineNiels` (`Add`/`Sub` of `EdwardsPoint` with a Niels point), all into
   completed coordinates. These are the `a = -1` formulas of Hisil–Wong–Carter–Dawson 2008; they
   are defined for every model and correct when `a = -1`
-  (`EllipticCurve.TwistedEdwards.Formulas.Lemmas`).
+  (`Curve25519.Models.TwistedEdwards.Formulas.Lemmas`).
 * `Extended.add` ("add-2008-hwcd", the complete extended addition for any `a`),
   `Extended.double`, the structurally recursive `Extended.nsmul` by double-and-add, and the
   zero test `Extended.IsZero`: field inversion appears nowhere, so that kernel `decide` can
   evaluate them on constants (the certificate engine).
 
-Correctness with respect to `toPoint` is in `EllipticCurve.TwistedEdwards.Formulas.Lemmas`. -/
+Correctness with respect to `toPoint` is in `Curve25519.Models.TwistedEdwards.Formulas.Lemmas`. -/
 
 universe u
 
@@ -123,7 +123,7 @@ result is `(E F : G H : F G : E H)`. No inversion: kernel `decide` can evaluate 
   P.add P
 
 /-- Double-and-add with fuel `k`: `nsmulAux P k n` represents `n • P` for `n < 2 ^ k`
-(`nsmulAux_spec` in `EllipticCurve.TwistedEdwards.Formulas.Lemmas`). Structural recursion on
+(`nsmulAux_spec` in `Curve25519.Models.TwistedEdwards.Formulas.Lemmas`). Structural recursion on
 the fuel, so that kernel `decide` can evaluate it. -/
 @[expose] def nsmulAux (P : E.Extended) : ℕ → ℕ → E.Extended
   | 0, _ => identity

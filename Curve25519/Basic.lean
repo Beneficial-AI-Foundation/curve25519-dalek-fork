@@ -221,6 +221,14 @@ theorem five_ne_zero : (5 : ZMod p) ≠ 0 := by
   rw [ZMod.natCast_eq_zero_iff] at h'
   exact absurd (Nat.le_of_dvd (by norm_num) h') (not_le.mpr (by rw [p_eq_numeral]; decide))
 
+/-- `6 ≠ 0` in `ZMod p`: the characteristic is not `2` or `3`, as the `EllipticCurve` library
+requires of a curve. -/
+instance instNeZeroSix : NeZero (6 : ZMod p) := by
+  refine ⟨fun h => ?_⟩
+  have h' : ((6 : ℕ) : ZMod p) = 0 := by exact_mod_cast h
+  rw [ZMod.natCast_eq_zero_iff] at h'
+  exact absurd (Nat.le_of_dvd (by norm_num) h') (not_le.mpr (by rw [p_eq_numeral]; decide))
+
 /-- `L` as a numeral. -/
 theorem L_eq_numeral :
     L = 7237005577332262213973186563042994240857116359379907606001950938285454250989 := by

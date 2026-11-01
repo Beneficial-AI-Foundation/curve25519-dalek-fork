@@ -9,10 +9,14 @@ Specifications of curve25519-dalek's public API in Lean 4, proved against an
 | `Specs` | One spec summary per Rust file: each public item's statement and the axioms it depends on. |
 | `Defs` | The definitions the statements use. |
 | `Proofs` | The proofs, one file per Rust item. |
-| `EllipticCurve`, `Curve25519` | Curve models and the curve's facts, independent of dalek (repository root). |
+| `Curve25519` | Curve25519's models and facts, and the coordinates, encodings and ladder of the implementation, independent of dalek (repository root). |
 | `Subtle`, `Zeroize` | Models of the `subtle` and `zeroize` crates (repository root). |
 
-To trust the result, read `Specs`, `Defs`, `EllipticCurve`, `Curve25519`,
+The elliptic curves and their models (`Curve`, `MontgomeryModel`, `TwistedEdwardsModel`) come from
+the [`EllipticCurve`](https://github.com/Beneficial-AI-Foundation/elliptic-curve) library, a
+dependency in `lakefile.toml`.
+
+To trust the result, read `Specs`, `Defs`, `Curve25519`, the definitions of `EllipticCurve`,
 `Curve25519Dalek/{Types,Funs}External.lean`, `Subtle/{Types,Contract}.lean` and
 `Zeroize/Contract.lean`; the proofs need not be read.
 

@@ -9,7 +9,7 @@ public section
 
 /-! # The RFC 8032 point encoding of edwards25519
 
-The generic encoding of `EllipticCurve.TwistedEdwards.Encoding.*` at `edwards` with
+The generic encoding of `Curve25519.Models.TwistedEdwards.Encoding.*` at `edwards` with
 `bits = 255`: `encode P = P.y.val + 2 ^ 255 * sign(P.x)` (RFC 8032 §5.1.2, the little-endian
 value of the 32 bytes of `CompressedEdwardsY`), and the strict decoder `decode` (§5.1.3). The
 lemmas are the generic ones instantiated (`encode_lt_two_pow_256`, `decode_encode`,

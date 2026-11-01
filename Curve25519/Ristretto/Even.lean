@@ -20,7 +20,7 @@ public section
 
 ristretto255 (RFC 9496) represents its elements by **even** Edwards points (`Even P`, i.e.
 `P = Q + Q`), two representatives standing for the same element when they differ by 4-torsion
-(`edwards.Rel`, from `EllipticCurve.TwistedEdwards.Even`). No quotient type is defined: the
+(`edwards.Rel`, from `Curve25519.Models.TwistedEdwards.Even`). No quotient type is defined: the
 specifications speak about representatives, and these are the facts they need.
 
 * The 4-torsion is `{0, (∓√-1, 0), (0, -1)} = {eightTorsion 0, 2, 4, 6}`
@@ -34,7 +34,7 @@ specifications speak about representatives, and these are the facts they need.
   Decaf: the validity test of the encoding).
 
 The 2-descent: the generic subgroup `edwards.descent = {P | IsSquare ((a - d)(1 - y²))}` of
-`EllipticCurve.TwistedEdwards.Even.Lemmas` contains the even points, `a - d` is a square, and
+`Curve25519.Models.TwistedEdwards.Even.Lemmas` contains the even points, `a - d` is a square, and
 `torsion8 ∉ descent` by Euler's criterion (`one_sub_torsion8_y_sq_pow_p_div_two` in
 `Curve25519.Proofs.Ristretto.DescentCert`); as `|even| = 4 L` and `|edwards.Point| = 8 L`,
 `descent` is the even subgroup (`descent_eq_even`). -/

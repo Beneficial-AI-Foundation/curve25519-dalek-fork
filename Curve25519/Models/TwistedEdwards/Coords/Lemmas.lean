@@ -3,8 +3,8 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import EllipticCurve.TwistedEdwards.Coords.Defs
-import all EllipticCurve.TwistedEdwards.Coords.Defs
+public import Curve25519.Models.TwistedEdwards.Coords.Defs
+import all Curve25519.Models.TwistedEdwards.Coords.Defs
 import Mathlib.Algebra.Field.Basic
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Ring
@@ -13,7 +13,7 @@ public section
 /-! # Twisted Edwards models: coordinate systems, lemmas
 
 The audited statements about the coordinate systems of
-`EllipticCurve.TwistedEdwards.Coords.Defs`: each coordinate in terms of the represented point
+`Curve25519.Models.TwistedEdwards.Coords.Defs`: each coordinate in terms of the represented point
 (`X_eq_toPoint_x_mul_Z`, `YplusX_eq`, …, the form the formula proofs use), the identities and
 negations (`onCurve_identity`, `toPoint_identity`, `onCurve_neg`, `toPoint_neg`), projective
 equality (`projEq_refl`, `projEq_symm`, `projEq_trans`) and the conversions between the systems

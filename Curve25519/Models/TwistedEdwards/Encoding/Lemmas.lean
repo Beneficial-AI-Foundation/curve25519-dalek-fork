@@ -3,9 +3,9 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import EllipticCurve.TwistedEdwards.Encoding.Defs
+public import Curve25519.Models.TwistedEdwards.Encoding.Defs
 public import EllipticCurve.TwistedEdwards.Lemmas
-import all EllipticCurve.TwistedEdwards.Encoding.Defs
+import all Curve25519.Models.TwistedEdwards.Encoding.Defs
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Ring
 public section
