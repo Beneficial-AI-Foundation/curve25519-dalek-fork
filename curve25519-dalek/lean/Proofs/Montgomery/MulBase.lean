@@ -32,7 +32,7 @@ theorem mul_base.«x86_64-tables_spec» (scalar : scalar.Scalar) (hscalar : scal
       r.asNat = encodeU (scalar.asNat • montgomeryBasepoint).u ⦄ := by
   unfold mul_base.«x86_64-tables»
   step as ⟨ep, hep_on, hep, hep_lt⟩
-  step with edwards.«EdwardsPointx86_64-tables».to_montgomery_spec_point ep hep_lt hep_on as ⟨r, hr⟩
+  step with edwards.«EdwardsPointx86_64-tables».to_montgomery_spec ep hep_lt hep_on as ⟨r, hr⟩
   rw [hr, hep, map_nsmul, montgomeryBasepoint_def]
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
@@ -44,7 +44,7 @@ theorem mul_base.«i686-tables_spec» (scalar : scalar.Scalar) (hscalar : scalar
       r.asNat = encodeU (scalar.asNat • montgomeryBasepoint).u ⦄ := by
   unfold mul_base.«i686-tables»
   step as ⟨ep, hep_on, hep, hep_lt⟩
-  step with edwards.«EdwardsPointi686-tables».to_montgomery_spec_point ep hep_lt hep_on as ⟨r, hr⟩
+  step with edwards.«EdwardsPointi686-tables».to_montgomery_spec ep hep_lt hep_on as ⟨r, hr⟩
   rw [hr, hep, map_nsmul, montgomeryBasepoint_def]
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
@@ -57,7 +57,7 @@ theorem mul_base.«x86_64-no-tables_spec» (scalar : scalar.Scalar) (hscalar : s
       r.asNat = encodeU (scalar.asNat • montgomeryBasepoint).u ⦄ := by
   unfold mul_base.«x86_64-no-tables»
   step as ⟨ep, hep_on, hep, hep_lt⟩
-  step with edwards.«EdwardsPointx86_64-no-tables».to_montgomery_spec_point ep hep_lt hep_on as ⟨r,
+  step with edwards.«EdwardsPointx86_64-no-tables».to_montgomery_spec ep hep_lt hep_on as ⟨r,
       hr⟩
   rw [hr, hep, map_nsmul, montgomeryBasepoint_def]
 
@@ -71,7 +71,7 @@ theorem mul_base.«i686-no-tables_spec» (scalar : scalar.Scalar) (hscalar : sca
       r.asNat = encodeU (scalar.asNat • montgomeryBasepoint).u ⦄ := by
   unfold mul_base.«i686-no-tables»
   step as ⟨ep, hep_on, hep, hep_lt⟩
-  step with edwards.«EdwardsPointi686-no-tables».to_montgomery_spec_point ep hep_lt hep_on as ⟨r,
+  step with edwards.«EdwardsPointi686-no-tables».to_montgomery_spec ep hep_lt hep_on as ⟨r,
       hr⟩
   rw [hr, hep, map_nsmul, montgomeryBasepoint_def]
 

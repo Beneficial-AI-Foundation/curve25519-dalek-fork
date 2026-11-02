@@ -3,6 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Proofs.Helpers.Represents
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
 public import Defs.Iterator
@@ -42,9 +43,9 @@ namespace Curve25519Dalek.backend.serial.scalar_mul.straus
 section
 open «Shared0EdwardsPointx86_64-tables».Insts
 open «CoreOpsArithAddSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables»
-    (add_spec_point)
+    (add_spec)
 open «CoreOpsArithSubSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables»
-    (sub_spec_point)
+    (sub_spec)
 
 namespace «VartimeMultiscalarMulStrausEdwardsPointx86_64-tables».optional_multiscalar_mul
 
@@ -236,7 +237,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     have hn : min ss.length (ops.filterMap id).length = min nafs.length tables.length := by
       rw [hTlen, hDlen]
     step with
-        ProjectivePoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+        ProjectivePoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec
       as ⟨r, hron, hr, hrb⟩
     step as ⟨iter, hiter⟩
     step with optional_multiscalar_mul_loop0_spec iter nafs tables r
@@ -250,7 +251,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
           rw [show ({ start := 0#usize, «end» := 256#usize } : core.ops.range.Range Usize).end.val
             = 256 from rfl, nafTail_eq_zero _ _ fun j hj hj' => by omega, zero_smul]).symm)
       as ⟨q, hqon, hqb, hq⟩
-    step with «ProjectivePointx86_64-tables».as_extended_spec_point as ⟨R, hRon, hR, hRb⟩
+    step with «ProjectivePointx86_64-tables».as_extended_spec as ⟨R, hRon, hR, hRb⟩
     refine ⟨by simpa using hnone, fun R' hR' => ?_⟩
     obtain rfl : R = R' := Option.some.inj hR'
     refine ⟨hRon, ?_, hRb⟩
@@ -267,9 +268,9 @@ end
 section
 open «Shared0EdwardsPointi686-tables».Insts
 open «CoreOpsArithAddSharedAProjectiveNielsPointi686-tablesCompletedPointi686-tables»
-    (add_spec_point)
+    (add_spec)
 open «CoreOpsArithSubSharedAProjectiveNielsPointi686-tablesCompletedPointi686-tables»
-    (sub_spec_point)
+    (sub_spec)
 
 namespace «VartimeMultiscalarMulStrausEdwardsPointi686-tables».optional_multiscalar_mul
 
@@ -461,7 +462,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     have hn : min ss.length (ops.filterMap id).length = min nafs.length tables.length := by
       rw [hTlen, hDlen]
     step with
-        ProjectivePoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+        ProjectivePoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec
       as ⟨r, hron, hr, hrb⟩
     step as ⟨iter, hiter⟩
     step with optional_multiscalar_mul_loop0_spec iter nafs tables r
@@ -475,7 +476,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
           rw [show ({ start := 0#usize, «end» := 256#usize } : core.ops.range.Range Usize).end.val
             = 256 from rfl, nafTail_eq_zero _ _ fun j hj hj' => by omega, zero_smul]).symm)
       as ⟨q, hqon, hqb, hq⟩
-    step with «ProjectivePointi686-tables».as_extended_spec_point as ⟨R, hRon, hR, hRb⟩
+    step with «ProjectivePointi686-tables».as_extended_spec as ⟨R, hRon, hR, hRb⟩
     refine ⟨by simpa using hnone, fun R' hR' => ?_⟩
     obtain rfl : R = R' := Option.some.inj hR'
     refine ⟨hRon, ?_, hRb⟩
@@ -492,9 +493,9 @@ end
 section
 open «Shared0EdwardsPointx86_64-no-tables».Insts
 open «CoreOpsArithAddSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables»
-    (add_spec_point)
+    (add_spec)
 open «CoreOpsArithSubSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables»
-    (sub_spec_point)
+    (sub_spec)
 
 namespace «VartimeMultiscalarMulStrausEdwardsPointx86_64-no-tables».optional_multiscalar_mul
 
@@ -688,7 +689,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     have hn : min ss.length (ops.filterMap id).length = min nafs.length tables.length := by
       rw [hTlen, hDlen]
     step with
-        ProjectivePoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+        ProjectivePoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec
       as ⟨r, hron, hr, hrb⟩
     step as ⟨iter, hiter⟩
     step with optional_multiscalar_mul_loop0_spec iter nafs tables r
@@ -702,7 +703,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
           rw [show ({ start := 0#usize, «end» := 256#usize } : core.ops.range.Range Usize).end.val
             = 256 from rfl, nafTail_eq_zero _ _ fun j hj hj' => by omega, zero_smul]).symm)
       as ⟨q, hqon, hqb, hq⟩
-    step with «ProjectivePointx86_64-no-tables».as_extended_spec_point as ⟨R, hRon, hR, hRb⟩
+    step with «ProjectivePointx86_64-no-tables».as_extended_spec as ⟨R, hRon, hR, hRb⟩
     refine ⟨by simpa using hnone, fun R' hR' => ?_⟩
     obtain rfl : R = R' := Option.some.inj hR'
     refine ⟨hRon, ?_, hRb⟩
@@ -719,9 +720,9 @@ end
 section
 open «Shared0EdwardsPointi686-no-tables».Insts
 open «CoreOpsArithAddSharedAProjectiveNielsPointi686-no-tablesCompletedPointi686-no-tables»
-    (add_spec_point)
+    (add_spec)
 open «CoreOpsArithSubSharedAProjectiveNielsPointi686-no-tablesCompletedPointi686-no-tables»
-    (sub_spec_point)
+    (sub_spec)
 
 namespace «VartimeMultiscalarMulStrausEdwardsPointi686-no-tables».optional_multiscalar_mul
 
@@ -915,7 +916,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     have hn : min ss.length (ops.filterMap id).length = min nafs.length tables.length := by
       rw [hTlen, hDlen]
     step with
-        ProjectivePoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+        ProjectivePoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec
       as ⟨r, hron, hr, hrb⟩
     step as ⟨iter, hiter⟩
     step with optional_multiscalar_mul_loop0_spec iter nafs tables r
@@ -929,7 +930,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
           rw [show ({ start := 0#usize, «end» := 256#usize } : core.ops.range.Range Usize).end.val
             = 256 from rfl, nafTail_eq_zero _ _ fun j hj hj' => by omega, zero_smul]).symm)
       as ⟨q, hqon, hqb, hq⟩
-    step with «ProjectivePointi686-no-tables».as_extended_spec_point as ⟨R, hRon, hR, hRb⟩
+    step with «ProjectivePointi686-no-tables».as_extended_spec as ⟨R, hRon, hR, hRb⟩
     refine ⟨by simpa using hnone, fun R' hR' => ?_⟩
     obtain rfl : R = R' := Option.some.inj hR'
     refine ⟨hRon, ?_, hRb⟩

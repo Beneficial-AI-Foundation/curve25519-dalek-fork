@@ -108,8 +108,8 @@ namespace Curve25519Dalek.scalar.Scalar.Insts.CoreCmpPartialEqScalar
 
 /-- `PartialEq::eq`: equality of the byte encodings. -/
 recall eq_spec (self other : Scalar) :
-    eq self other ⦃ (b : Bool) =>
-      (b = true ↔ self = other) ⦄
+    eq self other ⦃ (r : Bool) =>
+      (r = true ↔ self = other) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
@@ -120,8 +120,8 @@ namespace Curve25519Dalek.scalar.Scalar.Insts.SubtleConstantTimeEq
 
 /-- `ConstantTimeEq::ct_eq`: `1` iff the byte encodings are equal. -/
 recall ct_eq_spec (self other : Scalar) :
-    ct_eq self other ⦃ (c : subtle.Choice) =>
-      c.IsValid ∧ (self = other → c = 1#u8) ∧ (self ≠ other → c = 0#u8) ⦄
+    ct_eq self other ⦃ (r : subtle.Choice) =>
+      r.IsValid ∧ (self = other → r = 1#u8) ∧ (self ≠ other → r = 0#u8) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
@@ -640,8 +640,8 @@ namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreCmpPartialEqHalfWidth
 
 /-- `PartialEq::eq` (derived): equality. -/
 recall eq_spec (self other : HalfWidthScalar) :
-    eq self other ⦃ (b : Bool) =>
-      (b = true ↔ self = other) ⦄
+    eq self other ⦃ (r : Bool) =>
+      (r = true ↔ self = other) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec

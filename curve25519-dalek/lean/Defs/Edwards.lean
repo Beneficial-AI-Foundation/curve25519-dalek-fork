@@ -12,8 +12,10 @@ public section
 - `EdwardsPoint` implements the extended coordinates `(X : Y : Z : T)` of `curve25519.edwards`
   on radix-`2^51` limbs (x86_64) or radix-`2^25.5` limbs (i686): `toExtended` (hidden,
   `toExtended_def`), `OnCurve` (exposed), `toPoint` (hidden, `toPoint_def`), `LimbsLt n` (all
-  limbs `< 2^n`, exposed; the x86_64 specs use `LimbsLt 52`, the bound forced by the mixed
-  affine-Niels addition) and `ProjEq` (exposed), the projective equality that `ct_eq` computes.
+  limbs `< 2^n`, exposed), `IsBounded` (exposed: `LimbsLt 52` on x86_64, the bound forced by
+  the mixed affine-Niels addition, `LimbsLt 26` on i686; the bound every public function
+  assumes and preserves) and `ProjEq` (exposed), the projective equality that `ct_eq`
+  computes.
 - `AffinePoint` (`edwards/affine.rs`) is the affine point itself: `OnCurve` is the curve
   equation, `toPoint` the point (`0` off the curve), `LimbsLt n` as for `EdwardsPoint`.
 - `CompressedEdwardsY` is 32 bytes; `asNat` is their little-endian value, RFC 8032's encoding
@@ -25,9 +27,11 @@ public section
   decoder `curve25519.decode` exactly on these two leniencies
   (`Proofs/Helpers/Edwards.lean`).
 - The basepoint tables `EdwardsBasepointTable{,Radix32,Radix64,Radix128,Radix256}` (radix
-  `2^w`, `w = 4, 5, 6, 7, 8`) hold `32` lookup tables of affine Niels points: `Represents t P`
-  says that row `i` is the lookup table of `2^(2 w i) • P`, i.e. entry `j` of row `i`
-  represents `(j + 1) • 2^(2 w i) • P` (`BasepointTable::create`).
+  `2^w`, `w = 4, 5, 6, 7, 8`) hold `32` rows of `2^(w-1)` affine Niels points. `t.point` is the
+  point of entry `0` of row `0`, and `t.IsTable`, the invariant of the Rust type (whose tables
+  come only from `BasepointTable::create`), says that entry `j` of row `i` is on the curve and
+  is `(j + 1) • 2^(2 w i) • t.point`. `t.IsBounded`: every limb of every entry is `< 2^54`
+  (x86_64) or `< 2^27` (i686).
   They exist only in the `tables` configuration.
 
 `RistrettoPoint` is `EdwardsPoint`; see `Defs.Ristretto`. -/
@@ -68,6 +72,11 @@ theorem toPoint_def (self : EdwardsPoint.«x86_64-tables») :
 /-- Every limb of an `EdwardsPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : EdwardsPoint.«x86_64-tables») : Prop :=
   self.X.LimbsLt n ∧ self.Y.LimbsLt n ∧ self.Z.LimbsLt n ∧ self.T.LimbsLt n
+
+/-- The bound on the limbs of an `EdwardsPoint` that every public function assumes and preserves:
+every limb is `< 2^52`. -/
+@[expose] def IsBounded (self : EdwardsPoint.«x86_64-tables») : Prop :=
+  self.LimbsLt 52
 
 /-- Projective equality `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` ignored): what `ct_eq` computes.
 Equality of the represented points when both are on the curve
@@ -110,6 +119,11 @@ theorem toPoint_def (self : EdwardsPoint.«i686-tables») :
 /-- Every limb of an `EdwardsPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : EdwardsPoint.«i686-tables») : Prop :=
   self.X.LimbsLt n ∧ self.Y.LimbsLt n ∧ self.Z.LimbsLt n ∧ self.T.LimbsLt n
+
+/-- The bound on the limbs of an `EdwardsPoint` that every public function assumes and preserves:
+every limb is `< 2^26`. -/
+@[expose] def IsBounded (self : EdwardsPoint.«i686-tables») : Prop :=
+  self.LimbsLt 26
 
 /-- Projective equality `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` ignored): what `ct_eq` computes.
 Equality of the represented points when both are on the curve
@@ -205,6 +219,11 @@ theorem toPoint_def (self : EdwardsPoint.«x86_64-no-tables») :
 @[expose] def LimbsLt (n : ℕ) (self : EdwardsPoint.«x86_64-no-tables») : Prop :=
   self.X.LimbsLt n ∧ self.Y.LimbsLt n ∧ self.Z.LimbsLt n ∧ self.T.LimbsLt n
 
+/-- The bound on the limbs of an `EdwardsPoint` that every public function assumes and preserves:
+every limb is `< 2^52`. -/
+@[expose] def IsBounded (self : EdwardsPoint.«x86_64-no-tables») : Prop :=
+  self.LimbsLt 52
+
 /-- Projective equality `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` ignored): what `ct_eq` computes.
 Equality of the represented points when both are on the curve
 (`Proofs/Helpers/Coords.lean`). -/
@@ -246,6 +265,11 @@ theorem toPoint_def (self : EdwardsPoint.«i686-no-tables») :
 /-- Every limb of an `EdwardsPoint` is `< 2^n`. -/
 @[expose] def LimbsLt (n : ℕ) (self : EdwardsPoint.«i686-no-tables») : Prop :=
   self.X.LimbsLt n ∧ self.Y.LimbsLt n ∧ self.Z.LimbsLt n ∧ self.T.LimbsLt n
+
+/-- The bound on the limbs of an `EdwardsPoint` that every public function assumes and preserves:
+every limb is `< 2^26`. -/
+@[expose] def IsBounded (self : EdwardsPoint.«i686-no-tables») : Prop :=
+  self.LimbsLt 26
 
 /-- Projective equality `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁` (`T` ignored): what `ct_eq` computes.
 Equality of the represented points when both are on the curve
@@ -351,16 +375,6 @@ theorem decodeLenient_def (n : ℕ) :
 
 /-! ### The basepoint tables (`tables` configurations only) -/
 
-/-- Row `i` of the radix-`16` table is the lookup table of `2^(8 i) • P`. -/
-@[expose] def EdwardsBasepointTable.«x86_64-tables».Represents
-    (self : EdwardsBasepointTable.«x86_64-tables») (P : curve25519.edwards.Point) : Prop :=
-  ∀ i < 32, (self[i]!).Represents (2 ^ (8 * i) • P)
-
-/-- Row `i` of the radix-`16` table is the lookup table of `2^(8 i) • P`. -/
-@[expose] def EdwardsBasepointTable.«i686-tables».Represents
-    (self : EdwardsBasepointTable.«i686-tables») (P : curve25519.edwards.Point) : Prop :=
-  ∀ i < 32, (self[i]!).Represents (2 ^ (8 * i) • P)
-
 /-- Every limb of every entry of every row is `< 2^n`. -/
 @[expose] def EdwardsBasepointTable.«x86_64-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTable.«x86_64-tables») : Prop :=
@@ -370,18 +384,6 @@ theorem decodeLenient_def (n : ℕ) :
 @[expose] def EdwardsBasepointTable.«i686-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTable.«i686-tables») : Prop :=
   ∀ i < 32, (self[i]!).LimbsLt n
-
-/-- Row `i` of the radix-`32` table is the lookup table of `2^(10 i) • P`. -/
-@[expose] def EdwardsBasepointTableRadix32.«x86_64-tables».Represents
-    (self : EdwardsBasepointTableRadix32.«x86_64-tables») (P : curve25519.edwards.Point) :
-    Prop :=
-  ∀ i < 32, (self[i]!).Represents (2 ^ (10 * i) • P)
-
-/-- Row `i` of the radix-`32` table is the lookup table of `2^(10 i) • P`. -/
-@[expose] def EdwardsBasepointTableRadix32.«i686-tables».Represents
-    (self : EdwardsBasepointTableRadix32.«i686-tables») (P : curve25519.edwards.Point) :
-    Prop :=
-  ∀ i < 32, (self[i]!).Represents (2 ^ (10 * i) • P)
 
 /-- Every limb of every entry of every row is `< 2^n`. -/
 @[expose] def EdwardsBasepointTableRadix32.«x86_64-tables».LimbsLt (n : ℕ)
@@ -393,18 +395,6 @@ theorem decodeLenient_def (n : ℕ) :
     (self : EdwardsBasepointTableRadix32.«i686-tables») : Prop :=
   ∀ i < 32, (self[i]!).LimbsLt n
 
-/-- Row `i` of the radix-`64` table is the lookup table of `2^(12 i) • P`. -/
-@[expose] def EdwardsBasepointTableRadix64.«x86_64-tables».Represents
-    (self : EdwardsBasepointTableRadix64.«x86_64-tables») (P : curve25519.edwards.Point) :
-    Prop :=
-  ∀ i < 32, (self[i]!).Represents (2 ^ (12 * i) • P)
-
-/-- Row `i` of the radix-`64` table is the lookup table of `2^(12 i) • P`. -/
-@[expose] def EdwardsBasepointTableRadix64.«i686-tables».Represents
-    (self : EdwardsBasepointTableRadix64.«i686-tables») (P : curve25519.edwards.Point) :
-    Prop :=
-  ∀ i < 32, (self[i]!).Represents (2 ^ (12 * i) • P)
-
 /-- Every limb of every entry of every row is `< 2^n`. -/
 @[expose] def EdwardsBasepointTableRadix64.«x86_64-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTableRadix64.«x86_64-tables») : Prop :=
@@ -414,18 +404,6 @@ theorem decodeLenient_def (n : ℕ) :
 @[expose] def EdwardsBasepointTableRadix64.«i686-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTableRadix64.«i686-tables») : Prop :=
   ∀ i < 32, (self[i]!).LimbsLt n
-
-/-- Row `i` of the radix-`128` table is the lookup table of `2^(14 i) • P`. -/
-@[expose] def EdwardsBasepointTableRadix128.«x86_64-tables».Represents
-    (self : EdwardsBasepointTableRadix128.«x86_64-tables») (P : curve25519.edwards.Point) :
-    Prop :=
-  ∀ i < 32, (self[i]!).Represents (2 ^ (14 * i) • P)
-
-/-- Row `i` of the radix-`128` table is the lookup table of `2^(14 i) • P`. -/
-@[expose] def EdwardsBasepointTableRadix128.«i686-tables».Represents
-    (self : EdwardsBasepointTableRadix128.«i686-tables») (P : curve25519.edwards.Point) :
-    Prop :=
-  ∀ i < 32, (self[i]!).Represents (2 ^ (14 * i) • P)
 
 /-- Every limb of every entry of every row is `< 2^n`. -/
 @[expose] def EdwardsBasepointTableRadix128.«x86_64-tables».LimbsLt (n : ℕ)
@@ -437,18 +415,6 @@ theorem decodeLenient_def (n : ℕ) :
     (self : EdwardsBasepointTableRadix128.«i686-tables») : Prop :=
   ∀ i < 32, (self[i]!).LimbsLt n
 
-/-- Row `i` of the radix-`256` table is the lookup table of `2^(16 i) • P`. -/
-@[expose] def EdwardsBasepointTableRadix256.«x86_64-tables».Represents
-    (self : EdwardsBasepointTableRadix256.«x86_64-tables») (P : curve25519.edwards.Point) :
-    Prop :=
-  ∀ i < 32, (self[i]!).Represents (2 ^ (16 * i) • P)
-
-/-- Row `i` of the radix-`256` table is the lookup table of `2^(16 i) • P`. -/
-@[expose] def EdwardsBasepointTableRadix256.«i686-tables».Represents
-    (self : EdwardsBasepointTableRadix256.«i686-tables») (P : curve25519.edwards.Point) :
-    Prop :=
-  ∀ i < 32, (self[i]!).Represents (2 ^ (16 * i) • P)
-
 /-- Every limb of every entry of every row is `< 2^n`. -/
 @[expose] def EdwardsBasepointTableRadix256.«x86_64-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTableRadix256.«x86_64-tables») : Prop :=
@@ -458,5 +424,195 @@ theorem decodeLenient_def (n : ℕ) :
 @[expose] def EdwardsBasepointTableRadix256.«i686-tables».LimbsLt (n : ℕ)
     (self : EdwardsBasepointTableRadix256.«i686-tables») : Prop :=
   ∀ i < 32, (self[i]!).LimbsLt n
+
+/-- The point the radix-`16` table is for: the point of entry `0` of row `0`. -/
+@[expose] noncomputable def EdwardsBasepointTable.«x86_64-tables».point
+    (self : EdwardsBasepointTable.«x86_64-tables») :
+    curve25519.edwards.Point :=
+  PointRepr.toPoint (self[0]!)[0]!
+
+/-- The invariant of the radix-`16` table: entry `j` of row `i` is on the curve and is
+`(j + 1) • 2^(8 i) • self.point`. -/
+@[expose] def EdwardsBasepointTable.«x86_64-tables».IsTable
+    (self : EdwardsBasepointTable.«x86_64-tables») : Prop :=
+  ∀ i < 32, ∀ j < 8, PointRepr.OnCurve (self[i]!)[j]! ∧
+    PointRepr.toPoint (self[i]!)[j]! = (j + 1) • (2 ^ (8 * i) • self.point)
+
+/-- The bound on the limbs of the radix-`16` table that every public function assumes and
+preserves: every limb of every entry is `< 2^54`. -/
+@[expose] def EdwardsBasepointTable.«x86_64-tables».IsBounded
+    (self : EdwardsBasepointTable.«x86_64-tables») : Prop :=
+  self.LimbsLt 54
+
+/-- The point the radix-`16` table is for: the point of entry `0` of row `0`. -/
+@[expose] noncomputable def EdwardsBasepointTable.«i686-tables».point
+    (self : EdwardsBasepointTable.«i686-tables») :
+    curve25519.edwards.Point :=
+  PointRepr.toPoint (self[0]!)[0]!
+
+/-- The invariant of the radix-`16` table: entry `j` of row `i` is on the curve and is
+`(j + 1) • 2^(8 i) • self.point`. -/
+@[expose] def EdwardsBasepointTable.«i686-tables».IsTable
+    (self : EdwardsBasepointTable.«i686-tables») : Prop :=
+  ∀ i < 32, ∀ j < 8, PointRepr.OnCurve (self[i]!)[j]! ∧
+    PointRepr.toPoint (self[i]!)[j]! = (j + 1) • (2 ^ (8 * i) • self.point)
+
+/-- The bound on the limbs of the radix-`16` table that every public function assumes and
+preserves: every limb of every entry is `< 2^27`. -/
+@[expose] def EdwardsBasepointTable.«i686-tables».IsBounded
+    (self : EdwardsBasepointTable.«i686-tables») : Prop :=
+  self.LimbsLt 27
+
+/-- The point the radix-`32` table is for: the point of entry `0` of row `0`. -/
+@[expose] noncomputable def EdwardsBasepointTableRadix32.«x86_64-tables».point
+    (self : EdwardsBasepointTableRadix32.«x86_64-tables») :
+    curve25519.edwards.Point :=
+  PointRepr.toPoint (self[0]!)[0]!
+
+/-- The invariant of the radix-`32` table: entry `j` of row `i` is on the curve and is
+`(j + 1) • 2^(10 i) • self.point`. -/
+@[expose] def EdwardsBasepointTableRadix32.«x86_64-tables».IsTable
+    (self : EdwardsBasepointTableRadix32.«x86_64-tables») : Prop :=
+  ∀ i < 32, ∀ j < 16, PointRepr.OnCurve (self[i]!)[j]! ∧
+    PointRepr.toPoint (self[i]!)[j]! = (j + 1) • (2 ^ (10 * i) • self.point)
+
+/-- The bound on the limbs of the radix-`32` table that every public function assumes and
+preserves: every limb of every entry is `< 2^54`. -/
+@[expose] def EdwardsBasepointTableRadix32.«x86_64-tables».IsBounded
+    (self : EdwardsBasepointTableRadix32.«x86_64-tables») : Prop :=
+  self.LimbsLt 54
+
+/-- The point the radix-`32` table is for: the point of entry `0` of row `0`. -/
+@[expose] noncomputable def EdwardsBasepointTableRadix32.«i686-tables».point
+    (self : EdwardsBasepointTableRadix32.«i686-tables») :
+    curve25519.edwards.Point :=
+  PointRepr.toPoint (self[0]!)[0]!
+
+/-- The invariant of the radix-`32` table: entry `j` of row `i` is on the curve and is
+`(j + 1) • 2^(10 i) • self.point`. -/
+@[expose] def EdwardsBasepointTableRadix32.«i686-tables».IsTable
+    (self : EdwardsBasepointTableRadix32.«i686-tables») : Prop :=
+  ∀ i < 32, ∀ j < 16, PointRepr.OnCurve (self[i]!)[j]! ∧
+    PointRepr.toPoint (self[i]!)[j]! = (j + 1) • (2 ^ (10 * i) • self.point)
+
+/-- The bound on the limbs of the radix-`32` table that every public function assumes and
+preserves: every limb of every entry is `< 2^27`. -/
+@[expose] def EdwardsBasepointTableRadix32.«i686-tables».IsBounded
+    (self : EdwardsBasepointTableRadix32.«i686-tables») : Prop :=
+  self.LimbsLt 27
+
+/-- The point the radix-`64` table is for: the point of entry `0` of row `0`. -/
+@[expose] noncomputable def EdwardsBasepointTableRadix64.«x86_64-tables».point
+    (self : EdwardsBasepointTableRadix64.«x86_64-tables») :
+    curve25519.edwards.Point :=
+  PointRepr.toPoint (self[0]!)[0]!
+
+/-- The invariant of the radix-`64` table: entry `j` of row `i` is on the curve and is
+`(j + 1) • 2^(12 i) • self.point`. -/
+@[expose] def EdwardsBasepointTableRadix64.«x86_64-tables».IsTable
+    (self : EdwardsBasepointTableRadix64.«x86_64-tables») : Prop :=
+  ∀ i < 32, ∀ j < 32, PointRepr.OnCurve (self[i]!)[j]! ∧
+    PointRepr.toPoint (self[i]!)[j]! = (j + 1) • (2 ^ (12 * i) • self.point)
+
+/-- The bound on the limbs of the radix-`64` table that every public function assumes and
+preserves: every limb of every entry is `< 2^54`. -/
+@[expose] def EdwardsBasepointTableRadix64.«x86_64-tables».IsBounded
+    (self : EdwardsBasepointTableRadix64.«x86_64-tables») : Prop :=
+  self.LimbsLt 54
+
+/-- The point the radix-`64` table is for: the point of entry `0` of row `0`. -/
+@[expose] noncomputable def EdwardsBasepointTableRadix64.«i686-tables».point
+    (self : EdwardsBasepointTableRadix64.«i686-tables») :
+    curve25519.edwards.Point :=
+  PointRepr.toPoint (self[0]!)[0]!
+
+/-- The invariant of the radix-`64` table: entry `j` of row `i` is on the curve and is
+`(j + 1) • 2^(12 i) • self.point`. -/
+@[expose] def EdwardsBasepointTableRadix64.«i686-tables».IsTable
+    (self : EdwardsBasepointTableRadix64.«i686-tables») : Prop :=
+  ∀ i < 32, ∀ j < 32, PointRepr.OnCurve (self[i]!)[j]! ∧
+    PointRepr.toPoint (self[i]!)[j]! = (j + 1) • (2 ^ (12 * i) • self.point)
+
+/-- The bound on the limbs of the radix-`64` table that every public function assumes and
+preserves: every limb of every entry is `< 2^27`. -/
+@[expose] def EdwardsBasepointTableRadix64.«i686-tables».IsBounded
+    (self : EdwardsBasepointTableRadix64.«i686-tables») : Prop :=
+  self.LimbsLt 27
+
+/-- The point the radix-`128` table is for: the point of entry `0` of row `0`. -/
+@[expose] noncomputable def EdwardsBasepointTableRadix128.«x86_64-tables».point
+    (self : EdwardsBasepointTableRadix128.«x86_64-tables») :
+    curve25519.edwards.Point :=
+  PointRepr.toPoint (self[0]!)[0]!
+
+/-- The invariant of the radix-`128` table: entry `j` of row `i` is on the curve and is
+`(j + 1) • 2^(14 i) • self.point`. -/
+@[expose] def EdwardsBasepointTableRadix128.«x86_64-tables».IsTable
+    (self : EdwardsBasepointTableRadix128.«x86_64-tables») : Prop :=
+  ∀ i < 32, ∀ j < 64, PointRepr.OnCurve (self[i]!)[j]! ∧
+    PointRepr.toPoint (self[i]!)[j]! = (j + 1) • (2 ^ (14 * i) • self.point)
+
+/-- The bound on the limbs of the radix-`128` table that every public function assumes and
+preserves: every limb of every entry is `< 2^54`. -/
+@[expose] def EdwardsBasepointTableRadix128.«x86_64-tables».IsBounded
+    (self : EdwardsBasepointTableRadix128.«x86_64-tables») : Prop :=
+  self.LimbsLt 54
+
+/-- The point the radix-`128` table is for: the point of entry `0` of row `0`. -/
+@[expose] noncomputable def EdwardsBasepointTableRadix128.«i686-tables».point
+    (self : EdwardsBasepointTableRadix128.«i686-tables») :
+    curve25519.edwards.Point :=
+  PointRepr.toPoint (self[0]!)[0]!
+
+/-- The invariant of the radix-`128` table: entry `j` of row `i` is on the curve and is
+`(j + 1) • 2^(14 i) • self.point`. -/
+@[expose] def EdwardsBasepointTableRadix128.«i686-tables».IsTable
+    (self : EdwardsBasepointTableRadix128.«i686-tables») : Prop :=
+  ∀ i < 32, ∀ j < 64, PointRepr.OnCurve (self[i]!)[j]! ∧
+    PointRepr.toPoint (self[i]!)[j]! = (j + 1) • (2 ^ (14 * i) • self.point)
+
+/-- The bound on the limbs of the radix-`128` table that every public function assumes and
+preserves: every limb of every entry is `< 2^27`. -/
+@[expose] def EdwardsBasepointTableRadix128.«i686-tables».IsBounded
+    (self : EdwardsBasepointTableRadix128.«i686-tables») : Prop :=
+  self.LimbsLt 27
+
+/-- The point the radix-`256` table is for: the point of entry `0` of row `0`. -/
+@[expose] noncomputable def EdwardsBasepointTableRadix256.«x86_64-tables».point
+    (self : EdwardsBasepointTableRadix256.«x86_64-tables») :
+    curve25519.edwards.Point :=
+  PointRepr.toPoint (self[0]!)[0]!
+
+/-- The invariant of the radix-`256` table: entry `j` of row `i` is on the curve and is
+`(j + 1) • 2^(16 i) • self.point`. -/
+@[expose] def EdwardsBasepointTableRadix256.«x86_64-tables».IsTable
+    (self : EdwardsBasepointTableRadix256.«x86_64-tables») : Prop :=
+  ∀ i < 32, ∀ j < 128, PointRepr.OnCurve (self[i]!)[j]! ∧
+    PointRepr.toPoint (self[i]!)[j]! = (j + 1) • (2 ^ (16 * i) • self.point)
+
+/-- The bound on the limbs of the radix-`256` table that every public function assumes and
+preserves: every limb of every entry is `< 2^54`. -/
+@[expose] def EdwardsBasepointTableRadix256.«x86_64-tables».IsBounded
+    (self : EdwardsBasepointTableRadix256.«x86_64-tables») : Prop :=
+  self.LimbsLt 54
+
+/-- The point the radix-`256` table is for: the point of entry `0` of row `0`. -/
+@[expose] noncomputable def EdwardsBasepointTableRadix256.«i686-tables».point
+    (self : EdwardsBasepointTableRadix256.«i686-tables») :
+    curve25519.edwards.Point :=
+  PointRepr.toPoint (self[0]!)[0]!
+
+/-- The invariant of the radix-`256` table: entry `j` of row `i` is on the curve and is
+`(j + 1) • 2^(16 i) • self.point`. -/
+@[expose] def EdwardsBasepointTableRadix256.«i686-tables».IsTable
+    (self : EdwardsBasepointTableRadix256.«i686-tables») : Prop :=
+  ∀ i < 32, ∀ j < 128, PointRepr.OnCurve (self[i]!)[j]! ∧
+    PointRepr.toPoint (self[i]!)[j]! = (j + 1) • (2 ^ (16 * i) • self.point)
+
+/-- The bound on the limbs of the radix-`256` table that every public function assumes and
+preserves: every limb of every entry is `< 2^27`. -/
+@[expose] def EdwardsBasepointTableRadix256.«i686-tables».IsBounded
+    (self : EdwardsBasepointTableRadix256.«i686-tables») : Prop :=
+  self.LimbsLt 27
 
 end Curve25519Dalek.edwards

@@ -21,7 +21,7 @@ namespace «EdwardsPointx86_64-tables»
 @[step]
 theorem is_torsion_free_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
-    is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄ := by
+    is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄ := by
   unfold is_torsion_free
   have hL : constants.BASEPOINT_ORDER.asNat < 2 ^ 255 := by
     rw [constants.BASEPOINT_ORDER_spec]; exact L_lt_two_pow_253.trans (by norm_num)
@@ -38,7 +38,7 @@ namespace «EdwardsPointi686-tables»
 @[step]
 theorem is_torsion_free_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
-    is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄ := by
+    is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄ := by
   unfold is_torsion_free
   have hL : constants.BASEPOINT_ORDER.asNat < 2 ^ 255 := by
     rw [constants.BASEPOINT_ORDER_spec]; exact L_lt_two_pow_253.trans (by norm_num)
@@ -55,7 +55,7 @@ namespace «EdwardsPointx86_64-no-tables»
 @[step]
 theorem is_torsion_free_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
-    is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄ := by
+    is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄ := by
   unfold is_torsion_free
   have hL : constants.BASEPOINT_ORDER.asNat < 2 ^ 255 := by
     rw [constants.BASEPOINT_ORDER_spec]; exact L_lt_two_pow_253.trans (by norm_num)
@@ -72,7 +72,7 @@ namespace «EdwardsPointi686-no-tables»
 @[step]
 theorem is_torsion_free_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
-    is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄ := by
+    is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄ := by
   unfold is_torsion_free
   have hL : constants.BASEPOINT_ORDER.asNat < 2 ^ 255 := by
     rw [constants.BASEPOINT_ORDER_spec]; exact L_lt_two_pow_253.trans (by norm_num)

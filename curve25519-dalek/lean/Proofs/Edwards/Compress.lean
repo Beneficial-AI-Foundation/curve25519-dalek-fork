@@ -25,7 +25,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 /-- `EdwardsPoint::compress`: the canonical `y = Y / Z` with the sign of `x = X / Z` in
 bit `255`; limbs `< 2^52`. -/
 @[step]
-theorem compress_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
+theorem compress_asNat (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52) :
     compress self ⦃ (r : CompressedEdwardsY) =>
       r.asNat = (self.Y.toField / self.Z.toField).val +
         2 ^ 255 * (if (self.X.toField / self.Z.toField).IsNeg then 1 else 0) ⦄ := by
@@ -35,10 +35,10 @@ theorem compress_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.Limb
   rw [hr, hx, hy]
 
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
-theorem compress_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+theorem compress_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
-  spec_mono (compress_spec self hself) fun r hr => by
+  spec_mono (compress_asNat self hself) fun r hr => by
     rw [hr, encode_eq, EdwardsPoint.«x86_64-tables».toPoint_x hon,
       EdwardsPoint.«x86_64-tables».toPoint_y hon]
 
@@ -51,7 +51,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 /-- `EdwardsPoint::compress`: the canonical `y = Y / Z` with the sign of `x = X / Z` in
 bit `255`; limbs `< 2^26`. -/
 @[step]
-theorem compress_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26) :
+theorem compress_asNat (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26) :
     compress self ⦃ (r : CompressedEdwardsY) =>
       r.asNat = (self.Y.toField / self.Z.toField).val +
         2 ^ 255 * (if (self.X.toField / self.Z.toField).IsNeg then 1 else 0) ⦄ := by
@@ -61,10 +61,10 @@ theorem compress_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsL
   rw [hr, hx, hy]
 
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
-theorem compress_spec_point (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
+theorem compress_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
-  spec_mono (compress_spec self hself) fun r hr => by
+  spec_mono (compress_asNat self hself) fun r hr => by
     rw [hr, encode_eq, EdwardsPoint.«i686-tables».toPoint_x hon,
       EdwardsPoint.«i686-tables».toPoint_y hon]
 
@@ -77,7 +77,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 /-- `EdwardsPoint::compress`: the canonical `y = Y / Z` with the sign of `x = X / Z` in
 bit `255`; limbs `< 2^52`. -/
 @[step]
-theorem compress_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
+theorem compress_asNat (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52) :
     compress self ⦃ (r : CompressedEdwardsY) =>
       r.asNat = (self.Y.toField / self.Z.toField).val +
         2 ^ 255 * (if (self.X.toField / self.Z.toField).IsNeg then 1 else 0) ⦄ := by
@@ -87,10 +87,10 @@ theorem compress_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.L
   rw [hr, hx, hy]
 
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
-theorem compress_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+theorem compress_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
-  spec_mono (compress_spec self hself) fun r hr => by
+  spec_mono (compress_asNat self hself) fun r hr => by
     rw [hr, encode_eq, EdwardsPoint.«x86_64-no-tables».toPoint_x hon,
       EdwardsPoint.«x86_64-no-tables».toPoint_y hon]
 
@@ -103,7 +103,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 /-- `EdwardsPoint::compress`: the canonical `y = Y / Z` with the sign of `x = X / Z` in
 bit `255`; limbs `< 2^26`. -/
 @[step]
-theorem compress_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26) :
+theorem compress_asNat (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26) :
     compress self ⦃ (r : CompressedEdwardsY) =>
       r.asNat = (self.Y.toField / self.Z.toField).val +
         2 ^ 255 * (if (self.X.toField / self.Z.toField).IsNeg then 1 else 0) ⦄ := by
@@ -113,10 +113,10 @@ theorem compress_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.Lim
   rw [hr, hx, hy]
 
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
-theorem compress_spec_point (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
+theorem compress_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
-  spec_mono (compress_spec self hself) fun r hr => by
+  spec_mono (compress_asNat self hself) fun r hr => by
     rw [hr, encode_eq, EdwardsPoint.«i686-no-tables».toPoint_x hon,
       EdwardsPoint.«i686-no-tables».toPoint_y hon]
 

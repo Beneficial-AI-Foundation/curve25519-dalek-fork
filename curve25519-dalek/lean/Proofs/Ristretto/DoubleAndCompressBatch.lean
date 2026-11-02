@@ -148,8 +148,8 @@ theorem compressStateBody_spec (hsub : B.SubSpec) (hmul : B.MulSpec) (hneg : B.N
     (Sfh : B.toField fh = B.toField f * B.toField h) (Seb : B.SqIn e) (Sfb : B.SqIn f)
     (Sgb : B.SqIn g) (Shb : B.SqIn h) (Segb : B.Red eg) (Sfhb : B.Red fh)
     (Inv : B.toField inv = (B.toField eg * B.toField fh)⁻¹) (Invb : B.Red inv) :
-    B.compressStateBody e f g h eg fh inv ⦃ (bytes : ristretto.CompressedRistretto) =>
-      bytes.asNat = Ristretto.encodeRep (2 • (⟨X, Y, Z, T⟩ : edwards.Extended).toPoint) ⦄ := by
+    B.compressStateBody e f g h eg fh inv ⦃ (r : ristretto.CompressedRistretto) =>
+      r.asNat = Ristretto.encodeRep (2 • (⟨X, Y, Z, T⟩ : edwards.Extended).toPoint) ⦄ := by
   have hx : (⟨X, Y, Z, T⟩ : edwards.Extended).toPoint.x = X / Z :=
     TwistedEdwardsModel.Extended.toPoint_x hP
   have hy : (⟨X, Y, Z, T⟩ : edwards.Extended).toPoint.y = Y / Z :=

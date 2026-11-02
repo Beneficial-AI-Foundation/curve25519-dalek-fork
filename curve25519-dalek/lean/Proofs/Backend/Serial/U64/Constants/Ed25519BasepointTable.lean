@@ -3,6 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Proofs.Helpers.Represents
 public import Curve25519.Edwards.Basepoint
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
@@ -87,10 +88,20 @@ theorem ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN_spec :
 /-- `ED25519_BASEPOINT_TABLE`: the radix-`16` basepoint table of `B` (row `i` is the lookup
 table of `2^(8 i) • B`); limbs `< 2^54`. -/
 @[step]
-theorem ED25519_BASEPOINT_TABLE_spec :
+theorem ED25519_BASEPOINT_TABLE_represents :
     ED25519_BASEPOINT_TABLE ⦃ (r : edwards.EdwardsBasepointTable.«x86_64-tables») =>
       r.Represents basepoint ∧ r.LimbsLt 54 ⦄ := by
   unfold ED25519_BASEPOINT_TABLE
   exact ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN_spec
+
+/-- `ED25519_BASEPOINT_TABLE`: the radix-`16` basepoint table of `B` (row `i` is the lookup
+table of `2^(8 i) • B`); limbs `< 2^54`. -/
+theorem ED25519_BASEPOINT_TABLE_spec :
+    ED25519_BASEPOINT_TABLE ⦃ (r : edwards.EdwardsBasepointTable.«x86_64-tables») =>
+      r.IsTable ∧ r.point = basepoint ∧ r.LimbsLt 54 ⦄ := by
+  refine spec_mono (ED25519_BASEPOINT_TABLE_represents) fun r h => ?_
+  obtain ⟨hr, hb⟩ := h
+  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
+  exact ⟨h1, h2, hb⟩
 
 end Curve25519Dalek.backend.serial.u64.constants

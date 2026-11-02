@@ -3,6 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Proofs.Helpers.Represents
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
 public import Defs.Iterator
@@ -41,7 +42,7 @@ namespace Curve25519Dalek.backend.serial.scalar_mul.straus
 section
 open «Shared0EdwardsPointx86_64-tables».Insts
 open «CoreOpsArithAddSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables»
-    (add_spec_point)
+    (add_spec)
 
 namespace «MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul
 
@@ -180,7 +181,7 @@ theorem multiscalar_mul_spec
       it1
     xs hit1 ss hborrow_scalars hss hxs as ⟨digits, hdigits⟩
   step with
-      edwards.EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+      edwards.EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec
     as ⟨Q, hQon, hQ, hQb⟩
   step as ⟨iter, hiter⟩
   obtain ⟨hTlen, hT⟩ := forall₂_getElem! htables
@@ -218,7 +219,7 @@ end
 section
 open «Shared0EdwardsPointi686-tables».Insts
 open «CoreOpsArithAddSharedAProjectiveNielsPointi686-tablesCompletedPointi686-tables»
-    (add_spec_point)
+    (add_spec)
 
 namespace «MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul
 
@@ -357,7 +358,7 @@ theorem multiscalar_mul_spec
       it1
     xs hit1 ss hborrow_scalars hss hxs as ⟨digits, hdigits⟩
   step with
-      edwards.EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+      edwards.EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec
     as ⟨Q, hQon, hQ, hQb⟩
   step as ⟨iter, hiter⟩
   obtain ⟨hTlen, hT⟩ := forall₂_getElem! htables
@@ -395,7 +396,7 @@ end
 section
 open «Shared0EdwardsPointx86_64-no-tables».Insts
 open «CoreOpsArithAddSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables»
-    (add_spec_point)
+    (add_spec)
 
 namespace «MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul
 
@@ -535,7 +536,7 @@ theorem multiscalar_mul_spec
   step with «MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.scalar_digits_spec _
       _ it1
     xs hit1 ss hborrow_scalars hss hxs as ⟨digits, hdigits⟩
-  step with Curve25519_dalekTraitsIdentity.identity_spec_point
+  step with Curve25519_dalekTraitsIdentity.identity_spec
     as ⟨Q, hQon, hQ, hQb⟩
   step as ⟨iter, hiter⟩
   obtain ⟨hTlen, hT⟩ := forall₂_getElem! htables
@@ -573,7 +574,7 @@ end
 section
 open «Shared0EdwardsPointi686-no-tables».Insts
 open «CoreOpsArithAddSharedAProjectiveNielsPointi686-no-tablesCompletedPointi686-no-tables»
-    (add_spec_point)
+    (add_spec)
 
 namespace «MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul
 
@@ -713,7 +714,7 @@ theorem multiscalar_mul_spec
   step with «MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.scalar_digits_spec _
       _ it1
     xs hit1 ss hborrow_scalars hss hxs as ⟨digits, hdigits⟩
-  step with Curve25519_dalekTraitsIdentity.identity_spec_point
+  step with Curve25519_dalekTraitsIdentity.identity_spec
     as ⟨Q, hQon, hQ, hQb⟩
   step as ⟨iter, hiter⟩
   obtain ⟨hTlen, hT⟩ := forall₂_getElem! htables

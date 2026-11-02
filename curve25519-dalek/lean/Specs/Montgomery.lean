@@ -47,7 +47,7 @@ stated for all four targets.
 Definitions used: `MontgomeryPoint.asNat`, `MontgomeryPoint.u` (`Defs/Montgomery.lean`),
 `curve25519.decodeU`, `encodeU`, `x25519`, `montgomeryBasepoint`, `MontgomeryModel.ladder`,
 `MontgomeryModel.ladderBits` (`Curve25519/`, `EllipticCurve/`), `decodeLenient`,
-`EdwardsPoint.toPoint`, `OnCurve`, `LimbsLt` (`Defs/Edwards.lean`), `Iterator.Yields`
+`EdwardsPoint.toPoint`, `OnCurve`, `IsBounded` (`Defs/Edwards.lean`), `Iterator.Yields`
 (`Defs/Iterator.lean`), `subtle.Choice.IsValid`. -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
@@ -71,7 +71,7 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.SubtleConstantTimeEq
 /-- `ConstantTimeEq for MontgomeryPoint`: equality of the encoded `u`-coordinates (bit `255`
 masked, reduced modulo `p`; x86_64 targets). -/
 recall ct_eq_spec (self other : MontgomeryPoint) :
-    ct_eq self other ⦃ (c : subtle.Choice) => c.IsValid ∧ (c = 1#u8 ↔ self.u = other.u) ⦄
+    ct_eq self other ⦃ (r : subtle.Choice) => r.IsValid ∧ (r = 1#u8 ↔ self.u = other.u) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
@@ -95,7 +95,7 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreCmpPartialEqMontg
 
 /-- `PartialEq for MontgomeryPoint`: equality of the encoded `u`-coordinates (x86_64 targets). -/
 recall eq_spec (self other : MontgomeryPoint) :
-    eq self other ⦃ (b : Bool) => b = true ↔ self.u = other.u ⦄
+    eq self other ⦃ (r : Bool) => r = true ↔ self.u = other.u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
@@ -116,11 +116,11 @@ end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.Curve25519_dalekTraitsIdent
 namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.ZeroizeZeroize
 
 /-- `Zeroize for MontgomeryPoint`: thirty-two zero bytes, the encoding of `u = 0`. -/
-recall zeroize_spec_point (self : MontgomeryPoint) :
+recall zeroize_spec (self : MontgomeryPoint) :
     zeroize self ⦃ (r : MontgomeryPoint) => r.asNat = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.ZeroizeZeroize
 
@@ -189,7 +189,7 @@ recall to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
         Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
-      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄
+      ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_edwards.«x86_64-tables_spec»
@@ -203,7 +203,7 @@ recall to_edwards.«i686-tables_spec» (self : MontgomeryPoint) (sign : U8) :
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-tables».toPoint =
         Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
-      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄
+      ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -219,7 +219,7 @@ recall to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8)
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
         Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
-      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄
+      ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -235,7 +235,7 @@ recall to_edwards.«i686-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
         Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
-      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄
+      ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in

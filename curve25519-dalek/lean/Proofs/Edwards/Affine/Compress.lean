@@ -46,7 +46,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `AffinePoint::compress`: the canonical `y` with the sign of `x` in bit `255`. -/
 @[step]
-theorem compress_spec (self : AffinePoint.«x86_64-tables») :
+theorem compress_asNat (self : AffinePoint.«x86_64-tables») :
     compress self ⦃ (r : CompressedEdwardsY) =>
       r.asNat = self.y.toField.val + 2 ^ 255 * (if self.x.toField.IsNeg then 1 else 0) ⦄ := by
   unfold compress
@@ -83,9 +83,9 @@ theorem compress_spec (self : AffinePoint.«x86_64-tables») :
   omega
 
 /-- `AffinePoint::compress` is RFC 8032's encoding of the represented point. -/
-theorem compress_spec_point (self : AffinePoint.«x86_64-tables») (hon : self.OnCurve) :
+theorem compress_spec (self : AffinePoint.«x86_64-tables») (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
-  spec_mono (compress_spec self) fun r hr => by
+  spec_mono (compress_asNat self) fun r hr => by
     rw [hr, encode_eq, AffinePoint.«x86_64-tables».toPoint_x hon,
       AffinePoint.«x86_64-tables».toPoint_y hon]
 
@@ -97,7 +97,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `AffinePoint::compress`: the canonical `y` with the sign of `x` in bit `255`. -/
 @[step]
-theorem compress_spec (self : AffinePoint.«i686-tables») :
+theorem compress_asNat (self : AffinePoint.«i686-tables») :
     compress self ⦃ (r : CompressedEdwardsY) =>
       r.asNat = self.y.toField.val + 2 ^ 255 * (if self.x.toField.IsNeg then 1 else 0) ⦄ := by
   unfold compress
@@ -134,9 +134,9 @@ theorem compress_spec (self : AffinePoint.«i686-tables») :
   omega
 
 /-- `AffinePoint::compress` is RFC 8032's encoding of the represented point. -/
-theorem compress_spec_point (self : AffinePoint.«i686-tables») (hon : self.OnCurve) :
+theorem compress_spec (self : AffinePoint.«i686-tables») (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
-  spec_mono (compress_spec self) fun r hr => by
+  spec_mono (compress_asNat self) fun r hr => by
     rw [hr, encode_eq, AffinePoint.«i686-tables».toPoint_x hon,
       AffinePoint.«i686-tables».toPoint_y hon]
 
@@ -148,7 +148,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `AffinePoint::compress`: the canonical `y` with the sign of `x` in bit `255`. -/
 @[step]
-theorem compress_spec (self : AffinePoint.«x86_64-no-tables») :
+theorem compress_asNat (self : AffinePoint.«x86_64-no-tables») :
     compress self ⦃ (r : CompressedEdwardsY) =>
       r.asNat = self.y.toField.val + 2 ^ 255 * (if self.x.toField.IsNeg then 1 else 0) ⦄ := by
   unfold compress
@@ -185,9 +185,9 @@ theorem compress_spec (self : AffinePoint.«x86_64-no-tables») :
   omega
 
 /-- `AffinePoint::compress` is RFC 8032's encoding of the represented point. -/
-theorem compress_spec_point (self : AffinePoint.«x86_64-no-tables») (hon : self.OnCurve) :
+theorem compress_spec (self : AffinePoint.«x86_64-no-tables») (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
-  spec_mono (compress_spec self) fun r hr => by
+  spec_mono (compress_asNat self) fun r hr => by
     rw [hr, encode_eq, AffinePoint.«x86_64-no-tables».toPoint_x hon,
       AffinePoint.«x86_64-no-tables».toPoint_y hon]
 
@@ -199,7 +199,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `AffinePoint::compress`: the canonical `y` with the sign of `x` in bit `255`. -/
 @[step]
-theorem compress_spec (self : AffinePoint.«i686-no-tables») :
+theorem compress_asNat (self : AffinePoint.«i686-no-tables») :
     compress self ⦃ (r : CompressedEdwardsY) =>
       r.asNat = self.y.toField.val + 2 ^ 255 * (if self.x.toField.IsNeg then 1 else 0) ⦄ := by
   unfold compress
@@ -236,9 +236,9 @@ theorem compress_spec (self : AffinePoint.«i686-no-tables») :
   omega
 
 /-- `AffinePoint::compress` is RFC 8032's encoding of the represented point. -/
-theorem compress_spec_point (self : AffinePoint.«i686-no-tables») (hon : self.OnCurve) :
+theorem compress_spec (self : AffinePoint.«i686-no-tables») (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
-  spec_mono (compress_spec self) fun r hr => by
+  spec_mono (compress_asNat self) fun r hr => by
     rw [hr, encode_eq, AffinePoint.«i686-no-tables».toPoint_x hon,
       AffinePoint.«i686-no-tables».toPoint_y hon]
 

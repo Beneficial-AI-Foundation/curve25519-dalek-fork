@@ -3,6 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Proofs.Helpers.Represents
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
 public import Defs.Iterator
@@ -51,9 +52,9 @@ private noncomputable instance instInhabitedPoint : Inhabited curve25519.edwards
 section
 open «Shared0EdwardsPointx86_64-no-tables».Insts
 open «CoreOpsArithAddSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables»
-    (add_spec_point)
+    (add_spec)
 open «CoreOpsArithSubSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables»
-    (sub_spec_point)
+    (sub_spec)
 
 set_option linter.style.longLine false
 namespace «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -293,7 +294,7 @@ theorem optional_mixed_multiscalar_mul_spec
     step
     step
     step with
-        ProjectivePoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec_point
+        ProjectivePoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec
       as ⟨S0, hS0on, hS0, hS0b⟩
     step as ⟨iter, hiter⟩
     step with optional_mixed_multiscalar_mul_loop0_spec iter self.static_lookup_tables sn dn dtabs
@@ -311,7 +312,7 @@ theorem optional_mixed_multiscalar_mul_spec
         simp only [nafTail_eq_zero _ 256 fun j hj hj' => absurd hj' (Nat.not_lt.mpr hj),
           zero_smul, Finset.sum_const_zero, add_zero])
       as ⟨S1, hS1on, hS1b, hS1⟩
-    step with «ProjectivePointx86_64-no-tables».as_extended_spec_point as ⟨R, hRon, hR, hRb⟩
+    step with «ProjectivePointx86_64-no-tables».as_extended_spec as ⟨R, hRon, hR, hRb⟩
     refine ⟨by simpa using hnn, fun R' hR' => ?_⟩
     obtain rfl : R = R' := Option.some.inj hR'
     refine ⟨hRon, ?_, hRb⟩

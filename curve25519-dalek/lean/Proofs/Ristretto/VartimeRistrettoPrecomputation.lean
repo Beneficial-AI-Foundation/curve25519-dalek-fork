@@ -3,6 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Proofs.Helpers.Represents
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
 public import Defs.Iterator
@@ -33,7 +34,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPoint
 precomputation of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54`
 out. -/
 @[step]
-theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+theorem new_represents {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«x86_64-tables»)
     (static_points : I) (ys : List Clause0_Item)
@@ -64,23 +65,44 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
       hps (by rw [hv, ← hpsys]; exact hys) as ⟨r, h1, h2⟩
   exact ⟨h1, h2⟩
 
+/-- `VartimePrecomputedMultiscalarMul::new` for `VartimeRistrettoPrecomputation`: a
+precomputation of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54`
+out. -/
+theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+    (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«x86_64-tables»)
+    (static_points : I) (ys : List Clause0_Item)
+    (ps : List ristretto.RistrettoPoint.«x86_64-tables»)
+    (hstatic_points : pointsInst.Yields static_points ys)
+    (hborrow : List.Forall₂
+      (fun y P => borrowInst.borrow y
+          ⦃ (P' : ristretto.RistrettoPoint.«x86_64-tables») => P' = P ⦄)
+      ys ps)
+    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    new pointsInst borrowInst static_points
+      ⦃ (r : VartimeRistrettoPrecomputation.«x86_64-tables») =>
+        r.IsValid ∧ r.points = (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄ := by
+  refine spec_mono (new_represents pointsInst borrowInst static_points ys ps hstatic_points hborrow
+      hps hys) fun r h => ?_
+  obtain ⟨hr, hb⟩ := h
+  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
+  exact ⟨h1, h2, hb⟩
+
 /-- `VartimePrecomputedMultiscalarMul::len` for `VartimeRistrettoPrecomputation`: the number of
 static points. -/
 @[step]
-theorem len_spec (self : VartimeRistrettoPrecomputation.«x86_64-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    len self ⦃ (r : Usize) => r.val = ps.length ⦄ := by
+theorem len_spec (self : VartimeRistrettoPrecomputation.«x86_64-tables») :
+    len self ⦃ (r : Usize) => r.val = self.points.length ⦄ := by
   unfold len
-  exact backend.«VartimePrecomputedStrausx86_64-tables».len_spec self ps hself
+  exact backend.«VartimePrecomputedStrausx86_64-tables».len_spec self
 
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeRistrettoPrecomputation`: whether
 there are no static points. -/
 @[step]
-theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄ := by
+theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-tables») :
+    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausx86_64-tables».is_empty_spec self ps hself
+  exact backend.«VartimePrecomputedStrausx86_64-tables».is_empty_spec self
 
 set_option linter.style.longLine false
 open «VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables»
@@ -134,7 +156,7 @@ otherwise `∑ s_i • ps_i + ∑ d_i • Q_i` (at most `|ps|` static scalars, t
 as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
 `< 2^52`. -/
 @[step]
-theorem optional_mixed_multiscalar_mul_spec
+theorem optional_mixed_multiscalar_mul_represents
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowStaticInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -188,6 +210,49 @@ theorem optional_mixed_multiscalar_mul_spec
   rintro r rfl
   exact ⟨hnone, hsome⟩
 
+/-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
+`VartimeRistrettoPrecomputation` (static points `self.points`): `none` iff some dynamic point is
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
+ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
+`< 2^52`. -/
+theorem optional_mixed_multiscalar_mul_spec
+    {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
+    (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowStaticInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
+    (dynamicScalarsInst : core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+    (borrowDynamicInst : core.borrow.Borrow Clause2_Item scalar.Scalar)
+    (dynamicPointsInst : core.iter.traits.collect.IntoIterator K
+      (Option ristretto.RistrettoPoint.«x86_64-tables») Clause4_IntoIter)
+    (self : VartimeRistrettoPrecomputation.«x86_64-tables») (static_scalars : I)
+    (dynamic_scalars : J) (dynamic_points : K)
+    (xs : List Clause0_Item) (ss : List scalar.Scalar) (ys : List Clause2_Item)
+    (ds : List scalar.Scalar) (qops : List (Option ristretto.RistrettoPoint.«x86_64-tables»))
+    (hself : self.IsValid) (hself_b : self.LimbsLt 54)
+    (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
+    (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
+    (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
+    (hborrow_static : List.Forall₂
+      (fun x s => borrowStaticInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
+    (hborrow_dynamic : List.Forall₂
+      (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
+    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hdynamic : none ∉ qops → ds.length = qops.length) :
+    optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
+      borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
+      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-tables») => (r = none ↔ none ∈ qops) ∧
+        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+          R.LimbsLt 52 ⦄ :=
+  optional_mixed_multiscalar_mul_represents staticScalarsInst borrowStaticInst dynamicScalarsInst
+      borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
+      self.points xs ss ys ds qops ((self.represents_iff self.points).mpr ⟨hself, rfl⟩) hself_b
+      hstatic_scalars hdynamic_scalars hdynamic_points hborrow_static hborrow_dynamic hss hds hqs
+      hxs hys hqops hstatic hdynamic
+
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables»
 end Curve25519Dalek.ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts
 
@@ -198,7 +263,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPoint
 precomputation of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27`
 out. -/
 @[step]
-theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+theorem new_represents {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-tables»)
     (static_points : I) (ys : List Clause0_Item)
@@ -229,23 +294,44 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
       hps (by rw [hv, ← hpsys]; exact hys) as ⟨r, h1, h2⟩
   exact ⟨h1, h2⟩
 
+/-- `VartimePrecomputedMultiscalarMul::new` for `VartimeRistrettoPrecomputation`: a
+precomputation of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27`
+out. -/
+theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+    (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-tables»)
+    (static_points : I) (ys : List Clause0_Item)
+    (ps : List ristretto.RistrettoPoint.«i686-tables»)
+    (hstatic_points : pointsInst.Yields static_points ys)
+    (hborrow : List.Forall₂
+      (fun y P => borrowInst.borrow y
+          ⦃ (P' : ristretto.RistrettoPoint.«i686-tables») => P' = P ⦄)
+      ys ps)
+    (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    new pointsInst borrowInst static_points
+      ⦃ (r : VartimeRistrettoPrecomputation.«i686-tables») =>
+        r.IsValid ∧ r.points = (ps.map (·.toPoint)) ∧ r.LimbsLt 27 ⦄ := by
+  refine spec_mono (new_represents pointsInst borrowInst static_points ys ps hstatic_points hborrow
+      hps hys) fun r h => ?_
+  obtain ⟨hr, hb⟩ := h
+  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
+  exact ⟨h1, h2, hb⟩
+
 /-- `VartimePrecomputedMultiscalarMul::len` for `VartimeRistrettoPrecomputation`: the number of
 static points. -/
 @[step]
-theorem len_spec (self : VartimeRistrettoPrecomputation.«i686-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    len self ⦃ (r : Usize) => r.val = ps.length ⦄ := by
+theorem len_spec (self : VartimeRistrettoPrecomputation.«i686-tables») :
+    len self ⦃ (r : Usize) => r.val = self.points.length ⦄ := by
   unfold len
-  exact backend.«VartimePrecomputedStrausi686-tables».len_spec self ps hself
+  exact backend.«VartimePrecomputedStrausi686-tables».len_spec self
 
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeRistrettoPrecomputation`: whether
 there are no static points. -/
 @[step]
-theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«i686-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄ := by
+theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«i686-tables») :
+    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausi686-tables».is_empty_spec self ps hself
+  exact backend.«VartimePrecomputedStrausi686-tables».is_empty_spec self
 
 set_option linter.style.longLine false
 open «VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables»
@@ -299,7 +385,7 @@ otherwise `∑ s_i • ps_i + ∑ d_i • Q_i` (at most `|ps|` static scalars, t
 as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
 `< 2^26`. -/
 @[step]
-theorem optional_mixed_multiscalar_mul_spec
+theorem optional_mixed_multiscalar_mul_represents
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowStaticInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -353,6 +439,49 @@ theorem optional_mixed_multiscalar_mul_spec
   rintro r rfl
   exact ⟨hnone, hsome⟩
 
+/-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
+`VartimeRistrettoPrecomputation` (static points `self.points`): `none` iff some dynamic point is
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
+ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
+`< 2^26`. -/
+theorem optional_mixed_multiscalar_mul_spec
+    {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
+    (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowStaticInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
+    (dynamicScalarsInst : core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+    (borrowDynamicInst : core.borrow.Borrow Clause2_Item scalar.Scalar)
+    (dynamicPointsInst : core.iter.traits.collect.IntoIterator K
+      (Option ristretto.RistrettoPoint.«i686-tables») Clause4_IntoIter)
+    (self : VartimeRistrettoPrecomputation.«i686-tables») (static_scalars : I)
+    (dynamic_scalars : J) (dynamic_points : K)
+    (xs : List Clause0_Item) (ss : List scalar.Scalar) (ys : List Clause2_Item)
+    (ds : List scalar.Scalar) (qops : List (Option ristretto.RistrettoPoint.«i686-tables»))
+    (hself : self.IsValid) (hself_b : self.LimbsLt 27)
+    (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
+    (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
+    (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
+    (hborrow_static : List.Forall₂
+      (fun x s => borrowStaticInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
+    (hborrow_dynamic : List.Forall₂
+      (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve)
+    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hdynamic : none ∉ qops → ds.length = qops.length) :
+    optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
+      borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
+      ⦃ (r : Option ristretto.RistrettoPoint.«i686-tables») => (r = none ↔ none ∈ qops) ∧
+        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+          R.LimbsLt 26 ⦄ :=
+  optional_mixed_multiscalar_mul_represents staticScalarsInst borrowStaticInst dynamicScalarsInst
+      borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
+      self.points xs ss ys ds qops ((self.represents_iff self.points).mpr ⟨hself, rfl⟩) hself_b
+      hstatic_scalars hdynamic_scalars hdynamic_points hborrow_static hborrow_dynamic hss hds hqs
+      hxs hys hqops hstatic hdynamic
+
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables»
 end Curve25519Dalek.ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts
 
@@ -363,7 +492,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPoint
 precomputation of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54`
 out. -/
 @[step]
-theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+theorem new_represents {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«x86_64-no-tables»)
     (static_points : I) (ys : List Clause0_Item)
@@ -394,23 +523,44 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
       hps (by rw [hv, ← hpsys]; exact hys) as ⟨r, h1, h2⟩
   exact ⟨h1, h2⟩
 
+/-- `VartimePrecomputedMultiscalarMul::new` for `VartimeRistrettoPrecomputation`: a
+precomputation of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54`
+out. -/
+theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+    (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«x86_64-no-tables»)
+    (static_points : I) (ys : List Clause0_Item)
+    (ps : List ristretto.RistrettoPoint.«x86_64-no-tables»)
+    (hstatic_points : pointsInst.Yields static_points ys)
+    (hborrow : List.Forall₂
+      (fun y P => borrowInst.borrow y
+          ⦃ (P' : ristretto.RistrettoPoint.«x86_64-no-tables») => P' = P ⦄)
+      ys ps)
+    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    new pointsInst borrowInst static_points
+      ⦃ (r : VartimeRistrettoPrecomputation.«x86_64-no-tables») =>
+        r.IsValid ∧ r.points = (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄ := by
+  refine spec_mono (new_represents pointsInst borrowInst static_points ys ps hstatic_points hborrow
+      hps hys) fun r h => ?_
+  obtain ⟨hr, hb⟩ := h
+  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
+  exact ⟨h1, h2, hb⟩
+
 /-- `VartimePrecomputedMultiscalarMul::len` for `VartimeRistrettoPrecomputation`: the number of
 static points. -/
 @[step]
-theorem len_spec (self : VartimeRistrettoPrecomputation.«x86_64-no-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    len self ⦃ (r : Usize) => r.val = ps.length ⦄ := by
+theorem len_spec (self : VartimeRistrettoPrecomputation.«x86_64-no-tables») :
+    len self ⦃ (r : Usize) => r.val = self.points.length ⦄ := by
   unfold len
-  exact backend.«VartimePrecomputedStrausx86_64-no-tables».len_spec self ps hself
+  exact backend.«VartimePrecomputedStrausx86_64-no-tables».len_spec self
 
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeRistrettoPrecomputation`: whether
 there are no static points. -/
 @[step]
-theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-no-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄ := by
+theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-no-tables») :
+    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausx86_64-no-tables».is_empty_spec self ps hself
+  exact backend.«VartimePrecomputedStrausx86_64-no-tables».is_empty_spec self
 
 set_option linter.style.longLine false
 open «VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -464,7 +614,7 @@ otherwise `∑ s_i • ps_i + ∑ d_i • Q_i` (at most `|ps|` static scalars, t
 as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
 `< 2^52`. -/
 @[step]
-theorem optional_mixed_multiscalar_mul_spec
+theorem optional_mixed_multiscalar_mul_represents
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowStaticInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -518,6 +668,49 @@ theorem optional_mixed_multiscalar_mul_spec
   rintro r rfl
   exact ⟨hnone, hsome⟩
 
+/-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
+`VartimeRistrettoPrecomputation` (static points `self.points`): `none` iff some dynamic point is
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
+ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
+`< 2^52`. -/
+theorem optional_mixed_multiscalar_mul_spec
+    {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
+    (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowStaticInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
+    (dynamicScalarsInst : core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+    (borrowDynamicInst : core.borrow.Borrow Clause2_Item scalar.Scalar)
+    (dynamicPointsInst : core.iter.traits.collect.IntoIterator K
+      (Option ristretto.RistrettoPoint.«x86_64-no-tables») Clause4_IntoIter)
+    (self : VartimeRistrettoPrecomputation.«x86_64-no-tables») (static_scalars : I)
+    (dynamic_scalars : J) (dynamic_points : K)
+    (xs : List Clause0_Item) (ss : List scalar.Scalar) (ys : List Clause2_Item)
+    (ds : List scalar.Scalar) (qops : List (Option ristretto.RistrettoPoint.«x86_64-no-tables»))
+    (hself : self.IsValid) (hself_b : self.LimbsLt 54)
+    (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
+    (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
+    (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
+    (hborrow_static : List.Forall₂
+      (fun x s => borrowStaticInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
+    (hborrow_dynamic : List.Forall₂
+      (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
+    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hdynamic : none ∉ qops → ds.length = qops.length) :
+    optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
+      borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
+      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-no-tables») => (r = none ↔ none ∈ qops) ∧
+        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+          R.LimbsLt 52 ⦄ :=
+  optional_mixed_multiscalar_mul_represents staticScalarsInst borrowStaticInst dynamicScalarsInst
+      borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
+      self.points xs ss ys ds qops ((self.represents_iff self.points).mpr ⟨hself, rfl⟩) hself_b
+      hstatic_scalars hdynamic_scalars hdynamic_points hborrow_static hborrow_dynamic hss hds hqs
+      hxs hys hqops hstatic hdynamic
+
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables»
 end Curve25519Dalek.ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts
 
@@ -528,7 +721,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPoint
 precomputation of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27`
 out. -/
 @[step]
-theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+theorem new_represents {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-no-tables»)
     (static_points : I) (ys : List Clause0_Item)
@@ -559,23 +752,44 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
       hps (by rw [hv, ← hpsys]; exact hys) as ⟨r, h1, h2⟩
   exact ⟨h1, h2⟩
 
+/-- `VartimePrecomputedMultiscalarMul::new` for `VartimeRistrettoPrecomputation`: a
+precomputation of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27`
+out. -/
+theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+    (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-no-tables»)
+    (static_points : I) (ys : List Clause0_Item)
+    (ps : List ristretto.RistrettoPoint.«i686-no-tables»)
+    (hstatic_points : pointsInst.Yields static_points ys)
+    (hborrow : List.Forall₂
+      (fun y P => borrowInst.borrow y
+          ⦃ (P' : ristretto.RistrettoPoint.«i686-no-tables») => P' = P ⦄)
+      ys ps)
+    (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    new pointsInst borrowInst static_points
+      ⦃ (r : VartimeRistrettoPrecomputation.«i686-no-tables») =>
+        r.IsValid ∧ r.points = (ps.map (·.toPoint)) ∧ r.LimbsLt 27 ⦄ := by
+  refine spec_mono (new_represents pointsInst borrowInst static_points ys ps hstatic_points hborrow
+      hps hys) fun r h => ?_
+  obtain ⟨hr, hb⟩ := h
+  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
+  exact ⟨h1, h2, hb⟩
+
 /-- `VartimePrecomputedMultiscalarMul::len` for `VartimeRistrettoPrecomputation`: the number of
 static points. -/
 @[step]
-theorem len_spec (self : VartimeRistrettoPrecomputation.«i686-no-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    len self ⦃ (r : Usize) => r.val = ps.length ⦄ := by
+theorem len_spec (self : VartimeRistrettoPrecomputation.«i686-no-tables») :
+    len self ⦃ (r : Usize) => r.val = self.points.length ⦄ := by
   unfold len
-  exact backend.«VartimePrecomputedStrausi686-no-tables».len_spec self ps hself
+  exact backend.«VartimePrecomputedStrausi686-no-tables».len_spec self
 
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeRistrettoPrecomputation`: whether
 there are no static points. -/
 @[step]
-theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«i686-no-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄ := by
+theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«i686-no-tables») :
+    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausi686-no-tables».is_empty_spec self ps hself
+  exact backend.«VartimePrecomputedStrausi686-no-tables».is_empty_spec self
 
 set_option linter.style.longLine false
 open «VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables»
@@ -629,7 +843,7 @@ otherwise `∑ s_i • ps_i + ∑ d_i • Q_i` (at most `|ps|` static scalars, t
 as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
 `< 2^26`. -/
 @[step]
-theorem optional_mixed_multiscalar_mul_spec
+theorem optional_mixed_multiscalar_mul_represents
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowStaticInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -682,6 +896,49 @@ theorem optional_mixed_multiscalar_mul_spec
     rfl
   rintro r rfl
   exact ⟨hnone, hsome⟩
+
+/-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
+`VartimeRistrettoPrecomputation` (static points `self.points`): `none` iff some dynamic point is
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
+ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
+`< 2^26`. -/
+theorem optional_mixed_multiscalar_mul_spec
+    {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
+    (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowStaticInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
+    (dynamicScalarsInst : core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+    (borrowDynamicInst : core.borrow.Borrow Clause2_Item scalar.Scalar)
+    (dynamicPointsInst : core.iter.traits.collect.IntoIterator K
+      (Option ristretto.RistrettoPoint.«i686-no-tables») Clause4_IntoIter)
+    (self : VartimeRistrettoPrecomputation.«i686-no-tables») (static_scalars : I)
+    (dynamic_scalars : J) (dynamic_points : K)
+    (xs : List Clause0_Item) (ss : List scalar.Scalar) (ys : List Clause2_Item)
+    (ds : List scalar.Scalar) (qops : List (Option ristretto.RistrettoPoint.«i686-no-tables»))
+    (hself : self.IsValid) (hself_b : self.LimbsLt 27)
+    (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
+    (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
+    (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
+    (hborrow_static : List.Forall₂
+      (fun x s => borrowStaticInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
+    (hborrow_dynamic : List.Forall₂
+      (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve)
+    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hdynamic : none ∉ qops → ds.length = qops.length) :
+    optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
+      borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
+      ⦃ (r : Option ristretto.RistrettoPoint.«i686-no-tables») => (r = none ↔ none ∈ qops) ∧
+        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+          R.LimbsLt 26 ⦄ :=
+  optional_mixed_multiscalar_mul_represents staticScalarsInst borrowStaticInst dynamicScalarsInst
+      borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
+      self.points xs ss ys ds qops ((self.represents_iff self.points).mpr ⟨hself, rfl⟩) hself_b
+      hstatic_scalars hdynamic_scalars hdynamic_points hborrow_static hborrow_dynamic hss hds hqs
+      hxs hys hqops hstatic hdynamic
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables»
 end Curve25519Dalek.ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts

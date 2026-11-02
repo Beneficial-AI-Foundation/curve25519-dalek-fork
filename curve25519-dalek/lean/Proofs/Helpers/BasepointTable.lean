@@ -107,7 +107,7 @@ theorem createLoop_spec (fromF : EdwardsPoint.«i686-tables» → Result Tab)
 
 open «Shared0EdwardsPointi686-tables».Insts
 open «CoreOpsArithAddSharedAAffineNielsPointi686-tablesCompletedPointi686-tables»
-  (add_spec_point)
+  (add_spec)
 
 /-- The loop body of `BasepointTable::mul_base` (both loops): for `i < adds`, add the digit
 `a[i]` selected from row `i / 2`, then `i := i + 2`. -/
@@ -178,8 +178,8 @@ theorem mulBaseLoop_spec (adds : Usize) (hadds : adds.val ≤ 64)
       have hsel' := hsel i.val (by scalar_tac)
       rw [← hi1, ← hlt', ← hd] at hsel'
       step with hsel' as ⟨q, hqon, hq, hqb⟩
-      step with add_spec_point Q q hQb hqb hQon hqon as ⟨c, hcon, hc, hcb⟩
-      step with «CompletedPointi686-tables».as_extended_spec_point as ⟨Q1, hQ1on, hQ1, hQ1b⟩
+      step with add_spec Q q hQb hqb hQon hqon as ⟨c, hcon, hc, hcb⟩
+      step with «CompletedPointi686-tables».as_extended_spec as ⟨Q1, hQ1on, hQ1, hQ1b⟩
       step as ⟨i3, hi3⟩
       refine ⟨by scalar_tac, by scalar_tac, by scalar_tac, hQ1on, hQ1b, ?_, by scalar_tac⟩
       rw [hQ1, hc, hQp, hq, zsmul_nsmul, show i3.val / 2 = i.val / 2 + 1 by scalar_tac,
@@ -267,7 +267,7 @@ theorem createLoop_spec (fromF : EdwardsPoint.«x86_64-tables» → Result Tab)
 
 open «Shared0EdwardsPointx86_64-tables».Insts
 open «CoreOpsArithAddSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables»
-  (add_spec_point)
+  (add_spec)
 
 /-- The loop body of `BasepointTable::mul_base` (both loops): for `i < adds`, add the digit
 `a[i]` selected from row `i / 2`, then `i := i + 2`. -/
@@ -338,8 +338,8 @@ theorem mulBaseLoop_spec (adds : Usize) (hadds : adds.val ≤ 64)
       have hsel' := hsel i.val (by scalar_tac)
       rw [← hi1, ← hlt', ← hd] at hsel'
       step with hsel' as ⟨q, hqon, hq, hqb⟩
-      step with add_spec_point Q q hQb hqb hQon hqon as ⟨c, hcon, hc, hcb⟩
-      step with «CompletedPointx86_64-tables».as_extended_spec_point as ⟨Q1, hQ1on, hQ1, hQ1b⟩
+      step with add_spec Q q hQb hqb hQon hqon as ⟨c, hcon, hc, hcb⟩
+      step with «CompletedPointx86_64-tables».as_extended_spec as ⟨Q1, hQ1on, hQ1, hQ1b⟩
       step as ⟨i3, hi3⟩
       refine ⟨by scalar_tac, by scalar_tac, by scalar_tac, hQ1on, hQ1b, ?_, by scalar_tac⟩
       rw [hQ1, hc, hQp, hq, zsmul_nsmul, show i3.val / 2 = i.val / 2 + 1 by scalar_tac,

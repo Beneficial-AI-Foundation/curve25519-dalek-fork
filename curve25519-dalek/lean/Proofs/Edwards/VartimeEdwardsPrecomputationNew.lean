@@ -3,6 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Proofs.Helpers.Represents
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
 public import Defs.Iterator
@@ -19,7 +20,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
 of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+theorem new_represents {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-tables»)
     (static_points : I) (ys : List Clause0_Item) (ps : List edwards.EdwardsPoint.«x86_64-tables»)
@@ -37,6 +38,26 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     hps hys as ⟨v, hv, hvb⟩
   exact ⟨hv, hvb⟩
 
+/-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
+of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54` out. -/
+theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+    (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-tables»)
+    (static_points : I) (ys : List Clause0_Item) (ps : List edwards.EdwardsPoint.«x86_64-tables»)
+    (hstatic_points : pointsInst.Yields static_points ys)
+    (hborrow : List.Forall₂
+      (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄) ys
+          ps)
+    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    new pointsInst borrowInst static_points
+      ⦃ (r : VartimeEdwardsPrecomputation.«x86_64-tables») =>
+        r.IsValid ∧ r.points = (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄ := by
+  refine spec_mono (new_represents pointsInst borrowInst static_points ys ps hstatic_points hborrow
+      hps hys) fun r h => ?_
+  obtain ⟨hr, hb⟩ := h
+  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
+  exact ⟨h1, h2, hb⟩
+
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«x86_64-tables».Insts
 
@@ -46,7 +67,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
 of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27` out. -/
 @[step]
-theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+theorem new_represents {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-tables»)
     (static_points : I) (ys : List Clause0_Item) (ps : List edwards.EdwardsPoint.«i686-tables»)
@@ -64,6 +85,26 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     hps hys as ⟨v, hv, hvb⟩
   exact ⟨hv, hvb⟩
 
+/-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
+of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27` out. -/
+theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+    (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-tables»)
+    (static_points : I) (ys : List Clause0_Item) (ps : List edwards.EdwardsPoint.«i686-tables»)
+    (hstatic_points : pointsInst.Yields static_points ys)
+    (hborrow : List.Forall₂
+      (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«i686-tables») => P' = P ⦄) ys
+          ps)
+    (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    new pointsInst borrowInst static_points
+      ⦃ (r : VartimeEdwardsPrecomputation.«i686-tables») =>
+        r.IsValid ∧ r.points = (ps.map (·.toPoint)) ∧ r.LimbsLt 27 ⦄ := by
+  refine spec_mono (new_represents pointsInst borrowInst static_points ys ps hstatic_points hborrow
+      hps hys) fun r h => ?_
+  obtain ⟨hr, hb⟩ := h
+  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
+  exact ⟨h1, h2, hb⟩
+
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«i686-tables».Insts
 
@@ -73,7 +114,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
 of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54` out. -/
 @[step]
-theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+theorem new_represents {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-no-tables»)
     (static_points : I) (ys : List Clause0_Item) (ps : List edwards.EdwardsPoint.«x86_64-no-tables»)
@@ -91,6 +132,26 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     hps hys as ⟨v, hv, hvb⟩
   exact ⟨hv, hvb⟩
 
+/-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
+of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54` out. -/
+theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+    (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-no-tables»)
+    (static_points : I) (ys : List Clause0_Item) (ps : List edwards.EdwardsPoint.«x86_64-no-tables»)
+    (hstatic_points : pointsInst.Yields static_points ys)
+    (hborrow : List.Forall₂
+      (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
+          ys ps)
+    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    new pointsInst borrowInst static_points
+      ⦃ (r : VartimeEdwardsPrecomputation.«x86_64-no-tables») =>
+        r.IsValid ∧ r.points = (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄ := by
+  refine spec_mono (new_represents pointsInst borrowInst static_points ys ps hstatic_points hborrow
+      hps hys) fun r h => ?_
+  obtain ⟨hr, hb⟩ := h
+  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
+  exact ⟨h1, h2, hb⟩
+
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts
 
@@ -100,7 +161,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
 of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27` out. -/
 @[step]
-theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+theorem new_represents {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-no-tables»)
     (static_points : I) (ys : List Clause0_Item) (ps : List edwards.EdwardsPoint.«i686-no-tables»)
@@ -117,6 +178,26 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
       hborrow
     hps hys as ⟨v, hv, hvb⟩
   exact ⟨hv, hvb⟩
+
+/-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
+of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27` out. -/
+theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
+    (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+    (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-no-tables»)
+    (static_points : I) (ys : List Clause0_Item) (ps : List edwards.EdwardsPoint.«i686-no-tables»)
+    (hstatic_points : pointsInst.Yields static_points ys)
+    (hborrow : List.Forall₂
+      (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«i686-no-tables») => P' = P ⦄)
+          ys ps)
+    (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    new pointsInst borrowInst static_points
+      ⦃ (r : VartimeEdwardsPrecomputation.«i686-no-tables») =>
+        r.IsValid ∧ r.points = (ps.map (·.toPoint)) ∧ r.LimbsLt 27 ⦄ := by
+  refine spec_mono (new_represents pointsInst borrowInst static_points ys ps hstatic_points hborrow
+      hps hys) fun r h => ?_
+  obtain ⟨hr, hb⟩ := h
+  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
+  exact ⟨h1, h2, hb⟩
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«i686-no-tables».Insts
