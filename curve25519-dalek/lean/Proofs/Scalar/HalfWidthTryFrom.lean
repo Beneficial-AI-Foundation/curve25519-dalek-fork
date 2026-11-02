@@ -56,8 +56,10 @@ private theorem try_from_loop_spec (value : Scalar) (i : Usize) (hi : 16 ≤ i.v
       ∀ j : ℕ, 16 ≤ j → j < i.val → value.bytes[j]!.val = 0)
   · rintro k ⟨hk, hzk⟩
     unfold try_from_loop.body
+    have hlen : (Slice.len (Array.to_slice value.bytes)).val = 32 := by simp
+    simp only [lift, bind_ok]
     by_cases hlt : k.val < 32
-    · simp only [show k < 32#usize by scalar_tac, ite_true]
+    · simp only [show k < Slice.len (Array.to_slice value.bytes) by scalar_tac, ite_true]
       step with Array.index_usize_getElem!_spec as ⟨x, hx⟩
       by_cases hx0 : x = 0#u8
       · simp only [hx0, bne_self_eq_false, Bool.false_eq_true, ite_false]
@@ -71,7 +73,8 @@ private theorem try_from_loop_spec (value : Scalar) (i : Usize) (hi : 16 ≤ i.v
         refine ⟨fun hall => absurd ?_ hx0, fun _ => trivial⟩
         rw [hx]
         exact UScalar.eq_of_val_eq (hall k.val hk.1 hlt)
-    · simp only [show ¬ k < 32#usize by scalar_tac, ite_false, WP.spec_ok]
+    · simp only [show ¬ k < Slice.len (Array.to_slice value.bytes) by scalar_tac, ite_false,
+        WP.spec_ok]
       exact ⟨fun _ => trivial, fun hn => absurd (fun j hj hj32 => hzk j hj (by scalar_tac)) hn⟩
   · exact ⟨hi, hz⟩
 
