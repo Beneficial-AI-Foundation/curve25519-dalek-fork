@@ -3342,8 +3342,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1414,
-        "end_line": 1417
+        "begin_line": 1409,
+        "end_line": 1412
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3361,8 +3361,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1414,
-        "end_line": 1417
+        "begin_line": 1409,
+        "end_line": 1412
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3380,8 +3380,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1410,
-        "end_line": 1420
+        "begin_line": 1405,
+        "end_line": 1415
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3414,8 +3414,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 806,
-        "end_line": 808
+        "begin_line": 801,
+        "end_line": 803
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3431,8 +3431,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 818,
-        "end_line": 820
+        "begin_line": 813,
+        "end_line": 815
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3448,8 +3448,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 823,
-        "end_line": 823
+        "begin_line": 818,
+        "end_line": 818
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3465,8 +3465,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4032,8 +4032,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1414,
-        "end_line": 1417
+        "begin_line": 1409,
+        "end_line": 1412
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4051,8 +4051,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1414,
-        "end_line": 1417
+        "begin_line": 1409,
+        "end_line": 1412
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4070,8 +4070,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1410,
-        "end_line": 1420
+        "begin_line": 1405,
+        "end_line": 1415
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4104,8 +4104,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 806,
-        "end_line": 808
+        "begin_line": 801,
+        "end_line": 803
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4121,8 +4121,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 818,
-        "end_line": 820
+        "begin_line": 813,
+        "end_line": 815
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4138,8 +4138,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 823,
-        "end_line": 823
+        "begin_line": 818,
+        "end_line": 818
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4155,8 +4155,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4468,8 +4468,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1414,
-        "end_line": 1417
+        "begin_line": 1409,
+        "end_line": 1412
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4487,8 +4487,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1414,
-        "end_line": 1417
+        "begin_line": 1409,
+        "end_line": 1412
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4506,8 +4506,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1410,
-        "end_line": 1420
+        "begin_line": 1405,
+        "end_line": 1415
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4540,8 +4540,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 806,
-        "end_line": 808
+        "begin_line": 801,
+        "end_line": 803
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4557,8 +4557,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 818,
-        "end_line": 820
+        "begin_line": 813,
+        "end_line": 815
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4574,8 +4574,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 823,
-        "end_line": 823
+        "begin_line": 818,
+        "end_line": 818
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4591,8 +4591,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4904,8 +4904,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1414,
-        "end_line": 1417
+        "begin_line": 1409,
+        "end_line": 1412
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4923,8 +4923,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1414,
-        "end_line": 1417
+        "begin_line": 1409,
+        "end_line": 1412
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4942,8 +4942,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1410,
-        "end_line": 1420
+        "begin_line": 1405,
+        "end_line": 1415
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4976,8 +4976,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 806,
-        "end_line": 808
+        "begin_line": 801,
+        "end_line": 803
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4993,8 +4993,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 818,
-        "end_line": 820
+        "begin_line": 813,
+        "end_line": 815
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5010,8 +5010,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 823,
-        "end_line": 823
+        "begin_line": 818,
+        "end_line": 818
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5027,8 +5027,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5374,8 +5374,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 795,
-        "end_line": 797
+        "begin_line": 790,
+        "end_line": 792
       },
       "is_opaque": false,
       "can_fail": true,
@@ -6026,8 +6026,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 795,
-        "end_line": 797
+        "begin_line": 790,
+        "end_line": 792
       },
       "is_opaque": false,
       "can_fail": true,
@@ -6534,8 +6534,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 795,
-        "end_line": 797
+        "begin_line": 790,
+        "end_line": 792
       },
       "is_opaque": false,
       "can_fail": true,
@@ -7131,8 +7131,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 795,
-        "end_line": 797
+        "begin_line": 790,
+        "end_line": 792
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13536,8 +13536,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 909,
-        "end_line": 911
+        "begin_line": 904,
+        "end_line": 906
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13553,8 +13553,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13604,8 +13604,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 909,
-        "end_line": 911
+        "begin_line": 904,
+        "end_line": 906
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13621,8 +13621,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13672,8 +13672,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 909,
-        "end_line": 911
+        "begin_line": 904,
+        "end_line": 906
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13689,8 +13689,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13740,8 +13740,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 909,
-        "end_line": 911
+        "begin_line": 904,
+        "end_line": 906
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13757,8 +13757,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14955,8 +14955,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 604,
-        "end_line": 607
+        "begin_line": 602,
+        "end_line": 604
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14974,8 +14974,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 604,
-        "end_line": 607
+        "begin_line": 602,
+        "end_line": 604
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14993,8 +14993,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 613,
-        "end_line": 617
+        "begin_line": 609,
+        "end_line": 612
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15012,8 +15012,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 613,
-        "end_line": 617
+        "begin_line": 609,
+        "end_line": 612
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15032,7 +15032,7 @@
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
         "begin_line": 595,
-        "end_line": 620
+        "end_line": 615
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15048,8 +15048,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 604,
-        "end_line": 607
+        "begin_line": 602,
+        "end_line": 604
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15067,8 +15067,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 604,
-        "end_line": 607
+        "begin_line": 602,
+        "end_line": 604
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15086,8 +15086,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 613,
-        "end_line": 617
+        "begin_line": 609,
+        "end_line": 612
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15105,8 +15105,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 613,
-        "end_line": 617
+        "begin_line": 609,
+        "end_line": 612
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15125,7 +15125,7 @@
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
         "begin_line": 595,
-        "end_line": 620
+        "end_line": 615
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15268,8 +15268,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 604,
-        "end_line": 607
+        "begin_line": 602,
+        "end_line": 604
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15287,8 +15287,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 604,
-        "end_line": 607
+        "begin_line": 602,
+        "end_line": 604
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15306,8 +15306,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 613,
-        "end_line": 617
+        "begin_line": 609,
+        "end_line": 612
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15325,8 +15325,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 613,
-        "end_line": 617
+        "begin_line": 609,
+        "end_line": 612
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15345,7 +15345,7 @@
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
         "begin_line": 595,
-        "end_line": 620
+        "end_line": 615
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15361,8 +15361,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 604,
-        "end_line": 607
+        "begin_line": 602,
+        "end_line": 604
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15380,8 +15380,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 604,
-        "end_line": 607
+        "begin_line": 602,
+        "end_line": 604
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15399,8 +15399,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 613,
-        "end_line": 617
+        "begin_line": 609,
+        "end_line": 612
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15418,8 +15418,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 613,
-        "end_line": 617
+        "begin_line": 609,
+        "end_line": 612
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15438,7 +15438,7 @@
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
         "begin_line": 595,
-        "end_line": 620
+        "end_line": 615
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15454,8 +15454,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 623,
-        "end_line": 625
+        "begin_line": 618,
+        "end_line": 620
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15471,8 +15471,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 623,
-        "end_line": 625
+        "begin_line": 618,
+        "end_line": 620
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15488,8 +15488,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 623,
-        "end_line": 625
+        "begin_line": 618,
+        "end_line": 620
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15505,8 +15505,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 623,
-        "end_line": 625
+        "begin_line": 618,
+        "end_line": 620
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15539,8 +15539,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15556,8 +15556,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15573,8 +15573,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15590,8 +15590,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15607,8 +15607,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 629,
-        "end_line": 638
+        "begin_line": 624,
+        "end_line": 633
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15624,8 +15624,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15641,8 +15641,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15658,8 +15658,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15675,8 +15675,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15692,8 +15692,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 629,
-        "end_line": 638
+        "begin_line": 624,
+        "end_line": 633
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15726,8 +15726,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15743,8 +15743,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15760,8 +15760,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15777,8 +15777,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15794,8 +15794,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 629,
-        "end_line": 638
+        "begin_line": 624,
+        "end_line": 633
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15811,8 +15811,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15828,8 +15828,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15845,8 +15845,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15862,8 +15862,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15879,8 +15879,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 629,
-        "end_line": 638
+        "begin_line": 624,
+        "end_line": 633
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15896,8 +15896,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 644,
-        "end_line": 646
+        "begin_line": 639,
+        "end_line": 641
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15915,8 +15915,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 644,
-        "end_line": 646
+        "begin_line": 639,
+        "end_line": 641
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15934,8 +15934,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 650,
-        "end_line": 654
+        "begin_line": 645,
+        "end_line": 649
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15953,8 +15953,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 650,
-        "end_line": 654
+        "begin_line": 645,
+        "end_line": 649
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15972,8 +15972,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 642,
-        "end_line": 656
+        "begin_line": 637,
+        "end_line": 651
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15989,8 +15989,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 644,
-        "end_line": 646
+        "begin_line": 639,
+        "end_line": 641
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16008,8 +16008,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 644,
-        "end_line": 646
+        "begin_line": 639,
+        "end_line": 641
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16027,8 +16027,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 650,
-        "end_line": 654
+        "begin_line": 645,
+        "end_line": 649
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16046,8 +16046,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 650,
-        "end_line": 654
+        "begin_line": 645,
+        "end_line": 649
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16065,8 +16065,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 642,
-        "end_line": 656
+        "begin_line": 637,
+        "end_line": 651
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16082,8 +16082,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 644,
-        "end_line": 646
+        "begin_line": 639,
+        "end_line": 641
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16101,8 +16101,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 644,
-        "end_line": 646
+        "begin_line": 639,
+        "end_line": 641
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16120,8 +16120,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 650,
-        "end_line": 654
+        "begin_line": 645,
+        "end_line": 649
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16139,8 +16139,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 650,
-        "end_line": 654
+        "begin_line": 645,
+        "end_line": 649
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16158,8 +16158,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 642,
-        "end_line": 656
+        "begin_line": 637,
+        "end_line": 651
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16175,8 +16175,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 644,
-        "end_line": 646
+        "begin_line": 639,
+        "end_line": 641
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16194,8 +16194,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 644,
-        "end_line": 646
+        "begin_line": 639,
+        "end_line": 641
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16213,8 +16213,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 650,
-        "end_line": 654
+        "begin_line": 645,
+        "end_line": 649
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16232,8 +16232,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 650,
-        "end_line": 654
+        "begin_line": 645,
+        "end_line": 649
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16251,8 +16251,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 642,
-        "end_line": 656
+        "begin_line": 637,
+        "end_line": 651
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16268,8 +16268,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16285,8 +16285,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16302,8 +16302,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16319,8 +16319,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16336,8 +16336,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16353,8 +16353,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16370,8 +16370,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16387,8 +16387,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16404,8 +16404,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 827,
-        "end_line": 829
+        "begin_line": 822,
+        "end_line": 824
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16421,8 +16421,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 827,
-        "end_line": 829
+        "begin_line": 822,
+        "end_line": 824
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16438,8 +16438,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 827,
-        "end_line": 829
+        "begin_line": 822,
+        "end_line": 824
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16455,8 +16455,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 827,
-        "end_line": 829
+        "begin_line": 822,
+        "end_line": 824
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16472,8 +16472,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16489,8 +16489,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16506,8 +16506,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16523,8 +16523,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16540,8 +16540,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16557,8 +16557,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16574,8 +16574,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16591,8 +16591,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16608,8 +16608,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16625,8 +16625,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16642,8 +16642,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16659,8 +16659,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16676,8 +16676,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 839,
-        "end_line": 841
+        "begin_line": 834,
+        "end_line": 836
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16693,8 +16693,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 839,
-        "end_line": 841
+        "begin_line": 834,
+        "end_line": 836
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16710,8 +16710,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 839,
-        "end_line": 841
+        "begin_line": 834,
+        "end_line": 836
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16727,8 +16727,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 839,
-        "end_line": 841
+        "begin_line": 834,
+        "end_line": 836
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16744,8 +16744,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 844,
-        "end_line": 844
+        "begin_line": 839,
+        "end_line": 839
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16761,8 +16761,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 844,
-        "end_line": 844
+        "begin_line": 839,
+        "end_line": 839
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16778,8 +16778,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 844,
-        "end_line": 844
+        "begin_line": 839,
+        "end_line": 839
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16795,8 +16795,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 844,
-        "end_line": 844
+        "begin_line": 839,
+        "end_line": 839
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16812,8 +16812,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 855,
-        "end_line": 857
+        "begin_line": 850,
+        "end_line": 852
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16831,8 +16831,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 855,
-        "end_line": 857
+        "begin_line": 850,
+        "end_line": 852
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16850,8 +16850,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 850,
-        "end_line": 859
+        "begin_line": 845,
+        "end_line": 854
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16867,8 +16867,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 855,
-        "end_line": 857
+        "begin_line": 850,
+        "end_line": 852
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16886,8 +16886,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 855,
-        "end_line": 857
+        "begin_line": 850,
+        "end_line": 852
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16905,8 +16905,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 850,
-        "end_line": 859
+        "begin_line": 845,
+        "end_line": 854
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16922,8 +16922,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 855,
-        "end_line": 857
+        "begin_line": 850,
+        "end_line": 852
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16941,8 +16941,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 855,
-        "end_line": 857
+        "begin_line": 850,
+        "end_line": 852
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16960,8 +16960,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 850,
-        "end_line": 859
+        "begin_line": 845,
+        "end_line": 854
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16977,8 +16977,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 855,
-        "end_line": 857
+        "begin_line": 850,
+        "end_line": 852
       },
       "is_opaque": false,
       "can_fail": true,
@@ -16996,8 +16996,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 855,
-        "end_line": 857
+        "begin_line": 850,
+        "end_line": 852
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17015,8 +17015,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 850,
-        "end_line": 859
+        "begin_line": 845,
+        "end_line": 854
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17032,8 +17032,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 869,
-        "end_line": 876
+        "begin_line": 864,
+        "end_line": 871
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17049,8 +17049,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 869,
-        "end_line": 876
+        "begin_line": 864,
+        "end_line": 871
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17066,8 +17066,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 869,
-        "end_line": 876
+        "begin_line": 864,
+        "end_line": 871
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17083,8 +17083,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 869,
-        "end_line": 876
+        "begin_line": 864,
+        "end_line": 871
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17100,8 +17100,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 882,
-        "end_line": 884
+        "begin_line": 877,
+        "end_line": 879
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17117,8 +17117,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 882,
-        "end_line": 884
+        "begin_line": 877,
+        "end_line": 879
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17134,8 +17134,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 882,
-        "end_line": 884
+        "begin_line": 877,
+        "end_line": 879
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17151,8 +17151,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 882,
-        "end_line": 884
+        "begin_line": 877,
+        "end_line": 879
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17168,8 +17168,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 892,
-        "end_line": 895
+        "begin_line": 887,
+        "end_line": 890
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17185,8 +17185,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 892,
-        "end_line": 895
+        "begin_line": 887,
+        "end_line": 890
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17202,8 +17202,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 892,
-        "end_line": 895
+        "begin_line": 887,
+        "end_line": 890
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17219,8 +17219,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 892,
-        "end_line": 895
+        "begin_line": 887,
+        "end_line": 890
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17236,8 +17236,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 898,
-        "end_line": 898
+        "begin_line": 893,
+        "end_line": 893
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17253,8 +17253,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 898,
-        "end_line": 898
+        "begin_line": 893,
+        "end_line": 893
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17270,8 +17270,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 898,
-        "end_line": 898
+        "begin_line": 893,
+        "end_line": 893
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17287,8 +17287,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 898,
-        "end_line": 898
+        "begin_line": 893,
+        "end_line": 893
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17304,8 +17304,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17321,8 +17321,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17338,8 +17338,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17355,8 +17355,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17372,8 +17372,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17389,8 +17389,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17406,8 +17406,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17423,8 +17423,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17440,8 +17440,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 921,
-        "end_line": 923
+        "begin_line": 916,
+        "end_line": 918
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17457,8 +17457,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17474,8 +17474,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17491,8 +17491,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17508,8 +17508,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 921,
-        "end_line": 923
+        "begin_line": 916,
+        "end_line": 918
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17525,8 +17525,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17542,8 +17542,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17559,8 +17559,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17576,8 +17576,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 921,
-        "end_line": 923
+        "begin_line": 916,
+        "end_line": 918
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17593,8 +17593,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17610,8 +17610,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17627,8 +17627,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17644,8 +17644,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 921,
-        "end_line": 923
+        "begin_line": 916,
+        "end_line": 918
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17661,8 +17661,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17678,8 +17678,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17695,8 +17695,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17712,8 +17712,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17731,8 +17731,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17750,8 +17750,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17769,8 +17769,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17788,8 +17788,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17805,8 +17805,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17822,8 +17822,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17839,8 +17839,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 931,
-        "end_line": 941
+        "begin_line": 926,
+        "end_line": 936
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17856,8 +17856,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 931,
-        "end_line": 941
+        "begin_line": 926,
+        "end_line": 936
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17873,8 +17873,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17892,8 +17892,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17911,8 +17911,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17930,8 +17930,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17949,8 +17949,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17966,8 +17966,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -17983,8 +17983,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18000,8 +18000,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 931,
-        "end_line": 941
+        "begin_line": 926,
+        "end_line": 936
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18017,8 +18017,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 931,
-        "end_line": 941
+        "begin_line": 926,
+        "end_line": 936
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18051,8 +18051,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 945,
-        "end_line": 957
+        "begin_line": 940,
+        "end_line": 952
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18068,8 +18068,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 945,
-        "end_line": 957
+        "begin_line": 940,
+        "end_line": 952
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18085,8 +18085,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 945,
-        "end_line": 957
+        "begin_line": 940,
+        "end_line": 952
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18102,8 +18102,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 945,
-        "end_line": 957
+        "begin_line": 940,
+        "end_line": 952
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18119,8 +18119,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 961,
-        "end_line": 969
+        "begin_line": 956,
+        "end_line": 964
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18136,8 +18136,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 961,
-        "end_line": 969
+        "begin_line": 956,
+        "end_line": 964
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18153,8 +18153,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 961,
-        "end_line": 969
+        "begin_line": 956,
+        "end_line": 964
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18170,8 +18170,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 961,
-        "end_line": 969
+        "begin_line": 956,
+        "end_line": 964
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18187,8 +18187,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 983,
-        "end_line": 999
+        "begin_line": 978,
+        "end_line": 994
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18204,8 +18204,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 983,
-        "end_line": 999
+        "begin_line": 978,
+        "end_line": 994
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18221,8 +18221,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 983,
-        "end_line": 999
+        "begin_line": 978,
+        "end_line": 994
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18238,8 +18238,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 983,
-        "end_line": 999
+        "begin_line": 978,
+        "end_line": 994
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18255,8 +18255,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1006,
-        "end_line": 1027
+        "begin_line": 1001,
+        "end_line": 1022
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18272,8 +18272,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1006,
-        "end_line": 1027
+        "begin_line": 1001,
+        "end_line": 1022
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18289,8 +18289,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1006,
-        "end_line": 1027
+        "begin_line": 1001,
+        "end_line": 1022
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18306,8 +18306,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1006,
-        "end_line": 1027
+        "begin_line": 1001,
+        "end_line": 1022
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18323,8 +18323,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1057,
-        "end_line": 1072
+        "begin_line": 1052,
+        "end_line": 1067
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18340,8 +18340,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1053,
-        "end_line": 1055
+        "begin_line": 1048,
+        "end_line": 1050
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18357,8 +18357,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1049,
-        "end_line": 1051
+        "begin_line": 1044,
+        "end_line": 1046
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18374,8 +18374,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1041,
-        "end_line": 1047
+        "begin_line": 1036,
+        "end_line": 1042
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18391,8 +18391,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1057,
-        "end_line": 1072
+        "begin_line": 1052,
+        "end_line": 1067
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18408,8 +18408,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1053,
-        "end_line": 1055
+        "begin_line": 1048,
+        "end_line": 1050
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18425,8 +18425,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1049,
-        "end_line": 1051
+        "begin_line": 1044,
+        "end_line": 1046
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18442,8 +18442,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1041,
-        "end_line": 1047
+        "begin_line": 1036,
+        "end_line": 1042
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18459,8 +18459,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1057,
-        "end_line": 1072
+        "begin_line": 1052,
+        "end_line": 1067
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18476,8 +18476,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1053,
-        "end_line": 1055
+        "begin_line": 1048,
+        "end_line": 1050
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18493,8 +18493,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1049,
-        "end_line": 1051
+        "begin_line": 1044,
+        "end_line": 1046
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18510,8 +18510,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1041,
-        "end_line": 1047
+        "begin_line": 1036,
+        "end_line": 1042
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18527,8 +18527,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1057,
-        "end_line": 1072
+        "begin_line": 1052,
+        "end_line": 1067
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18544,8 +18544,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1053,
-        "end_line": 1055
+        "begin_line": 1048,
+        "end_line": 1050
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18561,8 +18561,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1049,
-        "end_line": 1051
+        "begin_line": 1044,
+        "end_line": 1046
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18578,8 +18578,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1041,
-        "end_line": 1047
+        "begin_line": 1036,
+        "end_line": 1042
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18595,8 +18595,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1077,
-        "end_line": 1083
+        "begin_line": 1072,
+        "end_line": 1078
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18612,8 +18612,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1077,
-        "end_line": 1083
+        "begin_line": 1072,
+        "end_line": 1078
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18629,8 +18629,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1077,
-        "end_line": 1083
+        "begin_line": 1072,
+        "end_line": 1078
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18646,8 +18646,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1077,
-        "end_line": 1083
+        "begin_line": 1072,
+        "end_line": 1078
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18663,8 +18663,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1114,
-        "end_line": 1122
+        "begin_line": 1109,
+        "end_line": 1117
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18680,8 +18680,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1114,
-        "end_line": 1122
+        "begin_line": 1109,
+        "end_line": 1117
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18697,8 +18697,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1114,
-        "end_line": 1122
+        "begin_line": 1109,
+        "end_line": 1117
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18714,8 +18714,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1114,
-        "end_line": 1122
+        "begin_line": 1109,
+        "end_line": 1117
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18748,8 +18748,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18765,8 +18765,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18854,8 +18854,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18873,8 +18873,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18892,8 +18892,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18909,8 +18909,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18926,8 +18926,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -18998,8 +18998,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19017,8 +19017,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19036,8 +19036,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19070,8 +19070,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19142,8 +19142,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19161,8 +19161,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19180,8 +19180,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19199,8 +19199,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19218,8 +19218,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19235,8 +19235,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19324,8 +19324,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19343,8 +19343,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19362,8 +19362,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19379,8 +19379,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19396,8 +19396,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19413,8 +19413,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19430,8 +19430,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19449,8 +19449,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19468,8 +19468,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19487,8 +19487,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19506,8 +19506,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19523,8 +19523,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19595,8 +19595,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19614,8 +19614,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19633,8 +19633,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19650,8 +19650,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19667,8 +19667,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19701,8 +19701,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19773,8 +19773,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19792,8 +19792,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19811,8 +19811,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19830,8 +19830,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19849,8 +19849,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19866,8 +19866,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19955,8 +19955,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19974,8 +19974,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -19993,8 +19993,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20010,8 +20010,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20027,8 +20027,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20044,8 +20044,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20061,8 +20061,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20080,8 +20080,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20099,8 +20099,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20118,8 +20118,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20137,8 +20137,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20154,8 +20154,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20226,8 +20226,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20245,8 +20245,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20264,8 +20264,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20281,8 +20281,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20298,8 +20298,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20332,8 +20332,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20404,8 +20404,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20423,8 +20423,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20442,8 +20442,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20461,8 +20461,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20480,8 +20480,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20497,8 +20497,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20586,8 +20586,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20605,8 +20605,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20624,8 +20624,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20641,8 +20641,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20658,8 +20658,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20675,8 +20675,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20692,8 +20692,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20711,8 +20711,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20730,8 +20730,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20749,8 +20749,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20768,8 +20768,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20785,8 +20785,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20857,8 +20857,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20876,8 +20876,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20895,8 +20895,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20912,8 +20912,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20929,8 +20929,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -20963,8 +20963,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21035,8 +21035,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21054,8 +21054,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21073,8 +21073,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21092,8 +21092,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21111,8 +21111,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21128,8 +21128,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21217,8 +21217,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21236,8 +21236,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21255,8 +21255,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21272,8 +21272,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21289,8 +21289,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21306,8 +21306,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21323,8 +21323,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21342,8 +21342,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21361,8 +21361,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21380,8 +21380,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21399,8 +21399,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21416,8 +21416,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21488,8 +21488,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21507,8 +21507,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21526,8 +21526,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21543,8 +21543,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21560,8 +21560,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21577,8 +21577,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1354,
-        "end_line": 1357
+        "begin_line": 1349,
+        "end_line": 1352
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21594,8 +21594,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1354,
-        "end_line": 1357
+        "begin_line": 1349,
+        "end_line": 1352
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21611,8 +21611,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1354,
-        "end_line": 1357
+        "begin_line": 1349,
+        "end_line": 1352
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21628,8 +21628,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1354,
-        "end_line": 1357
+        "begin_line": 1349,
+        "end_line": 1352
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21645,8 +21645,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1358,
-        "end_line": 1361
+        "begin_line": 1353,
+        "end_line": 1356
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21662,8 +21662,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1358,
-        "end_line": 1361
+        "begin_line": 1353,
+        "end_line": 1356
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21679,8 +21679,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1358,
-        "end_line": 1361
+        "begin_line": 1353,
+        "end_line": 1356
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21696,8 +21696,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1358,
-        "end_line": 1361
+        "begin_line": 1353,
+        "end_line": 1356
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21713,8 +21713,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1362,
-        "end_line": 1365
+        "begin_line": 1357,
+        "end_line": 1360
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21730,8 +21730,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1362,
-        "end_line": 1365
+        "begin_line": 1357,
+        "end_line": 1360
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21747,8 +21747,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1362,
-        "end_line": 1365
+        "begin_line": 1357,
+        "end_line": 1360
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21764,8 +21764,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1362,
-        "end_line": 1365
+        "begin_line": 1357,
+        "end_line": 1360
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21781,8 +21781,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1366,
-        "end_line": 1369
+        "begin_line": 1361,
+        "end_line": 1364
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21798,8 +21798,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1366,
-        "end_line": 1369
+        "begin_line": 1361,
+        "end_line": 1364
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21815,8 +21815,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1366,
-        "end_line": 1369
+        "begin_line": 1361,
+        "end_line": 1364
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21832,8 +21832,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1366,
-        "end_line": 1369
+        "begin_line": 1361,
+        "end_line": 1364
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21849,8 +21849,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1372,
-        "end_line": 1375
+        "begin_line": 1367,
+        "end_line": 1370
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21866,8 +21866,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1372,
-        "end_line": 1375
+        "begin_line": 1367,
+        "end_line": 1370
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21883,8 +21883,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1372,
-        "end_line": 1375
+        "begin_line": 1367,
+        "end_line": 1370
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21900,8 +21900,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1372,
-        "end_line": 1375
+        "begin_line": 1367,
+        "end_line": 1370
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21917,8 +21917,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1376,
-        "end_line": 1379
+        "begin_line": 1371,
+        "end_line": 1374
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21934,8 +21934,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1376,
-        "end_line": 1379
+        "begin_line": 1371,
+        "end_line": 1374
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21951,8 +21951,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1376,
-        "end_line": 1379
+        "begin_line": 1371,
+        "end_line": 1374
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21968,8 +21968,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1376,
-        "end_line": 1379
+        "begin_line": 1371,
+        "end_line": 1374
       },
       "is_opaque": false,
       "can_fail": true,
@@ -21985,8 +21985,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1380,
-        "end_line": 1383
+        "begin_line": 1375,
+        "end_line": 1378
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22002,8 +22002,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1380,
-        "end_line": 1383
+        "begin_line": 1375,
+        "end_line": 1378
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22019,8 +22019,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1380,
-        "end_line": 1383
+        "begin_line": 1375,
+        "end_line": 1378
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22036,8 +22036,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1380,
-        "end_line": 1383
+        "begin_line": 1375,
+        "end_line": 1378
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22053,8 +22053,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1386,
-        "end_line": 1389
+        "begin_line": 1381,
+        "end_line": 1384
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22070,8 +22070,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1386,
-        "end_line": 1389
+        "begin_line": 1381,
+        "end_line": 1384
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22087,8 +22087,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1386,
-        "end_line": 1389
+        "begin_line": 1381,
+        "end_line": 1384
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22104,8 +22104,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1386,
-        "end_line": 1389
+        "begin_line": 1381,
+        "end_line": 1384
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22121,8 +22121,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1390,
-        "end_line": 1393
+        "begin_line": 1385,
+        "end_line": 1388
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22138,8 +22138,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1390,
-        "end_line": 1393
+        "begin_line": 1385,
+        "end_line": 1388
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22155,8 +22155,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1390,
-        "end_line": 1393
+        "begin_line": 1385,
+        "end_line": 1388
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22172,8 +22172,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1390,
-        "end_line": 1393
+        "begin_line": 1385,
+        "end_line": 1388
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22189,8 +22189,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1396,
-        "end_line": 1399
+        "begin_line": 1391,
+        "end_line": 1394
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22206,8 +22206,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1396,
-        "end_line": 1399
+        "begin_line": 1391,
+        "end_line": 1394
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22223,8 +22223,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1396,
-        "end_line": 1399
+        "begin_line": 1391,
+        "end_line": 1394
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22240,8 +22240,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1396,
-        "end_line": 1399
+        "begin_line": 1391,
+        "end_line": 1394
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22257,8 +22257,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1405,
-        "end_line": 1407
+        "begin_line": 1400,
+        "end_line": 1402
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22274,8 +22274,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1405,
-        "end_line": 1407
+        "begin_line": 1400,
+        "end_line": 1402
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22291,8 +22291,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1405,
-        "end_line": 1407
+        "begin_line": 1400,
+        "end_line": 1402
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22308,8 +22308,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1405,
-        "end_line": 1407
+        "begin_line": 1400,
+        "end_line": 1402
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22342,8 +22342,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1445,
-        "end_line": 1447
+        "begin_line": 1440,
+        "end_line": 1442
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22359,8 +22359,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1445,
-        "end_line": 1447
+        "begin_line": 1440,
+        "end_line": 1442
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22376,8 +22376,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1445,
-        "end_line": 1447
+        "begin_line": 1440,
+        "end_line": 1442
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22393,8 +22393,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1445,
-        "end_line": 1447
+        "begin_line": 1440,
+        "end_line": 1442
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22410,8 +22410,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1475,
-        "end_line": 1477
+        "begin_line": 1470,
+        "end_line": 1472
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22427,8 +22427,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1475,
-        "end_line": 1477
+        "begin_line": 1470,
+        "end_line": 1472
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22444,8 +22444,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1475,
-        "end_line": 1477
+        "begin_line": 1470,
+        "end_line": 1472
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22461,8 +22461,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1475,
-        "end_line": 1477
+        "begin_line": 1470,
+        "end_line": 1472
       },
       "is_opaque": false,
       "can_fail": true,
@@ -33815,8 +33815,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       }
     },
     {
@@ -33839,8 +33839,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       }
     },
     {
@@ -34067,8 +34067,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       }
     },
     {
@@ -34079,8 +34079,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       }
     },
     {
@@ -34091,8 +34091,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       }
     },
     {
@@ -34103,8 +34103,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       }
     },
     {
@@ -34115,8 +34115,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       }
     },
     {
@@ -34127,8 +34127,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       }
     },
     {
@@ -34139,8 +34139,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       }
     },
     {
@@ -34151,8 +34151,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       }
     },
     {
@@ -34163,8 +34163,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1035,
-        "end_line": 1035
+        "begin_line": 1030,
+        "end_line": 1030
       }
     },
     {
@@ -34175,8 +34175,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1035,
-        "end_line": 1035
+        "begin_line": 1030,
+        "end_line": 1030
       }
     },
     {
@@ -34187,8 +34187,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1035,
-        "end_line": 1035
+        "begin_line": 1030,
+        "end_line": 1030
       }
     },
     {
@@ -34199,8 +34199,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1035,
-        "end_line": 1035
+        "begin_line": 1030,
+        "end_line": 1030
       }
     },
     {
@@ -34223,8 +34223,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       }
     },
     {
@@ -34235,8 +34235,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       }
     },
     {
@@ -34259,8 +34259,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       }
     },
     {
@@ -34271,8 +34271,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       }
     },
     {
@@ -34295,8 +34295,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       }
     },
     {
@@ -34307,8 +34307,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       }
     },
     {
@@ -34331,8 +34331,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       }
     },
     {
@@ -34343,8 +34343,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       }
     },
     {
@@ -39865,8 +39865,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "impl_trait_def_id": 43,
       "impl_trait_rust_name": "core::ops::function::FnOnce",
@@ -39880,8 +39880,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "impl_trait_def_id": 42,
       "impl_trait_rust_name": "core::ops::function::FnMut",
@@ -39895,8 +39895,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "impl_trait_def_id": 43,
       "impl_trait_rust_name": "core::ops::function::FnOnce",
@@ -39910,8 +39910,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "impl_trait_def_id": 42,
       "impl_trait_rust_name": "core::ops::function::FnMut",
@@ -39925,8 +39925,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "impl_trait_def_id": 43,
       "impl_trait_rust_name": "core::ops::function::FnOnce",
@@ -39940,8 +39940,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "impl_trait_def_id": 42,
       "impl_trait_rust_name": "core::ops::function::FnMut",
@@ -39955,8 +39955,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "impl_trait_def_id": 43,
       "impl_trait_rust_name": "core::ops::function::FnOnce",
@@ -39970,8 +39970,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "impl_trait_def_id": 42,
       "impl_trait_rust_name": "core::ops::function::FnMut",
@@ -39985,8 +39985,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "impl_trait_def_id": 43,
       "impl_trait_rust_name": "core::ops::function::FnOnce",
@@ -40000,8 +40000,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "impl_trait_def_id": 42,
       "impl_trait_rust_name": "core::ops::function::FnMut",
@@ -40015,8 +40015,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "impl_trait_def_id": 43,
       "impl_trait_rust_name": "core::ops::function::FnOnce",
@@ -40030,8 +40030,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "impl_trait_def_id": 42,
       "impl_trait_rust_name": "core::ops::function::FnMut",
@@ -40045,8 +40045,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "impl_trait_def_id": 43,
       "impl_trait_rust_name": "core::ops::function::FnOnce",
@@ -40060,8 +40060,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 633,
-        "end_line": 637
+        "begin_line": 628,
+        "end_line": 632
       },
       "impl_trait_def_id": 42,
       "impl_trait_rust_name": "core::ops::function::FnMut",
@@ -40075,8 +40075,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "impl_trait_def_id": 43,
       "impl_trait_rust_name": "core::ops::function::FnOnce",
@@ -40090,8 +40090,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 630,
-        "end_line": 630
+        "begin_line": 625,
+        "end_line": 625
       },
       "impl_trait_def_id": 42,
       "impl_trait_rust_name": "core::ops::function::FnMut",
@@ -40105,8 +40105,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 804,
-        "end_line": 809
+        "begin_line": 799,
+        "end_line": 804
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40120,8 +40120,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 804,
-        "end_line": 809
+        "begin_line": 799,
+        "end_line": 804
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40135,8 +40135,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 804,
-        "end_line": 809
+        "begin_line": 799,
+        "end_line": 804
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40150,8 +40150,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 804,
-        "end_line": 809
+        "begin_line": 799,
+        "end_line": 804
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40165,8 +40165,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40180,8 +40180,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40195,8 +40195,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40210,8 +40210,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40225,8 +40225,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40240,8 +40240,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40255,8 +40255,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40270,8 +40270,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40285,8 +40285,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40300,8 +40300,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40315,8 +40315,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40330,8 +40330,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 811,
-        "end_line": 815
+        "begin_line": 806,
+        "end_line": 810
       },
       "impl_trait_def_id": 23,
       "impl_trait_rust_name": "core::ops::arith::Add",
@@ -40345,8 +40345,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 817,
-        "end_line": 821
+        "begin_line": 812,
+        "end_line": 816
       },
       "impl_trait_def_id": 22,
       "impl_trait_rust_name": "core::ops::arith::AddAssign",
@@ -40360,8 +40360,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 817,
-        "end_line": 821
+        "begin_line": 812,
+        "end_line": 816
       },
       "impl_trait_def_id": 22,
       "impl_trait_rust_name": "core::ops::arith::AddAssign",
@@ -40375,8 +40375,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 817,
-        "end_line": 821
+        "begin_line": 812,
+        "end_line": 816
       },
       "impl_trait_def_id": 22,
       "impl_trait_rust_name": "core::ops::arith::AddAssign",
@@ -40390,8 +40390,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 817,
-        "end_line": 821
+        "begin_line": 812,
+        "end_line": 816
       },
       "impl_trait_def_id": 22,
       "impl_trait_rust_name": "core::ops::arith::AddAssign",
@@ -40405,8 +40405,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 823,
-        "end_line": 823
+        "begin_line": 818,
+        "end_line": 818
       },
       "impl_trait_def_id": 22,
       "impl_trait_rust_name": "core::ops::arith::AddAssign",
@@ -40420,8 +40420,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 823,
-        "end_line": 823
+        "begin_line": 818,
+        "end_line": 818
       },
       "impl_trait_def_id": 22,
       "impl_trait_rust_name": "core::ops::arith::AddAssign",
@@ -40435,8 +40435,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 823,
-        "end_line": 823
+        "begin_line": 818,
+        "end_line": 818
       },
       "impl_trait_def_id": 22,
       "impl_trait_rust_name": "core::ops::arith::AddAssign",
@@ -40450,8 +40450,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 823,
-        "end_line": 823
+        "begin_line": 818,
+        "end_line": 818
       },
       "impl_trait_def_id": 22,
       "impl_trait_rust_name": "core::ops::arith::AddAssign",
@@ -40465,8 +40465,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 825,
-        "end_line": 830
+        "begin_line": 820,
+        "end_line": 825
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40480,8 +40480,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 825,
-        "end_line": 830
+        "begin_line": 820,
+        "end_line": 825
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40495,8 +40495,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 825,
-        "end_line": 830
+        "begin_line": 820,
+        "end_line": 825
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40510,8 +40510,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 825,
-        "end_line": 830
+        "begin_line": 820,
+        "end_line": 825
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40525,8 +40525,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40540,8 +40540,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40555,8 +40555,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40570,8 +40570,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40585,8 +40585,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40600,8 +40600,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40615,8 +40615,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40630,8 +40630,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40645,8 +40645,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40660,8 +40660,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40675,8 +40675,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40690,8 +40690,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 832,
-        "end_line": 836
+        "begin_line": 827,
+        "end_line": 831
       },
       "impl_trait_def_id": 25,
       "impl_trait_rust_name": "core::ops::arith::Sub",
@@ -40705,8 +40705,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 838,
-        "end_line": 842
+        "begin_line": 833,
+        "end_line": 837
       },
       "impl_trait_def_id": 24,
       "impl_trait_rust_name": "core::ops::arith::SubAssign",
@@ -40720,8 +40720,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 838,
-        "end_line": 842
+        "begin_line": 833,
+        "end_line": 837
       },
       "impl_trait_def_id": 24,
       "impl_trait_rust_name": "core::ops::arith::SubAssign",
@@ -40735,8 +40735,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 838,
-        "end_line": 842
+        "begin_line": 833,
+        "end_line": 837
       },
       "impl_trait_def_id": 24,
       "impl_trait_rust_name": "core::ops::arith::SubAssign",
@@ -40750,8 +40750,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 838,
-        "end_line": 842
+        "begin_line": 833,
+        "end_line": 837
       },
       "impl_trait_def_id": 24,
       "impl_trait_rust_name": "core::ops::arith::SubAssign",
@@ -40765,8 +40765,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 844,
-        "end_line": 844
+        "begin_line": 839,
+        "end_line": 839
       },
       "impl_trait_def_id": 24,
       "impl_trait_rust_name": "core::ops::arith::SubAssign",
@@ -40780,8 +40780,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 844,
-        "end_line": 844
+        "begin_line": 839,
+        "end_line": 839
       },
       "impl_trait_def_id": 24,
       "impl_trait_rust_name": "core::ops::arith::SubAssign",
@@ -40795,8 +40795,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 844,
-        "end_line": 844
+        "begin_line": 839,
+        "end_line": 839
       },
       "impl_trait_def_id": 24,
       "impl_trait_rust_name": "core::ops::arith::SubAssign",
@@ -40810,8 +40810,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 844,
-        "end_line": 844
+        "begin_line": 839,
+        "end_line": 839
       },
       "impl_trait_def_id": 24,
       "impl_trait_rust_name": "core::ops::arith::SubAssign",
@@ -40825,8 +40825,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 846,
-        "end_line": 860
+        "begin_line": 841,
+        "end_line": 855
       },
       "impl_trait_def_id": 31,
       "impl_trait_rust_name": "core::iter::traits::accum::Sum",
@@ -40840,8 +40840,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 846,
-        "end_line": 860
+        "begin_line": 841,
+        "end_line": 855
       },
       "impl_trait_def_id": 31,
       "impl_trait_rust_name": "core::iter::traits::accum::Sum",
@@ -40855,8 +40855,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 846,
-        "end_line": 860
+        "begin_line": 841,
+        "end_line": 855
       },
       "impl_trait_def_id": 31,
       "impl_trait_rust_name": "core::iter::traits::accum::Sum",
@@ -40870,8 +40870,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 846,
-        "end_line": 860
+        "begin_line": 841,
+        "end_line": 855
       },
       "impl_trait_def_id": 31,
       "impl_trait_rust_name": "core::iter::traits::accum::Sum",
@@ -40885,8 +40885,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 866,
-        "end_line": 877
+        "begin_line": 861,
+        "end_line": 872
       },
       "impl_trait_def_id": 26,
       "impl_trait_rust_name": "core::ops::arith::Neg",
@@ -40900,8 +40900,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 866,
-        "end_line": 877
+        "begin_line": 861,
+        "end_line": 872
       },
       "impl_trait_def_id": 26,
       "impl_trait_rust_name": "core::ops::arith::Neg",
@@ -40915,8 +40915,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 866,
-        "end_line": 877
+        "begin_line": 861,
+        "end_line": 872
       },
       "impl_trait_def_id": 26,
       "impl_trait_rust_name": "core::ops::arith::Neg",
@@ -40930,8 +40930,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 866,
-        "end_line": 877
+        "begin_line": 861,
+        "end_line": 872
       },
       "impl_trait_def_id": 26,
       "impl_trait_rust_name": "core::ops::arith::Neg",
@@ -40945,8 +40945,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 879,
-        "end_line": 885
+        "begin_line": 874,
+        "end_line": 880
       },
       "impl_trait_def_id": 26,
       "impl_trait_rust_name": "core::ops::arith::Neg",
@@ -40960,8 +40960,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 879,
-        "end_line": 885
+        "begin_line": 874,
+        "end_line": 880
       },
       "impl_trait_def_id": 26,
       "impl_trait_rust_name": "core::ops::arith::Neg",
@@ -40975,8 +40975,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 879,
-        "end_line": 885
+        "begin_line": 874,
+        "end_line": 880
       },
       "impl_trait_def_id": 26,
       "impl_trait_rust_name": "core::ops::arith::Neg",
@@ -40990,8 +40990,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 879,
-        "end_line": 885
+        "begin_line": 874,
+        "end_line": 880
       },
       "impl_trait_def_id": 26,
       "impl_trait_rust_name": "core::ops::arith::Neg",
@@ -41005,8 +41005,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 891,
-        "end_line": 896
+        "begin_line": 886,
+        "end_line": 891
       },
       "impl_trait_def_id": 20,
       "impl_trait_rust_name": "core::ops::arith::MulAssign",
@@ -41020,8 +41020,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 891,
-        "end_line": 896
+        "begin_line": 886,
+        "end_line": 891
       },
       "impl_trait_def_id": 20,
       "impl_trait_rust_name": "core::ops::arith::MulAssign",
@@ -41035,8 +41035,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 891,
-        "end_line": 896
+        "begin_line": 886,
+        "end_line": 891
       },
       "impl_trait_def_id": 20,
       "impl_trait_rust_name": "core::ops::arith::MulAssign",
@@ -41050,8 +41050,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 891,
-        "end_line": 896
+        "begin_line": 886,
+        "end_line": 891
       },
       "impl_trait_def_id": 20,
       "impl_trait_rust_name": "core::ops::arith::MulAssign",
@@ -41065,8 +41065,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 898,
-        "end_line": 898
+        "begin_line": 893,
+        "end_line": 893
       },
       "impl_trait_def_id": 20,
       "impl_trait_rust_name": "core::ops::arith::MulAssign",
@@ -41080,8 +41080,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 898,
-        "end_line": 898
+        "begin_line": 893,
+        "end_line": 893
       },
       "impl_trait_def_id": 20,
       "impl_trait_rust_name": "core::ops::arith::MulAssign",
@@ -41095,8 +41095,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 898,
-        "end_line": 898
+        "begin_line": 893,
+        "end_line": 893
       },
       "impl_trait_def_id": 20,
       "impl_trait_rust_name": "core::ops::arith::MulAssign",
@@ -41110,8 +41110,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 898,
-        "end_line": 898
+        "begin_line": 893,
+        "end_line": 893
       },
       "impl_trait_def_id": 20,
       "impl_trait_rust_name": "core::ops::arith::MulAssign",
@@ -41125,8 +41125,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41140,8 +41140,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41155,8 +41155,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41170,8 +41170,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41185,8 +41185,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41200,8 +41200,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41215,8 +41215,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41230,8 +41230,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41245,8 +41245,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41260,8 +41260,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41275,8 +41275,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41290,8 +41290,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 900,
-        "end_line": 900
+        "begin_line": 895,
+        "end_line": 895
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41305,8 +41305,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41320,8 +41320,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41335,8 +41335,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41350,8 +41350,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41365,8 +41365,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41380,8 +41380,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41395,8 +41395,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41410,8 +41410,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41425,8 +41425,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41440,8 +41440,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41455,8 +41455,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41470,8 +41470,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 901,
-        "end_line": 901
+        "begin_line": 896,
+        "end_line": 896
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41485,8 +41485,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 903,
-        "end_line": 912
+        "begin_line": 898,
+        "end_line": 907
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41500,8 +41500,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 903,
-        "end_line": 912
+        "begin_line": 898,
+        "end_line": 907
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41515,8 +41515,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 903,
-        "end_line": 912
+        "begin_line": 898,
+        "end_line": 907
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41530,8 +41530,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 903,
-        "end_line": 912
+        "begin_line": 898,
+        "end_line": 907
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41545,8 +41545,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 914,
-        "end_line": 924
+        "begin_line": 909,
+        "end_line": 919
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41560,8 +41560,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 914,
-        "end_line": 924
+        "begin_line": 909,
+        "end_line": 919
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41575,8 +41575,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 914,
-        "end_line": 924
+        "begin_line": 909,
+        "end_line": 919
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41590,8 +41590,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 914,
-        "end_line": 924
+        "begin_line": 909,
+        "end_line": 919
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41605,8 +41605,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 980,
-        "end_line": 1000
+        "begin_line": 975,
+        "end_line": 995
       },
       "impl_trait_def_id": 8,
       "impl_trait_rust_name": "curve25519_dalek::traits::MultiscalarMul",
@@ -41620,8 +41620,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 980,
-        "end_line": 1000
+        "begin_line": 975,
+        "end_line": 995
       },
       "impl_trait_def_id": 8,
       "impl_trait_rust_name": "curve25519_dalek::traits::MultiscalarMul",
@@ -41635,8 +41635,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 980,
-        "end_line": 1000
+        "begin_line": 975,
+        "end_line": 995
       },
       "impl_trait_def_id": 8,
       "impl_trait_rust_name": "curve25519_dalek::traits::MultiscalarMul",
@@ -41650,8 +41650,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 980,
-        "end_line": 1000
+        "begin_line": 975,
+        "end_line": 995
       },
       "impl_trait_def_id": 8,
       "impl_trait_rust_name": "curve25519_dalek::traits::MultiscalarMul",
@@ -41665,8 +41665,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1003,
-        "end_line": 1028
+        "begin_line": 998,
+        "end_line": 1023
       },
       "impl_trait_def_id": 9,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimeMultiscalarMul",
@@ -41680,8 +41680,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1003,
-        "end_line": 1028
+        "begin_line": 998,
+        "end_line": 1023
       },
       "impl_trait_def_id": 9,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimeMultiscalarMul",
@@ -41695,8 +41695,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1003,
-        "end_line": 1028
+        "begin_line": 998,
+        "end_line": 1023
       },
       "impl_trait_def_id": 9,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimeMultiscalarMul",
@@ -41710,8 +41710,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1003,
-        "end_line": 1028
+        "begin_line": 998,
+        "end_line": 1023
       },
       "impl_trait_def_id": 9,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimeMultiscalarMul",
@@ -41725,8 +41725,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1038,
-        "end_line": 1073
+        "begin_line": 1033,
+        "end_line": 1068
       },
       "impl_trait_def_id": 10,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimePrecomputedMultiscalarMul",
@@ -41740,8 +41740,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1038,
-        "end_line": 1073
+        "begin_line": 1033,
+        "end_line": 1068
       },
       "impl_trait_def_id": 10,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimePrecomputedMultiscalarMul",
@@ -41755,8 +41755,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1038,
-        "end_line": 1073
+        "begin_line": 1033,
+        "end_line": 1068
       },
       "impl_trait_def_id": 10,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimePrecomputedMultiscalarMul",
@@ -41770,8 +41770,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1038,
-        "end_line": 1073
+        "begin_line": 1033,
+        "end_line": 1068
       },
       "impl_trait_def_id": 10,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimePrecomputedMultiscalarMul",
@@ -41800,8 +41800,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "impl_trait_def_id": 0,
       "impl_trait_rust_name": "core::clone::Clone",
@@ -41815,8 +41815,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "impl_trait_def_id": 7,
       "impl_trait_rust_name": "curve25519_dalek::traits::BasepointTable",
@@ -41830,8 +41830,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41845,8 +41845,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41860,8 +41860,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "impl_trait_def_id": 0,
       "impl_trait_rust_name": "core::clone::Clone",
@@ -41875,8 +41875,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "impl_trait_def_id": 7,
       "impl_trait_rust_name": "curve25519_dalek::traits::BasepointTable",
@@ -41890,8 +41890,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41905,8 +41905,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1288,
-        "end_line": 1294
+        "begin_line": 1283,
+        "end_line": 1289
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41935,8 +41935,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "impl_trait_def_id": 0,
       "impl_trait_rust_name": "core::clone::Clone",
@@ -41950,8 +41950,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "impl_trait_def_id": 7,
       "impl_trait_rust_name": "curve25519_dalek::traits::BasepointTable",
@@ -41965,8 +41965,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41980,8 +41980,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -41995,8 +41995,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "impl_trait_def_id": 0,
       "impl_trait_rust_name": "core::clone::Clone",
@@ -42010,8 +42010,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "impl_trait_def_id": 7,
       "impl_trait_rust_name": "curve25519_dalek::traits::BasepointTable",
@@ -42025,8 +42025,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42040,8 +42040,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1295,
-        "end_line": 1301
+        "begin_line": 1290,
+        "end_line": 1296
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42070,8 +42070,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "impl_trait_def_id": 0,
       "impl_trait_rust_name": "core::clone::Clone",
@@ -42085,8 +42085,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "impl_trait_def_id": 7,
       "impl_trait_rust_name": "curve25519_dalek::traits::BasepointTable",
@@ -42100,8 +42100,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42115,8 +42115,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42130,8 +42130,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "impl_trait_def_id": 0,
       "impl_trait_rust_name": "core::clone::Clone",
@@ -42145,8 +42145,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "impl_trait_def_id": 7,
       "impl_trait_rust_name": "curve25519_dalek::traits::BasepointTable",
@@ -42160,8 +42160,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42175,8 +42175,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1302,
-        "end_line": 1308
+        "begin_line": 1297,
+        "end_line": 1303
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42205,8 +42205,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "impl_trait_def_id": 0,
       "impl_trait_rust_name": "core::clone::Clone",
@@ -42220,8 +42220,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "impl_trait_def_id": 7,
       "impl_trait_rust_name": "curve25519_dalek::traits::BasepointTable",
@@ -42235,8 +42235,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42250,8 +42250,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42265,8 +42265,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "impl_trait_def_id": 0,
       "impl_trait_rust_name": "core::clone::Clone",
@@ -42280,8 +42280,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "impl_trait_def_id": 7,
       "impl_trait_rust_name": "curve25519_dalek::traits::BasepointTable",
@@ -42295,8 +42295,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42310,8 +42310,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1309,
-        "end_line": 1315
+        "begin_line": 1304,
+        "end_line": 1310
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42340,8 +42340,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "impl_trait_def_id": 0,
       "impl_trait_rust_name": "core::clone::Clone",
@@ -42355,8 +42355,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "impl_trait_def_id": 7,
       "impl_trait_rust_name": "curve25519_dalek::traits::BasepointTable",
@@ -42370,8 +42370,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42385,8 +42385,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42400,8 +42400,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "impl_trait_def_id": 0,
       "impl_trait_rust_name": "core::clone::Clone",
@@ -42415,8 +42415,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "impl_trait_def_id": 7,
       "impl_trait_rust_name": "curve25519_dalek::traits::BasepointTable",
@@ -42430,8 +42430,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42445,8 +42445,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1316,
-        "end_line": 1322
+        "begin_line": 1311,
+        "end_line": 1317
       },
       "impl_trait_def_id": 21,
       "impl_trait_rust_name": "core::ops::arith::Mul",
@@ -42460,8 +42460,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1354,
-        "end_line": 1357
+        "begin_line": 1349,
+        "end_line": 1352
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42475,8 +42475,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1354,
-        "end_line": 1357
+        "begin_line": 1349,
+        "end_line": 1352
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42490,8 +42490,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1354,
-        "end_line": 1357
+        "begin_line": 1349,
+        "end_line": 1352
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42505,8 +42505,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1354,
-        "end_line": 1357
+        "begin_line": 1349,
+        "end_line": 1352
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42520,8 +42520,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1358,
-        "end_line": 1361
+        "begin_line": 1353,
+        "end_line": 1356
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42535,8 +42535,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1358,
-        "end_line": 1361
+        "begin_line": 1353,
+        "end_line": 1356
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42550,8 +42550,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1358,
-        "end_line": 1361
+        "begin_line": 1353,
+        "end_line": 1356
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42565,8 +42565,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1358,
-        "end_line": 1361
+        "begin_line": 1353,
+        "end_line": 1356
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42580,8 +42580,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1362,
-        "end_line": 1365
+        "begin_line": 1357,
+        "end_line": 1360
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42595,8 +42595,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1362,
-        "end_line": 1365
+        "begin_line": 1357,
+        "end_line": 1360
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42610,8 +42610,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1362,
-        "end_line": 1365
+        "begin_line": 1357,
+        "end_line": 1360
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42625,8 +42625,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1362,
-        "end_line": 1365
+        "begin_line": 1357,
+        "end_line": 1360
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42640,8 +42640,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1366,
-        "end_line": 1369
+        "begin_line": 1361,
+        "end_line": 1364
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42655,8 +42655,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1366,
-        "end_line": 1369
+        "begin_line": 1361,
+        "end_line": 1364
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42670,8 +42670,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1366,
-        "end_line": 1369
+        "begin_line": 1361,
+        "end_line": 1364
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42685,8 +42685,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1366,
-        "end_line": 1369
+        "begin_line": 1361,
+        "end_line": 1364
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42700,8 +42700,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1372,
-        "end_line": 1375
+        "begin_line": 1367,
+        "end_line": 1370
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42715,8 +42715,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1372,
-        "end_line": 1375
+        "begin_line": 1367,
+        "end_line": 1370
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42730,8 +42730,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1372,
-        "end_line": 1375
+        "begin_line": 1367,
+        "end_line": 1370
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42745,8 +42745,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1372,
-        "end_line": 1375
+        "begin_line": 1367,
+        "end_line": 1370
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42760,8 +42760,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1376,
-        "end_line": 1379
+        "begin_line": 1371,
+        "end_line": 1374
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42775,8 +42775,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1376,
-        "end_line": 1379
+        "begin_line": 1371,
+        "end_line": 1374
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42790,8 +42790,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1376,
-        "end_line": 1379
+        "begin_line": 1371,
+        "end_line": 1374
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42805,8 +42805,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1376,
-        "end_line": 1379
+        "begin_line": 1371,
+        "end_line": 1374
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42820,8 +42820,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1380,
-        "end_line": 1383
+        "begin_line": 1375,
+        "end_line": 1378
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42835,8 +42835,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1380,
-        "end_line": 1383
+        "begin_line": 1375,
+        "end_line": 1378
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42850,8 +42850,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1380,
-        "end_line": 1383
+        "begin_line": 1375,
+        "end_line": 1378
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42865,8 +42865,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1380,
-        "end_line": 1383
+        "begin_line": 1375,
+        "end_line": 1378
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42880,8 +42880,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1386,
-        "end_line": 1389
+        "begin_line": 1381,
+        "end_line": 1384
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42895,8 +42895,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1386,
-        "end_line": 1389
+        "begin_line": 1381,
+        "end_line": 1384
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42910,8 +42910,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1386,
-        "end_line": 1389
+        "begin_line": 1381,
+        "end_line": 1384
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42925,8 +42925,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1386,
-        "end_line": 1389
+        "begin_line": 1381,
+        "end_line": 1384
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42940,8 +42940,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1390,
-        "end_line": 1393
+        "begin_line": 1385,
+        "end_line": 1388
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42955,8 +42955,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1390,
-        "end_line": 1393
+        "begin_line": 1385,
+        "end_line": 1388
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42970,8 +42970,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1390,
-        "end_line": 1393
+        "begin_line": 1385,
+        "end_line": 1388
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -42985,8 +42985,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1390,
-        "end_line": 1393
+        "begin_line": 1385,
+        "end_line": 1388
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -43000,8 +43000,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1396,
-        "end_line": 1399
+        "begin_line": 1391,
+        "end_line": 1394
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -43015,8 +43015,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1396,
-        "end_line": 1399
+        "begin_line": 1391,
+        "end_line": 1394
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -43030,8 +43030,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1396,
-        "end_line": 1399
+        "begin_line": 1391,
+        "end_line": 1394
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
@@ -43045,8 +43045,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/edwards.rs",
-        "begin_line": 1396,
-        "end_line": 1399
+        "begin_line": 1391,
+        "end_line": 1394
       },
       "impl_trait_def_id": 33,
       "impl_trait_rust_name": "core::convert::From",
