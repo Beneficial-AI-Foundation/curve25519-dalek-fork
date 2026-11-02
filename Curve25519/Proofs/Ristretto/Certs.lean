@@ -34,7 +34,7 @@ private theorem basepoint_invsqrt :
 
 private theorem basepoint_invsqrt_not_isNeg :
     ¬ (52572753176437111631691385822184065804252865134316606714987751091199353072154 :
-      ZMod p).isNeg := by
+      ZMod p).IsNeg := by
   decide +kernel
 
 /-- RFC 9496 §4.3.2 after `SQRT_RATIO_M1`, on the coordinates `(x, y)` with the inverse square
@@ -49,17 +49,17 @@ root `r` of `(1 + y)(1 - y)(x y)²` given: what the kernel evaluates. Exposed, f
   let ix := x * sqrtM1
   let iy := y * sqrtM1
   let enchanted := den1 * invsqrtAMinusD
-  let rotate := (t * zInv).isNeg
+  let rotate := (t * zInv).IsNeg
   let x' := if rotate then iy else x
   let y' := if rotate then ix else y
   let denInv := if rotate then enchanted else den2
-  let y'' := if (x' * zInv).isNeg then -y' else y'
+  let y'' := if (x' * zInv).IsNeg then -y' else y'
   (denInv * (1 - y'')).abs.val
 
 /-- `encodeRep` of a point with given coordinates, from the inverse square root `r` of
 `(1 + y)(1 - y)(x y)²` as a numeral and a kernel evaluation of the rest (`encodeRepOf`). -/
 theorem encodeRep_of_coords {x y r : ZMod p} {n : ℕ} (P : edwards.Point) (hx : P.x = x)
-    (hy : P.y = y) (hr : (1 + y) * (1 - y) * (x * y) ^ 2 * r ^ 2 = 1) (hneg : ¬ r.isNeg)
+    (hy : P.y = y) (hr : (1 + y) * (1 - y) * (x * y) ^ 2 * r ^ 2 = 1) (hneg : ¬ r.IsNeg)
     (hc : encodeRepOf x y r = n) : Ristretto.encodeRep P = n := by
   rw [Ristretto.encodeRep_eq]
   dsimp only

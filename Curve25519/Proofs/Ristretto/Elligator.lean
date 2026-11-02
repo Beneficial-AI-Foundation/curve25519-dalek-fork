@@ -44,7 +44,7 @@ private theorem map_equation_identity {F : Type*} [Field F] (dd r e c S D : F)
   rcases hc with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;> ring
 
 /-- The curve equation from the multiplied-out identity. -/
-private theorem ell_equation (s D N : ZMod p) (hN : N ≠ 0) (hs : 1 + s ^ 2 ≠ 0)
+private theorem map_equation_of_identity (s D N : ZMod p) (hN : N ≠ 0) (hs : 1 + s ^ 2 ≠ 0)
     (E : -(4 * s ^ 2 * D ^ 2) * (1 + s ^ 2) ^ 2 + (1 - s ^ 2) ^ 2 * N ^ 2 =
       N ^ 2 * (1 + s ^ 2) ^ 2 + d * (4 * s ^ 2 * D ^ 2) * (1 - s ^ 2) ^ 2) :
     edwards.Equation (2 * s * D / N) ((1 - s ^ 2) / (1 + s ^ 2)) := by
@@ -147,6 +147,6 @@ theorem map_equation_of_branch (r s c e D : ZMod p) (hD : D = (-1 - r * d) * (r 
     apply not_isSquare_d
     refine ⟨Nt * sqrtAdMinusOne / (2 * s * D), ?_⟩
     rw [div_mul_div_comm, eq_div_iff (mul_ne_zero hsD hsD), ← sq, ← sq, hsq]
-  exact ⟨hNK, hs1, ell_equation s D _ hNK hs1 E⟩
+  exact ⟨hNK, hs1, map_equation_of_identity s D _ hNK hs1 E⟩
 
 end curve25519.Proofs

@@ -16,7 +16,8 @@ Hisil–Wong–Carter–Dawson 2008; they are defined for every model and correc
 (`Curve25519.Models.TwistedEdwards.Formulas.Lemmas`).
 
 The other formulas the code uses (projective doubling, the complete extended addition, doubling
-and scalar multiplication, the zero test) are those of `EllipticCurve.TwistedEdwards.Formulas`. -/
+and scalar multiplication, the zero test) are those of
+`EllipticCurve.TwistedEdwards.Formulas.Defs`. -/
 
 universe u
 
@@ -33,8 +34,8 @@ namespace Extended
 @[expose] def addProjectiveNiels (P : E.Extended) (Q : E.ProjectiveNiels) : E.Completed :=
   let Y_plus_X := P.Y + P.X
   let Y_minus_X := P.Y - P.X
-  let PP := Y_plus_X * Q.YplusX
-  let MM := Y_minus_X * Q.YminusX
+  let PP := Y_plus_X * Q.YPlusX
+  let MM := Y_minus_X * Q.YMinusX
   let TT2d := P.T * Q.T2d
   let ZZ := P.Z * Q.Z
   let ZZ2 := ZZ + ZZ
@@ -47,8 +48,8 @@ namespace Extended
 @[expose] def subProjectiveNiels (P : E.Extended) (Q : E.ProjectiveNiels) : E.Completed :=
   let Y_plus_X := P.Y + P.X
   let Y_minus_X := P.Y - P.X
-  let PM := Y_plus_X * Q.YminusX
-  let MP := Y_minus_X * Q.YplusX
+  let PM := Y_plus_X * Q.YMinusX
+  let MP := Y_minus_X * Q.YPlusX
   let TT2d := P.T * Q.T2d
   let ZZ := P.Z * Q.Z
   let ZZ2 := ZZ + ZZ

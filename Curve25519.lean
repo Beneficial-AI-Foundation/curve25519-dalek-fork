@@ -1,6 +1,7 @@
 module
 public import Curve25519.Basic
 public import Curve25519.Prime
+public import Curve25519.Squares
 public import Curve25519.Edwards.Basic
 public import Curve25519.Edwards.Basepoint
 public import Curve25519.Edwards.Torsion

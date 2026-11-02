@@ -22,7 +22,7 @@ the rejection itself (`b = false`, `x y` negative, or `y = 0`) is then decided b
 `v = 0`.
 
 `Curve25519.Basic` is imported with `import all` so that the kernel can unfold `p` and `sqrtM1`;
-`d` is used as a numeral (`d_eq_natCast`), so that the kernel never meets a field inverse. -/
+`d` is used as a numeral (`d_eq_numeral`), so that the kernel never meets a field inverse. -/
 
 namespace curve25519.Proofs
 
@@ -57,8 +57,8 @@ private noncomputable abbrev decY (s : ℕ) (r : ZMod p) : ZMod p :=
 /-- The certificate that `s < p`, non-negative, is rejected: the output `(b, r)` of
 `SQRT_RATIO_M1(1, w)`, and a rejection reason. -/
 private abbrev DecodeNoneCert (s : ℕ) (b : Bool) (r : ZMod p) : Prop :=
-  decW s ≠ 0 ∧ (if b then decW s * r ^ 2 = 1 else decW s * r ^ 2 = sqrtM1) ∧ ¬ r.isNeg ∧
-    (b = false ∨ (decX s r * decY s r).isNeg ∨ decY s r = 0)
+  decW s ≠ 0 ∧ (if b then decW s * r ^ 2 = 1 else decW s * r ^ 2 = sqrtM1) ∧ ¬ r.IsNeg ∧
+    (b = false ∨ (decX s r * decY s r).IsNeg ∨ decY s r = 0)
 
 private theorem decodeRep_eq_none_of_cert {s : ℕ} {b : Bool} {r : ZMod p}
     (h : DecodeNoneCert s b r) : decodeRep s = none := by

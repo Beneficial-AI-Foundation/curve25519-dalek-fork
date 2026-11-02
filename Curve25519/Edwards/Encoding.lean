@@ -36,7 +36,7 @@ noncomputable abbrev decode : ℕ → Option edwards.Point :=
   TwistedEdwardsModel.decode edwards 255
 
 theorem encode_eq (P : edwards.Point) :
-    encode P = P.y.val + 2 ^ 255 * (if P.x.isNeg then 1 else 0) :=
+    encode P = P.y.val + 2 ^ 255 * (if P.x.IsNeg then 1 else 0) :=
   rfl
 
 /-! ### The generic lemmas at `edwards`, `bits = 255` -/
@@ -50,7 +50,7 @@ theorem encode_mod_two_pow_255 (P : edwards.Point) : encode P % 2 ^ 255 = P.y.va
 
 /-- Bit `255` of an encoding is the sign of `x`. -/
 theorem encode_div_two_pow_255 (P : edwards.Point) :
-    encode P / 2 ^ 255 = if P.x.isNeg then 1 else 0 :=
+    encode P / 2 ^ 255 = if P.x.IsNeg then 1 else 0 :=
   TwistedEdwardsModel.encode_div_two_pow edwards 255 P
 
 theorem encode_injective : Function.Injective encode :=
@@ -67,7 +67,7 @@ that value, and the sign of `P.x` is bit `255` of `n`. -/
 theorem decode_eq_some_iff {n : ℕ} {P : edwards.Point} :
     decode n = some P ↔
       n < 2 ^ 256 ∧ n % 2 ^ 255 < p ∧ P.y = ((n % 2 ^ 255 : ℕ) : ZMod p) ∧
-        (P.x.isNeg ↔ n / 2 ^ 255 = 1) :=
+        (P.x.IsNeg ↔ n / 2 ^ 255 = 1) :=
   TwistedEdwardsModel.decode_eq_some_iff edwards 255
 
 theorem decode_eq_some_iff_encode_eq {n : ℕ} {P : edwards.Point} :
@@ -94,7 +94,7 @@ theorem edwards_xSq (y : ZMod p) : edwards.xSq y = (y ^ 2 - 1) / (d * y ^ 2 + 1)
 /-! ### The basepoint -/
 
 /-- The basepoint has even `x`: RFC 8032's "positive" square root. -/
-theorem not_isNeg_basepoint_x : ¬ basepoint.x.isNeg :=
+theorem not_isNeg_basepoint_x : ¬ basepoint.x.IsNeg :=
   ZMod.not_isNeg_iff.mpr basepoint_x_val_even
 
 /-- **The encoding of the basepoint**: dalek's `ED25519_BASEPOINT_COMPRESSED`, the bytes

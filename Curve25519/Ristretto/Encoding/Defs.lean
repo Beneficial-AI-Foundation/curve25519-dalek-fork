@@ -13,7 +13,7 @@ public section
 The square-root helper `sqrtRatioM1 u v` (RFC 9496 §4.2 `SQRT_RATIO_M1`): `(true, √(u/v))` when
 `v ≠ 0` and `u/v` is a square, `(true, 0)` when `u = v = 0`, `(false, 0)` when `u ≠ 0 = v`, and
 `(false, √(√-1 · u/v))` otherwise, the root being non-negative
-(`ZMod.isNeg`); it is exposed, with its characterisation `sqrtRatioM1_spec` (all cases in one
+(`ZMod.IsNeg`); it is exposed, with its characterisation `sqrtRatioM1_spec` (all cases in one
 statement, for reading) and the uniqueness lemmas `sqrtRatioM1_eq_of_mul_sq_eq`,
 `sqrtRatioM1_eq_of_mul_sq_eq_sqrtM1_mul`, `sqrtRatioM1_zero_left`,
 `sqrtRatioM1_zero_right` (through which the dalek field specification `sqrt_ratio_i_spec`
@@ -86,10 +86,10 @@ theorem sqrtRatioM1_of_not_isSquare {u v : ZMod p} (hv : v ≠ 0) (h : ¬ IsSqua
   rw [ZMod.abs_sq, sq, ← hc, mul_left_comm, mul_div_cancel₀ u hv]
 
 /-- The root returned by `sqrtRatioM1` is never negative. -/
-theorem not_isNeg_sqrtRatioM1_snd (u v : ZMod p) : ¬ (sqrtRatioM1 u v).2.isNeg := by
+theorem not_isNeg_sqrtRatioM1_snd (u v : ZMod p) : ¬ (sqrtRatioM1 u v).2.IsNeg := by
   by_cases hv : v = 0
   · rw [sqrtRatioM1_of_v_eq_zero hv]
-    exact ZMod.isNeg_zero
+    exact ZMod.not_isNeg_zero
   · unfold sqrtRatioM1
     rw [ite_eq_right hv]
     by_cases h : IsSquare (u / v)
@@ -107,7 +107,7 @@ theorem sqrtRatioM1_spec (u v : ZMod p) :
       (sqrtRatioM1 u v).1 = true ∧ v * (sqrtRatioM1 u v).2 ^ 2 = u) ∧
     (v ≠ 0 → ¬ IsSquare (u / v) →
       (sqrtRatioM1 u v).1 = false ∧ v * (sqrtRatioM1 u v).2 ^ 2 = sqrtM1 * u) ∧
-    ¬ (sqrtRatioM1 u v).2.isNeg :=
+    ¬ (sqrtRatioM1 u v).2.IsNeg :=
   ⟨fun hu => hu ▸ sqrtRatioM1_zero_left v, fun hu hv => hv ▸ sqrtRatioM1_zero_right hu,
     sqrtRatioM1_of_isSquare, sqrtRatioM1_of_not_isSquare, not_isNeg_sqrtRatioM1_snd u v⟩
 
@@ -130,7 +130,7 @@ theorem sqrtRatioM1_fst_iff (u v : ZMod p) :
 /-- **Uniqueness, square case**: `sqrtRatioM1 u v = (true, r)` for the non-negative root `r` of
 `u / v`. -/
 theorem sqrtRatioM1_eq_of_mul_sq_eq {u v r : ZMod p} (hv : v ≠ 0) (hr : v * r ^ 2 = u)
-    (hneg : ¬ r.isNeg) : sqrtRatioM1 u v = (true, r) := by
+    (hneg : ¬ r.IsNeg) : sqrtRatioM1 u v = (true, r) := by
   have h : IsSquare (u / v) := ⟨r, by rw [← hr, mul_div_cancel_left₀ _ hv, sq]⟩
   obtain ⟨h1, h2⟩ := sqrtRatioM1_of_isSquare hv h
   refine Prod.ext h1 ?_
@@ -140,7 +140,7 @@ theorem sqrtRatioM1_eq_of_mul_sq_eq {u v r : ZMod p} (hv : v ≠ 0) (hr : v * r 
 /-- **Uniqueness, non-square case**: `sqrtRatioM1 u v = (false, r)` for the non-negative root `r`
 of `√-1 · u / v`, when `u ≠ 0`. -/
 theorem sqrtRatioM1_eq_of_mul_sq_eq_sqrtM1_mul {u v r : ZMod p} (hu : u ≠ 0) (hv : v ≠ 0)
-    (hr : v * r ^ 2 = sqrtM1 * u) (hneg : ¬ r.isNeg) : sqrtRatioM1 u v = (false, r) := by
+    (hr : v * r ^ 2 = sqrtM1 * u) (hneg : ¬ r.IsNeg) : sqrtRatioM1 u v = (false, r) := by
   have h : ¬ IsSquare (u / v) := by
     rintro ⟨t, ht⟩
     have h1 : sqrtM1 * (u / v) = r ^ 2 := by
@@ -182,7 +182,7 @@ theorem sqrtRatioM1_one_of_fst {v : ZMod p} (h : (sqrtRatioM1 1 v).1 = true) :
   exact sqrtRatioM1_one_of_isSquare hv hsq
 
 /-- `sqrtRatioM1 1 v = (true, r)` for the non-negative `r` with `v r² = 1`. -/
-theorem sqrtRatioM1_one_eq_of_mul_sq_eq {v r : ZMod p} (hr : v * r ^ 2 = 1) (hneg : ¬ r.isNeg) :
+theorem sqrtRatioM1_one_eq_of_mul_sq_eq {v r : ZMod p} (hr : v * r ^ 2 = 1) (hneg : ¬ r.IsNeg) :
     sqrtRatioM1 1 v = (true, r) :=
   sqrtRatioM1_eq_of_mul_sq_eq (fun hv => one_ne_zero (by rw [← hr, hv, zero_mul])) hr hneg
 
@@ -205,7 +205,7 @@ non-negative; then with `u1 = 1 - s²`, `u2 = 1 + s²`, `v = -(d u1²) - u2²`,
 `¬ wasSquare`, `x y` is negative or `y = 0`, else `some (x, y)`. Hidden; see
 `decodeRep_eq_some_iff`, `decodeRep_eq_none_iff` in `Curve25519.Ristretto.Encoding`. -/
 noncomputable def decodeRep (s : ℕ) : Option edwards.Point :=
-  if s < p ∧ ¬ (s : ZMod p).isNeg then
+  if s < p ∧ ¬ (s : ZMod p).IsNeg then
     let s' : ZMod p := s
     let u1 := 1 - s' ^ 2
     let u2 := 1 + s' ^ 2
@@ -215,7 +215,7 @@ noncomputable def decodeRep (s : ℕ) : Option edwards.Point :=
     let denY := r * denX * v
     let x := (2 * s' * denX).abs
     let y := u1 * denY
-    if h : (sqrtRatioM1 1 (v * u2 ^ 2)).1 = true ∧ ¬ (x * y).isNeg ∧ y ≠ 0 then
+    if h : (sqrtRatioM1 1 (v * u2 ^ 2)).1 = true ∧ ¬ (x * y).IsNeg ∧ y ≠ 0 then
       some ⟨x, y, decodeRep_equation s' r (sqrtRatioM1_one_of_fst h.1)⟩
     else none
   else none
@@ -240,11 +240,11 @@ noncomputable def encodeRep (P : edwards.Point) : ℕ :=
   let ix := x * sqrtM1
   let iy := y * sqrtM1
   let enchanted := den1 * invsqrtAMinusD
-  let rotate := (t * zInv).isNeg
+  let rotate := (t * zInv).IsNeg
   let x' := if rotate then iy else x
   let y' := if rotate then ix else y
   let denInv := if rotate then enchanted else den2
-  let y'' := if (x' * zInv).isNeg then -y' else y'
+  let y'' := if (x' * zInv).IsNeg then -y' else y'
   (denInv * (1 - y'')).abs.val
 
 /-- `encodeRep P`, RFC 9496 §4.3.2 spelled out. -/
@@ -261,11 +261,11 @@ theorem encodeRep_eq (P : edwards.Point) : encodeRep P =
     let ix := x * sqrtM1
     let iy := y * sqrtM1
     let enchanted := den1 * invsqrtAMinusD
-    let rotate := (t * zInv).isNeg
+    let rotate := (t * zInv).IsNeg
     let x' := if rotate then iy else x
     let y' := if rotate then ix else y
     let denInv := if rotate then enchanted else den2
-    let y'' := if (x' * zInv).isNeg then -y' else y'
+    let y'' := if (x' * zInv).IsNeg then -y' else y'
     (denInv * (1 - y'')).abs.val := by
   unfold encodeRep
   rfl

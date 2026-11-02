@@ -58,7 +58,7 @@ private abbrev MapCert (b : Bool) (r₀ ρ x y : ZMod p) : Prop :=
   mapV r₀ ≠ 0 ∧
     (if b then mapV r₀ * ρ ^ 2 = mapU r₀
       else mapU r₀ ≠ 0 ∧ mapV r₀ * ρ ^ 2 = sqrtM1 * mapU r₀) ∧
-    ¬ ρ.isNeg ∧ mapDen b r₀ ≠ 0 ∧ 2 * mapS b r₀ ρ * mapV r₀ = x * mapDen b r₀ ∧
+    ¬ ρ.IsNeg ∧ mapDen b r₀ ≠ 0 ∧ 2 * mapS b r₀ ρ * mapV r₀ = x * mapDen b r₀ ∧
     1 + mapS b r₀ ρ ^ 2 ≠ 0 ∧ 1 - mapS b r₀ ρ ^ 2 = y * (1 + mapS b r₀ ρ ^ 2)
 
 /-- The certificate for `(x₀, y₀) + (x₁, y₁) = (x, y)` on `edwards` (`a = -1`). -/

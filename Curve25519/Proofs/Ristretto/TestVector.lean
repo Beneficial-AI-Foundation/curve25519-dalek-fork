@@ -38,7 +38,7 @@ numeral, and a kernel evaluation of the rest (`encodeRepOf`). -/
 private theorem encodeRep_nsmul_basepoint {k : ℕ} {x' y' r : ZMod p} {n : ℕ}
     (h' : edwards.Equation x' y')
     (hc : (Extended.nsmul k (basepointExt edwards)).ProjEq ⟨x', y', 1, x' * y'⟩)
-    (hr : (1 + y') * (1 - y') * (x' * y') ^ 2 * r ^ 2 = 1) (hneg : ¬ r.isNeg)
+    (hr : (1 + y') * (1 - y') * (x' * y') ^ 2 * r ^ 2 = 1) (hneg : ¬ r.IsNeg)
     (he : encodeRepOf x' y' r = n) : Ristretto.encodeRep (k • basepoint) = n := by
   obtain ⟨hx, hy⟩ := nsmul_x_y_of_coords basepoint basepoint_x_eq basepoint_y_eq h' hc
   exact encodeRep_of_coords _ hx hy hr hneg he

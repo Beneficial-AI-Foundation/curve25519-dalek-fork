@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519.Edwards.Basic
-public import Curve25519.ToEllipticCurve.TwistedEdwards.Lemmas
 import Curve25519.Proofs.Edwards.Certs
+import Curve25519.ToEllipticCurve.TwistedEdwards.Lemmas
 public section
 
 /-! # The 8-torsion
@@ -84,13 +84,13 @@ theorem addOrderOf_torsion8 : addOrderOf torsion8 = 8 :=
 
 /-! ### The other multiples, from the group law -/
 
-/-- `5 • T = T + (0, -1) = (-x, -y)`. -/
+/-- `5 • T = (0, -1) + T = (-x, -y)`. -/
 private theorem five_nsmul_torsion8_x : (5 • torsion8).x = -torsion8.x := by
-  rw [succ_nsmul', TwistedEdwardsModel.add_x_of_x_eq_zero_of_y_eq_neg_one _ four_nsmul_torsion8_x
+  rw [succ_nsmul, TwistedEdwardsModel.add_x_of_x_eq_zero_of_y_eq_neg_one _ four_nsmul_torsion8_x
     four_nsmul_torsion8_y]
 
 private theorem five_nsmul_torsion8_y : (5 • torsion8).y = -torsion8.y := by
-  rw [succ_nsmul', TwistedEdwardsModel.add_y_of_x_eq_zero_of_y_eq_neg_one _ four_nsmul_torsion8_x
+  rw [succ_nsmul, TwistedEdwardsModel.add_y_of_x_eq_zero_of_y_eq_neg_one _ four_nsmul_torsion8_x
     four_nsmul_torsion8_y]
 
 /-- `i • T = -((8 - i) • T)`, as `8 • T = 0`. -/

@@ -60,7 +60,7 @@ def sqrtNegAAddTwo : ℕ :=
 
 /-- RFC 9496 §4.1 `SQRT_AD_MINUS_ONE`: a square root of `a d - 1 = -d - 1` modulo `p`, as a
 natural number below `p` (`sqrtAdMinusOne_sq`). The RFC's value is odd, i.e. negative in the
-sense of `ZMod.isNeg` (`sqrtAdMinusOne_mod_two`). -/
+sense of `ZMod.IsNeg` (`sqrtAdMinusOne_mod_two`). -/
 def sqrtAdMinusOne : ℕ :=
   25063068953384623474111414158702152701244531502492656460079210482610430750235
 
@@ -114,7 +114,7 @@ theorem two_lt_p : 2 < p := by rw [p_eq_numeral]; decide
 theorem p_mod_two : p % 2 = 1 := by rw [p_eq_numeral]
 
 /-- `p ≡ 5 (mod 8)`: `2` is not a square modulo `p` (`not_isSquare_two` in
-`Curve25519.X25519`). -/
+`Curve25519.Squares`). -/
 theorem p_mod_eight : p % 8 = 5 := by rw [p_eq_numeral]
 
 theorem p_lt_two_pow_255 : p < 2 ^ 255 := by rw [p_eq_numeral]; decide
@@ -193,7 +193,7 @@ theorem a_sub_d_ne_zero : a - d ≠ 0 := by
   decide
 
 /-- Euler's criterion for `d`: `d^((p-1)/2) = -1`, so `d` is not a square (`not_isSquare_d` in
-`Curve25519.Edwards.Basic`). -/
+`Curve25519.Squares`). -/
 theorem d_pow_p_div_two : d ^ (p / 2) = -1 := by
   rw [d_eq_natCast, p_eq_numeral]
   norm_num
@@ -314,7 +314,7 @@ theorem sqrtM1_eq_two_pow : (sqrtM1 : ZMod p) = 2 ^ ((p - 1) / 4) := by
   reduce_mod_char
 
 /-- Euler's criterion for `sqrtM1`: `sqrtM1^((p-1)/2) = (-1)^((p-1)/4) = -1` since `p ≡ 5 (mod 8)`,
-so `sqrtM1` is not a square (`not_isSquare_sqrtM1` in `Curve25519.Edwards.Basic`). -/
+so `sqrtM1` is not a square (`not_isSquare_sqrtM1` in `Curve25519.Squares`). -/
 theorem sqrtM1_pow_p_div_two : (sqrtM1 : ZMod p) ^ (p / 2) = -1 := by
   rw [sqrtM1_def, p_eq_numeral]
   norm_num

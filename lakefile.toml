@@ -40,7 +40,8 @@ srcDir = "."
 name = "Curve25519Dalek"
 srcDir = "curve25519-dalek/lean"
 
-# Curve25519 in general (parameters, later the curve models), independent of dalek.
+# Curve25519 in general (parameters, models, encodings; `Curve25519/Models`, and
+# `Curve25519/ToEllipticCurve` staged for the EllipticCurve library), independent of dalek.
 [[lean_lib]]
 name = "Curve25519"
 srcDir = "."

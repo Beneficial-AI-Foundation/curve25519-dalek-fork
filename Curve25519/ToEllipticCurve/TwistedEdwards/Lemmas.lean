@@ -6,7 +6,6 @@ module
 public import Curve25519.ToEllipticCurve.TwistedEdwards.Defs
 public import EllipticCurve.TwistedEdwards.Lemmas
 public import Mathlib.SetTheory.Cardinal.Finite
-import all Curve25519.ToEllipticCurve.TwistedEdwards.Defs
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Ring
 public section
@@ -117,15 +116,17 @@ section Translation
 
 variable [E.IsComplete] [NeZero (6 : F)]
 
-/-- Adding a point `(0, -1)` negates `x`. -/
-theorem add_x_of_x_eq_zero_of_y_eq_neg_one (P : E.Point) {Q : E.Point} (hx : Q.x = 0)
-    (hy : Q.y = -1) : (P + Q).x = -P.x := by
-  rw [add_x, addX_comm, addX_of_x_eq_zero_of_y_eq_neg_one P hx hy]
+/-- Adding the point `P = (0, -1)` negates `x` (the group form of
+`addX_of_x_eq_zero_of_y_eq_neg_one`). -/
+theorem add_x_of_x_eq_zero_of_y_eq_neg_one {P : E.Point} (Q : E.Point) (hx : P.x = 0)
+    (hy : P.y = -1) : (P + Q).x = -Q.x := by
+  rw [add_x, addX_of_x_eq_zero_of_y_eq_neg_one Q hx hy]
 
-/-- Adding a point `(0, -1)` negates `y`. -/
-theorem add_y_of_x_eq_zero_of_y_eq_neg_one (P : E.Point) {Q : E.Point} (hx : Q.x = 0)
-    (hy : Q.y = -1) : (P + Q).y = -P.y := by
-  rw [add_y, addY_comm, addY_of_x_eq_zero_of_y_eq_neg_one P hx hy]
+/-- Adding the point `P = (0, -1)` negates `y` (the group form of
+`addY_of_x_eq_zero_of_y_eq_neg_one`). -/
+theorem add_y_of_x_eq_zero_of_y_eq_neg_one {P : E.Point} (Q : E.Point) (hx : P.x = 0)
+    (hy : P.y = -1) : (P + Q).y = -Q.y := by
+  rw [add_y, addY_of_x_eq_zero_of_y_eq_neg_one Q hx hy]
 
 end Translation
 

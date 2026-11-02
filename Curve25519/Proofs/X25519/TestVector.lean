@@ -63,7 +63,7 @@ theorem x25519_bob_public :
   x25519_eq_of_ladderXZ (by decide +kernel) (by rw [p_eq_numeral]; decide)
 
 /-- RFC 7748 §6.1: the shared secret `X25519(a, X25519(b, 9))` is `4a5d9d5b…` (Alice's side;
-Bob's side `X25519(b, X25519(a, 9))` is the same number by the group law). -/
+RFC 7748 gives the same value for Bob's side `X25519(b, X25519(a, 9))`, not checked here). -/
 theorem x25519_shared_secret :
     x25519 19076158533740022697853188432810029468508100820210985396154491514718125885303
         35809631094079244041211258971985475468665640815735853089228998203411133079262 =

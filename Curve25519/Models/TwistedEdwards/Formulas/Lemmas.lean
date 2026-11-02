@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519.Models.TwistedEdwards.Formulas.Defs
 public import EllipticCurve.TwistedEdwards.Formulas.Lemmas
-import all Curve25519.Models.TwistedEdwards.Formulas.Defs
 import Curve25519.Models.TwistedEdwards.Coords.Lemmas
 import Mathlib.Tactic.Ring
 public section
@@ -19,10 +18,11 @@ The audited statements about the mixed additions of
 (`toPoint_addProjectiveNiels`, …).
 
 Each formula produces, in terms of the represented points, a nonzero multiple of the completed
-sum, which `Completed.onCurve_and_toPoint_eq_add` of `EllipticCurve.TwistedEdwards.Formulas`
-recognises; the coordinates of the inputs are eliminated through `X_eq_toPoint_x_mul_Z`,
-`YplusX_eq`, … (`Curve25519.Models.TwistedEdwards.Coords.Lemmas`), after which each identity is
-polynomial (`ring`). -/
+sum, which `Completed.onCurve_and_toPoint_eq_add` of
+`EllipticCurve.TwistedEdwards.Formulas.Lemmas` recognises; the coordinates of the inputs are
+eliminated through `X_eq_toPoint_x_mul_Z`, `YPlusX_eq`, …
+(`Curve25519.Models.TwistedEdwards.Coords.Lemmas`), after which each identity is polynomial
+(`ring`). -/
 
 universe u
 
@@ -43,7 +43,7 @@ private theorem addProjectiveNiels_spec (ha : E.a = -1) {Q : E.ProjectiveNiels} 
   refine Completed.onCurve_and_toPoint_eq_add (mul_ne_zero (mul_ne_zero h2 hP.1) hQ.1) P.toPoint
     Q.toPoint ?_ ?_ ?_ ?_ <;>
   · simp only [addProjectiveNiels, X_eq_toPoint_x_mul_Z hP, Y_eq_toPoint_y_mul_Z hP,
-      T_eq_toPoint_x_mul_y_mul_Z hP, ProjectiveNiels.YplusX_eq hQ, ProjectiveNiels.YminusX_eq hQ,
+      T_eq_toPoint_x_mul_y_mul_Z hP, ProjectiveNiels.YPlusX_eq hQ, ProjectiveNiels.YMinusX_eq hQ,
       ProjectiveNiels.T2d_eq hQ, addDen₁, addDen₂, ha]
     ring
 
@@ -66,7 +66,7 @@ private theorem subProjectiveNiels_spec (ha : E.a = -1) {Q : E.ProjectiveNiels} 
   refine Completed.onCurve_and_toPoint_eq_add (mul_ne_zero (mul_ne_zero h2 hP.1) hQ.1) P.toPoint
     (-Q.toPoint) ?_ ?_ ?_ ?_ <;>
   · simp only [subProjectiveNiels, X_eq_toPoint_x_mul_Z hP, Y_eq_toPoint_y_mul_Z hP,
-      T_eq_toPoint_x_mul_y_mul_Z hP, ProjectiveNiels.YplusX_eq hQ, ProjectiveNiels.YminusX_eq hQ,
+      T_eq_toPoint_x_mul_y_mul_Z hP, ProjectiveNiels.YPlusX_eq hQ, ProjectiveNiels.YMinusX_eq hQ,
       ProjectiveNiels.T2d_eq hQ, addDen₁, addDen₂, ha, neg_x, neg_y]
     ring
 

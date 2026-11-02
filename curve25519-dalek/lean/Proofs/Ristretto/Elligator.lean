@@ -152,13 +152,13 @@ theorem elligatorBody_spec (hadd : B.AddSpec) (hsub : B.SubSpec)
   have S0 : B.toField s = (sqrtRatioM1 u' v').2 := by rw [SQ]
   have SQ1 : sq = 1#u8 ↔ (sqrtRatioM1 u' v').1 = true := by rw [SQ]; simp
   have Sp : B.toField sp = (sqrtRatioM1 u' v').2 * B.toField r_0 := by rw [hsp, S0]
-  have Pos : pos = 1#u8 ↔ ¬ (B.toField sp).isNeg := by
+  have Pos : pos = 1#u8 ↔ ¬ (B.toField sp).IsNeg := by
     rw [hpos, ← eq_one_iff_isNeg hc1]
     rcases hc1v with rfl | rfl <;> decide
   have Sp1 : B.toField sp1 = -((sqrtRatioM1 u' v').2 * B.toField r_0).abs := by
     have h := eq_ite_of_choice hposv Pos (fun h => by rw [hsp10 h]) (fun h => (hsp11 h).1)
     rw [h, ← Sp]
-    by_cases hn : (B.toField sp).isNeg
+    by_cases hn : (B.toField sp).IsNeg
     · rw [ite_eq_right (not_not.mpr hn), ZMod.abs_of_isNeg hn, neg_neg]
     · rw [ite_eq_left hn, ZMod.abs_of_not_isNeg hn]
   have C2 : c2 = 1#u8 ↔ ¬ (sqrtRatioM1 u' v').1 = true := by

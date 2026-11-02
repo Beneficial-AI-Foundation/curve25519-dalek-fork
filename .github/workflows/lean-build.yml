@@ -52,7 +52,8 @@ jobs:
           rm elan-init elan.tar.gz
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
-      # Cache: project build and Aeneas package. Other packages and their oleans come from Mathlib's cache.
+      # Cache: project build, and the Aeneas and EllipticCurve packages (built here). Mathlib and its
+      # dependencies come from Mathlib's cache.
       - name: Restore build cache
         id: cache
         uses: actions/cache/restore@v6.1.0
@@ -60,6 +61,7 @@ jobs:
           path: &cache-paths |
             .lake/build
             .lake/packages/aeneas
+            .lake/packages/EllipticCurve
           key: &cache-key lean-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.ref_name }}-${{ github.sha }}
           restore-keys: |
             lean-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.ref_name }}-

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519.Edwards.Basic
-import Mathlib.NumberTheory.LegendreSymbol.QuadraticReciprocity
+import Mathlib.FieldTheory.Finite.Basic
 import Mathlib.Tactic.NormNum
 public section
 
@@ -124,12 +124,6 @@ theorem montgomery_a24_eq : montgomery.a24 = 121665 := by
 
 /-! ### The quadratic twist -/
 
-/-- `2` is not a square modulo `p`, since `p ≡ 5 (mod 8)`. -/
-theorem not_isSquare_two : ¬ IsSquare (2 : ZMod p) := by
-  have h2 := two_lt_p
-  rw [ZMod.exists_sq_eq_two_iff (by omega), p_mod_eight]
-  decide
-
 /-- The quadratic twist `2 v² = u³ + A u² + u` of `montgomery`: the other curve on which the
 ladder computes (`x25519_eq_xMul`). -/
 noncomputable def montgomeryTwist : MontgomeryModel (ZMod p) :=
@@ -171,8 +165,9 @@ theorem x25519_eq_u_nsmul (k : ℕ) (Q : montgomery.Point) :
 theorem x25519_eq_u_nsmul_twist (k : ℕ) (Q : montgomeryTwist.Point) :
     x25519 k (encodeU Q.u) = encodeU (clamp k • Q).u := by
   rw [x25519_eq_xMul, decodeU_encodeU]
-  exact congrArg encodeU (@MontgomeryModel.xMul_eq_u_nsmul_twist _ _ montgomery _ 2
-    not_isSquare_two instIsNonsingularMontgomeryTwist (clamp k) Q)
+  have : (montgomery.twist 2).IsNonsingular := instIsNonsingularMontgomeryTwist
+  exact congrArg encodeU
+    (MontgomeryModel.xMul_eq_u_nsmul_twist (M := montgomery) not_isSquare_two (clamp k) Q)
 
 /-- A coordinate whose `u ↦ u(8 • Q)` image is `0` (a point of order dividing `8` on the curve
 or the twist, or `u = 0`) is sent to `0` by `x25519` for every scalar, since clamped scalars

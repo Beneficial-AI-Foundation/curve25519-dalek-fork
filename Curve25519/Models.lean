@@ -22,7 +22,7 @@ stated for any field (or any `ZMod p`) rather than for curve25519, under the lib
 `Curve25519.ToEllipticCurve`; what is here is specific to the implementation or to the
 cryptographic encodings:
 
-* `Field.Sign`: the sign `ZMod.isNeg` (odd canonical representative) and `ZMod.abs`;
+* `Field.Sign`: the sign `ZMod.IsNeg` (odd canonical representative) and `ZMod.abs`;
 * `TwistedEdwards.Coords`: the Niels coordinates (`toPoint`, `OnCurve`);
 * `TwistedEdwards.Formulas`: the mixed additions with Niels points;
 * `TwistedEdwards.Encoding`: the RFC 8032 encoding of points (`encode`, `decode`);

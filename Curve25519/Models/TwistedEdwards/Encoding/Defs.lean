@@ -12,7 +12,7 @@ public section
 The RFC 8032 (§5.1.2, §5.1.3) point encoding, generic in the model `E` over `ZMod p` and in the
 width `bits` of the `y`-coordinate (`255` for edwards25519, `455` for edwards448): a point
 `(x, y)` is encoded as the natural number `y.val + 2 ^ bits * sign(x)` (`encode`), where
-`sign(x)` is `1` iff `x` is negative (`ZMod.isNeg`: `x.val` odd); the encoding is the
+`sign(x)` is `1` iff `x` is negative (`ZMod.IsNeg`: `x.val` odd); the encoding is the
 little-endian byte string of this number.
 
 Decoding (`decode`) is the strict RFC 8032 procedure: split `n` into `y := n % 2 ^ bits` and
@@ -37,7 +37,7 @@ variable {p : ℕ} [Fact p.Prime] (E : TwistedEdwardsModel (ZMod p)) (bits : ℕ
 /-- RFC 8032 §5.1.2: the encoding of `(x, y)` is `y.val` with the sign of `x` (`1` iff `x.val`
 is odd) in bit `bits`. -/
 @[expose] def encode (P : E.Point) : ℕ :=
-  P.y.val + 2 ^ bits * (if P.x.isNeg then 1 else 0)
+  P.y.val + 2 ^ bits * (if P.x.IsNeg then 1 else 0)
 
 open scoped Classical in
 /-- RFC 8032 §5.1.3, strict: `y := n % 2 ^ bits`, sign `s := n / 2 ^ bits`; `none` if
@@ -46,7 +46,7 @@ square root of `xSq y`, or `x = 0` with `s = 1`); otherwise the point `(x, y)` w
 noncomputable def decode (n : ℕ) : Option E.Point :=
   if n < 2 ^ (bits + 1) ∧ n % 2 ^ bits < p then
     if h : ∃ x : ZMod p, E.Equation x ((n % 2 ^ bits : ℕ) : ZMod p) ∧
-        (x.isNeg ↔ n / 2 ^ bits = 1) then
+        (x.IsNeg ↔ n / 2 ^ bits = 1) then
       some ⟨Classical.choose h, ((n % 2 ^ bits : ℕ) : ZMod p), (Classical.choose_spec h).1⟩
     else none
   else none

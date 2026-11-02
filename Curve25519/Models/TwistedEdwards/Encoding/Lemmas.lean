@@ -42,7 +42,7 @@ theorem mod_two_eq_one_of_isComplete (E : TwistedEdwardsModel (ZMod p)) [E.IsCom
 
 /-- **Uniqueness**: a point of a complete model is determined by `y` and the sign of `x`. -/
 theorem eq_of_y_eq_of_isNeg_iff [E.IsComplete] {P Q : E.Point} (hy : P.y = Q.y)
-    (hs : P.x.isNeg ↔ Q.x.isNeg) : P = Q :=
+    (hs : P.x.IsNeg ↔ Q.x.IsNeg) : P = Q :=
   have : Fact (p % 2 = 1) := ⟨mod_two_eq_one_of_isComplete E⟩
   Point.ext (ZMod.eq_of_sq_eq_of_isNeg_iff (sq_x_eq_sq_x_of_y_eq hy) hs) hy
 
@@ -55,11 +55,11 @@ variable (E bits)
 /-- The encoding of the zero `(0, 1)` is `1`. -/
 theorem encode_zero [E.IsComplete] : encode E bits 0 = 1 := by
   unfold encode
-  rw [zero_x, zero_y, ite_eq_right ZMod.isNeg_zero, mul_zero, add_zero, ZMod.val_one]
+  rw [zero_x, zero_y, ite_eq_right ZMod.not_isNeg_zero, mul_zero, add_zero, ZMod.val_one]
 
 variable [hbits : Fact (p < 2 ^ bits)]
 
-theorem val_y_lt_two_pow (P : E.Point) : P.y.val < 2 ^ bits :=
+private theorem val_y_lt_two_pow (P : E.Point) : P.y.val < 2 ^ bits :=
   lt_of_lt_of_le (ZMod.val_lt _) hbits.out.le
 
 /-- An encoding has at most `bits + 1` bits. -/
@@ -76,7 +76,7 @@ theorem encode_mod_two_pow (P : E.Point) : encode E bits P % 2 ^ bits = P.y.val 
 
 /-- Bit `bits` of an encoding is the sign of `x`. -/
 theorem encode_div_two_pow (P : E.Point) :
-    encode E bits P / 2 ^ bits = if P.x.isNeg then 1 else 0 := by
+    encode E bits P / 2 ^ bits = if P.x.IsNeg then 1 else 0 := by
   unfold encode
   rw [Nat.add_mul_div_left _ _ (Nat.two_pow_pos bits),
     Nat.div_eq_of_lt (val_y_lt_two_pow E bits P), zero_add]
@@ -86,10 +86,10 @@ theorem encode_injective [E.IsComplete] : Function.Injective (encode E bits) := 
   intro P Q h
   have hy : P.y = Q.y := ZMod.val_injective p
     (by rw [← encode_mod_two_pow E bits P, ← encode_mod_two_pow E bits Q, h])
-  have hs : (if P.x.isNeg then 1 else 0) = if Q.x.isNeg then 1 else 0 := by
+  have hs : (if P.x.IsNeg then 1 else 0) = if Q.x.IsNeg then 1 else 0 := by
     rw [← encode_div_two_pow E bits P, ← encode_div_two_pow E bits Q, h]
   refine eq_of_y_eq_of_isNeg_iff hy ?_
-  by_cases hP : P.x.isNeg <;> by_cases hQ : Q.x.isNeg
+  by_cases hP : P.x.IsNeg <;> by_cases hQ : Q.x.IsNeg
   · exact iff_of_true hP hQ
   · rw [ite_eq_left hP, ite_eq_right hQ] at hs
     exact absurd hs one_ne_zero
@@ -111,7 +111,7 @@ bit `bits` of `n`. -/
 theorem decode_eq_some_iff {n : ℕ} {P : E.Point} :
     decode E bits n = some P ↔
       n < 2 ^ (bits + 1) ∧ n % 2 ^ bits < p ∧ P.y = ((n % 2 ^ bits : ℕ) : ZMod p) ∧
-        (P.x.isNeg ↔ n / 2 ^ bits = 1) := by
+        (P.x.IsNeg ↔ n / 2 ^ bits = 1) := by
   unfold decode
   split_ifs with hn hx
   · rw [Option.some.injEq]
@@ -146,14 +146,15 @@ theorem decode_eq_none_iff {n : ℕ} :
     · exact absurd hn.2 (not_lt.mpr h)
     · exact h (isSquare_xSq_iff.mpr ⟨_, (Classical.choose_spec hx).1⟩)
     · have hx0 := x_eq_zero_of_y_sq_eq_one (Classical.choose_spec hx).1 h1
-      exact ZMod.isNeg_zero (hx0 ▸ (Classical.choose_spec hx).2.mpr h2)
+      exact ZMod.not_isNeg_zero (hx0 ▸ (Classical.choose_spec hx).2.mpr h2)
   · refine iff_of_true rfl ?_
     by_cases hsq : IsSquare (E.xSq ((n % 2 ^ bits : ℕ) : ZMod p))
     · obtain ⟨x, hxE⟩ := isSquare_xSq_iff.mp hsq
       by_cases hy1 : ((n % 2 ^ bits : ℕ) : ZMod p) ^ 2 = 1
       · by_cases hs : n / 2 ^ bits = 1
         · exact Or.inr (Or.inr (Or.inr ⟨hy1, hs⟩))
-        · exact absurd ⟨0, by unfold Equation; rw [hy1]; ring, iff_of_false ZMod.isNeg_zero hs⟩ hx
+        · exact absurd
+            ⟨0, by unfold Equation; rw [hy1]; ring, iff_of_false ZMod.not_isNeg_zero hs⟩ hx
       · have hx0 : x ≠ 0 := fun h0 => hy1 (y_sq_eq_one_of_x_eq_zero hxE h0)
         exfalso
         apply hx
@@ -161,7 +162,7 @@ theorem decode_eq_none_iff {n : ℕ} :
         · rcases ZMod.isNeg_or_isNeg_neg hx0 with h | h
           · exact ⟨x, hxE, iff_of_true h hs⟩
           · exact ⟨-x, equation_neg hxE, iff_of_true h hs⟩
-        · by_cases h : x.isNeg
+        · by_cases h : x.IsNeg
           · exact ⟨-x, equation_neg hxE, iff_of_false (ZMod.not_isNeg_neg_of_isNeg h) hs⟩
           · exact ⟨x, hxE, iff_of_false h hs⟩
     · exact Or.inr (Or.inr (Or.inl hsq))
@@ -180,7 +181,7 @@ theorem decode_eq_some_iff_encode_eq {n : ℕ} {P : E.Point} :
   constructor
   · rintro ⟨hn, hlt, hy, hs⟩
     have hval : P.y.val = n % 2 ^ bits := by rw [hy, ZMod.val_cast_of_lt hlt]
-    have hdiv : (if P.x.isNeg then 1 else 0) = n / 2 ^ bits := by
+    have hdiv : (if P.x.IsNeg then 1 else 0) = n / 2 ^ bits := by
       have h2 : n / 2 ^ bits < 2 := Nat.div_lt_of_lt_mul (by rwa [pow_succ] at hn)
       split_ifs with h
       · exact (hs.mp h).symm

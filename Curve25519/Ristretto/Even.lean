@@ -79,12 +79,6 @@ theorem torsionBy_four_le_even :
   rw [show (4 : ℤ) = ((4 : ℕ) : ℤ) from rfl, AddSubgroup.torsionBy.nsmul_iff] at hP
   rw [AddSubgroup.mem_even, even_iff_four_mul_L_nsmul, mul_comm, ← smul_smul, hP, smul_zero]
 
-/-- The generator `torsion8 + basepoint` of `edwards.Point`. -/
-theorem zmultiples_torsion8_add_basepoint_eq_top :
-    AddSubgroup.zmultiples (torsion8 + basepoint) = ⊤ :=
-  AddSubgroup.eq_top_of_card_eq _ (by
-    rw [Nat.card_zmultiples, addOrderOf_torsion8_add_basepoint, card_edwards])
-
 /-- `2 • (torsion8 + basepoint)` has order `4 L`. -/
 theorem addOrderOf_two_nsmul_torsion8_add_basepoint :
     addOrderOf (2 • (torsion8 + basepoint)) = 4 * L := by
@@ -147,12 +141,6 @@ theorem rel_iff_coords (P Q : edwards.Point) :
 
 /-! ### The 2-descent -/
 
-/-- `a - d = (2 / sqrtNegAAddTwo)²` is a square. -/
-theorem a_sub_d_eq_sq : a - d = (2 / sqrtNegAAddTwo) ^ 2 := by
-  rw [div_pow, eq_div_iff (pow_ne_zero 2 sqrtNegAAddTwo_ne_zero), mul_comm,
-    ← four_eq_sqrtNegAAddTwo_sq_mul]
-  norm_num
-
 /-- Membership in the 2-descent subgroup of `edwards`: `1 - y²` is a square (the factor `a - d`
 is a nonzero square). -/
 theorem mem_descent_iff (P : edwards.Point) : P ∈ edwards.descent ↔ IsSquare (1 - P.y ^ 2) :=
@@ -162,19 +150,19 @@ theorem mem_descent_iff (P : edwards.Point) : P ∈ edwards.descent ↔ IsSquare
 /-- The 2-descent certificate: `1 - y²` is not a square at the point of order `8`
 (Euler's criterion, `Proofs.one_sub_torsion8_y_sq_pow_p_div_two`). -/
 theorem not_isSquare_one_sub_torsion8_y_sq : ¬ IsSquare (1 - torsion8.y ^ 2) := by
-  rw [torsion8_y_eq]
-  intro h
-  have hpow := Proofs.one_sub_torsion8_y_sq_pow_p_div_two
-  push_cast at hpow
-  have hne : (1 - (55188659117513257062467267217118295137698188065244968500265048394206261417927 :
-      ZMod p) ^ 2) ≠ 0 := by
+  have hpow : (1 - torsion8.y ^ 2) ^ (p / 2) = -1 := by
+    rw [torsion8_y_eq]
+    exact_mod_cast Proofs.one_sub_torsion8_y_sq_pow_p_div_two
+  have hne : 1 - torsion8.y ^ 2 ≠ 0 := by
     intro h0
     rw [h0, zero_pow (Nat.div_pos two_lt_p.le two_pos).ne'] at hpow
     exact one_ne_zero (by linear_combination hpow)
+  intro h
   have := (ZMod.euler_criterion p hne).mp h
   rw [hpow] at this
   exact ZMod.neg_one_ne_one this
 
+/-- The point of order `8` is not in the 2-descent subgroup. -/
 theorem torsion8_not_mem_descent : torsion8 ∉ edwards.descent := by
   rw [mem_descent_iff]
   exact not_isSquare_one_sub_torsion8_y_sq

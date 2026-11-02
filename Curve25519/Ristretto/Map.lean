@@ -8,9 +8,7 @@ public import Curve25519.X25519
 import Curve25519.Proofs.Ristretto.Algebra
 import Curve25519.Proofs.Ristretto.Elligator
 import Curve25519.Ristretto.Even
-import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.LinearCombination
-import Mathlib.Tactic.Ring
 public section
 
 /-! # The ristretto255 map (RFC 9496 §4.3.4)

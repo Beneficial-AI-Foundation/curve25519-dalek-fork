@@ -5,24 +5,26 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519.Basic
 public import Curve25519.Prime
+public import Curve25519.Squares
 public import EllipticCurve
 public import Curve25519.Models
 public import Mathlib.Algebra.Field.ZMod
-import Mathlib.NumberTheory.LegendreSymbol.Basic
-import Mathlib.Tactic.LinearCombination
 public section
 
 /-! # The models of curve25519
 
 The twisted Edwards model `edwards = (a, d)` (edwards25519, RFC 8032 §5.1), the Montgomery
 model `montgomery = (A, 1)` (curve25519, RFC 7748 §4.1), and the curve `curve` they both realise.
-`edwards` is complete (`-1` is a square and `d` is not), `montgomery` is nonsingular, and the
-two models give the same curve (`toCurve_edwards`, `toCurve_montgomery`): the Montgomery model
-`(A, 4 / (a - d))` of `edwards` is the rescaling of `montgomery` by `sqrtNegAAddTwo`, a square
-root of `4 / (a - d) = -(A + 2)`.
+`edwards` is complete (`-1` is a square and `d` is not, `Curve25519.Squares`), `montgomery` is
+nonsingular, and the two models give the same curve (`toCurve_edwards`, `toCurve_montgomery`):
+the Montgomery model `(A, 4 / (a - d))` of `edwards` is the rescaling of `montgomery` by
+`sqrtNegAAddTwo`, a square root of `4 / (a - d) = -(A + 2)`.
 
 The definitions are hidden; importers use `edwards_def`, `edwards_a`, `edwards_d`,
-`montgomery_def`, `montgomery_A`, `montgomery_B`, `curve_def` and the lemmas below. -/
+`montgomery_def`, `montgomery_A`, `montgomery_B`, `curve_def` and the lemmas below.
+
+This module re-exports the `EllipticCurve` library and `Curve25519.Models` (coordinates,
+encodings, the Decaf relation), so that every importer of the models sees their API. -/
 
 namespace curve25519
 
@@ -43,45 +45,6 @@ theorem edwards_d : edwards.d = d := by
 
 theorem edwards_a_eq_neg_one : edwards.a = -1 := by
   rw [edwards_a, a_def]
-
-/-- `a = -1` is a square: `a = sqrtM1²`. -/
-theorem isSquare_a : IsSquare a :=
-  ⟨(sqrtM1 : ZMod p), by rw [a_def, ← sqrtM1_sq, sq]⟩
-
-/-- `d` is not a square (Euler's criterion, `d_pow_p_div_two`). -/
-theorem not_isSquare_d : ¬ IsSquare d := by
-  intro h
-  have hd := (ZMod.euler_criterion p d_ne_zero).mp h
-  rw [d_pow_p_div_two] at hd
-  exact ZMod.neg_one_ne_one hd
-
-/-! ### Squares and `sqrtM1` -/
-
-/-- `sqrtM1 = √-1` is not a square modulo `p` (Euler's criterion, `sqrtM1_pow_p_div_two`:
-`p ≡ 5 (mod 8)`). -/
-theorem not_isSquare_sqrtM1 : ¬ IsSquare (sqrtM1 : ZMod p) := by
-  intro h
-  have hpow := (ZMod.euler_criterion p sqrtM1_ne_zero).mp h
-  rw [sqrtM1_pow_p_div_two] at hpow
-  exact ZMod.neg_one_ne_one hpow
-
-/-- `-d` is not a square: `-1` is one and `d` is not. -/
-theorem not_isSquare_neg_d : ¬ IsSquare (-d) := by
-  rintro ⟨r, hr⟩
-  apply not_isSquare_d
-  refine ⟨sqrtM1 * r, ?_⟩
-  linear_combination -hr - r ^ 2 * sqrtM1_sq
-
-/-- `sqrtM1 · x` is a square when `x` is not (the product of two non-squares). -/
-theorem isSquare_sqrtM1_mul_of_not_isSquare {x : ZMod p} (hx : ¬ IsSquare x) :
-    IsSquare (sqrtM1 * x) := by
-  have hx0 : x ≠ 0 := ne_zero_of_not_isSquare hx
-  have hpow : x ^ (p / 2) = -1 :=
-    (ZMod.pow_div_two_eq_neg_one_or_one p hx0).resolve_left
-      fun h => hx ((ZMod.euler_criterion p hx0).mpr h)
-  rw [ZMod.euler_criterion p (mul_ne_zero sqrtM1_ne_zero hx0), mul_pow, sqrtM1_pow_p_div_two,
-    hpow]
-  ring
 
 /-- `edwards` is complete: the affine points form the whole group and the addition formula has
 no exceptional case. -/

@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519.Edwards.Basic
-public import Curve25519.ToEllipticCurve.TwistedEdwards.Formulas
 import all Curve25519.Basic
+import Curve25519.ToEllipticCurve.TwistedEdwards.Formulas.Lemmas
 public section
 
 /-! # Certificates for the basepoint and the 8-torsion (not audited)
@@ -15,12 +15,13 @@ basepoint and at the torsion point, numeral facts about the basepoint's coordina
 `L • basepoint = 0` (the 253-step double-and-add chain), and the coordinates of `2 • torsion8`
 and `4 • torsion8`. Scalar multiples are related to the group law by
 `Point.nsmul_eq_iff_projEq` and `Point.nsmul_eq_zero_iff_isZero`
-(`Curve25519.ToEllipticCurve.TwistedEdwards.Formulas`). The model is first rewritten to its
-numeral form (`edwards_eq`), so that the kernel never meets the field inversion in `d`;
+(`Curve25519.ToEllipticCurve.TwistedEdwards.Formulas.Lemmas`). The model is first rewritten to
+its numeral form (`edwards_eq`), so that the kernel never meets the field inversion in `d`;
 `Curve25519.Basic` is imported with `import all` so that the kernel can unfold `p` and `L`. The
 results are stated for any point with the given numeral coordinates and used by
-`Curve25519.Edwards.Basepoint`, `Curve25519.Edwards.Torsion` and `Curve25519.Montgomery` (and
-`nsmul_x_y_of_coords` by the Ristretto test vectors and the dalek table certificates). -/
+`Curve25519.Edwards.Basepoint`, `Curve25519.Edwards.Torsion` and `Curve25519.Montgomery`;
+`edwards_eq` and `nsmul_x_y_of_coords` also by the Ristretto test vectors, and `edwards_eq` by
+the dalek table certificates. -/
 
 namespace curve25519.Proofs
 

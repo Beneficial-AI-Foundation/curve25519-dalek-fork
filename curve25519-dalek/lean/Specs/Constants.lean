@@ -40,12 +40,12 @@ The tables `ED25519_BASEPOINT_TABLE` and `RISTRETTO_BASEPOINT_TABLE` exist only 
 tables (`x86_64-tables`, `i686-tables`). Not restated here: `BASEPOINT_ORDER` (`pub(crate)`, proved
 in `Proofs/Constants/BasepointOrder.lean`).
 
-Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `LimbsLt`, `CompressedEdwardsY.asNat`
-(`Defs/Edwards.lean`), `MontgomeryPoint.asNat` (`Defs/Montgomery.lean`), `curve25519.basepoint`
-(`Curve25519/Edwards/Basepoint.lean`), `curve25519.encode` (`Curve25519/Edwards/Encoding.lean`),
-`curve25519.eightTorsion` (`Curve25519/Edwards/Torsion.lean`), `curve25519.montgomeryBasepoint`
-(`Curve25519/Montgomery.lean`), `curve25519.encodeU`, `curve25519.x25519`
-(`Curve25519/X25519.lean`), the tables' `Represents` (`Defs/Edwards.lean`),
+Definitions used: Mathlib's `Even`, `EdwardsPoint.toPoint`, `OnCurve`, `LimbsLt`,
+`CompressedEdwardsY.asNat` (`Defs/Edwards.lean`), `MontgomeryPoint.asNat` (`Defs/Montgomery.lean`),
+`curve25519.basepoint` (`Curve25519/Edwards/Basepoint.lean`), `curve25519.encode`
+(`Curve25519/Edwards/Encoding.lean`), `curve25519.eightTorsion` (`Curve25519/Edwards/Torsion.lean`),
+`curve25519.montgomeryBasepoint` (`Curve25519/Montgomery.lean`), `curve25519.encodeU`,
+`curve25519.x25519` (`Curve25519/X25519.lean`), the tables' `Represents` (`Defs/Edwards.lean`),
 `CompressedRistretto.asNat` (`Defs/Ristretto.lean`), `Ristretto.encodeRep`
 (`Curve25519/Ristretto/`). -/
 

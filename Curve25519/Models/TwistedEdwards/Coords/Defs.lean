@@ -18,14 +18,16 @@ alongside the projective, extended and completed coordinates of
 * `E.AffineNiels`: `(y + x, y - x, 2 d x y)` of an affine point.
 
 Each is a plain structure of field elements, as in the library, with
+
 * an exposed validity predicate `OnCurve`, stated with the affine point, restated without
   division by `onCurve_iff_homogeneous` (away from `2`), and decided through that form;
 * a total hidden `toPoint` into `E.Point`: the affine point when `OnCurve`, and `(0, 1)`
   otherwise (the neutral element `0` when `E` is complete); characterised by `toPoint_x`,
   `toPoint_y`, `toPoint_of_not_onCurve`, `toPoint_eq_zero_of_not_onCurve`, for any model.
- The conversions into them
-(`Extended.toProjectiveNiels`, `Extended.toAffineNiels`, `Point.toAffineNiels`), the identities
-and the negations are the exposed formulas the code computes; their `onCurve_*` and `toPoint_*`
+
+The conversions into them (`Extended.toProjectiveNiels`, `Extended.toAffineNiels`,
+`Point.toAffineNiels`), the identities and the negations are the exposed formulas the code
+computes; their `onCurve_*` and `toPoint_*`
 lemmas are in `Curve25519.Models.TwistedEdwards.Coords.Lemmas`. The mixed additions with Niels
 points are in `Curve25519.Models.TwistedEdwards.Formulas.*`. -/
 
@@ -41,9 +43,9 @@ variable {F : Type u} [Field F] (E : TwistedEdwardsModel F)
 (curve25519-dalek's `ProjectiveNielsPoint`). -/
 @[ext] structure ProjectiveNiels (E : TwistedEdwardsModel F) where
   /-- `Y + X`. -/
-  YplusX : F
+  YPlusX : F
   /-- `Y - X`. -/
-  YminusX : F
+  YMinusX : F
   /-- The `Z`-coordinate. -/
   Z : F
   /-- `2 d T`. -/
@@ -88,32 +90,31 @@ namespace ProjectiveNiels
 
 /-- The `X`-coordinate `((Y + X) - (Y - X)) / 2` recovered from the Niels form. -/
 @[expose] def X (P : E.ProjectiveNiels) : F :=
-  (P.YplusX - P.YminusX) / 2
+  (P.YPlusX - P.YMinusX) / 2
 
 /-- The `Y`-coordinate `((Y + X) + (Y - X)) / 2` recovered from the Niels form. -/
 @[expose] def Y (P : E.ProjectiveNiels) : F :=
-  (P.YplusX + P.YminusX) / 2
+  (P.YPlusX + P.YMinusX) / 2
 
 /-- `(Y + X : Y - X : Z : T2d)` represents a point of `E`: `Z ≠ 0`, `(X / Z, Y / Z)` satisfies
 the equation (`X`, `Y` recovered from the Niels form), and `T2d Z = 2 d X Y`. -/
 @[expose] def OnCurve (P : E.ProjectiveNiels) : Prop :=
   P.Z ≠ 0 ∧ E.Equation (P.X / P.Z) (P.Y / P.Z) ∧ P.T2d * P.Z = 2 * E.d * P.X * P.Y
 
-
 /-- `OnCurve` without division, in terms of `X' = 2 X = (Y + X) - (Y - X)` and
 `Y' = 2 Y = (Y + X) + (Y - X)` (in characteristic `≠ 2`):
 `4 a X'² Z² + 4 Y'² Z² = 16 Z⁴ + d X'² Y'²` and `2 T2d Z = d X' Y'`. -/
 theorem onCurve_iff_homogeneous [NeZero (2 : F)] (P : E.ProjectiveNiels) :
     P.OnCurve ↔ P.Z ≠ 0 ∧
-      4 * E.a * (P.YplusX - P.YminusX) ^ 2 * P.Z ^ 2 + 4 * (P.YplusX + P.YminusX) ^ 2 * P.Z ^ 2 =
-        16 * P.Z ^ 4 + E.d * (P.YplusX - P.YminusX) ^ 2 * (P.YplusX + P.YminusX) ^ 2 ∧
-      2 * P.T2d * P.Z = E.d * (P.YplusX - P.YminusX) * (P.YplusX + P.YminusX) := by
+      4 * E.a * (P.YPlusX - P.YMinusX) ^ 2 * P.Z ^ 2 + 4 * (P.YPlusX + P.YMinusX) ^ 2 * P.Z ^ 2 =
+        16 * P.Z ^ 4 + E.d * (P.YPlusX - P.YMinusX) ^ 2 * (P.YPlusX + P.YMinusX) ^ 2 ∧
+      2 * P.T2d * P.Z = E.d * (P.YPlusX - P.YMinusX) * (P.YPlusX + P.YMinusX) := by
   have h2 : (2 : F) ≠ 0 := two_ne_zero
   have h16 : (16 : F) ≠ 0 := by
     rw [show (16 : F) = 2 * 2 * 2 * 2 by norm_num]
     exact mul_ne_zero (mul_ne_zero (mul_ne_zero h2 h2) h2) h2
-  have hX : P.YplusX - P.YminusX = 2 * P.X := (mul_div_cancel₀ _ h2).symm
-  have hY : P.YplusX + P.YminusX = 2 * P.Y := (mul_div_cancel₀ _ h2).symm
+  have hX : P.YPlusX - P.YMinusX = 2 * P.X := (mul_div_cancel₀ _ h2).symm
+  have hY : P.YPlusX + P.YMinusX = 2 * P.Y := (mul_div_cancel₀ _ h2).symm
   rw [hX, hY]
   unfold OnCurve
   constructor
@@ -167,7 +168,7 @@ theorem toPoint_eq_zero_of_not_onCurve [E.IsComplete] {P : E.ProjectiveNiels}
 
 /-- Negation: swap `Y + X` and `Y - X`, negate `T2d` (`Neg for ProjectiveNielsPoint`). -/
 @[expose] def neg (P : E.ProjectiveNiels) : E.ProjectiveNiels :=
-  ⟨P.YminusX, P.YplusX, P.Z, -P.T2d⟩
+  ⟨P.YMinusX, P.YPlusX, P.Z, -P.T2d⟩
 
 end ProjectiveNiels
 
@@ -187,7 +188,6 @@ namespace AffineNiels
 recovered from the Niels form) and `xy2d = 2 d x y`. -/
 @[expose] def OnCurve (P : E.AffineNiels) : Prop :=
   E.Equation P.x P.y ∧ P.xy2d = 2 * E.d * P.x * P.y
-
 
 /-- `OnCurve` without division, in terms of `x' = 2 x = (y + x) - (y - x)` and
 `y' = 2 y = (y + x) + (y - x)` (in characteristic `≠ 2`): `4 a x'² + 4 y'² = 16 + d x'² y'²`

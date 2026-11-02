@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519.Models.TwistedEdwards.Decaf.Defs
+public import Curve25519.Models.Field.Sign
 public import Mathlib.LinearAlgebra.SModEq.Basic
-import all Curve25519.Models.TwistedEdwards.Decaf.Defs
 import Curve25519.ToEllipticCurve.TwistedEdwards.Lemmas
 import EllipticCurve.TwistedEdwards.Even
 import EllipticCurve.TwistedEdwards.Lemmas
@@ -22,7 +22,10 @@ relation compatible with the group law (`rel_refl`, …, `rel_nsmul`), and in co
 (`rel_iff`, and `rel_iff_of_a_eq_neg_one` for `a = -1`), through the 4-torsion in coordinates
 (`mem_torsionBy_four_iff` of `EllipticCurve.TwistedEdwards.Even`). For `a = -1` and a square root
 `i` of `-1`, the class of `(x, y)` is `{(x, y), (-x, -y), (i y, i x), (-(i y), -(i x))}`
-(`rel_iff_coords_of_a_eq_neg_one`). -/
+(`rel_iff_coords_of_a_eq_neg_one`; `(y i, x i)` is on the model by `equation_rot_of_a_eq_neg_one`),
+and over `ZMod q` (`q` an odd prime) a class has at most one representative with `x` and `x y`
+non-negative, `y ≠ 0` and `y ≠ -1` (`eq_of_rel_of_canonical_of_a_eq_neg_one`, the canonical
+representative of Decaf/Ristretto encoding). -/
 
 universe u
 
@@ -91,6 +94,15 @@ theorem rel_iff_of_a_eq_neg_one (ha : E.a = -1) (P Q : E.Point) :
   rw [rel_iff, ha]
   exact or_congr_right ⟨fun h => by linear_combination -h, fun h => by linear_combination -h⟩
 
+/-- For `a = -1` and `i² = -1`, `(y i, x i)` is on the model with `(x, y)`. -/
+theorem equation_rot_of_a_eq_neg_one {F : Type u} [Field F] {E : TwistedEdwardsModel F}
+    (ha : E.a = -1) {i : F} (hi : i ^ 2 = -1) {x y : F} (h : E.Equation x y) :
+    E.Equation (y * i) (x * i) := by
+  unfold Equation at h ⊢
+  rw [ha] at h ⊢
+  rw [mul_pow, mul_pow, hi]
+  linear_combination h
+
 /-- **The class in coordinates** for `a = -1`, with `i² = -1`: `Q` is related to `P = (x, y)` iff
 `Q` is `(x, y)`, `(-x, -y)` (`P + (0, -1)`), `(y i, x i)` (`P + (i, 0)`) or `(-(y i), -(x i))`
 (`P + (-i, 0)`). -/
@@ -108,7 +120,7 @@ theorem rel_iff_coords_of_a_eq_neg_one (ha : E.a = -1) {i : F} (hi : i ^ 2 = -1)
       · have h0 : Q - P = 0 := Point.ext (by rw [hx, zero_x]) (by rw [hy, zero_y])
         rw [sub_eq_zero] at h0
         exact Or.inl ⟨by rw [h0], by rw [h0]⟩
-      · rw [hQ]
+      · rw [hQ, add_comm]
         exact Or.inr (Or.inl ⟨add_x_of_x_eq_zero_of_y_eq_neg_one P hx hy,
           add_y_of_x_eq_zero_of_y_eq_neg_one P hx hy⟩)
     · have hsq : (Q - P).x ^ 2 = i ^ 2 := by
@@ -137,5 +149,40 @@ theorem rel_iff_coords_of_a_eq_neg_one (ha : E.a = -1) {i : F} (hi : i ^ 2 = -1)
     · exact Or.inl (by ring)
     · exact Or.inr (by ring)
     · exact Or.inr (by ring)
+
+/-! ### The canonical representative over `ZMod q` -/
+
+section ZMod
+
+variable {q : ℕ} [Fact q.Prime] [Fact (q % 2 = 1)] [NeZero (6 : ZMod q)]
+  {E : TwistedEdwardsModel (ZMod q)} [E.IsComplete]
+
+/-- **Uniqueness of the canonical representative** for `a = -1` (`i² = -1`): two related points
+with `x` and `x y` non-negative, `y ≠ 0` and `y ≠ -1` are equal. -/
+theorem eq_of_rel_of_canonical_of_a_eq_neg_one (ha : E.a = -1) {i : ZMod q} (hi : i ^ 2 = -1)
+    {P Q : E.Point} (h : E.Rel P Q)
+    (hPx : ¬ P.x.IsNeg) (hPxy : ¬ (P.x * P.y).IsNeg) (hPy : P.y ≠ 0) (hPy1 : P.y ≠ -1)
+    (hQx : ¬ Q.x.IsNeg) (hQxy : ¬ (Q.x * Q.y).IsNeg) (hQy : Q.y ≠ 0) (hQy1 : Q.y ≠ -1) :
+    P = Q := by
+  rw [rel_iff_coords_of_a_eq_neg_one ha hi] at h
+  rcases h with ⟨hx, hy⟩ | ⟨hx, hy⟩ | h
+  · exact (Point.ext hx hy).symm
+  · exfalso
+    rw [hx] at hQx
+    have hx0 : P.x = 0 := ZMod.eq_zero_of_not_isNeg_of_not_isNeg_neg hPx hQx
+    have hy1 : P.y = 1 :=
+      (y_eq_one_or_eq_neg_one_of_x_eq_zero P.equation hx0).resolve_right hPy1
+    rw [hy, hy1] at hQy1
+    exact hQy1 rfl
+  · -- the two rotations: `x y` changes sign, and `y = 0` when `x = 0`
+    exfalso
+    have hrot : Q.x * Q.y = -(P.x * P.y) ∧ (P.x = 0 → Q.y = 0) := by
+      rcases h with ⟨hx, hy⟩ | ⟨hx, hy⟩ <;> rw [hx, hy] <;>
+        exact ⟨by linear_combination (P.x * P.y) * hi, fun h0 => by rw [h0]; ring⟩
+    rw [hrot.1] at hQxy
+    have h0 : P.x * P.y = 0 := ZMod.eq_zero_of_not_isNeg_of_not_isNeg_neg hPxy hQxy
+    exact hQy (hrot.2 ((mul_eq_zero.mp h0).resolve_right hPy))
+
+end ZMod
 
 end TwistedEdwardsModel
