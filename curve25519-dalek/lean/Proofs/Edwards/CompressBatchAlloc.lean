@@ -29,21 +29,21 @@ variable (B : Backend)
 open ControlFlow
 
 /-- `compress_batch_alloc_loop0.body` over a backend: the coordinate `Z` of a point by `Zf`. -/
-@[expose] def cbaLoop0Body {E : Type} (Zf : E → B.F) (inputs : Slice E) (n : Usize)
-    (zs : alloc.vec.Vec B.F) (i : Usize) :
-    Result (ControlFlow ((alloc.vec.Vec B.F) × Usize) (alloc.vec.Vec B.F)) := do
-  if i < n
-  then
-    let ep ← Slice.index_usize inputs i
-    let zs1 ← alloc.vec.Vec.push zs (Zf ep)
-    let i1 ← i + 1#usize
-    ok (cont (zs1, i1))
-  else ok (done zs)
+@[expose] def cbaLoop0Body {E : Type} (Zf : E → B.F) (iter : core.slice.iter.Iter E)
+    (zs : alloc.vec.Vec B.F) :
+    Result (ControlFlow ((core.slice.iter.Iter E) × (alloc.vec.Vec B.F))
+      (alloc.vec.Vec B.F)) := do
+  let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+  match o with
+  | none => ok (done zs)
+  | some input =>
+    let zs1 ← alloc.vec.Vec.push zs (Zf input)
+    ok (cont (iter1, zs1))
 
 /-- `compress_batch_alloc_loop0` over a backend. -/
-@[expose] def cbaLoop0 {E : Type} (Zf : E → B.F) (inputs : Slice E) (n : Usize)
-    (zs : alloc.vec.Vec B.F) (i : Usize) : Result (alloc.vec.Vec B.F) := do
-  loop (fun (zs1, i1) => B.cbaLoop0Body Zf inputs n zs1 i1) (zs, i)
+@[expose] def cbaLoop0 {E : Type} (Zf : E → B.F) (iter : core.slice.iter.Iter E)
+    (zs : alloc.vec.Vec B.F) : Result (alloc.vec.Vec B.F) := do
+  loop (fun (iter1, zs1) => B.cbaLoop0Body Zf iter1 zs1) (iter, zs)
 
 /-- `compress_batch_alloc_loop1.body` over a backend: `compress x y` is
 `AffinePoint::compress` of `(x, y)`. -/
@@ -77,41 +77,52 @@ open ControlFlow
     Result (alloc.vec.Vec edwards.CompressedEdwardsY) := do
   let n := Slice.len inputs
   let zs := alloc.vec.Vec.with_capacity B.F n
-  let zs1 ← B.cbaLoop0 Zf inputs n zs 0#usize
+  let iter ← SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter inputs
+  let zs1 ← B.cbaLoop0 Zf iter zs
   let (s, deref_mut_back) ← lift (alloc.vec.Vec.deref_mut zs1)
   let s1 ← B.invertBatchAlloc s
   let out := alloc.vec.Vec.with_capacity edwards.CompressedEdwardsY n
   let zs2 := deref_mut_back s1
   B.cbaLoop1 Xf Yf compress inputs n zs2 out 0#usize
 
-open scoped Helpers.IndexStep in
-/-- The first loop of `compress_batch_alloc`: the `Z` coordinates. -/
-private theorem cbaLoop0_spec {E : Type} [Inhabited E] (Zf : E → B.F) (inputs : Slice E)
-    (n : Usize) (hn : n.val = inputs.length) (zs : alloc.vec.Vec B.F) (i : Usize)
-    (hi : i.val ≤ n.val) (hlen : zs.length = i.val)
-    (hzs : ∀ k < i.val, zs[k]! = Zf inputs[k]!) :
-    B.cbaLoop0 Zf inputs n zs i ⦃ (r : alloc.vec.Vec B.F) =>
-      r.length = inputs.length ∧ ∀ k < inputs.length, r[k]! = Zf inputs[k]! ⦄ := by
+/-- The first loop collects the `Z` coordinates of the iterator's slice. -/
+private theorem cbaLoop0_spec {E : Type} [Inhabited E] (Zf : E → B.F)
+    (iter : core.slice.iter.Iter E) (zs : alloc.vec.Vec B.F)
+    (hi : iter.i ≤ iter.slice.length) (hlen : zs.length = iter.i)
+    (hzs : ∀ k < iter.i, zs[k]! = Zf iter.slice[k]!) :
+    B.cbaLoop0 Zf iter zs ⦃ (r : alloc.vec.Vec B.F) =>
+      r.length = iter.slice.length ∧ ∀ k < iter.slice.length, r[k]! = Zf iter.slice[k]! ⦄ := by
   unfold cbaLoop0
-  apply loop.spec_decr_nat (measure := fun (_, i') => n.val - i'.val)
-    (inv := fun (z, i') => i'.val ≤ n.val ∧ z.length = i'.val ∧ ∀ k < i'.val,
-      z[k]! = Zf inputs[k]!)
-  · rintro ⟨z, i'⟩ ⟨hi', hl, hz⟩
-    unfold cbaLoop0Body
-    by_cases hlt : i' < n
-    · simp only [hlt, ite_true]
-      step as ⟨ep, hep⟩
+  apply loop.spec_decr_nat (measure := fun (it, _) => it.slice.length - it.i)
+    (inv := fun (it, z) => it.slice = iter.slice ∧ it.i ≤ it.slice.length ∧
+      z.length = it.i ∧ ∀ k < it.i, z[k]! = Zf it.slice[k]!)
+  · rintro ⟨it, z⟩ ⟨hs, hi', hl, hz⟩
+    dsimp only
+    unfold cbaLoop0Body core.slice.iter.IteratorSliceIter.next
+    split
+    · rename_i hnext
+      have hlt : it.i < it.slice.length := by simpa using hnext
+      simp only [bind_ok]
+      change (do
+        let z1 ← alloc.vec.Vec.push z (Zf it.slice[it.i])
+        ok (cont ({ it with i := it.i + 1 }, z1))) ⦃ _ ⦄
       step as ⟨z1, hz1⟩
-      step as ⟨i1, hi1⟩
-      refine ⟨by scalar_tac, by rw [alloc.vec.Vec.length_of_val_eq_append hz1, hl, hi1], ?_,
-        by scalar_tac⟩
-      rw [hi1, ← hl]
-      exact alloc.vec.Vec.forall_lt_of_val_eq_append (P := fun k x => x = Zf inputs[k]!)
-        hz1 (hl ▸ hz) (by rw [hep, hl])
-    · simp only [hlt, ite_false, WP.spec_ok]
-      have hin : i'.val = inputs.length := by scalar_tac
+      refine ⟨hs, by omega, ?_, ?_, by omega⟩
+      · rw [alloc.vec.Vec.length_of_val_eq_append hz1, hl]
+      · rw [← hl]
+        refine alloc.vec.Vec.forall_lt_of_val_eq_append (P := fun k x => x = Zf it.slice[k]!)
+          hz1 (hl ▸ hz) ?_
+        rw [hl, Slice.getElem!_Nat_eq, getElem!_pos it.slice.val it.i hlt]
+        rfl
+    · rename_i hnext
+      have hlt : ¬ it.i < it.slice.length := by simpa using hnext
+      simp only [bind_ok]
+      change (ok (done z)) ⦃ _ ⦄
+      simp only [WP.spec_ok]
+      have hin : it.i = it.slice.length := by omega
+      rw [← hs]
       exact ⟨hl.trans hin, hin ▸ hz⟩
-  · exact ⟨hi, hlen, hzs⟩
+  · exact ⟨rfl, hi, hlen, hzs⟩
 
 open scoped Helpers.IndexStep in
 /-- The second loop of `compress_batch_alloc`: compress `(X z, Y z)` for the inverse `z` of
@@ -185,9 +196,11 @@ theorem compressBatchAlloc_spec (hmul : B.MulSpec) (hinv : B.InvertBatchAllocSpe
           (B.toField (Yf inputs[i]!) / B.toField (Zf inputs[i]!)).val + 2 ^ 255 *
             (if (B.toField (Xf inputs[i]!) / B.toField (Zf inputs[i]!)).IsNeg then 1 else 0) ⦄ := by
   unfold compressBatchAlloc
-  step with B.cbaLoop0_spec Zf inputs _ (Slice.len_val inputs)
-    (alloc.vec.Vec.with_capacity B.F (Slice.len inputs)) 0#usize (by scalar_tac)
-    (by rfl) (fun k hk => absurd hk (Nat.not_lt_zero k)) as ⟨z1, hz1len, hz1⟩
+  step as ⟨iter, hsiter, hi⟩
+  step with B.cbaLoop0_spec Zf iter (alloc.vec.Vec.with_capacity B.F (Slice.len inputs))
+    (by simp [hi]) (by simp [hi]; rfl)
+    (fun k hk => by simp [hi] at hk) as ⟨z1, hz1len, hz1⟩
+  rw [hsiter] at hz1len hz1
   simp only [alloc.vec.Vec.deref_mut, lift]
   step with hinv z1.slice (fun k hk => by
       rw [alloc.vec.Vec.getElem!_slice, hz1 k (hz1len ▸ hk)]
@@ -213,9 +226,25 @@ namespace «EdwardsPointx86_64-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
+private theorem compress_batch_alloc_loop0_eq
+    (iter : core.slice.iter.Iter EdwardsPoint.«x86_64-tables»)
+    (zs : alloc.vec.Vec FieldElement51) :
+    compress_batch_alloc_loop0 iter zs = Backend.U64.cbaLoop0 (·.Z) iter zs := by
+  unfold compress_batch_alloc_loop0 Backend.cbaLoop0
+  congr 1
+  funext ⟨it, z⟩
+  dsimp only
+  unfold compress_batch_alloc_loop0.body Backend.cbaLoop0Body
+  congr 1
+  funext ⟨o, it1⟩
+  cases o <;> rfl
+
 private theorem compress_batch_alloc_eq (inputs : Slice EdwardsPoint.«x86_64-tables») :
     compress_batch_alloc inputs = Backend.U64.compressBatchAlloc (·.X) (·.Y) (·.Z)
-      (fun x y => affine.«AffinePointx86_64-tables».compress { x, y }) inputs := rfl
+      (fun x y => affine.«AffinePointx86_64-tables».compress { x, y }) inputs := by
+  unfold compress_batch_alloc Backend.compressBatchAlloc
+  simp only [compress_batch_alloc_loop0_eq]
+  rfl
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is the canonical `y = Y / Z` of point `i`
 with the sign of `x = X / Z` in bit `255`; limbs `< 2^52`. -/
@@ -249,9 +278,25 @@ namespace «EdwardsPointi686-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
+private theorem compress_batch_alloc_loop0_eq
+    (iter : core.slice.iter.Iter EdwardsPoint.«i686-tables»)
+    (zs : alloc.vec.Vec FieldElement2625) :
+    compress_batch_alloc_loop0 iter zs = Backend.U32.cbaLoop0 (·.Z) iter zs := by
+  unfold compress_batch_alloc_loop0 Backend.cbaLoop0
+  congr 1
+  funext ⟨it, z⟩
+  dsimp only
+  unfold compress_batch_alloc_loop0.body Backend.cbaLoop0Body
+  congr 1
+  funext ⟨o, it1⟩
+  cases o <;> rfl
+
 private theorem compress_batch_alloc_eq (inputs : Slice EdwardsPoint.«i686-tables») :
     compress_batch_alloc inputs = Backend.U32.compressBatchAlloc (·.X) (·.Y) (·.Z)
-      (fun x y => affine.«AffinePointi686-tables».compress { x, y }) inputs := rfl
+      (fun x y => affine.«AffinePointi686-tables».compress { x, y }) inputs := by
+  unfold compress_batch_alloc Backend.compressBatchAlloc
+  simp only [compress_batch_alloc_loop0_eq]
+  rfl
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is the canonical `y = Y / Z` of point `i`
 with the sign of `x = X / Z` in bit `255`; limbs `< 2^26`. -/
@@ -285,9 +330,25 @@ namespace «EdwardsPointx86_64-no-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
+private theorem compress_batch_alloc_loop0_eq
+    (iter : core.slice.iter.Iter EdwardsPoint.«x86_64-no-tables»)
+    (zs : alloc.vec.Vec FieldElement51) :
+    compress_batch_alloc_loop0 iter zs = Backend.U64.cbaLoop0 (·.Z) iter zs := by
+  unfold compress_batch_alloc_loop0 Backend.cbaLoop0
+  congr 1
+  funext ⟨it, z⟩
+  dsimp only
+  unfold compress_batch_alloc_loop0.body Backend.cbaLoop0Body
+  congr 1
+  funext ⟨o, it1⟩
+  cases o <;> rfl
+
 private theorem compress_batch_alloc_eq (inputs : Slice EdwardsPoint.«x86_64-no-tables») :
     compress_batch_alloc inputs = Backend.U64.compressBatchAlloc (·.X) (·.Y) (·.Z)
-      (fun x y => affine.«AffinePointx86_64-no-tables».compress { x, y }) inputs := rfl
+      (fun x y => affine.«AffinePointx86_64-no-tables».compress { x, y }) inputs := by
+  unfold compress_batch_alloc Backend.compressBatchAlloc
+  simp only [compress_batch_alloc_loop0_eq]
+  rfl
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is the canonical `y = Y / Z` of point `i`
 with the sign of `x = X / Z` in bit `255`; limbs `< 2^52`. -/
@@ -321,9 +382,25 @@ namespace «EdwardsPointi686-no-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
+private theorem compress_batch_alloc_loop0_eq
+    (iter : core.slice.iter.Iter EdwardsPoint.«i686-no-tables»)
+    (zs : alloc.vec.Vec FieldElement2625) :
+    compress_batch_alloc_loop0 iter zs = Backend.U32.cbaLoop0 (·.Z) iter zs := by
+  unfold compress_batch_alloc_loop0 Backend.cbaLoop0
+  congr 1
+  funext ⟨it, z⟩
+  dsimp only
+  unfold compress_batch_alloc_loop0.body Backend.cbaLoop0Body
+  congr 1
+  funext ⟨o, it1⟩
+  cases o <;> rfl
+
 private theorem compress_batch_alloc_eq (inputs : Slice EdwardsPoint.«i686-no-tables») :
     compress_batch_alloc inputs = Backend.U32.compressBatchAlloc (·.X) (·.Y) (·.Z)
-      (fun x y => affine.«AffinePointi686-no-tables».compress { x, y }) inputs := rfl
+      (fun x y => affine.«AffinePointi686-no-tables».compress { x, y }) inputs := by
+  unfold compress_batch_alloc Backend.compressBatchAlloc
+  simp only [compress_batch_alloc_loop0_eq]
+  rfl
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is the canonical `y = Y / Z` of point `i`
 with the sign of `x = X / Z` in bit `255`; limbs `< 2^26`. -/
