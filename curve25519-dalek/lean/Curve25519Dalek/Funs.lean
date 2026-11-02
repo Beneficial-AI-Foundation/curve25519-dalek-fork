@@ -42544,16 +42544,16 @@ def edwards.«EdwardsPointi686-no-tables».mul_base_clamped
 def
   edwards.«MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect_loop.body
   {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
+  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
   (out : alloc.vec.Vec Clause0_Item) :
   Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
     Clause0_Item))
   := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
+  let (o, iter1) ← coreitertraitsiteratorIteratorInst.next iter
   match o with
   | none => ok (done out)
   | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
+              ok (cont (iter1, out1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::multiscalar_mul::collect]: loop 0:
     Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
@@ -42561,15 +42561,15 @@ def
 def
   edwards.«MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect_loop
   {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
+  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
   (out : alloc.vec.Vec Clause0_Item) :
   Result (alloc.vec.Vec Clause0_Item)
   := do
   loop
-    (fun (it1, out1) =>
+    (fun (iter1, out1) =>
       edwards.«MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
+      coreitertraitsiteratorIteratorInst iter1 out1)
+    (iter, out)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::multiscalar_mul::collect]:
     Source: 'curve25519-dalek/src/edwards.rs', lines 990:8-996:9 -/
@@ -42646,16 +42646,16 @@ def
 def
   edwards.«MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect_loop.body
   {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
+  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
   (out : alloc.vec.Vec Clause0_Item) :
   Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
     Clause0_Item))
   := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
+  let (o, iter1) ← coreitertraitsiteratorIteratorInst.next iter
   match o with
   | none => ok (done out)
   | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
+              ok (cont (iter1, out1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::multiscalar_mul::collect]: loop 0:
     Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
@@ -42663,15 +42663,15 @@ def
 def
   edwards.«MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect_loop
   {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
+  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
   (out : alloc.vec.Vec Clause0_Item) :
   Result (alloc.vec.Vec Clause0_Item)
   := do
   loop
-    (fun (it1, out1) =>
+    (fun (iter1, out1) =>
       edwards.«MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
+      coreitertraitsiteratorIteratorInst iter1 out1)
+    (iter, out)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::multiscalar_mul::collect]:
     Source: 'curve25519-dalek/src/edwards.rs', lines 990:8-996:9 -/
@@ -42748,16 +42748,16 @@ def
 def
   edwards.«MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect_loop.body
   {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
+  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
   (out : alloc.vec.Vec Clause0_Item) :
   Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
     Clause0_Item))
   := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
+  let (o, iter1) ← coreitertraitsiteratorIteratorInst.next iter
   match o with
   | none => ok (done out)
   | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
+              ok (cont (iter1, out1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::multiscalar_mul::collect]: loop 0:
     Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
@@ -42765,15 +42765,15 @@ def
 def
   edwards.«MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect_loop
   {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
+  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
   (out : alloc.vec.Vec Clause0_Item) :
   Result (alloc.vec.Vec Clause0_Item)
   := do
   loop
-    (fun (it1, out1) =>
+    (fun (iter1, out1) =>
       edwards.«MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
+      coreitertraitsiteratorIteratorInst iter1 out1)
+    (iter, out)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::multiscalar_mul::collect]:
     Source: 'curve25519-dalek/src/edwards.rs', lines 990:8-996:9 -/
@@ -42850,16 +42850,16 @@ def
 def
   edwards.«MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».multiscalar_mul.collect_loop.body
   {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
+  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
   (out : alloc.vec.Vec Clause0_Item) :
   Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
     Clause0_Item))
   := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
+  let (o, iter1) ← coreitertraitsiteratorIteratorInst.next iter
   match o with
   | none => ok (done out)
   | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
+              ok (cont (iter1, out1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::multiscalar_mul::collect]: loop 0:
     Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
@@ -42867,15 +42867,15 @@ def
 def
   edwards.«MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».multiscalar_mul.collect_loop
   {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
+  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
   (out : alloc.vec.Vec Clause0_Item) :
   Result (alloc.vec.Vec Clause0_Item)
   := do
   loop
-    (fun (it1, out1) =>
+    (fun (iter1, out1) =>
       edwards.«MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
+      coreitertraitsiteratorIteratorInst iter1 out1)
+    (iter, out)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::multiscalar_mul::collect]:
     Source: 'curve25519-dalek/src/edwards.rs', lines 990:8-996:9 -/
