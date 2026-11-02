@@ -11,8 +11,9 @@ public section
 
 /-! # Primality certificates for `p` and `L` (not audited)
 
-Lucas certificates (Pratt trees, 22 certificates): `n` is prime when some `a` has order `n - 1`
-modulo `n`, given the prime factorisation of `n - 1`, each large factor certified in turn. The
+Lucas certificates (Pratt trees): `n` is prime when some `a` has order `n - 1`
+modulo `n`, given the prime factorisation of `n - 1`, each large factor certified in turn; the
+three smallest factors (below `10⁷`) are proved by `norm_num` directly. The
 results, `p_numeral_prime` and `L_numeral_prime`, are about the numerals; `Curve25519.Prime`
 re-exports them as `p_prime` and `L_prime`.
 
@@ -34,27 +35,17 @@ private theorem prime_of_lucas (n a : ℕ) (fs : List (ℕ × ℕ)) (hfs : fs.Fo
   obtain rfl := (Nat.prime_dvd_prime_iff_eq hq (hfs f hf)).mp (hq.dvd_of_dvd_pow hqd)
   exact hdiv f hf
 
-private theorem prime_cert_1 : Nat.Prime 1224481 :=
-  prime_of_lucas 1224481 13
-    [(2, 5), (3, 1), (5, 1), (2551, 1)]
-    (by simp only [List.Forall]; exact ⟨by norm_num, by norm_num, by norm_num, by norm_num⟩)
-    (by norm_num) (by reduce_mod_char)
-    (by simp only [List.Forall]; and_intros <;> reduce_mod_char <;> decide)
+/-- Small enough for `norm_num`'s trial division. -/
+private theorem prime_cert_1 : Nat.Prime 1224481 := by
+  norm_num
 
-private theorem prime_cert_2 : Nat.Prime 1923133 :=
-  prime_of_lucas 1923133 2
-    [(2, 2), (3, 1), (43, 1), (3727, 1)]
-    (by simp only [List.Forall]; exact ⟨by norm_num, by norm_num, by norm_num, by norm_num⟩)
-    (by norm_num) (by reduce_mod_char)
-    (by simp only [List.Forall]; and_intros <;> reduce_mod_char <;> decide)
+/-- Small enough for `norm_num`'s trial division. -/
+private theorem prime_cert_2 : Nat.Prime 1923133 := by
+  norm_num
 
-private theorem prime_cert_3 : Nat.Prime 8574133 :=
-  prime_of_lucas 8574133 2
-    [(2, 2), (3, 1), (7, 1), (103, 1), (991, 1)]
-    (by simp only [List.Forall]; exact ⟨by norm_num, by norm_num, by norm_num, by norm_num,
-        by norm_num⟩)
-    (by norm_num) (by reduce_mod_char)
-    (by simp only [List.Forall]; and_intros <;> reduce_mod_char <;> decide)
+/-- Small enough for `norm_num`'s trial division. -/
+private theorem prime_cert_3 : Nat.Prime 8574133 := by
+  norm_num
 
 private theorem prime_cert_4 : Nat.Prime 14741173 :=
   prime_of_lucas 14741173 2

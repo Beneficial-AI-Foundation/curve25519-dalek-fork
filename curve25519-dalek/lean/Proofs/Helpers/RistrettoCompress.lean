@@ -111,7 +111,7 @@ theorem compressProj_eq_encodeRep (P : edwards.Point) {c X Y Z T : ZMod p}
   have hn2 : Z * x * zP = x * zA := by rw [← hz]; ring
   rw [hr]
   congr 1
-  apply ZMod.abs_eq_abs_of_sq_eq p_mod_two
+  apply ZMod.abs_eq_abs_of_sq_eq
   simp only [ite_mul, hn1, hn2]
   split_ifs
   · linear_combination ((1 + y) * (1 - y) * c * (1 - -(x * sqrtM1))) ^ 2 * hkey +
@@ -192,7 +192,7 @@ theorem doubleCompress_eq_compressProj {c e f g h : ZMod p} (hc : c ^ 2 * (a - d
       linear_combination (a - d) * e ^ 2 * f ^ 2 * g ^ 2 * h ^ 2 * R6 +
         e ^ 2 * f ^ 2 * g ^ 2 * h ^ 2 * inv ^ 2 * hc + (e * f * g * h * inv) * hinv
     rw [hz]
-    apply ZMod.abs_eq_abs_of_sq_eq p_mod_two
+    apply ZMod.abs_eq_abs_of_sq_eq
     by_cases hr : (e * g * (e * g * inv)).isNeg
     · simp only [ite_eq_left hr]
       rw [show f * (sqrtM1 : ZMod p) * g = g * f * sqrtM1 by ring]

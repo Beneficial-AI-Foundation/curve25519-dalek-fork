@@ -180,13 +180,8 @@ theorem mapRep_one_add_sq_ne_zero (r₀ : ZMod p) :
   (map_facts r₀).2.1
 
 /-- **`MAP(r₀)` is even**: `1 - y² = (2 s / (1 + s²))²`. -/
-theorem even_mapRep (r₀ : ZMod p) : Even (mapRep r₀) := by
-  have hs := (map_facts r₀).2.1
-  rw [even_iff_isSquare]
-  change IsSquare (1 - ((1 - mapS r₀ ^ 2) / (1 + mapS r₀ ^ 2)) ^ 2)
-  refine ⟨2 * mapS r₀ / (1 + mapS r₀ ^ 2), ?_⟩
-  field_simp
-  ring
+theorem even_mapRep (r₀ : ZMod p) : Even (mapRep r₀) :=
+  even_of_y_eq_div (map_facts r₀).2.1 rfl
 
 /-! ### The one-way map -/
 

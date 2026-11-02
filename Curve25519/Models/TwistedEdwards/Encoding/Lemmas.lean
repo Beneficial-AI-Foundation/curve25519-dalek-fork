@@ -4,9 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519.Models.TwistedEdwards.Encoding.Defs
-public import EllipticCurve.TwistedEdwards.Lemmas
+public import Curve25519.ToEllipticCurve.TwistedEdwards.Lemmas
 import all Curve25519.Models.TwistedEdwards.Encoding.Defs
-import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Ring
 public section
 
@@ -25,63 +24,12 @@ The audited statements about `TwistedEdwardsModel.encode` and `TwistedEdwardsMod
   rejection reasons: too many bits, `y ≥ p`, `xSq y` not a square, or `y² = 1` with the sign
   bit set, RFC 8032's "`x = 0` and `x_0 = 1`").
 
-Also the solved equation `x ^ 2 = E.xSq y` (`equation_iff_sq_eq_xSq`, `isSquare_xSq_iff`,
-`xSq_eq_zero_iff`), and the uniqueness of a point given `y` and the sign of `x`
-(`eq_of_y_eq_of_isNeg_iff`), the heart of both `decode_eq_some_iff` and `encode_injective`.
-These lemmas are the whole interface to the hidden `decode`. -/
-
-universe u
+Also the uniqueness of a point given `y` and the sign of `x` (`eq_of_y_eq_of_isNeg_iff`, from
+the solved equation `x ^ 2 = E.xSq y` of `Curve25519.ToEllipticCurve.TwistedEdwards.Lemmas`),
+the heart of both `decode_eq_some_iff` and `encode_injective`. These lemmas are the whole
+interface to the hidden `decode`. -/
 
 namespace TwistedEdwardsModel
-
-variable {F : Type u} [Field F] {E : TwistedEdwardsModel F}
-
-/-! ### The equation solved for `x²` -/
-
-section xSq
-
-variable [E.IsComplete]
-
-/-- `d y² - a ≠ 0` for every `y` on a complete model (`a` is a nonzero square, `d` is not). -/
-theorem d_mul_sq_sub_a_ne_zero (y : F) : E.d * y ^ 2 - E.a ≠ 0 := by
-  intro h
-  have ha : E.a = E.d * y ^ 2 := (sub_eq_zero.mp h).symm
-  by_cases hy : y = 0
-  · rw [hy] at ha
-    exact IsComplete.a_ne_zero (E := E) (by rw [ha]; ring)
-  · obtain ⟨s, hs⟩ := IsComplete.isSquare_a (E := E)
-    apply IsComplete.not_isSquare_d (E := E)
-    refine ⟨s / y, ?_⟩
-    rw [div_mul_div_comm, ← hs, ha, eq_div_iff (mul_ne_zero hy hy)]
-    ring
-
-/-- On a complete model, `(x, y)` is on the model iff `x² = (y² - 1) / (d y² - a)`. -/
-theorem equation_iff_sq_eq_xSq {x y : F} : E.Equation x y ↔ x ^ 2 = E.xSq y := by
-  unfold Equation xSq
-  rw [eq_div_iff (d_mul_sq_sub_a_ne_zero y)]
-  constructor <;> intro h <;> linear_combination -h
-
-/-- `xSq y = 0` iff `y² = 1`: the points with `x = 0` are `(0, ±1)`. -/
-theorem xSq_eq_zero_iff {y : F} : E.xSq y = 0 ↔ y ^ 2 = 1 := by
-  unfold xSq
-  rw [div_eq_zero_iff, sub_eq_zero, or_iff_left (d_mul_sq_sub_a_ne_zero y)]
-
-/-- `y` is the `y`-coordinate of a point iff `xSq y` is a square. -/
-theorem isSquare_xSq_iff {y : F} : IsSquare (E.xSq y) ↔ ∃ x, E.Equation x y := by
-  constructor
-  · rintro ⟨r, hr⟩
-    exact ⟨r, equation_iff_sq_eq_xSq.mpr (by rw [hr, sq])⟩
-  · rintro ⟨x, hx⟩
-    exact ⟨x, by rw [← sq, equation_iff_sq_eq_xSq.mp hx]⟩
-
-theorem Point.sq_x_eq_xSq (P : E.Point) : P.x ^ 2 = E.xSq P.y :=
-  equation_iff_sq_eq_xSq.mp P.equation
-
-/-- Two points with the same `y` have the same `x²`. -/
-theorem sq_x_eq_sq_x_of_y_eq {P Q : E.Point} (h : P.y = Q.y) : P.x ^ 2 = Q.x ^ 2 := by
-  rw [P.sq_x_eq_xSq, Q.sq_x_eq_xSq, h]
-
-end xSq
 
 /-! ### Models over `ZMod p` -/
 
@@ -95,8 +43,8 @@ theorem mod_two_eq_one_of_isComplete (E : TwistedEdwardsModel (ZMod p)) [E.IsCom
 /-- **Uniqueness**: a point of a complete model is determined by `y` and the sign of `x`. -/
 theorem eq_of_y_eq_of_isNeg_iff [E.IsComplete] {P Q : E.Point} (hy : P.y = Q.y)
     (hs : P.x.isNeg ↔ Q.x.isNeg) : P = Q :=
-  Point.ext (ZMod.eq_of_sq_eq_of_isNeg_iff (mod_two_eq_one_of_isComplete E)
-    (sq_x_eq_sq_x_of_y_eq hy) hs) hy
+  have : Fact (p % 2 = 1) := ⟨mod_two_eq_one_of_isComplete E⟩
+  Point.ext (ZMod.eq_of_sq_eq_of_isNeg_iff (sq_x_eq_sq_x_of_y_eq hy) hs) hy
 
 /-! ### The encoding -/
 
@@ -189,7 +137,7 @@ theorem decode_eq_none_iff {n : ℕ} :
       2 ^ (bits + 1) ≤ n ∨ p ≤ n % 2 ^ bits ∨
         ¬ IsSquare (E.xSq ((n % 2 ^ bits : ℕ) : ZMod p)) ∨
         (((n % 2 ^ bits : ℕ) : ZMod p) ^ 2 = 1 ∧ n / 2 ^ bits = 1) := by
-  have hp := mod_two_eq_one_of_isComplete E
+  have : Fact (p % 2 = 1) := ⟨mod_two_eq_one_of_isComplete E⟩
   unfold decode
   split_ifs with hn hx
   · refine iff_of_false (by simp) ?_
@@ -210,11 +158,11 @@ theorem decode_eq_none_iff {n : ℕ} :
         exfalso
         apply hx
         by_cases hs : n / 2 ^ bits = 1
-        · rcases ZMod.isNeg_or_isNeg_neg hp hx0 with h | h
+        · rcases ZMod.isNeg_or_isNeg_neg hx0 with h | h
           · exact ⟨x, hxE, iff_of_true h hs⟩
           · exact ⟨-x, equation_neg hxE, iff_of_true h hs⟩
         · by_cases h : x.isNeg
-          · exact ⟨-x, equation_neg hxE, iff_of_false (ZMod.not_isNeg_neg_of_isNeg hp h) hs⟩
+          · exact ⟨-x, equation_neg hxE, iff_of_false (ZMod.not_isNeg_neg_of_isNeg h) hs⟩
           · exact ⟨x, hxE, iff_of_false h hs⟩
     · exact Or.inr (Or.inr (Or.inl hsq))
   · refine iff_of_true rfl ?_

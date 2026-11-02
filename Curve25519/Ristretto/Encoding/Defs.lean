@@ -6,7 +6,6 @@ module
 public import Curve25519.Edwards.Basic
 import Curve25519.Proofs.Ristretto.Algebra
 import Mathlib.Tactic.LinearCombination
-import Mathlib.Tactic.Ring
 public section
 
 /-! # The ristretto255 encoding (RFC 9496 §4.2, §4.3.1, §4.3.2): definitions
@@ -14,9 +13,11 @@ public section
 The square-root helper `sqrtRatioM1 u v` (RFC 9496 §4.2 `SQRT_RATIO_M1`): `(true, √(u/v))` when
 `v ≠ 0` and `u/v` is a square, `(true, 0)` when `u = v = 0`, `(false, 0)` when `u ≠ 0 = v`, and
 `(false, √(√-1 · u/v))` otherwise, the root being non-negative
-(`ZMod.isNeg`); it is exposed, with its characterisation `sqrtRatioM1_spec` and the uniqueness
-lemmas `sqrtRatioM1_eq_of_mul_sq_eq`, `sqrtRatioM1_eq_of_mul_sq_eq_sqrtM1_mul` (which is how
-the dalek field specification `sqrt_ratio_i_spec` connects to it). Its non-square branch rests on
+(`ZMod.isNeg`); it is exposed, with its characterisation `sqrtRatioM1_spec` (all cases in one
+statement, for reading) and the uniqueness lemmas `sqrtRatioM1_eq_of_mul_sq_eq`,
+`sqrtRatioM1_eq_of_mul_sq_eq_sqrtM1_mul`, `sqrtRatioM1_zero_left`,
+`sqrtRatioM1_zero_right` (through which the dalek field specification `sqrt_ratio_i_spec`
+connects to it). Its non-square branch rests on
 `sqrtM1` not being a square (`not_isSquare_sqrtM1`, `p ≡ 5 (mod 8)`).
 
 The representative-level codec, hidden: `decodeRep s` (§4.3.1, the Edwards point encoded by the
@@ -93,9 +94,9 @@ theorem not_isNeg_sqrtRatioM1_snd (u v : ZMod p) : ¬ (sqrtRatioM1 u v).2.isNeg 
     rw [ite_eq_right hv]
     by_cases h : IsSquare (u / v)
     · rw [dite_eq_left h]
-      exact ZMod.not_isNeg_abs p_mod_two _
+      exact ZMod.not_isNeg_abs _
     · rw [dite_eq_right h]
-      exact ZMod.not_isNeg_abs p_mod_two _
+      exact ZMod.not_isNeg_abs _
 
 /-- **The specification of `SQRT_RATIO_M1`** (the shape of the dalek `sqrt_ratio_i_spec`): the
 four cases `u = 0`, `v = 0`, `u / v` a square, `u / v` not a square, and the sign of the root. -/
@@ -133,7 +134,7 @@ theorem sqrtRatioM1_eq_of_mul_sq_eq {u v r : ZMod p} (hv : v ≠ 0) (hr : v * r 
   have h : IsSquare (u / v) := ⟨r, by rw [← hr, mul_div_cancel_left₀ _ hv, sq]⟩
   obtain ⟨h1, h2⟩ := sqrtRatioM1_of_isSquare hv h
   refine Prod.ext h1 ?_
-  exact ZMod.eq_of_sq_eq_of_isNeg_iff p_mod_two (mul_left_cancel₀ hv (h2.trans hr.symm))
+  exact ZMod.eq_of_sq_eq_of_isNeg_iff (mul_left_cancel₀ hv (h2.trans hr.symm))
     (iff_of_false (not_isNeg_sqrtRatioM1_snd u v) hneg)
 
 /-- **Uniqueness, non-square case**: `sqrtRatioM1 u v = (false, r)` for the non-negative root `r`
@@ -155,7 +156,7 @@ theorem sqrtRatioM1_eq_of_mul_sq_eq_sqrtM1_mul {u v r : ZMod p} (hu : u ≠ 0) (
       linear_combination h1
   obtain ⟨h1, h2⟩ := sqrtRatioM1_of_not_isSquare hv h
   refine Prod.ext h1 ?_
-  exact ZMod.eq_of_sq_eq_of_isNeg_iff p_mod_two (mul_left_cancel₀ hv (h2.trans hr.symm))
+  exact ZMod.eq_of_sq_eq_of_isNeg_iff (mul_left_cancel₀ hv (h2.trans hr.symm))
     (iff_of_false (not_isNeg_sqrtRatioM1_snd u v) hneg)
 
 /-! The inverse square root `sqrtRatioM1 1 v` (dalek's `invsqrt`). -/
@@ -225,7 +226,7 @@ noncomputable def decodeRep (s : ℕ) : Option edwards.Point :=
 `zInv = den1 den2 t`, `rotate = IS_NEGATIVE(t zInv)`; `(x', y', denInv) = (y √-1, x √-1,
 den1 · INVSQRT_A_MINUS_D)` if `rotate` else `(x, y, den2)`; `y'' = -y'` if `x' zInv` is negative
 else `y'`; the result is `|denInv (1 - y'')|` as a natural number below `p`. Hidden; see
-`encodeRep_def`, `encodeRep_eq`. -/
+`encodeRep_eq`. -/
 noncomputable def encodeRep (P : edwards.Point) : ℕ :=
   let x := P.x
   let y := P.y
@@ -245,29 +246,6 @@ noncomputable def encodeRep (P : edwards.Point) : ℕ :=
   let denInv := if rotate then enchanted else den2
   let y'' := if (x' * zInv).isNeg then -y' else y'
   (denInv * (1 - y'')).abs.val
-
-/-- The defining equation of `encodeRep`. -/
-theorem encodeRep_def : encodeRep = fun P : edwards.Point =>
-    let x := P.x
-    let y := P.y
-    let t := x * y
-    let u1 := (1 + y) * (1 - y)
-    let u2 := x * y
-    let invsqrt := (sqrtRatioM1 1 (u1 * u2 ^ 2)).2
-    let den1 := invsqrt * u1
-    let den2 := invsqrt * u2
-    let zInv := den1 * den2 * t
-    let ix := x * sqrtM1
-    let iy := y * sqrtM1
-    let enchanted := den1 * invsqrtAMinusD
-    let rotate := (t * zInv).isNeg
-    let x' := if rotate then iy else x
-    let y' := if rotate then ix else y
-    let denInv := if rotate then enchanted else den2
-    let y'' := if (x' * zInv).isNeg then -y' else y'
-    (denInv * (1 - y'')).abs.val := by
-  unfold encodeRep
-  rfl
 
 /-- `encodeRep P`, RFC 9496 §4.3.2 spelled out. -/
 theorem encodeRep_eq (P : edwards.Point) : encodeRep P =
@@ -289,7 +267,8 @@ theorem encodeRep_eq (P : edwards.Point) : encodeRep P =
     let denInv := if rotate then enchanted else den2
     let y'' := if (x' * zInv).isNeg then -y' else y'
     (denInv * (1 - y'')).abs.val := by
-  rw [encodeRep_def]
+  unfold encodeRep
+  rfl
 
 end Ristretto
 

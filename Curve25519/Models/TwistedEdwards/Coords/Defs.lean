@@ -17,10 +17,13 @@ alongside the projective, extended and completed coordinates of
 * `E.ProjectiveNiels`: `(Y + X : Y - X : Z : 2 d T)` of an extended point;
 * `E.AffineNiels`: `(y + x, y - x, 2 d x y)` of an affine point.
 
-Each is a plain structure of field elements, with an exposed validity predicate `OnCurve`
-(stated with the affine point, and restated without division by `onCurve_iff_homogeneous`) and a
-total hidden `toPoint` into `E.Point` (the affine point when `OnCurve`, `0` otherwise;
-characterised by `toPoint_x`, `toPoint_y`, `toPoint_of_not_onCurve`). The conversions into them
+Each is a plain structure of field elements, as in the library, with
+* an exposed validity predicate `OnCurve`, stated with the affine point, restated without
+  division by `onCurve_iff_homogeneous` (away from `2`), and decided through that form;
+* a total hidden `toPoint` into `E.Point`: the affine point when `OnCurve`, and `(0, 1)`
+  otherwise (the neutral element `0` when `E` is complete); characterised by `toPoint_x`,
+  `toPoint_y`, `toPoint_of_not_onCurve`, `toPoint_eq_zero_of_not_onCurve`, for any model.
+ The conversions into them
 (`Extended.toProjectiveNiels`, `Extended.toAffineNiels`, `Point.toAffineNiels`), the identities
 and the negations are the exposed formulas the code computes; their `onCurve_*` and `toPoint_*`
 lemmas are in `Curve25519.Models.TwistedEdwards.Coords.Lemmas`. The mixed additions with Niels
@@ -96,17 +99,16 @@ the equation (`X`, `Y` recovered from the Niels form), and `T2d Z = 2 d X Y`. -/
 @[expose] def OnCurve (P : E.ProjectiveNiels) : Prop :=
   P.Z ≠ 0 ∧ E.Equation (P.X / P.Z) (P.Y / P.Z) ∧ P.T2d * P.Z = 2 * E.d * P.X * P.Y
 
-instance instDecidableOnCurve [DecidableEq F] (P : E.ProjectiveNiels) : Decidable P.OnCurve :=
-  inferInstanceAs (Decidable (_ ∧ _ ∧ _))
 
 /-- `OnCurve` without division, in terms of `X' = 2 X = (Y + X) - (Y - X)` and
 `Y' = 2 Y = (Y + X) + (Y - X)` (in characteristic `≠ 2`):
 `4 a X'² Z² + 4 Y'² Z² = 16 Z⁴ + d X'² Y'²` and `2 T2d Z = d X' Y'`. -/
-theorem onCurve_iff_homogeneous (h2 : (2 : F) ≠ 0) (P : E.ProjectiveNiels) :
+theorem onCurve_iff_homogeneous [NeZero (2 : F)] (P : E.ProjectiveNiels) :
     P.OnCurve ↔ P.Z ≠ 0 ∧
       4 * E.a * (P.YplusX - P.YminusX) ^ 2 * P.Z ^ 2 + 4 * (P.YplusX + P.YminusX) ^ 2 * P.Z ^ 2 =
         16 * P.Z ^ 4 + E.d * (P.YplusX - P.YminusX) ^ 2 * (P.YplusX + P.YminusX) ^ 2 ∧
       2 * P.T2d * P.Z = E.d * (P.YplusX - P.YminusX) * (P.YplusX + P.YminusX) := by
+  have h2 : (2 : F) ≠ 0 := two_ne_zero
   have h16 : (16 : F) ≠ 0 := by
     rw [show (16 : F) = 2 * 2 * 2 * 2 by norm_num]
     exact mul_ne_zero (mul_ne_zero (mul_ne_zero h2 h2) h2) h2
@@ -125,15 +127,18 @@ theorem onCurve_iff_homogeneous (h2 : (2 : F) ≠ 0) (P : E.ProjectiveNiels) :
     · apply mul_left_cancel₀ h2
       linear_combination hT
 
-section IsComplete
-
-variable [E.IsComplete]
+/-- `OnCurve` is decidable away from `2` through its form without division
+(`onCurve_iff_homogeneous`), so that the kernel can evaluate it. -/
+instance instDecidableOnCurve [DecidableEq F] [NeZero (2 : F)] (P : E.ProjectiveNiels) :
+    Decidable P.OnCurve :=
+  decidable_of_iff _ (onCurve_iff_homogeneous P).symm
 
 open scoped Classical in
 /-- The point represented by `(Y + X : Y - X : Z : T2d)`: `(X / Z, Y / Z)` when `OnCurve`, and
-`0` otherwise. Hidden; characterised by `toPoint_x`, `toPoint_y`, `toPoint_of_not_onCurve`. -/
+`(0, 1)` otherwise. Hidden; characterised by `toPoint_x`, `toPoint_y`,
+`toPoint_of_not_onCurve`. -/
 noncomputable def toPoint (P : E.ProjectiveNiels) : E.Point :=
-  if h : P.OnCurve then ⟨P.X / P.Z, P.Y / P.Z, h.2.1⟩ else 0
+  if h : P.OnCurve then ⟨P.X / P.Z, P.Y / P.Z, h.2.1⟩ else ⟨0, 1, E.equation_zero_one⟩
 
 /-- The `x`-coordinate of the point represented by a projective Niels point is `X / Z`. -/
 theorem toPoint_x {P : E.ProjectiveNiels} (h : P.OnCurve) : P.toPoint.x = P.X / P.Z := by
@@ -145,12 +150,16 @@ theorem toPoint_y {P : E.ProjectiveNiels} (h : P.OnCurve) : P.toPoint.y = P.Y / 
   unfold toPoint
   rw [dite_eq_left h]
 
-/-- Off the curve, `toPoint` is `0`. -/
-theorem toPoint_of_not_onCurve {P : E.ProjectiveNiels} (h : ¬ P.OnCurve) : P.toPoint = 0 := by
+/-- Off the curve, `toPoint` is `(0, 1)`. -/
+theorem toPoint_of_not_onCurve {P : E.ProjectiveNiels} (h : ¬ P.OnCurve) :
+    P.toPoint = ⟨0, 1, E.equation_zero_one⟩ := by
   unfold toPoint
   rw [dite_eq_right h]
 
-end IsComplete
+/-- Off the curve, `toPoint` is `0` on a complete model. -/
+theorem toPoint_eq_zero_of_not_onCurve [E.IsComplete] {P : E.ProjectiveNiels}
+    (h : ¬ P.OnCurve) : P.toPoint = 0 := by
+  rw [toPoint_of_not_onCurve h, zero_eq_mk]
 
 /-- The identity `(1 : 1 : 1 : 0)` (`ProjectiveNielsPoint::identity`). -/
 @[expose] def identity : E.ProjectiveNiels :=
@@ -179,17 +188,16 @@ recovered from the Niels form) and `xy2d = 2 d x y`. -/
 @[expose] def OnCurve (P : E.AffineNiels) : Prop :=
   E.Equation P.x P.y ∧ P.xy2d = 2 * E.d * P.x * P.y
 
-instance instDecidableOnCurve [DecidableEq F] (P : E.AffineNiels) : Decidable P.OnCurve :=
-  inferInstanceAs (Decidable (_ ∧ _))
 
 /-- `OnCurve` without division, in terms of `x' = 2 x = (y + x) - (y - x)` and
 `y' = 2 y = (y + x) + (y - x)` (in characteristic `≠ 2`): `4 a x'² + 4 y'² = 16 + d x'² y'²`
 and `2 xy2d = d x' y'`. -/
-theorem onCurve_iff_homogeneous (h2 : (2 : F) ≠ 0) (P : E.AffineNiels) :
+theorem onCurve_iff_homogeneous [NeZero (2 : F)] (P : E.AffineNiels) :
     P.OnCurve ↔
       4 * E.a * (P.yPlusX - P.yMinusX) ^ 2 + 4 * (P.yPlusX + P.yMinusX) ^ 2 =
         16 + E.d * (P.yPlusX - P.yMinusX) ^ 2 * (P.yPlusX + P.yMinusX) ^ 2 ∧
       2 * P.xy2d = E.d * (P.yPlusX - P.yMinusX) * (P.yPlusX + P.yMinusX) := by
+  have h2 : (2 : F) ≠ 0 := two_ne_zero
   have h16 : (16 : F) ≠ 0 := by
     rw [show (16 : F) = 2 * 2 * 2 * 2 by norm_num]
     exact mul_ne_zero (mul_ne_zero (mul_ne_zero h2 h2) h2) h2
@@ -207,15 +215,17 @@ theorem onCurve_iff_homogeneous (h2 : (2 : F) ≠ 0) (P : E.AffineNiels) :
     · apply mul_left_cancel₀ h2
       linear_combination hT
 
-section IsComplete
-
-variable [E.IsComplete]
+/-- `OnCurve` is decidable away from `2` through its form without division
+(`onCurve_iff_homogeneous`), so that the kernel can evaluate it. -/
+instance instDecidableOnCurve [DecidableEq F] [NeZero (2 : F)] (P : E.AffineNiels) :
+    Decidable P.OnCurve :=
+  decidable_of_iff _ (onCurve_iff_homogeneous P).symm
 
 open scoped Classical in
-/-- The point represented by `(y + x, y - x, xy2d)`: `(x, y)` when `OnCurve`, and `0`
+/-- The point represented by `(y + x, y - x, xy2d)`: `(x, y)` when `OnCurve`, and `(0, 1)`
 otherwise. Hidden; characterised by `toPoint_x`, `toPoint_y`, `toPoint_of_not_onCurve`. -/
 noncomputable def toPoint (P : E.AffineNiels) : E.Point :=
-  if h : P.OnCurve then ⟨P.x, P.y, h.1⟩ else 0
+  if h : P.OnCurve then ⟨P.x, P.y, h.1⟩ else ⟨0, 1, E.equation_zero_one⟩
 
 /-- The `x`-coordinate of the point represented by an affine Niels point is `x`. -/
 theorem toPoint_x {P : E.AffineNiels} (h : P.OnCurve) : P.toPoint.x = P.x := by
@@ -227,12 +237,16 @@ theorem toPoint_y {P : E.AffineNiels} (h : P.OnCurve) : P.toPoint.y = P.y := by
   unfold toPoint
   rw [dite_eq_left h]
 
-/-- Off the curve, `toPoint` is `0`. -/
-theorem toPoint_of_not_onCurve {P : E.AffineNiels} (h : ¬ P.OnCurve) : P.toPoint = 0 := by
+/-- Off the curve, `toPoint` is `(0, 1)`. -/
+theorem toPoint_of_not_onCurve {P : E.AffineNiels} (h : ¬ P.OnCurve) :
+    P.toPoint = ⟨0, 1, E.equation_zero_one⟩ := by
   unfold toPoint
   rw [dite_eq_right h]
 
-end IsComplete
+/-- Off the curve, `toPoint` is `0` on a complete model. -/
+theorem toPoint_eq_zero_of_not_onCurve [E.IsComplete] {P : E.AffineNiels} (h : ¬ P.OnCurve) :
+    P.toPoint = 0 := by
+  rw [toPoint_of_not_onCurve h, zero_eq_mk]
 
 /-- The identity `(1, 1, 0)` (`AffineNielsPoint::identity`). -/
 @[expose] def identity : E.AffineNiels :=

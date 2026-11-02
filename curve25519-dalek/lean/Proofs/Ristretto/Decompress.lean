@@ -584,7 +584,7 @@ theorem «x86_64-tables».decompress_spec (self : CompressedRistretto) :
         rw [Ristretto.decodeRep_eq_some_iff]
         refine ⟨hgood1.1, by rw [← hs']; exact hgood1.2, by rw [hpy, hy], ?_, ?_, ?_⟩
         · rw [hpx]
-          exact ZMod.not_isNeg_abs p_mod_two _
+          exact ZMod.not_isNeg_abs _
         · rw [hpx, hpy]
           exact hgood2.2.1
         · rw [hpy]
@@ -670,7 +670,7 @@ theorem «i686-tables».decompress_spec (self : CompressedRistretto) :
         rw [Ristretto.decodeRep_eq_some_iff]
         refine ⟨hgood1.1, by rw [← hs']; exact hgood1.2, by rw [hpy, hy], ?_, ?_, ?_⟩
         · rw [hpx]
-          exact ZMod.not_isNeg_abs p_mod_two _
+          exact ZMod.not_isNeg_abs _
         · rw [hpx, hpy]
           exact hgood2.2.1
         · rw [hpy]
@@ -757,7 +757,7 @@ theorem «x86_64-no-tables».decompress_spec (self : CompressedRistretto) :
         rw [Ristretto.decodeRep_eq_some_iff]
         refine ⟨hgood1.1, by rw [← hs']; exact hgood1.2, by rw [hpy, hy], ?_, ?_, ?_⟩
         · rw [hpx]
-          exact ZMod.not_isNeg_abs p_mod_two _
+          exact ZMod.not_isNeg_abs _
         · rw [hpx, hpy]
           exact hgood2.2.1
         · rw [hpy]
@@ -843,7 +843,7 @@ theorem «i686-no-tables».decompress_spec (self : CompressedRistretto) :
         rw [Ristretto.decodeRep_eq_some_iff]
         refine ⟨hgood1.1, by rw [← hs']; exact hgood1.2, by rw [hpy, hy], ?_, ?_, ?_⟩
         · rw [hpx]
-          exact ZMod.not_isNeg_abs p_mod_two _
+          exact ZMod.not_isNeg_abs _
         · rw [hpx, hpy]
           exact hgood2.2.1
         · rw [hpy]

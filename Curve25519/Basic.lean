@@ -18,8 +18,9 @@ The field prime, the prime-order subgroup's order, and the constants of the twis
 
 The definitions are not exposed: importing modules cannot unfold them (neither the elaborator nor
 the kernel), and use the characterisation lemmas below instead. The exception is the unaudited
-certificate files (`Curve25519/Proofs/**`), which `import all` this module so that the kernel can
-unfold `p` and `L`. -/
+certificate files, which `import all` this module so that the kernel can unfold `p` and `L`:
+`Curve25519/Proofs/**`, and the precomputed-table and low-order-point certificates of the dalek
+proofs (`Proofs/Backend/Serial/*/Constants/*`, `Proofs/Constants/X25519LowOrderPoints.lean`). -/
 
 namespace curve25519
 
@@ -120,8 +121,6 @@ theorem p_lt_two_pow_255 : p < 2 ^ 255 := by rw [p_eq_numeral]; decide
 
 theorem nine_lt_p : 9 < p := by rw [p_eq_numeral]; decide
 
-theorem two_pow_255_mod_p : 2 ^ 255 % p = 19 := by rw [p_eq_numeral]; decide
-
 theorem two_pow_255_eq_nineteen : (2 : ZMod p) ^ 255 = 19 := by
   rw [← Nat.cast_ofNat, ← Nat.cast_pow, ← p_add_nineteen]
   simp
@@ -149,10 +148,19 @@ theorem mod_p_of_lt {x : ℕ} (hx : x < 2 ^ 255) :
     grind
 
 /-- `A = 486662`. -/
-theorem A_def : A = 486662 := by rfl
+theorem A_def : A = 486662 := by
+  unfold A
+  rfl
 
 /-- `a = -1`. -/
-theorem a_def : a = -1 := by rfl
+theorem a_def : a = -1 := by
+  unfold a
+  rfl
+
+/-- A natural number strictly between `0` and `p` is nonzero in `ZMod p`. -/
+private theorem natCast_ne_zero_of_lt {n : ℕ} (h0 : 0 < n) (hn : n < p) : (n : ZMod p) ≠ 0 := by
+  rw [Ne, ZMod.natCast_eq_zero_iff]
+  exact Nat.not_dvd_of_pos_of_lt h0 hn
 
 /-- `d = -121665 / 121666` as a natural number below `p`. -/
 theorem d_eq_natCast :
@@ -168,6 +176,11 @@ theorem d_eq_natCast :
   simp only [Nat.cast_ofNat] at hd ⊢
   rw [d, neg_eq_of_add_eq_zero_left hd, mul_comm (121666 : ZMod p), mul_assoc, hinv,
     mul_one]
+
+/-- `d` as a numeral below `p`. -/
+theorem d_eq_numeral :
+    d = 37095705934669439343138083508754565189542113879843219016388785533085940283555 := by
+  rw [d_eq_natCast, Nat.cast_ofNat]
 
 theorem d_ne_zero : d ≠ 0 := by
   rw [d_eq_natCast, Ne, ZMod.natCast_eq_zero_iff, p_eq_numeral]
@@ -201,33 +214,21 @@ theorem A_sq_ne_four : (A : ZMod p) ^ 2 ≠ 4 := by
   exact absurd h' (by decide)
 
 /-- `2 ≠ 0` in `ZMod p`. -/
-instance instNeZeroTwo : NeZero (2 : ZMod p) := by
-  refine ⟨fun h => ?_⟩
-  have h' : ((2 : ℕ) : ZMod p) = 0 := by exact_mod_cast h
-  rw [ZMod.natCast_eq_zero_iff] at h'
-  exact absurd (Nat.le_of_dvd two_pos h') (not_le.mpr two_lt_p)
+instance instNeZeroTwo : NeZero (2 : ZMod p) :=
+  ⟨by exact_mod_cast natCast_ne_zero_of_lt (n := 2) two_pos two_lt_p⟩
 
 /-- `4 ≠ 0` in `ZMod p`. -/
-theorem four_ne_zero : (4 : ZMod p) ≠ 0 := by
-  intro h
-  have h' : ((4 : ℕ) : ZMod p) = 0 := by exact_mod_cast h
-  rw [ZMod.natCast_eq_zero_iff] at h'
-  exact absurd (Nat.le_of_dvd (by norm_num) h') (not_le.mpr (by rw [p_eq_numeral]; decide))
+instance instNeZeroFour : NeZero (4 : ZMod p) :=
+  ⟨by exact_mod_cast natCast_ne_zero_of_lt (n := 4) (by norm_num) (by rw [p_eq_numeral]; decide)⟩
 
 /-- `5 ≠ 0` in `ZMod p`. -/
-theorem five_ne_zero : (5 : ZMod p) ≠ 0 := by
-  intro h
-  have h' : ((5 : ℕ) : ZMod p) = 0 := by exact_mod_cast h
-  rw [ZMod.natCast_eq_zero_iff] at h'
-  exact absurd (Nat.le_of_dvd (by norm_num) h') (not_le.mpr (by rw [p_eq_numeral]; decide))
+instance instNeZeroFive : NeZero (5 : ZMod p) :=
+  ⟨by exact_mod_cast natCast_ne_zero_of_lt (n := 5) (by norm_num) (by rw [p_eq_numeral]; decide)⟩
 
 /-- `6 ≠ 0` in `ZMod p`: the characteristic is not `2` or `3`, as the `EllipticCurve` library
 requires of a curve. -/
-instance instNeZeroSix : NeZero (6 : ZMod p) := by
-  refine ⟨fun h => ?_⟩
-  have h' : ((6 : ℕ) : ZMod p) = 0 := by exact_mod_cast h
-  rw [ZMod.natCast_eq_zero_iff] at h'
-  exact absurd (Nat.le_of_dvd (by norm_num) h') (not_le.mpr (by rw [p_eq_numeral]; decide))
+instance instNeZeroSix : NeZero (6 : ZMod p) :=
+  ⟨by exact_mod_cast natCast_ne_zero_of_lt (n := 6) (by norm_num) (by rw [p_eq_numeral]; decide)⟩
 
 /-- `L` as a numeral. -/
 theorem L_eq_numeral :
@@ -257,8 +258,6 @@ theorem twistL_eq_numeral :
     twistL = 14474011154664524427946373126085988481603263447650325797860494125407373907997 := by
   decide
 
-theorem twistL_pos : 0 < twistL := by rw [twistL_eq_numeral]; decide
-
 /-- `2 p + 2 = 8 L + 4 L'`: the curve and its twist have `2 p + 2` points in total. -/
 theorem two_mul_p_add_two : 2 * p + 2 = 8 * L + 4 * twistL := by
   rw [p_eq_numeral, L_eq_numeral, twistL_eq_numeral]
@@ -279,6 +278,11 @@ theorem sqrtM1_sq : (sqrtM1 : ZMod p) ^ 2 = -1 := by
 theorem sqrtM1_ne_zero : (sqrtM1 : ZMod p) ≠ 0 := by
   rw [Ne, ZMod.natCast_eq_zero_iff, sqrtM1_def, p_eq_numeral]
   decide
+
+/-- Negation of a natural number below `p`: `-x = y` in `ZMod p` when `x + y = p`. -/
+theorem neg_natCast_eq_of_add_eq {x y : ℕ} (h : x + y = p) : -(x : ZMod p) = y := by
+  apply neg_eq_of_add_eq_zero_right
+  rw [← Nat.cast_add, h, ZMod.natCast_self]
 
 /-- `-1` as a numeral below `p`. -/
 theorem neg_one_eq_numeral :
@@ -308,10 +312,6 @@ one RFC 8032 specifies (a check of the constant; proofs use `sqrtM1_sq_add_one_m
 theorem sqrtM1_eq_two_pow : (sqrtM1 : ZMod p) = 2 ^ ((p - 1) / 4) := by
   rw [p_eq_numeral, sqrtM1]
   reduce_mod_char
-
-
-theorem sqrtM1_mod_two : sqrtM1 % 2 = 0 := by
-  rw [sqrtM1_def]
 
 /-- Euler's criterion for `sqrtM1`: `sqrtM1^((p-1)/2) = (-1)^((p-1)/4) = -1` since `p ≡ 5 (mod 8)`,
 so `sqrtM1` is not a square (`not_isSquare_sqrtM1` in `Curve25519.Edwards.Basic`). -/
@@ -366,10 +366,6 @@ theorem invsqrtAMinusD_sq_mul : (invsqrtAMinusD : ZMod p) ^ 2 * (a - d) = 1 := b
   push_cast
   reduce_mod_char
 
-theorem invsqrtAMinusD_ne_zero : (invsqrtAMinusD : ZMod p) ≠ 0 := by
-  rw [Ne, ZMod.natCast_eq_zero_iff, invsqrtAMinusD_def, p_eq_numeral]
-  decide
-
 theorem oneMinusDSq_def :
     oneMinusDSq =
       1159843021668779879193775521855586647937357759715417654439879720876111806838 := by
@@ -401,7 +397,6 @@ theorem dMinusOneSq_eq : (dMinusOneSq : ZMod p) = (d - 1) ^ 2 := by
   rw [dMinusOneSq_def, d_eq_natCast, p_eq_numeral]
   push_cast
   reduce_mod_char
-
 
 /-! ## Characterisation of `sqrtNegAAddTwo` -/
 

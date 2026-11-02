@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519.Models.Field.Sign
-public import EllipticCurve.TwistedEdwards.Defs
+public import Curve25519.ToEllipticCurve.TwistedEdwards.Defs
 public section
 
 /-! # Point encoding of a twisted Edwards model over `ZMod p`: definitions
@@ -25,22 +25,12 @@ sign `s`", which is unique (`decode_eq_some_iff` in
 is `decode_eq_none_iff`. The strict decoder accepts exactly the encodings:
 `decode n = some P ↔ encode P = n` (`decode_eq_some_iff_encode_eq`).
 
-`encode` and `xSq` are exposed formulas; `decode` is hidden. The hypothesis `p < 2 ^ bits`
+`encode` is an exposed formula and `decode` is hidden; `xSq` is that of
+`Curve25519.ToEllipticCurve.TwistedEdwards.Defs`. The hypothesis `p < 2 ^ bits`
 (so that `y.val` fits in `bits` bits) is taken as `[Fact (p < 2 ^ bits)]` only where it is
 needed. -/
 
-universe u
-
 namespace TwistedEdwardsModel
-
-variable {F : Type u} [Field F] (E : TwistedEdwardsModel F)
-
-/-- `x²` as a function of `y` on the model: `(y² - 1) / (d y² - a)`, the equation
-`a x² + y² = 1 + d x² y²` solved for `x²` (for `a = -1`, RFC 8032's `(y² - 1) / (d y² + 1)`).
-On a complete model, `(x, y)` is on the model iff `x ^ 2 = E.xSq y`
-(`equation_iff_sq_eq_xSq`). -/
-@[expose] def xSq (y : F) : F :=
-  (y ^ 2 - 1) / (E.d * y ^ 2 - E.a)
 
 variable {p : ℕ} [Fact p.Prime] (E : TwistedEdwardsModel (ZMod p)) (bits : ℕ)
 

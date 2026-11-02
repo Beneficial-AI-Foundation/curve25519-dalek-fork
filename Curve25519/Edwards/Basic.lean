@@ -48,8 +48,6 @@ theorem edwards_a_eq_neg_one : edwards.a = -1 := by
 theorem isSquare_a : IsSquare a :=
   ⟨(sqrtM1 : ZMod p), by rw [a_def, ← sqrtM1_sq, sq]⟩
 
-instance instFactTwoLtP : Fact (2 < p) := ⟨two_lt_p⟩
-
 /-- `d` is not a square (Euler's criterion, `d_pow_p_div_two`). -/
 theorem not_isSquare_d : ¬ IsSquare d := by
   intro h
@@ -77,21 +75,13 @@ theorem not_isSquare_neg_d : ¬ IsSquare (-d) := by
 /-- `sqrtM1 · x` is a square when `x` is not (the product of two non-squares). -/
 theorem isSquare_sqrtM1_mul_of_not_isSquare {x : ZMod p} (hx : ¬ IsSquare x) :
     IsSquare (sqrtM1 * x) := by
-  have hx0 : x ≠ 0 := fun h => hx ⟨0, by rw [h, mul_zero]⟩
+  have hx0 : x ≠ 0 := ne_zero_of_not_isSquare hx
   have hpow : x ^ (p / 2) = -1 :=
     (ZMod.pow_div_two_eq_neg_one_or_one p hx0).resolve_left
       fun h => hx ((ZMod.euler_criterion p hx0).mpr h)
   rw [ZMod.euler_criterion p (mul_ne_zero sqrtM1_ne_zero hx0), mul_pow, sqrtM1_pow_p_div_two,
     hpow]
   ring
-
-/-- `sqrtM1 · r²` is not a square for `r ≠ 0`. -/
-theorem not_isSquare_sqrtM1_mul_sq {r : ZMod p} (hr : r ≠ 0) : ¬ IsSquare (sqrtM1 * r ^ 2) := by
-  rintro ⟨t, ht⟩
-  apply not_isSquare_sqrtM1
-  refine ⟨t / r, ?_⟩
-  rw [div_mul_div_comm, eq_div_iff (mul_ne_zero hr hr)]
-  linear_combination ht
 
 /-- `edwards` is complete: the affine points form the whole group and the addition formula has
 no exceptional case. -/

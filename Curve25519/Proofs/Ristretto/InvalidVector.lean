@@ -69,7 +69,7 @@ private theorem decodeRep_eq_none_of_cert {s : ℕ} {b : Bool} {r : ZMod p}
       exact sqrtRatioM1_eq_of_mul_sq_eq_sqrtM1_mul one_ne_zero hw (by rw [hr, mul_one]) hneg
     · simp only [reduceIte] at hr
       exact sqrtRatioM1_eq_of_mul_sq_eq hw hr hneg
-  have hd : (d : ZMod p) = dNum := by rw [d_eq_natCast, Nat.cast_ofNat]
+  have hd : (d : ZMod p) = dNum := d_eq_numeral
   rw [decodeRep_eq_none_iff]
   refine Or.inr (Or.inr ?_)
   simp only [hd]

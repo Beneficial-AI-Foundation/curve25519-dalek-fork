@@ -7,10 +7,10 @@ public import Curve25519.Edwards.Basepoint
 public import Curve25519.Edwards.Torsion
 import Curve25519.Edwards.Order
 import Curve25519.Proofs.Ristretto.DescentCert
-import Mathlib.GroupTheory.Coset.Card
-import Mathlib.GroupTheory.SpecificGroups.Cyclic
+import Curve25519.ToEllipticCurve.TwistedEdwards.Even
 import Mathlib.NumberTheory.LegendreSymbol.Basic
-import Mathlib.Tactic.FinCases
+import Mathlib.Tactic.Abel
+import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
@@ -20,67 +20,29 @@ public section
 
 ristretto255 (RFC 9496) represents its elements by **even** Edwards points (`Even P`, i.e.
 `P = Q + Q`), two representatives standing for the same element when they differ by 4-torsion
-(`edwards.Rel`, from `Curve25519.Models.TwistedEdwards.Even`). No quotient type is defined: the
-specifications speak about representatives, and these are the facts they need.
+(`edwards.Rel`, from `Curve25519.Models.TwistedEdwards.Decaf.Defs`). No quotient type is
+defined: the specifications speak about representatives, and these are the facts they need.
 
-* The 4-torsion is `{0, (∓√-1, 0), (0, -1)} = {eightTorsion 0, 2, 4, 6}`
-  (`mem_torsionBy_four_iff_eightTorsion`).
 * The even points are the points killed by `4 L` (`even_iff_four_mul_L_nsmul`), a subgroup of
-  order `4 L` (`card_even`) containing the 4-torsion (`torsionBy_four_le_even`) and the basepoint
-  (`even_basepoint`).
+  order `4 L` (`card_even`, index `2`) containing the 4-torsion (`torsionBy_four_le_even`) and
+  the basepoint (`even_basepoint`); a point related to an even point is even (`even_of_rel`).
 * Two representatives are related iff `x₁ y₂ = y₁ x₂` or `x₁ x₂ = y₁ y₂` (`rel_iff_formula`,
-  RFC 9496's equality, what `RistrettoPoint::ct_eq` computes).
+  RFC 9496's equality, what `RistrettoPoint::ct_eq` computes); the class of `(x, y)` is
+  `{(x, y), (-x, -y), (y √-1, x √-1), (-(y √-1), -(x √-1))}` (`rel_iff_coords`).
 * A point is even iff `1 - y²` is a square (`even_iff_isSquare`, the 2-descent criterion of
-  Decaf: the validity test of the encoding).
+  Decaf: the validity test of the encoding); in particular a point with
+  `y = (1 - s²) / (1 + s²)` is even (`even_of_y_eq_div`), as decoding and `MAP` produce.
 
 The 2-descent: the generic subgroup `edwards.descent = {P | IsSquare ((a - d)(1 - y²))}` of
 `EllipticCurve.TwistedEdwards.Even` contains the even points, `a - d` is a square, and
 `torsion8 ∉ descent` by Euler's criterion (`one_sub_torsion8_y_sq_pow_p_div_two` in
-`Curve25519.Proofs.Ristretto.DescentCert`); as `|even| = 4 L` and `|edwards.Point| = 8 L`,
-`descent` is the even subgroup (`descent_eq_even`). -/
+`Curve25519.Proofs.Ristretto.DescentCert`); as the even points have index `2`, `descent` is the
+even subgroup (`descent_eq_even`, from the generic
+`TwistedEdwardsModel.descent_eq_even_of_index_eq_two`). -/
 
 namespace curve25519
 
 open TwistedEdwardsModel
-
-/-! ### The 4-torsion -/
-
-/-- `eightTorsion 2 = (-√-1, 0)`. -/
-theorem eightTorsion_two_x : (eightTorsion 2).x = -sqrtM1 := by
-  rw [eightTorsion_two_x_eq, neg_sqrtM1_eq]
-
-/-- `4 • eightTorsion i = 0` iff `i` is even. -/
-theorem four_nsmul_eightTorsion_eq_zero_iff (i : Fin 8) :
-    4 • eightTorsion i = 0 ↔ (i : ℕ) % 2 = 0 := by
-  rw [eightTorsion_apply, smul_smul, ← addOrderOf_dvd_iff_nsmul_eq_zero, addOrderOf_torsion8]
-  omega
-
-/-- **The 4-torsion** of `edwards` is `{0, eightTorsion 2, eightTorsion 4, eightTorsion 6}`, i.e.
-`{(0, 1), (-√-1, 0), (0, -1), (√-1, 0)}`. -/
-theorem mem_torsionBy_four_iff_eightTorsion (P : edwards.Point) :
-    P ∈ AddSubgroup.torsionBy edwards.Point 4 ↔
-      P = 0 ∨ P = eightTorsion 2 ∨ P = eightTorsion 4 ∨ P = eightTorsion 6 := by
-  rw [show (4 : ℤ) = ((4 : ℕ) : ℤ) from rfl, AddSubgroup.torsionBy.nsmul_iff]
-  constructor
-  · intro h
-    have h8 : 8 • P = 0 := by
-      rw [show (8 : ℕ) = 2 * 4 from rfl, ← smul_smul, h, smul_zero]
-    obtain ⟨i, rfl⟩ := (eight_nsmul_eq_zero_iff P).mp h8
-    rw [four_nsmul_eightTorsion_eq_zero_iff] at h
-    fin_cases i
-    · exact Or.inl eightTorsion_zero
-    · exact absurd h (by decide)
-    · exact Or.inr (Or.inl rfl)
-    · exact absurd h (by decide)
-    · exact Or.inr (Or.inr (Or.inl rfl))
-    · exact absurd h (by decide)
-    · exact Or.inr (Or.inr (Or.inr rfl))
-    · exact absurd h (by decide)
-  · rintro (rfl | rfl | rfl | rfl)
-    · exact smul_zero 4
-    · exact (four_nsmul_eightTorsion_eq_zero_iff 2).mpr rfl
-    · exact (four_nsmul_eightTorsion_eq_zero_iff 4).mpr rfl
-    · exact (four_nsmul_eightTorsion_eq_zero_iff 6).mpr rfl
 
 /-! ### The even points -/
 
@@ -121,8 +83,7 @@ theorem torsionBy_four_le_even :
 theorem zmultiples_torsion8_add_basepoint_eq_top :
     AddSubgroup.zmultiples (torsion8 + basepoint) = ⊤ :=
   AddSubgroup.eq_top_of_card_eq _ (by
-    rw [Nat.card_zmultiples, addOrderOf_torsion8_add_basepoint, Nat.card_eq_fintype_card,
-      card_edwards])
+    rw [Nat.card_zmultiples, addOrderOf_torsion8_add_basepoint, card_edwards])
 
 /-- `2 • (torsion8 + basepoint)` has order `4 L`. -/
 theorem addOrderOf_two_nsmul_torsion8_add_basepoint :
@@ -149,9 +110,21 @@ theorem even_eq_zmultiples :
 theorem card_even : Nat.card (AddSubgroup.even edwards.Point) = 4 * L := by
   rw [even_eq_zmultiples, Nat.card_zmultiples, addOrderOf_two_nsmul_torsion8_add_basepoint]
 
+/-- The even points have index `2`. -/
+theorem index_even : (AddSubgroup.even edwards.Point).index = 2 := by
+  have h := (AddSubgroup.even edwards.Point).index_mul_card
+  rw [card_even, card_edwards] at h
+  exact Nat.eq_of_mul_eq_mul_right (by have := L_pos; omega) (h.trans (by ring))
+
 /-- The basepoint is even. -/
 theorem even_basepoint : Even basepoint :=
   (even_iff_four_mul_L_nsmul _).mpr (by rw [mul_smul, L_nsmul_basepoint, smul_zero])
+
+/-- A point related to an even point is even: the 4-torsion is even. -/
+theorem even_of_rel {P Q : edwards.Point} (hP : Even P) (h : edwards.Rel P Q) : Even Q := by
+  have hT := torsionBy_four_le_even ((rel_iff_sub_mem Q P).mp (rel_symm h))
+  rw [show Q = P + (Q - P) by abel]
+  exact AddSubgroup.mem_even.mp ((AddSubgroup.even _).add_mem (AddSubgroup.mem_even.mpr hP) hT)
 
 /-! ### Equality of representatives -/
 
@@ -159,11 +132,18 @@ theorem even_basepoint : Even basepoint :=
 `x₁ y₂ = y₁ x₂` or `x₁ x₂ = y₁ y₂` (RFC 9496's equality, what `RistrettoPoint::ct_eq`
 computes). -/
 theorem rel_iff_formula (P Q : edwards.Point) :
-    edwards.Rel P Q ↔ P.x * Q.y = P.y * Q.x ∨ P.x * Q.x = P.y * Q.y := by
-  rw [rel_iff, edwards_a_eq_neg_one]
-  refine or_congr_right ⟨fun h => ?_, fun h => ?_⟩
-  · linear_combination -h
-  · linear_combination -h
+    edwards.Rel P Q ↔ P.x * Q.y = P.y * Q.x ∨ P.x * Q.x = P.y * Q.y :=
+  rel_iff_of_a_eq_neg_one edwards_a_eq_neg_one P Q
+
+/-- **The class in coordinates**: `Q` is in the class of `P` iff `Q` is `(x, y)`, `(-x, -y)`
+(`P + (0, -1)`), `(y √-1, x √-1)` (`P + (√-1, 0)`) or `(-(y √-1), -(x √-1))`
+(`P + (-√-1, 0)`). -/
+theorem rel_iff_coords (P Q : edwards.Point) :
+    edwards.Rel P Q ↔
+      (Q.x = P.x ∧ Q.y = P.y) ∨ (Q.x = -P.x ∧ Q.y = -P.y) ∨
+        (Q.x = P.y * sqrtM1 ∧ Q.y = P.x * sqrtM1) ∨
+        (Q.x = -(P.y * sqrtM1) ∧ Q.y = -(P.x * sqrtM1)) :=
+  rel_iff_coords_of_a_eq_neg_one edwards_a_eq_neg_one sqrtM1_sq P Q
 
 /-! ### The 2-descent -/
 
@@ -175,9 +155,9 @@ theorem a_sub_d_eq_sq : a - d = (2 / sqrtNegAAddTwo) ^ 2 := by
 
 /-- Membership in the 2-descent subgroup of `edwards`: `1 - y²` is a square (the factor `a - d`
 is a nonzero square). -/
-theorem mem_descent_iff (P : edwards.Point) : P ∈ edwards.descent ↔ IsSquare (1 - P.y ^ 2) := by
-  rw [mem_descent, edwards_a, edwards_d, a_sub_d_eq_sq,
-    isSquare_sq_mul_iff (div_ne_zero two_ne_zero sqrtNegAAddTwo_ne_zero)]
+theorem mem_descent_iff (P : edwards.Point) : P ∈ edwards.descent ↔ IsSquare (1 - P.y ^ 2) :=
+  mem_descent_iff_of_sub_eq_sq (div_ne_zero two_ne_zero sqrtNegAAddTwo_ne_zero)
+    (by rw [edwards_a, edwards_d]; exact a_sub_d_eq_sq) P
 
 /-- The 2-descent certificate: `1 - y²` is not a square at the point of order `8`
 (Euler's criterion, `Proofs.one_sub_torsion8_y_sq_pow_p_div_two`). -/
@@ -200,36 +180,22 @@ theorem torsion8_not_mem_descent : torsion8 ∉ edwards.descent := by
   exact not_isSquare_one_sub_torsion8_y_sq
 
 /-- **The 2-descent**: the subgroup of points with `1 - y²` a square is exactly the subgroup of
-even points. (`even ≤ descent` generically; `descent ≠ ⊤` by the certificate; `|even| = 4 L`
-and `|descent|` divides `8 L`.) -/
-theorem descent_eq_even : edwards.descent = AddSubgroup.even edwards.Point := by
-  symm
-  apply AddSubgroup.eq_of_le_of_card_ge even_le_descent
-  obtain ⟨k, hk⟩ := AddSubgroup.card_dvd_of_le (even_le_descent (E := edwards))
-  have hdvd := AddSubgroup.card_addSubgroup_dvd_card edwards.descent
-  have hne : Nat.card edwards.descent ≠ Nat.card edwards.Point := fun h =>
-    torsion8_not_mem_descent
-      (((AddSubgroup.card_eq_iff_eq_top _).mp h).symm ▸ AddSubgroup.mem_top _)
-  rw [Nat.card_eq_fintype_card (α := edwards.Point), card_edwards, hk, card_even] at hdvd hne
-  rw [hk, card_even]
-  have hL := L_pos
-  have hk2 : k ∣ 2 :=
-    Nat.dvd_of_mul_dvd_mul_left (by positivity : 0 < 4 * L)
-      (by rw [show 4 * L * 2 = 8 * L by ring]; exact hdvd)
-  rcases (Nat.dvd_prime Nat.prime_two).mp hk2 with rfl | rfl
-  · rw [mul_one]
-  · exact absurd (by ring) hne
+even points (`even ≤ descent` generically, the even points have index `2`, and
+`torsion8 ∉ descent` by the certificate). -/
+theorem descent_eq_even : edwards.descent = AddSubgroup.even edwards.Point :=
+  descent_eq_even_of_index_eq_two index_even torsion8_not_mem_descent
 
 /-- **The 2-descent criterion** (Decaf/Ristretto): a point is even iff `1 - y²` is a square. -/
 theorem even_iff_isSquare (P : edwards.Point) : Even P ↔ IsSquare (1 - P.y ^ 2) := by
   rw [← AddSubgroup.mem_even, ← descent_eq_even, mem_descent_iff]
 
-/-- The 2-descent criterion on the Montgomery side: a point is even iff the `u`-coordinate of
-its image in `edwards.toMontgomery` is a square. -/
-theorem even_iff_isSquare_u (P : edwards.Point) :
-    Even P ↔ IsSquare (edwards.toMontgomeryEquiv P).u := by
-  rw [← AddSubgroup.mem_even, ← descent_eq_even, mem_descent,
-    ← isSquare_toMontgomery_B_mul_u_iff, edwards_toMontgomery_B,
-    isSquare_sq_mul_iff sqrtNegAAddTwo_ne_zero]
+/-- A point with `y = (1 - s²) / (1 + s²)` is even: `1 - y² = (2 s / (1 + s²))²`. This is the
+`y`-coordinate that decoding and `MAP` produce. -/
+theorem even_of_y_eq_div {P : edwards.Point} {s : ZMod p} (hs : 1 + s ^ 2 ≠ 0)
+    (hy : P.y = (1 - s ^ 2) / (1 + s ^ 2)) : Even P := by
+  rw [even_iff_isSquare, hy]
+  refine ⟨2 * s / (1 + s ^ 2), ?_⟩
+  field_simp
+  ring
 
 end curve25519

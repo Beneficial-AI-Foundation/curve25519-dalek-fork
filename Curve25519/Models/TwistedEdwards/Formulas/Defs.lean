@@ -3,8 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
-public import Curve25519.Models.TwistedEdwards.Coords.Lemmas
-public import EllipticCurve.TwistedEdwards.Formulas.Defs
+public import Curve25519.Models.TwistedEdwards.Coords.Defs
 public section
 
 /-! # Twisted Edwards models: mixed additions with Niels points

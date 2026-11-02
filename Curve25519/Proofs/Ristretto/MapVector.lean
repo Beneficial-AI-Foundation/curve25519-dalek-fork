@@ -78,7 +78,7 @@ private theorem mapRep_coords (b : Bool) (r₀ ρ : ZMod p)
     (mapRep r₀).x = 2 * mapS b r₀ ρ * mapV r₀ / mapDen b r₀ ∧
       (mapRep r₀).y = (1 - mapS b r₀ ρ ^ 2) / (1 + mapS b r₀ ρ ^ 2) := by
   cases b <;>
-    simp only [mapRep_x, mapRep_y, d_eq_natCast, Nat.cast_ofNat, mapV, mapS, mapDen, dNum, h,
+    simp only [mapRep_x, mapRep_y, d_eq_numeral, mapV, mapS, mapDen, dNum, h,
       Bool.false_eq_true, reduceIte, and_self]
 
 /-- A `MapCert` gives the coordinates of `MAP(r₀)`. -/
@@ -99,7 +99,7 @@ private theorem add_xy_of_cert {P Q : edwards.Point} {x₀ y₀ x₁ y₁ x y : 
     (hy₀ : P.y = y₀) (hx₁ : Q.x = x₁) (hy₁ : Q.y = y₁) (h : AddCert x₀ y₀ x₁ y₁ x y) :
     (P + Q).x = x ∧ (P + Q).y = y := by
   obtain ⟨hd₁, hn₁, hd₂, hn₂⟩ := h
-  have hd : edwards.d = dNum := by rw [edwards_d, d_eq_natCast, Nat.cast_ofNat]
+  have hd : edwards.d = dNum := by rw [edwards_d, d_eq_numeral]
   refine ⟨?_, ?_⟩
   · rw [add_x]
     unfold addX addDen₁

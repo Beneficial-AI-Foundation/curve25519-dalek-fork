@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519.Edwards.Basic
 import Mathlib.NumberTheory.LegendreSymbol.QuadraticReciprocity
-import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.NormNum
 public section
 
 /-! # X25519 (RFC 7748 §5) on numbers
@@ -71,6 +71,11 @@ theorem clamp_mod_two_pow (k : ℕ) : clamp (k % 2 ^ 256) = clamp k := by
 
 theorem encodeU_lt (u : ZMod p) : encodeU u < p :=
   ZMod.val_lt u
+
+/-- The encoding of the basepoint coordinate `9`. -/
+theorem encodeU_nine : encodeU 9 = 9 := by
+  unfold encodeU
+  exact ZMod.val_ofNat_of_lt nine_lt_p
 
 theorem decodeU_of_lt {n : ℕ} (hn : n < 2 ^ 255) : decodeU n = (n : ZMod p) := by
   unfold decodeU
@@ -145,15 +150,11 @@ instance instIsNonsingularMontgomeryTwist : montgomeryTwist.IsNonsingular := by
   rw [montgomeryTwist_def]
   exact montgomery.isNonsingular_twist two_ne_zero
 
-/-- The ladder of the twist is the ladder of `montgomery`. -/
-theorem montgomeryTwist_ladder : montgomeryTwist.ladder = montgomery.ladder := by
-  rw [montgomeryTwist_def, MontgomeryModel.ladder_twist]
-
 /-! ### The meaning of `x25519` -/
 
-/-- `x25519 k u` is `u(clamp k • Q)` for a point `Q` of `montgomery` or of `montgomeryTwist`
-with `u`-coordinate `decodeU u` (`MontgomeryModel.xMul_eq_u_nsmul`,
-`MontgomeryModel.xMul_eq_u_nsmul_twist`). -/
+/-- `x25519 k u` is the x-only multiplication `xMul` by `clamp k` of `decodeU u`, which is
+`u(clamp k • Q)` for a point `Q` of `montgomery` or of `montgomeryTwist` with `u`-coordinate
+`decodeU u` (`MontgomeryModel.xMul_eq_u_nsmul`, `MontgomeryModel.xMul_eq_u_nsmul_twist`). -/
 theorem x25519_eq_xMul (k u : ℕ) :
     x25519 k u = encodeU (montgomery.xMul 2 (clamp k) (decodeU u)) := by
   unfold x25519
@@ -170,11 +171,8 @@ theorem x25519_eq_u_nsmul (k : ℕ) (Q : montgomery.Point) :
 theorem x25519_eq_u_nsmul_twist (k : ℕ) (Q : montgomeryTwist.Point) :
     x25519 k (encodeU Q.u) = encodeU (clamp k • Q).u := by
   rw [x25519_eq_xMul, decodeU_encodeU]
-  revert Q
-  unfold montgomeryTwist
-  intro Q
-  have : (montgomery.twist 2).IsNonsingular := instIsNonsingularMontgomeryTwist
-  exact congrArg encodeU (MontgomeryModel.xMul_eq_u_nsmul_twist not_isSquare_two (clamp k) Q)
+  exact congrArg encodeU (@MontgomeryModel.xMul_eq_u_nsmul_twist _ _ montgomery _ 2
+    not_isSquare_two instIsNonsingularMontgomeryTwist (clamp k) Q)
 
 /-- A coordinate whose `u ↦ u(8 • Q)` image is `0` (a point of order dividing `8` on the curve
 or the twist, or `u = 0`) is sent to `0` by `x25519` for every scalar, since clamped scalars

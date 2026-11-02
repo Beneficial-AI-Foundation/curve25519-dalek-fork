@@ -19,21 +19,6 @@ equality as point equality (`projEq_iff_toPoint_eq`). Everything is the correspo
 
 open curve25519 TwistedEdwardsModel
 
-/-! ### A generic fact used by `AffineNielsPoint::eq` -/
-
-namespace TwistedEdwardsModel.AffineNiels
-
-universe u
-
-/-- Affine Niels coordinates on the curve are determined by the represented point. -/
-theorem toPoint_inj {F : Type u} [Field F] {E : TwistedEdwardsModel F} [E.IsComplete]
-    {P Q : E.AffineNiels} (hP : P.OnCurve) (hQ : Q.OnCurve) : P.toPoint = Q.toPoint ↔ P = Q :=
-  ⟨fun h => AffineNiels.ext (by rw [yPlusX_eq hP, yPlusX_eq hQ, h])
-    (by rw [yMinusX_eq hP, yMinusX_eq hQ, h]) (by rw [xy2d_eq hP, xy2d_eq hQ, h]),
-    fun h => h ▸ rfl⟩
-
-end TwistedEdwardsModel.AffineNiels
-
 namespace Curve25519Dalek
 
 /-! ### `curve_models.rs` (`x86_64-tables`) -/
@@ -229,7 +214,7 @@ theorem toPoint_y {self : AffineNielsPoint.«x86_64-tables»} (h : self.OnCurve)
 
 theorem toPoint_of_not_onCurve {self : AffineNielsPoint.«x86_64-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, AffineNiels.toPoint_of_not_onCurve h]
+  rw [toPoint_def, AffineNiels.toPoint_eq_zero_of_not_onCurve h]
 
 end AffineNielsPoint.«x86_64-tables»
 
@@ -270,7 +255,7 @@ theorem toPoint_y {self : AffineNielsPoint.«i686-tables»} (h : self.OnCurve) :
 
 theorem toPoint_of_not_onCurve {self : AffineNielsPoint.«i686-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, AffineNiels.toPoint_of_not_onCurve h]
+  rw [toPoint_def, AffineNiels.toPoint_eq_zero_of_not_onCurve h]
 
 end AffineNielsPoint.«i686-tables»
 
@@ -315,7 +300,7 @@ theorem toPoint_y {self : ProjectiveNielsPoint.«x86_64-tables»} (h : self.OnCu
 
 theorem toPoint_of_not_onCurve {self : ProjectiveNielsPoint.«x86_64-tables»}
     (h : ¬ self.OnCurve) : self.toPoint = 0 := by
-  rw [toPoint_def, ProjectiveNiels.toPoint_of_not_onCurve h]
+  rw [toPoint_def, ProjectiveNiels.toPoint_eq_zero_of_not_onCurve h]
 
 end ProjectiveNielsPoint.«x86_64-tables»
 
@@ -360,7 +345,7 @@ theorem toPoint_y {self : ProjectiveNielsPoint.«i686-tables»} (h : self.OnCurv
 
 theorem toPoint_of_not_onCurve {self : ProjectiveNielsPoint.«i686-tables»}
     (h : ¬ self.OnCurve) : self.toPoint = 0 := by
-  rw [toPoint_def, ProjectiveNiels.toPoint_of_not_onCurve h]
+  rw [toPoint_def, ProjectiveNiels.toPoint_eq_zero_of_not_onCurve h]
 
 end ProjectiveNielsPoint.«i686-tables»
 
@@ -759,7 +744,7 @@ theorem toPoint_y {self : AffineNielsPoint.«x86_64-no-tables»} (h : self.OnCur
 
 theorem toPoint_of_not_onCurve {self : AffineNielsPoint.«x86_64-no-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, AffineNiels.toPoint_of_not_onCurve h]
+  rw [toPoint_def, AffineNiels.toPoint_eq_zero_of_not_onCurve h]
 
 end AffineNielsPoint.«x86_64-no-tables»
 
@@ -800,7 +785,7 @@ theorem toPoint_y {self : AffineNielsPoint.«i686-no-tables»} (h : self.OnCurve
 
 theorem toPoint_of_not_onCurve {self : AffineNielsPoint.«i686-no-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, AffineNiels.toPoint_of_not_onCurve h]
+  rw [toPoint_def, AffineNiels.toPoint_eq_zero_of_not_onCurve h]
 
 end AffineNielsPoint.«i686-no-tables»
 
@@ -845,7 +830,7 @@ theorem toPoint_y {self : ProjectiveNielsPoint.«x86_64-no-tables»} (h : self.O
 
 theorem toPoint_of_not_onCurve {self : ProjectiveNielsPoint.«x86_64-no-tables»}
     (h : ¬ self.OnCurve) : self.toPoint = 0 := by
-  rw [toPoint_def, ProjectiveNiels.toPoint_of_not_onCurve h]
+  rw [toPoint_def, ProjectiveNiels.toPoint_eq_zero_of_not_onCurve h]
 
 end ProjectiveNielsPoint.«x86_64-no-tables»
 
@@ -890,7 +875,7 @@ theorem toPoint_y {self : ProjectiveNielsPoint.«i686-no-tables»} (h : self.OnC
 
 theorem toPoint_of_not_onCurve {self : ProjectiveNielsPoint.«i686-no-tables»}
     (h : ¬ self.OnCurve) : self.toPoint = 0 := by
-  rw [toPoint_def, ProjectiveNiels.toPoint_of_not_onCurve h]
+  rw [toPoint_def, ProjectiveNiels.toPoint_eq_zero_of_not_onCurve h]
 
 end ProjectiveNielsPoint.«i686-no-tables»
 

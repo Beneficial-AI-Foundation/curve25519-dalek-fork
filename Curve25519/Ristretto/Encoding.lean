@@ -23,15 +23,15 @@ them standing for the same element of ristretto255 when they are related by `edw
 
 * Decoding: `decodeRep_eq_some_iff` (`decodeRep s = some P` iff `s < p` is non-negative, `P` has
   `y = (1 - s²) / (1 + s²)`, `x` and `x y` non-negative and `y ≠ 0`), `decodeRep_eq_none_iff`
-  (the rejection reasons of RFC 9496 §4.3.1), `even_decodeRep`, `decodeRep_y`, `decodeRep_x_sq`.
+  (the rejection reasons of RFC 9496 §4.3.1), `even_decodeRep`, `decodeRep_y`.
 * Encoding: `encodeRep_lt`, `not_isNeg_encodeRep`, the round trips `encodeRep_decodeRep` and
   `decodeRep_encodeRep`, and **the encoding of ristretto255**: on even points, two
   representatives have the same encoding iff they are related (`encodeRep_eq_iff`; one direction
   is the invariance `encodeRep_rel`). The encoding of the basepoint is `encodeRep_basepoint`
   (RFC 9496 §A.1, a kernel certificate in `Curve25519.Proofs.Ristretto.Certs`).
-* The classes in coordinates: `rel_iff_coords` (the four 4-torsion translates `(x, y)`,
-  `(-x, -y)`, `(y √-1, x √-1)`, `(-(y √-1), -(x √-1))`) and the uniqueness of the canonical
-  representative `eq_of_rel_of_canonical` (`x` and `x y` non-negative, `y ≠ 0`, `y ≠ -1`).
+* The uniqueness of the canonical representative of a class `eq_of_rel_of_canonical` (`x` and
+  `x y` non-negative, `y ≠ 0`, `y ≠ -1`), from the classes in coordinates (`rel_iff_coords` of
+  `Curve25519.Ristretto.Even`).
 
 The proof of the round trips goes through the canonical representative of a class: every class
 with `x y ≠ 0` has exactly one representative with `x` and `x y` non-negative (`exists_canon`,
@@ -43,45 +43,7 @@ namespace curve25519
 
 open TwistedEdwardsModel
 
-/-! ### The classes in coordinates -/
-
-/-- **The 4-torsion translates in coordinates**: `Q` is in the class of `P` iff `Q` is `(x, y)`,
-`(-x, -y)` (`P + (0, -1)`), `(y √-1, x √-1)` (`P + (√-1, 0)`) or `(-(y √-1), -(x √-1))`
-(`P + (-√-1, 0)`). -/
-theorem rel_iff_coords (P Q : edwards.Point) :
-    edwards.Rel P Q ↔
-      (Q.x = P.x ∧ Q.y = P.y) ∨ (Q.x = -P.x ∧ Q.y = -P.y) ∨
-        (Q.x = P.y * sqrtM1 ∧ Q.y = P.x * sqrtM1) ∨
-        (Q.x = -(P.y * sqrtM1) ∧ Q.y = -(P.x * sqrtM1)) := by
-  constructor
-  · intro h
-    have hT : Q - P ∈ AddSubgroup.torsionBy edwards.Point 4 := (rel_iff_sub_mem Q P).mp (rel_symm h)
-    have hQ : Q = P + (Q - P) := by abel
-    rw [mem_torsionBy_four_iff_eightTorsion] at hT
-    rcases hT with hT | hT | hT | hT <;> rw [hT] at hQ
-    · left
-      rw [hQ, add_zero]
-      exact ⟨rfl, rfl⟩
-    · right; right; right
-      rw [hQ, add_x, add_y]
-      unfold addX addY addDen₁ addDen₂
-      rw [eightTorsion_two_x, eightTorsion_two_y_eq, edwards_a_eq_neg_one]
-      constructor <;> ring
-    · right; left
-      rw [hQ, add_x, add_y]
-      unfold addX addY addDen₁ addDen₂
-      rw [eightTorsion_four_x_eq, eightTorsion_four_y, edwards_a_eq_neg_one]
-      constructor <;> ring
-    · right; right; left
-      rw [hQ, add_x, add_y]
-      unfold addX addY addDen₁ addDen₂
-      rw [eightTorsion_six_x, eightTorsion_six_y_eq, edwards_a_eq_neg_one]
-      constructor <;> ring
-  · rintro (⟨hx, hy⟩ | ⟨hx, hy⟩ | ⟨hx, hy⟩ | ⟨hx, hy⟩) <;> rw [rel_iff_formula, hx, hy]
-    · left; ring
-    · left; ring
-    · right; ring
-    · right; ring
+/-! ### The canonical representative -/
 
 /-- **Uniqueness of the canonical representative**: two representatives of one class with `x`
 and `x y` non-negative, `y ≠ 0` and `y ≠ -1` are equal. -/
@@ -90,40 +52,23 @@ theorem eq_of_rel_of_canonical {P Q : edwards.Point} (h : edwards.Rel P Q)
     (hQx : ¬ Q.x.isNeg) (hQxy : ¬ (Q.x * Q.y).isNeg) (hQy : Q.y ≠ 0) (hQy1 : Q.y ≠ -1) :
     P = Q := by
   rw [rel_iff_coords] at h
-  rcases h with ⟨hx, hy⟩ | ⟨hx, hy⟩ | ⟨hx, hy⟩ | ⟨hx, hy⟩
+  rcases h with ⟨hx, hy⟩ | ⟨hx, hy⟩ | h
   · exact (Point.ext hx hy).symm
   · exfalso
     rw [hx] at hQx
-    have hx0 : P.x = 0 := ZMod.eq_zero_of_not_isNeg_of_not_isNeg_neg p_mod_two hPx hQx
+    have hx0 : P.x = 0 := ZMod.eq_zero_of_not_isNeg_of_not_isNeg_neg hPx hQx
     have hy1 : P.y = 1 :=
       (y_eq_one_or_eq_neg_one_of_x_eq_zero P.equation hx0).resolve_right hPy1
     rw [hy, hy1] at hQy1
     exact hQy1 rfl
-  · exfalso
-    have hprod : Q.x * Q.y = -(P.x * P.y) := by
-      rw [hx, hy]
-      linear_combination (P.x * P.y) * sqrtM1_sq
-    rw [hprod] at hQxy
-    have h0 : P.x * P.y = 0 := ZMod.eq_zero_of_not_isNeg_of_not_isNeg_neg p_mod_two hPxy hQxy
-    have hx0 : P.x = 0 := (mul_eq_zero.mp h0).resolve_right hPy
-    rw [hy, hx0, zero_mul] at hQy
-    exact hQy rfl
-  · exfalso
-    have hprod : Q.x * Q.y = -(P.x * P.y) := by
-      rw [hx, hy]
-      linear_combination (P.x * P.y) * sqrtM1_sq
-    rw [hprod] at hQxy
-    have h0 : P.x * P.y = 0 := ZMod.eq_zero_of_not_isNeg_of_not_isNeg_neg p_mod_two hPxy hQxy
-    have hx0 : P.x = 0 := (mul_eq_zero.mp h0).resolve_right hPy
-    rw [hy, hx0, zero_mul, neg_zero] at hQy
-    exact hQy rfl
-
-/-- A point in the class of an even point is even. -/
-theorem even_of_rel {P Q : edwards.Point} (hP : Even P) (h : edwards.Rel P Q) : Even Q := by
-  have hT : Q - P ∈ AddSubgroup.torsionBy edwards.Point 4 := (rel_iff_sub_mem Q P).mp (rel_symm h)
-  have hT' : Even (Q - P) := AddSubgroup.mem_even.mp (torsionBy_four_le_even hT)
-  rw [show Q = P + (Q - P) by abel]
-  exact hP.add hT'
+  · -- the two rotations: `x y` changes sign, and `y = 0` when `x = 0`
+    exfalso
+    have hrot : Q.x * Q.y = -(P.x * P.y) ∧ (P.x = 0 → Q.y = 0) := by
+      rcases h with ⟨hx, hy⟩ | ⟨hx, hy⟩ <;> rw [hx, hy] <;>
+        exact ⟨by linear_combination (P.x * P.y) * sqrtM1_sq, fun h0 => by rw [h0]; ring⟩
+    rw [hrot.1] at hQxy
+    have h0 : P.x * P.y = 0 := ZMod.eq_zero_of_not_isNeg_of_not_isNeg_neg hPxy hQxy
+    exact hQy (hrot.2 ((mul_eq_zero.mp h0).resolve_right hPy))
 
 namespace Ristretto
 
@@ -215,7 +160,7 @@ theorem decodeRep_eq_some_iff {s : ℕ} {P : edwards.Point} :
       by_cases hc : (sqrtRatioM1 1 (decW s)).1 = true ∧ ¬ (decX s * decY s).isNeg ∧ decY s ≠ 0
       · rw [dite_eq_left hc, Option.some.injEq] at h
         subst h
-        refine ⟨hs.1, hs.2, ?_, ZMod.not_isNeg_abs p_mod_two _, hc.2.1, hc.2.2⟩
+        refine ⟨hs.1, hs.2, ?_, ZMod.not_isNeg_abs _, hc.2.1, hc.2.2⟩
         exact Proofs.decode_y_eq s (decR s) (sqrtRatioM1_one_of_fst hc.1)
       · rw [dite_eq_right hc] at h
         cases h
@@ -237,10 +182,7 @@ theorem decodeRep_eq_some_iff {s : ℕ} {P : edwards.Point} :
       · have hs0 : (s : ZMod p) = 0 := by
           rw [hx0] at hxv
           have h4 : (4 : ZMod p) * (s : ZMod p) ^ 2 = 0 := by linear_combination -hxv
-          have h4' : (4 : ZMod p) ≠ 0 := by
-            rw [show (4 : ZMod p) = 2 * 2 by norm_num]
-            exact mul_ne_zero two_ne_zero two_ne_zero
-          exact pow_eq_zero_iff two_ne_zero |>.mp ((mul_eq_zero.mp h4).resolve_left h4')
+          exact pow_eq_zero_iff two_ne_zero |>.mp ((mul_eq_zero.mp h4).resolve_left four_ne_zero)
         refine ⟨sqrtAdMinusOne, ?_⟩
         unfold decW decV decU1 decU2
         rw [hs0]
@@ -253,32 +195,17 @@ theorem decodeRep_eq_some_iff {s : ℕ} {P : edwards.Point} :
     have hr : decW s * decR s ^ 2 = 1 := sqrtRatioM1_one_of_fst hfst
     have hyd : decY s = P.y := (Proofs.decode_y_eq s (decR s) hr).trans hy.symm
     have hxd : decX s = P.x := by
-      refine ZMod.eq_of_sq_eq_of_isNeg_iff p_mod_two ?_
-        (iff_of_false (ZMod.not_isNeg_abs p_mod_two _) hx)
+      refine ZMod.eq_of_sq_eq_of_isNeg_iff ?_
+        (iff_of_false (ZMod.not_isNeg_abs _) hx)
       exact mul_right_cancel₀ hv ((Proofs.decode_x_sq_mul_v s (decR s) hr).trans hxv.symm)
     rw [decodeRep_of_lt ⟨hs, hneg⟩,
       dite_eq_left ⟨hfst, by rw [hxd, hyd]; exact hxy, by rw [hyd]; exact hy0⟩]
     exact congrArg some (Point.ext hxd hyd)
 
-theorem decodeRep_lt {s : ℕ} {P : edwards.Point} (h : decodeRep s = some P) : s < p :=
-  (decodeRep_eq_some_iff.mp h).1
-
-theorem not_isNeg_of_decodeRep {s : ℕ} {P : edwards.Point} (h : decodeRep s = some P) :
-    ¬ (s : ZMod p).isNeg :=
-  (decodeRep_eq_some_iff.mp h).2.1
-
 /-- The decoded point has `y = (1 - s²) / (1 + s²)`. -/
 theorem decodeRep_y {s : ℕ} {P : edwards.Point} (h : decodeRep s = some P) :
     P.y = (1 - (s : ZMod p) ^ 2) / (1 + (s : ZMod p) ^ 2) :=
   (decodeRep_eq_some_iff.mp h).2.2.1
-
-theorem not_isNeg_decodeRep_x {s : ℕ} {P : edwards.Point} (h : decodeRep s = some P) :
-    ¬ P.x.isNeg :=
-  (decodeRep_eq_some_iff.mp h).2.2.2.1
-
-theorem not_isNeg_decodeRep_xy {s : ℕ} {P : edwards.Point} (h : decodeRep s = some P) :
-    ¬ (P.x * P.y).isNeg :=
-  (decodeRep_eq_some_iff.mp h).2.2.2.2.1
 
 theorem decodeRep_y_ne_zero {s : ℕ} {P : edwards.Point} (h : decodeRep s = some P) : P.y ≠ 0 :=
   (decodeRep_eq_some_iff.mp h).2.2.2.2.2
@@ -300,20 +227,9 @@ theorem decodeRep_y_ne_neg_one {s : ℕ} {P : edwards.Point} (h : decodeRep s = 
   have h2 : (2 : ZMod p) = 0 := by linear_combination -hy
   exact two_ne_zero h2
 
-/-- The decoded point has `x² v = 4 s²` for `v = -(d (1 - s²)²) - (1 + s²)²`. -/
-theorem decodeRep_x_sq {s : ℕ} {P : edwards.Point} (h : decodeRep s = some P) :
-    P.x ^ 2 * (-(d * (1 - (s : ZMod p) ^ 2) ^ 2) - (1 + (s : ZMod p) ^ 2) ^ 2) =
-      4 * (s : ZMod p) ^ 2 :=
-  Proofs.x_sq_mul_v_eq (s : ZMod p) P.equation
-    ((eq_div_iff (one_add_sq_ne_zero_of_decodeRep h)).mp (decodeRep_y h))
-
 /-- **The decoded point is even**: `1 - y² = (2 s / (1 + s²))²`. -/
-theorem even_decodeRep {s : ℕ} {P : edwards.Point} (h : decodeRep s = some P) : Even P := by
-  have hu2 := one_add_sq_ne_zero_of_decodeRep h
-  rw [even_iff_isSquare, decodeRep_y h]
-  refine ⟨2 * (s : ZMod p) / (1 + (s : ZMod p) ^ 2), ?_⟩
-  field_simp
-  ring
+theorem even_decodeRep {s : ℕ} {P : edwards.Point} (h : decodeRep s = some P) : Even P :=
+  even_of_y_eq_div (one_add_sq_ne_zero_of_decodeRep h) (decodeRep_y h)
 
 /-- `decodeRep 0 = some 0`: `0` decodes to the identity. -/
 theorem decodeRep_zero : decodeRep 0 = some 0 := by
@@ -355,7 +271,7 @@ theorem not_isNeg_encodeRep (P : edwards.Point) : ¬ ((encodeRep P : ℕ) : ZMod
   rw [encodeRep_eq]
   dsimp only
   rw [ZMod.natCast_zmod_val]
-  exact ZMod.not_isNeg_abs p_mod_two _
+  exact ZMod.not_isNeg_abs _
 
 /-- The 4-torsion (`x y = 0`) encodes to `0`. -/
 theorem encodeRep_of_mul_eq_zero {P : edwards.Point} (h : P.x * P.y = 0) : encodeRep P = 0 := by
@@ -489,7 +405,7 @@ private theorem not_isNeg_abs_xRot_mul_yC (P : edwards.Point) :
   split_ifs with h
   · rw [show P.y * sqrtM1 * (P.x * sqrtM1) = -(P.x * P.y) by
       linear_combination (P.x * P.y) * sqrtM1_sq]
-    exact ZMod.not_isNeg_neg_of_isNeg p_mod_two h
+    exact ZMod.not_isNeg_neg_of_isNeg h
   · exact h
 
 /-- **Encoding then decoding**: `decodeRep (encodeRep P)` is the canonical representative of the
@@ -512,11 +428,11 @@ theorem decodeRep_encodeRep {P : edwards.Point} (hP : Even P) :
       exact one_ne_zero (by linear_combination -hD)
     refine ⟨C, ?_, hrel⟩
     rw [decodeRep_eq_some_iff, encodeRep_eq_of_mul_sq_eq_one hW, ZMod.natCast_zmod_val]
-    refine ⟨ZMod.val_lt _, ZMod.not_isNeg_abs p_mod_two _, ?_, ?_, ?_, ?_⟩
+    refine ⟨ZMod.val_lt _, ZMod.not_isNeg_abs _, ?_, ?_, ?_, ?_⟩
     · rw [hCy, ZMod.abs_sq]
       exact (Proofs.div_eq_of_sq_eq_div hy1 hS).symm
     · rw [hCx]
-      exact ZMod.not_isNeg_abs p_mod_two _
+      exact ZMod.not_isNeg_abs _
     · rw [hCx, hCy]
       exact not_isNeg_abs_xRot_mul_yC P
     · rw [hCy]
@@ -553,11 +469,11 @@ theorem encodeRep_decodeRep {s : ℕ} {P : edwards.Point} (h : decodeRep s = som
       y_ne_neg_one_of_x_ne_zero P.equation hx0 (by linear_combination h')
     have hs2 : (s : ZMod p) ^ 2 = (1 - P.y) / (1 + P.y) := by
       rw [eq_div_iff h1y]
-      exact Proofs.sq_mul_one_add_eq hyu
+      linear_combination hyu
     rw [encodeRep_eq_of_mul_sq_eq_one hW, hyC]
     have hSs : (denC P * (1 - P.y)).abs = (s : ZMod p) :=
-      ZMod.eq_of_sq_eq_of_isNeg_iff p_mod_two (by rw [ZMod.abs_sq, hS, hs2])
-        (iff_of_false (ZMod.not_isNeg_abs p_mod_two _) hneg)
+      ZMod.eq_of_sq_eq_of_isNeg_iff (by rw [ZMod.abs_sq, hS, hs2])
+        (iff_of_false (ZMod.not_isNeg_abs _) hneg)
     rw [hSs, ZMod.val_cast_of_lt hs]
 
 /-- **Invariance on classes**: representatives of one class have the same encoding. -/

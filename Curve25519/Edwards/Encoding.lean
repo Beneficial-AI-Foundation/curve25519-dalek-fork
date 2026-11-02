@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519.Edwards.Basepoint
-public import Curve25519.Edwards.Torsion
 public section
 
 /-! # The RFC 8032 point encoding of edwards25519
@@ -15,8 +14,7 @@ value of the 32 bytes of `CompressedEdwardsY`), and the strict decoder `decode` 
 lemmas are the generic ones instantiated (`encode_lt_two_pow_256`, `decode_encode`,
 `encode_decode`, `decode_eq_some_iff`, `decode_eq_none_iff`, `encode_injective`), the sign of
 the basepoint (`not_isNeg_basepoint_x`), and the encodings of the basepoint
-(`encode_basepoint`, dalek's `ED25519_BASEPOINT_COMPRESSED`), of `0` and of the eight torsion
-points as numerals.
+(`encode_basepoint`, dalek's `ED25519_BASEPOINT_COMPRESSED`) and of `0`.
 
 `encode` and `decode` are abbreviations of the generic functions, so every generic lemma
 applies to them directly. -/
@@ -106,82 +104,9 @@ theorem encode_basepoint : encode basepoint =
   rw [encode_eq, ite_eq_right not_isNeg_basepoint_x, mul_zero, add_zero, basepoint_y_eq,
     ZMod.val_ofNat_of_lt (by rw [p_eq_numeral]; decide)]
 
-/-- The encoding of the basepoint is below `2 ^ 255`: the sign bit is clear. -/
-theorem encode_basepoint_lt : encode basepoint < 2 ^ 255 := by
-  rw [encode_basepoint]
-  decide
-
-/-! ### The zero and the torsion points -/
+/-! ### The zero -/
 
 theorem encode_zero : encode 0 = 1 :=
   TwistedEdwardsModel.encode_zero edwards 255
-
-theorem encode_eightTorsion_zero : encode (eightTorsion 0) = 1 := by
-  rw [eightTorsion_zero, encode_zero]
-
-/-- `torsion8 = (x, y)` with `x` even: the encoding is `y`. -/
-theorem encode_torsion8 : encode torsion8 =
-    55188659117513257062467267217118295137698188065244968500265048394206261417927 := by
-  rw [encode_eq, torsion8_x_eq, torsion8_y_eq,
-    ite_eq_right ((not_iff_not.mpr (ZMod.isNeg_ofNat_iff (by rw [p_eq_numeral]; decide))).mpr
-      (by decide)),
-    mul_zero, add_zero, ZMod.val_ofNat_of_lt (by rw [p_eq_numeral]; decide)]
-
-theorem encode_eightTorsion_one : encode (eightTorsion 1) =
-    55188659117513257062467267217118295137698188065244968500265048394206261417927 := by
-  rw [eightTorsion_one, encode_torsion8]
-
-/-- `eightTorsion 2 = (-√-1, 0)` with `-√-1` odd: the encoding is `2 ^ 255`. -/
-theorem encode_eightTorsion_two : encode (eightTorsion 2) =
-    57896044618658097711785492504343953926634992332820282019728792003956564819968 := by
-  rw [encode_eq, eightTorsion_two_x_eq, eightTorsion_two_y_eq,
-    ite_eq_left ((ZMod.isNeg_ofNat_iff (by rw [p_eq_numeral]; decide)).mpr (by decide)),
-    ZMod.val_zero, zero_add, mul_one]
-  decide
-
-theorem encode_eightTorsion_two_eq_two_pow : encode (eightTorsion 2) = 2 ^ 255 := by
-  rw [encode_eightTorsion_two]
-  decide
-
-/-- `eightTorsion 3 = (x, -y)` with `x` even: the encoding is `-y`. -/
-theorem encode_eightTorsion_three : encode (eightTorsion 3) =
-    2707385501144840649318225287225658788936804267575313519463743609750303402022 := by
-  rw [encode_eq, eightTorsion_three_x_eq, eightTorsion_three_y_eq,
-    ite_eq_right ((not_iff_not.mpr (ZMod.isNeg_ofNat_iff (by rw [p_eq_numeral]; decide))).mpr
-      (by decide)),
-    mul_zero, add_zero, ZMod.val_ofNat_of_lt (by rw [p_eq_numeral]; decide)]
-
-/-- `eightTorsion 4 = (0, -1)`: the encoding is `p - 1`. -/
-theorem encode_eightTorsion_four : encode (eightTorsion 4) =
-    57896044618658097711785492504343953926634992332820282019728792003956564819948 := by
-  rw [encode_eq, eightTorsion_four_x_eq, eightTorsion_four_y_eq, ite_eq_right ZMod.isNeg_zero,
-    mul_zero, add_zero, ZMod.val_ofNat_of_lt (by rw [p_eq_numeral]; decide)]
-
-/-- The encoding of `(0, -1)` is `p - 1`. -/
-theorem encode_eightTorsion_four_add_one : encode (eightTorsion 4) + 1 = p := by
-  rw [encode_eightTorsion_four, p_eq_numeral]
-
-/-- `eightTorsion 5 = (-x, -y)` with `-x` odd: the encoding is `-y + 2 ^ 255`. -/
-theorem encode_eightTorsion_five : encode (eightTorsion 5) =
-    60603430119802938361103717791569612715571796600395595539192535613706868221990 := by
-  rw [encode_eq, eightTorsion_five_x_eq, eightTorsion_five_y_eq,
-    ite_eq_left ((ZMod.isNeg_ofNat_iff (by rw [p_eq_numeral]; decide)).mpr (by decide)),
-    mul_one, ZMod.val_ofNat_of_lt (by rw [p_eq_numeral]; decide)]
-  decide
-
-/-- `eightTorsion 6 = (√-1, 0)` with `√-1` even: the encoding is `0`. -/
-theorem encode_eightTorsion_six : encode (eightTorsion 6) = 0 := by
-  rw [encode_eq, eightTorsion_six_x_eq, eightTorsion_six_y_eq,
-    ite_eq_right ((not_iff_not.mpr (ZMod.isNeg_ofNat_iff (by rw [p_eq_numeral]; decide))).mpr
-      (by decide)),
-    mul_zero, add_zero, ZMod.val_zero]
-
-/-- `eightTorsion 7 = (-x, y)` with `-x` odd: the encoding is `y + 2 ^ 255`. -/
-theorem encode_eightTorsion_seven : encode (eightTorsion 7) =
-    113084703736171354774252759721462249064333180398065250519993840398162826237895 := by
-  rw [encode_eq, eightTorsion_seven_x_eq, eightTorsion_seven_y_eq,
-    ite_eq_left ((ZMod.isNeg_ofNat_iff (by rw [p_eq_numeral]; decide)).mpr (by decide)),
-    mul_one, ZMod.val_ofNat_of_lt (by rw [p_eq_numeral]; decide)]
-  decide
 
 end curve25519

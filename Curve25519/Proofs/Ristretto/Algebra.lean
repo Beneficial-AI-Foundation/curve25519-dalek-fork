@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519.Edwards.Basic
+import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.LinearCombination
+import Mathlib.Tactic.Ring
 public section
 
 /-! # The field identities behind the ristretto255 encoding (not audited)
@@ -99,13 +101,9 @@ theorem x_sq_mul_v_eq {x y : ZMod p} (s : ZMod p) (hc : edwards.Equation x y)
   rw [edwards_a_eq_neg_one, edwards_d] at hc
   linear_combination (1 + s ^ 2) ^ 2 * hc + ((y * (1 + s ^ 2) + (1 - s ^ 2)) * (d * x ^ 2 - 1)) * hy
 
-/-- `y = (1 - s²) / (1 + s²)` gives `s² (1 + y) = 1 - y`. -/
-theorem sq_mul_one_add_eq {y s : ZMod p} (hy : y * (1 + s ^ 2) = 1 - s ^ 2) :
-    s ^ 2 * (1 + y) = 1 - y := by
-  linear_combination hy
-
 /-- `S² = (1 - y) / (1 + y)` gives `(1 - S²) / (1 + S²) = y`. -/
-theorem div_eq_of_sq_eq_div {S y : ZMod p} (hy : 1 + y ≠ 0) (hS : S ^ 2 = (1 - y) / (1 + y)) :
+theorem div_eq_of_sq_eq_div {F : Type*} [Field F] [NeZero (2 : F)] {S y : F} (hy : 1 + y ≠ 0)
+    (hS : S ^ 2 = (1 - y) / (1 + y)) :
     (1 - S ^ 2) / (1 + S ^ 2) = y := by
   have e1 : 1 + S ^ 2 = 2 / (1 + y) := by
     rw [hS, eq_div_iff hy]
@@ -118,7 +116,7 @@ theorem div_eq_of_sq_eq_div {S y : ZMod p} (hy : 1 + y ≠ 0) (hS : S ^ 2 = (1 -
   rw [e1, e2, div_div_div_cancel_right₀ hy, mul_div_cancel_left₀ y two_ne_zero]
 
 /-- `D² (1 - y²) = 1` gives `(D (1 - y))² = (1 - y) / (1 + y)`. -/
-theorem mul_one_sub_sq_eq_div {D y : ZMod p} (h : D ^ 2 * (1 - y ^ 2) = 1) :
+theorem mul_one_sub_sq_eq_div {F : Type*} [Field F] {D y : F} (h : D ^ 2 * (1 - y ^ 2) = 1) :
     (D * (1 - y)) ^ 2 = (1 - y) / (1 + y) := by
   have hy : 1 + y ≠ 0 := by
     intro hy

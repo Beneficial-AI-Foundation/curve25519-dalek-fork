@@ -6,7 +6,6 @@ module
 public import Curve25519.Models.TwistedEdwards.Coords.Defs
 public import EllipticCurve.TwistedEdwards.Coords.Lemmas
 import all Curve25519.Models.TwistedEdwards.Coords.Defs
-import Mathlib.Algebra.Field.Basic
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Ring
 public section
@@ -31,63 +30,63 @@ variable {F : Type u} [Field F] {E : TwistedEdwardsModel F}
 namespace Extended
 
 /-- The `X`-coordinate recovered from the projective Niels form of `P` is `P.X`. -/
-theorem toProjectiveNiels_X (h2 : (2 : F) ≠ 0) (P : E.Extended) :
+theorem toProjectiveNiels_X [NeZero (2 : F)] (P : E.Extended) :
     P.toProjectiveNiels.X = P.X := by
   change (P.Y + P.X - (P.Y - P.X)) / 2 = P.X
-  rw [div_eq_iff h2]
+  rw [div_eq_iff two_ne_zero]
   ring
 
 /-- The `Y`-coordinate recovered from the projective Niels form of `P` is `P.Y`. -/
-theorem toProjectiveNiels_Y (h2 : (2 : F) ≠ 0) (P : E.Extended) :
+theorem toProjectiveNiels_Y [NeZero (2 : F)] (P : E.Extended) :
     P.toProjectiveNiels.Y = P.Y := by
   change (P.Y + P.X + (P.Y - P.X)) / 2 = P.Y
-  rw [div_eq_iff h2]
+  rw [div_eq_iff two_ne_zero]
   ring
 
 /-- The projective Niels form of a point on the curve is on the curve (in characteristic
 `≠ 2`). -/
-theorem onCurve_toProjectiveNiels (h2 : (2 : F) ≠ 0) {P : E.Extended} (h : P.OnCurve) :
+theorem onCurve_toProjectiveNiels [NeZero (2 : F)] {P : E.Extended} (h : P.OnCurve) :
     P.toProjectiveNiels.OnCurve := by
   refine ⟨h.1, ?_, ?_⟩
-  · rw [toProjectiveNiels_X h2, toProjectiveNiels_Y h2]
+  · rw [toProjectiveNiels_X, toProjectiveNiels_Y]
     exact h.2.2
-  · rw [toProjectiveNiels_X h2, toProjectiveNiels_Y h2]
+  · rw [toProjectiveNiels_X, toProjectiveNiels_Y]
     change P.T * (2 * E.d) * P.Z = 2 * E.d * P.X * P.Y
     linear_combination (-2 * E.d) * h.2.1
 
 /-- The projective Niels form represents the same point. -/
 theorem toPoint_toProjectiveNiels [E.IsComplete] {P : E.Extended} (h : P.OnCurve) :
     P.toProjectiveNiels.toPoint = P.toPoint := by
-  have h2 : (2 : F) ≠ 0 := IsComplete.two_ne_zero (E := E)
+  have : NeZero (2 : F) := ⟨IsComplete.two_ne_zero (E := E)⟩
   refine Point.ext ?_ ?_
-  · rw [ProjectiveNiels.toPoint_x (onCurve_toProjectiveNiels h2 h), toProjectiveNiels_X h2,
+  · rw [ProjectiveNiels.toPoint_x (onCurve_toProjectiveNiels h), toProjectiveNiels_X,
       toPoint_x h]
     rfl
-  · rw [ProjectiveNiels.toPoint_y (onCurve_toProjectiveNiels h2 h), toProjectiveNiels_Y h2,
+  · rw [ProjectiveNiels.toPoint_y (onCurve_toProjectiveNiels h), toProjectiveNiels_Y,
       toPoint_y h]
     rfl
 
 /-- The `x`-coordinate recovered from the affine Niels form of `P` is `X / Z`. -/
-theorem toAffineNiels_x (h2 : (2 : F) ≠ 0) (P : E.Extended) :
+theorem toAffineNiels_x [NeZero (2 : F)] (P : E.Extended) :
     P.toAffineNiels.x = P.X / P.Z := by
   change (P.Y * P.Z⁻¹ + P.X * P.Z⁻¹ - (P.Y * P.Z⁻¹ - P.X * P.Z⁻¹)) / 2 = P.X / P.Z
-  rw [div_eq_iff h2, div_eq_mul_inv]
+  rw [div_eq_iff two_ne_zero, div_eq_mul_inv]
   ring
 
 /-- The `y`-coordinate recovered from the affine Niels form of `P` is `Y / Z`. -/
-theorem toAffineNiels_y (h2 : (2 : F) ≠ 0) (P : E.Extended) :
+theorem toAffineNiels_y [NeZero (2 : F)] (P : E.Extended) :
     P.toAffineNiels.y = P.Y / P.Z := by
   change (P.Y * P.Z⁻¹ + P.X * P.Z⁻¹ + (P.Y * P.Z⁻¹ - P.X * P.Z⁻¹)) / 2 = P.Y / P.Z
-  rw [div_eq_iff h2, div_eq_mul_inv]
+  rw [div_eq_iff two_ne_zero, div_eq_mul_inv]
   ring
 
 /-- The affine Niels form of a point on the curve is on the curve (in characteristic `≠ 2`). -/
-theorem onCurve_toAffineNiels (h2 : (2 : F) ≠ 0) {P : E.Extended} (h : P.OnCurve) :
+theorem onCurve_toAffineNiels [NeZero (2 : F)] {P : E.Extended} (h : P.OnCurve) :
     P.toAffineNiels.OnCurve := by
   refine ⟨?_, ?_⟩
-  · rw [toAffineNiels_x h2, toAffineNiels_y h2]
+  · rw [toAffineNiels_x, toAffineNiels_y]
     exact h.2.2
-  · rw [toAffineNiels_x h2, toAffineNiels_y h2]
+  · rw [toAffineNiels_x, toAffineNiels_y]
     change P.X * P.Z⁻¹ * (P.Y * P.Z⁻¹) * (2 * E.d) = 2 * E.d * (P.X / P.Z) * (P.Y / P.Z)
     rw [div_eq_mul_inv, div_eq_mul_inv]
     ring
@@ -95,10 +94,10 @@ theorem onCurve_toAffineNiels (h2 : (2 : F) ≠ 0) {P : E.Extended} (h : P.OnCur
 /-- The affine Niels form represents the same point. -/
 theorem toPoint_toAffineNiels [E.IsComplete] {P : E.Extended} (h : P.OnCurve) :
     P.toAffineNiels.toPoint = P.toPoint := by
-  have h2 : (2 : F) ≠ 0 := IsComplete.two_ne_zero (E := E)
+  have : NeZero (2 : F) := ⟨IsComplete.two_ne_zero (E := E)⟩
   refine Point.ext ?_ ?_
-  · rw [AffineNiels.toPoint_x (onCurve_toAffineNiels h2 h), toAffineNiels_x h2, toPoint_x h]
-  · rw [AffineNiels.toPoint_y (onCurve_toAffineNiels h2 h), toAffineNiels_y h2, toPoint_y h]
+  · rw [AffineNiels.toPoint_x (onCurve_toAffineNiels h), toAffineNiels_x, toPoint_x h]
+  · rw [AffineNiels.toPoint_y (onCurve_toAffineNiels h), toAffineNiels_y, toPoint_y h]
 
 end Extended
 
@@ -106,9 +105,9 @@ end Extended
 
 namespace ProjectiveNiels
 
-section IsComplete
+section Coordinates
 
-variable [E.IsComplete] {P : E.ProjectiveNiels}
+variable {P : E.ProjectiveNiels}
 
 /-- `X = x Z` for the represented point `(x, y)`. -/
 theorem X_eq_toPoint_x_mul_Z (h : P.OnCurve) : P.X = P.toPoint.x * P.Z := by
@@ -119,19 +118,19 @@ theorem Y_eq_toPoint_y_mul_Z (h : P.OnCurve) : P.Y = P.toPoint.y * P.Z := by
   rw [toPoint_y h, div_mul_cancel₀ _ h.1]
 
 /-- `Y + X = (y + x) Z` for the represented point `(x, y)`. -/
-theorem YplusX_eq (h : P.OnCurve) : P.YplusX = (P.toPoint.y + P.toPoint.x) * P.Z := by
-  have h2 : (2 : F) ≠ 0 := IsComplete.two_ne_zero (E := E)
+theorem YplusX_eq [NeZero (2 : F)] (h : P.OnCurve) :
+    P.YplusX = (P.toPoint.y + P.toPoint.x) * P.Z := by
   rw [toPoint_x h, toPoint_y h, ← add_div, div_mul_cancel₀ _ h.1]
   unfold X Y
-  rw [← add_div, eq_div_iff h2]
+  rw [← add_div, eq_div_iff two_ne_zero]
   ring
 
 /-- `Y - X = (y - x) Z` for the represented point `(x, y)`. -/
-theorem YminusX_eq (h : P.OnCurve) : P.YminusX = (P.toPoint.y - P.toPoint.x) * P.Z := by
-  have h2 : (2 : F) ≠ 0 := IsComplete.two_ne_zero (E := E)
+theorem YminusX_eq [NeZero (2 : F)] (h : P.OnCurve) :
+    P.YminusX = (P.toPoint.y - P.toPoint.x) * P.Z := by
   rw [toPoint_x h, toPoint_y h, ← sub_div, div_mul_cancel₀ _ h.1]
   unfold X Y
-  rw [← sub_div, eq_div_iff h2]
+  rw [← sub_div, eq_div_iff two_ne_zero]
   ring
 
 /-- `T2d = 2 d x y Z` for the represented point `(x, y)`. -/
@@ -140,7 +139,7 @@ theorem T2d_eq (h : P.OnCurve) : P.T2d = 2 * E.d * P.toPoint.x * P.toPoint.y * P
   rw [X_eq_toPoint_x_mul_Z h, Y_eq_toPoint_y_mul_Z h] at key
   exact mul_right_cancel₀ h.1 (by linear_combination key)
 
-end IsComplete
+end Coordinates
 
 /-- The `X`-coordinate recovered from the identity `(1 : 1 : 1 : 0)` is `0`. -/
 theorem identity_X : (identity : E.ProjectiveNiels).X = 0 := by
@@ -149,29 +148,29 @@ theorem identity_X : (identity : E.ProjectiveNiels).X = 0 := by
 
 /-- The `Y`-coordinate recovered from the identity `(1 : 1 : 1 : 0)` is `1` (in characteristic
 `≠ 2`). -/
-theorem identity_Y (h2 : (2 : F) ≠ 0) : (identity : E.ProjectiveNiels).Y = 1 := by
+theorem identity_Y [NeZero (2 : F)] : (identity : E.ProjectiveNiels).Y = 1 := by
   change (1 + 1 : F) / 2 = 1
-  rw [div_eq_one_iff_eq h2]
+  rw [div_eq_one_iff_eq two_ne_zero]
   ring
 
 /-- The identity `(1 : 1 : 1 : 0)` is on the curve (in characteristic `≠ 2`). -/
-theorem onCurve_identity (h2 : (2 : F) ≠ 0) : (identity : E.ProjectiveNiels).OnCurve := by
+theorem onCurve_identity [NeZero (2 : F)] : (identity : E.ProjectiveNiels).OnCurve := by
   refine ⟨one_ne_zero, ?_, ?_⟩
-  · rw [identity_X, identity_Y h2]
+  · rw [identity_X, identity_Y]
     change E.Equation (0 / 1) (1 / 1)
     rw [zero_div, div_one]
     exact E.equation_zero_one
-  · rw [identity_X, identity_Y h2]
+  · rw [identity_X, identity_Y]
     change (0 : F) * 1 = 2 * E.d * 0 * 1
     ring
 
 /-- The identity `(1 : 1 : 1 : 0)` represents `0`. -/
 theorem toPoint_identity [E.IsComplete] : (identity : E.ProjectiveNiels).toPoint = 0 := by
-  have h2 : (2 : F) ≠ 0 := IsComplete.two_ne_zero (E := E)
+  have : NeZero (2 : F) := ⟨IsComplete.two_ne_zero (E := E)⟩
   refine Point.ext ?_ ?_
-  · rw [toPoint_x (onCurve_identity h2), identity_X, zero_x]
+  · rw [toPoint_x (onCurve_identity), identity_X, zero_x]
     exact zero_div 1
-  · rw [toPoint_y (onCurve_identity h2), identity_Y h2, zero_y]
+  · rw [toPoint_y (onCurve_identity), identity_Y, zero_y]
     exact div_one 1
 
 /-- The `X`-coordinate recovered from the negation is `-X`. -/
@@ -208,24 +207,22 @@ end ProjectiveNiels
 
 namespace AffineNiels
 
-section IsComplete
+section Coordinates
 
-variable [E.IsComplete] {P : E.AffineNiels}
+variable {P : E.AffineNiels}
 
 /-- `y + x` for the represented point `(x, y)`. -/
-theorem yPlusX_eq (h : P.OnCurve) : P.yPlusX = P.toPoint.y + P.toPoint.x := by
-  have h2 : (2 : F) ≠ 0 := IsComplete.two_ne_zero (E := E)
+theorem yPlusX_eq [NeZero (2 : F)] (h : P.OnCurve) : P.yPlusX = P.toPoint.y + P.toPoint.x := by
   rw [toPoint_x h, toPoint_y h]
   unfold x y
-  rw [← add_div, eq_div_iff h2]
+  rw [← add_div, eq_div_iff two_ne_zero]
   ring
 
 /-- `y - x` for the represented point `(x, y)`. -/
-theorem yMinusX_eq (h : P.OnCurve) : P.yMinusX = P.toPoint.y - P.toPoint.x := by
-  have h2 : (2 : F) ≠ 0 := IsComplete.two_ne_zero (E := E)
+theorem yMinusX_eq [NeZero (2 : F)] (h : P.OnCurve) : P.yMinusX = P.toPoint.y - P.toPoint.x := by
   rw [toPoint_x h, toPoint_y h]
   unfold x y
-  rw [← sub_div, eq_div_iff h2]
+  rw [← sub_div, eq_div_iff two_ne_zero]
   ring
 
 /-- `xy2d = 2 d x y` for the represented point `(x, y)`. -/
@@ -233,7 +230,7 @@ theorem xy2d_eq (h : P.OnCurve) : P.xy2d = 2 * E.d * P.toPoint.x * P.toPoint.y :
   rw [toPoint_x h, toPoint_y h]
   exact h.2
 
-end IsComplete
+end Coordinates
 
 /-- The `x`-coordinate recovered from the identity `(1, 1, 0)` is `0`. -/
 theorem identity_x : (identity : E.AffineNiels).x = 0 := by
@@ -242,26 +239,26 @@ theorem identity_x : (identity : E.AffineNiels).x = 0 := by
 
 /-- The `y`-coordinate recovered from the identity `(1, 1, 0)` is `1` (in characteristic
 `≠ 2`). -/
-theorem identity_y (h2 : (2 : F) ≠ 0) : (identity : E.AffineNiels).y = 1 := by
+theorem identity_y [NeZero (2 : F)] : (identity : E.AffineNiels).y = 1 := by
   change (1 + 1 : F) / 2 = 1
-  rw [div_eq_one_iff_eq h2]
+  rw [div_eq_one_iff_eq two_ne_zero]
   ring
 
 /-- The identity `(1, 1, 0)` is on the curve (in characteristic `≠ 2`). -/
-theorem onCurve_identity (h2 : (2 : F) ≠ 0) : (identity : E.AffineNiels).OnCurve := by
+theorem onCurve_identity [NeZero (2 : F)] : (identity : E.AffineNiels).OnCurve := by
   refine ⟨?_, ?_⟩
-  · rw [identity_x, identity_y h2]
+  · rw [identity_x, identity_y]
     exact E.equation_zero_one
-  · rw [identity_x, identity_y h2]
+  · rw [identity_x, identity_y]
     change (0 : F) = 2 * E.d * 0 * 1
     ring
 
 /-- The identity `(1, 1, 0)` represents `0`. -/
 theorem toPoint_identity [E.IsComplete] : (identity : E.AffineNiels).toPoint = 0 := by
-  have h2 : (2 : F) ≠ 0 := IsComplete.two_ne_zero (E := E)
+  have : NeZero (2 : F) := ⟨IsComplete.two_ne_zero (E := E)⟩
   refine Point.ext ?_ ?_
-  · rw [toPoint_x (onCurve_identity h2), identity_x, zero_x]
-  · rw [toPoint_y (onCurve_identity h2), identity_y h2, zero_y]
+  · rw [toPoint_x (onCurve_identity), identity_x, zero_x]
+  · rw [toPoint_y (onCurve_identity), identity_y, zero_y]
 
 /-- The `x`-coordinate recovered from the negation is `-x`. -/
 theorem neg_x (P : E.AffineNiels) : P.neg.x = -P.x := by
@@ -289,6 +286,13 @@ theorem toPoint_neg [E.IsComplete] {P : E.AffineNiels} (h : P.OnCurve) :
   · rw [toPoint_x (onCurve_neg h), TwistedEdwardsModel.neg_x, toPoint_x h, neg_x]
   · rw [toPoint_y (onCurve_neg h), TwistedEdwardsModel.neg_y, toPoint_y h, neg_y]
 
+/-- Affine Niels coordinates on the curve are determined by the represented point. -/
+theorem toPoint_inj [NeZero (2 : F)] {P Q : E.AffineNiels} (hP : P.OnCurve) (hQ : Q.OnCurve) :
+    P.toPoint = Q.toPoint ↔ P = Q :=
+  ⟨fun h => AffineNiels.ext (by rw [yPlusX_eq hP, yPlusX_eq hQ, h])
+    (by rw [yMinusX_eq hP, yMinusX_eq hQ, h]) (by rw [xy2d_eq hP, xy2d_eq hQ, h]),
+    fun h => h ▸ rfl⟩
+
 end AffineNiels
 
 /-! ### From affine points -/
@@ -296,34 +300,34 @@ end AffineNiels
 namespace Point
 
 /-- The `x`-coordinate recovered from the affine Niels form of `P` is `P.x`. -/
-theorem toAffineNiels_x (h2 : (2 : F) ≠ 0) (P : E.Point) : P.toAffineNiels.x = P.x := by
+theorem toAffineNiels_x [NeZero (2 : F)] (P : E.Point) : P.toAffineNiels.x = P.x := by
   change (P.y + P.x - (P.y - P.x)) / 2 = P.x
-  rw [div_eq_iff h2]
+  rw [div_eq_iff two_ne_zero]
   ring
 
 /-- The `y`-coordinate recovered from the affine Niels form of `P` is `P.y`. -/
-theorem toAffineNiels_y (h2 : (2 : F) ≠ 0) (P : E.Point) : P.toAffineNiels.y = P.y := by
+theorem toAffineNiels_y [NeZero (2 : F)] (P : E.Point) : P.toAffineNiels.y = P.y := by
   change (P.y + P.x + (P.y - P.x)) / 2 = P.y
-  rw [div_eq_iff h2]
+  rw [div_eq_iff two_ne_zero]
   ring
 
 /-- The affine Niels form `(y + x, y - x, x y (2 d))` of a point is on the curve (in
 characteristic `≠ 2`). -/
-theorem onCurve_toAffineNiels (h2 : (2 : F) ≠ 0) (P : E.Point) : P.toAffineNiels.OnCurve := by
+theorem onCurve_toAffineNiels [NeZero (2 : F)] (P : E.Point) : P.toAffineNiels.OnCurve := by
   refine ⟨?_, ?_⟩
-  · rw [toAffineNiels_x h2, toAffineNiels_y h2]
+  · rw [toAffineNiels_x, toAffineNiels_y]
     exact P.equation
-  · rw [toAffineNiels_x h2, toAffineNiels_y h2]
+  · rw [toAffineNiels_x, toAffineNiels_y]
     change P.x * P.y * (2 * E.d) = 2 * E.d * P.x * P.y
     ring
 
 /-- The affine Niels form represents the point: `Point.toAffineNiels` is a section of
 `toPoint`. -/
 theorem toPoint_toAffineNiels [E.IsComplete] (P : E.Point) : P.toAffineNiels.toPoint = P := by
-  have h2 : (2 : F) ≠ 0 := IsComplete.two_ne_zero (E := E)
+  have : NeZero (2 : F) := ⟨IsComplete.two_ne_zero (E := E)⟩
   refine Point.ext ?_ ?_
-  · rw [AffineNiels.toPoint_x (onCurve_toAffineNiels h2 P), toAffineNiels_x h2]
-  · rw [AffineNiels.toPoint_y (onCurve_toAffineNiels h2 P), toAffineNiels_y h2]
+  · rw [AffineNiels.toPoint_x (onCurve_toAffineNiels P), toAffineNiels_x]
+  · rw [AffineNiels.toPoint_y (onCurve_toAffineNiels P), toAffineNiels_y]
 
 end Point
 

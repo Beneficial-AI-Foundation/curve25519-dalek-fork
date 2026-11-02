@@ -16,7 +16,7 @@ Edwards model `E`, two points are related (`E.Rel`) iff they differ by an elemen
 themselves are Mathlib's `Even P`.
 
 `Rel` is exposed (specifications unfold it). The characterising lemmas are in
-`Curve25519.Models.TwistedEdwards.Even.Lemmas`. -/
+`Curve25519.Models.TwistedEdwards.Decaf.Lemmas`. -/
 
 universe u
 

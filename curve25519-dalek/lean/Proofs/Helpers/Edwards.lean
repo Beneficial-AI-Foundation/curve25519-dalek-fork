@@ -48,7 +48,7 @@ theorem decodeLenient_eq_some_iff {n : ℕ} {P : curve25519.edwards.Point} :
           change P.x = Classical.choose h
           rw [h0]
           exact (pow_eq_zero_iff two_ne_zero).mp hsq
-        · exact ZMod.eq_of_sq_eq_of_isNeg_iff p_mod_two hsq (hs.trans h0.symm)
+        · exact ZMod.eq_of_sq_eq_of_isNeg_iff hsq (hs.trans h0.symm)
   · refine iff_of_false (by simp) ?_
     rintro ⟨hy, hs⟩
     exact h ⟨P.x, hy ▸ P.equation, hs⟩
@@ -68,14 +68,14 @@ theorem decodeLenient_eq_none_iff {n : ℕ} :
     by_cases hx0 : x = 0
     · exact ⟨x, hx, Or.inl hx0⟩
     by_cases hs : n / 2 ^ 255 = 1
-    · rcases ZMod.isNeg_or_isNeg_neg p_mod_two hx0 with hneg | hneg
+    · rcases ZMod.isNeg_or_isNeg_neg hx0 with hneg | hneg
       · exact ⟨x, hx, Or.inr (iff_of_true hneg hs)⟩
       · exact ⟨-x, equation_neg hx, Or.inr (iff_of_true hneg hs)⟩
-    · rcases ZMod.isNeg_or_isNeg_neg p_mod_two hx0 with hneg | hneg
+    · rcases ZMod.isNeg_or_isNeg_neg hx0 with hneg | hneg
       · exact ⟨-x, equation_neg hx,
-          Or.inr (iff_of_false (ZMod.not_isNeg_neg_of_isNeg p_mod_two hneg) hs)⟩
+          Or.inr (iff_of_false (ZMod.not_isNeg_neg_of_isNeg hneg) hs)⟩
       · exact ⟨x, hx, Or.inr (iff_of_false (fun h' =>
-          ZMod.not_isNeg_neg_of_isNeg p_mod_two h' hneg) hs)⟩
+          ZMod.not_isNeg_neg_of_isNeg h' hneg) hs)⟩
 
 theorem decodeLenient_isSome_iff {n : ℕ} :
     (decodeLenient n).isSome ↔ IsSquare (curve25519.edwards.xSq ((n % 2 ^ 255 : ℕ) : ZMod p)) := by
@@ -141,7 +141,7 @@ theorem decodeLenient_eq_some_of_sign {n : ℕ} {x : ZMod p} (hneg : ¬ x.isNeg)
     · rw [hP1 h, hx0, neg_zero]
       exact Or.inl rfl
     · rw [hP1 h, h]
-      exact Or.inr (iff_of_true (ZMod.isNeg_neg_of_not_isNeg p_mod_two hx0 hneg) rfl)
+      exact Or.inr (iff_of_true (ZMod.isNeg_neg_of_not_isNeg hx0 hneg) rfl)
 
 /-! ### The bytes of a `CompressedEdwardsY` -/
 

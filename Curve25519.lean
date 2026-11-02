@@ -13,6 +13,7 @@ public import Curve25519.Ristretto.Map
 public import Curve25519.X25519
 public import Curve25519.Montgomery
 public import Curve25519.Models
+public import Curve25519.ToEllipticCurve
 import Curve25519.Proofs.X25519.TestVector
 import Curve25519.Proofs.Ristretto.TestVector
 import Curve25519.Proofs.Ristretto.InvalidVector

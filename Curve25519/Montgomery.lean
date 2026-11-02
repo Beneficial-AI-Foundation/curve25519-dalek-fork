@@ -6,7 +6,6 @@ module
 public import Curve25519.Edwards.Order
 public import Curve25519.X25519
 import Curve25519.Proofs.Edwards.Certs
-import Curve25519.Ristretto.Even
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.LinearCombination
 public section
@@ -111,13 +110,6 @@ theorem edwardsToMontgomery_symm_y (Q : montgomery.Point) (hQ : Q ≠ 0) :
   rw [edwardsToMontgomery_symm_apply,
     toMontgomeryEquiv_symm_y _ ((AddEquiv.map_ne_zero_iff _).mpr hQ), u_rescaleEquiv_symm]
 
-/-- The 2-descent criterion on the Montgomery side: a point is even iff the `u`-coordinate of
-its image in `montgomery` is a square (`even_iff_isSquare_u`; rescaling keeps `u`). -/
-theorem even_iff_isSquare_edwardsToMontgomery_u (P : edwards.Point) :
-    Even P ↔ IsSquare (edwardsToMontgomery P).u := by
-  rw [u_edwardsToMontgomery, ← u_toMontgomeryEquiv]
-  exact even_iff_isSquare_u P
-
 /-! ### The Montgomery basepoint -/
 
 /-- The basepoint of `montgomery`: the image of `basepoint`, with `u = 9` (RFC 7748 §4.1). -/
@@ -130,7 +122,7 @@ theorem montgomeryBasepoint_def : montgomeryBasepoint = edwardsToMontgomery base
 
 /-- The Montgomery basepoint has `u = 9`: `(1 + 4/5) / (1 - 4/5) = 9`. -/
 theorem u_montgomeryBasepoint : montgomeryBasepoint.u = 9 := by
-  have h5 := five_ne_zero
+  have h5 : (5 : ZMod p) ≠ 0 := NeZero.ne 5
   have h15 : (1 : ZMod p) - 4 / 5 ≠ 0 := by
     rw [sub_ne_zero]
     intro h
@@ -152,24 +144,11 @@ theorem v_montgomeryBasepoint : montgomeryBasepoint.v =
     mul_div_assoc', div_eq_iff hden]
   exact Proofs.basepoint_v_mul_den.symm
 
-theorem montgomeryBasepoint_ne_zero : montgomeryBasepoint ≠ 0 := by
-  rw [montgomeryBasepoint_def]
-  exact (AddEquiv.map_ne_zero_iff _).mpr basepoint_ne_zero
-
-/-- `L • montgomeryBasepoint = 0`. -/
-theorem L_nsmul_montgomeryBasepoint : L • montgomeryBasepoint = 0 := by
-  rw [montgomeryBasepoint_def, ← map_nsmul, L_nsmul_basepoint, map_zero]
-
 /-- The Montgomery basepoint has prime order `L`. -/
 theorem addOrderOf_montgomeryBasepoint : addOrderOf montgomeryBasepoint = L := by
   rw [montgomeryBasepoint_def, AddEquiv.addOrderOf_eq, addOrderOf_basepoint]
 
 /-! ### `x25519` on the basepoint and on Edwards points -/
-
-/-- The encoding of the basepoint coordinate `9`. -/
-theorem encodeU_nine : encodeU 9 = 9 := by
-  unfold encodeU
-  exact ZMod.val_ofNat_of_lt nine_lt_p
 
 /-- `x25519 k 9` is the `u`-coordinate of `clamp k • montgomeryBasepoint`. -/
 theorem x25519_basepoint (k : ℕ) : x25519 k 9 = encodeU (clamp k • montgomeryBasepoint).u := by
@@ -191,29 +170,18 @@ theorem x25519_edwards (k : ℕ) (P : edwards.Point) :
 
 /-! ### The twist -/
 
-@[no_expose] noncomputable instance instFintypeMontgomeryTwistPoint :
-    Fintype montgomeryTwist.Point :=
-  Fintype.ofFinite _
-
 /-- `montgomery` and its twist have `2 p + 2` points in total (the generic
 `MontgomeryModel.card_add_card_twist`, as `2` is not a square). -/
 theorem card_montgomery_add_card_twist :
-    Fintype.card montgomery.Point + Fintype.card montgomeryTwist.Point = 2 * p + 2 := by
+    Nat.card montgomery.Point + Nat.card montgomeryTwist.Point = 2 * p + 2 := by
   have h := card_add_card_twist montgomery two_ne_zero IsNonsingular.B_ne_zero not_isSquare_two
-  rwa [← montgomeryTwist_def, Nat.card_eq_fintype_card, Nat.card_eq_fintype_card, ZMod.card] at h
+  rwa [← montgomeryTwist_def, ZMod.card] at h
 
 /-- **The cardinality of the twist**: `4 L'` points, `L' = twistL`. -/
-theorem card_twist : Fintype.card montgomeryTwist.Point = 4 * twistL := by
+theorem card_twist : Nat.card montgomeryTwist.Point = 4 * twistL := by
   have h := card_montgomery_add_card_twist
   rw [card_montgomery, two_mul_p_add_two] at h
   omega
-
-theorem natCard_twist : Nat.card montgomeryTwist.Point = 4 * twistL := by
-  rw [Nat.card_eq_fintype_card, card_twist]
-
-/-- Every point of the twist is killed by `4 L'`. -/
-theorem four_mul_twistL_nsmul (P : montgomeryTwist.Point) : (4 * twistL) • P = 0 :=
-  card_twist ▸ card_nsmul_eq_zero
 
 /-- Every `u` is the `u`-coordinate of a point of `montgomery` or of `montgomeryTwist`
 (`MontgomeryModel.exists_point_u_or_twist`, as `2` is not a square). -/

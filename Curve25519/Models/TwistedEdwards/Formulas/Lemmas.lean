@@ -6,6 +6,7 @@ module
 public import Curve25519.Models.TwistedEdwards.Formulas.Defs
 public import EllipticCurve.TwistedEdwards.Formulas.Lemmas
 import all Curve25519.Models.TwistedEdwards.Formulas.Defs
+import Curve25519.Models.TwistedEdwards.Coords.Lemmas
 import Mathlib.Tactic.Ring
 public section
 
