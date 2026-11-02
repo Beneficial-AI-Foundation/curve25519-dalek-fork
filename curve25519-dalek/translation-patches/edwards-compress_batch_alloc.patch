@@ -9,7 +9,7 @@ diff --git a/curve25519-dalek/src/edwards.rs b/curve25519-dalek/src/edwards.rs
 index 2a75012..e208c30 100644
 --- a/curve25519-dalek/src/edwards.rs
 +++ b/curve25519-dalek/src/edwards.rs
-@@ -625,26 +625,29 @@ pub fn compress(&self) -> CompressedEdwardsY {
+@@ -625,26 +625,27 @@ pub fn compress(&self) -> CompressedEdwardsY {
          core::array::from_fn(|i| {
              let x = &inputs[i].X * &zs[i];
              let y = &inputs[i].Y * &zs[i];
@@ -37,12 +37,10 @@ index 2a75012..e208c30 100644
 -            })
 -            .collect()
 +        let mut out = Vec::with_capacity(inputs.len());
-+        let mut i = 0;
-+        while i < inputs.len() {
++        for i in 0..inputs.len() {
 +            let x = &inputs[i].X * &zs[i];
 +            let y = &inputs[i].Y * &zs[i];
 +            out.push(AffinePoint { x, y }.compress());
-+            i += 1;
 +        }
 +        out
      }
