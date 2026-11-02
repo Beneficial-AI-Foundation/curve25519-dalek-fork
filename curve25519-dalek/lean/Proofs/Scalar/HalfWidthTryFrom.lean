@@ -43,22 +43,24 @@ private theorem Aeneas.Std.Array.asNat_lt_pow_iff {ty : UScalarTy} {n : Usize} (
 
 namespace Curve25519Dalek.scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple
 
-/-- The loop of `try_from` checks that the bytes from `i` to `31` are zero. -/
+/-- The loop of `try_from` checks that the bytes from `i` to the end of the array are zero. -/
 @[local step]
-private theorem try_from_loop_spec (value : Scalar) (i : Usize) (hi : 16 ≤ i.val ∧ i.val ≤ 32)
+private theorem try_from_loop_spec (value : Scalar) (i : Usize)
+    (hi : 16 ≤ i.val ∧ i.val ≤ value.bytes.val.length)
     (hz : ∀ j : ℕ, 16 ≤ j → j < i.val → value.bytes[j]!.val = 0) :
     try_from_loop value i ⦃ (r : core.result.Result HalfWidthScalar Unit) =>
-      ((∀ j : ℕ, 16 ≤ j → j < 32 → value.bytes[j]!.val = 0) → r = .Ok value) ∧
-      (¬ (∀ j : ℕ, 16 ≤ j → j < 32 → value.bytes[j]!.val = 0) → r = .Err ()) ⦄ := by
+      ((∀ j : ℕ, 16 ≤ j → j < value.bytes.val.length → value.bytes[j]!.val = 0) →
+        r = .Ok value) ∧
+      (¬ (∀ j : ℕ, 16 ≤ j → j < value.bytes.val.length → value.bytes[j]!.val = 0) →
+        r = .Err ()) ⦄ := by
   unfold try_from_loop
-  apply loop.spec_decr_nat (measure := fun i => 32 - i.val)
-    (inv := fun i => (16 ≤ i.val ∧ i.val ≤ 32) ∧
+  apply loop.spec_decr_nat (measure := fun i => value.bytes.val.length - i.val)
+    (inv := fun i => (16 ≤ i.val ∧ i.val ≤ value.bytes.val.length) ∧
       ∀ j : ℕ, 16 ≤ j → j < i.val → value.bytes[j]!.val = 0)
   · rintro k ⟨hk, hzk⟩
     unfold try_from_loop.body
-    have hlen : (Slice.len (Array.to_slice value.bytes)).val = 32 := by simp
     simp only [lift, bind_ok]
-    by_cases hlt : k.val < 32
+    by_cases hlt : k.val < value.bytes.val.length
     · simp only [show k < Slice.len (Array.to_slice value.bytes) by scalar_tac, ite_true]
       step with Array.index_usize_getElem!_spec as ⟨x, hx⟩
       by_cases hx0 : x = 0#u8
@@ -75,7 +77,7 @@ private theorem try_from_loop_spec (value : Scalar) (i : Usize) (hi : 16 ≤ i.v
         exact UScalar.eq_of_val_eq (hall k.val hk.1 hlt)
     · simp only [show ¬ k < Slice.len (Array.to_slice value.bytes) by scalar_tac, ite_false,
         WP.spec_ok]
-      exact ⟨fun _ => trivial, fun hn => absurd (fun j hj hj32 => hzk j hj (by scalar_tac)) hn⟩
+      exact ⟨fun _ => trivial, fun hn => absurd (fun j hj hjlen => hzk j hj (by scalar_tac)) hn⟩
   · exact ⟨hi, hz⟩
 
 @[step]
@@ -86,7 +88,7 @@ theorem try_from_spec (value : Scalar) :
   step with try_from_loop_spec as ⟨r, hok, herr⟩
   have hiff := Array.asNat_lt_pow_iff 8 16 value.bytes (by simp)
     fun j _ => (value.bytes[j]!).hBounds
-  simp only [scalar.Scalar.asNat_def] at *
+  simp only [scalar.Scalar.asNat_def, Array.property] at *
   refine ⟨fun hlt => hok (hiff.mp hlt), fun hge => herr fun hall => ?_⟩
   exact absurd (hiff.mpr hall) (Nat.not_lt.mpr hge)
 
