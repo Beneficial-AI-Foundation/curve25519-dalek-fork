@@ -32,8 +32,8 @@ namespace «i686-tables»
 theorem EIGHT_TORSION_toExtended :
     EIGHT_TORSION.«i686-tables»
       ⦃ (r : Array edwards.EdwardsPoint.«i686-tables» 8#usize) =>
-      ∀ i : Fin 8, r[i.val]!.toExtended = ((i : ℕ) • torsion8).toExtended ∧ r[i.val]!.LimbsLt 26 ⦄
-          := by
+      ∀ i : Fin 8, r[i.val]!.toExtended = ((i : ℕ) • torsion8).toExtended ∧
+        r[i.val]!.LimbsLt 26 ⦄ := by
   unfold EIGHT_TORSION.«i686-tables» EIGHT_TORSION_INNER_DOC_HIDDEN.«i686-tables»
   step as ⟨f0, h0⟩
   step as ⟨f1, h1⟩
@@ -179,8 +179,8 @@ namespace «i686-no-tables»
 theorem EIGHT_TORSION_toExtended :
     EIGHT_TORSION.«i686-no-tables»
       ⦃ (r : Array edwards.EdwardsPoint.«i686-no-tables» 8#usize) =>
-      ∀ i : Fin 8, r[i.val]!.toExtended = ((i : ℕ) • torsion8).toExtended ∧ r[i.val]!.LimbsLt 26 ⦄
-          := by
+      ∀ i : Fin 8, r[i.val]!.toExtended = ((i : ℕ) • torsion8).toExtended ∧
+        r[i.val]!.LimbsLt 26 ⦄ := by
   unfold EIGHT_TORSION.«i686-no-tables» EIGHT_TORSION_INNER_DOC_HIDDEN.«i686-no-tables»
   step as ⟨f0, h0⟩
   step as ⟨f1, h1⟩

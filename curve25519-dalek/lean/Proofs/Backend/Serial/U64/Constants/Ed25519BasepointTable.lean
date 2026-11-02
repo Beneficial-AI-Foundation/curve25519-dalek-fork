@@ -71,9 +71,9 @@ is the lookup table of `2^(8 i) • B`); limbs `< 2^54`. -/
 theorem ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN_spec :
     ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN
       ⦃ (r : edwards.EdwardsBasepointTable.«x86_64-tables») =>
-        r.Represents basepoint ∧ r.LimbsLt 54 ⦄ := by
+        r.IsTable ∧ r.point = basepoint ∧ r.LimbsLt 54 ⦄ := by
   rw [inner_eq, spec_ok]
-  constructor
+  refine edwards.EdwardsBasepointTable.«x86_64-tables».isTable_and_of_rows ?_ ?_
   · intro i hi j hj
     rw [mkTable_get tableLimbs_length hi hj]
     have h := checkTable_sound onCurve_basepointExt table_check (by rw [tableLimbs_length]) i hi
@@ -88,20 +88,10 @@ theorem ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN_spec :
 /-- `ED25519_BASEPOINT_TABLE`: the radix-`16` basepoint table of `B` (row `i` is the lookup
 table of `2^(8 i) • B`); limbs `< 2^54`. -/
 @[step]
-theorem ED25519_BASEPOINT_TABLE_represents :
-    ED25519_BASEPOINT_TABLE ⦃ (r : edwards.EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents basepoint ∧ r.LimbsLt 54 ⦄ := by
-  unfold ED25519_BASEPOINT_TABLE
-  exact ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN_spec
-
-/-- `ED25519_BASEPOINT_TABLE`: the radix-`16` basepoint table of `B` (row `i` is the lookup
-table of `2^(8 i) • B`); limbs `< 2^54`. -/
 theorem ED25519_BASEPOINT_TABLE_spec :
     ED25519_BASEPOINT_TABLE ⦃ (r : edwards.EdwardsBasepointTable.«x86_64-tables») =>
       r.IsTable ∧ r.point = basepoint ∧ r.LimbsLt 54 ⦄ := by
-  refine spec_mono (ED25519_BASEPOINT_TABLE_represents) fun r h => ?_
-  obtain ⟨hr, hb⟩ := h
-  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
-  exact ⟨h1, h2, hb⟩
+  unfold ED25519_BASEPOINT_TABLE
+  exact ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN_spec
 
 end Curve25519Dalek.backend.serial.u64.constants

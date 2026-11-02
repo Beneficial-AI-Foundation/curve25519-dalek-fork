@@ -48,23 +48,13 @@ theorem RISTRETTO_BASEPOINT_POINT_spec :
 
 /-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^54`. -/
 @[step]
-theorem RISTRETTO_BASEPOINT_TABLE_represents :
-    RISTRETTO_BASEPOINT_TABLE.«x86_64-tables»
-      ⦃ (r : ristretto.RistrettoBasepointTable.«x86_64-tables») =>
-        r.Represents basepoint ∧ r.LimbsLt 54 ⦄ := by
-  unfold RISTRETTO_BASEPOINT_TABLE.«x86_64-tables»
-  step with backend.serial.u64.constants.ED25519_BASEPOINT_TABLE_represents as ⟨r, h1, h2⟩
-  exact ⟨h1, h2⟩
-
-/-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^54`. -/
 theorem RISTRETTO_BASEPOINT_TABLE_spec :
     RISTRETTO_BASEPOINT_TABLE.«x86_64-tables»
       ⦃ (r : ristretto.RistrettoBasepointTable.«x86_64-tables») =>
         r.IsTable ∧ r.point = basepoint ∧ r.LimbsLt 54 ⦄ := by
-  refine spec_mono (RISTRETTO_BASEPOINT_TABLE_represents) fun r h => ?_
-  obtain ⟨hr, hb⟩ := h
-  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
-  exact ⟨h1, h2, hb⟩
+  unfold RISTRETTO_BASEPOINT_TABLE.«x86_64-tables»
+  step with backend.serial.u64.constants.ED25519_BASEPOINT_TABLE_spec as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
 
 end «x86_64-tables»
 
@@ -83,23 +73,13 @@ theorem RISTRETTO_BASEPOINT_POINT_spec :
 
 /-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^27`. -/
 @[step]
-theorem RISTRETTO_BASEPOINT_TABLE_represents :
-    RISTRETTO_BASEPOINT_TABLE.«i686-tables»
-      ⦃ (r : ristretto.RistrettoBasepointTable.«i686-tables») =>
-        r.Represents basepoint ∧ r.LimbsLt 27 ⦄ := by
-  unfold RISTRETTO_BASEPOINT_TABLE.«i686-tables»
-  step with backend.serial.u32.constants.ED25519_BASEPOINT_TABLE_represents as ⟨r, h1, h2⟩
-  exact ⟨h1, h2⟩
-
-/-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^27`. -/
 theorem RISTRETTO_BASEPOINT_TABLE_spec :
     RISTRETTO_BASEPOINT_TABLE.«i686-tables»
       ⦃ (r : ristretto.RistrettoBasepointTable.«i686-tables») =>
         r.IsTable ∧ r.point = basepoint ∧ r.LimbsLt 27 ⦄ := by
-  refine spec_mono (RISTRETTO_BASEPOINT_TABLE_represents) fun r h => ?_
-  obtain ⟨hr, hb⟩ := h
-  obtain ⟨h1, h2⟩ := (r.represents_iff _).mp hr
-  exact ⟨h1, h2, hb⟩
+  unfold RISTRETTO_BASEPOINT_TABLE.«i686-tables»
+  step with backend.serial.u32.constants.ED25519_BASEPOINT_TABLE_spec as ⟨r, h1, h2, h3⟩
+  exact ⟨h1, h2, h3⟩
 
 end «i686-tables»
 
