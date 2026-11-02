@@ -1,6 +1,6 @@
 Translation patch: EdwardsPoint::compress_batch_alloc
 
-Change: `map`/`collect` and `zip`/`map`/`collect` become index loops.
+Change: `map`/`collect` and `zip`/`map`/`collect` become for loops.
 Why: Aeneas only models `Iterator::next` (aeneas#1057).
 Behaviour: identical.
 Relies on: `invert_batch_alloc` takes `&mut [FieldElement]`, so it keeps the length `n`.
