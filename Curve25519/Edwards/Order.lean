@@ -25,10 +25,6 @@ open TwistedEdwardsModel
 
 /-! ### Finiteness and the cardinality bound -/
 
-instance instFiniteEdwardsPoint : Finite edwards.Point :=
-  Finite.of_injective (fun P : edwards.Point => (P.x, P.y)) fun _ _ h =>
-    Point.ext (congrArg Prod.fst h) (congrArg Prod.snd h)
-
 @[no_expose] noncomputable instance instFintypeEdwardsPoint : Fintype edwards.Point :=
   Fintype.ofFinite _
 
@@ -214,9 +210,6 @@ theorem L_nsmul_eq_zero_iff (P : edwards.Point) : L • P = 0 ↔ ∃ n : ℕ, P
 /-- The curve has `8 L` points. -/
 theorem card_curve : Fintype.card curve.Point = 8 * L := by
   rw [← toCurve_edwards, ← Fintype.card_congr edwards.pointEquiv.toEquiv, card_edwards]
-
-instance instFiniteMontgomeryPoint : Finite montgomery.Point :=
-  Finite.of_equiv _ montgomery.pointEquiv.symm.toEquiv
 
 @[no_expose] noncomputable instance instFintypeMontgomeryPoint : Fintype montgomery.Point :=
   Fintype.ofFinite _

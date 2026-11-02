@@ -55,9 +55,9 @@ theorem rel_iff_coords (P Q : edwards.Point) :
         (Q.x = -(P.y * sqrtM1) ∧ Q.y = -(P.x * sqrtM1)) := by
   constructor
   · intro h
-    have hT : Q - P ∈ edwards.torsion4 := (rel_iff_sub_mem Q P).mp (rel_symm h)
+    have hT : Q - P ∈ AddSubgroup.torsionBy edwards.Point 4 := (rel_iff_sub_mem Q P).mp (rel_symm h)
     have hQ : Q = P + (Q - P) := by abel
-    rw [mem_torsion4_iff_eightTorsion] at hT
+    rw [mem_torsionBy_four_iff_eightTorsion] at hT
     rcases hT with hT | hT | hT | hT <;> rw [hT] at hQ
     · left
       rw [hQ, add_zero]
@@ -120,8 +120,8 @@ theorem eq_of_rel_of_canonical {P Q : edwards.Point} (h : edwards.Rel P Q)
 
 /-- A point in the class of an even point is even. -/
 theorem even_of_rel {P Q : edwards.Point} (hP : Even P) (h : edwards.Rel P Q) : Even Q := by
-  have hT : Q - P ∈ edwards.torsion4 := (rel_iff_sub_mem Q P).mp (rel_symm h)
-  have hT' : Even (Q - P) := AddSubgroup.mem_even.mp (torsion4_le_even hT)
+  have hT : Q - P ∈ AddSubgroup.torsionBy edwards.Point 4 := (rel_iff_sub_mem Q P).mp (rel_symm h)
+  have hT' : Even (Q - P) := AddSubgroup.mem_even.mp (torsionBy_four_le_even hT)
   rw [show Q = P + (Q - P) by abel]
   exact hP.add hT'
 
@@ -499,7 +499,7 @@ theorem decodeRep_encodeRep {P : edwards.Point} (hP : Even P) :
   by_cases hxy : P.x * P.y = 0
   · refine ⟨0, ?_, ?_⟩
     · rw [encodeRep_of_mul_eq_zero hxy, decodeRep_zero]
-    · rw [rel_iff_sub_mem, sub_zero, TwistedEdwardsModel.mem_torsion4_iff]
+    · rw [rel_iff_sub_mem, sub_zero, TwistedEdwardsModel.mem_torsionBy_four_iff]
       exact mul_eq_zero.mp hxy
   · obtain ⟨C, hrel, hCx, hCy⟩ := exists_canon P
     have hW := encW_mul_sq_eq_one hP hxy

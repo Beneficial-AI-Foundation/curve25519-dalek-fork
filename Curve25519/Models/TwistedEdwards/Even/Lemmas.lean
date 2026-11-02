@@ -4,23 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519.Models.TwistedEdwards.Even.Defs
-public import Mathlib.Algebra.Module.Torsion.Basic
 import all Curve25519.Models.TwistedEdwards.Even.Defs
 import EllipticCurve.TwistedEdwards.Even
 import EllipticCurve.TwistedEdwards.Lemmas
-import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.LinearCombination
-import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 public section
 
-/-! # The 4-torsion of a complete twisted Edwards model: characterising lemmas
+/-! # The Decaf/Ristretto relation on a complete twisted Edwards model: characterising lemmas
 
-The audited statements about `Curve25519.Models.TwistedEdwards.Even.Defs`: the 4-torsion in
-coordinates (`mem_torsion4_iff`: `P ∈ E.torsion4 ↔ x = 0 ∨ y = 0`, from
-`TwistedEdwardsModel.four_nsmul_eq_zero_iff` of `EllipticCurve.TwistedEdwards.Even`;
-`torsion4_eq_torsionBy` relates it to Mathlib's `Submodule.torsionBy`), and the relation `E.Rel`:
-an equivalence relation compatible with the group law, `rel_iff` in coordinates. -/
+The audited statements about `Curve25519.Models.TwistedEdwards.Even.Defs`: the relation `E.Rel`
+is an equivalence relation compatible with the group law, and `rel_iff` states it in coordinates,
+through the 4-torsion in coordinates (`mem_torsionBy_four_iff` of
+`EllipticCurve.TwistedEdwards.Even`). -/
 
 universe u
 
@@ -28,24 +24,11 @@ namespace TwistedEdwardsModel
 
 variable {F : Type u} [Field F] {E : TwistedEdwardsModel F} [E.IsComplete]
 
-/-! ### The 4-torsion in coordinates -/
-
-/-- The 4-torsion in coordinates. -/
-theorem mem_torsion4_iff [NeZero (6 : F)] (P : E.Point) :
-    P ∈ E.torsion4 ↔ P.x = 0 ∨ P.y = 0 := by
-  rw [mem_torsion4, four_nsmul_eq_zero_iff]
-
-/-- The 4-torsion is Mathlib's `Submodule.torsionBy ℤ E.Point 4`. -/
-theorem torsion4_eq_torsionBy (E : TwistedEdwardsModel F) [E.IsComplete] :
-    E.torsion4 = (Submodule.torsionBy ℤ E.Point 4).toAddSubgroup := by
-  ext P
-  rw [mem_torsion4, Submodule.mem_toAddSubgroup, Submodule.mem_torsionBy_iff,
-    show (4 : ℤ) = ((4 : ℕ) : ℤ) from rfl, natCast_zsmul]
-
 /-! ### The relation -/
 
-/-- `E.Rel P Q` unfolds to `P - Q ∈ E.torsion4`. -/
-theorem rel_iff_sub_mem (P Q : E.Point) : E.Rel P Q ↔ P - Q ∈ E.torsion4 :=
+/-- `E.Rel P Q` unfolds to `P - Q ∈ E.Point[4]`. -/
+theorem rel_iff_sub_mem (P Q : E.Point) :
+    E.Rel P Q ↔ P - Q ∈ AddSubgroup.torsionBy E.Point 4 :=
   Iff.rfl
 
 theorem rel_refl (P : E.Point) : E.Rel P P := by
@@ -91,7 +74,8 @@ theorem rel_nsmul (n : ℕ) {P Q : E.Point} (h : E.Rel P Q) : E.Rel (n • P) (n
   exact nsmul_mem h n
 
 /-- Adding 4-torsion does not change the class. -/
-theorem rel_add_of_mem {P T : E.Point} (hT : T ∈ E.torsion4) : E.Rel (P + T) P := by
+theorem rel_add_of_mem {P T : E.Point} (hT : T ∈ AddSubgroup.torsionBy E.Point 4) :
+    E.Rel (P + T) P := by
   rw [rel_iff_sub_mem, add_sub_cancel_left]
   exact hT
 
@@ -99,7 +83,7 @@ theorem rel_add_of_mem {P T : E.Point} (hT : T ∈ E.torsion4) : E.Rel (P + T) P
 or `y₁ y₂ + a x₁ x₂ = 0` (then `P - Q` has `y = 0`). -/
 theorem rel_iff [NeZero (6 : F)] (P Q : E.Point) :
     E.Rel P Q ↔ P.x * Q.y = P.y * Q.x ∨ P.y * Q.y + E.a * P.x * Q.x = 0 := by
-  rw [rel_iff_sub_mem, mem_torsion4_iff, sub_x, sub_y]
+  rw [rel_iff_sub_mem, mem_torsionBy_four_iff, sub_x, sub_y]
   unfold addX addY
   rw [div_eq_zero_iff, div_eq_zero_iff, neg_x, neg_y]
   have h₁ := addDen₁_ne_zero P (-Q)

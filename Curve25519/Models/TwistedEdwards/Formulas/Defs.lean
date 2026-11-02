@@ -4,48 +4,26 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 public import Curve25519.Models.TwistedEdwards.Coords.Lemmas
+public import EllipticCurve.TwistedEdwards.Formulas.Defs
 public section
 
-/-! # Twisted Edwards models: formulas in coordinates
+/-! # Twisted Edwards models: mixed additions with Niels points
 
-The group operations in the coordinate systems of `Curve25519.Models.TwistedEdwards.Coords.Defs`,
-as exposed formulas, exactly as curve25519-dalek's `curve_models.rs` computes them:
+The four mixed additions of curve25519-dalek's `curve_models.rs`, as exposed formulas, exactly as
+the code computes them: `Extended.addProjectiveNiels`, `Extended.subProjectiveNiels`,
+`Extended.addAffineNiels`, `Extended.subAffineNiels` (`Add`/`Sub` of `EdwardsPoint` with a Niels
+point), all into completed coordinates. These are the `a = -1` formulas of
+Hisil–Wong–Carter–Dawson 2008; they are defined for every model and correct when `a = -1`
+(`Curve25519.Models.TwistedEdwards.Formulas.Lemmas`).
 
-* `Projective.double` ("dbl-2008-bbjlp", `ProjectivePoint::double`), the four mixed
-  additions `Extended.addProjectiveNiels`, `Extended.subProjectiveNiels`, `Extended.addAffineNiels`,
-  `Extended.subAffineNiels` (`Add`/`Sub` of `EdwardsPoint` with a Niels point), all into
-  completed coordinates. These are the `a = -1` formulas of Hisil–Wong–Carter–Dawson 2008; they
-  are defined for every model and correct when `a = -1`
-  (`Curve25519.Models.TwistedEdwards.Formulas.Lemmas`).
-* `Extended.add` ("add-2008-hwcd", the complete extended addition for any `a`),
-  `Extended.double`, the structurally recursive `Extended.nsmul` by double-and-add, and the
-  zero test `Extended.IsZero`: field inversion appears nowhere, so that kernel `decide` can
-  evaluate them on constants (the certificate engine).
-
-Correctness with respect to `toPoint` is in `Curve25519.Models.TwistedEdwards.Formulas.Lemmas`. -/
+The other formulas the code uses (projective doubling, the complete extended addition, doubling
+and scalar multiplication, the zero test) are those of `EllipticCurve.TwistedEdwards.Formulas`. -/
 
 universe u
 
 namespace TwistedEdwardsModel
 
 variable {F : Type u} [Field F] {E : TwistedEdwardsModel F}
-
-namespace Projective
-
-/-- Doubling `(X : Y : Z) ↦ ((X : Z), (Y : T))` by "dbl-2008-bbjlp" for `a = -1`
-(`ProjectivePoint::double`): `XX = X²`, `YY = Y²`, `ZZ2 = 2 Z²`, `X_plus_Y_sq = (X + Y)²`,
-`YY_plus_XX = YY + XX`, `YY_minus_XX = YY - XX`; the result is
-`(X_plus_Y_sq - YY_plus_XX, YY_plus_XX, YY_minus_XX, ZZ2 - YY_minus_XX)`. -/
-@[expose] def double (P : E.Projective) : E.Completed :=
-  let XX := P.X ^ 2
-  let YY := P.Y ^ 2
-  let ZZ2 := 2 * P.Z ^ 2
-  let X_plus_Y_sq := (P.X + P.Y) ^ 2
-  let YY_plus_XX := YY + XX
-  let YY_minus_XX := YY - XX
-  ⟨X_plus_Y_sq - YY_plus_XX, YY_plus_XX, YY_minus_XX, ZZ2 - YY_minus_XX⟩
-
-end Projective
 
 namespace Extended
 
@@ -102,49 +80,6 @@ namespace Extended
   let Txy2d := P.T * Q.xy2d
   let Z2 := P.Z + P.Z
   ⟨PM - MP, PM + MP, Z2 - Txy2d, Z2 + Txy2d⟩
-
-/-- The complete addition in extended coordinates for any `a`, "add-2008-hwcd"
-(Hisil–Wong–Carter–Dawson 2008, §3.1): `A = X₁ X₂`, `B = Y₁ Y₂`, `C = d T₁ T₂`,
-`D = Z₁ Z₂`, `E = (X₁ + Y₁) (X₂ + Y₂) - A - B`, `F = D - C`, `G = D + C`, `H = B - a A`; the
-result is `(E F : G H : F G : E H)`. No inversion: kernel `decide` can evaluate it. -/
-@[expose] def add (P Q : E.Extended) : E.Extended :=
-  let A := P.X * Q.X
-  let B := P.Y * Q.Y
-  let C := E.d * P.T * Q.T
-  let D := P.Z * Q.Z
-  let e := (P.X + P.Y) * (Q.X + Q.Y) - A - B
-  let f := D - C
-  let G := D + C
-  let H := B - E.a * A
-  ⟨e * f, G * H, f * G, e * H⟩
-
-/-- Doubling in extended coordinates: `P.add P`. -/
-@[expose] def double (P : E.Extended) : E.Extended :=
-  P.add P
-
-/-- Double-and-add with fuel `k`: `nsmulAux P k n` represents `n • P` for `n < 2 ^ k`
-(`nsmulAux_spec` in `Curve25519.Models.TwistedEdwards.Formulas.Lemmas`). Structural recursion on
-the fuel, so that kernel `decide` can evaluate it. -/
-@[expose] def nsmulAux (P : E.Extended) : ℕ → ℕ → E.Extended
-  | 0, _ => identity
-  | k + 1, n =>
-    if n = 0 then identity
-    else
-      let Q := nsmulAux P k (n / 2)
-      if n % 2 = 0 then Q.double else Q.double.add P
-
-/-- Scalar multiplication `n • P` in extended coordinates by double-and-add on `add`, without
-inversion: the certificate engine for constants (`toPoint_nsmul`). -/
-@[expose] def nsmul (n : ℕ) (P : E.Extended) : E.Extended :=
-  nsmulAux P n n
-
-/-- The zero test without inversion: `(X : Y : Z : T)` represents `0 = (0, 1)` exactly when
-`X = 0` and `Y = Z` (`isZero_iff`). -/
-@[expose] def IsZero (P : E.Extended) : Prop :=
-  P.X = 0 ∧ P.Y = P.Z
-
-instance instDecidableIsZero [DecidableEq F] (P : E.Extended) : Decidable P.IsZero :=
-  inferInstanceAs (Decidable (_ ∧ _))
 
 end Extended
 

@@ -24,9 +24,9 @@ ristretto255 (RFC 9496) represents its elements by **even** Edwards points (`Eve
 specifications speak about representatives, and these are the facts they need.
 
 * The 4-torsion is `{0, (∓√-1, 0), (0, -1)} = {eightTorsion 0, 2, 4, 6}`
-  (`mem_torsion4_iff_eightTorsion`).
+  (`mem_torsionBy_four_iff_eightTorsion`).
 * The even points are the points killed by `4 L` (`even_iff_four_mul_L_nsmul`), a subgroup of
-  order `4 L` (`card_even`) containing the 4-torsion (`torsion4_le_even`) and the basepoint
+  order `4 L` (`card_even`) containing the 4-torsion (`torsionBy_four_le_even`) and the basepoint
   (`even_basepoint`).
 * Two representatives are related iff `x₁ y₂ = y₁ x₂` or `x₁ x₂ = y₁ y₂` (`rel_iff_formula`,
   RFC 9496's equality, what `RistrettoPoint::ct_eq` computes).
@@ -34,7 +34,7 @@ specifications speak about representatives, and these are the facts they need.
   Decaf: the validity test of the encoding).
 
 The 2-descent: the generic subgroup `edwards.descent = {P | IsSquare ((a - d)(1 - y²))}` of
-`Curve25519.Models.TwistedEdwards.Even.Lemmas` contains the even points, `a - d` is a square, and
+`EllipticCurve.TwistedEdwards.Even` contains the even points, `a - d` is a square, and
 `torsion8 ∉ descent` by Euler's criterion (`one_sub_torsion8_y_sq_pow_p_div_two` in
 `Curve25519.Proofs.Ristretto.DescentCert`); as `|even| = 4 L` and `|edwards.Point| = 8 L`,
 `descent` is the even subgroup (`descent_eq_even`). -/
@@ -57,10 +57,10 @@ theorem four_nsmul_eightTorsion_eq_zero_iff (i : Fin 8) :
 
 /-- **The 4-torsion** of `edwards` is `{0, eightTorsion 2, eightTorsion 4, eightTorsion 6}`, i.e.
 `{(0, 1), (-√-1, 0), (0, -1), (√-1, 0)}`. -/
-theorem mem_torsion4_iff_eightTorsion (P : edwards.Point) :
-    P ∈ edwards.torsion4 ↔
+theorem mem_torsionBy_four_iff_eightTorsion (P : edwards.Point) :
+    P ∈ AddSubgroup.torsionBy edwards.Point 4 ↔
       P = 0 ∨ P = eightTorsion 2 ∨ P = eightTorsion 4 ∨ P = eightTorsion 6 := by
-  rw [mem_torsion4]
+  rw [show (4 : ℤ) = ((4 : ℕ) : ℤ) from rfl, AddSubgroup.torsionBy.nsmul_iff]
   constructor
   · intro h
     have h8 : 8 • P = 0 := by
@@ -111,9 +111,10 @@ theorem even_iff_four_mul_L_nsmul (P : edwards.Point) : Even P ↔ (4 * L) • P
       mul_smul (n : ℕ) L, L_nsmul_basepoint, smul_zero, add_zero]
 
 /-- The 4-torsion consists of even points. -/
-theorem torsion4_le_even : edwards.torsion4 ≤ AddSubgroup.even edwards.Point := by
+theorem torsionBy_four_le_even :
+    AddSubgroup.torsionBy edwards.Point 4 ≤ AddSubgroup.even edwards.Point := by
   intro P hP
-  rw [mem_torsion4] at hP
+  rw [show (4 : ℤ) = ((4 : ℕ) : ℤ) from rfl, AddSubgroup.torsionBy.nsmul_iff] at hP
   rw [AddSubgroup.mem_even, even_iff_four_mul_L_nsmul, mul_comm, ← smul_smul, hP, smul_zero]
 
 /-- The generator `torsion8 + basepoint` of `edwards.Point`. -/
@@ -165,16 +166,6 @@ theorem rel_iff_formula (P Q : edwards.Point) :
   · linear_combination -h
 
 /-! ### The 2-descent -/
-
-private theorem isSquare_sq_mul_iff {c x : ZMod p} (hc : c ≠ 0) :
-    IsSquare (c ^ 2 * x) ↔ IsSquare x := by
-  constructor
-  · rintro ⟨r, hr⟩
-    refine ⟨r / c, ?_⟩
-    rw [div_mul_div_comm, eq_div_iff (mul_ne_zero hc hc), ← hr]
-    ring
-  · rintro ⟨r, hr⟩
-    exact ⟨c * r, by rw [hr]; ring⟩
 
 /-- `a - d = (2 / sqrtNegAAddTwo)²` is a square. -/
 theorem a_sub_d_eq_sq : a - d = (2 / sqrtNegAAddTwo) ^ 2 := by

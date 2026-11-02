@@ -15,7 +15,7 @@ maxRecDepth = 10000
 [[require]]
 name = "EllipticCurve"
 git = "https://github.com/Beneficial-AI-Foundation/elliptic-curve.git"
-rev = "72c8ba2d137a227559b133d39ccae383f6147d7f"
+rev = "4015c7cfab714640e77500bdbde6e64face3fbaa"
 
 # The pinned Aeneas version. Also read by `scripts/aeneas-install.sh` to download
 # the charon/aeneas binaries from the GitHub. The `rev` must be a GitHub release tag.

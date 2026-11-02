@@ -14,7 +14,8 @@ For each point structure of `Defs.CurveModels`, `Defs.Edwards` and `Defs.Montgom
 `OnCurve` on the limbs' values (`onCurve_iff_equation`, `onCurve_iff_homogeneous`), the
 coordinates of `toPoint` (`toPoint_x`, `toPoint_y`, `toPoint_of_not_onCurve`), and projective
 equality as point equality (`projEq_iff_toPoint_eq`). Everything is the corresponding lemma of
-`Curve25519.Models.TwistedEdwards.Coords` rewritten through the `_def` lemmas. -/
+`EllipticCurve.TwistedEdwards.Coords` (projective, extended, completed) or
+`Curve25519.Models.TwistedEdwards.Coords` (Niels) rewritten through the `_def` lemmas. -/
 
 open curve25519 TwistedEdwardsModel
 
@@ -69,7 +70,7 @@ theorem toPoint_y {self : ProjectivePoint.«x86_64-tables»} (h : self.OnCurve) 
 
 theorem toPoint_of_not_onCurve {self : ProjectivePoint.«x86_64-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Projective.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Projective.toPoint_eq_zero_of_not_onCurve h]
 
 theorem projEq_iff_toPoint_eq {self other : ProjectivePoint.«x86_64-tables»} (hP : self.OnCurve)
     (hQ : other.OnCurve) :
@@ -109,7 +110,7 @@ theorem toPoint_y {self : ProjectivePoint.«i686-tables»} (h : self.OnCurve) :
 
 theorem toPoint_of_not_onCurve {self : ProjectivePoint.«i686-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Projective.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Projective.toPoint_eq_zero_of_not_onCurve h]
 
 theorem projEq_iff_toPoint_eq {self other : ProjectivePoint.«i686-tables»} (hP : self.OnCurve)
     (hQ : other.OnCurve) :
@@ -151,7 +152,7 @@ theorem toPoint_y {self : CompletedPoint.«x86_64-tables»} (h : self.OnCurve) :
 
 theorem toPoint_of_not_onCurve {self : CompletedPoint.«x86_64-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Completed.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Completed.toPoint_eq_zero_of_not_onCurve h]
 
 end CompletedPoint.«x86_64-tables»
 
@@ -187,7 +188,7 @@ theorem toPoint_y {self : CompletedPoint.«i686-tables»} (h : self.OnCurve) :
 
 theorem toPoint_of_not_onCurve {self : CompletedPoint.«i686-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Completed.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Completed.toPoint_eq_zero_of_not_onCurve h]
 
 end CompletedPoint.«i686-tables»
 
@@ -400,7 +401,7 @@ theorem toPoint_y {self : EdwardsPoint.«x86_64-tables»} (h : self.OnCurve) :
 
 theorem toPoint_of_not_onCurve {self : EdwardsPoint.«x86_64-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Extended.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Extended.toPoint_eq_zero_of_not_onCurve h]
 
 /-- `ProjEq` on the limbs' values: `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁`. -/
 theorem projEq_iff (self other : EdwardsPoint.«x86_64-tables») :
@@ -451,7 +452,7 @@ theorem toPoint_y {self : EdwardsPoint.«i686-tables»} (h : self.OnCurve) :
 
 theorem toPoint_of_not_onCurve {self : EdwardsPoint.«i686-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Extended.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Extended.toPoint_eq_zero_of_not_onCurve h]
 
 /-- `ProjEq` on the limbs' values: `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁`. -/
 theorem projEq_iff (self other : EdwardsPoint.«i686-tables») :
@@ -587,7 +588,7 @@ theorem toPoint_y {self : ProjectivePoint.«x86_64-no-tables»} (h : self.OnCurv
 
 theorem toPoint_of_not_onCurve {self : ProjectivePoint.«x86_64-no-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Projective.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Projective.toPoint_eq_zero_of_not_onCurve h]
 
 theorem projEq_iff_toPoint_eq {self other : ProjectivePoint.«x86_64-no-tables»} (hP : self.OnCurve)
     (hQ : other.OnCurve) :
@@ -627,7 +628,7 @@ theorem toPoint_y {self : ProjectivePoint.«i686-no-tables»} (h : self.OnCurve)
 
 theorem toPoint_of_not_onCurve {self : ProjectivePoint.«i686-no-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Projective.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Projective.toPoint_eq_zero_of_not_onCurve h]
 
 theorem projEq_iff_toPoint_eq {self other : ProjectivePoint.«i686-no-tables»} (hP : self.OnCurve)
     (hQ : other.OnCurve) :
@@ -669,7 +670,7 @@ theorem toPoint_y {self : CompletedPoint.«x86_64-no-tables»} (h : self.OnCurve
 
 theorem toPoint_of_not_onCurve {self : CompletedPoint.«x86_64-no-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Completed.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Completed.toPoint_eq_zero_of_not_onCurve h]
 
 end CompletedPoint.«x86_64-no-tables»
 
@@ -705,7 +706,7 @@ theorem toPoint_y {self : CompletedPoint.«i686-no-tables»} (h : self.OnCurve) 
 
 theorem toPoint_of_not_onCurve {self : CompletedPoint.«i686-no-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Completed.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Completed.toPoint_eq_zero_of_not_onCurve h]
 
 end CompletedPoint.«i686-no-tables»
 
@@ -930,7 +931,7 @@ theorem toPoint_y {self : EdwardsPoint.«x86_64-no-tables»} (h : self.OnCurve) 
 
 theorem toPoint_of_not_onCurve {self : EdwardsPoint.«x86_64-no-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Extended.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Extended.toPoint_eq_zero_of_not_onCurve h]
 
 /-- `ProjEq` on the limbs' values: `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁`. -/
 theorem projEq_iff (self other : EdwardsPoint.«x86_64-no-tables») :
@@ -981,7 +982,7 @@ theorem toPoint_y {self : EdwardsPoint.«i686-no-tables»} (h : self.OnCurve) :
 
 theorem toPoint_of_not_onCurve {self : EdwardsPoint.«i686-no-tables»} (h : ¬ self.OnCurve) :
     self.toPoint = 0 := by
-  rw [toPoint_def, Extended.toPoint_of_not_onCurve h]
+  rw [toPoint_def, Extended.toPoint_eq_zero_of_not_onCurve h]
 
 /-- `ProjEq` on the limbs' values: `X₁ Z₂ = X₂ Z₁ ∧ Y₁ Z₂ = Y₂ Z₁`. -/
 theorem projEq_iff (self other : EdwardsPoint.«i686-no-tables») :
