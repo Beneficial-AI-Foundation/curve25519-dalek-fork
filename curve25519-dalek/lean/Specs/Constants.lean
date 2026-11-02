@@ -389,24 +389,16 @@ recall RISTRETTO_BASEPOINT_TABLE_spec :
 
 end «i686-tables»
 
-/-- `X25519_LOW_ORDER_POINTS`: X25519 sends each of the seven points to `0`, whatever the
-scalar ("The output of any scalar multiplied by these points is zero"; true for clamped
-scalars, which is what X25519 uses). -/
-recall X25519_LOW_ORDER_POINTS_spec :
-    ∀ i : Fin 7, ∀ k : ℕ, x25519 k X25519_LOW_ORDER_POINTS[i.val]!.asNat = 0
-
-/-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms X25519_LOW_ORDER_POINTS_spec
-
-/-- `X25519_LOW_ORDER_POINTS` is complete: a point is sent to `0` by X25519 for every scalar iff
-it is equal to one of the seven points as a `MontgomeryPoint`. This is equality with `==`
-(`PartialEq`, which compares the decoded coordinates `u`), not equality of the bytes: other
-encodings of the same coordinates are sent to `0` too. -/
-recall X25519_LOW_ORDER_POINTS_complete (Q : montgomery.MontgomeryPoint) :
+/-- `X25519_LOW_ORDER_POINTS`: a point is sent to `0` by X25519 for every scalar iff it is equal
+to one of the seven points as a `MontgomeryPoint` ("The output of any scalar multiplied by these
+points is zero"; true for clamped scalars, which is what X25519 uses; and no other point has this
+property). This is equality with `==` (`PartialEq`, which compares the decoded coordinates `u`),
+not equality of the bytes: other encodings of the same coordinates are sent to `0` too. In
+particular each of the seven points is sent to `0` (take `Q` to be the point). -/
+recall X25519_LOW_ORDER_POINTS_spec (Q : montgomery.MontgomeryPoint) :
     (∀ k : ℕ, x25519 k Q.asNat = 0) ↔ ∃ i : Fin 7, Q.u = X25519_LOW_ORDER_POINTS[i.val]!.u
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in
-#print axioms X25519_LOW_ORDER_POINTS_complete
+#guard_msgs (whitespace := lax, substring := true) in #print axioms X25519_LOW_ORDER_POINTS_spec
 
 end Curve25519Dalek.constants

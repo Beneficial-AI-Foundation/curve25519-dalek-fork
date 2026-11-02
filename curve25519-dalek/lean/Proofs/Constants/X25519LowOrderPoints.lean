@@ -12,15 +12,16 @@ public section
 
 /-! # `X25519_LOW_ORDER_POINTS`
 
-Each of the seven coordinates is sent to `0` by `u ↦ u(8 • Q)`: a kernel evaluation
-(`decide +kernel`) of the 4-bit ladder on `8` in projective form (`XZ.ladderXZ`, no field
-inversion) ends at infinity (`W = 0`). Clamped scalars are multiples of `8`, so `x25519` sends
-them to `0` (`curve25519.x25519_eq_zero_of_xMul_eight`).
+`X25519_LOW_ORDER_POINTS_spec`: a point is sent to `0` by every scalar iff its coordinate is
+that of one of the seven entries.
 
-Conversely (`X25519_LOW_ORDER_POINTS_complete`), a coordinate sent to `0` by every scalar is one
-of `0`, `1`, `-1`, `u₈`, `u₈⁻¹` (`curve25519.x25519_eq_zero_iff`), and a kernel evaluation
-decodes the entries `0` to `4` to these five. `Curve25519.Basic` is imported with `import all`
-so that the kernel can unfold `p`. -/
+The seven are sent to `0`: each coordinate is sent to `0` by `u ↦ u(8 • Q)`, a kernel evaluation
+(`decide +kernel`) of the 4-bit ladder on `8` in projective form (`XZ.ladderXZ`, no field
+inversion) ending at infinity (`W = 0`), and clamped scalars are multiples of `8`
+(`curve25519.x25519_eq_zero_of_xMul_eight`). No other coordinate is: a coordinate sent to `0` by
+every scalar is one of `0`, `1`, `-1`, `u₈`, `u₈⁻¹` (`curve25519.x25519_eq_zero_iff`), and a
+kernel evaluation decodes the entries `0` to `4` to these five. `Curve25519.Basic` is imported
+with `import all` so that the kernel can unfold `p`. -/
 
 open Aeneas Aeneas.Std curve25519 MontgomeryModel
 
@@ -33,9 +34,8 @@ private theorem xMul_eight_eq_zero {u : ZMod p} (h : (XZ.ladderXZ 121665 4 8 u).
   unfold MontgomeryModel.ladder XZ.ladder
   rw [montgomery_a24_eq, XZ.toU, h, div_zero]
 
-/-- `X25519_LOW_ORDER_POINTS`: X25519 sends each of the seven points to `0`, whatever the
-scalar. -/
-theorem X25519_LOW_ORDER_POINTS_spec :
+/-- X25519 sends each of the seven points to `0`, whatever the scalar. -/
+private theorem x25519_entry_eq_zero :
     ∀ i : Fin 7, ∀ k : ℕ, x25519 k X25519_LOW_ORDER_POINTS[i.val]!.asNat = 0 := by
   have h : ∀ i : Fin 7, (XZ.ladderXZ 121665 4 8
       (decodeU (Nat.ofDigits (2 ^ 8) (X25519_LOW_ORDER_POINTS[i.val]!.val.map (·.val))))).W =
@@ -57,10 +57,11 @@ private theorem u_entries :
   unfold X25519_LOW_ORDER_POINTS
   decide +kernel
 
-/-- `X25519_LOW_ORDER_POINTS` is complete: a point is sent to `0` by X25519 for every scalar iff
-it is equal to one of the seven points as a `MontgomeryPoint`, that is with `==`, which compares
-the decoded coordinates `u` (not the bytes: other encodings of the same `u` count). -/
-theorem X25519_LOW_ORDER_POINTS_complete (Q : montgomery.MontgomeryPoint) :
+/-- `X25519_LOW_ORDER_POINTS`: a point is sent to `0` by X25519 for every scalar iff it is equal
+to one of the seven points as a `MontgomeryPoint`, that is with `==`, which compares the decoded
+coordinates `u` (not the bytes: other encodings of the same `u` count). In particular each of the
+seven points is sent to `0`. -/
+theorem X25519_LOW_ORDER_POINTS_spec (Q : montgomery.MontgomeryPoint) :
     (∀ k : ℕ, x25519 k Q.asNat = 0) ↔ ∃ i : Fin 7, Q.u = X25519_LOW_ORDER_POINTS[i.val]!.u := by
   constructor
   · intro h
@@ -73,7 +74,7 @@ theorem X25519_LOW_ORDER_POINTS_complete (Q : montgomery.MontgomeryPoint) :
     · exact ⟨2, h.trans h2.symm⟩
     · exact ⟨3, h.trans h3.symm⟩
   · rintro ⟨i, hi⟩ k
-    have hk := X25519_LOW_ORDER_POINTS_spec i k
+    have hk := x25519_entry_eq_zero i k
     rw [x25519_eq_xMul] at hk ⊢
     rwa [← montgomery.MontgomeryPoint.u_def, hi, montgomery.MontgomeryPoint.u_def]
 
