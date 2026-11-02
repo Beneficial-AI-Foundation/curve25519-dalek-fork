@@ -18,7 +18,7 @@ index c417780..f0e2199 100644
 -        } else {
 -            Err(())
 +        let mut i = 16;
-+        while i < 32 {
++        while i < value.bytes.len() {
 +            if value.bytes[i] != 0 {
 +                return Err(());
 +            }
@@ -27,4 +27,4 @@ index c417780..f0e2199 100644
 +        Ok(Self(value))
      }
  }
- 
+
