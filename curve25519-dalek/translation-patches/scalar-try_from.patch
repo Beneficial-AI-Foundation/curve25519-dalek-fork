@@ -1,6 +1,6 @@
 Translation patch: <HalfWidthScalar as TryFrom<Scalar>>::try_from
 
-Change: `bytes[16..].iter().all(|&b| b == 0)` becomes a loop over 16..32 returning `Err(())` at the first nonzero byte.
+Change: `bytes[16..].iter().all(|&b| b == 0)` becomes a loop over `16..bytes.len()` returning `Err(())` at the first nonzero byte.
 Why: Aeneas doesn't model `Iter::all`.
 Behaviour: identical.
 Relies on: `Scalar::bytes` is `[u8; 32]`.
