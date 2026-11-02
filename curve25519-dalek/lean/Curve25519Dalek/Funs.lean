@@ -18943,7 +18943,7 @@ def backend.serial.scalar_mul.vartime_double_base.mul.«i686-no-tables»
     a_naf b_naf i table_A table_B r
 
 /-- [curve25519_dalek::scalar::{curve25519_dalek::scalar::HalfWidthScalar}::from_bytes]: loop body 0:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1462:8-1465:9
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1460:8-1463:9
     Visibility: public -/
 @[rust_loop_body]
 def scalar.HalfWidthScalar.from_bytes_loop.body
@@ -18961,7 +18961,7 @@ def scalar.HalfWidthScalar.from_bytes_loop.body
   else ok (done s_bytes)
 
 /-- [curve25519_dalek::scalar::{curve25519_dalek::scalar::HalfWidthScalar}::from_bytes]: loop 0:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1462:8-1465:9
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1460:8-1463:9
     Visibility: public -/
 @[rust_loop]
 def scalar.HalfWidthScalar.from_bytes_loop
@@ -18975,7 +18975,7 @@ def scalar.HalfWidthScalar.from_bytes_loop
     (s_bytes, i)
 
 /-- [curve25519_dalek::scalar::{curve25519_dalek::scalar::HalfWidthScalar}::from_bytes]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1459:4-1469:5
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1457:4-1467:5
     Visibility: public -/
 def scalar.HalfWidthScalar.from_bytes
   (bytes : Array Std.U8 16#usize) : Result scalar.HalfWidthScalar := do
@@ -18984,7 +18984,7 @@ def scalar.HalfWidthScalar.from_bytes
   ok { bytes := s_bytes1 }
 
 /-- [curve25519_dalek::scalar::{curve25519_dalek::scalar::Scalar}::split_at_128]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1495:4-1505:5 -/
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1493:4-1503:5 -/
 def scalar.Scalar.split_at_128
   (self : scalar.Scalar) :
   Result (scalar.HalfWidthScalar × scalar.HalfWidthScalar)
@@ -19010,7 +19010,7 @@ def scalar.Scalar.split_at_128
   ok (hws, hws1)
 
 /-- [curve25519_dalek::scalar::{curve25519_dalek::scalar::HalfWidthScalar}::non_adjacent_form]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1485:4-1487:5 -/
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1483:4-1485:5 -/
 def scalar.HalfWidthScalar.non_adjacent_form
   (self : scalar.HalfWidthScalar) (w : Std.Usize) :
   Result (Array Std.I8 256#usize)
@@ -62049,53 +62049,55 @@ impl_def scalar.HalfWidthScalar.Insts.CoreCmpPartialEqHalfWidthScalar :
 }
 
 /-- [curve25519_dalek::scalar::{impl core::convert::TryFrom<curve25519_dalek::scalar::Scalar, ()> for curve25519_dalek::scalar::HalfWidthScalar}::try_from]: loop body 0:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1439:8-1446:5
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1438:8-1444:5
     Visibility: public -/
 @[rust_loop_body]
 def
   scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple.try_from_loop.body
-  (value : scalar.Scalar) (i : Std.Usize) :
-  Result (ControlFlow Std.Usize (core.result.Result scalar.HalfWidthScalar
-    Unit))
+  (a : Array Std.U8 32#usize) (iter : core.slice.iter.Iter Std.U8) :
+  Result (ControlFlow (core.slice.iter.Iter Std.U8) (core.result.Result
+    scalar.HalfWidthScalar Unit))
   := do
-  let s ← lift (Array.to_slice value.bytes)
-  let i1 := Slice.len s
-  if i < i1
-  then
-    let i2 ← Array.index_usize value.bytes i
-    if i2 != 0#u8
+  let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+  match o with
+  | none => ok (done (core.result.Result.Ok { bytes := a }))
+  | some byte =>
+    if byte != 0#u8
     then ok (done (core.result.Result.Err ()))
-    else let i3 ← i + 1#usize
-         ok (cont i3)
-  else ok (done (core.result.Result.Ok value))
+    else ok (cont iter1)
 
 /-- [curve25519_dalek::scalar::{impl core::convert::TryFrom<curve25519_dalek::scalar::Scalar, ()> for curve25519_dalek::scalar::HalfWidthScalar}::try_from]: loop 0:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1439:8-1446:5
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1438:8-1444:5
     Visibility: public -/
 @[rust_loop]
 def scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple.try_from_loop
-  (value : scalar.Scalar) (i : Std.Usize) :
+  (iter : core.slice.iter.Iter Std.U8) (a : Array Std.U8 32#usize) :
   Result (core.result.Result scalar.HalfWidthScalar Unit)
   := do
   loop
-    (fun i1 =>
+    (fun iter1 =>
       scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple.try_from_loop.body
-      value i1)
-    i
+      a iter1)
+    iter
 
 /-- [curve25519_dalek::scalar::{impl core::convert::TryFrom<curve25519_dalek::scalar::Scalar, ()> for curve25519_dalek::scalar::HalfWidthScalar}::try_from]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1437:4-1446:5
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1437:4-1444:5
     Visibility: public -/
-@[reducible]
 def scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple.try_from
   (value : scalar.Scalar) :
   Result (core.result.Result scalar.HalfWidthScalar Unit)
   := do
-  scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple.try_from_loop
-    value 16#usize
+  let s ←
+    core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8)) value.bytes
+      { start := 16#usize }
+  let iter ←
+    SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter s
+  scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple.try_from_loop iter
+    value.bytes
 
 /-- Trait implementation: [curve25519_dalek::scalar::{impl core::convert::TryFrom<curve25519_dalek::scalar::Scalar, ()> for curve25519_dalek::scalar::HalfWidthScalar}]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1432:0-1447:1 -/
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1432:0-1445:1 -/
 @[reducible]
 def scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple :
   core.convert.TryFrom scalar.HalfWidthScalar scalar.Scalar Unit := {
@@ -62104,26 +62106,26 @@ def scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple :
 }
 
 /-- [curve25519_dalek::scalar::{curve25519_dalek::scalar::HalfWidthScalar}::ZERO]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1451:4-1451:46
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1449:4-1449:46
     Visibility: public -/
 @[global_simps, irreducible]
 def scalar.HalfWidthScalar.ZERO : scalar.HalfWidthScalar := scalar.Scalar.ZERO
 
 /-- [curve25519_dalek::scalar::{curve25519_dalek::scalar::HalfWidthScalar}::ONE]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1454:4-1454:44
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1452:4-1452:44
     Visibility: public -/
 @[global_simps, irreducible]
 def scalar.HalfWidthScalar.ONE : scalar.HalfWidthScalar := scalar.Scalar.ONE
 
 /-- [curve25519_dalek::scalar::{curve25519_dalek::scalar::HalfWidthScalar}::as_scalar]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1472:4-1474:5
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1470:4-1472:5
     Visibility: public -/
 def scalar.HalfWidthScalar.as_scalar
   (self : scalar.HalfWidthScalar) : Result scalar.Scalar := do
   ok self
 
 /-- [curve25519_dalek::scalar::{curve25519_dalek::scalar::HalfWidthScalar}::to_bytes]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1477:4-1481:5
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1475:4-1479:5
     Visibility: public -/
 def scalar.HalfWidthScalar.to_bytes
   (self : scalar.HalfWidthScalar) : Result (Array Std.U8 16#usize) := do
@@ -62137,14 +62139,14 @@ def scalar.HalfWidthScalar.to_bytes
   ok (to_slice_mut_back s2)
 
 /-- [curve25519_dalek::scalar::{impl core::convert::From<curve25519_dalek::scalar::HalfWidthScalar> for curve25519_dalek::scalar::Scalar}::from]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1509:4-1511:5
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1507:4-1509:5
     Visibility: public -/
 def scalar.Scalar.Insts.CoreConvertFromHalfWidthScalar.from
   (x : scalar.HalfWidthScalar) : Result scalar.Scalar := do
   ok x
 
 /-- Trait implementation: [curve25519_dalek::scalar::{impl core::convert::From<curve25519_dalek::scalar::HalfWidthScalar> for curve25519_dalek::scalar::Scalar}]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1508:0-1512:1 -/
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1506:0-1510:1 -/
 @[reducible]
 def scalar.Scalar.Insts.CoreConvertFromHalfWidthScalar : core.convert.From
   scalar.Scalar scalar.HalfWidthScalar := {
@@ -62152,7 +62154,7 @@ def scalar.Scalar.Insts.CoreConvertFromHalfWidthScalar : core.convert.From
 }
 
 /-- [curve25519_dalek::scalar::{impl core::convert::From<u8> for curve25519_dalek::scalar::HalfWidthScalar}::from]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1517:12-1522:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1527:0-1527:66
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1515:12-1520:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1525:0-1525:66
     Visibility: public -/
 def scalar.HalfWidthScalar.Insts.CoreConvertFromU8.from
   (x : Std.U8) : Result scalar.HalfWidthScalar := do
@@ -62170,7 +62172,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertFromU8.from
   scalar.HalfWidthScalar.from_bytes bytes1
 
 /-- Trait implementation: [curve25519_dalek::scalar::{impl core::convert::From<u8> for curve25519_dalek::scalar::HalfWidthScalar}]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1516:8-1523:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1527:0-1527:66 -/
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1514:8-1521:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1525:0-1525:66 -/
 @[reducible]
 def scalar.HalfWidthScalar.Insts.CoreConvertFromU8 : core.convert.From
   scalar.HalfWidthScalar Std.U8 := {
@@ -62178,7 +62180,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertFromU8 : core.convert.From
 }
 
 /-- [curve25519_dalek::scalar::{impl core::convert::From<u16> for curve25519_dalek::scalar::HalfWidthScalar}::from]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1517:12-1522:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1527:0-1527:66
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1515:12-1520:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1525:0-1525:66
     Visibility: public -/
 def scalar.HalfWidthScalar.Insts.CoreConvertFromU16.from
   (x : Std.U16) : Result scalar.HalfWidthScalar := do
@@ -62196,7 +62198,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertFromU16.from
   scalar.HalfWidthScalar.from_bytes bytes1
 
 /-- Trait implementation: [curve25519_dalek::scalar::{impl core::convert::From<u16> for curve25519_dalek::scalar::HalfWidthScalar}]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1516:8-1523:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1527:0-1527:66 -/
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1514:8-1521:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1525:0-1525:66 -/
 @[reducible]
 def scalar.HalfWidthScalar.Insts.CoreConvertFromU16 : core.convert.From
   scalar.HalfWidthScalar Std.U16 := {
@@ -62204,7 +62206,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertFromU16 : core.convert.From
 }
 
 /-- [curve25519_dalek::scalar::{impl core::convert::From<u32> for curve25519_dalek::scalar::HalfWidthScalar}::from]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1517:12-1522:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1527:0-1527:66
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1515:12-1520:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1525:0-1525:66
     Visibility: public -/
 def scalar.HalfWidthScalar.Insts.CoreConvertFromU32.from
   (x : Std.U32) : Result scalar.HalfWidthScalar := do
@@ -62222,7 +62224,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertFromU32.from
   scalar.HalfWidthScalar.from_bytes bytes1
 
 /-- Trait implementation: [curve25519_dalek::scalar::{impl core::convert::From<u32> for curve25519_dalek::scalar::HalfWidthScalar}]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1516:8-1523:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1527:0-1527:66 -/
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1514:8-1521:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1525:0-1525:66 -/
 @[reducible]
 def scalar.HalfWidthScalar.Insts.CoreConvertFromU32 : core.convert.From
   scalar.HalfWidthScalar Std.U32 := {
@@ -62230,7 +62232,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertFromU32 : core.convert.From
 }
 
 /-- [curve25519_dalek::scalar::{impl core::convert::From<u64> for curve25519_dalek::scalar::HalfWidthScalar}::from]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1517:12-1522:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1527:0-1527:66
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1515:12-1520:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1525:0-1525:66
     Visibility: public -/
 def scalar.HalfWidthScalar.Insts.CoreConvertFromU64.from
   (x : Std.U64) : Result scalar.HalfWidthScalar := do
@@ -62248,7 +62250,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertFromU64.from
   scalar.HalfWidthScalar.from_bytes bytes1
 
 /-- Trait implementation: [curve25519_dalek::scalar::{impl core::convert::From<u64> for curve25519_dalek::scalar::HalfWidthScalar}]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1516:8-1523:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1527:0-1527:66 -/
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1514:8-1521:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1525:0-1525:66 -/
 @[reducible]
 def scalar.HalfWidthScalar.Insts.CoreConvertFromU64 : core.convert.From
   scalar.HalfWidthScalar Std.U64 := {
@@ -62256,7 +62258,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertFromU64 : core.convert.From
 }
 
 /-- [curve25519_dalek::scalar::{impl core::convert::From<u128> for curve25519_dalek::scalar::HalfWidthScalar}::from]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1517:12-1522:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1527:0-1527:66
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1515:12-1520:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1525:0-1525:66
     Visibility: public -/
 def scalar.HalfWidthScalar.Insts.CoreConvertFromU128.from
   (x : Std.U128) : Result scalar.HalfWidthScalar := do
@@ -62274,7 +62276,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertFromU128.from
   scalar.HalfWidthScalar.from_bytes bytes1
 
 /-- Trait implementation: [curve25519_dalek::scalar::{impl core::convert::From<u128> for curve25519_dalek::scalar::HalfWidthScalar}]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1516:8-1523:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1527:0-1527:66 -/
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1514:8-1521:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/scalar.rs', lines 1525:0-1525:66 -/
 @[reducible]
 def scalar.HalfWidthScalar.Insts.CoreConvertFromU128 : core.convert.From
   scalar.HalfWidthScalar Std.U128 := {
@@ -62282,7 +62284,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertFromU128 : core.convert.From
 }
 
 /-- [curve25519_dalek::scalar::{impl zeroize::Zeroize for curve25519_dalek::scalar::HalfWidthScalar}::zeroize]:
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1531:4-1533:5
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1529:4-1531:5
     Visibility: public -/
 def scalar.HalfWidthScalar.Insts.ZeroizeZeroize.zeroize
   (self : scalar.HalfWidthScalar) : Result scalar.HalfWidthScalar := do
@@ -62290,7 +62292,7 @@ def scalar.HalfWidthScalar.Insts.ZeroizeZeroize.zeroize
   ok s
 
 /-- Trait implementation: [curve25519_dalek::scalar::{impl zeroize::Zeroize for curve25519_dalek::scalar::HalfWidthScalar}]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1530:0-1534:1 -/
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1528:0-1532:1 -/
 @[reducible]
 def scalar.HalfWidthScalar.Insts.ZeroizeZeroize : zeroize.Zeroize
   scalar.HalfWidthScalar := {
