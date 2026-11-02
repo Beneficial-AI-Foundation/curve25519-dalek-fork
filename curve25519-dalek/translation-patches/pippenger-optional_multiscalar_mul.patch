@@ -13,7 +13,7 @@ diff --git a/curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs b/curve
 index a5469b8..5bdd137 100644
 --- a/curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs
 +++ b/curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs
-@@ -67,97 +67,139 @@ impl VartimeMultiscalarMul for Pippenger {
+@@ -67,97 +67,131 @@ impl VartimeMultiscalarMul for Pippenger {
      fn optional_multiscalar_mul<I, J>(scalars: I, points: J) -> Option<EdwardsPoint>
      where
          I: IntoIterator,
@@ -25,14 +25,6 @@ index a5469b8..5bdd137 100644
 -        let mut scalars = scalars.into_iter();
 -        let size = scalars.by_ref().size_hint().0;
 +        use crate::backend::serial::curve_models::ProjectiveNielsPoint;
-+
-+        fn collect<It: Iterator>(mut it: It) -> Vec<It::Item> {
-+            let mut out = Vec::new();
-+            while let Some(x) = it.next() {
-+                out.push(x);
-+            }
-+            out
-+        }
 +
 +        fn scalars_points<S, It>(
 +            scalars: &[S],
@@ -57,7 +49,7 @@ index a5469b8..5bdd137 100644
 +            Some(out)
 +        }
 +
-+        let scalars = collect(scalars.into_iter());
++        let scalars = Vec::from_iter(scalars.into_iter());
 +        let size = scalars.len();
  
          // Digit width in bits. As digit width grows,

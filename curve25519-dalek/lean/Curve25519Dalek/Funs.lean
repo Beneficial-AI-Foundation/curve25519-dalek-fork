@@ -6182,7 +6182,7 @@ def edwards.«EdwardsPointx86_64-tables».as_projective
   ok { X := self.X, Y := self.Y, Z := self.Z }
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::mul_by_pow_2]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1429:8-1432:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1414:8-1417:9 -/
 @[rust_loop_body]
 def edwards.«EdwardsPointx86_64-tables».mul_by_pow_2_loop.body
   (iter : core.ops.range.Range Std.U32)
@@ -6204,7 +6204,7 @@ def edwards.«EdwardsPointx86_64-tables».mul_by_pow_2_loop.body
     ok (cont (iter1, s1))
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::mul_by_pow_2]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1429:8-1432:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1414:8-1417:9 -/
 @[rust_loop]
 def edwards.«EdwardsPointx86_64-tables».mul_by_pow_2_loop
   (iter : core.ops.range.Range Std.U32)
@@ -6217,7 +6217,7 @@ def edwards.«EdwardsPointx86_64-tables».mul_by_pow_2_loop
     (iter, s)
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::mul_by_pow_2]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1425:4-1435:5 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1410:4-1420:5 -/
 def edwards.«EdwardsPointx86_64-tables».mul_by_pow_2
   (self : edwards.EdwardsPoint.«x86_64-tables») (k : Std.U32) :
   Result edwards.EdwardsPoint.«x86_64-tables»
@@ -6602,7 +6602,7 @@ def scalar.Scalar.as_radix_2w
       Array.update digits1 i2 i4
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 96:12-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points_loop.body
@@ -6642,7 +6642,7 @@ def
   else ok (done (some out))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 96:12-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points_loop
@@ -6667,7 +6667,7 @@ def
     (points, out, k)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 85:8-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-98:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points
@@ -6687,53 +6687,8 @@ def
     backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables»))
     0#usize
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 79:12-81:13 -/
-@[rust_loop_body]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 79:12-81:13 -/
-@[rust_loop]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (it1, out1) =>
-      backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-83:9 -/
-@[reducible]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 137:8-140:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -6754,7 +6709,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 137:8-140:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -6771,7 +6726,7 @@ def
     (buckets, b)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 149:12-152:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -6795,7 +6750,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 149:12-152:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -6812,7 +6767,7 @@ def
     (buckets, b)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 159:12-175:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -6879,7 +6834,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 159:12-175:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -6897,7 +6852,7 @@ def
     (buckets, si)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 188:12-192:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -6925,7 +6880,7 @@ def
   else ok (done buckets_sum)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 188:12-192:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -6942,7 +6897,7 @@ def
     (buckets_intermediate_sum, buckets_sum, i)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 144:8-199:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -6988,7 +6943,7 @@ def
   else ok (done total)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 144:8-199:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -7008,7 +6963,7 @@ def
     (buckets, total, digit_index)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-202:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-194:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul
@@ -7025,8 +6980,9 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let size := alloc.vec.Vec.len scalars1
   let w ←
     if size < 500#usize
@@ -7062,7 +7018,7 @@ def
     ok (some ep)
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::x86_64-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-203:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-195:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables»
@@ -7091,7 +7047,7 @@ def edwards.«EdwardsPointx86_64-no-tables».as_projective
   ok { X := self.X, Y := self.Y, Z := self.Z }
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::mul_by_pow_2]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1429:8-1432:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1414:8-1417:9 -/
 @[rust_loop_body]
 def edwards.«EdwardsPointx86_64-no-tables».mul_by_pow_2_loop.body
   (iter : core.ops.range.Range Std.U32)
@@ -7113,7 +7069,7 @@ def edwards.«EdwardsPointx86_64-no-tables».mul_by_pow_2_loop.body
     ok (cont (iter1, s1))
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::mul_by_pow_2]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1429:8-1432:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1414:8-1417:9 -/
 @[rust_loop]
 def edwards.«EdwardsPointx86_64-no-tables».mul_by_pow_2_loop
   (iter : core.ops.range.Range Std.U32)
@@ -7126,7 +7082,7 @@ def edwards.«EdwardsPointx86_64-no-tables».mul_by_pow_2_loop
     (iter, s)
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::mul_by_pow_2]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1425:4-1435:5 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1410:4-1420:5 -/
 def edwards.«EdwardsPointx86_64-no-tables».mul_by_pow_2
   (self : edwards.EdwardsPoint.«x86_64-no-tables») (k : Std.U32) :
   Result edwards.EdwardsPoint.«x86_64-no-tables»
@@ -7222,7 +7178,7 @@ def
   ok { X := fe, Y := fe1, Z := fe1, T := fe }
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 96:12-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points_loop.body
@@ -7263,7 +7219,7 @@ def
   else ok (done (some out))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 96:12-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points_loop
@@ -7288,7 +7244,7 @@ def
     (points, out, k)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 85:8-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-98:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points
@@ -7308,53 +7264,8 @@ def
     backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables»))
     0#usize
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 79:12-81:13 -/
-@[rust_loop_body]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 79:12-81:13 -/
-@[rust_loop]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (it1, out1) =>
-      backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-83:9 -/
-@[reducible]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 137:8-140:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -7376,7 +7287,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 137:8-140:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -7393,7 +7304,7 @@ def
     (buckets, b)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 149:12-152:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -7418,7 +7329,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 149:12-152:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -7435,7 +7346,7 @@ def
     (buckets, b)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 159:12-175:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -7503,7 +7414,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 159:12-175:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -7521,7 +7432,7 @@ def
     (buckets, si)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 188:12-192:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -7549,7 +7460,7 @@ def
   else ok (done buckets_sum)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 188:12-192:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -7566,7 +7477,7 @@ def
     (buckets_intermediate_sum, buckets_sum, i)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 144:8-199:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -7614,7 +7525,7 @@ def
   else ok (done total)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 144:8-199:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -7634,7 +7545,7 @@ def
     (buckets, total, digit_index)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-202:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-194:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul
@@ -7651,8 +7562,9 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let size := alloc.vec.Vec.len scalars1
   let w ←
     if size < 500#usize
@@ -7688,7 +7600,7 @@ def
     ok (some ep)
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-203:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-195:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -7717,7 +7629,7 @@ def edwards.«EdwardsPointi686-tables».as_projective
   ok { X := self.X, Y := self.Y, Z := self.Z }
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-tables}::mul_by_pow_2]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1429:8-1432:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1414:8-1417:9 -/
 @[rust_loop_body]
 def edwards.«EdwardsPointi686-tables».mul_by_pow_2_loop.body
   (iter : core.ops.range.Range Std.U32)
@@ -7738,7 +7650,7 @@ def edwards.«EdwardsPointi686-tables».mul_by_pow_2_loop.body
     ok (cont (iter1, s1))
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-tables}::mul_by_pow_2]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1429:8-1432:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1414:8-1417:9 -/
 @[rust_loop]
 def edwards.«EdwardsPointi686-tables».mul_by_pow_2_loop
   (iter : core.ops.range.Range Std.U32)
@@ -7751,7 +7663,7 @@ def edwards.«EdwardsPointi686-tables».mul_by_pow_2_loop
     (iter, s)
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-tables}::mul_by_pow_2]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1425:4-1435:5 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1410:4-1420:5 -/
 def edwards.«EdwardsPointi686-tables».mul_by_pow_2
   (self : edwards.EdwardsPoint.«i686-tables») (k : Std.U32) :
   Result edwards.EdwardsPoint.«i686-tables»
@@ -7857,7 +7769,7 @@ def
   ok { X := fe, Y := fe1, Z := fe1, T := fe }
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 96:12-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points_loop.body
@@ -7897,7 +7809,7 @@ def
   else ok (done (some out))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 96:12-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points_loop
@@ -7922,7 +7834,7 @@ def
     (points, out, k)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 85:8-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-98:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points
@@ -7941,53 +7853,8 @@ def
     scalars points w (alloc.vec.Vec.new ((Array Std.I8 64#usize) ×
     backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables»)) 0#usize
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 79:12-81:13 -/
-@[rust_loop_body]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 79:12-81:13 -/
-@[rust_loop]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (it1, out1) =>
-      backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-83:9 -/
-@[reducible]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 137:8-140:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8008,7 +7875,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 137:8-140:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -8025,7 +7892,7 @@ def
     (buckets, b)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 149:12-152:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8049,7 +7916,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 149:12-152:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -8066,7 +7933,7 @@ def
     (buckets, b)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 159:12-175:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8133,7 +8000,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 159:12-175:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -8151,7 +8018,7 @@ def
     (buckets, si)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 188:12-192:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8179,7 +8046,7 @@ def
   else ok (done buckets_sum)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 188:12-192:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -8196,7 +8063,7 @@ def
     (buckets_intermediate_sum, buckets_sum, i)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 144:8-199:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8242,7 +8109,7 @@ def
   else ok (done total)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 144:8-199:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -8262,7 +8129,7 @@ def
     (buckets, total, digit_index)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-202:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-194:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul
@@ -8279,8 +8146,9 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let size := alloc.vec.Vec.len scalars1
   let w ←
     if size < 500#usize
@@ -8316,7 +8184,7 @@ def
     ok (some ep)
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::i686-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-203:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-195:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables»
@@ -8345,7 +8213,7 @@ def edwards.«EdwardsPointi686-no-tables».as_projective
   ok { X := self.X, Y := self.Y, Z := self.Z }
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::mul_by_pow_2]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1429:8-1432:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1414:8-1417:9 -/
 @[rust_loop_body]
 def edwards.«EdwardsPointi686-no-tables».mul_by_pow_2_loop.body
   (iter : core.ops.range.Range Std.U32)
@@ -8367,7 +8235,7 @@ def edwards.«EdwardsPointi686-no-tables».mul_by_pow_2_loop.body
     ok (cont (iter1, s1))
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::mul_by_pow_2]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1429:8-1432:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1414:8-1417:9 -/
 @[rust_loop]
 def edwards.«EdwardsPointi686-no-tables».mul_by_pow_2_loop
   (iter : core.ops.range.Range Std.U32)
@@ -8380,7 +8248,7 @@ def edwards.«EdwardsPointi686-no-tables».mul_by_pow_2_loop
     (iter, s)
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::mul_by_pow_2]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1425:4-1435:5 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1410:4-1420:5 -/
 def edwards.«EdwardsPointi686-no-tables».mul_by_pow_2
   (self : edwards.EdwardsPoint.«i686-no-tables») (k : Std.U32) :
   Result edwards.EdwardsPoint.«i686-no-tables»
@@ -8475,7 +8343,7 @@ def
   ok { X := fe, Y := fe1, Z := fe1, T := fe }
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 96:12-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points_loop.body
@@ -8516,7 +8384,7 @@ def
   else ok (done (some out))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 96:12-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points_loop
@@ -8541,7 +8409,7 @@ def
     (points, out, k)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 85:8-106:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-98:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points
@@ -8561,53 +8429,8 @@ def
     backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables»))
     0#usize
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 79:12-81:13 -/
-@[rust_loop_body]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 79:12-81:13 -/
-@[rust_loop]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (it1, out1) =>
-      backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-83:9 -/
-@[reducible]
-def
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 137:8-140:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8628,7 +8451,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 137:8-140:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -8645,7 +8468,7 @@ def
     (buckets, b)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 149:12-152:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8669,7 +8492,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 149:12-152:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -8686,7 +8509,7 @@ def
     (buckets, b)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 159:12-175:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8753,7 +8576,7 @@ def
   else ok (done buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 159:12-175:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -8771,7 +8594,7 @@ def
     (buckets, si)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 188:12-192:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8799,7 +8622,7 @@ def
   else ok (done buckets_sum)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 188:12-192:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -8816,7 +8639,7 @@ def
     (buckets_intermediate_sum, buckets_sum, i)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 144:8-199:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8862,7 +8685,7 @@ def
   else ok (done total)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 144:8-199:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -8882,7 +8705,7 @@ def
     (buckets, total, digit_index)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-202:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-194:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul
@@ -8899,8 +8722,9 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let size := alloc.vec.Vec.len scalars1
   let w ←
     if size < 500#usize
@@ -8936,7 +8760,7 @@ def
     ok (some ep)
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::i686-no-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-203:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-195:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables»
@@ -42093,7 +41917,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::mul_base]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -42129,7 +41953,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::mul_base]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -42147,7 +41971,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::mul_base]: loop body 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -42183,7 +42007,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::mul_base]: loop 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -42201,7 +42025,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1243:12-1264:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1228:12-1249:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».mul_base
@@ -42220,7 +42044,7 @@ def
     a self P2 0#usize
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1272:12-1275:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1257:12-1260:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def
   «SharedAEdwardsBasepointTablex86_64-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables».mul
@@ -42232,7 +42056,7 @@ def
     self scalar
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'b curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1283:12-1285:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1268:12-1270:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTablex86_64-tablesEdwardsPointx86_64-tables».mul
@@ -42267,7 +42091,7 @@ def edwards.«EdwardsPointx86_64-no-tables».mul_base
     scalar ep
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::mul_base]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -42302,7 +42126,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::mul_base]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -42320,7 +42144,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::mul_base]: loop body 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -42355,7 +42179,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::mul_base]: loop 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -42373,7 +42197,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1243:12-1264:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1228:12-1249:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».mul_base
@@ -42391,7 +42215,7 @@ def
     a self P2 0#usize
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1272:12-1275:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1257:12-1260:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def
   «SharedAEdwardsBasepointTablei686-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointi686-tables».mul
@@ -42403,7 +42227,7 @@ def
     self scalar
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'b curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1283:12-1285:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1268:12-1270:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTablei686-tablesEdwardsPointi686-tables».mul
@@ -42538,53 +42362,8 @@ def edwards.«EdwardsPointi686-no-tables».mul_base_clamped
   let a ← scalar.clamp_integer bytes
   edwards.«EdwardsPointi686-no-tables».mul_base { bytes := a }
 
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
-@[rust_loop_body]
-def
-  edwards.«MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, iter1) ← coreitertraitsiteratorIteratorInst.next iter
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (iter1, out1))
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
-@[rust_loop]
-def
-  edwards.«MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (iter1, out1) =>
-      edwards.«MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst iter1 out1)
-    (iter, out)
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 990:8-996:9 -/
-@[reducible]
-def
-  edwards.«MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  edwards.«MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 983:4-1006:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 983:4-999:5
     Visibility: public -/
 def
   edwards.EdwardsPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables».multiscalar_mul
@@ -42602,12 +42381,14 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    edwards.«MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let t1 ← coreitertraitscollectIntoIteratorInst1.into_iter points
   let points1 ←
-    edwards.«MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst1.iteratorInst t1
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst1.iteratorInst) t1
   let left_val := alloc.vec.Vec.len scalars1
   let right_val := alloc.vec.Vec.len points1
   massert (left_val = right_val)
@@ -42619,7 +42400,7 @@ def
     points1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 980:0-1007:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 980:0-1000:1 -/
 @[reducible]
 def
   edwards.EdwardsPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables»
@@ -42640,53 +42421,8 @@ def
     «coreborrowBorrowPEdwardsPointx86_64-tablesInst»
 }
 
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
-@[rust_loop_body]
-def
-  edwards.«MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, iter1) ← coreitertraitsiteratorIteratorInst.next iter
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (iter1, out1))
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
-@[rust_loop]
-def
-  edwards.«MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (iter1, out1) =>
-      edwards.«MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst iter1 out1)
-    (iter, out)
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 990:8-996:9 -/
-@[reducible]
-def
-  edwards.«MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  edwards.«MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 983:4-1006:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 983:4-999:5
     Visibility: public -/
 def
   edwards.EdwardsPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables».multiscalar_mul
@@ -42704,12 +42440,14 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    edwards.«MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let t1 ← coreitertraitscollectIntoIteratorInst1.into_iter points
   let points1 ←
-    edwards.«MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst1.iteratorInst t1
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst1.iteratorInst) t1
   let left_val := alloc.vec.Vec.len scalars1
   let right_val := alloc.vec.Vec.len points1
   massert (left_val = right_val)
@@ -42721,7 +42459,7 @@ def
     points1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 980:0-1007:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 980:0-1000:1 -/
 @[reducible]
 def
   edwards.EdwardsPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -42742,53 +42480,8 @@ def
     «coreborrowBorrowPEdwardsPointx86_64-no-tablesInst»
 }
 
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
-@[rust_loop_body]
-def
-  edwards.«MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, iter1) ← coreitertraitsiteratorIteratorInst.next iter
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (iter1, out1))
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
-@[rust_loop]
-def
-  edwards.«MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (iter1, out1) =>
-      edwards.«MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst iter1 out1)
-    (iter, out)
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 990:8-996:9 -/
-@[reducible]
-def
-  edwards.«MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  edwards.«MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 983:4-1006:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 983:4-999:5
     Visibility: public -/
 def
   edwards.EdwardsPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-tables».multiscalar_mul
@@ -42806,12 +42499,14 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    edwards.«MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let t1 ← coreitertraitscollectIntoIteratorInst1.into_iter points
   let points1 ←
-    edwards.«MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst1.iteratorInst t1
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst1.iteratorInst) t1
   let left_val := alloc.vec.Vec.len scalars1
   let right_val := alloc.vec.Vec.len points1
   massert (left_val = right_val)
@@ -42823,7 +42518,7 @@ def
     points1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 980:0-1007:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 980:0-1000:1 -/
 @[reducible]
 def
   edwards.EdwardsPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-tables»
@@ -42844,53 +42539,8 @@ def
     «coreborrowBorrowPEdwardsPointi686-tablesInst»
 }
 
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
-@[rust_loop_body]
-def
-  edwards.«MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, iter1) ← coreitertraitsiteratorIteratorInst.next iter
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (iter1, out1))
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 992:12-994:13 -/
-@[rust_loop]
-def
-  edwards.«MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (iter : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (iter1, out1) =>
-      edwards.«MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst iter1 out1)
-    (iter, out)
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 990:8-996:9 -/
-@[reducible]
-def
-  edwards.«MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  edwards.«MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 983:4-1006:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 983:4-999:5
     Visibility: public -/
 def
   edwards.EdwardsPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-no-tables».multiscalar_mul
@@ -42908,12 +42558,14 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    edwards.«MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let t1 ← coreitertraitscollectIntoIteratorInst1.into_iter points
   let points1 ←
-    edwards.«MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst1.iteratorInst t1
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst1.iteratorInst) t1
   let left_val := alloc.vec.Vec.len scalars1
   let right_val := alloc.vec.Vec.len points1
   massert (left_val = right_val)
@@ -42925,7 +42577,7 @@ def
     points1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 980:0-1007:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 980:0-1000:1 -/
 @[reducible]
 def
   edwards.EdwardsPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-no-tables»
@@ -42946,53 +42598,8 @@ def
     «coreborrowBorrowPEdwardsPointi686-no-tablesInst»
 }
 
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::optional_multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1021:12-1023:13 -/
-@[rust_loop_body]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».optional_multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::optional_multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1021:12-1023:13 -/
-@[rust_loop]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».optional_multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (it1, out1) =>
-      edwards.«VartimeMultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».optional_multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::optional_multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1019:8-1025:9 -/
-@[reducible]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».optional_multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  edwards.«VartimeMultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».optional_multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1013:4-1042:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1006:4-1027:5
     Visibility: public -/
 def
   edwards.EdwardsPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul
@@ -43009,14 +42616,16 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    edwards.«VartimeMultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».optional_multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let t1 ←
     «coreitertraitscollectIntoIteratorJOptionEdwardsPointx86_64-tablesClause2_IntoIterInst».into_iter
       points
   let points1 ←
-    edwards.«VartimeMultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».optional_multiscalar_mul.collect
-      «coreitertraitscollectIntoIteratorJOptionEdwardsPointx86_64-tablesClause2_IntoIterInst».iteratorInst
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      «coreitertraitscollectIntoIteratorJOptionEdwardsPointx86_64-tablesClause2_IntoIterInst».iteratorInst)
       t1
   let left_val := alloc.vec.Vec.len scalars1
   let right_val := alloc.vec.Vec.len points1
@@ -43037,7 +42646,7 @@ def
       edwards.EdwardsPoint.«x86_64-tables»)) scalars1 points1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1010:0-1043:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1003:0-1028:1 -/
 @[reducible]
 def
   edwards.EdwardsPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables»
@@ -43057,53 +42666,8 @@ def
     «coreitertraitscollectIntoIteratorPOptionEdwardsPointx86_64-tablesPInst»
 }
 
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::optional_multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1021:12-1023:13 -/
-@[rust_loop_body]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::optional_multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1021:12-1023:13 -/
-@[rust_loop]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (it1, out1) =>
-      edwards.«VartimeMultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::optional_multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1019:8-1025:9 -/
-@[reducible]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  edwards.«VartimeMultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1013:4-1042:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1006:4-1027:5
     Visibility: public -/
 def
   edwards.EdwardsPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul
@@ -43120,14 +42684,16 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    edwards.«VartimeMultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let t1 ←
     «coreitertraitscollectIntoIteratorJOptionEdwardsPointx86_64-no-tablesClause2_IntoIterInst».into_iter
       points
   let points1 ←
-    edwards.«VartimeMultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_multiscalar_mul.collect
-      «coreitertraitscollectIntoIteratorJOptionEdwardsPointx86_64-no-tablesClause2_IntoIterInst».iteratorInst
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      «coreitertraitscollectIntoIteratorJOptionEdwardsPointx86_64-no-tablesClause2_IntoIterInst».iteratorInst)
       t1
   let left_val := alloc.vec.Vec.len scalars1
   let right_val := alloc.vec.Vec.len points1
@@ -43148,7 +42714,7 @@ def
       edwards.EdwardsPoint.«x86_64-no-tables»)) scalars1 points1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1010:0-1043:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1003:0-1028:1 -/
 @[reducible]
 def
   edwards.EdwardsPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -43168,53 +42734,8 @@ def
     «coreitertraitscollectIntoIteratorPOptionEdwardsPointx86_64-no-tablesPInst»
 }
 
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::optional_multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1021:12-1023:13 -/
-@[rust_loop_body]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».optional_multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::optional_multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1021:12-1023:13 -/
-@[rust_loop]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».optional_multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (it1, out1) =>
-      edwards.«VartimeMultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».optional_multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::optional_multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1019:8-1025:9 -/
-@[reducible]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».optional_multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  edwards.«VartimeMultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».optional_multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1013:4-1042:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1006:4-1027:5
     Visibility: public -/
 def
   edwards.EdwardsPoint.«i686-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul
@@ -43231,14 +42752,16 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    edwards.«VartimeMultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».optional_multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let t1 ←
     «coreitertraitscollectIntoIteratorJOptionEdwardsPointi686-tablesClause2_IntoIterInst».into_iter
       points
   let points1 ←
-    edwards.«VartimeMultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».optional_multiscalar_mul.collect
-      «coreitertraitscollectIntoIteratorJOptionEdwardsPointi686-tablesClause2_IntoIterInst».iteratorInst
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      «coreitertraitscollectIntoIteratorJOptionEdwardsPointi686-tablesClause2_IntoIterInst».iteratorInst)
       t1
   let left_val := alloc.vec.Vec.len scalars1
   let right_val := alloc.vec.Vec.len points1
@@ -43259,7 +42782,7 @@ def
       edwards.EdwardsPoint.«i686-tables»)) scalars1 points1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1010:0-1043:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1003:0-1028:1 -/
 @[reducible]
 def
   edwards.EdwardsPoint.«i686-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables»
@@ -43279,53 +42802,8 @@ def
     «coreitertraitscollectIntoIteratorPOptionEdwardsPointi686-tablesPInst»
 }
 
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::optional_multiscalar_mul::collect]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1021:12-1023:13 -/
-@[rust_loop_body]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».optional_multiscalar_mul.collect_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (ControlFlow (It × (alloc.vec.Vec Clause0_Item)) (alloc.vec.Vec
-    Clause0_Item))
-  := do
-  let (o, it1) ← coreitertraitsiteratorIteratorInst.next it
-  match o with
-  | none => ok (done out)
-  | some x => let out1 ← alloc.vec.Vec.push out x
-              ok (cont (it1, out1))
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::optional_multiscalar_mul::collect]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1021:12-1023:13 -/
-@[rust_loop]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».optional_multiscalar_mul.collect_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It)
-  (out : alloc.vec.Vec Clause0_Item) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  loop
-    (fun (it1, out1) =>
-      edwards.«VartimeMultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».optional_multiscalar_mul.collect_loop.body
-      coreitertraitsiteratorIteratorInst it1 out1)
-    (it, out)
-
-/-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::optional_multiscalar_mul::collect]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1019:8-1025:9 -/
-@[reducible]
-def
-  edwards.«VartimeMultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».optional_multiscalar_mul.collect
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item) (it : It) :
-  Result (alloc.vec.Vec Clause0_Item)
-  := do
-  edwards.«VartimeMultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».optional_multiscalar_mul.collect_loop
-    coreitertraitsiteratorIteratorInst it (alloc.vec.Vec.new Clause0_Item)
-
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1013:4-1042:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1006:4-1027:5
     Visibility: public -/
 def
   edwards.EdwardsPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul
@@ -43342,14 +42820,16 @@ def
   := do
   let t ← coreitertraitscollectIntoIteratorInst.into_iter scalars
   let scalars1 ←
-    edwards.«VartimeMultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».optional_multiscalar_mul.collect
-      coreitertraitscollectIntoIteratorInst.iteratorInst t
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      coreitertraitscollectIntoIteratorInst.iteratorInst) t
   let t1 ←
     «coreitertraitscollectIntoIteratorJOptionEdwardsPointi686-no-tablesClause2_IntoIterInst».into_iter
       points
   let points1 ←
-    edwards.«VartimeMultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».optional_multiscalar_mul.collect
-      «coreitertraitscollectIntoIteratorJOptionEdwardsPointi686-no-tablesClause2_IntoIterInst».iteratorInst
+    alloc.vec.FromIteratorVec.from_iter
+      (core.iter.traits.collect.IntoIterator.Blanket
+      «coreitertraitscollectIntoIteratorJOptionEdwardsPointi686-no-tablesClause2_IntoIterInst».iteratorInst)
       t1
   let left_val := alloc.vec.Vec.len scalars1
   let right_val := alloc.vec.Vec.len points1
@@ -43370,7 +42850,7 @@ def
       edwards.EdwardsPoint.«i686-no-tables»)) scalars1 points1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1010:0-1043:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1003:0-1028:1 -/
 @[reducible]
 def
   edwards.EdwardsPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables»
@@ -43391,7 +42871,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1072:4-1087:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1057:4-1072:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul
@@ -43420,7 +42900,7 @@ def
     self static_scalars dynamic_scalars dynamic_points
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1068:4-1070:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1053:4-1055:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».is_empty
@@ -43430,7 +42910,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-tables».is_empty self
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-tables}::len]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1064:4-1066:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1049:4-1051:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».len
@@ -43440,7 +42920,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-tables».len self
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-tables}::new]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1056:4-1062:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1041:4-1047:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».new
@@ -43460,7 +42940,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1053:0-1088:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1038:0-1073:1 -/
 @[reducible]
 def
   edwards.VartimeEdwardsPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
@@ -43501,7 +42981,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1072:4-1087:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1057:4-1072:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul
@@ -43530,7 +43010,7 @@ def
     self static_scalars dynamic_scalars dynamic_points
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-no-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1068:4-1070:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1053:4-1055:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».is_empty
@@ -43540,7 +43020,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-no-tables».is_empty self
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-no-tables}::len]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1064:4-1066:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1049:4-1051:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».len
@@ -43550,7 +43030,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-no-tables».len self
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-no-tables}::new]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1056:4-1062:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1041:4-1047:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».new
@@ -43570,7 +43050,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1053:0-1088:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1038:0-1073:1 -/
 @[reducible]
 def
   edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -43611,7 +43091,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::i686-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1072:4-1087:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1057:4-1072:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul
@@ -43640,7 +43120,7 @@ def
     self static_scalars dynamic_scalars dynamic_points
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::i686-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1068:4-1070:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1053:4-1055:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».is_empty
@@ -43650,7 +43130,7 @@ def
   backend.«VartimePrecomputedStrausi686-tables».is_empty self
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::i686-tables}::len]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1064:4-1066:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1049:4-1051:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».len
@@ -43660,7 +43140,7 @@ def
   backend.«VartimePrecomputedStrausi686-tables».len self
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::i686-tables}::new]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1056:4-1062:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1041:4-1047:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».new
@@ -43679,7 +43159,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1053:0-1088:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1038:0-1073:1 -/
 @[reducible]
 def
   edwards.VartimeEdwardsPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
@@ -43720,7 +43200,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1072:4-1087:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1057:4-1072:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul
@@ -43749,7 +43229,7 @@ def
     self static_scalars dynamic_scalars dynamic_points
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::i686-no-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1068:4-1070:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1053:4-1055:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».is_empty
@@ -43759,7 +43239,7 @@ def
   backend.«VartimePrecomputedStrausi686-no-tables».is_empty self
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::i686-no-tables}::len]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1064:4-1066:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1049:4-1051:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».len
@@ -43769,7 +43249,7 @@ def
   backend.«VartimePrecomputedStrausi686-no-tables».len self
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::i686-no-tables}::new]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1056:4-1062:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1041:4-1047:5
     Visibility: public -/
 def
   edwards.VartimeEdwardsPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».new
@@ -43789,7 +43269,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::edwards::VartimeEdwardsPrecomputation::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1053:0-1088:1 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1038:0-1073:1 -/
 @[reducible]
 def
   edwards.VartimeEdwardsPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»
@@ -43830,7 +43310,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1092:4-1098:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1077:4-1083:5
     Visibility: public -/
 def edwards.«EdwardsPointx86_64-tables».vartime_double_scalar_mul_basepoint
   (a : scalar.Scalar) (A : edwards.EdwardsPoint.«x86_64-tables»)
@@ -43840,7 +43320,7 @@ def edwards.«EdwardsPointx86_64-tables».vartime_double_scalar_mul_basepoint
   backend.vartime_double_base_mul.«x86_64-tables» a A b
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1092:4-1098:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1077:4-1083:5
     Visibility: public -/
 def
   edwards.«EdwardsPointx86_64-no-tables».vartime_double_scalar_mul_basepoint
@@ -43851,7 +43331,7 @@ def
   backend.vartime_double_base_mul.«x86_64-no-tables» a A b
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1092:4-1098:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1077:4-1083:5
     Visibility: public -/
 def edwards.«EdwardsPointi686-tables».vartime_double_scalar_mul_basepoint
   (a : scalar.Scalar) (A : edwards.EdwardsPoint.«i686-tables»)
@@ -43861,7 +43341,7 @@ def edwards.«EdwardsPointi686-tables».vartime_double_scalar_mul_basepoint
   backend.vartime_double_base_mul.«i686-tables» a A b
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1092:4-1098:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1077:4-1083:5
     Visibility: public -/
 def edwards.«EdwardsPointi686-no-tables».vartime_double_scalar_mul_basepoint
   (a : scalar.Scalar) (A : edwards.EdwardsPoint.«i686-no-tables»)
@@ -43871,7 +43351,7 @@ def edwards.«EdwardsPointi686-no-tables».vartime_double_scalar_mul_basepoint
   backend.vartime_double_base_mul.«i686-no-tables» a A b
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::vartime_triple_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1129:4-1137:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1114:4-1122:5
     Visibility: public -/
 def edwards.«EdwardsPointx86_64-tables».vartime_triple_scalar_mul_basepoint
   (a1 : scalar.HalfWidthScalar) (A1 : edwards.EdwardsPoint.«x86_64-tables»)
@@ -43882,7 +43362,7 @@ def edwards.«EdwardsPointx86_64-tables».vartime_triple_scalar_mul_basepoint
   backend.vartime_triple_base_mul_128_128_256.«x86_64-tables» a1 A1 a2 A2 b
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::vartime_triple_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1129:4-1137:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1114:4-1122:5
     Visibility: public -/
 def
   edwards.«EdwardsPointx86_64-no-tables».vartime_triple_scalar_mul_basepoint
@@ -43896,7 +43376,7 @@ def
     b
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-tables}::vartime_triple_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1129:4-1137:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1114:4-1122:5
     Visibility: public -/
 def edwards.«EdwardsPointi686-tables».vartime_triple_scalar_mul_basepoint
   (a1 : scalar.HalfWidthScalar) (A1 : edwards.EdwardsPoint.«i686-tables»)
@@ -43907,7 +43387,7 @@ def edwards.«EdwardsPointi686-tables».vartime_triple_scalar_mul_basepoint
   backend.vartime_triple_base_mul_128_128_256.«i686-tables» a1 A1 a2 A2 b
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::vartime_triple_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1129:4-1137:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1114:4-1122:5
     Visibility: public -/
 def edwards.«EdwardsPointi686-no-tables».vartime_triple_scalar_mul_basepoint
   (a1 : scalar.HalfWidthScalar) (A1 : edwards.EdwardsPoint.«i686-no-tables»)
@@ -43937,7 +43417,7 @@ def window.LookupTable.Insts.CoreCloneClone {T : Type _} (corecloneCloneInst :
 }
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::clone]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def edwards.EdwardsBasepointTable.«x86_64-tables».Insts.CoreCloneClone.clone
   (self : edwards.EdwardsBasepointTable.«x86_64-tables») :
@@ -43950,7 +43430,7 @@ def edwards.EdwardsBasepointTable.«x86_64-tables».Insts.CoreCloneClone.clone
   ok a
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9 -/
 @[reducible]
 def edwards.EdwardsBasepointTable.«x86_64-tables».Insts.CoreCloneClone :
   core.clone.Clone edwards.EdwardsBasepointTable.«x86_64-tables» := {
@@ -43959,7 +43439,7 @@ def edwards.EdwardsBasepointTable.«x86_64-tables».Insts.CoreCloneClone :
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1195:12-1199:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1180:12-1184:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».basepoint
@@ -44062,7 +43542,7 @@ def window.LookupTable.Insts.CoreDefaultDefault.default
   ok a
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::create]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -44091,7 +43571,7 @@ def
     ok (cont (iter1, a1, P1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::create]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -44110,7 +43590,7 @@ def
     (iter, a, P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::create]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1182:12-1192:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1167:12-1177:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».create
@@ -44128,7 +43608,7 @@ def
   ok a1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1178:8-1265:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1163:8-1250:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -44143,7 +43623,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1267:8-1276:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1252:8-1261:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9 -/
 @[reducible]
 def
   «SharedAEdwardsBasepointTablex86_64-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -44154,7 +43634,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'b curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1278:8-1286:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1263:8-1271:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9 -/
 @[reducible]
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTablex86_64-tablesEdwardsPointx86_64-tables»
@@ -44166,7 +43646,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::clone]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def edwards.EdwardsBasepointTable.«i686-tables».Insts.CoreCloneClone.clone
   (self : edwards.EdwardsBasepointTable.«i686-tables») :
@@ -44179,7 +43659,7 @@ def edwards.EdwardsBasepointTable.«i686-tables».Insts.CoreCloneClone.clone
   ok a
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9 -/
 @[reducible]
 def edwards.EdwardsBasepointTable.«i686-tables».Insts.CoreCloneClone :
   core.clone.Clone edwards.EdwardsBasepointTable.«i686-tables» := {
@@ -44188,7 +43668,7 @@ def edwards.EdwardsBasepointTable.«i686-tables».Insts.CoreCloneClone :
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1195:12-1199:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1180:12-1184:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».basepoint
@@ -44278,7 +43758,7 @@ def
   ok points1
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::create]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -44307,7 +43787,7 @@ def
     ok (cont (iter1, a1, P1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::create]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -44326,7 +43806,7 @@ def
     (iter, a, P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::create]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1182:12-1192:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1167:12-1177:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».create
@@ -44344,7 +43824,7 @@ def
   ok a1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1178:8-1265:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1163:8-1250:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
@@ -44359,7 +43839,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1267:8-1276:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1252:8-1261:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9 -/
 @[reducible]
 def
   «SharedAEdwardsBasepointTablei686-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
@@ -44370,7 +43850,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'b curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1278:8-1286:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1303:8-1309:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1263:8-1271:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9 -/
 @[reducible]
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTablei686-tablesEdwardsPointi686-tables»
@@ -44403,7 +43883,7 @@ def window.LookupTableRadix32.Insts.CoreCloneClone {T : Type _}
 }
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::clone]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.CoreCloneClone.clone
@@ -44417,7 +43897,7 @@ def
   ok a
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9 -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.CoreCloneClone
   : core.clone.Clone edwards.EdwardsBasepointTableRadix32.«x86_64-tables»
@@ -44494,7 +43974,7 @@ def window.LookupTableRadix32.select
   subtleConditionallyNegatableInst.conditional_negate t1 neg_mask
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::mul_base]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -44530,7 +44010,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::mul_base]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -44548,7 +44028,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::mul_base]: loop body 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -44584,7 +44064,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::mul_base]: loop 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -44602,7 +44082,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1243:12-1264:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1228:12-1249:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».mul_base
@@ -44621,7 +44101,7 @@ def
     a self P2 0#usize
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1195:12-1199:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1180:12-1184:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».basepoint
@@ -44724,7 +44204,7 @@ def window.LookupTableRadix32.Insts.CoreDefaultDefault.default
   ok a
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::create]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -44754,7 +44234,7 @@ def
     ok (cont (iter1, a1, P1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::create]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -44773,7 +44253,7 @@ def
     (iter, a, P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::create]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1182:12-1192:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1167:12-1177:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».create
@@ -44791,7 +44271,7 @@ def
   ok a1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1178:8-1265:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1163:8-1250:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -44807,7 +44287,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1272:12-1275:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1257:12-1260:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   «SharedAEdwardsBasepointTableRadix32x86_64-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables».mul
@@ -44819,7 +44299,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1267:8-1276:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1252:8-1261:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9 -/
 @[reducible]
 def
   «SharedAEdwardsBasepointTableRadix32x86_64-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -44830,7 +44310,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'b curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1283:12-1285:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1268:12-1270:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix32x86_64-tablesEdwardsPointx86_64-tables».mul
@@ -44842,7 +44322,7 @@ def
     basepoint_table self
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'b curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1278:8-1286:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1263:8-1271:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9 -/
 @[reducible]
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix32x86_64-tablesEdwardsPointx86_64-tables»
@@ -44854,7 +44334,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::clone]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.CoreCloneClone.clone
@@ -44868,7 +44348,7 @@ def
   ok a
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9 -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.CoreCloneClone :
   core.clone.Clone edwards.EdwardsBasepointTableRadix32.«i686-tables» := {
@@ -44877,7 +44357,7 @@ def edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.CoreCloneClone :
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::mul_base]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -44912,7 +44392,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::mul_base]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -44930,7 +44410,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::mul_base]: loop body 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -44965,7 +44445,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::mul_base]: loop 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -44983,7 +44463,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1243:12-1264:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1228:12-1249:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».mul_base
@@ -45002,7 +44482,7 @@ def
     a self P2 0#usize
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1195:12-1199:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1180:12-1184:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».basepoint
@@ -45092,7 +44572,7 @@ def
   ok points1
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::create]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -45121,7 +44601,7 @@ def
     ok (cont (iter1, a1, P1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::create]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -45140,7 +44620,7 @@ def
     (iter, a, P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::create]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1182:12-1192:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1167:12-1177:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».create
@@ -45158,7 +44638,7 @@ def
   ok a1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1178:8-1265:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1163:8-1250:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
@@ -45173,7 +44653,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1272:12-1275:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1257:12-1260:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   «SharedAEdwardsBasepointTableRadix32i686-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointi686-tables».mul
@@ -45185,7 +44665,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1267:8-1276:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1252:8-1261:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9 -/
 @[reducible]
 def
   «SharedAEdwardsBasepointTableRadix32i686-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
@@ -45196,7 +44676,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'b curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1283:12-1285:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1268:12-1270:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix32i686-tablesEdwardsPointi686-tables».mul
@@ -45208,7 +44688,7 @@ def
     basepoint_table self
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'b curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1278:8-1286:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1310:8-1316:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1263:8-1271:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9 -/
 @[reducible]
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix32i686-tablesEdwardsPointi686-tables»
@@ -45241,7 +44721,7 @@ def window.LookupTableRadix64.Insts.CoreCloneClone {T : Type _}
 }
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::clone]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.CoreCloneClone.clone
@@ -45255,7 +44735,7 @@ def
   ok a
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9 -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.CoreCloneClone
   : core.clone.Clone edwards.EdwardsBasepointTableRadix64.«x86_64-tables»
@@ -45332,7 +44812,7 @@ def window.LookupTableRadix64.select
   subtleConditionallyNegatableInst.conditional_negate t1 neg_mask
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::mul_base]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -45368,7 +44848,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::mul_base]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -45386,7 +44866,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::mul_base]: loop body 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -45422,7 +44902,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::mul_base]: loop 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -45440,7 +44920,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1243:12-1264:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1228:12-1249:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».mul_base
@@ -45459,7 +44939,7 @@ def
     a self P2 0#usize
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1195:12-1199:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1180:12-1184:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».basepoint
@@ -45562,7 +45042,7 @@ def window.LookupTableRadix64.Insts.CoreDefaultDefault.default
   ok a
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::create]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -45592,7 +45072,7 @@ def
     ok (cont (iter1, a1, P1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::create]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -45611,7 +45091,7 @@ def
     (iter, a, P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::create]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1182:12-1192:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1167:12-1177:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».create
@@ -45629,7 +45109,7 @@ def
   ok a1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1178:8-1265:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1163:8-1250:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -45645,7 +45125,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1272:12-1275:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1257:12-1260:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   «SharedAEdwardsBasepointTableRadix64x86_64-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables».mul
@@ -45657,7 +45137,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1267:8-1276:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1252:8-1261:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9 -/
 @[reducible]
 def
   «SharedAEdwardsBasepointTableRadix64x86_64-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -45668,7 +45148,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'b curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1283:12-1285:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1268:12-1270:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix64x86_64-tablesEdwardsPointx86_64-tables».mul
@@ -45680,7 +45160,7 @@ def
     basepoint_table self
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'b curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1278:8-1286:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1263:8-1271:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9 -/
 @[reducible]
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix64x86_64-tablesEdwardsPointx86_64-tables»
@@ -45692,7 +45172,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::clone]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.CoreCloneClone.clone
@@ -45706,7 +45186,7 @@ def
   ok a
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9 -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.CoreCloneClone :
   core.clone.Clone edwards.EdwardsBasepointTableRadix64.«i686-tables» := {
@@ -45715,7 +45195,7 @@ def edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.CoreCloneClone :
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::mul_base]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -45750,7 +45230,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::mul_base]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -45768,7 +45248,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::mul_base]: loop body 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -45803,7 +45283,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::mul_base]: loop 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -45821,7 +45301,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1243:12-1264:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1228:12-1249:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».mul_base
@@ -45840,7 +45320,7 @@ def
     a self P2 0#usize
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1195:12-1199:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1180:12-1184:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».basepoint
@@ -45930,7 +45410,7 @@ def
   ok points1
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::create]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -45959,7 +45439,7 @@ def
     ok (cont (iter1, a1, P1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::create]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -45978,7 +45458,7 @@ def
     (iter, a, P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::create]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1182:12-1192:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1167:12-1177:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».create
@@ -45996,7 +45476,7 @@ def
   ok a1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1178:8-1265:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1163:8-1250:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
@@ -46011,7 +45491,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1272:12-1275:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1257:12-1260:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   «SharedAEdwardsBasepointTableRadix64i686-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointi686-tables».mul
@@ -46023,7 +45503,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1267:8-1276:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1252:8-1261:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9 -/
 @[reducible]
 def
   «SharedAEdwardsBasepointTableRadix64i686-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
@@ -46034,7 +45514,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'b curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1283:12-1285:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1268:12-1270:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix64i686-tablesEdwardsPointi686-tables».mul
@@ -46046,7 +45526,7 @@ def
     basepoint_table self
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'b curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1278:8-1286:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1317:8-1323:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1263:8-1271:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9 -/
 @[reducible]
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix64i686-tablesEdwardsPointi686-tables»
@@ -46079,7 +45559,7 @@ def window.LookupTableRadix128.Insts.CoreCloneClone {T : Type _}
 }
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::clone]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.CoreCloneClone.clone
@@ -46094,7 +45574,7 @@ def
   ok a
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.CoreCloneClone
@@ -46172,7 +45652,7 @@ def window.LookupTableRadix128.select
   subtleConditionallyNegatableInst.conditional_negate t1 neg_mask
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::mul_base]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -46208,7 +45688,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::mul_base]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -46226,7 +45706,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::mul_base]: loop body 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -46262,7 +45742,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::mul_base]: loop 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -46280,7 +45760,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1243:12-1264:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1228:12-1249:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».mul_base
@@ -46299,7 +45779,7 @@ def
     a self P2 0#usize
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1195:12-1199:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1180:12-1184:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».basepoint
@@ -46402,7 +45882,7 @@ def window.LookupTableRadix128.Insts.CoreDefaultDefault.default
   ok a
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::create]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -46432,7 +45912,7 @@ def
     ok (cont (iter1, a1, P1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::create]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -46451,7 +45931,7 @@ def
     (iter, a, P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::create]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1182:12-1192:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1167:12-1177:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».create
@@ -46469,7 +45949,7 @@ def
   ok a1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1178:8-1265:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1163:8-1250:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -46485,7 +45965,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1272:12-1275:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1257:12-1260:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   «SharedAEdwardsBasepointTableRadix128x86_64-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables».mul
@@ -46497,7 +45977,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1267:8-1276:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1252:8-1261:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9 -/
 @[reducible]
 def
   «SharedAEdwardsBasepointTableRadix128x86_64-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -46508,7 +45988,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'b curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1283:12-1285:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1268:12-1270:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix128x86_64-tablesEdwardsPointx86_64-tables».mul
@@ -46520,7 +46000,7 @@ def
     basepoint_table self
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'b curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1278:8-1286:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1263:8-1271:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9 -/
 @[reducible]
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix128x86_64-tablesEdwardsPointx86_64-tables»
@@ -46532,7 +46012,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::clone]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.CoreCloneClone.clone
@@ -46547,7 +46027,7 @@ def
   ok a
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9 -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.CoreCloneClone
   : core.clone.Clone edwards.EdwardsBasepointTableRadix128.«i686-tables» := {
@@ -46556,7 +46036,7 @@ def edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.CoreCloneClone
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::mul_base]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -46591,7 +46071,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::mul_base]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -46609,7 +46089,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::mul_base]: loop body 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -46644,7 +46124,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::mul_base]: loop 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -46662,7 +46142,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1243:12-1264:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1228:12-1249:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».mul_base
@@ -46681,7 +46161,7 @@ def
     a self P2 0#usize
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1195:12-1199:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1180:12-1184:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».basepoint
@@ -46771,7 +46251,7 @@ def
   ok points1
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::create]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -46800,7 +46280,7 @@ def
     ok (cont (iter1, a1, P1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::create]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -46819,7 +46299,7 @@ def
     (iter, a, P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::create]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1182:12-1192:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1167:12-1177:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».create
@@ -46837,7 +46317,7 @@ def
   ok a1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1178:8-1265:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1163:8-1250:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
@@ -46852,7 +46332,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1272:12-1275:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1257:12-1260:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   «SharedAEdwardsBasepointTableRadix128i686-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointi686-tables».mul
@@ -46864,7 +46344,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1267:8-1276:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1252:8-1261:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9 -/
 @[reducible]
 def
   «SharedAEdwardsBasepointTableRadix128i686-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
@@ -46875,7 +46355,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'b curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1283:12-1285:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1268:12-1270:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix128i686-tablesEdwardsPointi686-tables».mul
@@ -46887,7 +46367,7 @@ def
     basepoint_table self
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'b curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1278:8-1286:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1324:8-1330:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1263:8-1271:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9 -/
 @[reducible]
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix128i686-tablesEdwardsPointi686-tables»
@@ -46920,7 +46400,7 @@ def window.LookupTableRadix256.Insts.CoreCloneClone {T : Type _}
 }
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::clone]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.CoreCloneClone.clone
@@ -46935,7 +46415,7 @@ def
   ok a
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.CoreCloneClone
@@ -47013,7 +46493,7 @@ def window.LookupTableRadix256.select
   subtleConditionallyNegatableInst.conditional_negate t1 neg_mask
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::mul_base]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -47049,7 +46529,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::mul_base]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -47067,7 +46547,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::mul_base]: loop body 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -47103,7 +46583,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::mul_base]: loop 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -47121,7 +46601,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1243:12-1264:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1228:12-1249:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».mul_base
@@ -47140,7 +46620,7 @@ def
     a self P2 0#usize
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1195:12-1199:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1180:12-1184:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».basepoint
@@ -47243,7 +46723,7 @@ def window.LookupTableRadix256.Insts.CoreDefaultDefault.default
   ok a
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::create]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -47273,7 +46753,7 @@ def
     ok (cont (iter1, a1, P1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::create]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -47292,7 +46772,7 @@ def
     (iter, a, P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::create]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1182:12-1192:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1167:12-1177:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables».create
@@ -47310,7 +46790,7 @@ def
   ok a1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1178:8-1265:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1163:8-1250:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
@@ -47326,7 +46806,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1272:12-1275:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1257:12-1260:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   «SharedAEdwardsBasepointTableRadix256x86_64-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables».mul
@@ -47338,7 +46818,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1267:8-1276:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1252:8-1261:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9 -/
 @[reducible]
 def
   «SharedAEdwardsBasepointTableRadix256x86_64-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
@@ -47349,7 +46829,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'b curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1283:12-1285:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1268:12-1270:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix256x86_64-tablesEdwardsPointx86_64-tables».mul
@@ -47361,7 +46841,7 @@ def
     basepoint_table self
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables, curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for &'b curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1278:8-1286:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1263:8-1271:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9 -/
 @[reducible]
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix256x86_64-tablesEdwardsPointx86_64-tables»
@@ -47373,7 +46853,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::clone]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.CoreCloneClone.clone
@@ -47388,7 +46868,7 @@ def
   ok a
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::clone::Clone for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1174:17-1174:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1159:17-1159:22; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9 -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.CoreCloneClone
   : core.clone.Clone edwards.EdwardsBasepointTableRadix256.«i686-tables» := {
@@ -47397,7 +46877,7 @@ def edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.CoreCloneClone
 }
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::mul_base]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -47432,7 +46912,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::mul_base]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -47450,7 +46930,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::mul_base]: loop body 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -47485,7 +46965,7 @@ def
   else ok (done P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::mul_base]: loop 1:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -47503,7 +46983,7 @@ def
     (P, i)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1243:12-1264:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1228:12-1249:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».mul_base
@@ -47522,7 +47002,7 @@ def
     a self P2 0#usize
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1195:12-1199:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1180:12-1184:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».basepoint
@@ -47612,7 +47092,7 @@ def
   ok points1
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::create]: loop body 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -47641,7 +47121,7 @@ def
     ok (cont (iter1, a1, P1))
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::create]: loop 0:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -47660,7 +47140,7 @@ def
     (iter, a, P)
 
 /-- [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::create]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1182:12-1192:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1167:12-1177:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables».create
@@ -47678,7 +47158,7 @@ def
   ok a1
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl curve25519_dalek::traits::BasepointTable<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1178:8-1265:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1163:8-1250:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
@@ -47693,7 +47173,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1272:12-1275:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1257:12-1260:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   «SharedAEdwardsBasepointTableRadix256i686-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointi686-tables».mul
@@ -47705,7 +47185,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1267:8-1276:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1252:8-1261:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9 -/
 @[reducible]
 def
   «SharedAEdwardsBasepointTableRadix256i686-tables».Insts.«CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
@@ -47716,7 +47196,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'b curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1283:12-1285:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1268:12-1270:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9
     Visibility: public -/
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix256i686-tablesEdwardsPointi686-tables».mul
@@ -47728,7 +47208,7 @@ def
     basepoint_table self
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::ops::arith::Mul<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables, curve25519_dalek::edwards::EdwardsPoint::i686-tables> for &'b curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1278:8-1286:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1331:8-1337:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1263:8-1271:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1316:8-1322:9 -/
 @[reducible]
 def
   SharedBScalar.Insts.«CoreOpsArithMulSharedAEdwardsBasepointTableRadix256i686-tablesEdwardsPointi686-tables»
@@ -47740,7 +47220,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1369:8-1372:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1354:8-1357:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables».from
@@ -47754,7 +47234,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1369:8-1372:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1354:8-1357:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
@@ -47765,7 +47245,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1369:8-1372:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1354:8-1357:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables».from
@@ -47779,7 +47259,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1369:8-1372:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1354:8-1357:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
@@ -47790,7 +47270,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1369:8-1372:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1354:8-1357:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablei686-tables».from
@@ -47804,7 +47284,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1369:8-1372:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1354:8-1357:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
@@ -47815,7 +47295,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1369:8-1372:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1354:8-1357:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables».from
@@ -47829,7 +47309,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1369:8-1372:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1354:8-1357:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
@@ -47840,7 +47320,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1373:8-1376:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1361:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables».from
@@ -47854,7 +47334,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1373:8-1376:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1361:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
@@ -47865,7 +47345,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1373:8-1376:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1361:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables».from
@@ -47879,7 +47359,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1373:8-1376:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1361:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
@@ -47890,7 +47370,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1373:8-1376:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1361:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablei686-tables».from
@@ -47904,7 +47384,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1373:8-1376:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1361:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
@@ -47915,7 +47395,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1373:8-1376:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1361:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables».from
@@ -47929,7 +47409,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1373:8-1376:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1361:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
@@ -47940,7 +47420,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1377:8-1380:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1362:8-1365:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables».from
@@ -47954,7 +47434,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1377:8-1380:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1362:8-1365:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
@@ -47965,7 +47445,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1377:8-1380:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1362:8-1365:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables».from
@@ -47979,7 +47459,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1377:8-1380:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1362:8-1365:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
@@ -47990,7 +47470,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1377:8-1380:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1362:8-1365:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablei686-tables».from
@@ -48004,7 +47484,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1377:8-1380:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1362:8-1365:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
@@ -48015,7 +47495,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1377:8-1380:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1362:8-1365:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables».from
@@ -48029,7 +47509,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1377:8-1380:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1362:8-1365:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
@@ -48040,7 +47520,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1381:8-1384:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1366:8-1369:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables».from
@@ -48054,7 +47534,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1381:8-1384:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1366:8-1369:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
@@ -48065,7 +47545,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1381:8-1384:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1366:8-1369:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables».from
@@ -48079,7 +47559,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1381:8-1384:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1366:8-1369:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTable.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
@@ -48090,7 +47570,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1381:8-1384:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1366:8-1369:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablei686-tables».from
@@ -48104,7 +47584,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1381:8-1384:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1366:8-1369:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
@@ -48115,7 +47595,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1381:8-1384:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1366:8-1369:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables».from
@@ -48129,7 +47609,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1381:8-1384:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1366:8-1369:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTable.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
@@ -48140,7 +47620,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1387:8-1390:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1372:8-1375:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables».from
@@ -48154,7 +47634,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1387:8-1390:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1372:8-1375:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
@@ -48165,7 +47645,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1387:8-1390:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1372:8-1375:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables».from
@@ -48179,7 +47659,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1387:8-1390:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1372:8-1375:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
@@ -48190,7 +47670,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1387:8-1390:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1372:8-1375:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables».from
@@ -48204,7 +47684,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1387:8-1390:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1372:8-1375:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
@@ -48215,7 +47695,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1387:8-1390:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1372:8-1375:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables».from
@@ -48229,7 +47709,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1387:8-1390:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1372:8-1375:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
@@ -48240,7 +47720,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1391:8-1394:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1376:8-1379:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables».from
@@ -48254,7 +47734,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1391:8-1394:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1376:8-1379:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
@@ -48265,7 +47745,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1391:8-1394:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1376:8-1379:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables».from
@@ -48279,7 +47759,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1391:8-1394:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1376:8-1379:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
@@ -48290,7 +47770,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1391:8-1394:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1376:8-1379:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables».from
@@ -48304,7 +47784,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1391:8-1394:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1376:8-1379:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
@@ -48315,7 +47795,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1391:8-1394:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1376:8-1379:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables».from
@@ -48329,7 +47809,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1391:8-1394:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1376:8-1379:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
@@ -48340,7 +47820,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1395:8-1398:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1380:8-1383:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables».from
@@ -48354,7 +47834,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1395:8-1398:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1380:8-1383:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
@@ -48365,7 +47845,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1395:8-1398:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1380:8-1383:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables».from
@@ -48379,7 +47859,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1395:8-1398:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1380:8-1383:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix32.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
@@ -48390,7 +47870,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1395:8-1398:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1380:8-1383:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables».from
@@ -48404,7 +47884,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1395:8-1398:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1380:8-1383:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
@@ -48415,7 +47895,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1395:8-1398:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1380:8-1383:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables».from
@@ -48429,7 +47909,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1395:8-1398:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1380:8-1383:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix32.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
@@ -48440,7 +47920,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1401:8-1404:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1386:8-1389:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables».from
@@ -48454,7 +47934,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1401:8-1404:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1386:8-1389:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
@@ -48465,7 +47945,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1401:8-1404:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1386:8-1389:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables».from
@@ -48479,7 +47959,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1401:8-1404:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1386:8-1389:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
@@ -48490,7 +47970,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1401:8-1404:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1386:8-1389:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables».from
@@ -48504,7 +47984,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1401:8-1404:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1386:8-1389:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
@@ -48515,7 +47995,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1401:8-1404:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1386:8-1389:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables».from
@@ -48529,7 +48009,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1401:8-1404:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1386:8-1389:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
@@ -48540,7 +48020,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1405:8-1408:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1390:8-1393:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables».from
@@ -48554,7 +48034,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1405:8-1408:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1390:8-1393:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
@@ -48565,7 +48045,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1405:8-1408:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1390:8-1393:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables».from
@@ -48579,7 +48059,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1405:8-1408:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1390:8-1393:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix64.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
@@ -48590,7 +48070,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1405:8-1408:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1390:8-1393:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables».from
@@ -48604,7 +48084,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1405:8-1408:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1390:8-1393:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
@@ -48615,7 +48095,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1405:8-1408:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1390:8-1393:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables».from
@@ -48629,7 +48109,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1405:8-1408:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1390:8-1393:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix64.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
@@ -48640,7 +48120,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1411:8-1414:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1396:8-1399:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables».from
@@ -48654,7 +48134,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1411:8-1414:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1396:8-1399:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
@@ -48665,7 +48145,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1411:8-1414:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1396:8-1399:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables».from
@@ -48679,7 +48159,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1411:8-1414:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1396:8-1399:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«x86_64-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
@@ -48690,7 +48170,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1353:12-1355:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1411:8-1414:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1338:12-1340:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1396:8-1399:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables».from
@@ -48704,7 +48184,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1352:8-1356:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1411:8-1414:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1337:8-1341:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1396:8-1399:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix256.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
@@ -48715,7 +48195,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::from]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1359:12-1361:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1411:8-1414:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1344:12-1346:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1396:8-1399:9
     Visibility: public -/
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables».from
@@ -48729,7 +48209,7 @@ def
     ep
 
 /-- Trait implementation: [curve25519_dalek::edwards::{impl core::convert::From<&'a curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables> for curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1358:8-1362:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1411:8-1414:9 -/
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1343:8-1347:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1396:8-1399:9 -/
 @[reducible]
 def
   edwards.EdwardsBasepointTableRadix128.«i686-tables».Insts.«CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
@@ -48740,7 +48220,7 @@ def
 }
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::mul_by_cofactor]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1420:4-1422:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1405:4-1407:5
     Visibility: public -/
 def edwards.«EdwardsPointx86_64-tables».mul_by_cofactor
   (self : edwards.EdwardsPoint.«x86_64-tables») :
@@ -48749,7 +48229,7 @@ def edwards.«EdwardsPointx86_64-tables».mul_by_cofactor
   edwards.«EdwardsPointx86_64-tables».mul_by_pow_2 self 3#u32
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::mul_by_cofactor]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1420:4-1422:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1405:4-1407:5
     Visibility: public -/
 def edwards.«EdwardsPointx86_64-no-tables».mul_by_cofactor
   (self : edwards.EdwardsPoint.«x86_64-no-tables») :
@@ -48758,7 +48238,7 @@ def edwards.«EdwardsPointx86_64-no-tables».mul_by_cofactor
   edwards.«EdwardsPointx86_64-no-tables».mul_by_pow_2 self 3#u32
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-tables}::mul_by_cofactor]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1420:4-1422:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1405:4-1407:5
     Visibility: public -/
 def edwards.«EdwardsPointi686-tables».mul_by_cofactor
   (self : edwards.EdwardsPoint.«i686-tables») :
@@ -48767,7 +48247,7 @@ def edwards.«EdwardsPointi686-tables».mul_by_cofactor
   edwards.«EdwardsPointi686-tables».mul_by_pow_2 self 3#u32
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::mul_by_cofactor]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1420:4-1422:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1405:4-1407:5
     Visibility: public -/
 def edwards.«EdwardsPointi686-no-tables».mul_by_cofactor
   (self : edwards.EdwardsPoint.«i686-no-tables») :
@@ -48788,7 +48268,7 @@ def traits.IsIdentity.Blanket.is_identity
   core.convert.IntoFrom.into Bool.Insts.CoreConvertFromChoice c
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::is_small_order]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1460:4-1462:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1445:4-1447:5
     Visibility: public -/
 def edwards.«EdwardsPointx86_64-tables».is_small_order
   (self : edwards.EdwardsPoint.«x86_64-tables») : Result Bool := do
@@ -48799,7 +48279,7 @@ def edwards.«EdwardsPointx86_64-tables».is_small_order
     ep
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::is_small_order]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1460:4-1462:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1445:4-1447:5
     Visibility: public -/
 def edwards.«EdwardsPointx86_64-no-tables».is_small_order
   (self : edwards.EdwardsPoint.«x86_64-no-tables») : Result Bool := do
@@ -48810,7 +48290,7 @@ def edwards.«EdwardsPointx86_64-no-tables».is_small_order
     ep
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-tables}::is_small_order]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1460:4-1462:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1445:4-1447:5
     Visibility: public -/
 def edwards.«EdwardsPointi686-tables».is_small_order
   (self : edwards.EdwardsPoint.«i686-tables») : Result Bool := do
@@ -48821,7 +48301,7 @@ def edwards.«EdwardsPointi686-tables».is_small_order
     ep
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::is_small_order]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1460:4-1462:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1445:4-1447:5
     Visibility: public -/
 def edwards.«EdwardsPointi686-no-tables».is_small_order
   (self : edwards.EdwardsPoint.«i686-no-tables») : Result Bool := do
@@ -48832,7 +48312,7 @@ def edwards.«EdwardsPointi686-no-tables».is_small_order
     ep
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::is_torsion_free]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1490:4-1492:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1475:4-1477:5
     Visibility: public -/
 def edwards.«EdwardsPointx86_64-tables».is_torsion_free
   (self : edwards.EdwardsPoint.«x86_64-tables») : Result Bool := do
@@ -48845,7 +48325,7 @@ def edwards.«EdwardsPointx86_64-tables».is_torsion_free
     ep
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::is_torsion_free]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1490:4-1492:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1475:4-1477:5
     Visibility: public -/
 def edwards.«EdwardsPointx86_64-no-tables».is_torsion_free
   (self : edwards.EdwardsPoint.«x86_64-no-tables») : Result Bool := do
@@ -48858,7 +48338,7 @@ def edwards.«EdwardsPointx86_64-no-tables».is_torsion_free
     ep
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-tables}::is_torsion_free]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1490:4-1492:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1475:4-1477:5
     Visibility: public -/
 def edwards.«EdwardsPointi686-tables».is_torsion_free
   (self : edwards.EdwardsPoint.«i686-tables») : Result Bool := do
@@ -48871,7 +48351,7 @@ def edwards.«EdwardsPointi686-tables».is_torsion_free
     ep
 
 /-- [curve25519_dalek::edwards::{curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::is_torsion_free]:
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1490:4-1492:5
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1475:4-1477:5
     Visibility: public -/
 def edwards.«EdwardsPointi686-no-tables».is_torsion_free
   (self : edwards.EdwardsPoint.«i686-no-tables») : Result Bool := do

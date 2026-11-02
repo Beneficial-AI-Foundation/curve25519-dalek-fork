@@ -666,8 +666,8 @@ def PairsOK (w : ℕ) (ss : List scalar.Scalar) (ops : List (Option O.E))
     (pointsInst : core.iter.traits.collect.IntoIterator J (Option O.E) IntoIter2)
     (scalars : I) (points : J) : Result (Option O.E) := do
   let t ← scalarsInst.into_iter scalars
-  let scalars1 ← loop (fun ((it1, out1) : IntoIter × alloc.vec.Vec Item) =>
-    collect.collectBody scalarsInst.iteratorInst it1 out1) (t, alloc.vec.Vec.new Item)
+  let scalars1 ← alloc.vec.FromIteratorVec.from_iter
+    (core.iter.traits.collect.IntoIterator.Blanket scalarsInst.iteratorInst) t
   let size := alloc.vec.Vec.len scalars1
   let w ←
     if size < 500#usize
@@ -835,9 +835,7 @@ theorem pippengerMain_spec (hid : O.IdentitySpec) (hadd : O.AddSpec)
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  apply spec_bind (collect.collectLoop_spec _ it xs hit (alloc.vec.Vec.new _) (by simpa using hxs))
-  intro vs hvs
-  replace hvs : vs.val = xs := by rw [hvs]; rfl
+  step with collect.fromIter_spec _ it xs hit hxs as ⟨vs, hvs⟩
   apply spec_bind (Pₘ := fun (w : Usize) => 6 ≤ w.val ∧ w.val ≤ 8)
   · split_ifs <;> rw [WP.spec_ok] <;> decide
   intro w hw
