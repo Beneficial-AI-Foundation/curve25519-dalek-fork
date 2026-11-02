@@ -62058,13 +62058,15 @@ def
   Result (ControlFlow Std.Usize (core.result.Result scalar.HalfWidthScalar
     Unit))
   := do
-  if i < 32#usize
+  let s ← lift (Array.to_slice value.bytes)
+  let i1 := Slice.len s
+  if i < i1
   then
-    let i1 ← Array.index_usize value.bytes i
-    if i1 != 0#u8
+    let i2 ← Array.index_usize value.bytes i
+    if i2 != 0#u8
     then ok (done (core.result.Result.Err ()))
-    else let i2 ← i + 1#usize
-         ok (cont i2)
+    else let i3 ← i + 1#usize
+         ok (cont i3)
   else ok (done (core.result.Result.Ok value))
 
 /-- [curve25519_dalek::scalar::{impl core::convert::TryFrom<curve25519_dalek::scalar::Scalar, ()> for curve25519_dalek::scalar::HalfWidthScalar}::try_from]: loop 0:
