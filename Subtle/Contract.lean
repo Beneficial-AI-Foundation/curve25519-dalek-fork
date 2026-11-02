@@ -1,57 +1,36 @@
 /-
-Copyright 2026 The Beneficial AI Foundation. All rights reserved.
+Copyright 2025 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo,
-  Hoang Le Truong, Markus Ferdinand Dablander
+Authors: Oliver Butterley, Zhang-Liao, Alessandro D'Angelo, Hoang Le Truong,
+  Markus Ferdinand Dablander
 -/
 module
 public import Curve25519Dalek.Types
 @[expose] public section
--- The style linter misreads `@[rust_fun "..."]`/`@[rust_type "..."]` attributes.
 set_option linter.style.whitespace false
--- Docstrings quote the Aeneas name patterns, which exceed 100 characters.
--- The contract predicates name their hypotheses (`hc : c.IsValid`), as the theorems do.
 set_option linter.unusedVariables false
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek
 
-/-! # Functions of the `subtle` crate (subtle-2.6.1) — TRUSTED
+/-! # Functions of the `subtle` crate (subtle-2.6.1)
 
-This file and `Subtle/Types.lean` are the trusted base for `subtle`. Nothing here is derived.
+This file and `Subtle/Types.lean` are the trusted base for `subtle`.
 
-* **Signatures.** Each external function that Aeneas expects (see the gitignored
-  `Curve25519Dalek/FunsExternal_Template.lean`) is an `opaque` constant with the template's exact
-  name, type and `@[rust_fun]` attribute. `opaque` adds no axiom, so `#print axioms` lists exactly
-  the axiom `RustAx.subtle` below.
-* **Contracts.** Each function has one predicate `….Contract : Prop` that restates the Rust
-  documentation (quoted in its doc comment). Specs that call trait methods of a generic `T` assume
-  the behaviour of those methods as a hypothesis. An unconditional spec there could prove `False`.
-  The single axiom `RustAx.subtle` (end of file) states all the predicates; the `@[step]` theorems
-  `…_spec` used by the proofs are its projections, so `#print axioms` lists `RustAx.subtle`.
-* **Faithful bodies.** Three functions keep a body that is a verbatim translation of the Rust body:
-  the two `@[trait_default]` methods of `ConditionallySelectable` (`impl_def` in `Funs.lean` must
-  unfold them) and the generic `ConditionallyNegatable::conditional_negate`.
+* Signatures: Each external function that Aeneas expects is an `opaque` constant with the
+  required name, type and `@[rust_fun]` attribute.
+* Contracts: Each function used by the proofs has one predicate `….Contract : Prop` that restates
+  the Rust documentation. Specs that call trait methods of a generic `T` assume the behaviour of
+  those methods as a hypothesis.
+* Axiom: The single axiom `RustAx.subtle` states that all the contracts hold.
 
-**`Choice` validity.** `Choice` is a plain `u8` (`Subtle/Types.lean`). The crate maintains the
-invariant that it is `0` or `1` (`subtle.Choice.IsValid` below). Every contract with a `Choice`
-argument `c` assumes `c.IsValid`, and every contract returning a `Choice` states that the result
-is valid. The crate is translated with debug assertions (`debug_assert!` becomes `massert`), and
-these contracts do the same:
-* `From<u8> for Choice` and `From<Choice> for bool` have `debug_assert!((x == 0) | (x == 1))`.
-* `BitAnd` and `BitOr` go through `.into()`, which asserts validity.
-* `Not` computes `1 & !x`, which is always 0 or 1.
-* `ConditionallySelectable for u8` computes `-(choice as i8)`. That overflows (a debug panic) for
-  `choice = 128`. All integer specs say nothing about the result for an invalid choice; Rust
-  returns a bit-mix there.
-
-Derived facts (closure lemmas for `IsValid`, specs of the faithful bodies) are in
-`Subtle/Lemmas.lean`.
+**`Choice` validity.** `Choice` is a plain `u8`. The crate maintains the invariant that it is `0` or
+`1` (`subtle.Choice.IsValid` below). Every contract with a `Choice` argument `c` assumes
+`c.IsValid`, and every contract returning a `Choice` states that the result is valid.
 -/
 
 /-! ## `Choice` -/
 
-/-- A `Choice` is valid when its byte is `0` or `1`: "It is a wrapper around a `u8`, which should
-have the value either `1` (true) or `0` (false)." (lib.rs:104-105) -/
+/-- A `Choice` is valid when its byte is `0` or `1`. -/
 abbrev subtle.Choice.IsValid (c : subtle.Choice) : Prop := c = 0#u8 ∨ c = 1#u8
 
 /-- [subtle::{subtle::Choice}::unwrap_u8]:
@@ -269,15 +248,6 @@ def U8.Insts.SubtleConditionallySelectable.conditional_assign.Contract : Prop :=
 opaque U8.Insts.SubtleConditionallySelectable.conditional_swap :
   Std.U8 → Std.U8 → subtle.Choice → Result (Std.U8 × Std.U8)
 
-/-- "Conditionally swap `self` and `other` if `choice == 1`; otherwise, reassign both unto
-themselves." (lib.rs:446-447). `-(choice as i8)` overflows for `choice = 128`, so the spec
-requires a valid choice. -/
-@[nolint defsWithUnderscore]
-def U8.Insts.SubtleConditionallySelectable.conditional_swap.Contract : Prop :=
-  ∀ (a b : Std.U8) (choice : subtle.Choice) (hc : choice.IsValid),
-    U8.Insts.SubtleConditionallySelectable.conditional_swap a b choice ⦃ r =>
-      (choice = 0#u8 → r = (a, b)) ∧ (choice = 1#u8 → r = (b, a)) ⦄
-
 /-- [subtle::{impl subtle::ConditionallySelectable for u32}::conditional_select]:
     Source: 'subtle-2.6.1/src/lib.rs', lines 513:12-513:77
     Name pattern: [subtle::{subtle::ConditionallySelectable<u32>}::conditional_select] -/
@@ -445,7 +415,6 @@ structure subtle.Contract : Prop where
   u16_ct_eq : U16.Insts.SubtleConstantTimeEq.ct_eq.Contract
   u8_conditional_select : U8.Insts.SubtleConditionallySelectable.conditional_select.Contract
   u8_conditional_assign : U8.Insts.SubtleConditionallySelectable.conditional_assign.Contract
-  u8_conditional_swap : U8.Insts.SubtleConditionallySelectable.conditional_swap.Contract
   u32_conditional_select : U32.Insts.SubtleConditionallySelectable.conditional_select.Contract
   u32_conditional_assign : U32.Insts.SubtleConditionallySelectable.conditional_assign.Contract
   u32_conditional_swap : U32.Insts.SubtleConditionallySelectable.conditional_swap.Contract
@@ -552,15 +521,6 @@ theorem U8.Insts.SubtleConditionallySelectable.conditional_assign_spec
     U8.Insts.SubtleConditionallySelectable.conditional_assign a b choice ⦃ r =>
       (choice = 0#u8 → r = a) ∧ (choice = 1#u8 → r = b) ⦄ :=
   RustAx.subtle.u8_conditional_assign a b choice hc
-
-/-- `U8.Insts.SubtleConditionallySelectable.conditional_swap`
-meets its contract (`RustAx.subtle`). -/
-@[step]
-theorem U8.Insts.SubtleConditionallySelectable.conditional_swap_spec
-    (a b : Std.U8) (choice : subtle.Choice) (hc : choice.IsValid) :
-    U8.Insts.SubtleConditionallySelectable.conditional_swap a b choice ⦃ r =>
-      (choice = 0#u8 → r = (a, b)) ∧ (choice = 1#u8 → r = (b, a)) ⦄ :=
-  RustAx.subtle.u8_conditional_swap a b choice hc
 
 /-- `U32.Insts.SubtleConditionallySelectable.conditional_select`
 meets its contract (`RustAx.subtle`). -/

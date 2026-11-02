@@ -5,9 +5,7 @@ Authors: Oliver Butterley
 -/
 module
 public import Aeneas.Std.Scalar.Core
-import Mathlib.Data.Finset.Attr
 @[expose] public section
--- The style linter misreads `@[rust_fun "..."]`/`@[rust_type "..."]` attributes.
 set_option linter.style.whitespace false
 open Aeneas Aeneas.Std
 
