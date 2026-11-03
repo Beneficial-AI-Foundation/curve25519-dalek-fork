@@ -56508,7 +56508,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1163:4-1165:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1154:4-1156:5
     Visibility: public -/
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoBasepointTablex86_64-tablesRistrettoPointx86_64-tables».mul
@@ -56556,7 +56556,7 @@ def ristretto.«RistrettoPointx86_64-no-tables».mul_base
     scalar rp
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1163:4-1165:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1154:4-1156:5
     Visibility: public -/
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoBasepointTablei686-tablesRistrettoPointi686-tables».mul
@@ -57207,68 +57207,65 @@ def
     scalar.Scalar.Insts.«CoreOpsArithMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».mul
 }
 
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1003:12-1005:13 -/
+/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::multiscalar_mul]: loop body 0:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Visibility: public -/
 @[rust_loop_body]
 def
-  ristretto.«MultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».multiscalar_mul.extended_points_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointx86_64-tablesInst» :
-  core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«x86_64-tables»)
-  (points : It) (out : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») :
-  Result (ControlFlow (It × (alloc.vec.Vec
+  ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables».multiscalar_mul_loop.body
+  {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  {Clause2_Item : Type _} {Clause2_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+  (coreitertraitscollectIntoIteratorInst1 :
+  core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+  («coreborrowBorrowClause2_ItemRistrettoPointx86_64-tablesInst» :
+  core.borrow.Borrow Clause2_Item ristretto.RistrettoPoint.«x86_64-tables»)
+  (iter : Clause2_IntoIter)
+  (extended_points : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») :
+  Result (ControlFlow (Clause2_IntoIter × (alloc.vec.Vec
     edwards.EdwardsPoint.«x86_64-tables»)) (alloc.vec.Vec
     edwards.EdwardsPoint.«x86_64-tables»))
   := do
-  let (o, points1) ← coreitertraitsiteratorIteratorInst.next points
+  let (o, iter1) ←
+    coreitertraitscollectIntoIteratorInst1.iteratorInst.next iter
   match o with
-  | none => ok (done out)
+  | none => ok (done extended_points)
   | some P =>
     let rp ←
-      «coreborrowBorrowClause0_ItemRistrettoPointx86_64-tablesInst».borrow P
-    let out1 ← alloc.vec.Vec.push out rp
-    ok (cont (points1, out1))
+      «coreborrowBorrowClause2_ItemRistrettoPointx86_64-tablesInst».borrow P
+    let extended_points1 ← alloc.vec.Vec.push extended_points rp
+    ok (cont (iter1, extended_points1))
 
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1003:12-1005:13 -/
+/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::multiscalar_mul]: loop 0:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Visibility: public -/
 @[rust_loop]
 def
-  ristretto.«MultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».multiscalar_mul.extended_points_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointx86_64-tablesInst» :
-  core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«x86_64-tables»)
-  (points : It) (out : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») :
+  ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables».multiscalar_mul_loop
+  {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  {Clause2_Item : Type _} {Clause2_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+  (coreitertraitscollectIntoIteratorInst1 :
+  core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+  («coreborrowBorrowClause2_ItemRistrettoPointx86_64-tablesInst» :
+  core.borrow.Borrow Clause2_Item ristretto.RistrettoPoint.«x86_64-tables»)
+  (iter : Clause2_IntoIter)
+  (extended_points : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
   := do
   loop
-    (fun (points1, out1) =>
-      ristretto.«MultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».multiscalar_mul.extended_points_loop.body
-      coreitertraitsiteratorIteratorInst
-      «coreborrowBorrowClause0_ItemRistrettoPointx86_64-tablesInst» points1
-      out1)
-    (points, out)
-
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 997:8-1007:9 -/
-@[reducible]
-def
-  ristretto.«MultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».multiscalar_mul.extended_points
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointx86_64-tablesInst» :
-  core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«x86_64-tables»)
-  (points : It) :
-  Result (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-  := do
-  ristretto.«MultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».multiscalar_mul.extended_points_loop
-    coreitertraitsiteratorIteratorInst
-    «coreborrowBorrowClause0_ItemRistrettoPointx86_64-tablesInst» points
-    (alloc.vec.Vec.new edwards.EdwardsPoint.«x86_64-tables»)
+    (fun (iter1, extended_points1) =>
+      ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables».multiscalar_mul_loop.body
+      coreitertraitscollectIntoIteratorInst
+      coreitertraitscollectIntoIteratorInst1
+      «coreborrowBorrowClause2_ItemRistrettoPointx86_64-tablesInst» iter1
+      extended_points1)
+    (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1011:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1002:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables».multiscalar_mul
@@ -57284,11 +57281,13 @@ def
   (scalars : I) (points : J) :
   Result ristretto.RistrettoPoint.«x86_64-tables»
   := do
-  let t ← coreitertraitscollectIntoIteratorInst1.into_iter points
+  let iter ← coreitertraitscollectIntoIteratorInst1.into_iter points
   let extended_points ←
-    ristretto.«MultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».multiscalar_mul.extended_points
-      coreitertraitscollectIntoIteratorInst1.iteratorInst
-      «coreborrowBorrowClause2_ItemRistrettoPointx86_64-tablesInst» t
+    ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables».multiscalar_mul_loop
+      coreitertraitscollectIntoIteratorInst
+      coreitertraitscollectIntoIteratorInst1
+      «coreborrowBorrowClause2_ItemRistrettoPointx86_64-tablesInst» iter
+      (alloc.vec.Vec.new edwards.EdwardsPoint.«x86_64-tables»)
   let ep ←
     edwards.EdwardsPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables».multiscalar_mul
       coreitertraitscollectIntoIteratorInst
@@ -57299,7 +57298,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1012:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1003:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables»
@@ -57320,71 +57319,66 @@ def
     «coreborrowBorrowPRistrettoPointx86_64-tablesInst»
 }
 
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1003:12-1005:13 -/
+/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::multiscalar_mul]: loop body 0:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Visibility: public -/
 @[rust_loop_body]
 def
-  ristretto.«MultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».multiscalar_mul.extended_points_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointx86_64-no-tablesInst» :
-  core.borrow.Borrow Clause0_Item
-  ristretto.RistrettoPoint.«x86_64-no-tables») (points : It)
-  (out : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») :
-  Result (ControlFlow (It × (alloc.vec.Vec
+  ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables».multiscalar_mul_loop.body
+  {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  {Clause2_Item : Type _} {Clause2_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+  (coreitertraitscollectIntoIteratorInst1 :
+  core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+  («coreborrowBorrowClause2_ItemRistrettoPointx86_64-no-tablesInst» :
+  core.borrow.Borrow Clause2_Item
+  ristretto.RistrettoPoint.«x86_64-no-tables») (iter : Clause2_IntoIter)
+  (extended_points : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») :
+  Result (ControlFlow (Clause2_IntoIter × (alloc.vec.Vec
     edwards.EdwardsPoint.«x86_64-no-tables»)) (alloc.vec.Vec
     edwards.EdwardsPoint.«x86_64-no-tables»))
   := do
-  let (o, points1) ← coreitertraitsiteratorIteratorInst.next points
+  let (o, iter1) ←
+    coreitertraitscollectIntoIteratorInst1.iteratorInst.next iter
   match o with
-  | none => ok (done out)
+  | none => ok (done extended_points)
   | some P =>
     let rp ←
-      «coreborrowBorrowClause0_ItemRistrettoPointx86_64-no-tablesInst».borrow
+      «coreborrowBorrowClause2_ItemRistrettoPointx86_64-no-tablesInst».borrow
         P
-    let out1 ← alloc.vec.Vec.push out rp
-    ok (cont (points1, out1))
+    let extended_points1 ← alloc.vec.Vec.push extended_points rp
+    ok (cont (iter1, extended_points1))
 
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1003:12-1005:13 -/
+/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::multiscalar_mul]: loop 0:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Visibility: public -/
 @[rust_loop]
 def
-  ristretto.«MultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».multiscalar_mul.extended_points_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointx86_64-no-tablesInst» :
-  core.borrow.Borrow Clause0_Item
-  ristretto.RistrettoPoint.«x86_64-no-tables») (points : It)
-  (out : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») :
+  ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables».multiscalar_mul_loop
+  {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  {Clause2_Item : Type _} {Clause2_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+  (coreitertraitscollectIntoIteratorInst1 :
+  core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+  («coreborrowBorrowClause2_ItemRistrettoPointx86_64-no-tablesInst» :
+  core.borrow.Borrow Clause2_Item
+  ristretto.RistrettoPoint.«x86_64-no-tables») (iter : Clause2_IntoIter)
+  (extended_points : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
   := do
   loop
-    (fun (points1, out1) =>
-      ristretto.«MultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».multiscalar_mul.extended_points_loop.body
-      coreitertraitsiteratorIteratorInst
-      «coreborrowBorrowClause0_ItemRistrettoPointx86_64-no-tablesInst»
-      points1 out1)
-    (points, out)
-
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 997:8-1007:9 -/
-@[reducible]
-def
-  ristretto.«MultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».multiscalar_mul.extended_points
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointx86_64-no-tablesInst» :
-  core.borrow.Borrow Clause0_Item
-  ristretto.RistrettoPoint.«x86_64-no-tables») (points : It) :
-  Result (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
-  := do
-  ristretto.«MultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».multiscalar_mul.extended_points_loop
-    coreitertraitsiteratorIteratorInst
-    «coreborrowBorrowClause0_ItemRistrettoPointx86_64-no-tablesInst» points
-    (alloc.vec.Vec.new edwards.EdwardsPoint.«x86_64-no-tables»)
+    (fun (iter1, extended_points1) =>
+      ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables».multiscalar_mul_loop.body
+      coreitertraitscollectIntoIteratorInst
+      coreitertraitscollectIntoIteratorInst1
+      «coreborrowBorrowClause2_ItemRistrettoPointx86_64-no-tablesInst» iter1
+      extended_points1)
+    (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1011:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1002:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables».multiscalar_mul
@@ -57400,11 +57394,13 @@ def
   ristretto.RistrettoPoint.«x86_64-no-tables») (scalars : I) (points : J) :
   Result ristretto.RistrettoPoint.«x86_64-no-tables»
   := do
-  let t ← coreitertraitscollectIntoIteratorInst1.into_iter points
+  let iter ← coreitertraitscollectIntoIteratorInst1.into_iter points
   let extended_points ←
-    ristretto.«MultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».multiscalar_mul.extended_points
-      coreitertraitscollectIntoIteratorInst1.iteratorInst
-      «coreborrowBorrowClause2_ItemRistrettoPointx86_64-no-tablesInst» t
+    ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables».multiscalar_mul_loop
+      coreitertraitscollectIntoIteratorInst
+      coreitertraitscollectIntoIteratorInst1
+      «coreborrowBorrowClause2_ItemRistrettoPointx86_64-no-tablesInst» iter
+      (alloc.vec.Vec.new edwards.EdwardsPoint.«x86_64-no-tables»)
   let ep ←
     edwards.EdwardsPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables».multiscalar_mul
       coreitertraitscollectIntoIteratorInst
@@ -57415,7 +57411,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1012:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1003:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables»
@@ -57437,68 +57433,65 @@ def
     «coreborrowBorrowPRistrettoPointx86_64-no-tablesInst»
 }
 
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1003:12-1005:13 -/
+/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::multiscalar_mul]: loop body 0:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Visibility: public -/
 @[rust_loop_body]
 def
-  ristretto.«MultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».multiscalar_mul.extended_points_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointi686-tablesInst» :
-  core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-tables»)
-  (points : It) (out : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») :
-  Result (ControlFlow (It × (alloc.vec.Vec
+  ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-tables».multiscalar_mul_loop.body
+  {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  {Clause2_Item : Type _} {Clause2_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+  (coreitertraitscollectIntoIteratorInst1 :
+  core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+  («coreborrowBorrowClause2_ItemRistrettoPointi686-tablesInst» :
+  core.borrow.Borrow Clause2_Item ristretto.RistrettoPoint.«i686-tables»)
+  (iter : Clause2_IntoIter)
+  (extended_points : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») :
+  Result (ControlFlow (Clause2_IntoIter × (alloc.vec.Vec
     edwards.EdwardsPoint.«i686-tables»)) (alloc.vec.Vec
     edwards.EdwardsPoint.«i686-tables»))
   := do
-  let (o, points1) ← coreitertraitsiteratorIteratorInst.next points
+  let (o, iter1) ←
+    coreitertraitscollectIntoIteratorInst1.iteratorInst.next iter
   match o with
-  | none => ok (done out)
+  | none => ok (done extended_points)
   | some P =>
     let rp ←
-      «coreborrowBorrowClause0_ItemRistrettoPointi686-tablesInst».borrow P
-    let out1 ← alloc.vec.Vec.push out rp
-    ok (cont (points1, out1))
+      «coreborrowBorrowClause2_ItemRistrettoPointi686-tablesInst».borrow P
+    let extended_points1 ← alloc.vec.Vec.push extended_points rp
+    ok (cont (iter1, extended_points1))
 
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1003:12-1005:13 -/
+/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::multiscalar_mul]: loop 0:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Visibility: public -/
 @[rust_loop]
 def
-  ristretto.«MultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».multiscalar_mul.extended_points_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointi686-tablesInst» :
-  core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-tables»)
-  (points : It) (out : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») :
+  ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-tables».multiscalar_mul_loop
+  {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  {Clause2_Item : Type _} {Clause2_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+  (coreitertraitscollectIntoIteratorInst1 :
+  core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+  («coreborrowBorrowClause2_ItemRistrettoPointi686-tablesInst» :
+  core.borrow.Borrow Clause2_Item ristretto.RistrettoPoint.«i686-tables»)
+  (iter : Clause2_IntoIter)
+  (extended_points : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
   := do
   loop
-    (fun (points1, out1) =>
-      ristretto.«MultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».multiscalar_mul.extended_points_loop.body
-      coreitertraitsiteratorIteratorInst
-      «coreborrowBorrowClause0_ItemRistrettoPointi686-tablesInst» points1
-      out1)
-    (points, out)
-
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 997:8-1007:9 -/
-@[reducible]
-def
-  ristretto.«MultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».multiscalar_mul.extended_points
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointi686-tablesInst» :
-  core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-tables»)
-  (points : It) :
-  Result (alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
-  := do
-  ristretto.«MultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».multiscalar_mul.extended_points_loop
-    coreitertraitsiteratorIteratorInst
-    «coreborrowBorrowClause0_ItemRistrettoPointi686-tablesInst» points
-    (alloc.vec.Vec.new edwards.EdwardsPoint.«i686-tables»)
+    (fun (iter1, extended_points1) =>
+      ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-tables».multiscalar_mul_loop.body
+      coreitertraitscollectIntoIteratorInst
+      coreitertraitscollectIntoIteratorInst1
+      «coreborrowBorrowClause2_ItemRistrettoPointi686-tablesInst» iter1
+      extended_points1)
+    (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1011:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1002:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-tables».multiscalar_mul
@@ -57514,11 +57507,13 @@ def
   (scalars : I) (points : J) :
   Result ristretto.RistrettoPoint.«i686-tables»
   := do
-  let t ← coreitertraitscollectIntoIteratorInst1.into_iter points
+  let iter ← coreitertraitscollectIntoIteratorInst1.into_iter points
   let extended_points ←
-    ristretto.«MultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».multiscalar_mul.extended_points
-      coreitertraitscollectIntoIteratorInst1.iteratorInst
-      «coreborrowBorrowClause2_ItemRistrettoPointi686-tablesInst» t
+    ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-tables».multiscalar_mul_loop
+      coreitertraitscollectIntoIteratorInst
+      coreitertraitscollectIntoIteratorInst1
+      «coreborrowBorrowClause2_ItemRistrettoPointi686-tablesInst» iter
+      (alloc.vec.Vec.new edwards.EdwardsPoint.«i686-tables»)
   let ep ←
     edwards.EdwardsPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-tables».multiscalar_mul
       coreitertraitscollectIntoIteratorInst
@@ -57529,7 +57524,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1012:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1003:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-tables»
@@ -57550,68 +57545,65 @@ def
     «coreborrowBorrowPRistrettoPointi686-tablesInst»
 }
 
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1003:12-1005:13 -/
+/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::multiscalar_mul]: loop body 0:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Visibility: public -/
 @[rust_loop_body]
 def
-  ristretto.«MultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».multiscalar_mul.extended_points_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointi686-no-tablesInst» :
-  core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-no-tables»)
-  (points : It) (out : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables») :
-  Result (ControlFlow (It × (alloc.vec.Vec
+  ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-no-tables».multiscalar_mul_loop.body
+  {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  {Clause2_Item : Type _} {Clause2_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+  (coreitertraitscollectIntoIteratorInst1 :
+  core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+  («coreborrowBorrowClause2_ItemRistrettoPointi686-no-tablesInst» :
+  core.borrow.Borrow Clause2_Item ristretto.RistrettoPoint.«i686-no-tables»)
+  (iter : Clause2_IntoIter)
+  (extended_points : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables») :
+  Result (ControlFlow (Clause2_IntoIter × (alloc.vec.Vec
     edwards.EdwardsPoint.«i686-no-tables»)) (alloc.vec.Vec
     edwards.EdwardsPoint.«i686-no-tables»))
   := do
-  let (o, points1) ← coreitertraitsiteratorIteratorInst.next points
+  let (o, iter1) ←
+    coreitertraitscollectIntoIteratorInst1.iteratorInst.next iter
   match o with
-  | none => ok (done out)
+  | none => ok (done extended_points)
   | some P =>
     let rp ←
-      «coreborrowBorrowClause0_ItemRistrettoPointi686-no-tablesInst».borrow P
-    let out1 ← alloc.vec.Vec.push out rp
-    ok (cont (points1, out1))
+      «coreborrowBorrowClause2_ItemRistrettoPointi686-no-tablesInst».borrow P
+    let extended_points1 ← alloc.vec.Vec.push extended_points rp
+    ok (cont (iter1, extended_points1))
 
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1003:12-1005:13 -/
+/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::multiscalar_mul]: loop 0:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Visibility: public -/
 @[rust_loop]
 def
-  ristretto.«MultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».multiscalar_mul.extended_points_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointi686-no-tablesInst» :
-  core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-no-tables»)
-  (points : It) (out : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables») :
+  ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-no-tables».multiscalar_mul_loop
+  {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  {Clause2_Item : Type _} {Clause2_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
+  (coreitertraitscollectIntoIteratorInst1 :
+  core.iter.traits.collect.IntoIterator J Clause2_Item Clause2_IntoIter)
+  («coreborrowBorrowClause2_ItemRistrettoPointi686-no-tablesInst» :
+  core.borrow.Borrow Clause2_Item ristretto.RistrettoPoint.«i686-no-tables»)
+  (iter : Clause2_IntoIter)
+  (extended_points : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
   := do
   loop
-    (fun (points1, out1) =>
-      ristretto.«MultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».multiscalar_mul.extended_points_loop.body
-      coreitertraitsiteratorIteratorInst
-      «coreborrowBorrowClause0_ItemRistrettoPointi686-no-tablesInst» points1
-      out1)
-    (points, out)
-
-/-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 997:8-1007:9 -/
-@[reducible]
-def
-  ristretto.«MultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».multiscalar_mul.extended_points
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemRistrettoPointi686-no-tablesInst» :
-  core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-no-tables»)
-  (points : It) :
-  Result (alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-  := do
-  ristretto.«MultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».multiscalar_mul.extended_points_loop
-    coreitertraitsiteratorIteratorInst
-    «coreborrowBorrowClause0_ItemRistrettoPointi686-no-tablesInst» points
-    (alloc.vec.Vec.new edwards.EdwardsPoint.«i686-no-tables»)
+    (fun (iter1, extended_points1) =>
+      ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-no-tables».multiscalar_mul_loop.body
+      coreitertraitscollectIntoIteratorInst
+      coreitertraitscollectIntoIteratorInst1
+      «coreborrowBorrowClause2_ItemRistrettoPointi686-no-tablesInst» iter1
+      extended_points1)
+    (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1011:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1002:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-no-tables».multiscalar_mul
@@ -57627,11 +57619,13 @@ def
   (scalars : I) (points : J) :
   Result ristretto.RistrettoPoint.«i686-no-tables»
   := do
-  let t ← coreitertraitscollectIntoIteratorInst1.into_iter points
+  let iter ← coreitertraitscollectIntoIteratorInst1.into_iter points
   let extended_points ←
-    ristretto.«MultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».multiscalar_mul.extended_points
-      coreitertraitscollectIntoIteratorInst1.iteratorInst
-      «coreborrowBorrowClause2_ItemRistrettoPointi686-no-tablesInst» t
+    ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-no-tables».multiscalar_mul_loop
+      coreitertraitscollectIntoIteratorInst
+      coreitertraitscollectIntoIteratorInst1
+      «coreborrowBorrowClause2_ItemRistrettoPointi686-no-tablesInst» iter
+      (alloc.vec.Vec.new edwards.EdwardsPoint.«i686-no-tables»)
   let ep ←
     edwards.EdwardsPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-no-tables».multiscalar_mul
       coreitertraitscollectIntoIteratorInst
@@ -57642,7 +57636,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1012:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1003:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-no-tables»
@@ -57664,7 +57658,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::extended_points::{closure}::x86_64-tables<It>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1030:35-1030:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1021:35-1021:42 -/
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».optional_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-tablesEdwardsPointx86_64-tables».call_once
   {It : Type _}
@@ -57679,7 +57673,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::extended_points::{closure}::x86_64-tables<It>}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1030:35-1030:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1021:35-1021:42 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».optional_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -57696,7 +57690,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1029:12-1031:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1020:12-1022:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».optional_multiscalar_mul.extended_points_loop.body
@@ -57724,7 +57718,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1029:12-1031:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1020:12-1022:13 -/
 @[rust_loop]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».optional_multiscalar_mul.extended_points_loop
@@ -57743,7 +57737,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1024:8-1033:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1015:8-1024:9 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».optional_multiscalar_mul.extended_points
@@ -57758,7 +57752,7 @@ def
     points (alloc.vec.Vec.new (Option edwards.EdwardsPoint.«x86_64-tables»))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1018:4-1038:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1009:4-1029:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-tables».optional_multiscalar_mul
@@ -57791,7 +57785,7 @@ def
     o (ristretto.RistrettoPoint.«x86_64-tables».constructor)
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1015:0-1039:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:0-1030:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-tables»
@@ -57812,7 +57806,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::extended_points::{closure}::x86_64-no-tables<It>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1030:35-1030:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1021:35-1021:42 -/
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-no-tablesEdwardsPointx86_64-no-tables».call_once
   {It : Type _}
@@ -57827,7 +57821,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::extended_points::{closure}::x86_64-no-tables<It>}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1030:35-1030:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1021:35-1021:42 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -57844,7 +57838,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1029:12-1031:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1020:12-1022:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_multiscalar_mul.extended_points_loop.body
@@ -57872,7 +57866,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1029:12-1031:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1020:12-1022:13 -/
 @[rust_loop]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_multiscalar_mul.extended_points_loop
@@ -57891,7 +57885,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1024:8-1033:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1015:8-1024:9 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_multiscalar_mul.extended_points
@@ -57907,7 +57901,7 @@ def
     edwards.EdwardsPoint.«x86_64-no-tables»))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1018:4-1038:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1009:4-1029:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-no-tables».optional_multiscalar_mul
@@ -57940,7 +57934,7 @@ def
     o (ristretto.RistrettoPoint.«x86_64-no-tables».constructor)
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1015:0-1039:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:0-1030:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-no-tables»
@@ -57961,7 +57955,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::extended_points::{closure}::i686-tables<It>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1030:35-1030:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1021:35-1021:42 -/
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».optional_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-tablesEdwardsPointi686-tables».call_once
   {It : Type _}
@@ -57976,7 +57970,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::extended_points::{closure}::i686-tables<It>}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1030:35-1030:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1021:35-1021:42 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».optional_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-tablesEdwardsPointi686-tables»
@@ -57993,7 +57987,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1029:12-1031:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1020:12-1022:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».optional_multiscalar_mul.extended_points_loop.body
@@ -58021,7 +58015,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1029:12-1031:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1020:12-1022:13 -/
 @[rust_loop]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».optional_multiscalar_mul.extended_points_loop
@@ -58040,7 +58034,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1024:8-1033:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1015:8-1024:9 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».optional_multiscalar_mul.extended_points
@@ -58055,7 +58049,7 @@ def
     points (alloc.vec.Vec.new (Option edwards.EdwardsPoint.«i686-tables»))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1018:4-1038:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1009:4-1029:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-tables».optional_multiscalar_mul
@@ -58088,7 +58082,7 @@ def
     o (ristretto.RistrettoPoint.«i686-tables».constructor)
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1015:0-1039:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:0-1030:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-tables»
@@ -58109,7 +58103,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::extended_points::{closure}::i686-no-tables<It>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1030:35-1030:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1021:35-1021:42 -/
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».optional_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-no-tablesEdwardsPointi686-no-tables».call_once
   {It : Type _}
@@ -58124,7 +58118,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::extended_points::{closure}::i686-no-tables<It>}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1030:35-1030:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1021:35-1021:42 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».optional_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-no-tablesEdwardsPointi686-no-tables»
@@ -58141,7 +58135,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1029:12-1031:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1020:12-1022:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».optional_multiscalar_mul.extended_points_loop.body
@@ -58169,7 +58163,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1029:12-1031:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1020:12-1022:13 -/
 @[rust_loop]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».optional_multiscalar_mul.extended_points_loop
@@ -58188,7 +58182,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1024:8-1033:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1015:8-1024:9 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».optional_multiscalar_mul.extended_points
@@ -58203,7 +58197,7 @@ def
     points (alloc.vec.Vec.new (Option edwards.EdwardsPoint.«i686-no-tables»))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1018:4-1038:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1009:4-1029:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-no-tables».optional_multiscalar_mul
@@ -58236,7 +58230,7 @@ def
     o (ristretto.RistrettoPoint.«i686-no-tables».constructor)
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1015:0-1039:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:0-1030:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-no-tables»
@@ -58257,7 +58251,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}::x86_64-tables<It>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1104:35-1104:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».optional_mixed_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-tablesEdwardsPointx86_64-tables».call_once
   {It : Type _}
@@ -58272,7 +58266,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}::x86_64-tables<It>}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1104:35-1104:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».optional_mixed_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -58289,7 +58283,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1103:12-1105:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1094:12-1096:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».optional_mixed_multiscalar_mul.extended_points_loop.body
@@ -58317,7 +58311,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1103:12-1105:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1094:12-1096:13 -/
 @[rust_loop]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».optional_mixed_multiscalar_mul.extended_points_loop
@@ -58336,7 +58330,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1098:8-1107:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1089:8-1098:9 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».optional_mixed_multiscalar_mul.extended_points
@@ -58351,7 +58345,7 @@ def
     points (alloc.vec.Vec.new (Option edwards.EdwardsPoint.«x86_64-tables»))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1085:4-1116:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1076:4-1107:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables».optional_mixed_multiscalar_mul
@@ -58392,7 +58386,7 @@ def
     o (ristretto.RistrettoPoint.«x86_64-tables».constructor)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1081:4-1083:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1072:4-1074:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables».is_empty
@@ -58402,7 +58396,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-tables».is_empty self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::len]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1077:4-1079:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1068:4-1070:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables».len
@@ -58412,7 +58406,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-tables».len self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::new::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1066:12-1068:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1057:12-1059:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».new.extended_points_loop.body
@@ -58435,7 +58429,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::new::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1066:12-1068:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1057:12-1059:13 -/
 @[rust_loop]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».new.extended_points_loop
@@ -58455,7 +58449,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::new::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1060:8-1070:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1051:8-1061:9 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».new.extended_points
@@ -58472,7 +58466,7 @@ def
     (alloc.vec.Vec.new edwards.EdwardsPoint.«x86_64-tables»)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::new]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1055:4-1075:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1046:4-1066:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables».new
@@ -58497,7 +58491,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1052:0-1117:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1043:0-1108:1 -/
 @[reducible]
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables»
@@ -58538,7 +58532,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}::x86_64-no-tables<It>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1104:35-1104:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_mixed_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-no-tablesEdwardsPointx86_64-no-tables».call_once
   {It : Type _}
@@ -58553,7 +58547,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}::x86_64-no-tables<It>}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1104:35-1104:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_mixed_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -58570,7 +58564,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1103:12-1105:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1094:12-1096:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_mixed_multiscalar_mul.extended_points_loop.body
@@ -58598,7 +58592,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1103:12-1105:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1094:12-1096:13 -/
 @[rust_loop]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_mixed_multiscalar_mul.extended_points_loop
@@ -58617,7 +58611,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1098:8-1107:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1089:8-1098:9 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_mixed_multiscalar_mul.extended_points
@@ -58633,7 +58627,7 @@ def
     edwards.EdwardsPoint.«x86_64-no-tables»))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1085:4-1116:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1076:4-1107:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables».optional_mixed_multiscalar_mul
@@ -58674,7 +58668,7 @@ def
     o (ristretto.RistrettoPoint.«x86_64-no-tables».constructor)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1081:4-1083:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1072:4-1074:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables».is_empty
@@ -58684,7 +58678,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-no-tables».is_empty self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::len]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1077:4-1079:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1068:4-1070:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables».len
@@ -58694,7 +58688,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-no-tables».len self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::new::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1066:12-1068:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1057:12-1059:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».new.extended_points_loop.body
@@ -58719,7 +58713,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::new::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1066:12-1068:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1057:12-1059:13 -/
 @[rust_loop]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».new.extended_points_loop
@@ -58740,7 +58734,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::new::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1060:8-1070:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1051:8-1061:9 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».new.extended_points
@@ -58757,7 +58751,7 @@ def
     (alloc.vec.Vec.new edwards.EdwardsPoint.«x86_64-no-tables»)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::new]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1055:4-1075:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1046:4-1066:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables».new
@@ -58782,7 +58776,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1052:0-1117:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1043:0-1108:1 -/
 @[reducible]
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables»
@@ -58824,7 +58818,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}::i686-tables<It>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1104:35-1104:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».optional_mixed_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-tablesEdwardsPointi686-tables».call_once
   {It : Type _}
@@ -58839,7 +58833,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}::i686-tables<It>}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1104:35-1104:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».optional_mixed_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-tablesEdwardsPointi686-tables»
@@ -58856,7 +58850,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1103:12-1105:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1094:12-1096:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».optional_mixed_multiscalar_mul.extended_points_loop.body
@@ -58884,7 +58878,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1103:12-1105:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1094:12-1096:13 -/
 @[rust_loop]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».optional_mixed_multiscalar_mul.extended_points_loop
@@ -58903,7 +58897,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1098:8-1107:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1089:8-1098:9 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».optional_mixed_multiscalar_mul.extended_points
@@ -58918,7 +58912,7 @@ def
     points (alloc.vec.Vec.new (Option edwards.EdwardsPoint.«i686-tables»))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1085:4-1116:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1076:4-1107:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables».optional_mixed_multiscalar_mul
@@ -58959,7 +58953,7 @@ def
     o (ristretto.RistrettoPoint.«i686-tables».constructor)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1081:4-1083:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1072:4-1074:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables».is_empty
@@ -58969,7 +58963,7 @@ def
   backend.«VartimePrecomputedStrausi686-tables».is_empty self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::len]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1077:4-1079:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1068:4-1070:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables».len
@@ -58979,7 +58973,7 @@ def
   backend.«VartimePrecomputedStrausi686-tables».len self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::new::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1066:12-1068:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1057:12-1059:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».new.extended_points_loop.body
@@ -59002,7 +58996,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::new::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1066:12-1068:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1057:12-1059:13 -/
 @[rust_loop]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».new.extended_points_loop
@@ -59022,7 +59016,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::new::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1060:8-1070:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1051:8-1061:9 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».new.extended_points
@@ -59039,7 +59033,7 @@ def
     (alloc.vec.Vec.new edwards.EdwardsPoint.«i686-tables»)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::new]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1055:4-1075:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1046:4-1066:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables».new
@@ -59064,7 +59058,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1052:0-1117:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1043:0-1108:1 -/
 @[reducible]
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables»
@@ -59105,7 +59099,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}::i686-no-tables<It>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1104:35-1104:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».optional_mixed_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-no-tablesEdwardsPointi686-no-tables».call_once
   {It : Type _}
@@ -59120,7 +59114,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::extended_points::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}::i686-no-tables<It>}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1104:35-1104:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».optional_mixed_multiscalar_mul.extended_points.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-no-tablesEdwardsPointi686-no-tables»
@@ -59137,7 +59131,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1103:12-1105:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1094:12-1096:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».optional_mixed_multiscalar_mul.extended_points_loop.body
@@ -59165,7 +59159,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1103:12-1105:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1094:12-1096:13 -/
 @[rust_loop]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».optional_mixed_multiscalar_mul.extended_points_loop
@@ -59184,7 +59178,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1098:8-1107:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1089:8-1098:9 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».optional_mixed_multiscalar_mul.extended_points
@@ -59199,7 +59193,7 @@ def
     points (alloc.vec.Vec.new (Option edwards.EdwardsPoint.«i686-no-tables»))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1085:4-1116:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1076:4-1107:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables».optional_mixed_multiscalar_mul
@@ -59240,7 +59234,7 @@ def
     o (ristretto.RistrettoPoint.«i686-no-tables».constructor)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1081:4-1083:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1072:4-1074:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables».is_empty
@@ -59250,7 +59244,7 @@ def
   backend.«VartimePrecomputedStrausi686-no-tables».is_empty self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::len]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1077:4-1079:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1068:4-1070:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables».len
@@ -59260,7 +59254,7 @@ def
   backend.«VartimePrecomputedStrausi686-no-tables».len self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::new::extended_points]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1066:12-1068:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1057:12-1059:13 -/
 @[rust_loop_body]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».new.extended_points_loop.body
@@ -59283,7 +59277,7 @@ def
     ok (cont (points1, out1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::new::extended_points]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1066:12-1068:13 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1057:12-1059:13 -/
 @[rust_loop]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».new.extended_points_loop
@@ -59303,7 +59297,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::new::extended_points]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1060:8-1070:9 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1051:8-1061:9 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».new.extended_points
@@ -59320,7 +59314,7 @@ def
     (alloc.vec.Vec.new edwards.EdwardsPoint.«i686-no-tables»)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::new]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1055:4-1075:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1046:4-1066:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables».new
@@ -59345,7 +59339,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1052:0-1117:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1043:0-1108:1 -/
 @[reducible]
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables»
@@ -59386,7 +59380,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1122:4-1130:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1113:4-1121:5
     Visibility: public -/
 def
   ristretto.«RistrettoPointx86_64-tables».vartime_double_scalar_mul_basepoint
@@ -59400,7 +59394,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1122:4-1130:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1113:4-1121:5
     Visibility: public -/
 def
   ristretto.«RistrettoPointx86_64-no-tables».vartime_double_scalar_mul_basepoint
@@ -59414,7 +59408,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1122:4-1130:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1113:4-1121:5
     Visibility: public -/
 def ristretto.«RistrettoPointi686-tables».vartime_double_scalar_mul_basepoint
   (a : scalar.Scalar) (A : ristretto.RistrettoPoint.«i686-tables»)
@@ -59427,7 +59421,7 @@ def ristretto.«RistrettoPointi686-tables».vartime_double_scalar_mul_basepoint
   ok ep
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1122:4-1130:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1113:4-1121:5
     Visibility: public -/
 def
   ristretto.«RistrettoPointi686-no-tables».vartime_double_scalar_mul_basepoint
@@ -59441,7 +59435,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl core::clone::Clone for curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::clone]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1146:9-1146:14
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1137:9-1137:14
     Visibility: public -/
 def
   ristretto.RistrettoBasepointTable.«x86_64-tables».Insts.CoreCloneClone.clone
@@ -59454,7 +59448,7 @@ def
   ok ebt
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::clone::Clone for curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1146:9-1146:14 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1137:9-1137:14 -/
 @[reducible]
 def ristretto.RistrettoBasepointTable.«x86_64-tables».Insts.CoreCloneClone :
   core.clone.Clone ristretto.RistrettoBasepointTable.«x86_64-tables» := {
@@ -59463,7 +59457,7 @@ def ristretto.RistrettoBasepointTable.«x86_64-tables».Insts.CoreCloneClone :
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::clone::Clone for curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::clone]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1146:9-1146:14
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1137:9-1137:14
     Visibility: public -/
 def
   ristretto.RistrettoBasepointTable.«i686-tables».Insts.CoreCloneClone.clone
@@ -59476,7 +59470,7 @@ def
   ok ebt
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::clone::Clone for curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1146:9-1146:14 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1137:9-1137:14 -/
 @[reducible]
 def ristretto.RistrettoBasepointTable.«i686-tables».Insts.CoreCloneClone :
   core.clone.Clone ristretto.RistrettoBasepointTable.«i686-tables» := {
@@ -59485,7 +59479,7 @@ def ristretto.RistrettoBasepointTable.«i686-tables».Insts.CoreCloneClone :
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1154:4-1156:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1145:4-1147:5
     Visibility: public -/
 def
   «Shared0RistrettoBasepointTablex86_64-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointx86_64-tables».mul
@@ -59499,7 +59493,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1151:0-1157:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1142:0-1148:1 -/
 @[reducible]
 def
   «Shared0RistrettoBasepointTablex86_64-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointx86_64-tables»
@@ -59510,7 +59504,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1154:4-1156:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1145:4-1147:5
     Visibility: public -/
 def
   «Shared0RistrettoBasepointTablei686-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointi686-tables».mul
@@ -59524,7 +59518,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1151:0-1157:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1142:0-1148:1 -/
 @[reducible]
 def
   «Shared0RistrettoBasepointTablei686-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointi686-tables»
@@ -59535,7 +59529,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1160:0-1166:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1151:0-1157:1 -/
 @[reducible]
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoBasepointTablex86_64-tablesRistrettoPointx86_64-tables»
@@ -59547,7 +59541,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1160:0-1166:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1151:0-1157:1 -/
 @[reducible]
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoBasepointTablei686-tablesRistrettoPointi686-tables»
@@ -59559,7 +59553,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::create]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1171:4-1173:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1162:4-1164:5
     Visibility: public -/
 def ristretto.«RistrettoBasepointTablex86_64-tables».create
   (basepoint : ristretto.RistrettoPoint.«x86_64-tables») :
@@ -59571,7 +59565,7 @@ def ristretto.«RistrettoBasepointTablex86_64-tables».create
   ok ebt
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::create]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1171:4-1173:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1162:4-1164:5
     Visibility: public -/
 def ristretto.«RistrettoBasepointTablei686-tables».create
   (basepoint : ristretto.RistrettoPoint.«i686-tables») :
@@ -59583,7 +59577,7 @@ def ristretto.«RistrettoBasepointTablei686-tables».create
   ok ebt
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1176:4-1178:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1167:4-1169:5
     Visibility: public -/
 def ristretto.«RistrettoBasepointTablex86_64-tables».basepoint
   (self : ristretto.RistrettoBasepointTable.«x86_64-tables») :
@@ -59595,7 +59589,7 @@ def ristretto.«RistrettoBasepointTablex86_64-tables».basepoint
   ok ep
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1176:4-1178:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1167:4-1169:5
     Visibility: public -/
 def ristretto.«RistrettoBasepointTablei686-tables».basepoint
   (self : ristretto.RistrettoBasepointTable.«i686-tables») :
@@ -59607,7 +59601,7 @@ def ristretto.«RistrettoBasepointTablei686-tables».basepoint
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::conditional_select]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1210:4-1216:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1201:4-1207:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.SubtleConditionallySelectable.conditional_select
@@ -59621,7 +59615,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1185:0-1217:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1176:0-1208:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.SubtleConditionallySelectable
@@ -59639,7 +59633,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::conditional_select]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1210:4-1216:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1201:4-1207:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable.conditional_select
@@ -59654,7 +59648,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1185:0-1217:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1176:0-1208:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable
@@ -59672,7 +59666,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::conditional_select]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1210:4-1216:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1201:4-1207:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.SubtleConditionallySelectable.conditional_select
@@ -59686,7 +59680,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1185:0-1217:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1176:0-1208:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«i686-tables».Insts.SubtleConditionallySelectable
@@ -59704,7 +59698,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::conditional_select]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1210:4-1216:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1201:4-1207:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.SubtleConditionallySelectable.conditional_select
@@ -59718,7 +59712,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1185:0-1217:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1176:0-1208:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.SubtleConditionallySelectable
@@ -59736,7 +59730,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::CompressedRistretto}::zeroize]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1326:4-1328:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1317:4-1319:5
     Visibility: public -/
 def ristretto.CompressedRistretto.Insts.ZeroizeZeroize.zeroize
   (self : ristretto.CompressedRistretto) :
@@ -59748,7 +59742,7 @@ def ristretto.CompressedRistretto.Insts.ZeroizeZeroize.zeroize
   ok a
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::CompressedRistretto}]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1325:0-1329:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1316:0-1320:1 -/
 @[reducible]
 def ristretto.CompressedRistretto.Insts.ZeroizeZeroize : zeroize.Zeroize
   ristretto.CompressedRistretto := {
@@ -59756,7 +59750,7 @@ def ristretto.CompressedRistretto.Insts.ZeroizeZeroize : zeroize.Zeroize
 }
 
 /-- [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::zeroize]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1333:4-1335:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1324:4-1326:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«x86_64-tables».Insts.ZeroizeZeroize.zeroize
   (self : ristretto.RistrettoPoint.«x86_64-tables») :
@@ -59767,7 +59761,7 @@ def ristretto.RistrettoPoint.«x86_64-tables».Insts.ZeroizeZeroize.zeroize
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1332:0-1336:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1323:0-1327:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«x86_64-tables».Insts.ZeroizeZeroize :
   zeroize.Zeroize ristretto.RistrettoPoint.«x86_64-tables» := {
@@ -59776,7 +59770,7 @@ def ristretto.RistrettoPoint.«x86_64-tables».Insts.ZeroizeZeroize :
 }
 
 /-- [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::zeroize]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1333:4-1335:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1324:4-1326:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.ZeroizeZeroize.zeroize
   (self : ristretto.RistrettoPoint.«x86_64-no-tables») :
@@ -59787,7 +59781,7 @@ def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.ZeroizeZeroize.zeroize
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1332:0-1336:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1323:0-1327:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.ZeroizeZeroize :
   zeroize.Zeroize ristretto.RistrettoPoint.«x86_64-no-tables» := {
@@ -59796,7 +59790,7 @@ def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.ZeroizeZeroize :
 }
 
 /-- [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::zeroize]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1333:4-1335:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1324:4-1326:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«i686-tables».Insts.ZeroizeZeroize.zeroize
   (self : ristretto.RistrettoPoint.«i686-tables») :
@@ -59807,7 +59801,7 @@ def ristretto.RistrettoPoint.«i686-tables».Insts.ZeroizeZeroize.zeroize
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1332:0-1336:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1323:0-1327:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-tables».Insts.ZeroizeZeroize :
   zeroize.Zeroize ristretto.RistrettoPoint.«i686-tables» := {
@@ -59816,7 +59810,7 @@ def ristretto.RistrettoPoint.«i686-tables».Insts.ZeroizeZeroize :
 }
 
 /-- [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::zeroize]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1333:4-1335:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1324:4-1326:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«i686-no-tables».Insts.ZeroizeZeroize.zeroize
   (self : ristretto.RistrettoPoint.«i686-no-tables») :
@@ -59827,7 +59821,7 @@ def ristretto.RistrettoPoint.«i686-no-tables».Insts.ZeroizeZeroize.zeroize
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1332:0-1336:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1323:0-1327:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-no-tables».Insts.ZeroizeZeroize :
   zeroize.Zeroize ristretto.RistrettoPoint.«i686-no-tables» := {
