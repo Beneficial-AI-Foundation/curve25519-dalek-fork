@@ -52926,73 +52926,6 @@ def
       f h
   ok { e, f, g, h, eg, fh }
 
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch::states]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 609:12-611:13 -/
-@[rust_loop_body]
-def
-  ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.states_loop.body
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedRistrettoPointx86_64-tablesInst» :
-  core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«x86_64-tables») (points : It)
-  (out : alloc.vec.Vec
-  ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
-  :
-  Result (ControlFlow (It × (alloc.vec.Vec
-    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState))
-    (alloc.vec.Vec
-    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState))
-  := do
-  let (o, points1) ←
-    «coreitertraitsiteratorIteratorItSharedRistrettoPointx86_64-tablesInst».next
-      points
-  match o with
-  | none => ok (done out)
-  | some P =>
-    let bcs ←
-      ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointx86_64-tables».from
-        P
-    let out1 ← alloc.vec.Vec.push out bcs
-    ok (cont (points1, out1))
-
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch::states]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 609:12-611:13 -/
-@[rust_loop]
-def
-  ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.states_loop
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedRistrettoPointx86_64-tablesInst» :
-  core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«x86_64-tables») (points : It)
-  (out : alloc.vec.Vec
-  ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
-  :
-  Result (alloc.vec.Vec
-    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
-  := do
-  loop
-    (fun (points1, out1) =>
-      ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.states_loop.body
-      «coreitertraitsiteratorIteratorItSharedRistrettoPointx86_64-tablesInst»
-      points1 out1)
-    (points, out)
-
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch::states]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 604:8-613:9 -/
-@[reducible]
-def ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.states
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedARistrettoPointx86_64-tablesInst» :
-  core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«x86_64-tables») (points : It) :
-  Result (alloc.vec.Vec
-    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
-  := do
-  ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.states_loop
-    «coreitertraitsiteratorIteratorItSharedARistrettoPointx86_64-tablesInst»
-    points (alloc.vec.Vec.new
-    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
-
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch::{curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch::BatchCompressState::x86_64-tables}::efgh]:
     Source: 'curve25519-dalek/src/ristretto.rs', lines 579:12-581:13 -/
 def
@@ -53006,66 +52939,119 @@ def
     self.eg self.fh
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 619:8-622:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 605:8-607:9
     Visibility: public -/
 @[rust_loop_body]
 def
   ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop0.body
+  {I : Type _} {Clause0_IntoIter : Type _}
+  («coreitertraitscollectIntoIteratorISharedRistrettoPointx86_64-tablesClause0_IntoIterInst»
+  : core.iter.traits.collect.IntoIterator I
+  ristretto.RistrettoPoint.«x86_64-tables» Clause0_IntoIter)
+  (iter : Clause0_IntoIter)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
-  (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51)
-  (i : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec backend.serial.u64.field.FieldElement51)
-    × Std.Usize) (alloc.vec.Vec backend.serial.u64.field.FieldElement51))
+  :
+  Result (ControlFlow (Clause0_IntoIter × (alloc.vec.Vec
+    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState))
+    (alloc.vec.Vec
+    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState))
   := do
-  let i1 := alloc.vec.Vec.len states
-  if i < i1
-  then
+  let (o, iter1) ←
+    «coreitertraitscollectIntoIteratorISharedRistrettoPointx86_64-tablesClause0_IntoIterInst».iteratorInst.next
+      iter
+  match o with
+  | none => ok (done states)
+  | some P =>
     let bcs ←
-      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-        ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
-        states i
-    let fe ←
-      ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState.efgh
-        bcs
-    let invs1 ← alloc.vec.Vec.push invs fe
-    let i2 ← i + 1#usize
-    ok (cont (invs1, i2))
-  else ok (done invs)
+      ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointx86_64-tables».from
+        P
+    let states1 ← alloc.vec.Vec.push states bcs
+    ok (cont (iter1, states1))
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 619:8-622:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 605:8-607:9
     Visibility: public -/
 @[rust_loop]
 def ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop0
+  {I : Type _} {Clause0_IntoIter : Type _}
+  («coreitertraitscollectIntoIteratorISharedRistrettoPointx86_64-tablesClause0_IntoIterInst»
+  : core.iter.traits.collect.IntoIterator I
+  ristretto.RistrettoPoint.«x86_64-tables» Clause0_IntoIter)
+  (iter : Clause0_IntoIter)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
-  (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51)
-  (i : Std.Usize) :
-  Result (alloc.vec.Vec backend.serial.u64.field.FieldElement51)
+  :
+  Result (alloc.vec.Vec
+    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
   := do
   loop
-    (fun (invs1, i1) =>
+    (fun (iter1, states1) =>
       ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop0.body
-      states invs1 i1)
-    (invs, i)
+      «coreitertraitscollectIntoIteratorISharedRistrettoPointx86_64-tablesClause0_IntoIterInst»
+      iter1 states1)
+    (iter, states)
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch]: loop body 1:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 628:8-663:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 610:8-612:9
     Visibility: public -/
 @[rust_loop_body]
 def
   ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop1.body
+  (iter : core.slice.iter.Iter
+  ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
+  (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51) :
+  Result (ControlFlow ((core.slice.iter.Iter
+    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
+    × (alloc.vec.Vec backend.serial.u64.field.FieldElement51)) (alloc.vec.Vec
+    backend.serial.u64.field.FieldElement51))
+  := do
+  let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+  match o with
+  | none => ok (done invs)
+  | some state =>
+    let fe ←
+      ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState.efgh
+        state
+    let invs1 ← alloc.vec.Vec.push invs fe
+    ok (cont (iter1, invs1))
+
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch]: loop 1:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 610:8-612:9
+    Visibility: public -/
+@[rust_loop]
+def ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop1
+  (iter : core.slice.iter.Iter
+  ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
+  (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51) :
+  Result (alloc.vec.Vec backend.serial.u64.field.FieldElement51)
+  := do
+  loop
+    (fun (iter1, invs1) =>
+      ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop1.body
+      iter1 invs1)
+    (iter, invs)
+
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch]: loop body 2:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 618:12-652:13
+    Visibility: public -/
+@[rust_loop_body]
+def
+  ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop2.body
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
   (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51)
-  (out : alloc.vec.Vec ristretto.CompressedRistretto) (i : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec ristretto.CompressedRistretto) ×
-    Std.Usize) (alloc.vec.Vec ristretto.CompressedRistretto))
+  (iter : core.ops.range.Range Std.Usize)
+  (out : alloc.vec.Vec ristretto.CompressedRistretto) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    ristretto.CompressedRistretto)) (alloc.vec.Vec
+    ristretto.CompressedRistretto))
   := do
-  let i1 := alloc.vec.Vec.len states
-  if i < i1
-  then
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done out)
+  | some i =>
     let state ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
         ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
@@ -53133,29 +53119,28 @@ def
         s_is_negative
     let a ← backend.serial.u64.field.FieldElement51.to_bytes s1
     let out1 ← alloc.vec.Vec.push out a
-    let i2 ← i + 1#usize
-    ok (cont (out1, i2))
-  else ok (done out)
+    ok (cont (iter1, out1))
 
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch]: loop 1:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 628:8-663:9
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch]: loop 2:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 618:12-652:13
     Visibility: public -/
 @[rust_loop]
-def ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop1
+def ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop2
+  (iter : core.ops.range.Range Std.Usize)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
   (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51)
-  (out : alloc.vec.Vec ristretto.CompressedRistretto) (i : Std.Usize) :
+  (out : alloc.vec.Vec ristretto.CompressedRistretto) :
   Result (alloc.vec.Vec ristretto.CompressedRistretto)
   := do
   loop
-    (fun (out1, i1) =>
-      ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop1.body
-      states invs out1 i1)
-    (out, i)
+    (fun (iter1, out1) =>
+      ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop2.body
+      states invs iter1 out1)
+    (iter, out)
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 564:4-665:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 564:4-655:5
     Visibility: public -/
 def ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch
   {I : Type _} {Clause0_IntoIter : Type _}
@@ -53164,28 +53149,33 @@ def ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch
   ristretto.RistrettoPoint.«x86_64-tables» Clause0_IntoIter) (points : I) :
   Result (alloc.vec.Vec ristretto.CompressedRistretto)
   := do
-  let t ←
+  let iter ←
     «coreitertraitscollectIntoIteratorISharedARistrettoPointx86_64-tablesClause0_IntoIterInst».into_iter
       points
   let states ←
-    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.states
-      «coreitertraitscollectIntoIteratorISharedARistrettoPointx86_64-tablesClause0_IntoIterInst».iteratorInst
-      t
+    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop0
+      «coreitertraitscollectIntoIteratorISharedARistrettoPointx86_64-tablesClause0_IntoIterInst»
+      iter (alloc.vec.Vec.new
+      ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch.BatchCompressState)
   let i := alloc.vec.Vec.len states
   let invs :=
     alloc.vec.Vec.with_capacity backend.serial.u64.field.FieldElement51 i
+  let iter1 ←
+    SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter
+      alloc.alloc.Global states
   let invs1 ←
-    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop0
-      states invs 0#usize
+    ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop1
+      iter1 invs
   let (s, index_mut_back) ←
     alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeFullSlice
       backend.serial.u64.field.FieldElement51) invs1 ()
   let s1 ← field.FieldElement51.invert_batch_alloc s
   let i1 := alloc.vec.Vec.len states
   let out := alloc.vec.Vec.with_capacity ristretto.CompressedRistretto i1
+  let i2 := alloc.vec.Vec.len states
   let invs2 := index_mut_back s1
-  ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop1
-    states invs2 out 0#usize
+  ristretto.«RistrettoPointx86_64-tables».double_and_compress_batch_loop2
+    { start := 0#usize, «end» := i2 } states invs2 out
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch::{impl core::convert::From<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch::BatchCompressState::x86_64-no-tables}::from]:
     Source: 'curve25519-dalek/src/ristretto.rs', lines 586:12-601:13
@@ -53227,74 +53217,6 @@ def
       f h
   ok { e, f, g, h, eg, fh }
 
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch::states]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 609:12-611:13 -/
-@[rust_loop_body]
-def
-  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.states_loop.body
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedRistrettoPointx86_64-no-tablesInst»
-  : core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«x86_64-no-tables») (points : It)
-  (out : alloc.vec.Vec
-  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
-  :
-  Result (ControlFlow (It × (alloc.vec.Vec
-    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState))
-    (alloc.vec.Vec
-    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState))
-  := do
-  let (o, points1) ←
-    «coreitertraitsiteratorIteratorItSharedRistrettoPointx86_64-no-tablesInst».next
-      points
-  match o with
-  | none => ok (done out)
-  | some P =>
-    let bcs ←
-      ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointx86_64-no-tables».from
-        P
-    let out1 ← alloc.vec.Vec.push out bcs
-    ok (cont (points1, out1))
-
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch::states]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 609:12-611:13 -/
-@[rust_loop]
-def
-  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.states_loop
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedRistrettoPointx86_64-no-tablesInst»
-  : core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«x86_64-no-tables») (points : It)
-  (out : alloc.vec.Vec
-  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
-  :
-  Result (alloc.vec.Vec
-    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
-  := do
-  loop
-    (fun (points1, out1) =>
-      ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.states_loop.body
-      «coreitertraitsiteratorIteratorItSharedRistrettoPointx86_64-no-tablesInst»
-      points1 out1)
-    (points, out)
-
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch::states]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 604:8-613:9 -/
-@[reducible]
-def
-  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.states
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedARistrettoPointx86_64-no-tablesInst»
-  : core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«x86_64-no-tables») (points : It) :
-  Result (alloc.vec.Vec
-    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
-  := do
-  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.states_loop
-    «coreitertraitsiteratorIteratorItSharedARistrettoPointx86_64-no-tablesInst»
-    points (alloc.vec.Vec.new
-    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
-
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch::{curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch::BatchCompressState::x86_64-no-tables}::efgh]:
     Source: 'curve25519-dalek/src/ristretto.rs', lines 579:12-581:13 -/
 def
@@ -53308,67 +53230,121 @@ def
     self.eg self.fh
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 619:8-622:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 605:8-607:9
     Visibility: public -/
 @[rust_loop_body]
 def
   ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop0.body
+  {I : Type _} {Clause0_IntoIter : Type _}
+  («coreitertraitscollectIntoIteratorISharedRistrettoPointx86_64-no-tablesClause0_IntoIterInst»
+  : core.iter.traits.collect.IntoIterator I
+  ristretto.RistrettoPoint.«x86_64-no-tables» Clause0_IntoIter)
+  (iter : Clause0_IntoIter)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
-  (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51)
-  (i : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec backend.serial.u64.field.FieldElement51)
-    × Std.Usize) (alloc.vec.Vec backend.serial.u64.field.FieldElement51))
+  :
+  Result (ControlFlow (Clause0_IntoIter × (alloc.vec.Vec
+    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState))
+    (alloc.vec.Vec
+    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState))
   := do
-  let i1 := alloc.vec.Vec.len states
-  if i < i1
-  then
+  let (o, iter1) ←
+    «coreitertraitscollectIntoIteratorISharedRistrettoPointx86_64-no-tablesClause0_IntoIterInst».iteratorInst.next
+      iter
+  match o with
+  | none => ok (done states)
+  | some P =>
     let bcs ←
-      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-        ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
-        states i
-    let fe ←
-      ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState.efgh
-        bcs
-    let invs1 ← alloc.vec.Vec.push invs fe
-    let i2 ← i + 1#usize
-    ok (cont (invs1, i2))
-  else ok (done invs)
+      ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointx86_64-no-tables».from
+        P
+    let states1 ← alloc.vec.Vec.push states bcs
+    ok (cont (iter1, states1))
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 619:8-622:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 605:8-607:9
     Visibility: public -/
 @[rust_loop]
 def
   ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop0
+  {I : Type _} {Clause0_IntoIter : Type _}
+  («coreitertraitscollectIntoIteratorISharedRistrettoPointx86_64-no-tablesClause0_IntoIterInst»
+  : core.iter.traits.collect.IntoIterator I
+  ristretto.RistrettoPoint.«x86_64-no-tables» Clause0_IntoIter)
+  (iter : Clause0_IntoIter)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
-  (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51)
-  (i : Std.Usize) :
-  Result (alloc.vec.Vec backend.serial.u64.field.FieldElement51)
+  :
+  Result (alloc.vec.Vec
+    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
   := do
   loop
-    (fun (invs1, i1) =>
+    (fun (iter1, states1) =>
       ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop0.body
-      states invs1 i1)
-    (invs, i)
+      «coreitertraitscollectIntoIteratorISharedRistrettoPointx86_64-no-tablesClause0_IntoIterInst»
+      iter1 states1)
+    (iter, states)
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch]: loop body 1:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 628:8-663:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 610:8-612:9
     Visibility: public -/
 @[rust_loop_body]
 def
   ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop1.body
+  (iter : core.slice.iter.Iter
+  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
+  (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51) :
+  Result (ControlFlow ((core.slice.iter.Iter
+    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
+    × (alloc.vec.Vec backend.serial.u64.field.FieldElement51)) (alloc.vec.Vec
+    backend.serial.u64.field.FieldElement51))
+  := do
+  let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+  match o with
+  | none => ok (done invs)
+  | some state =>
+    let fe ←
+      ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState.efgh
+        state
+    let invs1 ← alloc.vec.Vec.push invs fe
+    ok (cont (iter1, invs1))
+
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch]: loop 1:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 610:8-612:9
+    Visibility: public -/
+@[rust_loop]
+def
+  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop1
+  (iter : core.slice.iter.Iter
+  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
+  (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51) :
+  Result (alloc.vec.Vec backend.serial.u64.field.FieldElement51)
+  := do
+  loop
+    (fun (iter1, invs1) =>
+      ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop1.body
+      iter1 invs1)
+    (iter, invs)
+
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch]: loop body 2:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 618:12-652:13
+    Visibility: public -/
+@[rust_loop_body]
+def
+  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop2.body
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
   (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51)
-  (out : alloc.vec.Vec ristretto.CompressedRistretto) (i : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec ristretto.CompressedRistretto) ×
-    Std.Usize) (alloc.vec.Vec ristretto.CompressedRistretto))
+  (iter : core.ops.range.Range Std.Usize)
+  (out : alloc.vec.Vec ristretto.CompressedRistretto) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    ristretto.CompressedRistretto)) (alloc.vec.Vec
+    ristretto.CompressedRistretto))
   := do
-  let i1 := alloc.vec.Vec.len states
-  if i < i1
-  then
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done out)
+  | some i =>
     let state ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
         ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
@@ -53436,30 +53412,29 @@ def
         s_is_negative
     let a ← backend.serial.u64.field.FieldElement51.to_bytes s1
     let out1 ← alloc.vec.Vec.push out a
-    let i2 ← i + 1#usize
-    ok (cont (out1, i2))
-  else ok (done out)
+    ok (cont (iter1, out1))
 
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch]: loop 1:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 628:8-663:9
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch]: loop 2:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 618:12-652:13
     Visibility: public -/
 @[rust_loop]
 def
-  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop1
+  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop2
+  (iter : core.ops.range.Range Std.Usize)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
   (invs : alloc.vec.Vec backend.serial.u64.field.FieldElement51)
-  (out : alloc.vec.Vec ristretto.CompressedRistretto) (i : Std.Usize) :
+  (out : alloc.vec.Vec ristretto.CompressedRistretto) :
   Result (alloc.vec.Vec ristretto.CompressedRistretto)
   := do
   loop
-    (fun (out1, i1) =>
-      ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop1.body
-      states invs out1 i1)
-    (out, i)
+    (fun (iter1, out1) =>
+      ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop2.body
+      states invs iter1 out1)
+    (iter, out)
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::double_and_compress_batch]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 564:4-665:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 564:4-655:5
     Visibility: public -/
 def ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch
   {I : Type _} {Clause0_IntoIter : Type _}
@@ -53469,28 +53444,33 @@ def ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch
   :
   Result (alloc.vec.Vec ristretto.CompressedRistretto)
   := do
-  let t ←
+  let iter ←
     «coreitertraitscollectIntoIteratorISharedARistrettoPointx86_64-no-tablesClause0_IntoIterInst».into_iter
       points
   let states ←
-    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.states
-      «coreitertraitscollectIntoIteratorISharedARistrettoPointx86_64-no-tablesClause0_IntoIterInst».iteratorInst
-      t
+    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop0
+      «coreitertraitscollectIntoIteratorISharedARistrettoPointx86_64-no-tablesClause0_IntoIterInst»
+      iter (alloc.vec.Vec.new
+      ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch.BatchCompressState)
   let i := alloc.vec.Vec.len states
   let invs :=
     alloc.vec.Vec.with_capacity backend.serial.u64.field.FieldElement51 i
+  let iter1 ←
+    SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter
+      alloc.alloc.Global states
   let invs1 ←
-    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop0
-      states invs 0#usize
+    ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop1
+      iter1 invs
   let (s, index_mut_back) ←
     alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeFullSlice
       backend.serial.u64.field.FieldElement51) invs1 ()
   let s1 ← field.FieldElement51.invert_batch_alloc s
   let i1 := alloc.vec.Vec.len states
   let out := alloc.vec.Vec.with_capacity ristretto.CompressedRistretto i1
+  let i2 := alloc.vec.Vec.len states
   let invs2 := index_mut_back s1
-  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop1
-    states invs2 out 0#usize
+  ristretto.«RistrettoPointx86_64-no-tables».double_and_compress_batch_loop2
+    { start := 0#usize, «end» := i2 } states invs2 out
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch::{impl core::convert::From<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch::BatchCompressState::i686-tables}::from]:
     Source: 'curve25519-dalek/src/ristretto.rs', lines 586:12-601:13
@@ -53532,73 +53512,6 @@ def
       f h
   ok { e, f, g, h, eg, fh }
 
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch::states]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 609:12-611:13 -/
-@[rust_loop_body]
-def
-  ristretto.«RistrettoPointi686-tables».double_and_compress_batch.states_loop.body
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedRistrettoPointi686-tablesInst» :
-  core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«i686-tables») (points : It)
-  (out : alloc.vec.Vec
-  ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
-  :
-  Result (ControlFlow (It × (alloc.vec.Vec
-    ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState))
-    (alloc.vec.Vec
-    ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState))
-  := do
-  let (o, points1) ←
-    «coreitertraitsiteratorIteratorItSharedRistrettoPointi686-tablesInst».next
-      points
-  match o with
-  | none => ok (done out)
-  | some P =>
-    let bcs ←
-      ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointi686-tables».from
-        P
-    let out1 ← alloc.vec.Vec.push out bcs
-    ok (cont (points1, out1))
-
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch::states]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 609:12-611:13 -/
-@[rust_loop]
-def
-  ristretto.«RistrettoPointi686-tables».double_and_compress_batch.states_loop
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedRistrettoPointi686-tablesInst» :
-  core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«i686-tables») (points : It)
-  (out : alloc.vec.Vec
-  ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
-  :
-  Result (alloc.vec.Vec
-    ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
-  := do
-  loop
-    (fun (points1, out1) =>
-      ristretto.«RistrettoPointi686-tables».double_and_compress_batch.states_loop.body
-      «coreitertraitsiteratorIteratorItSharedRistrettoPointi686-tablesInst»
-      points1 out1)
-    (points, out)
-
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch::states]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 604:8-613:9 -/
-@[reducible]
-def ristretto.«RistrettoPointi686-tables».double_and_compress_batch.states
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedARistrettoPointi686-tablesInst» :
-  core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«i686-tables») (points : It) :
-  Result (alloc.vec.Vec
-    ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
-  := do
-  ristretto.«RistrettoPointi686-tables».double_and_compress_batch.states_loop
-    «coreitertraitsiteratorIteratorItSharedARistrettoPointi686-tablesInst»
-    points (alloc.vec.Vec.new
-    ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
-
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch::{curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch::BatchCompressState::i686-tables}::efgh]:
     Source: 'curve25519-dalek/src/ristretto.rs', lines 579:12-581:13 -/
 def
@@ -53612,67 +53525,119 @@ def
     self.eg self.fh
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 619:8-622:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 605:8-607:9
     Visibility: public -/
 @[rust_loop_body]
 def
   ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop0.body
+  {I : Type _} {Clause0_IntoIter : Type _}
+  («coreitertraitscollectIntoIteratorISharedRistrettoPointi686-tablesClause0_IntoIterInst»
+  : core.iter.traits.collect.IntoIterator I
+  ristretto.RistrettoPoint.«i686-tables» Clause0_IntoIter)
+  (iter : Clause0_IntoIter)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
-  (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
-  (i : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec
-    backend.serial.u32.field.FieldElement2625) × Std.Usize) (alloc.vec.Vec
-    backend.serial.u32.field.FieldElement2625))
+  :
+  Result (ControlFlow (Clause0_IntoIter × (alloc.vec.Vec
+    ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState))
+    (alloc.vec.Vec
+    ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState))
   := do
-  let i1 := alloc.vec.Vec.len states
-  if i < i1
-  then
+  let (o, iter1) ←
+    «coreitertraitscollectIntoIteratorISharedRistrettoPointi686-tablesClause0_IntoIterInst».iteratorInst.next
+      iter
+  match o with
+  | none => ok (done states)
+  | some P =>
     let bcs ←
-      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-        ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
-        states i
-    let fe ←
-      ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState.efgh
-        bcs
-    let invs1 ← alloc.vec.Vec.push invs fe
-    let i2 ← i + 1#usize
-    ok (cont (invs1, i2))
-  else ok (done invs)
+      ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointi686-tables».from
+        P
+    let states1 ← alloc.vec.Vec.push states bcs
+    ok (cont (iter1, states1))
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 619:8-622:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 605:8-607:9
     Visibility: public -/
 @[rust_loop]
 def ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop0
+  {I : Type _} {Clause0_IntoIter : Type _}
+  («coreitertraitscollectIntoIteratorISharedRistrettoPointi686-tablesClause0_IntoIterInst»
+  : core.iter.traits.collect.IntoIterator I
+  ristretto.RistrettoPoint.«i686-tables» Clause0_IntoIter)
+  (iter : Clause0_IntoIter)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
-  (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
-  (i : Std.Usize) :
-  Result (alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
+  :
+  Result (alloc.vec.Vec
+    ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
   := do
   loop
-    (fun (invs1, i1) =>
+    (fun (iter1, states1) =>
       ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop0.body
-      states invs1 i1)
-    (invs, i)
+      «coreitertraitscollectIntoIteratorISharedRistrettoPointi686-tablesClause0_IntoIterInst»
+      iter1 states1)
+    (iter, states)
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch]: loop body 1:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 628:8-663:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 610:8-612:9
     Visibility: public -/
 @[rust_loop_body]
 def
   ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop1.body
+  (iter : core.slice.iter.Iter
+  ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
+  (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625) :
+  Result (ControlFlow ((core.slice.iter.Iter
+    ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
+    × (alloc.vec.Vec backend.serial.u32.field.FieldElement2625))
+    (alloc.vec.Vec backend.serial.u32.field.FieldElement2625))
+  := do
+  let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+  match o with
+  | none => ok (done invs)
+  | some state =>
+    let fe ←
+      ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState.efgh
+        state
+    let invs1 ← alloc.vec.Vec.push invs fe
+    ok (cont (iter1, invs1))
+
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch]: loop 1:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 610:8-612:9
+    Visibility: public -/
+@[rust_loop]
+def ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop1
+  (iter : core.slice.iter.Iter
+  ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
+  (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625) :
+  Result (alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
+  := do
+  loop
+    (fun (iter1, invs1) =>
+      ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop1.body
+      iter1 invs1)
+    (iter, invs)
+
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch]: loop body 2:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 618:12-652:13
+    Visibility: public -/
+@[rust_loop_body]
+def
+  ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop2.body
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
   (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
-  (out : alloc.vec.Vec ristretto.CompressedRistretto) (i : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec ristretto.CompressedRistretto) ×
-    Std.Usize) (alloc.vec.Vec ristretto.CompressedRistretto))
+  (iter : core.ops.range.Range Std.Usize)
+  (out : alloc.vec.Vec ristretto.CompressedRistretto) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    ristretto.CompressedRistretto)) (alloc.vec.Vec
+    ristretto.CompressedRistretto))
   := do
-  let i1 := alloc.vec.Vec.len states
-  if i < i1
-  then
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done out)
+  | some i =>
     let state ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
         ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
@@ -53741,29 +53706,28 @@ def
         s_is_negative
     let a ← backend.serial.u32.field.FieldElement2625.to_bytes s1
     let out1 ← alloc.vec.Vec.push out a
-    let i2 ← i + 1#usize
-    ok (cont (out1, i2))
-  else ok (done out)
+    ok (cont (iter1, out1))
 
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch]: loop 1:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 628:8-663:9
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch]: loop 2:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 618:12-652:13
     Visibility: public -/
 @[rust_loop]
-def ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop1
+def ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop2
+  (iter : core.ops.range.Range Std.Usize)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
   (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
-  (out : alloc.vec.Vec ristretto.CompressedRistretto) (i : Std.Usize) :
+  (out : alloc.vec.Vec ristretto.CompressedRistretto) :
   Result (alloc.vec.Vec ristretto.CompressedRistretto)
   := do
   loop
-    (fun (out1, i1) =>
-      ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop1.body
-      states invs out1 i1)
-    (out, i)
+    (fun (iter1, out1) =>
+      ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop2.body
+      states invs iter1 out1)
+    (iter, out)
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::double_and_compress_batch]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 564:4-665:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 564:4-655:5
     Visibility: public -/
 def ristretto.«RistrettoPointi686-tables».double_and_compress_batch
   {I : Type _} {Clause0_IntoIter : Type _}
@@ -53772,28 +53736,33 @@ def ristretto.«RistrettoPointi686-tables».double_and_compress_batch
   ristretto.RistrettoPoint.«i686-tables» Clause0_IntoIter) (points : I) :
   Result (alloc.vec.Vec ristretto.CompressedRistretto)
   := do
-  let t ←
+  let iter ←
     «coreitertraitscollectIntoIteratorISharedARistrettoPointi686-tablesClause0_IntoIterInst».into_iter
       points
   let states ←
-    ristretto.«RistrettoPointi686-tables».double_and_compress_batch.states
-      «coreitertraitscollectIntoIteratorISharedARistrettoPointi686-tablesClause0_IntoIterInst».iteratorInst
-      t
+    ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop0
+      «coreitertraitscollectIntoIteratorISharedARistrettoPointi686-tablesClause0_IntoIterInst»
+      iter (alloc.vec.Vec.new
+      ristretto.«RistrettoPointi686-tables».double_and_compress_batch.BatchCompressState)
   let i := alloc.vec.Vec.len states
   let invs :=
     alloc.vec.Vec.with_capacity backend.serial.u32.field.FieldElement2625 i
+  let iter1 ←
+    SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter
+      alloc.alloc.Global states
   let invs1 ←
-    ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop0
-      states invs 0#usize
+    ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop1
+      iter1 invs
   let (s, index_mut_back) ←
     alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeFullSlice
       backend.serial.u32.field.FieldElement2625) invs1 ()
   let s1 ← field.FieldElement2625.invert_batch_alloc s
   let i1 := alloc.vec.Vec.len states
   let out := alloc.vec.Vec.with_capacity ristretto.CompressedRistretto i1
+  let i2 := alloc.vec.Vec.len states
   let invs2 := index_mut_back s1
-  ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop1
-    states invs2 out 0#usize
+  ristretto.«RistrettoPointi686-tables».double_and_compress_batch_loop2
+    { start := 0#usize, «end» := i2 } states invs2 out
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch::{impl core::convert::From<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch::BatchCompressState::i686-no-tables}::from]:
     Source: 'curve25519-dalek/src/ristretto.rs', lines 586:12-601:13
@@ -53835,73 +53804,6 @@ def
       f h
   ok { e, f, g, h, eg, fh }
 
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch::states]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 609:12-611:13 -/
-@[rust_loop_body]
-def
-  ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.states_loop.body
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedRistrettoPointi686-no-tablesInst» :
-  core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«i686-no-tables») (points : It)
-  (out : alloc.vec.Vec
-  ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
-  :
-  Result (ControlFlow (It × (alloc.vec.Vec
-    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState))
-    (alloc.vec.Vec
-    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState))
-  := do
-  let (o, points1) ←
-    «coreitertraitsiteratorIteratorItSharedRistrettoPointi686-no-tablesInst».next
-      points
-  match o with
-  | none => ok (done out)
-  | some P =>
-    let bcs ←
-      ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointi686-no-tables».from
-        P
-    let out1 ← alloc.vec.Vec.push out bcs
-    ok (cont (points1, out1))
-
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch::states]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 609:12-611:13 -/
-@[rust_loop]
-def
-  ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.states_loop
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedRistrettoPointi686-no-tablesInst» :
-  core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«i686-no-tables») (points : It)
-  (out : alloc.vec.Vec
-  ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
-  :
-  Result (alloc.vec.Vec
-    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
-  := do
-  loop
-    (fun (points1, out1) =>
-      ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.states_loop.body
-      «coreitertraitsiteratorIteratorItSharedRistrettoPointi686-no-tablesInst»
-      points1 out1)
-    (points, out)
-
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch::states]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 604:8-613:9 -/
-@[reducible]
-def ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.states
-  {It : Type _}
-  («coreitertraitsiteratorIteratorItSharedARistrettoPointi686-no-tablesInst»
-  : core.iter.traits.iterator.Iterator It
-  ristretto.RistrettoPoint.«i686-no-tables») (points : It) :
-  Result (alloc.vec.Vec
-    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
-  := do
-  ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.states_loop
-    «coreitertraitsiteratorIteratorItSharedARistrettoPointi686-no-tablesInst»
-    points (alloc.vec.Vec.new
-    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
-
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch::{curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch::BatchCompressState::i686-no-tables}::efgh]:
     Source: 'curve25519-dalek/src/ristretto.rs', lines 579:12-581:13 -/
 def
@@ -53915,67 +53817,119 @@ def
     self.eg self.fh
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 619:8-622:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 605:8-607:9
     Visibility: public -/
 @[rust_loop_body]
 def
   ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop0.body
+  {I : Type _} {Clause0_IntoIter : Type _}
+  («coreitertraitscollectIntoIteratorISharedRistrettoPointi686-no-tablesClause0_IntoIterInst»
+  : core.iter.traits.collect.IntoIterator I
+  ristretto.RistrettoPoint.«i686-no-tables» Clause0_IntoIter)
+  (iter : Clause0_IntoIter)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
-  (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
-  (i : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec
-    backend.serial.u32.field.FieldElement2625) × Std.Usize) (alloc.vec.Vec
-    backend.serial.u32.field.FieldElement2625))
+  :
+  Result (ControlFlow (Clause0_IntoIter × (alloc.vec.Vec
+    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState))
+    (alloc.vec.Vec
+    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState))
   := do
-  let i1 := alloc.vec.Vec.len states
-  if i < i1
-  then
+  let (o, iter1) ←
+    «coreitertraitscollectIntoIteratorISharedRistrettoPointi686-no-tablesClause0_IntoIterInst».iteratorInst.next
+      iter
+  match o with
+  | none => ok (done states)
+  | some P =>
     let bcs ←
-      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-        ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
-        states i
-    let fe ←
-      ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState.efgh
-        bcs
-    let invs1 ← alloc.vec.Vec.push invs fe
-    let i2 ← i + 1#usize
-    ok (cont (invs1, i2))
-  else ok (done invs)
+      ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState.Insts.«CoreConvertFromSharedARistrettoPointi686-no-tables».from
+        P
+    let states1 ← alloc.vec.Vec.push states bcs
+    ok (cont (iter1, states1))
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 619:8-622:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 605:8-607:9
     Visibility: public -/
 @[rust_loop]
 def ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop0
+  {I : Type _} {Clause0_IntoIter : Type _}
+  («coreitertraitscollectIntoIteratorISharedRistrettoPointi686-no-tablesClause0_IntoIterInst»
+  : core.iter.traits.collect.IntoIterator I
+  ristretto.RistrettoPoint.«i686-no-tables» Clause0_IntoIter)
+  (iter : Clause0_IntoIter)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
-  (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
-  (i : Std.Usize) :
-  Result (alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
+  :
+  Result (alloc.vec.Vec
+    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
   := do
   loop
-    (fun (invs1, i1) =>
+    (fun (iter1, states1) =>
       ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop0.body
-      states invs1 i1)
-    (invs, i)
+      «coreitertraitscollectIntoIteratorISharedRistrettoPointi686-no-tablesClause0_IntoIterInst»
+      iter1 states1)
+    (iter, states)
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch]: loop body 1:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 628:8-663:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 610:8-612:9
     Visibility: public -/
 @[rust_loop_body]
 def
   ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop1.body
+  (iter : core.slice.iter.Iter
+  ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
+  (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625) :
+  Result (ControlFlow ((core.slice.iter.Iter
+    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
+    × (alloc.vec.Vec backend.serial.u32.field.FieldElement2625))
+    (alloc.vec.Vec backend.serial.u32.field.FieldElement2625))
+  := do
+  let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+  match o with
+  | none => ok (done invs)
+  | some state =>
+    let fe ←
+      ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState.efgh
+        state
+    let invs1 ← alloc.vec.Vec.push invs fe
+    ok (cont (iter1, invs1))
+
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch]: loop 1:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 610:8-612:9
+    Visibility: public -/
+@[rust_loop]
+def ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop1
+  (iter : core.slice.iter.Iter
+  ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
+  (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625) :
+  Result (alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
+  := do
+  loop
+    (fun (iter1, invs1) =>
+      ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop1.body
+      iter1 invs1)
+    (iter, invs)
+
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch]: loop body 2:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 618:12-652:13
+    Visibility: public -/
+@[rust_loop_body]
+def
+  ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop2.body
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
   (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
-  (out : alloc.vec.Vec ristretto.CompressedRistretto) (i : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec ristretto.CompressedRistretto) ×
-    Std.Usize) (alloc.vec.Vec ristretto.CompressedRistretto))
+  (iter : core.ops.range.Range Std.Usize)
+  (out : alloc.vec.Vec ristretto.CompressedRistretto) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    ristretto.CompressedRistretto)) (alloc.vec.Vec
+    ristretto.CompressedRistretto))
   := do
-  let i1 := alloc.vec.Vec.len states
-  if i < i1
-  then
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done out)
+  | some i =>
     let state ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
         ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
@@ -54044,29 +53998,28 @@ def
         s_is_negative
     let a ← backend.serial.u32.field.FieldElement2625.to_bytes s1
     let out1 ← alloc.vec.Vec.push out a
-    let i2 ← i + 1#usize
-    ok (cont (out1, i2))
-  else ok (done out)
+    ok (cont (iter1, out1))
 
-/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch]: loop 1:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 628:8-663:9
+/-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch]: loop 2:
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 618:12-652:13
     Visibility: public -/
 @[rust_loop]
-def ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop1
+def ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop2
+  (iter : core.ops.range.Range Std.Usize)
   (states : alloc.vec.Vec
   ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
   (invs : alloc.vec.Vec backend.serial.u32.field.FieldElement2625)
-  (out : alloc.vec.Vec ristretto.CompressedRistretto) (i : Std.Usize) :
+  (out : alloc.vec.Vec ristretto.CompressedRistretto) :
   Result (alloc.vec.Vec ristretto.CompressedRistretto)
   := do
   loop
-    (fun (out1, i1) =>
-      ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop1.body
-      states invs out1 i1)
-    (out, i)
+    (fun (iter1, out1) =>
+      ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop2.body
+      states invs iter1 out1)
+    (iter, out)
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::double_and_compress_batch]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 564:4-665:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 564:4-655:5
     Visibility: public -/
 def ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch
   {I : Type _} {Clause0_IntoIter : Type _}
@@ -54075,28 +54028,33 @@ def ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch
   ristretto.RistrettoPoint.«i686-no-tables» Clause0_IntoIter) (points : I) :
   Result (alloc.vec.Vec ristretto.CompressedRistretto)
   := do
-  let t ←
+  let iter ←
     «coreitertraitscollectIntoIteratorISharedARistrettoPointi686-no-tablesClause0_IntoIterInst».into_iter
       points
   let states ←
-    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.states
-      «coreitertraitscollectIntoIteratorISharedARistrettoPointi686-no-tablesClause0_IntoIterInst».iteratorInst
-      t
+    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop0
+      «coreitertraitscollectIntoIteratorISharedARistrettoPointi686-no-tablesClause0_IntoIterInst»
+      iter (alloc.vec.Vec.new
+      ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch.BatchCompressState)
   let i := alloc.vec.Vec.len states
   let invs :=
     alloc.vec.Vec.with_capacity backend.serial.u32.field.FieldElement2625 i
+  let iter1 ←
+    SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter
+      alloc.alloc.Global states
   let invs1 ←
-    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop0
-      states invs 0#usize
+    ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop1
+      iter1 invs
   let (s, index_mut_back) ←
     alloc.vec.Vec.index_mut (core.slice.index.SliceIndexRangeFullSlice
       backend.serial.u32.field.FieldElement2625) invs1 ()
   let s1 ← field.FieldElement2625.invert_batch_alloc s
   let i1 := alloc.vec.Vec.len states
   let out := alloc.vec.Vec.with_capacity ristretto.CompressedRistretto i1
+  let i2 := alloc.vec.Vec.len states
   let invs2 := index_mut_back s1
-  ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop1
-    states invs2 out 0#usize
+  ristretto.«RistrettoPointi686-no-tables».double_and_compress_batch_loop2
+    { start := 0#usize, «end» := i2 } states invs2 out
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch::{impl core::clone::Clone for curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::double_and_compress_batch::BatchCompressState::x86_64-tables}::clone]:
     Source: 'curve25519-dalek/src/ristretto.rs', lines 568:23-568:28
@@ -54295,7 +54253,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::coset4]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 668:4-675:5 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 658:4-665:5 -/
 def ristretto.«RistrettoPointx86_64-tables».coset4
   (self : ristretto.RistrettoPoint.«x86_64-tables») :
   Result (Array edwards.EdwardsPoint.«x86_64-tables» 4#usize)
@@ -54316,7 +54274,7 @@ def ristretto.«RistrettoPointx86_64-tables».coset4
   ok (Array.make 4#usize [ self, ep1, ep3, ep5 ])
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::coset4]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 668:4-675:5 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 658:4-665:5 -/
 def ristretto.«RistrettoPointx86_64-no-tables».coset4
   (self : ristretto.RistrettoPoint.«x86_64-no-tables») :
   Result (Array edwards.EdwardsPoint.«x86_64-no-tables» 4#usize)
@@ -54337,7 +54295,7 @@ def ristretto.«RistrettoPointx86_64-no-tables».coset4
   ok (Array.make 4#usize [ self, ep1, ep3, ep5 ])
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::coset4]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 668:4-675:5 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 658:4-665:5 -/
 def ristretto.«RistrettoPointi686-tables».coset4
   (self : ristretto.RistrettoPoint.«i686-tables») :
   Result (Array edwards.EdwardsPoint.«i686-tables» 4#usize)
@@ -54358,7 +54316,7 @@ def ristretto.«RistrettoPointi686-tables».coset4
   ok (Array.make 4#usize [ self, ep1, ep3, ep5 ])
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::coset4]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 668:4-675:5 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 658:4-665:5 -/
 def ristretto.«RistrettoPointi686-no-tables».coset4
   (self : ristretto.RistrettoPoint.«i686-no-tables») :
   Result (Array edwards.EdwardsPoint.«i686-no-tables» 4#usize)
@@ -54379,7 +54337,7 @@ def ristretto.«RistrettoPointi686-no-tables».coset4
   ok (Array.make 4#usize [ self, ep1, ep3, ep5 ])
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::add]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 859:4-861:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 849:4-851:5
     Visibility: public -/
 def
   «Shared0RistrettoPointx86_64-tables».Insts.«CoreOpsArithAddSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables».add
@@ -54393,7 +54351,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 33:12-35:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 33:12-35:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithAddRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».add
@@ -54405,7 +54363,7 @@ def
     self rhs
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::from_uniform_bytes]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 792:4-808:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 782:4-798:5
     Visibility: public -/
 def ristretto.«RistrettoPointx86_64-tables».from_uniform_bytes
   (bytes : Array Std.U8 64#usize) :
@@ -54439,7 +54397,7 @@ def ristretto.«RistrettoPointx86_64-tables».from_uniform_bytes
     R_1 R_2
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::add]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 859:4-861:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 849:4-851:5
     Visibility: public -/
 def
   «Shared0RistrettoPointx86_64-no-tables».Insts.«CoreOpsArithAddSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».add
@@ -54453,7 +54411,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 33:12-35:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 33:12-35:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».add
@@ -54465,7 +54423,7 @@ def
     self rhs
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::from_uniform_bytes]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 792:4-808:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 782:4-798:5
     Visibility: public -/
 def ristretto.«RistrettoPointx86_64-no-tables».from_uniform_bytes
   (bytes : Array Std.U8 64#usize) :
@@ -54499,7 +54457,7 @@ def ristretto.«RistrettoPointx86_64-no-tables».from_uniform_bytes
     R_1 R_2
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::add]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 859:4-861:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 849:4-851:5
     Visibility: public -/
 def
   «Shared0RistrettoPointi686-tables».Insts.«CoreOpsArithAddSharedARistrettoPointi686-tablesRistrettoPointi686-tables».add
@@ -54513,7 +54471,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 33:12-35:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 33:12-35:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithAddRistrettoPointi686-tablesRistrettoPointi686-tables».add
@@ -54525,7 +54483,7 @@ def
     self rhs
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::from_uniform_bytes]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 792:4-808:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 782:4-798:5
     Visibility: public -/
 def ristretto.«RistrettoPointi686-tables».from_uniform_bytes
   (bytes : Array Std.U8 64#usize) :
@@ -54559,7 +54517,7 @@ def ristretto.«RistrettoPointi686-tables».from_uniform_bytes
     R_1 R_2
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::add]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 859:4-861:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 849:4-851:5
     Visibility: public -/
 def
   «Shared0RistrettoPointi686-no-tables».Insts.«CoreOpsArithAddSharedARistrettoPointi686-no-tablesRistrettoPointi686-no-tables».add
@@ -54573,7 +54531,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 33:12-35:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 33:12-35:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithAddRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».add
@@ -54585,7 +54543,7 @@ def
     self rhs
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::from_uniform_bytes]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 792:4-808:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 782:4-798:5
     Visibility: public -/
 def ristretto.«RistrettoPointi686-no-tables».from_uniform_bytes
   (bytes : Array Std.U8 64#usize) :
@@ -54619,7 +54577,7 @@ def ristretto.«RistrettoPointi686-no-tables».from_uniform_bytes
     R_1 R_2
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::Identity for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::identity]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 812:4-814:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 802:4-804:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity
@@ -54629,7 +54587,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::Identity for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 811:0-815:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 801:0-805:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity
@@ -54639,7 +54597,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::Identity for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::identity]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 812:4-814:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 802:4-804:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity
@@ -54649,7 +54607,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::Identity for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 811:0-815:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 801:0-805:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity
@@ -54659,7 +54617,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::Identity for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::identity]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 812:4-814:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 802:4-804:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity
@@ -54669,7 +54627,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::Identity for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 811:0-815:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 801:0-805:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity
@@ -54679,7 +54637,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::Identity for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::identity]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 812:4-814:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 802:4-804:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity
@@ -54689,7 +54647,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::Identity for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 811:0-815:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 801:0-805:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity
@@ -54699,14 +54657,14 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::default::Default for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::default]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 818:4-820:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 808:4-810:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreDefaultDefault.default
   : Result ristretto.RistrettoPoint.«x86_64-tables» := do
   ristretto.RistrettoPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::default::Default for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 817:0-821:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 807:0-811:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreDefaultDefault :
   core.default.Default ristretto.RistrettoPoint.«x86_64-tables» := {
@@ -54715,7 +54673,7 @@ def ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreDefaultDefault :
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::default::Default for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::default]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 818:4-820:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 808:4-810:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreDefaultDefault.default
@@ -54723,7 +54681,7 @@ def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::default::Default for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 817:0-821:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 807:0-811:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreDefaultDefault :
   core.default.Default ristretto.RistrettoPoint.«x86_64-no-tables» := {
@@ -54732,14 +54690,14 @@ def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreDefaultDefault :
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::default::Default for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::default]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 818:4-820:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 808:4-810:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«i686-tables».Insts.CoreDefaultDefault.default
   : Result ristretto.RistrettoPoint.«i686-tables» := do
   ristretto.RistrettoPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::default::Default for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 817:0-821:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 807:0-811:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-tables».Insts.CoreDefaultDefault :
   core.default.Default ristretto.RistrettoPoint.«i686-tables» := {
@@ -54748,7 +54706,7 @@ def ristretto.RistrettoPoint.«i686-tables».Insts.CoreDefaultDefault :
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::default::Default for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::default]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 818:4-820:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 808:4-810:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreDefaultDefault.default
@@ -54756,7 +54714,7 @@ def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::default::Default for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 817:0-821:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 807:0-811:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreDefaultDefault :
   core.default.Default ristretto.RistrettoPoint.«i686-no-tables» := {
@@ -54765,7 +54723,7 @@ def ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreDefaultDefault :
 }
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConstantTimeEq for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::ct_eq]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 840:4-847:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 830:4-837:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«x86_64-tables».Insts.SubtleConstantTimeEq.ct_eq
   (self : ristretto.RistrettoPoint.«x86_64-tables»)
@@ -54793,7 +54751,7 @@ def ristretto.RistrettoPoint.«x86_64-tables».Insts.SubtleConstantTimeEq.ct_eq
   subtle.Choice.Insts.CoreOpsBitBitOrChoiceChoice.bitor c c1
 
 /-- [curve25519_dalek::ristretto::{impl core::cmp::PartialEq<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::eq]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 828:4-830:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 818:4-820:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreCmpPartialEqRistrettoPointx86_64-tables».eq
@@ -54807,7 +54765,7 @@ def
   core.convert.IntoFrom.into Bool.Insts.CoreConvertFromChoice c
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::cmp::PartialEq<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 827:0-831:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 817:0-821:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreCmpPartialEqRistrettoPointx86_64-tables»
@@ -54820,7 +54778,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConstantTimeEq for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::ct_eq]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 840:4-847:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 830:4-837:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.SubtleConstantTimeEq.ct_eq
@@ -54849,7 +54807,7 @@ def
   subtle.Choice.Insts.CoreOpsBitBitOrChoiceChoice.bitor c c1
 
 /-- [curve25519_dalek::ristretto::{impl core::cmp::PartialEq<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::eq]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 828:4-830:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 818:4-820:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreCmpPartialEqRistrettoPointx86_64-no-tables».eq
@@ -54863,7 +54821,7 @@ def
   core.convert.IntoFrom.into Bool.Insts.CoreConvertFromChoice c
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::cmp::PartialEq<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 827:0-831:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 817:0-821:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreCmpPartialEqRistrettoPointx86_64-no-tables»
@@ -54876,7 +54834,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConstantTimeEq for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::ct_eq]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 840:4-847:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 830:4-837:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«i686-tables».Insts.SubtleConstantTimeEq.ct_eq
   (self : ristretto.RistrettoPoint.«i686-tables»)
@@ -54904,7 +54862,7 @@ def ristretto.RistrettoPoint.«i686-tables».Insts.SubtleConstantTimeEq.ct_eq
   subtle.Choice.Insts.CoreOpsBitBitOrChoiceChoice.bitor c c1
 
 /-- [curve25519_dalek::ristretto::{impl core::cmp::PartialEq<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::eq]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 828:4-830:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 818:4-820:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreCmpPartialEqRistrettoPointi686-tables».eq
@@ -54918,7 +54876,7 @@ def
   core.convert.IntoFrom.into Bool.Insts.CoreConvertFromChoice c
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::cmp::PartialEq<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 827:0-831:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 817:0-821:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreCmpPartialEqRistrettoPointi686-tables»
@@ -54931,7 +54889,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConstantTimeEq for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::ct_eq]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 840:4-847:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 830:4-837:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.SubtleConstantTimeEq.ct_eq
@@ -54960,7 +54918,7 @@ def
   subtle.Choice.Insts.CoreOpsBitBitOrChoiceChoice.bitor c c1
 
 /-- [curve25519_dalek::ristretto::{impl core::cmp::PartialEq<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::eq]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 828:4-830:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 818:4-820:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreCmpPartialEqRistrettoPointi686-no-tables».eq
@@ -54974,7 +54932,7 @@ def
   core.convert.IntoFrom.into Bool.Insts.CoreConvertFromChoice c
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::cmp::PartialEq<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 827:0-831:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 817:0-821:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreCmpPartialEqRistrettoPointi686-no-tables»
@@ -54987,7 +54945,7 @@ impl_def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConstantTimeEq for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 833:0-848:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 823:0-838:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«x86_64-tables».Insts.SubtleConstantTimeEq :
   subtle.ConstantTimeEq ristretto.RistrettoPoint.«x86_64-tables» := {
@@ -54996,7 +54954,7 @@ def ristretto.RistrettoPoint.«x86_64-tables».Insts.SubtleConstantTimeEq :
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConstantTimeEq for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 833:0-848:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 823:0-838:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.SubtleConstantTimeEq :
   subtle.ConstantTimeEq ristretto.RistrettoPoint.«x86_64-no-tables» := {
@@ -55005,7 +54963,7 @@ def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.SubtleConstantTimeEq :
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConstantTimeEq for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 833:0-848:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 823:0-838:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-tables».Insts.SubtleConstantTimeEq :
   subtle.ConstantTimeEq ristretto.RistrettoPoint.«i686-tables» := {
@@ -55014,7 +54972,7 @@ def ristretto.RistrettoPoint.«i686-tables».Insts.SubtleConstantTimeEq :
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConstantTimeEq for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 833:0-848:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 823:0-838:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-no-tables».Insts.SubtleConstantTimeEq :
   subtle.ConstantTimeEq ristretto.RistrettoPoint.«i686-no-tables» := {
@@ -55023,7 +54981,7 @@ def ristretto.RistrettoPoint.«i686-no-tables».Insts.SubtleConstantTimeEq :
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 856:0-862:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 846:0-852:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointx86_64-tables».Insts.«CoreOpsArithAddSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -55035,7 +54993,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 856:0-862:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 846:0-852:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointx86_64-no-tables».Insts.«CoreOpsArithAddSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -55047,7 +55005,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 856:0-862:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 846:0-852:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointi686-tables».Insts.«CoreOpsArithAddSharedARistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -55059,7 +55017,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 856:0-862:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 846:0-852:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointi686-no-tables».Insts.«CoreOpsArithAddSharedARistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -55071,7 +55029,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 19:12-21:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 19:12-21:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithAddSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».add
@@ -55083,7 +55041,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 17:8-22:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 17:8-22:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithAddSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -55095,7 +55053,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 26:12-28:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 26:12-28:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   «SharedARistrettoPointx86_64-tables».Insts.«CoreOpsArithAddRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».add
@@ -55107,7 +55065,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 24:8-29:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 24:8-29:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   «SharedARistrettoPointx86_64-tables».Insts.«CoreOpsArithAddRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -55119,7 +55077,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 31:8-36:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 31:8-36:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithAddRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -55131,7 +55089,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 19:12-21:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 19:12-21:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».add
@@ -55143,7 +55101,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 17:8-22:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 17:8-22:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -55155,7 +55113,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 26:12-28:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 26:12-28:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   «SharedARistrettoPointx86_64-no-tables».Insts.«CoreOpsArithAddRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».add
@@ -55167,7 +55125,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 24:8-29:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 24:8-29:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   «SharedARistrettoPointx86_64-no-tables».Insts.«CoreOpsArithAddRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -55179,7 +55137,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 31:8-36:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 31:8-36:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -55191,7 +55149,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 19:12-21:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 19:12-21:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithAddSharedBRistrettoPointi686-tablesRistrettoPointi686-tables».add
@@ -55203,7 +55161,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 17:8-22:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 17:8-22:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithAddSharedBRistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -55215,7 +55173,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 26:12-28:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 26:12-28:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   «SharedARistrettoPointi686-tables».Insts.«CoreOpsArithAddRistrettoPointi686-tablesRistrettoPointi686-tables».add
@@ -55227,7 +55185,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 24:8-29:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 24:8-29:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   «SharedARistrettoPointi686-tables».Insts.«CoreOpsArithAddRistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -55239,7 +55197,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 31:8-36:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 31:8-36:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithAddRistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -55251,7 +55209,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 19:12-21:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 19:12-21:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithAddSharedBRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».add
@@ -55263,7 +55221,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 17:8-22:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 17:8-22:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithAddSharedBRistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -55275,7 +55233,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::add]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 26:12-28:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 26:12-28:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1
     Visibility: public -/
 def
   «SharedARistrettoPointi686-no-tables».Insts.«CoreOpsArithAddRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».add
@@ -55287,7 +55245,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 24:8-29:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 24:8-29:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   «SharedARistrettoPointi686-no-tables».Insts.«CoreOpsArithAddRistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -55299,7 +55257,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Add<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 31:8-36:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 864:0-868:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 31:8-36:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 854:0-858:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithAddRistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -55311,7 +55269,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::add_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 871:4-873:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 861:4-863:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithAddAssignShared0RistrettoPointx86_64-tables».add_assign
@@ -55323,7 +55281,7 @@ def
     self _rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 870:0-874:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 860:0-864:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithAddAssignShared0RistrettoPointx86_64-tables»
@@ -55334,7 +55292,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::add_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 871:4-873:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 861:4-863:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddAssignShared0RistrettoPointx86_64-no-tables».add_assign
@@ -55346,7 +55304,7 @@ def
     self _rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 870:0-874:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 860:0-864:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddAssignShared0RistrettoPointx86_64-no-tables»
@@ -55357,7 +55315,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::add_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 871:4-873:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 861:4-863:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithAddAssignShared0RistrettoPointi686-tables».add_assign
@@ -55369,7 +55327,7 @@ def
     self _rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 870:0-874:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 860:0-864:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithAddAssignShared0RistrettoPointi686-tables»
@@ -55380,7 +55338,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::add_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 871:4-873:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 861:4-863:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithAddAssignShared0RistrettoPointi686-no-tables».add_assign
@@ -55392,7 +55350,7 @@ def
     self _rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 870:0-874:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 860:0-864:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithAddAssignShared0RistrettoPointi686-no-tables»
@@ -55403,7 +55361,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::add_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 44:12-46:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-876:71
+    Source: 'curve25519-dalek/src/macros.rs', lines 44:12-46:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 866:0-866:71
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithAddAssignRistrettoPointx86_64-tables».add_assign
@@ -55415,7 +55373,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 43:8-47:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-876:71 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 43:8-47:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 866:0-866:71 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithAddAssignRistrettoPointx86_64-tables»
@@ -55426,7 +55384,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::add_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 44:12-46:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-876:71
+    Source: 'curve25519-dalek/src/macros.rs', lines 44:12-46:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 866:0-866:71
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddAssignRistrettoPointx86_64-no-tables».add_assign
@@ -55438,7 +55396,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 43:8-47:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-876:71 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 43:8-47:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 866:0-866:71 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddAssignRistrettoPointx86_64-no-tables»
@@ -55449,7 +55407,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::add_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 44:12-46:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-876:71
+    Source: 'curve25519-dalek/src/macros.rs', lines 44:12-46:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 866:0-866:71
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithAddAssignRistrettoPointi686-tables».add_assign
@@ -55461,7 +55419,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 43:8-47:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-876:71 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 43:8-47:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 866:0-866:71 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithAddAssignRistrettoPointi686-tables»
@@ -55472,7 +55430,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::add_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 44:12-46:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-876:71
+    Source: 'curve25519-dalek/src/macros.rs', lines 44:12-46:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 866:0-866:71
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithAddAssignRistrettoPointi686-no-tables».add_assign
@@ -55484,7 +55442,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::AddAssign<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 43:8-47:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-876:71 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 43:8-47:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 866:0-866:71 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithAddAssignRistrettoPointi686-no-tables»
@@ -55495,7 +55453,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::sub]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 881:4-883:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 871:4-873:5
     Visibility: public -/
 def
   «Shared0RistrettoPointx86_64-tables».Insts.«CoreOpsArithSubSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables».sub
@@ -55509,7 +55467,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 878:0-884:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 868:0-874:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointx86_64-tables».Insts.«CoreOpsArithSubSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -55521,7 +55479,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::sub]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 881:4-883:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 871:4-873:5
     Visibility: public -/
 def
   «Shared0RistrettoPointx86_64-no-tables».Insts.«CoreOpsArithSubSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».sub
@@ -55535,7 +55493,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 878:0-884:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 868:0-874:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointx86_64-no-tables».Insts.«CoreOpsArithSubSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -55547,7 +55505,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::sub]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 881:4-883:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 871:4-873:5
     Visibility: public -/
 def
   «Shared0RistrettoPointi686-tables».Insts.«CoreOpsArithSubSharedARistrettoPointi686-tablesRistrettoPointi686-tables».sub
@@ -55561,7 +55519,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 878:0-884:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 868:0-874:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointi686-tables».Insts.«CoreOpsArithSubSharedARistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -55573,7 +55531,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::sub]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 881:4-883:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 871:4-873:5
     Visibility: public -/
 def
   «Shared0RistrettoPointi686-no-tables».Insts.«CoreOpsArithSubSharedARistrettoPointi686-no-tablesRistrettoPointi686-no-tables».sub
@@ -55587,7 +55545,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 878:0-884:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 868:0-874:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointi686-no-tables».Insts.«CoreOpsArithSubSharedARistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -55599,7 +55557,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 56:12-58:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 56:12-58:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithSubSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».sub
@@ -55611,7 +55569,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 54:8-59:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 54:8-59:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithSubSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -55623,7 +55581,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 63:12-65:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 63:12-65:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   «SharedARistrettoPointx86_64-tables».Insts.«CoreOpsArithSubRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».sub
@@ -55635,7 +55593,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 61:8-66:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 61:8-66:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   «SharedARistrettoPointx86_64-tables».Insts.«CoreOpsArithSubRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -55647,7 +55605,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 70:12-72:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 70:12-72:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithSubRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».sub
@@ -55659,7 +55617,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 68:8-73:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 68:8-73:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithSubRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -55671,7 +55629,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 56:12-58:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 56:12-58:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithSubSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».sub
@@ -55683,7 +55641,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 54:8-59:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 54:8-59:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithSubSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -55695,7 +55653,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 63:12-65:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 63:12-65:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   «SharedARistrettoPointx86_64-no-tables».Insts.«CoreOpsArithSubRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».sub
@@ -55707,7 +55665,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 61:8-66:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 61:8-66:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   «SharedARistrettoPointx86_64-no-tables».Insts.«CoreOpsArithSubRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -55719,7 +55677,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 70:12-72:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 70:12-72:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithSubRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».sub
@@ -55731,7 +55689,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 68:8-73:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 68:8-73:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithSubRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -55743,7 +55701,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 56:12-58:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 56:12-58:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithSubSharedBRistrettoPointi686-tablesRistrettoPointi686-tables».sub
@@ -55755,7 +55713,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 54:8-59:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 54:8-59:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithSubSharedBRistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -55767,7 +55725,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 63:12-65:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 63:12-65:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   «SharedARistrettoPointi686-tables».Insts.«CoreOpsArithSubRistrettoPointi686-tablesRistrettoPointi686-tables».sub
@@ -55779,7 +55737,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 61:8-66:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 61:8-66:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   «SharedARistrettoPointi686-tables».Insts.«CoreOpsArithSubRistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -55791,7 +55749,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 70:12-72:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 70:12-72:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithSubRistrettoPointi686-tablesRistrettoPointi686-tables».sub
@@ -55803,7 +55761,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 68:8-73:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 68:8-73:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithSubRistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -55815,7 +55773,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 56:12-58:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 56:12-58:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithSubSharedBRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».sub
@@ -55827,7 +55785,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 54:8-59:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 54:8-59:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithSubSharedBRistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -55839,7 +55797,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 63:12-65:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 63:12-65:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   «SharedARistrettoPointi686-no-tables».Insts.«CoreOpsArithSubRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».sub
@@ -55851,7 +55809,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 61:8-66:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 61:8-66:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   «SharedARistrettoPointi686-no-tables».Insts.«CoreOpsArithSubRistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -55863,7 +55821,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::sub]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 70:12-72:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1
+    Source: 'curve25519-dalek/src/macros.rs', lines 70:12-72:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithSubRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».sub
@@ -55875,7 +55833,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Sub<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 68:8-73:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 886:0-890:1 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 68:8-73:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 876:0-880:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithSubRistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -55887,7 +55845,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::sub_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 893:4-895:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 883:4-885:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithSubAssignShared0RistrettoPointx86_64-tables».sub_assign
@@ -55899,7 +55857,7 @@ def
     self _rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 892:0-896:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 882:0-886:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithSubAssignShared0RistrettoPointx86_64-tables»
@@ -55910,7 +55868,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::sub_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 893:4-895:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 883:4-885:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithSubAssignShared0RistrettoPointx86_64-no-tables».sub_assign
@@ -55922,7 +55880,7 @@ def
     self _rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 892:0-896:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 882:0-886:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithSubAssignShared0RistrettoPointx86_64-no-tables»
@@ -55933,7 +55891,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::sub_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 893:4-895:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 883:4-885:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithSubAssignShared0RistrettoPointi686-tables».sub_assign
@@ -55945,7 +55903,7 @@ def
     self _rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 892:0-896:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 882:0-886:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithSubAssignShared0RistrettoPointi686-tables»
@@ -55956,7 +55914,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::sub_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 893:4-895:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 883:4-885:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithSubAssignShared0RistrettoPointi686-no-tables».sub_assign
@@ -55968,7 +55926,7 @@ def
     self _rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<&'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 892:0-896:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 882:0-886:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithSubAssignShared0RistrettoPointi686-no-tables»
@@ -55979,7 +55937,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::sub_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 81:12-83:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 898:0-898:71
+    Source: 'curve25519-dalek/src/macros.rs', lines 81:12-83:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 888:0-888:71
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithSubAssignRistrettoPointx86_64-tables».sub_assign
@@ -55991,7 +55949,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 80:8-84:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 898:0-898:71 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 80:8-84:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 888:0-888:71 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithSubAssignRistrettoPointx86_64-tables»
@@ -56002,7 +55960,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::sub_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 81:12-83:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 898:0-898:71
+    Source: 'curve25519-dalek/src/macros.rs', lines 81:12-83:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 888:0-888:71
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithSubAssignRistrettoPointx86_64-no-tables».sub_assign
@@ -56014,7 +55972,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 80:8-84:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 898:0-898:71 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 80:8-84:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 888:0-888:71 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithSubAssignRistrettoPointx86_64-no-tables»
@@ -56025,7 +55983,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::sub_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 81:12-83:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 898:0-898:71
+    Source: 'curve25519-dalek/src/macros.rs', lines 81:12-83:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 888:0-888:71
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithSubAssignRistrettoPointi686-tables».sub_assign
@@ -56037,7 +55995,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 80:8-84:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 898:0-898:71 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 80:8-84:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 888:0-888:71 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithSubAssignRistrettoPointi686-tables»
@@ -56048,7 +56006,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::sub_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 81:12-83:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 898:0-898:71
+    Source: 'curve25519-dalek/src/macros.rs', lines 81:12-83:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 888:0-888:71
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithSubAssignRistrettoPointi686-no-tables».sub_assign
@@ -56060,7 +56018,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::SubAssign<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 80:8-84:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 898:0-898:71 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 80:8-84:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 888:0-888:71 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithSubAssignRistrettoPointi686-no-tables»
@@ -56071,7 +56029,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::sum]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:8-911:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 899:8-901:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -56095,7 +56053,7 @@ def
     ok (cont (iter1, acc1))
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::sum]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:8-911:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 899:8-901:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -56115,7 +56073,7 @@ def
     (iter, acc)
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::sum]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 904:4-913:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 894:4-903:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreIterTraitsAccumSum.sum
   {T : Type _} {I : Type _}
@@ -56132,7 +56090,7 @@ def ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreIterTraitsAccumSum.sum
     coreitertraitsiteratorIteratorInst iter acc
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 900:0-914:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 890:0-904:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreIterTraitsAccumSum {T
   : Type _} («coreborrowBorrowTRistrettoPointx86_64-tablesInst» :
@@ -56146,7 +56104,7 @@ def ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreIterTraitsAccumSum {T
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::sum]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:8-911:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 899:8-901:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -56171,7 +56129,7 @@ def
     ok (cont (iter1, acc1))
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::sum]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:8-911:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 899:8-901:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -56191,7 +56149,7 @@ def
     (iter, acc)
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::sum]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 904:4-913:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 894:4-903:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreIterTraitsAccumSum.sum
@@ -56209,7 +56167,7 @@ def
     coreitertraitsiteratorIteratorInst iter acc
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 900:0-914:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 890:0-904:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreIterTraitsAccumSum
   {T : Type _} («coreborrowBorrowTRistrettoPointx86_64-no-tablesInst» :
@@ -56224,7 +56182,7 @@ def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreIterTraitsAccumSum
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::sum]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:8-911:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 899:8-901:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -56247,7 +56205,7 @@ def
     ok (cont (iter1, acc1))
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::sum]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:8-911:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 899:8-901:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -56266,7 +56224,7 @@ def
     (iter, acc)
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::sum]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 904:4-913:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 894:4-903:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«i686-tables».Insts.CoreIterTraitsAccumSum.sum
   {T : Type _} {I : Type _} («coreborrowBorrowTRistrettoPointi686-tablesInst»
@@ -56282,7 +56240,7 @@ def ristretto.RistrettoPoint.«i686-tables».Insts.CoreIterTraitsAccumSum.sum
     coreitertraitsiteratorIteratorInst iter acc
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 900:0-914:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 890:0-904:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-tables».Insts.CoreIterTraitsAccumSum {T :
   Type _} («coreborrowBorrowTRistrettoPointi686-tablesInst» :
@@ -56296,7 +56254,7 @@ def ristretto.RistrettoPoint.«i686-tables».Insts.CoreIterTraitsAccumSum {T :
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::sum]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:8-911:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 899:8-901:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -56321,7 +56279,7 @@ def
     ok (cont (iter1, acc1))
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::sum]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:8-911:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 899:8-901:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -56341,7 +56299,7 @@ def
     (iter, acc)
 
 /-- [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::sum]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 904:4-913:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 894:4-903:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreIterTraitsAccumSum.sum
@@ -56359,7 +56317,7 @@ def
     coreitertraitsiteratorIteratorInst iter acc
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::iter::traits::accum::Sum<T> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 900:0-914:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 890:0-904:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreIterTraitsAccumSum {T
   : Type _} («coreborrowBorrowTRistrettoPointi686-no-tablesInst» :
@@ -56373,7 +56331,7 @@ def ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreIterTraitsAccumSum {T
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::neg]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 919:4-921:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:4-911:5
     Visibility: public -/
 def
   «Shared0RistrettoPointx86_64-tables».Insts.«CoreOpsArithNegRistrettoPointx86_64-tables».neg
@@ -56386,7 +56344,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 916:0-922:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 906:0-912:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointx86_64-tables».Insts.«CoreOpsArithNegRistrettoPointx86_64-tables»
@@ -56397,7 +56355,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::neg]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 919:4-921:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:4-911:5
     Visibility: public -/
 def
   «Shared0RistrettoPointx86_64-no-tables».Insts.«CoreOpsArithNegRistrettoPointx86_64-no-tables».neg
@@ -56410,7 +56368,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'_0 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 916:0-922:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 906:0-912:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointx86_64-no-tables».Insts.«CoreOpsArithNegRistrettoPointx86_64-no-tables»
@@ -56421,7 +56379,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::neg]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 919:4-921:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:4-911:5
     Visibility: public -/
 def
   «Shared0RistrettoPointi686-tables».Insts.«CoreOpsArithNegRistrettoPointi686-tables».neg
@@ -56434,7 +56392,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 916:0-922:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 906:0-912:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointi686-tables».Insts.«CoreOpsArithNegRistrettoPointi686-tables»
@@ -56445,7 +56403,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::neg]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 919:4-921:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 909:4-911:5
     Visibility: public -/
 def
   «Shared0RistrettoPointi686-no-tables».Insts.«CoreOpsArithNegRistrettoPointi686-no-tables».neg
@@ -56458,7 +56416,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'_0 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 916:0-922:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 906:0-912:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointi686-no-tables».Insts.«CoreOpsArithNegRistrettoPointi686-no-tables»
@@ -56469,7 +56427,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::neg]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 927:4-929:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 917:4-919:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithNegRistrettoPointx86_64-tables».neg
@@ -56480,7 +56438,7 @@ def
     self
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 924:0-930:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 914:0-920:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithNegRistrettoPointx86_64-tables»
@@ -56491,7 +56449,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::neg]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 927:4-929:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 917:4-919:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithNegRistrettoPointx86_64-no-tables».neg
@@ -56502,7 +56460,7 @@ def
     self
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 924:0-930:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 914:0-920:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithNegRistrettoPointx86_64-no-tables»
@@ -56513,7 +56471,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::neg]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 927:4-929:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 917:4-919:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithNegRistrettoPointi686-tables».neg
@@ -56524,7 +56482,7 @@ def
     self
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 924:0-930:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 914:0-920:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithNegRistrettoPointi686-tables»
@@ -56535,7 +56493,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::neg]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 927:4-929:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 917:4-919:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithNegRistrettoPointi686-no-tables».neg
@@ -56546,7 +56504,7 @@ def
     self
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Neg<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 924:0-930:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 914:0-920:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithNegRistrettoPointi686-no-tables»
@@ -56557,7 +56515,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 942:4-944:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 932:4-934:5
     Visibility: public -/
 def
   «Shared0RistrettoPointx86_64-tables».Insts.«CoreOpsArithMulSharedAScalarRistrettoPointx86_64-tables».mul
@@ -56571,7 +56529,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<&'a curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::mul_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 933:4-936:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 923:4-926:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignSharedAScalar.mul_assign
@@ -56583,7 +56541,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<&'a curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 932:0-937:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 922:0-927:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignSharedAScalar
@@ -56594,7 +56552,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 942:4-944:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 932:4-934:5
     Visibility: public -/
 def
   «Shared0RistrettoPointx86_64-no-tables».Insts.«CoreOpsArithMulSharedAScalarRistrettoPointx86_64-no-tables».mul
@@ -56608,7 +56566,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<&'a curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::mul_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 933:4-936:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 923:4-926:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignSharedAScalar.mul_assign
@@ -56620,7 +56578,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<&'a curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 932:0-937:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 922:0-927:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignSharedAScalar
@@ -56631,7 +56589,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 942:4-944:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 932:4-934:5
     Visibility: public -/
 def
   «Shared0RistrettoPointi686-tables».Insts.«CoreOpsArithMulSharedAScalarRistrettoPointi686-tables».mul
@@ -56644,7 +56602,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<&'a curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::mul_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 933:4-936:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 923:4-926:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.CoreOpsArithMulAssignSharedAScalar.mul_assign
@@ -56655,7 +56613,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<&'a curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 932:0-937:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 922:0-927:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.CoreOpsArithMulAssignSharedAScalar
@@ -56666,7 +56624,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 942:4-944:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 932:4-934:5
     Visibility: public -/
 def
   «Shared0RistrettoPointi686-no-tables».Insts.«CoreOpsArithMulSharedAScalarRistrettoPointi686-no-tables».mul
@@ -56680,7 +56638,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<&'a curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::mul_assign]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 933:4-936:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 923:4-926:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreOpsArithMulAssignSharedAScalar.mul_assign
@@ -56692,7 +56650,7 @@ def
     self scalar
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<&'a curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 932:0-937:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 922:0-927:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreOpsArithMulAssignSharedAScalar
@@ -56703,7 +56661,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 939:0-945:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 929:0-935:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointx86_64-tables».Insts.«CoreOpsArithMulSharedAScalarRistrettoPointx86_64-tables»
@@ -56714,7 +56672,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 939:0-945:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 929:0-935:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointx86_64-no-tables».Insts.«CoreOpsArithMulSharedAScalarRistrettoPointx86_64-no-tables»
@@ -56725,7 +56683,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 939:0-945:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 929:0-935:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointi686-tables».Insts.«CoreOpsArithMulSharedAScalarRistrettoPointi686-tables»
@@ -56736,7 +56694,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'_1 curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 939:0-945:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 929:0-935:1 -/
 @[reducible]
 def
   «Shared0RistrettoPointi686-no-tables».Insts.«CoreOpsArithMulSharedAScalarRistrettoPointi686-no-tables»
@@ -56747,7 +56705,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 951:4-953:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 941:4-943:5
     Visibility: public -/
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables».mul
@@ -56760,7 +56718,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 947:0-954:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 937:0-944:1 -/
 @[reducible]
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -56771,7 +56729,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'_1 curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 951:4-953:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 941:4-943:5
     Visibility: public -/
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».mul
@@ -56785,7 +56743,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'_1 curve25519_dalek::scalar::Scalar}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 947:0-954:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 937:0-944:1 -/
 @[reducible]
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -56797,7 +56755,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 951:4-953:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 941:4-943:5
     Visibility: public -/
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoPointi686-tablesRistrettoPointi686-tables».mul
@@ -56810,7 +56768,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 947:0-954:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 937:0-944:1 -/
 @[reducible]
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -56821,7 +56779,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'_1 curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 951:4-953:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 941:4-943:5
     Visibility: public -/
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoPointi686-no-tablesRistrettoPointi686-no-tables».mul
@@ -56835,7 +56793,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'_1 curve25519_dalek::scalar::Scalar}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 947:0-954:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 937:0-944:1 -/
 @[reducible]
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -56847,7 +56805,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1132:4-1134:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1122:4-1124:5
     Visibility: public -/
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoBasepointTablex86_64-tablesRistrettoPointx86_64-tables».mul
@@ -56861,7 +56819,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 961:4-971:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 951:4-961:5
     Visibility: public -/
 def ristretto.«RistrettoPointx86_64-tables».mul_base
   (scalar : scalar.Scalar) :
@@ -56872,7 +56830,7 @@ def ristretto.«RistrettoPointx86_64-tables».mul_base
     scalar rbt
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'a curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   SharedAScalar.Insts.«CoreOpsArithMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».mul
@@ -56884,7 +56842,7 @@ def
     self rhs
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 961:4-971:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 951:4-961:5
     Visibility: public -/
 def ristretto.«RistrettoPointx86_64-no-tables».mul_base
   (scalar : scalar.Scalar) :
@@ -56895,7 +56853,7 @@ def ristretto.«RistrettoPointx86_64-no-tables».mul_base
     scalar rp
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1132:4-1134:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1122:4-1124:5
     Visibility: public -/
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoBasepointTablei686-tablesRistrettoPointi686-tables».mul
@@ -56909,7 +56867,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 961:4-971:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 951:4-961:5
     Visibility: public -/
 def ristretto.«RistrettoPointi686-tables».mul_base
   (scalar : scalar.Scalar) :
@@ -56920,7 +56878,7 @@ def ristretto.«RistrettoPointi686-tables».mul_base
     scalar rbt
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'a curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   SharedAScalar.Insts.«CoreOpsArithMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».mul
@@ -56931,7 +56889,7 @@ def
     self rhs
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::mul_base]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 961:4-971:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 951:4-961:5
     Visibility: public -/
 def ristretto.«RistrettoPointi686-no-tables».mul_base
   (scalar : scalar.Scalar) :
@@ -56942,7 +56900,7 @@ def ristretto.«RistrettoPointi686-no-tables».mul_base
     scalar rp
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::mul_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 118:12-120:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 974:0-974:63
+    Source: 'curve25519-dalek/src/macros.rs', lines 118:12-120:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 964:0-964:63
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignScalar.mul_assign
@@ -56953,7 +56911,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 117:8-121:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 974:0-974:63 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 117:8-121:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 964:0-964:63 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignScalar
@@ -56964,7 +56922,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::mul_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 118:12-120:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 974:0-974:63
+    Source: 'curve25519-dalek/src/macros.rs', lines 118:12-120:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 964:0-964:63
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignScalar.mul_assign
@@ -56976,7 +56934,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 117:8-121:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 974:0-974:63 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 117:8-121:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 964:0-964:63 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.CoreOpsArithMulAssignScalar
@@ -56987,7 +56945,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::mul_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 118:12-120:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 974:0-974:63
+    Source: 'curve25519-dalek/src/macros.rs', lines 118:12-120:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 964:0-964:63
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.CoreOpsArithMulAssignScalar.mul_assign
@@ -56998,7 +56956,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 117:8-121:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 974:0-974:63 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 117:8-121:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 964:0-964:63 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-tables».Insts.CoreOpsArithMulAssignScalar
   : core.ops.arith.MulAssign ristretto.RistrettoPoint.«i686-tables»
@@ -57008,7 +56966,7 @@ def ristretto.RistrettoPoint.«i686-tables».Insts.CoreOpsArithMulAssignScalar
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::mul_assign]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 118:12-120:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 974:0-974:63
+    Source: 'curve25519-dalek/src/macros.rs', lines 118:12-120:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 964:0-964:63
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreOpsArithMulAssignScalar.mul_assign
@@ -57019,7 +56977,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::MulAssign<curve25519_dalek::scalar::Scalar> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 117:8-121:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 974:0-974:63 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 117:8-121:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 964:0-964:63 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.CoreOpsArithMulAssignScalar
@@ -57030,7 +56988,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointx86_64-tables».mul
@@ -57041,7 +56999,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointx86_64-tables»
@@ -57052,7 +57010,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   «SharedARistrettoPointx86_64-tables».Insts.«CoreOpsArithMulScalarRistrettoPointx86_64-tables».mul
@@ -57063,7 +57021,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   «SharedARistrettoPointx86_64-tables».Insts.«CoreOpsArithMulScalarRistrettoPointx86_64-tables»
@@ -57074,7 +57032,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithMulScalarRistrettoPointx86_64-tables».mul
@@ -57085,7 +57043,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«CoreOpsArithMulScalarRistrettoPointx86_64-tables»
@@ -57096,7 +57054,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointx86_64-no-tables».mul
@@ -57108,7 +57066,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointx86_64-no-tables»
@@ -57119,7 +57077,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   «SharedARistrettoPointx86_64-no-tables».Insts.«CoreOpsArithMulScalarRistrettoPointx86_64-no-tables».mul
@@ -57131,7 +57089,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   «SharedARistrettoPointx86_64-no-tables».Insts.«CoreOpsArithMulScalarRistrettoPointx86_64-no-tables»
@@ -57142,7 +57100,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithMulScalarRistrettoPointx86_64-no-tables».mul
@@ -57154,7 +57112,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«CoreOpsArithMulScalarRistrettoPointx86_64-no-tables»
@@ -57165,7 +57123,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointi686-tables».mul
@@ -57176,7 +57134,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointi686-tables»
@@ -57187,7 +57145,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   «SharedARistrettoPointi686-tables».Insts.«CoreOpsArithMulScalarRistrettoPointi686-tables».mul
@@ -57198,7 +57156,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   «SharedARistrettoPointi686-tables».Insts.«CoreOpsArithMulScalarRistrettoPointi686-tables»
@@ -57209,7 +57167,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithMulScalarRistrettoPointi686-tables».mul
@@ -57220,7 +57178,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«CoreOpsArithMulScalarRistrettoPointi686-tables»
@@ -57231,7 +57189,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointi686-no-tables».mul
@@ -57242,7 +57200,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointi686-no-tables»
@@ -57253,7 +57211,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   «SharedARistrettoPointi686-no-tables».Insts.«CoreOpsArithMulScalarRistrettoPointi686-no-tables».mul
@@ -57264,7 +57222,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'a curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   «SharedARistrettoPointi686-no-tables».Insts.«CoreOpsArithMulScalarRistrettoPointi686-no-tables»
@@ -57275,7 +57233,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithMulScalarRistrettoPointi686-no-tables».mul
@@ -57286,7 +57244,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 976:0-976:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 966:0-966:81 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«CoreOpsArithMulScalarRistrettoPointi686-no-tables»
@@ -57297,7 +57255,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   scalar.Scalar.Insts.«CoreOpsArithMulSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».mul
@@ -57308,7 +57266,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   scalar.Scalar.Insts.«CoreOpsArithMulSharedBRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -57319,7 +57277,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'a curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   SharedAScalar.Insts.«CoreOpsArithMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».mul
@@ -57330,7 +57288,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'a curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   SharedAScalar.Insts.«CoreOpsArithMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -57341,7 +57299,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   scalar.Scalar.Insts.«CoreOpsArithMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».mul
@@ -57352,7 +57310,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   scalar.Scalar.Insts.«CoreOpsArithMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables»
@@ -57363,7 +57321,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   scalar.Scalar.Insts.«CoreOpsArithMulSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».mul
@@ -57375,7 +57333,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::scalar::Scalar}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   scalar.Scalar.Insts.«CoreOpsArithMulSharedBRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -57387,7 +57345,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for &'a curve25519_dalek::scalar::Scalar}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   SharedAScalar.Insts.«CoreOpsArithMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -57399,7 +57357,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   scalar.Scalar.Insts.«CoreOpsArithMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».mul
@@ -57411,7 +57369,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::scalar::Scalar}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   scalar.Scalar.Insts.«CoreOpsArithMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -57423,7 +57381,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   scalar.Scalar.Insts.«CoreOpsArithMulSharedBRistrettoPointi686-tablesRistrettoPointi686-tables».mul
@@ -57434,7 +57392,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   scalar.Scalar.Insts.«CoreOpsArithMulSharedBRistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -57445,7 +57403,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'a curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 100:12-102:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   SharedAScalar.Insts.«CoreOpsArithMulRistrettoPointi686-tablesRistrettoPointi686-tables».mul
@@ -57456,7 +57414,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'a curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   SharedAScalar.Insts.«CoreOpsArithMulRistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -57467,7 +57425,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   scalar.Scalar.Insts.«CoreOpsArithMulRistrettoPointi686-tablesRistrettoPointi686-tables».mul
@@ -57478,7 +57436,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   scalar.Scalar.Insts.«CoreOpsArithMulRistrettoPointi686-tablesRistrettoPointi686-tables»
@@ -57489,7 +57447,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 93:12-95:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   scalar.Scalar.Insts.«CoreOpsArithMulSharedBRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».mul
@@ -57500,7 +57458,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::scalar::Scalar}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 91:8-96:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   scalar.Scalar.Insts.«CoreOpsArithMulSharedBRistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -57512,7 +57470,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for &'a curve25519_dalek::scalar::Scalar}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 98:8-103:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   SharedAScalar.Insts.«CoreOpsArithMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -57524,7 +57482,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::scalar::Scalar}::mul]:
-    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81
+    Source: 'curve25519-dalek/src/macros.rs', lines 107:12-109:13; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81
     Visibility: public -/
 def
   scalar.Scalar.Insts.«CoreOpsArithMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».mul
@@ -57535,7 +57493,7 @@ def
     self rhs
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::scalar::Scalar}::i686-no-tables]
-    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 977:0-977:81 -/
+    Source: 'curve25519-dalek/src/macros.rs', lines 105:8-110:9; this code is generated from a macro invocation at: 'curve25519-dalek/src/ristretto.rs', lines 967:0-967:81 -/
 @[reducible]
 def
   scalar.Scalar.Insts.«CoreOpsArithMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables»
@@ -57547,7 +57505,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 988:8-990:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -57577,7 +57535,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 988:8-990:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -57604,7 +57562,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1002:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 980:4-992:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables».multiscalar_mul
@@ -57637,7 +57595,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1003:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 977:0-993:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables»
@@ -57659,7 +57617,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 988:8-990:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -57690,7 +57648,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 988:8-990:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -57717,7 +57675,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1002:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 980:4-992:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables».multiscalar_mul
@@ -57750,7 +57708,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1003:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 977:0-993:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables»
@@ -57773,7 +57731,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 988:8-990:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -57803,7 +57761,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 988:8-990:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -57830,7 +57788,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1002:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 980:4-992:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-tables».multiscalar_mul
@@ -57863,7 +57821,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1003:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 977:0-993:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-tables»
@@ -57885,7 +57843,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 988:8-990:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -57915,7 +57873,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 998:8-1000:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 988:8-990:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -57942,7 +57900,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 990:4-1002:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 980:4-992:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-no-tables».multiscalar_mul
@@ -57975,7 +57933,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 987:0-1003:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 977:0-993:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-no-tables»
@@ -57997,7 +57955,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::{closure}::x86_64-tables<I, J, Clause0_Item, Clause0_IntoIter, Clause2_IntoIter>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1017:43-1017:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1007:43-1007:50 -/
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».optional_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-tablesEdwardsPointx86_64-tables».call_once
   {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
@@ -58017,7 +57975,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul::{closure}::x86_64-tables<I, J, Clause0_Item, Clause0_IntoIter, Clause2_IntoIter>}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1017:43-1017:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1007:43-1007:50 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables».optional_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -58042,7 +58000,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1016:8-1018:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:8-1008:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -58079,7 +58037,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1016:8-1018:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:8-1008:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -58107,7 +58065,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1009:4-1021:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 999:4-1011:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-tables».optional_multiscalar_mul
@@ -58142,7 +58100,7 @@ def
     o (ristretto.RistrettoPoint.«x86_64-tables».constructor)
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:0-1022:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 996:0-1012:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-tables»
@@ -58163,7 +58121,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::{closure}::x86_64-no-tables<I, J, Clause0_Item, Clause0_IntoIter, Clause2_IntoIter>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1017:43-1017:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1007:43-1007:50 -/
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-no-tablesEdwardsPointx86_64-no-tables».call_once
   {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
@@ -58183,7 +58141,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul::{closure}::x86_64-no-tables<I, J, Clause0_Item, Clause0_IntoIter, Clause2_IntoIter>}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1017:43-1017:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1007:43-1007:50 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -58208,7 +58166,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1016:8-1018:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:8-1008:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -58245,7 +58203,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1016:8-1018:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:8-1008:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -58273,7 +58231,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1009:4-1021:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 999:4-1011:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-no-tables».optional_multiscalar_mul
@@ -58309,7 +58267,7 @@ def
     o (ristretto.RistrettoPoint.«x86_64-no-tables».constructor)
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:0-1022:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 996:0-1012:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-no-tables»
@@ -58330,7 +58288,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::{closure}::i686-tables<I, J, Clause0_Item, Clause0_IntoIter, Clause2_IntoIter>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1017:43-1017:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1007:43-1007:50 -/
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».optional_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-tablesEdwardsPointi686-tables».call_once
   {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
@@ -58350,7 +58308,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul::{closure}::i686-tables<I, J, Clause0_Item, Clause0_IntoIter, Clause2_IntoIter>}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1017:43-1017:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1007:43-1007:50 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables».optional_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-tablesEdwardsPointi686-tables»
@@ -58375,7 +58333,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1016:8-1018:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:8-1008:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -58412,7 +58370,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1016:8-1018:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:8-1008:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -58440,7 +58398,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1009:4-1021:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 999:4-1011:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-tables».optional_multiscalar_mul
@@ -58475,7 +58433,7 @@ def
     o (ristretto.RistrettoPoint.«i686-tables».constructor)
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:0-1022:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 996:0-1012:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-tables»
@@ -58496,7 +58454,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::{closure}::i686-no-tables<I, J, Clause0_Item, Clause0_IntoIter, Clause2_IntoIter>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1017:43-1017:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1007:43-1007:50 -/
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».optional_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-no-tablesEdwardsPointi686-no-tables».call_once
   {I : Type _} {J : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
@@ -58516,7 +58474,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul::{closure}::i686-no-tables<I, J, Clause0_Item, Clause0_IntoIter, Clause2_IntoIter>}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1017:43-1017:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1007:43-1007:50 -/
 @[reducible]
 def
   ristretto.«VartimeMultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables».optional_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-no-tablesEdwardsPointi686-no-tables»
@@ -58541,7 +58499,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1016:8-1018:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:8-1008:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -58578,7 +58536,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1016:8-1018:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:8-1008:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -58606,7 +58564,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1009:4-1021:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 999:4-1011:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-no-tables».optional_multiscalar_mul
@@ -58641,7 +58599,7 @@ def
     o (ristretto.RistrettoPoint.«i686-no-tables».constructor)
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1006:0-1022:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 996:0-1012:1 -/
 @[reducible]
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-no-tables»
@@ -58662,7 +58620,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::{closure}::x86_64-tables<I, J, K, Clause0_Item, Clause0_IntoIter, Clause2_Item, Clause2_IntoIter, Clause4_IntoIter>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1075:43-1075:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1065:43-1065:50 -/
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».optional_mixed_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-tablesEdwardsPointx86_64-tables».call_once
   {I : Type _} {J : Type _} {K : Type _} {Clause0_Item : Type _}
@@ -58687,7 +58645,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::{closure}::x86_64-tables<I, J, K, Clause0_Item, Clause0_IntoIter, Clause2_Item, Clause2_IntoIter, Clause4_IntoIter>}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1075:43-1075:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1065:43-1065:50 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».optional_mixed_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-tablesEdwardsPointx86_64-tables»
@@ -58718,7 +58676,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1074:8-1076:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1064:8-1066:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -58761,7 +58719,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1074:8-1076:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1064:8-1066:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -58795,7 +58753,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1060:4-1085:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1050:4-1075:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables».optional_mixed_multiscalar_mul
@@ -58840,7 +58798,7 @@ def
     o (ristretto.RistrettoPoint.«x86_64-tables».constructor)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1056:4-1058:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1046:4-1048:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables».is_empty
@@ -58850,7 +58808,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-tables».is_empty self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::len]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1052:4-1054:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1042:4-1044:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables».len
@@ -58860,7 +58818,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-tables».len self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::new]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1044:8-1046:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1034:8-1036:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -58887,7 +58845,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::new]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1044:8-1046:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1034:8-1036:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -58910,7 +58868,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::new]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1038:4-1050:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1028:4-1040:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables».new
@@ -58936,7 +58894,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1035:0-1086:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1025:0-1076:1 -/
 @[reducible]
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables»
@@ -58977,7 +58935,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::{closure}::x86_64-no-tables<I, J, K, Clause0_Item, Clause0_IntoIter, Clause2_Item, Clause2_IntoIter, Clause4_IntoIter>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1075:43-1075:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1065:43-1065:50 -/
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_mixed_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-no-tablesEdwardsPointx86_64-no-tables».call_once
   {I : Type _} {J : Type _} {K : Type _} {Clause0_Item : Type _}
@@ -59002,7 +58960,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables,), curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::{closure}::x86_64-no-tables<I, J, K, Clause0_Item, Clause0_IntoIter, Clause2_Item, Clause2_IntoIter, Clause4_IntoIter>}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1075:43-1075:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1065:43-1065:50 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_mixed_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
@@ -59033,7 +58991,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1074:8-1076:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1064:8-1066:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -59076,7 +59034,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1074:8-1076:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1064:8-1066:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -59110,7 +59068,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1060:4-1085:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1050:4-1075:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables».optional_mixed_multiscalar_mul
@@ -59156,7 +59114,7 @@ def
     o (ristretto.RistrettoPoint.«x86_64-no-tables».constructor)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1056:4-1058:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1046:4-1048:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables».is_empty
@@ -59166,7 +59124,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-no-tables».is_empty self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::len]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1052:4-1054:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1042:4-1044:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables».len
@@ -59176,7 +59134,7 @@ def
   backend.«VartimePrecomputedStrausx86_64-no-tables».len self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::new]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1044:8-1046:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1034:8-1036:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -59204,7 +59162,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::new]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1044:8-1046:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1034:8-1036:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -59227,7 +59185,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::new]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1038:4-1050:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1028:4-1040:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables».new
@@ -59253,7 +59211,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1035:0-1086:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1025:0-1076:1 -/
 @[reducible]
 def
   ristretto.VartimeRistrettoPrecomputation.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables»
@@ -59295,7 +59253,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::{closure}::i686-tables<I, J, K, Clause0_Item, Clause0_IntoIter, Clause2_Item, Clause2_IntoIter, Clause4_IntoIter>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1075:43-1075:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1065:43-1065:50 -/
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».optional_mixed_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-tablesEdwardsPointi686-tables».call_once
   {I : Type _} {J : Type _} {K : Type _} {Clause0_Item : Type _}
@@ -59319,7 +59277,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::{closure}::i686-tables<I, J, K, Clause0_Item, Clause0_IntoIter, Clause2_Item, Clause2_IntoIter, Clause4_IntoIter>}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1075:43-1075:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1065:43-1065:50 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».optional_mixed_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-tablesEdwardsPointi686-tables»
@@ -59350,7 +59308,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1074:8-1076:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1064:8-1066:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -59393,7 +59351,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1074:8-1076:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1064:8-1066:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -59427,7 +59385,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1060:4-1085:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1050:4-1075:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables».optional_mixed_multiscalar_mul
@@ -59472,7 +59430,7 @@ def
     o (ristretto.RistrettoPoint.«i686-tables».constructor)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1056:4-1058:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1046:4-1048:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables».is_empty
@@ -59482,7 +59440,7 @@ def
   backend.«VartimePrecomputedStrausi686-tables».is_empty self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::len]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1052:4-1054:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1042:4-1044:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables».len
@@ -59492,7 +59450,7 @@ def
   backend.«VartimePrecomputedStrausi686-tables».len self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::new]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1044:8-1046:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1034:8-1036:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -59519,7 +59477,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::new]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1044:8-1046:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1034:8-1036:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -59542,7 +59500,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::new]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1038:4-1050:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1028:4-1040:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables».new
@@ -59568,7 +59526,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1035:0-1086:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1025:0-1076:1 -/
 @[reducible]
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables»
@@ -59609,7 +59567,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::{closure}::i686-no-tables<I, J, K, Clause0_Item, Clause0_IntoIter, Clause2_Item, Clause2_IntoIter, Clause4_IntoIter>}::call_once]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1075:43-1075:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1065:43-1065:50 -/
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».optional_mixed_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-no-tablesEdwardsPointi686-no-tables».call_once
   {I : Type _} {J : Type _} {K : Type _} {Clause0_Item : Type _}
@@ -59634,7 +59592,7 @@ def
   ok tupled_args
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::{impl core::ops::function::FnOnce<(curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables,), curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::{closure}::i686-no-tables<I, J, K, Clause0_Item, Clause0_IntoIter, Clause2_Item, Clause2_IntoIter, Clause4_IntoIter>}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1075:43-1075:50 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1065:43-1065:50 -/
 @[reducible]
 def
   ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».optional_mixed_multiscalar_mul.closure.Insts.«CoreOpsFunctionFnOnceTupleRistrettoPointi686-no-tablesEdwardsPointi686-no-tables»
@@ -59665,7 +59623,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1074:8-1076:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1064:8-1066:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -59708,7 +59666,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1074:8-1076:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1064:8-1066:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -59742,7 +59700,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1060:4-1085:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1050:4-1075:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables».optional_mixed_multiscalar_mul
@@ -59787,7 +59745,7 @@ def
     o (ristretto.RistrettoPoint.«i686-no-tables».constructor)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1056:4-1058:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1046:4-1048:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables».is_empty
@@ -59797,7 +59755,7 @@ def
   backend.«VartimePrecomputedStrausi686-no-tables».is_empty self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::len]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1052:4-1054:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1042:4-1044:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables».len
@@ -59807,7 +59765,7 @@ def
   backend.«VartimePrecomputedStrausi686-no-tables».len self
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::new]: loop body 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1044:8-1046:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1034:8-1036:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -59834,7 +59792,7 @@ def
     ok (cont (iter1, extended_points1))
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::new]: loop 0:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1044:8-1046:9
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1034:8-1036:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -59857,7 +59815,7 @@ def
     (iter, extended_points)
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::new]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1038:4-1050:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1028:4-1040:5
     Visibility: public -/
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables».new
@@ -59883,7 +59841,7 @@ def
   ok vps
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1035:0-1086:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1025:0-1076:1 -/
 @[reducible]
 def
   ristretto.VartimeRistrettoPrecomputation.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables»
@@ -59924,7 +59882,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1091:4-1099:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1081:4-1089:5
     Visibility: public -/
 def
   ristretto.«RistrettoPointx86_64-tables».vartime_double_scalar_mul_basepoint
@@ -59938,7 +59896,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1091:4-1099:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1081:4-1089:5
     Visibility: public -/
 def
   ristretto.«RistrettoPointx86_64-no-tables».vartime_double_scalar_mul_basepoint
@@ -59952,7 +59910,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1091:4-1099:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1081:4-1089:5
     Visibility: public -/
 def ristretto.«RistrettoPointi686-tables».vartime_double_scalar_mul_basepoint
   (a : scalar.Scalar) (A : ristretto.RistrettoPoint.«i686-tables»)
@@ -59965,7 +59923,7 @@ def ristretto.«RistrettoPointi686-tables».vartime_double_scalar_mul_basepoint
   ok ep
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::vartime_double_scalar_mul_basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1091:4-1099:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1081:4-1089:5
     Visibility: public -/
 def
   ristretto.«RistrettoPointi686-no-tables».vartime_double_scalar_mul_basepoint
@@ -59979,7 +59937,7 @@ def
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl core::clone::Clone for curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::clone]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1115:9-1115:14
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1105:9-1105:14
     Visibility: public -/
 def
   ristretto.RistrettoBasepointTable.«x86_64-tables».Insts.CoreCloneClone.clone
@@ -59992,7 +59950,7 @@ def
   ok ebt
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::clone::Clone for curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1115:9-1115:14 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1105:9-1105:14 -/
 @[reducible]
 def ristretto.RistrettoBasepointTable.«x86_64-tables».Insts.CoreCloneClone :
   core.clone.Clone ristretto.RistrettoBasepointTable.«x86_64-tables» := {
@@ -60001,7 +59959,7 @@ def ristretto.RistrettoBasepointTable.«x86_64-tables».Insts.CoreCloneClone :
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::clone::Clone for curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::clone]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1115:9-1115:14
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1105:9-1105:14
     Visibility: public -/
 def
   ristretto.RistrettoBasepointTable.«i686-tables».Insts.CoreCloneClone.clone
@@ -60014,7 +59972,7 @@ def
   ok ebt
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::clone::Clone for curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1115:9-1115:14 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1105:9-1105:14 -/
 @[reducible]
 def ristretto.RistrettoBasepointTable.«i686-tables».Insts.CoreCloneClone :
   core.clone.Clone ristretto.RistrettoBasepointTable.«i686-tables» := {
@@ -60023,7 +59981,7 @@ def ristretto.RistrettoBasepointTable.«i686-tables».Insts.CoreCloneClone :
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1123:4-1125:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1113:4-1115:5
     Visibility: public -/
 def
   «Shared0RistrettoBasepointTablex86_64-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointx86_64-tables».mul
@@ -60037,7 +59995,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1120:0-1126:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1110:0-1116:1 -/
 @[reducible]
 def
   «Shared0RistrettoBasepointTablex86_64-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointx86_64-tables»
@@ -60048,7 +60006,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::mul]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1123:4-1125:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1113:4-1115:5
     Visibility: public -/
 def
   «Shared0RistrettoBasepointTablei686-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointi686-tables».mul
@@ -60062,7 +60020,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'b curve25519_dalek::scalar::Scalar, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1120:0-1126:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1110:0-1116:1 -/
 @[reducible]
 def
   «Shared0RistrettoBasepointTablei686-tables».Insts.«CoreOpsArithMulSharedBScalarRistrettoPointi686-tables»
@@ -60073,7 +60031,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables, curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for &'_1 curve25519_dalek::scalar::Scalar}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1129:0-1135:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1119:0-1125:1 -/
 @[reducible]
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoBasepointTablex86_64-tablesRistrettoPointx86_64-tables»
@@ -60085,7 +60043,7 @@ def
 }
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl core::ops::arith::Mul<&'a curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables, curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for &'_1 curve25519_dalek::scalar::Scalar}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1129:0-1135:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1119:0-1125:1 -/
 @[reducible]
 def
   Shared0Scalar.Insts.«CoreOpsArithMulSharedARistrettoBasepointTablei686-tablesRistrettoPointi686-tables»
@@ -60097,7 +60055,7 @@ def
 }
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::create]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1140:4-1142:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1130:4-1132:5
     Visibility: public -/
 def ristretto.«RistrettoBasepointTablex86_64-tables».create
   (basepoint : ristretto.RistrettoPoint.«x86_64-tables») :
@@ -60109,7 +60067,7 @@ def ristretto.«RistrettoBasepointTablex86_64-tables».create
   ok ebt
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::create]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1140:4-1142:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1130:4-1132:5
     Visibility: public -/
 def ristretto.«RistrettoBasepointTablei686-tables».create
   (basepoint : ristretto.RistrettoPoint.«i686-tables») :
@@ -60121,7 +60079,7 @@ def ristretto.«RistrettoBasepointTablei686-tables».create
   ok ebt
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1145:4-1147:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1135:4-1137:5
     Visibility: public -/
 def ristretto.«RistrettoBasepointTablex86_64-tables».basepoint
   (self : ristretto.RistrettoBasepointTable.«x86_64-tables») :
@@ -60133,7 +60091,7 @@ def ristretto.«RistrettoBasepointTablex86_64-tables».basepoint
   ok ep
 
 /-- [curve25519_dalek::ristretto::{curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables}::basepoint]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1145:4-1147:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1135:4-1137:5
     Visibility: public -/
 def ristretto.«RistrettoBasepointTablei686-tables».basepoint
   (self : ristretto.RistrettoBasepointTable.«i686-tables») :
@@ -60145,7 +60103,7 @@ def ristretto.«RistrettoBasepointTablei686-tables».basepoint
   ok ep
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::conditional_select]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1179:4-1185:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1169:4-1175:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.SubtleConditionallySelectable.conditional_select
@@ -60159,7 +60117,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1154:0-1186:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1144:0-1176:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«x86_64-tables».Insts.SubtleConditionallySelectable
@@ -60177,7 +60135,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::conditional_select]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1179:4-1185:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1169:4-1175:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable.conditional_select
@@ -60192,7 +60150,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1154:0-1186:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1144:0-1176:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable
@@ -60210,7 +60168,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::conditional_select]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1179:4-1185:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1169:4-1175:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-tables».Insts.SubtleConditionallySelectable.conditional_select
@@ -60224,7 +60182,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1154:0-1186:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1144:0-1176:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«i686-tables».Insts.SubtleConditionallySelectable
@@ -60242,7 +60200,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::conditional_select]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1179:4-1185:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1169:4-1175:5
     Visibility: public -/
 def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.SubtleConditionallySelectable.conditional_select
@@ -60256,7 +60214,7 @@ def
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl subtle::ConditionallySelectable for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1154:0-1186:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1144:0-1176:1 -/
 @[reducible]
 impl_def
   ristretto.RistrettoPoint.«i686-no-tables».Insts.SubtleConditionallySelectable
@@ -60274,7 +60232,7 @@ impl_def
 }
 
 /-- [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::CompressedRistretto}::zeroize]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1295:4-1297:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1285:4-1287:5
     Visibility: public -/
 def ristretto.CompressedRistretto.Insts.ZeroizeZeroize.zeroize
   (self : ristretto.CompressedRistretto) :
@@ -60286,7 +60244,7 @@ def ristretto.CompressedRistretto.Insts.ZeroizeZeroize.zeroize
   ok a
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::CompressedRistretto}]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1294:0-1298:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1284:0-1288:1 -/
 @[reducible]
 def ristretto.CompressedRistretto.Insts.ZeroizeZeroize : zeroize.Zeroize
   ristretto.CompressedRistretto := {
@@ -60294,7 +60252,7 @@ def ristretto.CompressedRistretto.Insts.ZeroizeZeroize : zeroize.Zeroize
 }
 
 /-- [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::zeroize]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1302:4-1304:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1292:4-1294:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«x86_64-tables».Insts.ZeroizeZeroize.zeroize
   (self : ristretto.RistrettoPoint.«x86_64-tables») :
@@ -60305,7 +60263,7 @@ def ristretto.RistrettoPoint.«x86_64-tables».Insts.ZeroizeZeroize.zeroize
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1301:0-1305:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1291:0-1295:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«x86_64-tables».Insts.ZeroizeZeroize :
   zeroize.Zeroize ristretto.RistrettoPoint.«x86_64-tables» := {
@@ -60314,7 +60272,7 @@ def ristretto.RistrettoPoint.«x86_64-tables».Insts.ZeroizeZeroize :
 }
 
 /-- [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::zeroize]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1302:4-1304:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1292:4-1294:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.ZeroizeZeroize.zeroize
   (self : ristretto.RistrettoPoint.«x86_64-no-tables») :
@@ -60325,7 +60283,7 @@ def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.ZeroizeZeroize.zeroize
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1301:0-1305:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1291:0-1295:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.ZeroizeZeroize :
   zeroize.Zeroize ristretto.RistrettoPoint.«x86_64-no-tables» := {
@@ -60334,7 +60292,7 @@ def ristretto.RistrettoPoint.«x86_64-no-tables».Insts.ZeroizeZeroize :
 }
 
 /-- [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::zeroize]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1302:4-1304:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1292:4-1294:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«i686-tables».Insts.ZeroizeZeroize.zeroize
   (self : ristretto.RistrettoPoint.«i686-tables») :
@@ -60345,7 +60303,7 @@ def ristretto.RistrettoPoint.«i686-tables».Insts.ZeroizeZeroize.zeroize
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1301:0-1305:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1291:0-1295:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-tables».Insts.ZeroizeZeroize :
   zeroize.Zeroize ristretto.RistrettoPoint.«i686-tables» := {
@@ -60354,7 +60312,7 @@ def ristretto.RistrettoPoint.«i686-tables».Insts.ZeroizeZeroize :
 }
 
 /-- [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::zeroize]:
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1302:4-1304:5
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1292:4-1294:5
     Visibility: public -/
 def ristretto.RistrettoPoint.«i686-no-tables».Insts.ZeroizeZeroize.zeroize
   (self : ristretto.RistrettoPoint.«i686-no-tables») :
@@ -60365,7 +60323,7 @@ def ristretto.RistrettoPoint.«i686-no-tables».Insts.ZeroizeZeroize.zeroize
   ok ep
 
 /-- Trait implementation: [curve25519_dalek::ristretto::{impl zeroize::Zeroize for curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1301:0-1305:1 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1291:0-1295:1 -/
 @[reducible]
 def ristretto.RistrettoPoint.«i686-no-tables».Insts.ZeroizeZeroize :
   zeroize.Zeroize ristretto.RistrettoPoint.«i686-no-tables» := {
