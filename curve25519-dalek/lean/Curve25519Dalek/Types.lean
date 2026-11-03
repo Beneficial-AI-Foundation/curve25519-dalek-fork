@@ -505,7 +505,7 @@ structure traits.MultiscalarMul (Self : Type _) (Self_Point : Type _) where
 def window.LookupTable (T : Type _) := Array T 8#usize
 
 /-- [curve25519_dalek::scalar::HalfWidthScalar]
-    Source: 'curve25519-dalek/src/scalar.rs', lines 1430:0-1430:35
+    Source: 'curve25519-dalek/src/scalar.rs', lines 1428:0-1428:35
     Visibility: public -/
 @[reducible]
 def scalar.HalfWidthScalar := scalar.Scalar
