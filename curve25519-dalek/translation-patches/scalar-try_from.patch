@@ -17,7 +17,7 @@ index c417780..f0e2199 100644
 -            Ok(Self(value))
 -        } else {
 -            Err(())
-+        for byte in &value.bytes[16..] {
++        for byte in value.bytes[16..].iter() {
 +            if *byte != 0 {
 +                return Err(());
 +            }

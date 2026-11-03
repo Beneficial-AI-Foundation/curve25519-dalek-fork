@@ -62363,8 +62363,7 @@ def scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple.try_from
     core.array.Array.index (core.ops.index.IndexSlice
       (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8)) value.bytes
       { start := 16#usize }
-  let iter ←
-    SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter s
+  let iter ← core.slice.Slice.iter s
   scalar.HalfWidthScalar.Insts.CoreConvertTryFromScalarTuple.try_from_loop iter
     value.bytes
 

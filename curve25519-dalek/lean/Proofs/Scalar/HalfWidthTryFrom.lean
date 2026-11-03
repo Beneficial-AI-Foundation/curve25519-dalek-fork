@@ -96,13 +96,14 @@ theorem try_from_spec (value : Scalar) :
       (value.asNat < 2 ^ 128 → r = .Ok value) ∧ (2 ^ 128 ≤ value.asNat → r = .Err ()) ⦄ := by
   unfold try_from
   step as ⟨s, hs, hlen⟩
-  step as ⟨iter, hsiter, hi⟩
-  step with try_from_loop_spec as ⟨r, hok, herr⟩
+  simp only [core.slice.Slice.iter, bind_ok]
+  let iter : core.slice.iter.Iter U8 := { slice := s, i := 0 }
+  step with try_from_loop_spec value iter (by simp [iter]) (by simp [iter]) as ⟨r, hok, herr⟩
   have hiff := Array.asNat_lt_pow_iff 8 16 value.bytes (by simp)
     fun j _ => (value.bytes[j]!).hBounds
   have hzero : (∀ j < iter.slice.val.length, iter.slice.val[j]!.val = 0) ↔
       ∀ j : ℕ, 16 ≤ j → j < value.bytes.val.length → value.bytes[j]!.val = 0 := by
-    rw [hsiter, hs]
+    rw [show iter.slice = s from rfl, hs]
     simp only [Array.val_to_slice]
     constructor
     · intro h j hj hjlen
