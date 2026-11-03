@@ -442,6 +442,42 @@ structure traits.VartimePrecomputedMultiscalarMul (Self : Type _) (Self_Point :
 @[reducible]
 def window.NafLookupTable5 (T : Type _) := Array T 8#usize
 
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::{closure}]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 82:28-82:81 -/
+@[reducible]
+def backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.closure
+  (I : Type _) (J : Type _) (K : Type _) (Clause0_Item : Type _)
+  (Clause0_IntoIter : Type _) (Clause2_Item : Type _) (Clause2_IntoIter :
+  Type _) (Clause4_IntoIter : Type _) :=
+Unit
+
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::{closure}]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 82:28-82:81 -/
+@[reducible]
+def backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.closure
+  (I : Type _) (J : Type _) (K : Type _) (Clause0_Item : Type _)
+  (Clause0_IntoIter : Type _) (Clause2_Item : Type _) (Clause2_IntoIter :
+  Type _) (Clause4_IntoIter : Type _) :=
+Unit
+
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::{closure}]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 82:28-82:81 -/
+@[reducible]
+def backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.closure
+  (I : Type _) (J : Type _) (K : Type _) (Clause0_Item : Type _)
+  (Clause0_IntoIter : Type _) (Clause2_Item : Type _) (Clause2_IntoIter :
+  Type _) (Clause4_IntoIter : Type _) :=
+Unit
+
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::{closure}]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 82:28-82:81 -/
+@[reducible]
+def backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.closure
+  (I : Type _) (J : Type _) (K : Type _) (Clause0_Item : Type _)
+  (Clause0_IntoIter : Type _) (Clause2_Item : Type _) (Clause2_IntoIter :
+  Type _) (Clause4_IntoIter : Type _) :=
+Unit
+
 /-- [curve25519_dalek::backend::serial::scalar_mul::straus::Straus]
     Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 47:0-47:20
     Visibility: public -/
