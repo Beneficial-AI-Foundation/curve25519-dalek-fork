@@ -504,6 +504,38 @@ structure traits.MultiscalarMul (Self : Type _) (Self_Point : Type _) where
 @[reducible]
 def window.LookupTable (T : Type _) := Array T 8#usize
 
+/-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::optional_multiscalar_mul::{closure}]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 180:28-180:81 -/
+@[reducible]
+def backend.serial.scalar_mul.straus.«VartimeMultiscalarMulStrausEdwardsPointx86_64-tables».optional_multiscalar_mul.closure
+  (I : Type _) (J : Type _) (Clause0_Item : Type _) (Clause0_IntoIter : Type _)
+  (Clause2_IntoIter : Type _) :=
+Unit
+
+/-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::optional_multiscalar_mul::{closure}]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 180:28-180:81 -/
+@[reducible]
+def backend.serial.scalar_mul.straus.«VartimeMultiscalarMulStrausEdwardsPointx86_64-no-tables».optional_multiscalar_mul.closure
+  (I : Type _) (J : Type _) (Clause0_Item : Type _) (Clause0_IntoIter : Type _)
+  (Clause2_IntoIter : Type _) :=
+Unit
+
+/-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::optional_multiscalar_mul::{closure}]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 180:28-180:81 -/
+@[reducible]
+def backend.serial.scalar_mul.straus.«VartimeMultiscalarMulStrausEdwardsPointi686-tables».optional_multiscalar_mul.closure
+  (I : Type _) (J : Type _) (Clause0_Item : Type _) (Clause0_IntoIter : Type _)
+  (Clause2_IntoIter : Type _) :=
+Unit
+
+/-- [curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::optional_multiscalar_mul::{closure}]
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/straus.rs', lines 180:28-180:81 -/
+@[reducible]
+def backend.serial.scalar_mul.straus.«VartimeMultiscalarMulStrausEdwardsPointi686-no-tables».optional_multiscalar_mul.closure
+  (I : Type _) (J : Type _) (Clause0_Item : Type _) (Clause0_IntoIter : Type _)
+  (Clause2_IntoIter : Type _) :=
+Unit
+
 /-- [curve25519_dalek::scalar::HalfWidthScalar]
     Source: 'curve25519-dalek/src/scalar.rs', lines 1428:0-1428:35
     Visibility: public -/
