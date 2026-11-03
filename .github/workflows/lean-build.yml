@@ -4,7 +4,7 @@ name: Lean build
 
 on:
   push:
-    branches: [ 'main' ]
+    branches: [ '**' ]
     paths: &paths
       - 'curve25519-dalek/lean/**'
       - 'Curve25519/**'
@@ -26,8 +26,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   ELAN_VERSION: v4.2.4
@@ -88,17 +88,17 @@ jobs:
           path: *cache-paths
           key: *cache-key
 
-      # Keep only the newest build cache of this pull request
+      # Keep only the newest build cache of this branch or pull request
       - name: Delete superseded build caches
-        if: ${{ !cancelled() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
+        if: ${{ !cancelled() }}
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
           KEY: lean-build-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.ref_name }}-${{ github.sha }}
         run: |
-          cache_ids=$(gh cache list --ref "$GITHUB_REF" --key lean-build- --limit 100 --json id,key \
-            --jq 'if any(.[]; .key == env.KEY) then .[] | select(.key != env.KEY) | .id else empty end')
-          printf '%s\n' "$cache_ids" | xargs -r -n1 gh cache delete
+          gh cache list --ref "$GITHUB_REF" --key lean-build- --limit 100 --json id,key \
+            --jq 'if any(.[]; .key == env.KEY) then .[] | select(.key != env.KEY) | .id else empty end' |
+            xargs -r -n1 gh cache delete
 
       - name: Lint Subtle
         if: ${{ !cancelled() }}
