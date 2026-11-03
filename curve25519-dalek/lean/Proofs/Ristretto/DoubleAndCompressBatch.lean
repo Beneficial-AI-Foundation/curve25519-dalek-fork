@@ -23,6 +23,7 @@ import Proofs.Field.InvertBatchAlloc
 import Proofs.Field.IsNegative
 import Proofs.Helpers.Coords
 import Proofs.Helpers.Collect
+import Proofs.Helpers.Iterator
 import Proofs.Helpers.RistrettoCompress
 import Proofs.Helpers.StepSpecs
 import Proofs.Helpers.ToField
@@ -482,22 +483,16 @@ private theorem loop0_spec (states : alloc.vec.Vec double_and_compress_batch.Bat
     · have hnext : core.slice.iter.IteratorSliceIter.next it
           ⦃ o it1 => o = some (states[it.i]!) ∧
             it1 = { slice := it.slice, i := it.i + 1 } ⦄ := by
-        unfold core.slice.iter.IteratorSliceIter.next
-        split
-        · simp only [WP.spec_ok]
-          constructor
-          · congr 1
-            rw [alloc.vec.Vec.getElem!_Nat_eq, getElem!_pos states.val it.i hlt]
-            change it.slice.val[it.i] = states.val[it.i]
-            simp only [hsval]
-          · rfl
-        · rename_i h
-          exfalso
-          apply h
-          simp only [Slice.len_val]
-          change it.i < it.slice.val.length
-          rw [hsval]
-          exact hlt
+        have h := Curve25519Dalek.EdwardsOps.sliceNextSome it.slice it.i
+          (by simpa [hsval] using hlt)
+        apply spec_mono h
+        rintro ⟨o, it1⟩ ⟨ho, hit⟩
+        refine ⟨?_, hit⟩
+        rw [ho, alloc.vec.Vec.getElem!_Nat_eq, getElem!_pos states.val it.i hlt]
+        congr 1
+        have hslt : it.i < it.slice.val.length := by simpa [hsval] using hlt
+        change it.slice.val[it.i] = states.val[it.i]
+        simp only [hsval]
       step with hnext as ⟨o, it1, ho, hit1⟩
       subst ho hit1
       obtain ⟨h1, h2⟩ := hst it.i hlt
@@ -511,13 +506,9 @@ private theorem loop0_spec (states : alloc.vec.Vec double_and_compress_batch.Bat
           hz1 (hl ▸ hz) (by rw [hl]; exact ⟨hfe, hfeb⟩)
     · have hnext : core.slice.iter.IteratorSliceIter.next it
           ⦃ o it1 => o = none ∧ it1 = it ⦄ := by
-        unfold core.slice.iter.IteratorSliceIter.next
-        have h : ¬ it.i < it.slice.len := by
-          simp only [Slice.len_val]; change ¬ it.i < it.slice.val.length
-          rw [hsval]; exact hlt
-        simp only [Slice.len_val] at h ⊢
-        simp only [h, _root_.dite_false, WP.spec_ok]
-        exact ⟨rfl, rfl⟩
+        have h := Curve25519Dalek.EdwardsOps.sliceNextNone it.slice it.i
+          (by simpa [hsval] using Nat.le_of_not_gt hlt)
+        simpa using h
       step with hnext as ⟨o, it1, ho, hit1⟩
       subst ho
       simp only [WP.spec_ok]
@@ -703,22 +694,16 @@ private theorem loop0_spec (states : alloc.vec.Vec double_and_compress_batch.Bat
     · have hnext : core.slice.iter.IteratorSliceIter.next it
           ⦃ o it1 => o = some (states[it.i]!) ∧
             it1 = { slice := it.slice, i := it.i + 1 } ⦄ := by
-        unfold core.slice.iter.IteratorSliceIter.next
-        split
-        · simp only [WP.spec_ok]
-          constructor
-          · congr 1
-            rw [alloc.vec.Vec.getElem!_Nat_eq, getElem!_pos states.val it.i hlt]
-            change it.slice.val[it.i] = states.val[it.i]
-            simp only [hsval]
-          · rfl
-        · rename_i h
-          exfalso
-          apply h
-          simp only [Slice.len_val]
-          change it.i < it.slice.val.length
-          rw [hsval]
-          exact hlt
+        have h := Curve25519Dalek.EdwardsOps.sliceNextSome it.slice it.i
+          (by simpa [hsval] using hlt)
+        apply spec_mono h
+        rintro ⟨o, it1⟩ ⟨ho, hit⟩
+        refine ⟨?_, hit⟩
+        rw [ho, alloc.vec.Vec.getElem!_Nat_eq, getElem!_pos states.val it.i hlt]
+        congr 1
+        have hslt : it.i < it.slice.val.length := by simpa [hsval] using hlt
+        change it.slice.val[it.i] = states.val[it.i]
+        simp only [hsval]
       step with hnext as ⟨o, it1, ho, hit1⟩
       subst ho hit1
       obtain ⟨h1, h2⟩ := hst it.i hlt
@@ -732,13 +717,9 @@ private theorem loop0_spec (states : alloc.vec.Vec double_and_compress_batch.Bat
           hz1 (hl ▸ hz) (by rw [hl]; exact ⟨hfe, hfeb⟩)
     · have hnext : core.slice.iter.IteratorSliceIter.next it
           ⦃ o it1 => o = none ∧ it1 = it ⦄ := by
-        unfold core.slice.iter.IteratorSliceIter.next
-        have h : ¬ it.i < it.slice.len := by
-          simp only [Slice.len_val]; change ¬ it.i < it.slice.val.length
-          rw [hsval]; exact hlt
-        simp only [Slice.len_val] at h ⊢
-        simp only [h, _root_.dite_false, WP.spec_ok]
-        exact ⟨rfl, rfl⟩
+        have h := Curve25519Dalek.EdwardsOps.sliceNextNone it.slice it.i
+          (by simpa [hsval] using Nat.le_of_not_gt hlt)
+        simpa using h
       step with hnext as ⟨o, it1, ho, hit1⟩
       subst ho
       simp only [WP.spec_ok]
@@ -1142,22 +1123,16 @@ private theorem loop0_spec (states : alloc.vec.Vec double_and_compress_batch.Bat
     · have hnext : core.slice.iter.IteratorSliceIter.next it
           ⦃ o it1 => o = some (states[it.i]!) ∧
             it1 = { slice := it.slice, i := it.i + 1 } ⦄ := by
-        unfold core.slice.iter.IteratorSliceIter.next
-        split
-        · simp only [WP.spec_ok]
-          constructor
-          · congr 1
-            rw [alloc.vec.Vec.getElem!_Nat_eq, getElem!_pos states.val it.i hlt]
-            change it.slice.val[it.i] = states.val[it.i]
-            simp only [hsval]
-          · rfl
-        · rename_i h
-          exfalso
-          apply h
-          simp only [Slice.len_val]
-          change it.i < it.slice.val.length
-          rw [hsval]
-          exact hlt
+        have h := Curve25519Dalek.EdwardsOps.sliceNextSome it.slice it.i
+          (by simpa [hsval] using hlt)
+        apply spec_mono h
+        rintro ⟨o, it1⟩ ⟨ho, hit⟩
+        refine ⟨?_, hit⟩
+        rw [ho, alloc.vec.Vec.getElem!_Nat_eq, getElem!_pos states.val it.i hlt]
+        congr 1
+        have hslt : it.i < it.slice.val.length := by simpa [hsval] using hlt
+        change it.slice.val[it.i] = states.val[it.i]
+        simp only [hsval]
       step with hnext as ⟨o, it1, ho, hit1⟩
       subst ho hit1
       obtain ⟨h1, h2⟩ := hst it.i hlt
@@ -1171,13 +1146,9 @@ private theorem loop0_spec (states : alloc.vec.Vec double_and_compress_batch.Bat
           hz1 (hl ▸ hz) (by rw [hl]; exact ⟨hfe, hfeb⟩)
     · have hnext : core.slice.iter.IteratorSliceIter.next it
           ⦃ o it1 => o = none ∧ it1 = it ⦄ := by
-        unfold core.slice.iter.IteratorSliceIter.next
-        have h : ¬ it.i < it.slice.len := by
-          simp only [Slice.len_val]; change ¬ it.i < it.slice.val.length
-          rw [hsval]; exact hlt
-        simp only [Slice.len_val] at h ⊢
-        simp only [h, _root_.dite_false, WP.spec_ok]
-        exact ⟨rfl, rfl⟩
+        have h := Curve25519Dalek.EdwardsOps.sliceNextNone it.slice it.i
+          (by simpa [hsval] using Nat.le_of_not_gt hlt)
+        simpa using h
       step with hnext as ⟨o, it1, ho, hit1⟩
       subst ho
       simp only [WP.spec_ok]
@@ -1363,22 +1334,16 @@ private theorem loop0_spec (states : alloc.vec.Vec double_and_compress_batch.Bat
     · have hnext : core.slice.iter.IteratorSliceIter.next it
           ⦃ o it1 => o = some (states[it.i]!) ∧
             it1 = { slice := it.slice, i := it.i + 1 } ⦄ := by
-        unfold core.slice.iter.IteratorSliceIter.next
-        split
-        · simp only [WP.spec_ok]
-          constructor
-          · congr 1
-            rw [alloc.vec.Vec.getElem!_Nat_eq, getElem!_pos states.val it.i hlt]
-            change it.slice.val[it.i] = states.val[it.i]
-            simp only [hsval]
-          · rfl
-        · rename_i h
-          exfalso
-          apply h
-          simp only [Slice.len_val]
-          change it.i < it.slice.val.length
-          rw [hsval]
-          exact hlt
+        have h := Curve25519Dalek.EdwardsOps.sliceNextSome it.slice it.i
+          (by simpa [hsval] using hlt)
+        apply spec_mono h
+        rintro ⟨o, it1⟩ ⟨ho, hit⟩
+        refine ⟨?_, hit⟩
+        rw [ho, alloc.vec.Vec.getElem!_Nat_eq, getElem!_pos states.val it.i hlt]
+        congr 1
+        have hslt : it.i < it.slice.val.length := by simpa [hsval] using hlt
+        change it.slice.val[it.i] = states.val[it.i]
+        simp only [hsval]
       step with hnext as ⟨o, it1, ho, hit1⟩
       subst ho hit1
       obtain ⟨h1, h2⟩ := hst it.i hlt
@@ -1392,13 +1357,9 @@ private theorem loop0_spec (states : alloc.vec.Vec double_and_compress_batch.Bat
           hz1 (hl ▸ hz) (by rw [hl]; exact ⟨hfe, hfeb⟩)
     · have hnext : core.slice.iter.IteratorSliceIter.next it
           ⦃ o it1 => o = none ∧ it1 = it ⦄ := by
-        unfold core.slice.iter.IteratorSliceIter.next
-        have h : ¬ it.i < it.slice.len := by
-          simp only [Slice.len_val]; change ¬ it.i < it.slice.val.length
-          rw [hsval]; exact hlt
-        simp only [Slice.len_val] at h ⊢
-        simp only [h, _root_.dite_false, WP.spec_ok]
-        exact ⟨rfl, rfl⟩
+        have h := Curve25519Dalek.EdwardsOps.sliceNextNone it.slice it.i
+          (by simpa [hsval] using Nat.le_of_not_gt hlt)
+        simpa using h
       step with hnext as ⟨o, it1, ho, hit1⟩
       subst ho
       simp only [WP.spec_ok]
