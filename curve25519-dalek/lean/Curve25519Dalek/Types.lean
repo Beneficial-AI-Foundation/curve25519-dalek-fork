@@ -627,14 +627,14 @@ def ristretto.RistrettoPoint.«i686-no-tables» :=
   edwards.EdwardsPoint.«i686-no-tables»
 
 /-- [curve25519_dalek::ristretto::RistrettoBasepointTable::x86_64-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1139:0-1139:69
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1131:0-1131:69
     Visibility: public -/
 @[reducible]
 def ristretto.RistrettoBasepointTable.«x86_64-tables» :=
   edwards.EdwardsBasepointTable.«x86_64-tables»
 
 /-- [curve25519_dalek::ristretto::RistrettoBasepointTable::i686-tables]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1139:0-1139:69
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1131:0-1131:69
     Visibility: public -/
 @[reducible]
 def ristretto.RistrettoBasepointTable.«i686-tables» :=
@@ -973,28 +973,28 @@ def ristretto.VartimeRistrettoPrecomputation.«i686-no-tables» :=
   backend.VartimePrecomputedStraus.«i686-no-tables»
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1087:35-1087:42 -/
 @[reducible]
 def ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables».optional_mixed_multiscalar_mul.extended_points.closure
   (It : Type _) :=
 Unit
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::x86_64-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::x86_64-no-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1087:35-1087:42 -/
 @[reducible]
 def ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables».optional_mixed_multiscalar_mul.extended_points.closure
   (It : Type _) :=
 Unit
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1087:35-1087:42 -/
 @[reducible]
 def ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables».optional_mixed_multiscalar_mul.extended_points.closure
   (It : Type _) :=
 Unit
 
 /-- [curve25519_dalek::ristretto::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::ristretto::RistrettoPoint::i686-no-tables> for curve25519_dalek::ristretto::VartimeRistrettoPrecomputation::i686-no-tables}::optional_mixed_multiscalar_mul::extended_points::{closure}]
-    Source: 'curve25519-dalek/src/ristretto.rs', lines 1095:35-1095:42 -/
+    Source: 'curve25519-dalek/src/ristretto.rs', lines 1087:35-1087:42 -/
 @[reducible]
 def ristretto.«VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables».optional_mixed_multiscalar_mul.extended_points.closure
   (It : Type _) :=

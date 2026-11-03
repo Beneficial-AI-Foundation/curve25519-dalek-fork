@@ -8,27 +8,19 @@ diff --git a/curve25519-dalek/src/ristretto.rs b/curve25519-dalek/src/ristretto.
 index 269662d..85d6fb5 100644
 --- a/curve25519-dalek/src/ristretto.rs
 +++ b/curve25519-dalek/src/ristretto.rs
-@@ -1010,10 +1010,22 @@ impl VartimePrecomputedMultiscalarMul for VartimeRistrettoPrecomputation {
+@@ -1010,10 +1010,14 @@ impl VartimePrecomputedMultiscalarMul for VartimeRistrettoPrecomputation {
      fn new<I>(static_points: I) -> Self
      where
          I: IntoIterator,
          I::Item: Borrow<Self::Point>,
      {
-+        fn extended_points<It>(mut points: It) -> Vec<EdwardsPoint>
-+        where
-+            It: Iterator,
-+            It::Item: Borrow<RistrettoPoint>,
-+        {
-+            let mut out = Vec::new();
-+            while let Some(P) = points.next() {
-+                out.push(P.borrow().0);
-+            }
-+            out
++        let mut extended_points = vec![];
++        for P in static_points {
++            extended_points.push(P.borrow().0);
 +        }
-+
          Self(crate::backend::VartimePrecomputedStraus::new(
 -            static_points.into_iter().map(|P| P.borrow().0),
-+            extended_points(static_points.into_iter()),
++            extended_points,
          ))
      }
  
