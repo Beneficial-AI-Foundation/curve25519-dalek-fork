@@ -549,7 +549,7 @@ def scalar.HalfWidthScalar := scalar.Scalar
 def backend.serial.u32.scalar.Scalar29 := Array Std.U32 9#usize
 
 /-- [curve25519_dalek::edwards::EdwardsBasepointTable::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1285:8-1291:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1281:8-1287:9
     Visibility: public -/
 @[reducible]
 def edwards.EdwardsBasepointTable.«i686-tables» :=
@@ -563,7 +563,7 @@ def edwards.EdwardsBasepointTable.«i686-tables» :=
 def backend.serial.u64.scalar.Scalar52 := Array Std.U64 5#usize
 
 /-- [curve25519_dalek::edwards::EdwardsBasepointTable::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1285:8-1291:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1281:8-1287:9
     Visibility: public -/
 @[reducible]
 def edwards.EdwardsBasepointTable.«x86_64-tables» :=
@@ -799,7 +799,7 @@ structure traits.BasepointTable (Self : Type _) (Self_Point : Type _) where
 def window.LookupTableRadix32 (T : Type _) := Array T 16#usize
 
 /-- [curve25519_dalek::edwards::EdwardsBasepointTableRadix32::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1292:8-1298:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix32.«x86_64-tables» :=
@@ -807,7 +807,7 @@ def edwards.EdwardsBasepointTableRadix32.«x86_64-tables» :=
   backend.serial.curve_models.AffineNielsPoint.«x86_64-tables») 32#usize
 
 /-- [curve25519_dalek::edwards::EdwardsBasepointTableRadix32::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1292:8-1298:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1288:8-1294:9
     Visibility: public -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix32.«i686-tables» :=
@@ -821,7 +821,7 @@ def edwards.EdwardsBasepointTableRadix32.«i686-tables» :=
 def window.LookupTableRadix64 (T : Type _) := Array T 32#usize
 
 /-- [curve25519_dalek::edwards::EdwardsBasepointTableRadix64::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1299:8-1305:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix64.«x86_64-tables» :=
@@ -829,7 +829,7 @@ def edwards.EdwardsBasepointTableRadix64.«x86_64-tables» :=
   backend.serial.curve_models.AffineNielsPoint.«x86_64-tables») 32#usize
 
 /-- [curve25519_dalek::edwards::EdwardsBasepointTableRadix64::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1299:8-1305:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1295:8-1301:9
     Visibility: public -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix64.«i686-tables» :=
@@ -843,7 +843,7 @@ def edwards.EdwardsBasepointTableRadix64.«i686-tables» :=
 def window.LookupTableRadix128 (T : Type _) := Array T 64#usize
 
 /-- [curve25519_dalek::edwards::EdwardsBasepointTableRadix128::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1306:8-1312:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix128.«x86_64-tables» :=
@@ -851,7 +851,7 @@ def edwards.EdwardsBasepointTableRadix128.«x86_64-tables» :=
   backend.serial.curve_models.AffineNielsPoint.«x86_64-tables») 32#usize
 
 /-- [curve25519_dalek::edwards::EdwardsBasepointTableRadix128::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1306:8-1312:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1302:8-1308:9
     Visibility: public -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix128.«i686-tables» :=
@@ -865,7 +865,7 @@ def edwards.EdwardsBasepointTableRadix128.«i686-tables» :=
 def window.LookupTableRadix256 (T : Type _) := Array T 128#usize
 
 /-- [curve25519_dalek::edwards::EdwardsBasepointTableRadix256::x86_64-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1313:8-1319:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix256.«x86_64-tables» :=
@@ -873,7 +873,7 @@ def edwards.EdwardsBasepointTableRadix256.«x86_64-tables» :=
   backend.serial.curve_models.AffineNielsPoint.«x86_64-tables») 32#usize
 
 /-- [curve25519_dalek::edwards::EdwardsBasepointTableRadix256::i686-tables]
-    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1313:8-1319:9
+    Source: 'curve25519-dalek/src/edwards.rs', lines 1158:8-1158:68; this code is generated from a macro invocation at: 'curve25519-dalek/src/edwards.rs', lines 1309:8-1315:9
     Visibility: public -/
 @[reducible]
 def edwards.EdwardsBasepointTableRadix256.«i686-tables» :=
