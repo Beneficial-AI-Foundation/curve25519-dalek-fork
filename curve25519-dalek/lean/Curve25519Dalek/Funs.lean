@@ -6607,7 +6607,7 @@ def scalar.Scalar.as_radix_2w
       Array.update digits1 i2 i4
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 87:12-97:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points_loop.body
@@ -6647,7 +6647,7 @@ def
   else ok (done (some out))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 87:12-97:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points_loop
@@ -6672,7 +6672,7 @@ def
     (points, out, k)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 76:8-97:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points
@@ -6693,216 +6693,216 @@ def
     0#usize
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 127:8-129:9
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop0.body
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-  (b : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-    × Std.Usize) (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»))
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    edwards.EdwardsPoint.«x86_64-tables»)) (alloc.vec.Vec
+    edwards.EdwardsPoint.«x86_64-tables»))
   := do
-  if b < buckets_count
-  then
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done buckets)
+  | some _ =>
     let ep ←
       edwards.EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity
     let buckets1 ← alloc.vec.Vec.push buckets ep
-    let b1 ← b + 1#usize
-    ok (cont (buckets1, b1))
-  else ok (done buckets)
+    ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 127:8-129:9
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop0
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-  (b : Std.Usize) :
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
   := do
   loop
-    (fun (buckets1, b1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop0.body
-      buckets_count buckets1 b1)
-    (buckets, b)
+      iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 134:12-137:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop0.body
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-  (b : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-    × Std.Usize) (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»))
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    edwards.EdwardsPoint.«x86_64-tables»)) (alloc.vec.Vec
+    edwards.EdwardsPoint.«x86_64-tables»))
   := do
-  if b < buckets_count
-  then
-    let ep ←
-      edwards.EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done buckets)
+  | some b =>
     let (_, index_mut_back) ←
       alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
         edwards.EdwardsPoint.«x86_64-tables») buckets b
-    let b1 ← b + 1#usize
-    let buckets1 := index_mut_back ep
-    ok (cont (buckets1, b1))
-  else ok (done buckets)
+    let bucket ←
+      edwards.EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity
+    let buckets1 := index_mut_back bucket
+    ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 134:12-137:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop0
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-  (b : Std.Usize) :
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
   := do
   loop
-    (fun (buckets1, b1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop0.body
-      buckets_count buckets1 b1)
-    (buckets, b)
+      iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 143:12-157:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop1.body
-  (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
-  backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables»))
   (digit_index : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-  (si : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-    × Std.Usize) (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»))
+  (iter : core.slice.iter.Iter ((Array Std.I8 64#usize) ×
+  backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables»))
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») :
+  Result (ControlFlow ((core.slice.iter.Iter ((Array Std.I8 64#usize) ×
+    backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables»)) ×
+    (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)) (alloc.vec.Vec
+    edwards.EdwardsPoint.«x86_64-tables»))
   := do
-  let i := alloc.vec.Vec.len scalars_points
-  if si < i
-  then
-    let (digits, pt) ←
-      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice ((Array Std.I8
-        64#usize) ×
-        backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables»))
-        scalars_points si
-    let i1 ← Array.index_usize digits digit_index
-    let digit ← lift (IScalar.cast .I16 i1)
-    let o ← lift (core.cmp.impls.OrdI16.cmp digit 0#i16)
-    let buckets1 ←
-      match o with
-      | Ordering.lt =>
-        do
-        let i2 ← -. digit
-        let i3 ← i2 - 1#i16
-        let b ← lift (IScalar.hcast .Usize i3)
-        let ep ←
-          alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«x86_64-tables») buckets b
-        let cp ←
-          «Shared0EdwardsPointx86_64-tables».Insts.«CoreOpsArithSubSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables».sub
-            ep pt
-        let ep1 ←
-          backend.serial.curve_models.«CompletedPointx86_64-tables».as_extended
-            cp
-        let (_, index_mut_back) ←
-          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«x86_64-tables») buckets b
-        ok (index_mut_back ep1)
-      | Ordering.eq => ok buckets
-      | Ordering.gt =>
-        do
-        let i2 ← digit - 1#i16
-        let b ← lift (IScalar.hcast .Usize i2)
-        let ep ←
-          alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«x86_64-tables») buckets b
-        let cp ←
-          «Shared0EdwardsPointx86_64-tables».Insts.«CoreOpsArithAddSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables».add
-            ep pt
-        let ep1 ←
-          backend.serial.curve_models.«CompletedPointx86_64-tables».as_extended
-            cp
-        let (_, index_mut_back) ←
-          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«x86_64-tables») buckets b
-        ok (index_mut_back ep1)
-    let si1 ← si + 1#usize
-    ok (cont (buckets1, si1))
-  else ok (done buckets)
+  let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+  match o with
+  | none => ok (done buckets)
+  | some p =>
+    let (digits, pt) := p
+    let i ← Array.index_usize digits digit_index
+    let digit ← lift (IScalar.cast .I16 i)
+    let o1 ← lift (core.cmp.impls.OrdI16.cmp digit 0#i16)
+    match o1 with
+    | Ordering.lt =>
+      let i1 ← -. digit
+      let i2 ← i1 - 1#i16
+      let b ← lift (IScalar.hcast .Usize i2)
+      let ep ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«x86_64-tables») buckets b
+      let cp ←
+        «Shared0EdwardsPointx86_64-tables».Insts.«CoreOpsArithSubSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables».sub
+          ep pt
+      let ep1 ←
+        backend.serial.curve_models.«CompletedPointx86_64-tables».as_extended
+          cp
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«x86_64-tables») buckets b
+      let buckets1 := index_mut_back ep1
+      ok (cont (iter1, buckets1))
+    | Ordering.eq => ok (cont (iter1, buckets))
+    | Ordering.gt =>
+      let i1 ← digit - 1#i16
+      let b ← lift (IScalar.hcast .Usize i1)
+      let ep ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«x86_64-tables») buckets b
+      let cp ←
+        «Shared0EdwardsPointx86_64-tables».Insts.«CoreOpsArithAddSharedAProjectiveNielsPointx86_64-tablesCompletedPointx86_64-tables».add
+          ep pt
+      let ep1 ←
+        backend.serial.curve_models.«CompletedPointx86_64-tables».as_extended
+          cp
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«x86_64-tables») buckets b
+      let buckets1 := index_mut_back ep1
+      ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 143:12-157:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop1
-  (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
+  (iter : core.slice.iter.Iter ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables»))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-  (digit_index : Std.Usize) (si : Std.Usize) :
+  (digit_index : Std.Usize) :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
   := do
   loop
-    (fun (buckets1, si1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop1.body
-      scalars_points digit_index buckets1 si1)
-    (buckets, si)
+      digit_index iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 169:12-172:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop2.body
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets_intermediate_sum : edwards.EdwardsPoint.«x86_64-tables»)
-  (buckets_sum : edwards.EdwardsPoint.«x86_64-tables») (i : Std.Usize) :
-  Result (ControlFlow (edwards.EdwardsPoint.«x86_64-tables» ×
-    edwards.EdwardsPoint.«x86_64-tables» × Std.Usize)
+  (buckets_sum : edwards.EdwardsPoint.«x86_64-tables») :
+  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range
+    Std.Usize)) × edwards.EdwardsPoint.«x86_64-tables» ×
+    edwards.EdwardsPoint.«x86_64-tables»)
     edwards.EdwardsPoint.«x86_64-tables»)
   := do
-  if i > 0#usize
-  then
-    let i1 ← i - 1#usize
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done buckets_sum)
+  | some i =>
     let ep ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-        edwards.EdwardsPoint.«x86_64-tables») buckets i1
+        edwards.EdwardsPoint.«x86_64-tables») buckets i
     let buckets_intermediate_sum1 ←
       edwards.EdwardsPoint.«x86_64-tables».Insts.«CoreOpsArithAddAssignEdwardsPointx86_64-tables».add_assign
         buckets_intermediate_sum ep
     let buckets_sum1 ←
       edwards.EdwardsPoint.«x86_64-tables».Insts.«CoreOpsArithAddAssignEdwardsPointx86_64-tables».add_assign
         buckets_sum buckets_intermediate_sum1
-    ok (cont (buckets_intermediate_sum1, buckets_sum1, i1))
-  else ok (done buckets_sum)
+    ok (cont (iter1, buckets_intermediate_sum1, buckets_sum1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 169:12-172:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop2
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
   (buckets_intermediate_sum : edwards.EdwardsPoint.«x86_64-tables»)
-  (buckets_sum : edwards.EdwardsPoint.«x86_64-tables») (i : Std.Usize) :
+  (buckets_sum : edwards.EdwardsPoint.«x86_64-tables») :
   Result edwards.EdwardsPoint.«x86_64-tables»
   := do
   loop
-    (fun (buckets_intermediate_sum1, buckets_sum1, i1) =>
+    (fun (iter1, buckets_intermediate_sum1, buckets_sum1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop2.body
-      buckets buckets_intermediate_sum1 buckets_sum1 i1)
-    (buckets_intermediate_sum, buckets_sum, i)
+      buckets iter1 buckets_intermediate_sum1 buckets_sum1)
+    (iter, buckets_intermediate_sum, buckets_sum)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 132:8-179:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -6910,22 +6910,29 @@ def
   (w : Std.Usize) (buckets_count : Std.Usize)
   (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables»))
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-  (total : Option edwards.EdwardsPoint.«x86_64-tables»)
-  (digit_index : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-    × (Option edwards.EdwardsPoint.«x86_64-tables») × Std.Usize) (Option
+  (total : Option edwards.EdwardsPoint.«x86_64-tables») :
+  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range
+    Std.Usize)) × (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables») ×
+    (Option edwards.EdwardsPoint.«x86_64-tables»)) (Option
     edwards.EdwardsPoint.«x86_64-tables»))
   := do
-  if digit_index > 0#usize
-  then
-    let digit_index1 ← digit_index - 1#usize
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done total)
+  | some digit_index =>
     let buckets1 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop0
-        buckets_count buckets 0#usize
+        { start := 0#usize, «end» := buckets_count } buckets
+    let s := alloc.vec.Vec.deref scalars_points
+    let iter2 ← core.slice.Slice.iter s
     let buckets2 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop1
-        scalars_points buckets1 digit_index1 0#usize
+        iter2 buckets1 digit_index
     let i ← buckets_count - 1#usize
     let buckets_intermediate_sum ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
@@ -6933,42 +6940,46 @@ def
     let buckets_sum ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
         edwards.EdwardsPoint.«x86_64-tables») buckets2 i
+    let iter3 ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (core.ops.range.Range.Insts.DoubleEndedIterator
+        core.iter.range.StepUsize) { start := 0#usize, «end» := i }
     let buckets_sum1 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1_loop2
-        buckets2 buckets_intermediate_sum buckets_sum i
+        iter3 buckets2 buckets_intermediate_sum buckets_sum
     match total with
-    | none => ok (cont (buckets2, some buckets_sum1, digit_index1))
+    | none => ok (cont (iter1, buckets2, some buckets_sum1))
     | some total1 =>
       let i1 ← lift (UScalar.cast .U32 w)
       let ep ← edwards.«EdwardsPointx86_64-tables».mul_by_pow_2 total1 i1
       let buckets_sum2 ←
         edwards.EdwardsPoint.«x86_64-tables».Insts.«CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».add
           ep buckets_sum1
-      ok (cont (buckets2, some buckets_sum2, digit_index1))
-  else ok (done total)
+      ok (cont (iter1, buckets2, some buckets_sum2))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 132:8-179:9
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (w : Std.Usize) (buckets_count : Std.Usize)
   (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables»))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-tables»)
-  (total : Option edwards.EdwardsPoint.«x86_64-tables»)
-  (digit_index : Std.Usize) :
+  (total : Option edwards.EdwardsPoint.«x86_64-tables») :
   Result (Option edwards.EdwardsPoint.«x86_64-tables»)
   := do
   loop
-    (fun (buckets1, total1, digit_index1) =>
+    (fun (iter1, buckets1, total1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1.body
-      w buckets_count scalars_points buckets1 total1 digit_index1)
-    (buckets, total, digit_index)
+      w buckets_count scalars_points iter1 buckets1 total1)
+    (iter, buckets, total)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-194:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-182:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul
@@ -7012,18 +7023,24 @@ def
   | some scalars_points =>
     let buckets ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop0
-        buckets_count (alloc.vec.Vec.new
-        edwards.EdwardsPoint.«x86_64-tables») 0#usize
+        { start := 0#usize, «end» := buckets_count } (alloc.vec.Vec.new
+        edwards.EdwardsPoint.«x86_64-tables»)
+    let iter ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (core.ops.range.Range.Insts.DoubleEndedIterator
+        core.iter.range.StepUsize)
+        { start := 0#usize, «end» := digits_count }
     let total ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables».optional_multiscalar_mul_loop1
-        w buckets_count scalars_points buckets none digits_count
+        iter w buckets_count scalars_points buckets none
     let ep ←
       core.option.Option.expect total (toStr
         "should have more than zero digits")
     ok (some ep)
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::x86_64-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-195:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-183:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables»
@@ -7183,7 +7200,7 @@ def
   ok { X := fe, Y := fe1, Z := fe1, T := fe }
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 87:12-97:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points_loop.body
@@ -7224,7 +7241,7 @@ def
   else ok (done (some out))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 87:12-97:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points_loop
@@ -7249,7 +7266,7 @@ def
     (points, out, k)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 76:8-97:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points
@@ -7270,219 +7287,216 @@ def
     0#usize
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 127:8-129:9
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop0.body
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
-  (b : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec
-    edwards.EdwardsPoint.«x86_64-no-tables») × Std.Usize) (alloc.vec.Vec
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    edwards.EdwardsPoint.«x86_64-no-tables»)) (alloc.vec.Vec
     edwards.EdwardsPoint.«x86_64-no-tables»))
   := do
-  if b < buckets_count
-  then
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done buckets)
+  | some _ =>
     let ep ←
       edwards.EdwardsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity
     let buckets1 ← alloc.vec.Vec.push buckets ep
-    let b1 ← b + 1#usize
-    ok (cont (buckets1, b1))
-  else ok (done buckets)
+    ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 127:8-129:9
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop0
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
-  (b : Std.Usize) :
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
   := do
   loop
-    (fun (buckets1, b1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop0.body
-      buckets_count buckets1 b1)
-    (buckets, b)
+      iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 134:12-137:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop0.body
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
-  (b : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec
-    edwards.EdwardsPoint.«x86_64-no-tables») × Std.Usize) (alloc.vec.Vec
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    edwards.EdwardsPoint.«x86_64-no-tables»)) (alloc.vec.Vec
     edwards.EdwardsPoint.«x86_64-no-tables»))
   := do
-  if b < buckets_count
-  then
-    let ep ←
-      edwards.EdwardsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done buckets)
+  | some b =>
     let (_, index_mut_back) ←
       alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
         edwards.EdwardsPoint.«x86_64-no-tables») buckets b
-    let b1 ← b + 1#usize
-    let buckets1 := index_mut_back ep
-    ok (cont (buckets1, b1))
-  else ok (done buckets)
+    let bucket ←
+      edwards.EdwardsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity
+    let buckets1 := index_mut_back bucket
+    ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 134:12-137:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop0
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
-  (b : Std.Usize) :
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
   := do
   loop
-    (fun (buckets1, b1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop0.body
-      buckets_count buckets1 b1)
-    (buckets, b)
+      iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 143:12-157:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop1.body
-  (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
-  backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables»))
   (digit_index : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
-  (si : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec
-    edwards.EdwardsPoint.«x86_64-no-tables») × Std.Usize) (alloc.vec.Vec
+  (iter : core.slice.iter.Iter ((Array Std.I8 64#usize) ×
+  backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables»))
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») :
+  Result (ControlFlow ((core.slice.iter.Iter ((Array Std.I8 64#usize) ×
+    backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables»)) ×
+    (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)) (alloc.vec.Vec
     edwards.EdwardsPoint.«x86_64-no-tables»))
   := do
-  let i := alloc.vec.Vec.len scalars_points
-  if si < i
-  then
-    let (digits, pt) ←
-      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice ((Array Std.I8
-        64#usize) ×
-        backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables»))
-        scalars_points si
-    let i1 ← Array.index_usize digits digit_index
-    let digit ← lift (IScalar.cast .I16 i1)
-    let o ← lift (core.cmp.impls.OrdI16.cmp digit 0#i16)
-    let buckets1 ←
-      match o with
-      | Ordering.lt =>
-        do
-        let i2 ← -. digit
-        let i3 ← i2 - 1#i16
-        let b ← lift (IScalar.hcast .Usize i3)
-        let ep ←
-          alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«x86_64-no-tables») buckets b
-        let cp ←
-          «Shared0EdwardsPointx86_64-no-tables».Insts.«CoreOpsArithSubSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables».sub
-            ep pt
-        let ep1 ←
-          backend.serial.curve_models.«CompletedPointx86_64-no-tables».as_extended
-            cp
-        let (_, index_mut_back) ←
-          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«x86_64-no-tables») buckets b
-        ok (index_mut_back ep1)
-      | Ordering.eq => ok buckets
-      | Ordering.gt =>
-        do
-        let i2 ← digit - 1#i16
-        let b ← lift (IScalar.hcast .Usize i2)
-        let ep ←
-          alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«x86_64-no-tables») buckets b
-        let cp ←
-          «Shared0EdwardsPointx86_64-no-tables».Insts.«CoreOpsArithAddSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables».add
-            ep pt
-        let ep1 ←
-          backend.serial.curve_models.«CompletedPointx86_64-no-tables».as_extended
-            cp
-        let (_, index_mut_back) ←
-          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«x86_64-no-tables») buckets b
-        ok (index_mut_back ep1)
-    let si1 ← si + 1#usize
-    ok (cont (buckets1, si1))
-  else ok (done buckets)
+  let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+  match o with
+  | none => ok (done buckets)
+  | some p =>
+    let (digits, pt) := p
+    let i ← Array.index_usize digits digit_index
+    let digit ← lift (IScalar.cast .I16 i)
+    let o1 ← lift (core.cmp.impls.OrdI16.cmp digit 0#i16)
+    match o1 with
+    | Ordering.lt =>
+      let i1 ← -. digit
+      let i2 ← i1 - 1#i16
+      let b ← lift (IScalar.hcast .Usize i2)
+      let ep ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«x86_64-no-tables») buckets b
+      let cp ←
+        «Shared0EdwardsPointx86_64-no-tables».Insts.«CoreOpsArithSubSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables».sub
+          ep pt
+      let ep1 ←
+        backend.serial.curve_models.«CompletedPointx86_64-no-tables».as_extended
+          cp
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«x86_64-no-tables») buckets b
+      let buckets1 := index_mut_back ep1
+      ok (cont (iter1, buckets1))
+    | Ordering.eq => ok (cont (iter1, buckets))
+    | Ordering.gt =>
+      let i1 ← digit - 1#i16
+      let b ← lift (IScalar.hcast .Usize i1)
+      let ep ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«x86_64-no-tables») buckets b
+      let cp ←
+        «Shared0EdwardsPointx86_64-no-tables».Insts.«CoreOpsArithAddSharedAProjectiveNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables».add
+          ep pt
+      let ep1 ←
+        backend.serial.curve_models.«CompletedPointx86_64-no-tables».as_extended
+          cp
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«x86_64-no-tables») buckets b
+      let buckets1 := index_mut_back ep1
+      ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 143:12-157:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop1
-  (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
+  (iter : core.slice.iter.Iter ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables»))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
-  (digit_index : Std.Usize) (si : Std.Usize) :
+  (digit_index : Std.Usize) :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
   := do
   loop
-    (fun (buckets1, si1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop1.body
-      scalars_points digit_index buckets1 si1)
-    (buckets, si)
+      digit_index iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 169:12-172:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop2.body
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets_intermediate_sum : edwards.EdwardsPoint.«x86_64-no-tables»)
-  (buckets_sum : edwards.EdwardsPoint.«x86_64-no-tables») (i : Std.Usize) :
-  Result (ControlFlow (edwards.EdwardsPoint.«x86_64-no-tables» ×
-    edwards.EdwardsPoint.«x86_64-no-tables» × Std.Usize)
+  (buckets_sum : edwards.EdwardsPoint.«x86_64-no-tables») :
+  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range
+    Std.Usize)) × edwards.EdwardsPoint.«x86_64-no-tables» ×
+    edwards.EdwardsPoint.«x86_64-no-tables»)
     edwards.EdwardsPoint.«x86_64-no-tables»)
   := do
-  if i > 0#usize
-  then
-    let i1 ← i - 1#usize
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done buckets_sum)
+  | some i =>
     let ep ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-        edwards.EdwardsPoint.«x86_64-no-tables») buckets i1
+        edwards.EdwardsPoint.«x86_64-no-tables») buckets i
     let buckets_intermediate_sum1 ←
       edwards.EdwardsPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddAssignEdwardsPointx86_64-no-tables».add_assign
         buckets_intermediate_sum ep
     let buckets_sum1 ←
       edwards.EdwardsPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddAssignEdwardsPointx86_64-no-tables».add_assign
         buckets_sum buckets_intermediate_sum1
-    ok (cont (buckets_intermediate_sum1, buckets_sum1, i1))
-  else ok (done buckets_sum)
+    ok (cont (iter1, buckets_intermediate_sum1, buckets_sum1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 169:12-172:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop2
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
   (buckets_intermediate_sum : edwards.EdwardsPoint.«x86_64-no-tables»)
-  (buckets_sum : edwards.EdwardsPoint.«x86_64-no-tables») (i : Std.Usize) :
+  (buckets_sum : edwards.EdwardsPoint.«x86_64-no-tables») :
   Result edwards.EdwardsPoint.«x86_64-no-tables»
   := do
   loop
-    (fun (buckets_intermediate_sum1, buckets_sum1, i1) =>
+    (fun (iter1, buckets_intermediate_sum1, buckets_sum1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop2.body
-      buckets buckets_intermediate_sum1 buckets_sum1 i1)
-    (buckets_intermediate_sum, buckets_sum, i)
+      buckets iter1 buckets_intermediate_sum1 buckets_sum1)
+    (iter, buckets_intermediate_sum, buckets_sum)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 132:8-179:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -7490,23 +7504,29 @@ def
   (w : Std.Usize) (buckets_count : Std.Usize)
   (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables»))
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
-  (total : Option edwards.EdwardsPoint.«x86_64-no-tables»)
-  (digit_index : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec
-    edwards.EdwardsPoint.«x86_64-no-tables») × (Option
-    edwards.EdwardsPoint.«x86_64-no-tables») × Std.Usize) (Option
+  (total : Option edwards.EdwardsPoint.«x86_64-no-tables») :
+  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range
+    Std.Usize)) × (alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables») ×
+    (Option edwards.EdwardsPoint.«x86_64-no-tables»)) (Option
     edwards.EdwardsPoint.«x86_64-no-tables»))
   := do
-  if digit_index > 0#usize
-  then
-    let digit_index1 ← digit_index - 1#usize
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done total)
+  | some digit_index =>
     let buckets1 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop0
-        buckets_count buckets 0#usize
+        { start := 0#usize, «end» := buckets_count } buckets
+    let s := alloc.vec.Vec.deref scalars_points
+    let iter2 ← core.slice.Slice.iter s
     let buckets2 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop1
-        scalars_points buckets1 digit_index1 0#usize
+        iter2 buckets1 digit_index
     let i ← buckets_count - 1#usize
     let buckets_intermediate_sum ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
@@ -7514,11 +7534,16 @@ def
     let buckets_sum ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
         edwards.EdwardsPoint.«x86_64-no-tables») buckets2 i
+    let iter3 ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (core.ops.range.Range.Insts.DoubleEndedIterator
+        core.iter.range.StepUsize) { start := 0#usize, «end» := i }
     let buckets_sum1 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1_loop2
-        buckets2 buckets_intermediate_sum buckets_sum i
+        iter3 buckets2 buckets_intermediate_sum buckets_sum
     match total with
-    | none => ok (cont (buckets2, some buckets_sum1, digit_index1))
+    | none => ok (cont (iter1, buckets2, some buckets_sum1))
     | some total1 =>
       let i1 ← lift (UScalar.cast .U32 w)
       let ep ←
@@ -7526,31 +7551,30 @@ def
       let buckets_sum2 ←
         edwards.EdwardsPoint.«x86_64-no-tables».Insts.«CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables».add
           ep buckets_sum1
-      ok (cont (buckets2, some buckets_sum2, digit_index1))
-  else ok (done total)
+      ok (cont (iter1, buckets2, some buckets_sum2))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 132:8-179:9
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (w : Std.Usize) (buckets_count : Std.Usize)
   (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables»))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«x86_64-no-tables»)
-  (total : Option edwards.EdwardsPoint.«x86_64-no-tables»)
-  (digit_index : Std.Usize) :
+  (total : Option edwards.EdwardsPoint.«x86_64-no-tables») :
   Result (Option edwards.EdwardsPoint.«x86_64-no-tables»)
   := do
   loop
-    (fun (buckets1, total1, digit_index1) =>
+    (fun (iter1, buckets1, total1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1.body
-      w buckets_count scalars_points buckets1 total1 digit_index1)
-    (buckets, total, digit_index)
+      w buckets_count scalars_points iter1 buckets1 total1)
+    (iter, buckets, total)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-194:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-182:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul
@@ -7594,18 +7618,24 @@ def
   | some scalars_points =>
     let buckets ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop0
-        buckets_count (alloc.vec.Vec.new
-        edwards.EdwardsPoint.«x86_64-no-tables») 0#usize
+        { start := 0#usize, «end» := buckets_count } (alloc.vec.Vec.new
+        edwards.EdwardsPoint.«x86_64-no-tables»)
+    let iter ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (core.ops.range.Range.Insts.DoubleEndedIterator
+        core.iter.range.StepUsize)
+        { start := 0#usize, «end» := digits_count }
     let total ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables».optional_multiscalar_mul_loop1
-        w buckets_count scalars_points buckets none digits_count
+        iter w buckets_count scalars_points buckets none
     let ep ←
       core.option.Option.expect total (toStr
         "should have more than zero digits")
     ok (some ep)
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-195:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-183:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -7774,7 +7804,7 @@ def
   ok { X := fe, Y := fe1, Z := fe1, T := fe }
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 87:12-97:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points_loop.body
@@ -7814,7 +7844,7 @@ def
   else ok (done (some out))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 87:12-97:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points_loop
@@ -7839,7 +7869,7 @@ def
     (points, out, k)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 76:8-97:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points
@@ -7859,216 +7889,215 @@ def
     backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables»)) 0#usize
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 127:8-129:9
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop0.body
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
-  (b : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») ×
-    Std.Usize) (alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»))
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    edwards.EdwardsPoint.«i686-tables»)) (alloc.vec.Vec
+    edwards.EdwardsPoint.«i686-tables»))
   := do
-  if b < buckets_count
-  then
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done buckets)
+  | some _ =>
     let ep ←
       edwards.EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity
     let buckets1 ← alloc.vec.Vec.push buckets ep
-    let b1 ← b + 1#usize
-    ok (cont (buckets1, b1))
-  else ok (done buckets)
+    ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 127:8-129:9
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop0
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
-  (b : Std.Usize) :
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
   := do
   loop
-    (fun (buckets1, b1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop0.body
-      buckets_count buckets1 b1)
-    (buckets, b)
+      iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 134:12-137:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop0.body
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
-  (b : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») ×
-    Std.Usize) (alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»))
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    edwards.EdwardsPoint.«i686-tables»)) (alloc.vec.Vec
+    edwards.EdwardsPoint.«i686-tables»))
   := do
-  if b < buckets_count
-  then
-    let ep ←
-      edwards.EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done buckets)
+  | some b =>
     let (_, index_mut_back) ←
       alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
         edwards.EdwardsPoint.«i686-tables») buckets b
-    let b1 ← b + 1#usize
-    let buckets1 := index_mut_back ep
-    ok (cont (buckets1, b1))
-  else ok (done buckets)
+    let bucket ←
+      edwards.EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity
+    let buckets1 := index_mut_back bucket
+    ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 134:12-137:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop0
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
-  (b : Std.Usize) :
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
   := do
   loop
-    (fun (buckets1, b1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop0.body
-      buckets_count buckets1 b1)
-    (buckets, b)
+      iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 143:12-157:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop1.body
-  (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
-  backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables»))
   (digit_index : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
-  (si : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») ×
-    Std.Usize) (alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»))
+  (iter : core.slice.iter.Iter ((Array Std.I8 64#usize) ×
+  backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables»))
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») :
+  Result (ControlFlow ((core.slice.iter.Iter ((Array Std.I8 64#usize) ×
+    backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables»)) ×
+    (alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)) (alloc.vec.Vec
+    edwards.EdwardsPoint.«i686-tables»))
   := do
-  let i := alloc.vec.Vec.len scalars_points
-  if si < i
-  then
-    let (digits, pt) ←
-      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice ((Array Std.I8
-        64#usize) ×
-        backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables»))
-        scalars_points si
-    let i1 ← Array.index_usize digits digit_index
-    let digit ← lift (IScalar.cast .I16 i1)
-    let o ← lift (core.cmp.impls.OrdI16.cmp digit 0#i16)
-    let buckets1 ←
-      match o with
-      | Ordering.lt =>
-        do
-        let i2 ← -. digit
-        let i3 ← i2 - 1#i16
-        let b ← lift (IScalar.hcast .Usize i3)
-        let ep ←
-          alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«i686-tables») buckets b
-        let cp ←
-          «Shared0EdwardsPointi686-tables».Insts.«CoreOpsArithSubSharedAProjectiveNielsPointi686-tablesCompletedPointi686-tables».sub
-            ep pt
-        let ep1 ←
-          backend.serial.curve_models.«CompletedPointi686-tables».as_extended
-            cp
-        let (_, index_mut_back) ←
-          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«i686-tables») buckets b
-        ok (index_mut_back ep1)
-      | Ordering.eq => ok buckets
-      | Ordering.gt =>
-        do
-        let i2 ← digit - 1#i16
-        let b ← lift (IScalar.hcast .Usize i2)
-        let ep ←
-          alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«i686-tables») buckets b
-        let cp ←
-          «Shared0EdwardsPointi686-tables».Insts.«CoreOpsArithAddSharedAProjectiveNielsPointi686-tablesCompletedPointi686-tables».add
-            ep pt
-        let ep1 ←
-          backend.serial.curve_models.«CompletedPointi686-tables».as_extended
-            cp
-        let (_, index_mut_back) ←
-          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«i686-tables») buckets b
-        ok (index_mut_back ep1)
-    let si1 ← si + 1#usize
-    ok (cont (buckets1, si1))
-  else ok (done buckets)
+  let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+  match o with
+  | none => ok (done buckets)
+  | some p =>
+    let (digits, pt) := p
+    let i ← Array.index_usize digits digit_index
+    let digit ← lift (IScalar.cast .I16 i)
+    let o1 ← lift (core.cmp.impls.OrdI16.cmp digit 0#i16)
+    match o1 with
+    | Ordering.lt =>
+      let i1 ← -. digit
+      let i2 ← i1 - 1#i16
+      let b ← lift (IScalar.hcast .Usize i2)
+      let ep ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«i686-tables») buckets b
+      let cp ←
+        «Shared0EdwardsPointi686-tables».Insts.«CoreOpsArithSubSharedAProjectiveNielsPointi686-tablesCompletedPointi686-tables».sub
+          ep pt
+      let ep1 ←
+        backend.serial.curve_models.«CompletedPointi686-tables».as_extended
+          cp
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«i686-tables») buckets b
+      let buckets1 := index_mut_back ep1
+      ok (cont (iter1, buckets1))
+    | Ordering.eq => ok (cont (iter1, buckets))
+    | Ordering.gt =>
+      let i1 ← digit - 1#i16
+      let b ← lift (IScalar.hcast .Usize i1)
+      let ep ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«i686-tables») buckets b
+      let cp ←
+        «Shared0EdwardsPointi686-tables».Insts.«CoreOpsArithAddSharedAProjectiveNielsPointi686-tablesCompletedPointi686-tables».add
+          ep pt
+      let ep1 ←
+        backend.serial.curve_models.«CompletedPointi686-tables».as_extended
+          cp
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«i686-tables») buckets b
+      let buckets1 := index_mut_back ep1
+      ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 143:12-157:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop1
-  (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
+  (iter : core.slice.iter.Iter ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables»))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
-  (digit_index : Std.Usize) (si : Std.Usize) :
+  (digit_index : Std.Usize) :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
   := do
   loop
-    (fun (buckets1, si1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop1.body
-      scalars_points digit_index buckets1 si1)
-    (buckets, si)
+      digit_index iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 169:12-172:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop2.body
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets_intermediate_sum : edwards.EdwardsPoint.«i686-tables»)
-  (buckets_sum : edwards.EdwardsPoint.«i686-tables») (i : Std.Usize) :
-  Result (ControlFlow (edwards.EdwardsPoint.«i686-tables» ×
-    edwards.EdwardsPoint.«i686-tables» × Std.Usize)
-    edwards.EdwardsPoint.«i686-tables»)
+  (buckets_sum : edwards.EdwardsPoint.«i686-tables») :
+  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range
+    Std.Usize)) × edwards.EdwardsPoint.«i686-tables» ×
+    edwards.EdwardsPoint.«i686-tables») edwards.EdwardsPoint.«i686-tables»)
   := do
-  if i > 0#usize
-  then
-    let i1 ← i - 1#usize
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done buckets_sum)
+  | some i =>
     let ep ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-        edwards.EdwardsPoint.«i686-tables») buckets i1
+        edwards.EdwardsPoint.«i686-tables») buckets i
     let buckets_intermediate_sum1 ←
       edwards.EdwardsPoint.«i686-tables».Insts.«CoreOpsArithAddAssignEdwardsPointi686-tables».add_assign
         buckets_intermediate_sum ep
     let buckets_sum1 ←
       edwards.EdwardsPoint.«i686-tables».Insts.«CoreOpsArithAddAssignEdwardsPointi686-tables».add_assign
         buckets_sum buckets_intermediate_sum1
-    ok (cont (buckets_intermediate_sum1, buckets_sum1, i1))
-  else ok (done buckets_sum)
+    ok (cont (iter1, buckets_intermediate_sum1, buckets_sum1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 169:12-172:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop2
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
   (buckets_intermediate_sum : edwards.EdwardsPoint.«i686-tables»)
-  (buckets_sum : edwards.EdwardsPoint.«i686-tables») (i : Std.Usize) :
+  (buckets_sum : edwards.EdwardsPoint.«i686-tables») :
   Result edwards.EdwardsPoint.«i686-tables»
   := do
   loop
-    (fun (buckets_intermediate_sum1, buckets_sum1, i1) =>
+    (fun (iter1, buckets_intermediate_sum1, buckets_sum1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop2.body
-      buckets buckets_intermediate_sum1 buckets_sum1 i1)
-    (buckets_intermediate_sum, buckets_sum, i)
+      buckets iter1 buckets_intermediate_sum1 buckets_sum1)
+    (iter, buckets_intermediate_sum, buckets_sum)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 132:8-179:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8076,22 +8105,29 @@ def
   (w : Std.Usize) (buckets_count : Std.Usize)
   (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables»))
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
-  (total : Option edwards.EdwardsPoint.«i686-tables»)
-  (digit_index : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») ×
-    (Option edwards.EdwardsPoint.«i686-tables») × Std.Usize) (Option
+  (total : Option edwards.EdwardsPoint.«i686-tables») :
+  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range
+    Std.Usize)) × (alloc.vec.Vec edwards.EdwardsPoint.«i686-tables») ×
+    (Option edwards.EdwardsPoint.«i686-tables»)) (Option
     edwards.EdwardsPoint.«i686-tables»))
   := do
-  if digit_index > 0#usize
-  then
-    let digit_index1 ← digit_index - 1#usize
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done total)
+  | some digit_index =>
     let buckets1 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop0
-        buckets_count buckets 0#usize
+        { start := 0#usize, «end» := buckets_count } buckets
+    let s := alloc.vec.Vec.deref scalars_points
+    let iter2 ← core.slice.Slice.iter s
     let buckets2 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop1
-        scalars_points buckets1 digit_index1 0#usize
+        iter2 buckets1 digit_index
     let i ← buckets_count - 1#usize
     let buckets_intermediate_sum ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
@@ -8099,42 +8135,46 @@ def
     let buckets_sum ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
         edwards.EdwardsPoint.«i686-tables») buckets2 i
+    let iter3 ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (core.ops.range.Range.Insts.DoubleEndedIterator
+        core.iter.range.StepUsize) { start := 0#usize, «end» := i }
     let buckets_sum1 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1_loop2
-        buckets2 buckets_intermediate_sum buckets_sum i
+        iter3 buckets2 buckets_intermediate_sum buckets_sum
     match total with
-    | none => ok (cont (buckets2, some buckets_sum1, digit_index1))
+    | none => ok (cont (iter1, buckets2, some buckets_sum1))
     | some total1 =>
       let i1 ← lift (UScalar.cast .U32 w)
       let ep ← edwards.«EdwardsPointi686-tables».mul_by_pow_2 total1 i1
       let buckets_sum2 ←
         edwards.EdwardsPoint.«i686-tables».Insts.«CoreOpsArithAddEdwardsPointi686-tablesEdwardsPointi686-tables».add
           ep buckets_sum1
-      ok (cont (buckets2, some buckets_sum2, digit_index1))
-  else ok (done total)
+      ok (cont (iter1, buckets2, some buckets_sum2))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 132:8-179:9
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (w : Std.Usize) (buckets_count : Std.Usize)
   (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables»))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-tables»)
-  (total : Option edwards.EdwardsPoint.«i686-tables»)
-  (digit_index : Std.Usize) :
+  (total : Option edwards.EdwardsPoint.«i686-tables») :
   Result (Option edwards.EdwardsPoint.«i686-tables»)
   := do
   loop
-    (fun (buckets1, total1, digit_index1) =>
+    (fun (iter1, buckets1, total1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1.body
-      w buckets_count scalars_points buckets1 total1 digit_index1)
-    (buckets, total, digit_index)
+      w buckets_count scalars_points iter1 buckets1 total1)
+    (iter, buckets, total)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-194:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-182:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul
@@ -8178,18 +8218,24 @@ def
   | some scalars_points =>
     let buckets ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop0
-        buckets_count (alloc.vec.Vec.new edwards.EdwardsPoint.«i686-tables»)
-        0#usize
+        { start := 0#usize, «end» := buckets_count } (alloc.vec.Vec.new
+        edwards.EdwardsPoint.«i686-tables»)
+    let iter ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (core.ops.range.Range.Insts.DoubleEndedIterator
+        core.iter.range.StepUsize)
+        { start := 0#usize, «end» := digits_count }
     let total ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables».optional_multiscalar_mul_loop1
-        w buckets_count scalars_points buckets none digits_count
+        iter w buckets_count scalars_points buckets none
     let ep ←
       core.option.Option.expect total (toStr
         "should have more than zero digits")
     ok (some ep)
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::i686-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-195:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-183:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables»
@@ -8348,7 +8394,7 @@ def
   ok { X := fe, Y := fe1, Z := fe1, T := fe }
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 87:12-97:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points_loop.body
@@ -8389,7 +8435,7 @@ def
   else ok (done (some out))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 88:12-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 87:12-97:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points_loop
@@ -8414,7 +8460,7 @@ def
     (points, out, k)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 77:8-98:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 76:8-97:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points
@@ -8435,216 +8481,216 @@ def
     0#usize
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 127:8-129:9
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop0.body
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-  (b : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-    × Std.Usize) (alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»))
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables») :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    edwards.EdwardsPoint.«i686-no-tables»)) (alloc.vec.Vec
+    edwards.EdwardsPoint.«i686-no-tables»))
   := do
-  if b < buckets_count
-  then
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done buckets)
+  | some _ =>
     let ep ←
       edwards.EdwardsPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity
     let buckets1 ← alloc.vec.Vec.push buckets ep
-    let b1 ← b + 1#usize
-    ok (cont (buckets1, b1))
-  else ok (done buckets)
+    ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 129:8-132:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 127:8-129:9
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop0
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-  (b : Std.Usize) :
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
   := do
   loop
-    (fun (buckets1, b1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop0.body
-      buckets_count buckets1 b1)
-    (buckets, b)
+      iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 134:12-137:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop0.body
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-  (b : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-    × Std.Usize) (alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»))
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables») :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (alloc.vec.Vec
+    edwards.EdwardsPoint.«i686-no-tables»)) (alloc.vec.Vec
+    edwards.EdwardsPoint.«i686-no-tables»))
   := do
-  if b < buckets_count
-  then
-    let ep ←
-      edwards.EdwardsPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done buckets)
+  | some b =>
     let (_, index_mut_back) ←
       alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
         edwards.EdwardsPoint.«i686-no-tables») buckets b
-    let b1 ← b + 1#usize
-    let buckets1 := index_mut_back ep
-    ok (cont (buckets1, b1))
-  else ok (done buckets)
+    let bucket ←
+      edwards.EdwardsPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity
+    let buckets1 := index_mut_back bucket
+    ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 141:12-144:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 134:12-137:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop0
-  (buckets_count : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-  (b : Std.Usize) :
+  (iter : core.ops.range.Range Std.Usize)
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables») :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
   := do
   loop
-    (fun (buckets1, b1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop0.body
-      buckets_count buckets1 b1)
-    (buckets, b)
+      iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 143:12-157:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop1.body
-  (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
-  backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables»))
   (digit_index : Std.Usize)
-  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-  (si : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-    × Std.Usize) (alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»))
+  (iter : core.slice.iter.Iter ((Array Std.I8 64#usize) ×
+  backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables»))
+  (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables») :
+  Result (ControlFlow ((core.slice.iter.Iter ((Array Std.I8 64#usize) ×
+    backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables»)) ×
+    (alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)) (alloc.vec.Vec
+    edwards.EdwardsPoint.«i686-no-tables»))
   := do
-  let i := alloc.vec.Vec.len scalars_points
-  if si < i
-  then
-    let (digits, pt) ←
-      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice ((Array Std.I8
-        64#usize) ×
-        backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables»))
-        scalars_points si
-    let i1 ← Array.index_usize digits digit_index
-    let digit ← lift (IScalar.cast .I16 i1)
-    let o ← lift (core.cmp.impls.OrdI16.cmp digit 0#i16)
-    let buckets1 ←
-      match o with
-      | Ordering.lt =>
-        do
-        let i2 ← -. digit
-        let i3 ← i2 - 1#i16
-        let b ← lift (IScalar.hcast .Usize i3)
-        let ep ←
-          alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«i686-no-tables») buckets b
-        let cp ←
-          «Shared0EdwardsPointi686-no-tables».Insts.«CoreOpsArithSubSharedAProjectiveNielsPointi686-no-tablesCompletedPointi686-no-tables».sub
-            ep pt
-        let ep1 ←
-          backend.serial.curve_models.«CompletedPointi686-no-tables».as_extended
-            cp
-        let (_, index_mut_back) ←
-          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«i686-no-tables») buckets b
-        ok (index_mut_back ep1)
-      | Ordering.eq => ok buckets
-      | Ordering.gt =>
-        do
-        let i2 ← digit - 1#i16
-        let b ← lift (IScalar.hcast .Usize i2)
-        let ep ←
-          alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«i686-no-tables») buckets b
-        let cp ←
-          «Shared0EdwardsPointi686-no-tables».Insts.«CoreOpsArithAddSharedAProjectiveNielsPointi686-no-tablesCompletedPointi686-no-tables».add
-            ep pt
-        let ep1 ←
-          backend.serial.curve_models.«CompletedPointi686-no-tables».as_extended
-            cp
-        let (_, index_mut_back) ←
-          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
-            edwards.EdwardsPoint.«i686-no-tables») buckets b
-        ok (index_mut_back ep1)
-    let si1 ← si + 1#usize
-    ok (cont (buckets1, si1))
-  else ok (done buckets)
+  let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+  match o with
+  | none => ok (done buckets)
+  | some p =>
+    let (digits, pt) := p
+    let i ← Array.index_usize digits digit_index
+    let digit ← lift (IScalar.cast .I16 i)
+    let o1 ← lift (core.cmp.impls.OrdI16.cmp digit 0#i16)
+    match o1 with
+    | Ordering.lt =>
+      let i1 ← -. digit
+      let i2 ← i1 - 1#i16
+      let b ← lift (IScalar.hcast .Usize i2)
+      let ep ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«i686-no-tables») buckets b
+      let cp ←
+        «Shared0EdwardsPointi686-no-tables».Insts.«CoreOpsArithSubSharedAProjectiveNielsPointi686-no-tablesCompletedPointi686-no-tables».sub
+          ep pt
+      let ep1 ←
+        backend.serial.curve_models.«CompletedPointi686-no-tables».as_extended
+          cp
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«i686-no-tables») buckets b
+      let buckets1 := index_mut_back ep1
+      ok (cont (iter1, buckets1))
+    | Ordering.eq => ok (cont (iter1, buckets))
+    | Ordering.gt =>
+      let i1 ← digit - 1#i16
+      let b ← lift (IScalar.hcast .Usize i1)
+      let ep ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«i686-no-tables») buckets b
+      let cp ←
+        «Shared0EdwardsPointi686-no-tables».Insts.«CoreOpsArithAddSharedAProjectiveNielsPointi686-no-tablesCompletedPointi686-no-tables».add
+          ep pt
+      let ep1 ←
+        backend.serial.curve_models.«CompletedPointi686-no-tables».as_extended
+          cp
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice
+          edwards.EdwardsPoint.«i686-no-tables») buckets b
+      let buckets1 := index_mut_back ep1
+      ok (cont (iter1, buckets1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 3:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 151:12-167:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 143:12-157:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop1
-  (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
+  (iter : core.slice.iter.Iter ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables»))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-  (digit_index : Std.Usize) (si : Std.Usize) :
+  (digit_index : Std.Usize) :
   Result (alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
   := do
   loop
-    (fun (buckets1, si1) =>
+    (fun (iter1, buckets1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop1.body
-      scalars_points digit_index buckets1 si1)
-    (buckets, si)
+      digit_index iter1 buckets1)
+    (iter, buckets)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 169:12-172:13
     Visibility: public -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop2.body
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets_intermediate_sum : edwards.EdwardsPoint.«i686-no-tables»)
-  (buckets_sum : edwards.EdwardsPoint.«i686-no-tables») (i : Std.Usize) :
-  Result (ControlFlow (edwards.EdwardsPoint.«i686-no-tables» ×
-    edwards.EdwardsPoint.«i686-no-tables» × Std.Usize)
+  (buckets_sum : edwards.EdwardsPoint.«i686-no-tables») :
+  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range
+    Std.Usize)) × edwards.EdwardsPoint.«i686-no-tables» ×
+    edwards.EdwardsPoint.«i686-no-tables»)
     edwards.EdwardsPoint.«i686-no-tables»)
   := do
-  if i > 0#usize
-  then
-    let i1 ← i - 1#usize
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done buckets_sum)
+  | some i =>
     let ep ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-        edwards.EdwardsPoint.«i686-no-tables») buckets i1
+        edwards.EdwardsPoint.«i686-no-tables») buckets i
     let buckets_intermediate_sum1 ←
       edwards.EdwardsPoint.«i686-no-tables».Insts.«CoreOpsArithAddAssignEdwardsPointi686-no-tables».add_assign
         buckets_intermediate_sum ep
     let buckets_sum1 ←
       edwards.EdwardsPoint.«i686-no-tables».Insts.«CoreOpsArithAddAssignEdwardsPointi686-no-tables».add_assign
         buckets_sum buckets_intermediate_sum1
-    ok (cont (buckets_intermediate_sum1, buckets_sum1, i1))
-  else ok (done buckets_sum)
+    ok (cont (iter1, buckets_intermediate_sum1, buckets_sum1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 4:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 180:12-184:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 169:12-172:13
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop2
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
   (buckets_intermediate_sum : edwards.EdwardsPoint.«i686-no-tables»)
-  (buckets_sum : edwards.EdwardsPoint.«i686-no-tables») (i : Std.Usize) :
+  (buckets_sum : edwards.EdwardsPoint.«i686-no-tables») :
   Result edwards.EdwardsPoint.«i686-no-tables»
   := do
   loop
-    (fun (buckets_intermediate_sum1, buckets_sum1, i1) =>
+    (fun (iter1, buckets_intermediate_sum1, buckets_sum1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop2.body
-      buckets buckets_intermediate_sum1 buckets_sum1 i1)
-    (buckets_intermediate_sum, buckets_sum, i)
+      buckets iter1 buckets_intermediate_sum1 buckets_sum1)
+    (iter, buckets_intermediate_sum, buckets_sum)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 132:8-179:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -8652,22 +8698,29 @@ def
   (w : Std.Usize) (buckets_count : Std.Usize)
   (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables»))
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-  (total : Option edwards.EdwardsPoint.«i686-no-tables»)
-  (digit_index : Std.Usize) :
-  Result (ControlFlow ((alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-    × (Option edwards.EdwardsPoint.«i686-no-tables») × Std.Usize) (Option
+  (total : Option edwards.EdwardsPoint.«i686-no-tables») :
+  Result (ControlFlow ((core.iter.adapters.rev.Rev (core.ops.range.Range
+    Std.Usize)) × (alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables») ×
+    (Option edwards.EdwardsPoint.«i686-no-tables»)) (Option
     edwards.EdwardsPoint.«i686-no-tables»))
   := do
-  if digit_index > 0#usize
-  then
-    let digit_index1 ← digit_index - 1#usize
+  let (o, iter1) ←
+    core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator
+      core.iter.range.StepUsize) iter
+  match o with
+  | none => ok (done total)
+  | some digit_index =>
     let buckets1 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop0
-        buckets_count buckets 0#usize
+        { start := 0#usize, «end» := buckets_count } buckets
+    let s := alloc.vec.Vec.deref scalars_points
+    let iter2 ← core.slice.Slice.iter s
     let buckets2 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop1
-        scalars_points buckets1 digit_index1 0#usize
+        iter2 buckets1 digit_index
     let i ← buckets_count - 1#usize
     let buckets_intermediate_sum ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
@@ -8675,42 +8728,46 @@ def
     let buckets_sum ←
       alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
         edwards.EdwardsPoint.«i686-no-tables») buckets2 i
+    let iter3 ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (core.ops.range.Range.Insts.DoubleEndedIterator
+        core.iter.range.StepUsize) { start := 0#usize, «end» := i }
     let buckets_sum1 ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1_loop2
-        buckets2 buckets_intermediate_sum buckets_sum i
+        iter3 buckets2 buckets_intermediate_sum buckets_sum
     match total with
-    | none => ok (cont (buckets2, some buckets_sum1, digit_index1))
+    | none => ok (cont (iter1, buckets2, some buckets_sum1))
     | some total1 =>
       let i1 ← lift (UScalar.cast .U32 w)
       let ep ← edwards.«EdwardsPointi686-no-tables».mul_by_pow_2 total1 i1
       let buckets_sum2 ←
         edwards.EdwardsPoint.«i686-no-tables».Insts.«CoreOpsArithAddEdwardsPointi686-no-tablesEdwardsPointi686-no-tables».add
           ep buckets_sum1
-      ok (cont (buckets2, some buckets_sum2, digit_index1))
-  else ok (done total)
+      ok (cont (iter1, buckets2, some buckets_sum2))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 136:8-191:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 132:8-179:9
     Visibility: public -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1
+  (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Std.Usize))
   (w : Std.Usize) (buckets_count : Std.Usize)
   (scalars_points : alloc.vec.Vec ((Array Std.I8 64#usize) ×
   backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables»))
   (buckets : alloc.vec.Vec edwards.EdwardsPoint.«i686-no-tables»)
-  (total : Option edwards.EdwardsPoint.«i686-no-tables»)
-  (digit_index : Std.Usize) :
+  (total : Option edwards.EdwardsPoint.«i686-no-tables») :
   Result (Option edwards.EdwardsPoint.«i686-no-tables»)
   := do
   loop
-    (fun (buckets1, total1, digit_index1) =>
+    (fun (iter1, buckets1, total1) =>
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1.body
-      w buckets_count scalars_points buckets1 total1 digit_index1)
-    (buckets, total, digit_index)
+      w buckets_count scalars_points iter1 buckets1 total1)
+    (iter, buckets, total)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-194:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 67:4-182:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul
@@ -8754,18 +8811,24 @@ def
   | some scalars_points =>
     let buckets ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop0
-        buckets_count (alloc.vec.Vec.new
-        edwards.EdwardsPoint.«i686-no-tables») 0#usize
+        { start := 0#usize, «end» := buckets_count } (alloc.vec.Vec.new
+        edwards.EdwardsPoint.«i686-no-tables»)
+    let iter ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (core.ops.range.Range.Insts.DoubleEndedIterator
+        core.iter.range.StepUsize)
+        { start := 0#usize, «end» := digits_count }
     let total ←
       backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables».optional_multiscalar_mul_loop1
-        w buckets_count scalars_points buckets none digits_count
+        iter w buckets_count scalars_points buckets none
     let ep ←
       core.option.Option.expect total (toStr
         "should have more than zero digits")
     ok (some ep)
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::i686-no-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-195:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs', lines 64:0-183:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.pippenger.Pippenger.Insts.«Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables»

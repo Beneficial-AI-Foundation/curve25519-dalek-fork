@@ -3753,8 +3753,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 88,
-        "end_line": 98
+        "begin_line": 87,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3772,8 +3772,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 88,
-        "end_line": 98
+        "begin_line": 87,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3791,8 +3791,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 77,
-        "end_line": 98
+        "begin_line": 76,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3808,8 +3808,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 129,
-        "end_line": 132
+        "begin_line": 127,
+        "end_line": 129
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3827,8 +3827,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 129,
-        "end_line": 132
+        "begin_line": 127,
+        "end_line": 129
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3846,8 +3846,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 141,
-        "end_line": 144
+        "begin_line": 134,
+        "end_line": 137
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3865,8 +3865,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 141,
-        "end_line": 144
+        "begin_line": 134,
+        "end_line": 137
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3884,8 +3884,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 151,
-        "end_line": 167
+        "begin_line": 143,
+        "end_line": 157
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3903,8 +3903,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 151,
-        "end_line": 167
+        "begin_line": 143,
+        "end_line": 157
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3922,8 +3922,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 180,
-        "end_line": 184
+        "begin_line": 169,
+        "end_line": 172
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3941,8 +3941,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 180,
-        "end_line": 184
+        "begin_line": 169,
+        "end_line": 172
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3960,8 +3960,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 136,
-        "end_line": 191
+        "begin_line": 132,
+        "end_line": 179
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3979,8 +3979,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 136,
-        "end_line": 191
+        "begin_line": 132,
+        "end_line": 179
       },
       "is_opaque": false,
       "can_fail": true,
@@ -3999,7 +3999,7 @@
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
         "begin_line": 67,
-        "end_line": 194
+        "end_line": 182
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4189,8 +4189,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 88,
-        "end_line": 98
+        "begin_line": 87,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4208,8 +4208,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 88,
-        "end_line": 98
+        "begin_line": 87,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4227,8 +4227,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 77,
-        "end_line": 98
+        "begin_line": 76,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4244,8 +4244,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 129,
-        "end_line": 132
+        "begin_line": 127,
+        "end_line": 129
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4263,8 +4263,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 129,
-        "end_line": 132
+        "begin_line": 127,
+        "end_line": 129
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4282,8 +4282,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 141,
-        "end_line": 144
+        "begin_line": 134,
+        "end_line": 137
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4301,8 +4301,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 141,
-        "end_line": 144
+        "begin_line": 134,
+        "end_line": 137
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4320,8 +4320,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 151,
-        "end_line": 167
+        "begin_line": 143,
+        "end_line": 157
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4339,8 +4339,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 151,
-        "end_line": 167
+        "begin_line": 143,
+        "end_line": 157
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4358,8 +4358,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 180,
-        "end_line": 184
+        "begin_line": 169,
+        "end_line": 172
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4377,8 +4377,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 180,
-        "end_line": 184
+        "begin_line": 169,
+        "end_line": 172
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4396,8 +4396,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 136,
-        "end_line": 191
+        "begin_line": 132,
+        "end_line": 179
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4415,8 +4415,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 136,
-        "end_line": 191
+        "begin_line": 132,
+        "end_line": 179
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4435,7 +4435,7 @@
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
         "begin_line": 67,
-        "end_line": 194
+        "end_line": 182
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4625,8 +4625,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 88,
-        "end_line": 98
+        "begin_line": 87,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4644,8 +4644,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 88,
-        "end_line": 98
+        "begin_line": 87,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4663,8 +4663,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 77,
-        "end_line": 98
+        "begin_line": 76,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4680,8 +4680,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 129,
-        "end_line": 132
+        "begin_line": 127,
+        "end_line": 129
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4699,8 +4699,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 129,
-        "end_line": 132
+        "begin_line": 127,
+        "end_line": 129
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4718,8 +4718,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 141,
-        "end_line": 144
+        "begin_line": 134,
+        "end_line": 137
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4737,8 +4737,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 141,
-        "end_line": 144
+        "begin_line": 134,
+        "end_line": 137
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4756,8 +4756,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 151,
-        "end_line": 167
+        "begin_line": 143,
+        "end_line": 157
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4775,8 +4775,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 151,
-        "end_line": 167
+        "begin_line": 143,
+        "end_line": 157
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4794,8 +4794,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 180,
-        "end_line": 184
+        "begin_line": 169,
+        "end_line": 172
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4813,8 +4813,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 180,
-        "end_line": 184
+        "begin_line": 169,
+        "end_line": 172
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4832,8 +4832,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 136,
-        "end_line": 191
+        "begin_line": 132,
+        "end_line": 179
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4851,8 +4851,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 136,
-        "end_line": 191
+        "begin_line": 132,
+        "end_line": 179
       },
       "is_opaque": false,
       "can_fail": true,
@@ -4871,7 +4871,7 @@
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
         "begin_line": 67,
-        "end_line": 194
+        "end_line": 182
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5061,8 +5061,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 88,
-        "end_line": 98
+        "begin_line": 87,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5080,8 +5080,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 88,
-        "end_line": 98
+        "begin_line": 87,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5099,8 +5099,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 77,
-        "end_line": 98
+        "begin_line": 76,
+        "end_line": 97
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5116,8 +5116,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 129,
-        "end_line": 132
+        "begin_line": 127,
+        "end_line": 129
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5135,8 +5135,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 129,
-        "end_line": 132
+        "begin_line": 127,
+        "end_line": 129
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5154,8 +5154,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 141,
-        "end_line": 144
+        "begin_line": 134,
+        "end_line": 137
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5173,8 +5173,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 141,
-        "end_line": 144
+        "begin_line": 134,
+        "end_line": 137
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5192,8 +5192,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 151,
-        "end_line": 167
+        "begin_line": 143,
+        "end_line": 157
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5211,8 +5211,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 151,
-        "end_line": 167
+        "begin_line": 143,
+        "end_line": 157
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5230,8 +5230,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 180,
-        "end_line": 184
+        "begin_line": 169,
+        "end_line": 172
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5249,8 +5249,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 180,
-        "end_line": 184
+        "begin_line": 169,
+        "end_line": 172
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5268,8 +5268,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 136,
-        "end_line": 191
+        "begin_line": 132,
+        "end_line": 179
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5287,8 +5287,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
-        "begin_line": 136,
-        "end_line": 191
+        "begin_line": 132,
+        "end_line": 179
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5307,7 +5307,7 @@
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
         "begin_line": 67,
-        "end_line": 194
+        "end_line": 182
       },
       "is_opaque": false,
       "can_fail": true,
@@ -37477,7 +37477,7 @@
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
         "begin_line": 64,
-        "end_line": 195
+        "end_line": 183
       },
       "impl_trait_def_id": 9,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimeMultiscalarMul",
@@ -37492,7 +37492,7 @@
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
         "begin_line": 64,
-        "end_line": 195
+        "end_line": 183
       },
       "impl_trait_def_id": 9,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimeMultiscalarMul",
@@ -37507,7 +37507,7 @@
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
         "begin_line": 64,
-        "end_line": 195
+        "end_line": 183
       },
       "impl_trait_def_id": 9,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimeMultiscalarMul",
@@ -37522,7 +37522,7 @@
       "source": {
         "file": "curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs",
         "begin_line": 64,
-        "end_line": 195
+        "end_line": 183
       },
       "impl_trait_def_id": 9,
       "impl_trait_rust_name": "curve25519_dalek::traits::VartimeMultiscalarMul",
