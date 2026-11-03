@@ -9,7 +9,7 @@ diff --git a/curve25519-dalek/src/edwards.rs b/curve25519-dalek/src/edwards.rs
 index 2a75012..5b2a9ef 100644
 --- a/curve25519-dalek/src/edwards.rs
 +++ b/curve25519-dalek/src/edwards.rs
-@@ -592,23 +592,26 @@ pub fn to_montgomery(&self) -> MontgomeryPoint {
+@@ -592,23 +592,28 @@ pub fn to_montgomery(&self) -> MontgomeryPoint {
      /// Converts a large batch of points to Edwards at once. This has the same
      /// behavior on identity elements as [`Self::to_montgomery`].
      #[cfg(feature = "alloc")]
@@ -27,12 +27,12 @@ index 2a75012..5b2a9ef 100644
          FieldElement::invert_batch_alloc(&mut denominators);
  
          // Now compute the Montgomery u coordinate for every point
--        let mut ret = Vec::with_capacity(eds.len());
+         let mut ret = Vec::with_capacity(eds.len());
 -        for (ed, d) in eds.iter().zip(denominators.iter()) {
--            let u = &(&ed.Z + &ed.Y) * d;
-+        let mut ret = Vec::with_capacity(eds.len());
 +        for i in 0..eds.len() {
-+            let u = &(&eds[i].Z + &eds[i].Y) * &denominators[i];
++            let ed = &eds[i];
++            let d = &denominators[i];
+             let u = &(&ed.Z + &ed.Y) * d;
              ret.push(MontgomeryPoint(u.to_bytes()));
          }
  
