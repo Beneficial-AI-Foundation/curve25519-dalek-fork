@@ -61,8 +61,8 @@ open ControlFlow
   | none => ok (done ret)
   | some i =>
     let ep ← Slice.index_usize eds i
-    let fe ← B.add (Zf ep) (Yf ep)
     let fe1 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice B.F) denominators i
+    let fe ← B.add (Zf ep) (Yf ep)
     let u ← B.mul fe fe1
     let a ← B.toBytes u
     let ret1 ← alloc.vec.Vec.push ret a
@@ -176,7 +176,6 @@ private theorem tmbLoop1_spec (hadd : B.AddSpec) (hmul : B.MulSpec) (htb : B.ToB
       subst hnext
       step as ⟨ep, hep⟩
       obtain ⟨hZ, hY⟩ := hep ▸ heds it.start.val (by scalar_tac)
-      step with hadd (Zf ep) (Yf ep) hZ hY as ⟨fe, hfe, hfeb⟩
       have hik : it.start.val < eds.length := by scalar_tac
       obtain ⟨hdk, hdkb⟩ := hden it.start.val hik
       have hfe1' : den.val[it.start.val]! = den[it.start.val]! := rfl
@@ -184,6 +183,7 @@ private theorem tmbLoop1_spec (hadd : B.AddSpec) (hmul : B.MulSpec) (htb : B.ToB
       have hfe1e : fe1 = den[it.start.val]! := by
         rw [hfe1, ← hfe1', getElem!_pos]
       rw [← hfe1e] at hdk hdkb
+      step with hadd (Zf ep) (Yf ep) hZ hY as ⟨fe, hfe, hfeb⟩
       step with hmul fe fe1 (B.sum2_mulIn hfeb) (B.red_mulIn hdkb) as ⟨u, hu, hub⟩
       step with htb u as ⟨a, ha⟩
       step as ⟨d1, hd1⟩
