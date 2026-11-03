@@ -14,6 +14,7 @@ import Proofs.Backend.Serial.U64.Field.One
 import Proofs.Field.Invert
 import Proofs.Field.IsZero
 import Proofs.Helpers.Field
+import Proofs.Helpers.Iterator
 import Proofs.Helpers.Array
 import Proofs.Helpers.ZMod
 import Proofs.Backend.Serial.U32.Field.ConditionalAssign
@@ -148,34 +149,31 @@ private def Done (x r : FieldElement51) : Prop :=
   ((x.asNat : ZMod p) = 0 → r = x) ∧
   ((x.asNat : ZMod p) ≠ 0 → (r.asNat : ZMod p) * x.asNat = 1 ∧ r.LimbsLt 52)
 
-/-- One step of the second loop: input `k - 1` is replaced by its inverse, unless zero, and `acc`
-becomes the inverse of the product before `k - 1`. -/
+/-- One step of the second loop replaces the last unchecked input by its inverse, unless zero,
+and updates `acc` to the inverse of the preceding prefix product. -/
 private theorem internal_invert_batch_loop1_body_spec
     (inputs0 inputs scratch : Slice FieldElement51) (acc : FieldElement51)
-    (it : core.ops.range.Range Usize)
-    (hlt : it.start.val < it.end.val) (hend : it.end.val = inputs0.length)
+    (it : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (hlt : it.iter.start.val < it.iter.end.val) (hend : it.iter.end.val ≤ inputs0.length)
     (hlen : inputs.length = inputs0.length)
     (hinputs : ∀ k < inputs0.length, (inputs0[k]!).LimbsLt 54)
     (hscratch : ∀ k < inputs0.length, IsPre inputs0 scratch[k]! k)
     (hslen : scratch.length = inputs0.length)
-    (hacc : (acc.asNat : ZMod p) * pre inputs0 (inputs0.length - it.start.val) = 1)
+    (hacc : (acc.asNat : ZMod p) * pre inputs0 it.iter.end.val = 1)
     (haccb : acc.LimbsLt 54)
-    (hlow : ∀ j < inputs0.length - it.start.val, inputs[j]! = inputs0[j]!) :
+    (hlow : ∀ j < it.iter.end.val, inputs[j]! = inputs0[j]!) :
     internal_invert_batch_loop1.body it inputs scratch acc ⦃ r =>
       ∃ fe acc1 k1 it1, r = .cont (it1, inputs.set k1 fe, scratch, acc1) ∧
-        k1.val + 1 = inputs0.length - it.start.val ∧
-        it1.start.val = it.start.val + 1 ∧ it1.end = it.end ∧
+        k1.val + 1 = it.iter.end.val ∧
+        it1.iter.start = it.iter.start ∧ it1.iter.end = k1 ∧
         (acc1.asNat : ZMod p) * pre inputs0 k1.val = 1 ∧ (acc1.LimbsLt 54) ∧
         Done inputs0[k1.val]! fe ⦄ := by
   unfold internal_invert_batch_loop1.body
-  step with core.iter.range.IteratorRange.next_Usize_some_spec
-    as ⟨o, it1, ho, hstart1, hend1⟩
+  step with core.iter.adapters.rev.Rev.next_Usize_some_spec
+    as ⟨o, it1, k1, ho, hkk, hstart1, hend1⟩
   subst ho
-  step as ⟨last, hlast⟩
-  step as ⟨k1, hk1⟩
-  have hkk : k1.val + 1 = inputs0.length - it.start.val := by scalar_tac
   have hk1' : k1.val < inputs0.length := by scalar_tac
-  have hk1k : k1.val < inputs0.length - it.start.val := by omega
+  have hk1k : k1.val < it.iter.end.val := by omega
   step as ⟨fe, back, hfe, hback⟩
   step as ⟨fe1, scratch_back, hfe1, hscratch_back⟩
   have hfe' : fe = inputs0[k1.val]! := by
@@ -230,53 +228,51 @@ private theorem done_set {inputs0 s : Slice FieldElement51} {fe : FieldElement51
 @[local step]
 private theorem internal_invert_batch_loop1_spec (inputs0 inputs scratch : Slice FieldElement51)
     (acc : FieldElement51)
-    (it : core.ops.range.Range Usize) (hend : it.end.val = inputs0.length)
-    (hk : it.start.val ≤ it.end.val)
+    (it : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (hstart : it.iter.start.val = 0) (hk : it.iter.end.val ≤ inputs0.length)
     (hlen : inputs.length = inputs0.length)
     (hinputs : ∀ k < inputs0.length, (inputs0[k]!).LimbsLt 54)
     (hscratch : ∀ k < inputs0.length, IsPre inputs0 scratch[k]! k)
     (hslen : scratch.length = inputs0.length)
-    (hacc : (acc.asNat : ZMod p) * pre inputs0 (inputs0.length - it.start.val) = 1)
+    (hacc : (acc.asNat : ZMod p) * pre inputs0 it.iter.end.val = 1)
     (haccb : acc.LimbsLt 54)
-    (hlow : ∀ j < (inputs0.length - it.start.val), inputs[j]! = inputs0[j]!)
+    (hlow : ∀ j < it.iter.end.val, inputs[j]! = inputs0[j]!)
     (hhigh : ∀ j < inputs0.length,
-      inputs0.length - it.start.val ≤ j → Done inputs0[j]! inputs[j]!) :
+      it.iter.end.val ≤ j → Done inputs0[j]! inputs[j]!) :
     internal_invert_batch_loop1 it inputs scratch acc ⦃ (r _scratch : Slice FieldElement51) =>
       r.length = inputs0.length ∧ ∀ j < inputs0.length, Done inputs0[j]! r[j]! ⦄ := by
   unfold internal_invert_batch_loop1
-  apply loop.spec_decr_nat (measure := fun (it, _, _, _) => it.end.val - it.start.val)
-    (inv := fun (it, s, sc, a) => it.end.val = inputs0.length ∧
-      it.start.val ≤ it.end.val ∧ s.length = inputs0.length ∧ sc = scratch ∧
-      (a.asNat : ZMod p) * pre inputs0 (inputs0.length - it.start.val) = 1 ∧
-      a.LimbsLt 54 ∧
-      (∀ j < inputs0.length - it.start.val, s[j]! = inputs0[j]!) ∧
-      ∀ j < inputs0.length, inputs0.length - it.start.val ≤ j → Done inputs0[j]! s[j]!)
-  · rintro ⟨it', s, sc, a⟩ ⟨hend', hk', hsl, hsc, ha, hab, hl, hh⟩
+  apply loop.spec_decr_nat (measure := fun (it, _, _, _) => it.iter.end.val)
+    (inv := fun (it, s, sc, a) => it.iter.start.val = 0 ∧
+      it.iter.end.val ≤ inputs0.length ∧ s.length = inputs0.length ∧ sc = scratch ∧
+      (a.asNat : ZMod p) * pre inputs0 it.iter.end.val = 1 ∧ a.LimbsLt 54 ∧
+      (∀ j < it.iter.end.val, s[j]! = inputs0[j]!) ∧
+      ∀ j < inputs0.length, it.iter.end.val ≤ j → Done inputs0[j]! s[j]!)
+  · rintro ⟨it', s, sc, a⟩ ⟨hst, hk', hsl, hsc, ha, hab, hl, hh⟩
     subst sc
     dsimp only
-    by_cases hlt : it'.start.val < it'.end.val
-    · apply spec_mono (internal_invert_batch_loop1_body_spec inputs0 s scratch a it' hlt hend'
+    by_cases hlt : it'.iter.start.val < it'.iter.end.val
+    · apply spec_mono (internal_invert_batch_loop1_body_spec inputs0 s scratch a it' hlt hk'
         hsl hinputs hscratch hslen ha hab hl)
       rintro r ⟨fe, acc1, k1, it1, rfl, hkk, hstart1, hend1, hacc1, hacc1b, hfe⟩
       have hk1 : k1.val < s.length := by omega
       obtain ⟨hl1, hh1⟩ := done_set hkk hk1 hl hh hfe
-      have hboundary : inputs0.length - it1.start.val = k1.val := by omega
-      refine ⟨⟨by simpa only [hend1] using hend', by scalar_tac,
+      refine ⟨⟨by simpa only [hstart1] using hst, by scalar_tac,
         by rw [Slice.set_length, hsl], rfl, ?_, hacc1b, ?_, ?_⟩, ?_⟩
-      · simpa only [hboundary] using hacc1
-      · simpa only [hboundary] using hl1
-      · simpa only [hboundary] using hh1
+      · simpa only [hend1] using hacc1
+      · simpa only [hend1] using hl1
+      · simpa only [hend1] using hh1
       · dsimp only
-        rw [hstart1, hend1]
+        rw [hend1]
         omega
     · unfold internal_invert_batch_loop1.body
-      step with core.iter.range.IteratorRange.next_Usize_none_spec as ⟨o, it1, ho, hit1⟩
+      step with core.iter.adapters.rev.Rev.next_Usize_none_spec as ⟨o, it1, ho⟩
       subst ho
       simp only [WP.spec_ok]
-      have hk0 : inputs0.length - it'.start.val = 0 := by omega
+      have hk0 : it'.iter.end.val = 0 := by omega
       rw [hk0] at hh
       exact ⟨hsl, fun j hj => hh j hj (Nat.zero_le j)⟩
-  · exact ⟨hend, hk, hlen, rfl, hacc, haccb, hlow, hhigh⟩
+  · exact ⟨hstart, hk, hlen, rfl, hacc, haccb, hlow, hhigh⟩
 
 @[step]
 theorem internal_invert_batch_spec (inputs scratch : Slice FieldElement51)
@@ -319,11 +315,12 @@ theorem internal_invert_batch_spec (inputs scratch : Slice FieldElement51)
     have h := ZMod.natCast_eq_natCast_of_mod_eq (hinv1 hne)
     push_cast at h
     rw [hn, ← hacc1, h]
-  step with internal_invert_batch_loop1_spec inputs inputs scratch1 acc2
-    { start := 0#usize, «end» := inputs.len } hn (by simp) rfl
-    hinputs hs1 hs1len (by simpa [hn] using hacc2)
+  step as ⟨rev, hrev⟩
+  step with internal_invert_batch_loop1_spec inputs inputs scratch1 acc2 rev
+    (by simp [hrev]) (by simp [hrev]) rfl
+    hinputs hs1 hs1len (by simpa [hrev] using hacc2)
     (fun j hj => lt_trans (hacc2b j hj) (by norm_num))
-    (fun j _ => rfl) (fun j hj hkj => absurd hj (by simpa using Nat.not_lt.mpr hkj))
+    (fun j _ => rfl) (fun j hj hkj => absurd hj (by simpa [hrev] using Nat.not_lt.mpr hkj))
     as ⟨r, scratch2, hrlen, hr⟩
   refine ⟨hrlen, fun i hi => ⟨fun h => (hr i hi).1 (ZMod.natCast_eq_zero_iff_mod.mpr h),
     fun h => ?_⟩⟩
@@ -457,34 +454,31 @@ private def Done (x r : FieldElement2625) : Prop :=
   ((x.asNat : ZMod p) = 0 → r = x) ∧
   ((x.asNat : ZMod p) ≠ 0 → (r.asNat : ZMod p) * x.asNat = 1 ∧ r.LimbsLt 26)
 
-/-- One step of the second loop: input `k - 1` is replaced by its inverse, unless zero, and `acc`
-becomes the inverse of the product before `k - 1`. -/
+/-- One step of the second loop replaces the last unchecked input by its inverse, unless zero,
+and updates `acc` to the inverse of the preceding prefix product. -/
 private theorem internal_invert_batch_loop1_body_spec
     (inputs0 inputs scratch : Slice FieldElement2625) (acc : FieldElement2625)
-    (it : core.ops.range.Range Usize)
-    (hlt : it.start.val < it.end.val) (hend : it.end.val = inputs0.length)
+    (it : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (hlt : it.iter.start.val < it.iter.end.val) (hend : it.iter.end.val ≤ inputs0.length)
     (hlen : inputs.length = inputs0.length)
     (hinputs : ∀ k < inputs0.length, (inputs0[k]!).LimbsLt 27)
     (hscratch : ∀ k < inputs0.length, IsPre inputs0 scratch[k]! k)
     (hslen : scratch.length = inputs0.length)
-    (hacc : (acc.asNat : ZMod p) * pre inputs0 (inputs0.length - it.start.val) = 1)
+    (hacc : (acc.asNat : ZMod p) * pre inputs0 it.iter.end.val = 1)
     (haccb : acc.LimbsLt 27)
-    (hlow : ∀ j < inputs0.length - it.start.val, inputs[j]! = inputs0[j]!) :
+    (hlow : ∀ j < it.iter.end.val, inputs[j]! = inputs0[j]!) :
     internal_invert_batch_loop1.body it inputs scratch acc ⦃ r =>
       ∃ fe acc1 k1 it1, r = .cont (it1, inputs.set k1 fe, scratch, acc1) ∧
-        k1.val + 1 = inputs0.length - it.start.val ∧
-        it1.start.val = it.start.val + 1 ∧ it1.end = it.end ∧
+        k1.val + 1 = it.iter.end.val ∧
+        it1.iter.start = it.iter.start ∧ it1.iter.end = k1 ∧
         (acc1.asNat : ZMod p) * pre inputs0 k1.val = 1 ∧ (acc1.LimbsLt 27) ∧
         Done inputs0[k1.val]! fe ⦄ := by
   unfold internal_invert_batch_loop1.body
-  step with core.iter.range.IteratorRange.next_Usize_some_spec
-    as ⟨o, it1, ho, hstart1, hend1⟩
+  step with core.iter.adapters.rev.Rev.next_Usize_some_spec
+    as ⟨o, it1, k1, ho, hkk, hstart1, hend1⟩
   subst ho
-  step as ⟨last, hlast⟩
-  step as ⟨k1, hk1⟩
-  have hkk : k1.val + 1 = inputs0.length - it.start.val := by scalar_tac
   have hk1' : k1.val < inputs0.length := by scalar_tac
-  have hk1k : k1.val < inputs0.length - it.start.val := by omega
+  have hk1k : k1.val < it.iter.end.val := by omega
   step as ⟨fe, back, hfe, hback⟩
   step as ⟨fe1, scratch_back, hfe1, hscratch_back⟩
   have hfe' : fe = inputs0[k1.val]! := by
@@ -539,53 +533,51 @@ private theorem done_set {inputs0 s : Slice FieldElement2625} {fe : FieldElement
 @[local step]
 private theorem internal_invert_batch_loop1_spec (inputs0 inputs scratch : Slice FieldElement2625)
     (acc : FieldElement2625)
-    (it : core.ops.range.Range Usize) (hend : it.end.val = inputs0.length)
-    (hk : it.start.val ≤ it.end.val)
+    (it : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
+    (hstart : it.iter.start.val = 0) (hk : it.iter.end.val ≤ inputs0.length)
     (hlen : inputs.length = inputs0.length)
     (hinputs : ∀ k < inputs0.length, (inputs0[k]!).LimbsLt 27)
     (hscratch : ∀ k < inputs0.length, IsPre inputs0 scratch[k]! k)
     (hslen : scratch.length = inputs0.length)
-    (hacc : (acc.asNat : ZMod p) * pre inputs0 (inputs0.length - it.start.val) = 1)
+    (hacc : (acc.asNat : ZMod p) * pre inputs0 it.iter.end.val = 1)
     (haccb : acc.LimbsLt 27)
-    (hlow : ∀ j < (inputs0.length - it.start.val), inputs[j]! = inputs0[j]!)
+    (hlow : ∀ j < it.iter.end.val, inputs[j]! = inputs0[j]!)
     (hhigh : ∀ j < inputs0.length,
-      inputs0.length - it.start.val ≤ j → Done inputs0[j]! inputs[j]!) :
+      it.iter.end.val ≤ j → Done inputs0[j]! inputs[j]!) :
     internal_invert_batch_loop1 it inputs scratch acc ⦃ (r _scratch : Slice FieldElement2625) =>
       r.length = inputs0.length ∧ ∀ j < inputs0.length, Done inputs0[j]! r[j]! ⦄ := by
   unfold internal_invert_batch_loop1
-  apply loop.spec_decr_nat (measure := fun (it, _, _, _) => it.end.val - it.start.val)
-    (inv := fun (it, s, sc, a) => it.end.val = inputs0.length ∧
-      it.start.val ≤ it.end.val ∧ s.length = inputs0.length ∧ sc = scratch ∧
-      (a.asNat : ZMod p) * pre inputs0 (inputs0.length - it.start.val) = 1 ∧
-      a.LimbsLt 27 ∧
-      (∀ j < inputs0.length - it.start.val, s[j]! = inputs0[j]!) ∧
-      ∀ j < inputs0.length, inputs0.length - it.start.val ≤ j → Done inputs0[j]! s[j]!)
-  · rintro ⟨it', s, sc, a⟩ ⟨hend', hk', hsl, hsc, ha, hab, hl, hh⟩
+  apply loop.spec_decr_nat (measure := fun (it, _, _, _) => it.iter.end.val)
+    (inv := fun (it, s, sc, a) => it.iter.start.val = 0 ∧
+      it.iter.end.val ≤ inputs0.length ∧ s.length = inputs0.length ∧ sc = scratch ∧
+      (a.asNat : ZMod p) * pre inputs0 it.iter.end.val = 1 ∧ a.LimbsLt 27 ∧
+      (∀ j < it.iter.end.val, s[j]! = inputs0[j]!) ∧
+      ∀ j < inputs0.length, it.iter.end.val ≤ j → Done inputs0[j]! s[j]!)
+  · rintro ⟨it', s, sc, a⟩ ⟨hst, hk', hsl, hsc, ha, hab, hl, hh⟩
     subst sc
     dsimp only
-    by_cases hlt : it'.start.val < it'.end.val
-    · apply spec_mono (internal_invert_batch_loop1_body_spec inputs0 s scratch a it' hlt hend'
+    by_cases hlt : it'.iter.start.val < it'.iter.end.val
+    · apply spec_mono (internal_invert_batch_loop1_body_spec inputs0 s scratch a it' hlt hk'
         hsl hinputs hscratch hslen ha hab hl)
       rintro r ⟨fe, acc1, k1, it1, rfl, hkk, hstart1, hend1, hacc1, hacc1b, hfe⟩
       have hk1 : k1.val < s.length := by omega
       obtain ⟨hl1, hh1⟩ := done_set hkk hk1 hl hh hfe
-      have hboundary : inputs0.length - it1.start.val = k1.val := by omega
-      refine ⟨⟨by simpa only [hend1] using hend', by scalar_tac,
+      refine ⟨⟨by simpa only [hstart1] using hst, by scalar_tac,
         by rw [Slice.set_length, hsl], rfl, ?_, hacc1b, ?_, ?_⟩, ?_⟩
-      · simpa only [hboundary] using hacc1
-      · simpa only [hboundary] using hl1
-      · simpa only [hboundary] using hh1
+      · simpa only [hend1] using hacc1
+      · simpa only [hend1] using hl1
+      · simpa only [hend1] using hh1
       · dsimp only
-        rw [hstart1, hend1]
+        rw [hend1]
         omega
     · unfold internal_invert_batch_loop1.body
-      step with core.iter.range.IteratorRange.next_Usize_none_spec as ⟨o, it1, ho, hit1⟩
+      step with core.iter.adapters.rev.Rev.next_Usize_none_spec as ⟨o, it1, ho⟩
       subst ho
       simp only [WP.spec_ok]
-      have hk0 : inputs0.length - it'.start.val = 0 := by omega
+      have hk0 : it'.iter.end.val = 0 := by omega
       rw [hk0] at hh
       exact ⟨hsl, fun j hj => hh j hj (Nat.zero_le j)⟩
-  · exact ⟨hend, hk, hlen, rfl, hacc, haccb, hlow, hhigh⟩
+  · exact ⟨hstart, hk, hlen, rfl, hacc, haccb, hlow, hhigh⟩
 
 @[step]
 theorem internal_invert_batch_spec (inputs scratch : Slice FieldElement2625)
@@ -628,11 +620,12 @@ theorem internal_invert_batch_spec (inputs scratch : Slice FieldElement2625)
     have h := ZMod.natCast_eq_natCast_of_mod_eq (hinv1 hne)
     push_cast at h
     rw [hn, ← hacc1, h]
-  step with internal_invert_batch_loop1_spec inputs inputs scratch1 acc2
-    { start := 0#usize, «end» := inputs.len } hn (by simp) rfl
-    hinputs hs1 hs1len (by simpa [hn] using hacc2)
+  step as ⟨rev, hrev⟩
+  step with internal_invert_batch_loop1_spec inputs inputs scratch1 acc2 rev
+    (by simp [hrev]) (by simp [hrev]) rfl
+    hinputs hs1 hs1len (by simpa [hrev] using hacc2)
     (fun j hj => lt_trans (hacc2b j hj) (by norm_num))
-    (fun j _ => rfl) (fun j hj hkj => absurd hj (by simpa using Nat.not_lt.mpr hkj))
+    (fun j _ => rfl) (fun j hj hkj => absurd hj (by simpa [hrev] using Nat.not_lt.mpr hkj))
     as ⟨r, scratch2, hrlen, hr⟩
   refine ⟨hrlen, fun i hi => ⟨fun h => (hr i hi).1 (ZMod.natCast_eq_zero_iff_mod.mpr h),
     fun h => ?_⟩⟩

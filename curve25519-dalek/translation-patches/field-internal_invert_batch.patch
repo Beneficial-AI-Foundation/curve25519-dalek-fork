@@ -9,7 +9,7 @@ diff --git a/curve25519-dalek/src/field.rs b/curve25519-dalek/src/field.rs
 index 8924166..4c7263e 100644
 --- a/curve25519-dalek/src/field.rs
 +++ b/curve25519-dalek/src/field.rs
-@@ -232,51 +232,56 @@ pub(crate) fn invert_batch_alloc(inputs: &mut [FieldElement]) {
+@@ -232,51 +232,55 @@ pub(crate) fn invert_batch_alloc(inputs: &mut [FieldElement]) {
      /// Given a slice of pub(crate)lic `FieldElements`, replace each with its inverse. `scratch` can
      /// contain anything, so long as its length is the same as `inputs`.
      ///
@@ -47,8 +47,7 @@ index 8924166..4c7263e 100644
          // Pass through the vector backwards to compute the inverses
          // in place
 -        for (input, scratch) in inputs.iter_mut().rev().zip(scratch.iter_mut().rev()) {
-+        for i in 0..inputs.len() {
-+            let k = inputs.len() - 1 - i;
++        for k in (0..inputs.len()).rev() {
 +            let input = &mut inputs[k];
 +            let scratch = &mut scratch[k];
              let tmp = &acc * input;

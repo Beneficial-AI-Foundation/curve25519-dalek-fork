@@ -89,7 +89,7 @@
       "reducible": false
     },
     {
-      "def_id": 850,
+      "def_id": 859,
       "lean_name": "alloc.vec.Vec.is_empty",
       "lean_file": "Curve25519Dalek/FunsExternal_Template.lean",
       "rust_name": "alloc::vec::{alloc::vec::Vec<T>}::is_empty",
@@ -565,7 +565,7 @@
       "reducible": false
     },
     {
-      "def_id": 828,
+      "def_id": 837,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«x86_64-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::x86_64-tables}::clone",
@@ -582,7 +582,7 @@
       "reducible": false
     },
     {
-      "def_id": 1768,
+      "def_id": 1777,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«x86_64-no-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::x86_64-no-tables}::clone",
@@ -599,7 +599,7 @@
       "reducible": false
     },
     {
-      "def_id": 2814,
+      "def_id": 2823,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«i686-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::i686-tables}::clone",
@@ -616,7 +616,7 @@
       "reducible": false
     },
     {
-      "def_id": 3754,
+      "def_id": 3763,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«i686-no-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::i686-no-tables}::clone",
@@ -633,7 +633,7 @@
       "reducible": false
     },
     {
-      "def_id": 829,
+      "def_id": 838,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«x86_64-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::CompletedPoint::x86_64-tables}::clone",
@@ -650,7 +650,7 @@
       "reducible": false
     },
     {
-      "def_id": 1769,
+      "def_id": 1778,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«x86_64-no-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::CompletedPoint::x86_64-no-tables}::clone",
@@ -667,7 +667,7 @@
       "reducible": false
     },
     {
-      "def_id": 2815,
+      "def_id": 2824,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«i686-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::CompletedPoint::i686-tables}::clone",
@@ -684,7 +684,7 @@
       "reducible": false
     },
     {
-      "def_id": 3755,
+      "def_id": 3764,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«i686-no-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::CompletedPoint::i686-no-tables}::clone",
@@ -718,7 +718,7 @@
       "reducible": false
     },
     {
-      "def_id": 1770,
+      "def_id": 1779,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::clone",
@@ -752,7 +752,7 @@
       "reducible": false
     },
     {
-      "def_id": 3756,
+      "def_id": 3765,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::clone",
@@ -837,7 +837,7 @@
       "reducible": false
     },
     {
-      "def_id": 831,
+      "def_id": 840,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-tables».Insts.«CoreCmpPartialEqAffineNielsPointx86_64-tables».eq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::PartialEq<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-tables> for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-tables}::eq",
@@ -854,7 +854,7 @@
       "reducible": false
     },
     {
-      "def_id": 1772,
+      "def_id": 1781,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.«CoreCmpPartialEqAffineNielsPointx86_64-no-tables».eq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::PartialEq<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::eq",
@@ -956,7 +956,7 @@
       "reducible": false
     },
     {
-      "def_id": 2817,
+      "def_id": 2826,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-tables».Insts.«CoreCmpPartialEqAffineNielsPointi686-tables».eq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::PartialEq<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-tables> for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-tables}::eq",
@@ -973,7 +973,7 @@
       "reducible": false
     },
     {
-      "def_id": 3758,
+      "def_id": 3767,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.«CoreCmpPartialEqAffineNielsPointi686-no-tables».eq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::PartialEq<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables> for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::eq",
@@ -1007,7 +1007,7 @@
       "reducible": false
     },
     {
-      "def_id": 832,
+      "def_id": 841,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-tables».Insts.ZeroizeZeroize.zeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-tables}::zeroize",
@@ -1024,7 +1024,7 @@
       "reducible": false
     },
     {
-      "def_id": 1773,
+      "def_id": 1782,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize.zeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::zeroize",
@@ -1058,7 +1058,7 @@
       "reducible": false
     },
     {
-      "def_id": 2818,
+      "def_id": 2827,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-tables».Insts.ZeroizeZeroize.zeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-tables}::zeroize",
@@ -1075,7 +1075,7 @@
       "reducible": false
     },
     {
-      "def_id": 3759,
+      "def_id": 3768,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.ZeroizeZeroize.zeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::zeroize",
@@ -1092,7 +1092,7 @@
       "reducible": false
     },
     {
-      "def_id": 833,
+      "def_id": 842,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::clone",
@@ -1109,7 +1109,7 @@
       "reducible": false
     },
     {
-      "def_id": 1774,
+      "def_id": 1783,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::clone",
@@ -1126,7 +1126,7 @@
       "reducible": false
     },
     {
-      "def_id": 2819,
+      "def_id": 2828,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::clone",
@@ -1143,7 +1143,7 @@
       "reducible": false
     },
     {
-      "def_id": 3760,
+      "def_id": 3769,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.CoreCloneClone.clone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::clone",
@@ -1160,7 +1160,7 @@
       "reducible": false
     },
     {
-      "def_id": 834,
+      "def_id": 843,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.ZeroizeZeroize.zeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::zeroize",
@@ -1177,7 +1177,7 @@
       "reducible": false
     },
     {
-      "def_id": 1775,
+      "def_id": 1784,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize.zeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::zeroize",
@@ -1194,7 +1194,7 @@
       "reducible": false
     },
     {
-      "def_id": 2820,
+      "def_id": 2829,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.ZeroizeZeroize.zeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::zeroize",
@@ -1211,7 +1211,7 @@
       "reducible": false
     },
     {
-      "def_id": 3761,
+      "def_id": 3770,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.ZeroizeZeroize.zeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::zeroize",
@@ -1330,7 +1330,7 @@
       "reducible": false
     },
     {
-      "def_id": 835,
+      "def_id": 844,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::identity",
@@ -1347,7 +1347,7 @@
       "reducible": false
     },
     {
-      "def_id": 1776,
+      "def_id": 1785,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::identity",
@@ -1364,7 +1364,7 @@
       "reducible": false
     },
     {
-      "def_id": 2821,
+      "def_id": 2830,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::identity",
@@ -1381,7 +1381,7 @@
       "reducible": false
     },
     {
-      "def_id": 3762,
+      "def_id": 3771,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::identity",
@@ -1398,7 +1398,7 @@
       "reducible": false
     },
     {
-      "def_id": 836,
+      "def_id": 845,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.CoreDefaultDefault.default",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::default",
@@ -1415,7 +1415,7 @@
       "reducible": false
     },
     {
-      "def_id": 1777,
+      "def_id": 1786,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.CoreDefaultDefault.default",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::default",
@@ -1432,7 +1432,7 @@
       "reducible": false
     },
     {
-      "def_id": 2822,
+      "def_id": 2831,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.CoreDefaultDefault.default",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::default",
@@ -1449,7 +1449,7 @@
       "reducible": false
     },
     {
-      "def_id": 3763,
+      "def_id": 3772,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.CoreDefaultDefault.default",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::default",
@@ -1483,7 +1483,7 @@
       "reducible": false
     },
     {
-      "def_id": 1778,
+      "def_id": 1787,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::identity",
@@ -1517,7 +1517,7 @@
       "reducible": false
     },
     {
-      "def_id": 3764,
+      "def_id": 3773,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity.identity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::identity",
@@ -1551,7 +1551,7 @@
       "reducible": false
     },
     {
-      "def_id": 1779,
+      "def_id": 1788,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.CoreDefaultDefault.default",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::default",
@@ -1585,7 +1585,7 @@
       "reducible": false
     },
     {
-      "def_id": 3765,
+      "def_id": 3774,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.CoreDefaultDefault.default",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::default",
@@ -2086,7 +2086,7 @@
       "reducible": false
     },
     {
-      "def_id": 838,
+      "def_id": 847,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.SubtleConditionallySelectable.conditional_assign",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::conditional_assign",
@@ -2120,7 +2120,7 @@
       "reducible": false
     },
     {
-      "def_id": 837,
+      "def_id": 846,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.SubtleConditionallySelectable.conditional_select",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::conditional_select",
@@ -2137,7 +2137,7 @@
       "reducible": false
     },
     {
-      "def_id": 1781,
+      "def_id": 1790,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable.conditional_assign",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::conditional_assign",
@@ -2154,7 +2154,7 @@
       "reducible": false
     },
     {
-      "def_id": 1780,
+      "def_id": 1789,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable.conditional_select",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::conditional_select",
@@ -2188,7 +2188,7 @@
       "reducible": false
     },
     {
-      "def_id": 2824,
+      "def_id": 2833,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.SubtleConditionallySelectable.conditional_assign",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::conditional_assign",
@@ -2222,7 +2222,7 @@
       "reducible": false
     },
     {
-      "def_id": 2823,
+      "def_id": 2832,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.SubtleConditionallySelectable.conditional_select",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::conditional_select",
@@ -2239,7 +2239,7 @@
       "reducible": false
     },
     {
-      "def_id": 3767,
+      "def_id": 3776,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.SubtleConditionallySelectable.conditional_assign",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::conditional_assign",
@@ -2256,7 +2256,7 @@
       "reducible": false
     },
     {
-      "def_id": 3766,
+      "def_id": 3775,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.SubtleConditionallySelectable.conditional_select",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::conditional_select",
@@ -2307,7 +2307,7 @@
       "reducible": false
     },
     {
-      "def_id": 1783,
+      "def_id": 1792,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable.conditional_assign",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::conditional_assign",
@@ -2324,7 +2324,7 @@
       "reducible": false
     },
     {
-      "def_id": 1782,
+      "def_id": 1791,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable.conditional_select",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::conditional_select",
@@ -2375,7 +2375,7 @@
       "reducible": false
     },
     {
-      "def_id": 3769,
+      "def_id": 3778,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.SubtleConditionallySelectable.conditional_assign",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::conditional_assign",
@@ -2392,7 +2392,7 @@
       "reducible": false
     },
     {
-      "def_id": 3768,
+      "def_id": 3777,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.SubtleConditionallySelectable.conditional_select",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::conditional_select",
@@ -3012,7 +3012,7 @@
       "reducible": false
     },
     {
-      "def_id": 1784,
+      "def_id": 1793,
       "lean_name": "Curve25519Dalek.«Shared0EdwardsPointx86_64-no-tables».Insts.«CoreOpsArithSubSharedAAffineNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables».sub",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables, curve25519_dalek::backend::serial::curve_models::CompletedPoint::x86_64-no-tables> for &'_1 curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::sub",
@@ -3046,7 +3046,7 @@
       "reducible": false
     },
     {
-      "def_id": 3770,
+      "def_id": 3779,
       "lean_name": "Curve25519Dalek.«Shared0EdwardsPointi686-no-tables».Insts.«CoreOpsArithSubSharedAAffineNielsPointi686-no-tablesCompletedPointi686-no-tables».sub",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables, curve25519_dalek::backend::serial::curve_models::CompletedPoint::i686-no-tables> for &'_1 curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::sub",
@@ -3131,7 +3131,7 @@
       "reducible": false
     },
     {
-      "def_id": 839,
+      "def_id": 848,
       "lean_name": "Curve25519Dalek.«Shared0ProjectiveNielsPointx86_64-tables».Insts.«CoreOpsArithNegProjectiveNielsPointx86_64-tables».neg",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::neg",
@@ -3148,7 +3148,7 @@
       "reducible": false
     },
     {
-      "def_id": 1785,
+      "def_id": 1794,
       "lean_name": "Curve25519Dalek.«Shared0ProjectiveNielsPointx86_64-no-tables».Insts.«CoreOpsArithNegProjectiveNielsPointx86_64-no-tables».neg",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::neg",
@@ -3199,7 +3199,7 @@
       "reducible": false
     },
     {
-      "def_id": 2825,
+      "def_id": 2834,
       "lean_name": "Curve25519Dalek.«Shared0ProjectiveNielsPointi686-tables».Insts.«CoreOpsArithNegProjectiveNielsPointi686-tables».neg",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::neg",
@@ -3216,7 +3216,7 @@
       "reducible": false
     },
     {
-      "def_id": 3771,
+      "def_id": 3780,
       "lean_name": "Curve25519Dalek.«Shared0ProjectiveNielsPointi686-no-tables».Insts.«CoreOpsArithNegProjectiveNielsPointi686-no-tables».neg",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::neg",
@@ -3250,7 +3250,7 @@
       "reducible": false
     },
     {
-      "def_id": 1786,
+      "def_id": 1795,
       "lean_name": "Curve25519Dalek.«Shared0AffineNielsPointx86_64-no-tables».Insts.«CoreOpsArithNegAffineNielsPointx86_64-no-tables».neg",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::neg",
@@ -3284,7 +3284,7 @@
       "reducible": false
     },
     {
-      "def_id": 3772,
+      "def_id": 3781,
       "lean_name": "Curve25519Dalek.«Shared0AffineNielsPointi686-no-tables».Insts.«CoreOpsArithNegAffineNielsPointi686-no-tables».neg",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::neg",
@@ -3746,7 +3746,7 @@
       "reducible": false
     },
     {
-      "def_id": 631,
+      "def_id": 632,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -3765,7 +3765,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points"
     },
     {
-      "def_id": 631,
+      "def_id": 632,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -3784,7 +3784,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points"
     },
     {
-      "def_id": 631,
+      "def_id": 632,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-tables».optional_multiscalar_mul.scalars_points",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -4182,7 +4182,7 @@
       "reducible": false
     },
     {
-      "def_id": 1578,
+      "def_id": 1579,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -4201,7 +4201,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points"
     },
     {
-      "def_id": 1578,
+      "def_id": 1579,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -4220,7 +4220,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points"
     },
     {
-      "def_id": 1578,
+      "def_id": 1579,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointx86_64-no-tables».optional_multiscalar_mul.scalars_points",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -4618,7 +4618,7 @@
       "reducible": false
     },
     {
-      "def_id": 2615,
+      "def_id": 2616,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -4637,7 +4637,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points"
     },
     {
-      "def_id": 2615,
+      "def_id": 2616,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -4656,7 +4656,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points"
     },
     {
-      "def_id": 2615,
+      "def_id": 2616,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-tables».optional_multiscalar_mul.scalars_points",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -5054,7 +5054,7 @@
       "reducible": false
     },
     {
-      "def_id": 3562,
+      "def_id": 3563,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -5073,7 +5073,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points"
     },
     {
-      "def_id": 3562,
+      "def_id": 3563,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -5092,7 +5092,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points"
     },
     {
-      "def_id": 3562,
+      "def_id": 3563,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.pippenger.«VartimeMultiscalarMulPippengerEdwardsPointi686-no-tables».optional_multiscalar_mul.scalars_points",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::pippenger::{impl curve25519_dalek::traits::VartimeMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::pippenger::Pippenger}::optional_multiscalar_mul::scalars_points",
@@ -5439,7 +5439,7 @@
       "reducible": false
     },
     {
-      "def_id": 852,
+      "def_id": 861,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -5458,7 +5458,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 852,
+      "def_id": 861,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -5477,7 +5477,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 852,
+      "def_id": 861,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -5549,7 +5549,7 @@
       "reducible": false
     },
     {
-      "def_id": 851,
+      "def_id": 860,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.nafs_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -5568,7 +5568,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.nafs"
     },
     {
-      "def_id": 851,
+      "def_id": 860,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.nafs_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -5587,7 +5587,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.nafs"
     },
     {
-      "def_id": 851,
+      "def_id": 860,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.nafs",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -5604,7 +5604,7 @@
       "reducible": true
     },
     {
-      "def_id": 638,
+      "def_id": 639,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul_loop0_loop0.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul",
@@ -5623,7 +5623,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 638,
+      "def_id": 639,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul_loop0_loop0",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul",
@@ -5642,7 +5642,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 638,
+      "def_id": 639,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul_loop0_loop1.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul",
@@ -5661,7 +5661,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 638,
+      "def_id": 639,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul_loop0_loop1",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul",
@@ -5680,7 +5680,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 638,
+      "def_id": 639,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul_loop0.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul",
@@ -5699,7 +5699,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 638,
+      "def_id": 639,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul_loop0",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul",
@@ -5718,7 +5718,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 638,
+      "def_id": 639,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul",
@@ -5735,7 +5735,7 @@
       "reducible": false
     },
     {
-      "def_id": 637,
+      "def_id": 638,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».is_empty",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::is_empty",
@@ -5752,7 +5752,7 @@
       "reducible": false
     },
     {
-      "def_id": 636,
+      "def_id": 637,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».len",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::len",
@@ -5848,8 +5848,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 288,
-        "end_line": 297
+        "begin_line": 287,
+        "end_line": 296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -5930,7 +5930,7 @@
       "reducible": false
     },
     {
-      "def_id": 848,
+      "def_id": 857,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::new::static_lookup_tables",
@@ -5949,7 +5949,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables"
     },
     {
-      "def_id": 848,
+      "def_id": 857,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::new::static_lookup_tables",
@@ -5968,7 +5968,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables"
     },
     {
-      "def_id": 848,
+      "def_id": 857,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::new::static_lookup_tables",
@@ -5985,7 +5985,7 @@
       "reducible": true
     },
     {
-      "def_id": 635,
+      "def_id": 636,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».new",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::new",
@@ -6091,7 +6091,7 @@
       "reducible": false
     },
     {
-      "def_id": 1799,
+      "def_id": 1808,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -6110,7 +6110,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 1799,
+      "def_id": 1808,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -6129,7 +6129,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 1799,
+      "def_id": 1808,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -6146,7 +6146,7 @@
       "reducible": true
     },
     {
-      "def_id": 1798,
+      "def_id": 1807,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.nafs_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -6165,7 +6165,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.nafs"
     },
     {
-      "def_id": 1798,
+      "def_id": 1807,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.nafs_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -6184,7 +6184,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.nafs"
     },
     {
-      "def_id": 1798,
+      "def_id": 1807,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.nafs",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -6201,7 +6201,7 @@
       "reducible": true
     },
     {
-      "def_id": 1585,
+      "def_id": 1586,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul_loop0_loop0.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul",
@@ -6220,7 +6220,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 1585,
+      "def_id": 1586,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul_loop0_loop0",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul",
@@ -6239,7 +6239,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 1585,
+      "def_id": 1586,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul_loop0_loop1.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul",
@@ -6258,7 +6258,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 1585,
+      "def_id": 1586,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul_loop0_loop1",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul",
@@ -6277,7 +6277,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 1585,
+      "def_id": 1586,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul_loop0.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul",
@@ -6296,7 +6296,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 1585,
+      "def_id": 1586,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul_loop0",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul",
@@ -6315,7 +6315,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 1585,
+      "def_id": 1586,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul",
@@ -6332,7 +6332,7 @@
       "reducible": false
     },
     {
-      "def_id": 1584,
+      "def_id": 1585,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».is_empty",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::is_empty",
@@ -6349,7 +6349,7 @@
       "reducible": false
     },
     {
-      "def_id": 1583,
+      "def_id": 1584,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».len",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::len",
@@ -6438,7 +6438,7 @@
       "reducible": false
     },
     {
-      "def_id": 1795,
+      "def_id": 1804,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::new::static_lookup_tables",
@@ -6457,7 +6457,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables"
     },
     {
-      "def_id": 1795,
+      "def_id": 1804,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::new::static_lookup_tables",
@@ -6476,7 +6476,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables"
     },
     {
-      "def_id": 1795,
+      "def_id": 1804,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::new::static_lookup_tables",
@@ -6493,7 +6493,7 @@
       "reducible": true
     },
     {
-      "def_id": 1582,
+      "def_id": 1583,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».new",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::new",
@@ -6599,7 +6599,7 @@
       "reducible": false
     },
     {
-      "def_id": 2838,
+      "def_id": 2847,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -6618,7 +6618,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 2838,
+      "def_id": 2847,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -6637,7 +6637,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 2838,
+      "def_id": 2847,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -6654,7 +6654,7 @@
       "reducible": true
     },
     {
-      "def_id": 2837,
+      "def_id": 2846,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.nafs_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -6673,7 +6673,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.nafs"
     },
     {
-      "def_id": 2837,
+      "def_id": 2846,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.nafs_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -6692,7 +6692,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.nafs"
     },
     {
-      "def_id": 2837,
+      "def_id": 2846,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.nafs",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -6709,7 +6709,7 @@
       "reducible": true
     },
     {
-      "def_id": 2622,
+      "def_id": 2623,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul_loop0_loop0.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul",
@@ -6728,7 +6728,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 2622,
+      "def_id": 2623,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul_loop0_loop0",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul",
@@ -6747,7 +6747,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 2622,
+      "def_id": 2623,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul_loop0_loop1.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul",
@@ -6766,7 +6766,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 2622,
+      "def_id": 2623,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul_loop0_loop1",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul",
@@ -6785,7 +6785,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 2622,
+      "def_id": 2623,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul_loop0.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul",
@@ -6804,7 +6804,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 2622,
+      "def_id": 2623,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul_loop0",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul",
@@ -6823,7 +6823,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 2622,
+      "def_id": 2623,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul",
@@ -6840,7 +6840,7 @@
       "reducible": false
     },
     {
-      "def_id": 2621,
+      "def_id": 2622,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».is_empty",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::is_empty",
@@ -6857,7 +6857,7 @@
       "reducible": false
     },
     {
-      "def_id": 2620,
+      "def_id": 2621,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».len",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::len",
@@ -6953,8 +6953,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 288,
-        "end_line": 297
+        "begin_line": 287,
+        "end_line": 296
       },
       "is_opaque": false,
       "can_fail": true,
@@ -7035,7 +7035,7 @@
       "reducible": false
     },
     {
-      "def_id": 2834,
+      "def_id": 2843,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::new::static_lookup_tables",
@@ -7054,7 +7054,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables"
     },
     {
-      "def_id": 2834,
+      "def_id": 2843,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::new::static_lookup_tables",
@@ -7073,7 +7073,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables"
     },
     {
-      "def_id": 2834,
+      "def_id": 2843,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::new::static_lookup_tables",
@@ -7090,7 +7090,7 @@
       "reducible": true
     },
     {
-      "def_id": 2619,
+      "def_id": 2620,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».new",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::new",
@@ -7196,7 +7196,7 @@
       "reducible": false
     },
     {
-      "def_id": 3785,
+      "def_id": 3794,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -7215,7 +7215,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 3785,
+      "def_id": 3794,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -7234,7 +7234,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 3785,
+      "def_id": 3794,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::lookup_tables",
@@ -7251,7 +7251,7 @@
       "reducible": true
     },
     {
-      "def_id": 3784,
+      "def_id": 3793,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.nafs_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -7270,7 +7270,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.nafs"
     },
     {
-      "def_id": 3784,
+      "def_id": 3793,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.nafs_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -7289,7 +7289,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.nafs"
     },
     {
-      "def_id": 3784,
+      "def_id": 3793,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.nafs",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::nafs",
@@ -7306,7 +7306,7 @@
       "reducible": true
     },
     {
-      "def_id": 3569,
+      "def_id": 3570,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul_loop0_loop0.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul",
@@ -7325,7 +7325,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 3569,
+      "def_id": 3570,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul_loop0_loop0",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul",
@@ -7344,7 +7344,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 3569,
+      "def_id": 3570,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul_loop0_loop1.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul",
@@ -7363,7 +7363,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 3569,
+      "def_id": 3570,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul_loop0_loop1",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul",
@@ -7382,7 +7382,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 3569,
+      "def_id": 3570,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul_loop0.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul",
@@ -7401,7 +7401,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 3569,
+      "def_id": 3570,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul_loop0",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul",
@@ -7420,7 +7420,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul"
     },
     {
-      "def_id": 3569,
+      "def_id": 3570,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul",
@@ -7437,7 +7437,7 @@
       "reducible": false
     },
     {
-      "def_id": 3568,
+      "def_id": 3569,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».is_empty",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::is_empty",
@@ -7454,7 +7454,7 @@
       "reducible": false
     },
     {
-      "def_id": 3567,
+      "def_id": 3568,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».len",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::len",
@@ -7543,7 +7543,7 @@
       "reducible": false
     },
     {
-      "def_id": 3781,
+      "def_id": 3790,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::new::static_lookup_tables",
@@ -7562,7 +7562,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables"
     },
     {
-      "def_id": 3781,
+      "def_id": 3790,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::new::static_lookup_tables",
@@ -7581,7 +7581,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables"
     },
     {
-      "def_id": 3781,
+      "def_id": 3790,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::new::static_lookup_tables",
@@ -7598,7 +7598,7 @@
       "reducible": true
     },
     {
-      "def_id": 3566,
+      "def_id": 3567,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».new",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::new",
@@ -7670,7 +7670,7 @@
       "reducible": false
     },
     {
-      "def_id": 640,
+      "def_id": 641,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.scalar_digits_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -7689,7 +7689,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.scalar_digits"
     },
     {
-      "def_id": 640,
+      "def_id": 641,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.scalar_digits_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -7708,7 +7708,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.scalar_digits"
     },
     {
-      "def_id": 640,
+      "def_id": 641,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.scalar_digits",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -7780,7 +7780,7 @@
       "reducible": false
     },
     {
-      "def_id": 639,
+      "def_id": 640,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -7799,7 +7799,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 639,
+      "def_id": 640,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -7818,7 +7818,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 639,
+      "def_id": 640,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -7928,7 +7928,7 @@
       "reducible": false
     },
     {
-      "def_id": 1587,
+      "def_id": 1588,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.scalar_digits_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -7947,7 +7947,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.scalar_digits"
     },
     {
-      "def_id": 1587,
+      "def_id": 1588,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.scalar_digits_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -7966,7 +7966,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.scalar_digits"
     },
     {
-      "def_id": 1587,
+      "def_id": 1588,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.scalar_digits",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -8038,7 +8038,7 @@
       "reducible": false
     },
     {
-      "def_id": 1586,
+      "def_id": 1587,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -8057,7 +8057,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 1586,
+      "def_id": 1587,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -8076,7 +8076,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 1586,
+      "def_id": 1587,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -8186,7 +8186,7 @@
       "reducible": false
     },
     {
-      "def_id": 2624,
+      "def_id": 2625,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.scalar_digits_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -8205,7 +8205,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.scalar_digits"
     },
     {
-      "def_id": 2624,
+      "def_id": 2625,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.scalar_digits_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -8224,7 +8224,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.scalar_digits"
     },
     {
-      "def_id": 2624,
+      "def_id": 2625,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.scalar_digits",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -8296,7 +8296,7 @@
       "reducible": false
     },
     {
-      "def_id": 2623,
+      "def_id": 2624,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -8315,7 +8315,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 2623,
+      "def_id": 2624,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -8334,7 +8334,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 2623,
+      "def_id": 2624,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -8444,7 +8444,7 @@
       "reducible": false
     },
     {
-      "def_id": 3571,
+      "def_id": 3572,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.scalar_digits_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -8463,7 +8463,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.scalar_digits"
     },
     {
-      "def_id": 3571,
+      "def_id": 3572,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.scalar_digits_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -8482,7 +8482,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.scalar_digits"
     },
     {
-      "def_id": 3571,
+      "def_id": 3572,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.scalar_digits",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::scalar_digits",
@@ -8554,7 +8554,7 @@
       "reducible": false
     },
     {
-      "def_id": 3570,
+      "def_id": 3571,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.lookup_tables_loop.body",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -8573,7 +8573,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 3570,
+      "def_id": 3571,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.lookup_tables_loop",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -8592,7 +8592,7 @@
       "parent_lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.lookup_tables"
     },
     {
-      "def_id": 3570,
+      "def_id": 3571,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.straus.«MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.lookup_tables",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::straus::{impl curve25519_dalek::traits::MultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::straus::Straus}::multiscalar_mul::lookup_tables",
@@ -13944,8 +13944,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 302,
-        "end_line": 311
+        "begin_line": 301,
+        "end_line": 310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13961,8 +13961,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 325,
-        "end_line": 371
+        "begin_line": 324,
+        "end_line": 370
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14080,8 +14080,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 302,
-        "end_line": 311
+        "begin_line": 301,
+        "end_line": 310
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14097,8 +14097,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 325,
-        "end_line": 371
+        "begin_line": 324,
+        "end_line": 370
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14884,7 +14884,7 @@
       "source": {
         "file": "curve25519-dalek/src/field.rs",
         "begin_line": 267,
-        "end_line": 277
+        "end_line": 276
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14903,7 +14903,7 @@
       "source": {
         "file": "curve25519-dalek/src/field.rs",
         "begin_line": 267,
-        "end_line": 277
+        "end_line": 276
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14922,7 +14922,7 @@
       "source": {
         "file": "curve25519-dalek/src/field.rs",
         "begin_line": 239,
-        "end_line": 278
+        "end_line": 277
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15197,7 +15197,7 @@
       "source": {
         "file": "curve25519-dalek/src/field.rs",
         "begin_line": 267,
-        "end_line": 277
+        "end_line": 276
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15216,7 +15216,7 @@
       "source": {
         "file": "curve25519-dalek/src/field.rs",
         "begin_line": 267,
-        "end_line": 277
+        "end_line": 276
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15235,7 +15235,7 @@
       "source": {
         "file": "curve25519-dalek/src/field.rs",
         "begin_line": 239,
-        "end_line": 278
+        "end_line": 277
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22512,8 +22512,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 385,
-        "end_line": 387
+        "begin_line": 384,
+        "end_line": 386
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22529,8 +22529,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 385,
-        "end_line": 387
+        "begin_line": 384,
+        "end_line": 386
       },
       "is_opaque": false,
       "can_fail": true,
@@ -34733,7 +34733,7 @@
       "can_fail": true
     },
     {
-      "def_id": 268,
+      "def_id": 270,
       "lean_name": "Curve25519Dalek.backend.serial.u64.field.SIXTEEN_P",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::field::SIXTEEN_P",
@@ -34746,7 +34746,7 @@
       "can_fail": false
     },
     {
-      "def_id": 269,
+      "def_id": 271,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.EDWARDS_D",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::EDWARDS_D",
@@ -34759,7 +34759,7 @@
       "can_fail": true
     },
     {
-      "def_id": 914,
+      "def_id": 916,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.EDWARDS_D",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::EDWARDS_D",
@@ -34772,7 +34772,7 @@
       "can_fail": true
     },
     {
-      "def_id": 270,
+      "def_id": 272,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.EDWARDS_D2",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::EDWARDS_D2",
@@ -34785,7 +34785,7 @@
       "can_fail": true
     },
     {
-      "def_id": 915,
+      "def_id": 917,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.EDWARDS_D2",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::EDWARDS_D2",
@@ -34798,7 +34798,7 @@
       "can_fail": true
     },
     {
-      "def_id": 282,
+      "def_id": 284,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.AFFINE_ODD_MULTIPLES_OF_BASEPOINT",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::AFFINE_ODD_MULTIPLES_OF_BASEPOINT",
@@ -34824,7 +34824,7 @@
       "can_fail": true
     },
     {
-      "def_id": 927,
+      "def_id": 929,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.AFFINE_ODD_MULTIPLES_OF_BASEPOINT",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::AFFINE_ODD_MULTIPLES_OF_BASEPOINT",
@@ -34863,7 +34863,7 @@
       "can_fail": false
     },
     {
-      "def_id": 283,
+      "def_id": 285,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128",
@@ -34876,7 +34876,7 @@
       "can_fail": true
     },
     {
-      "def_id": 587,
+      "def_id": 589,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.ED25519_BASEPOINT_128_POINT.«x86_64-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::ED25519_BASEPOINT_128_POINT::x86_64-no-tables",
@@ -34889,7 +34889,7 @@
       "can_fail": true
     },
     {
-      "def_id": 928,
+      "def_id": 930,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::AFFINE_ODD_MULTIPLES_OF_BASEPOINT_128",
@@ -34902,7 +34902,7 @@
       "can_fail": true
     },
     {
-      "def_id": 1229,
+      "def_id": 1231,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.ED25519_BASEPOINT_128_POINT.«i686-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::ED25519_BASEPOINT_128_POINT::i686-no-tables",
@@ -34928,7 +34928,7 @@
       "can_fail": true
     },
     {
-      "def_id": 916,
+      "def_id": 918,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.ONE_MINUS_EDWARDS_D_SQUARED",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::ONE_MINUS_EDWARDS_D_SQUARED",
@@ -34941,7 +34941,7 @@
       "can_fail": true
     },
     {
-      "def_id": 917,
+      "def_id": 919,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.EDWARDS_D_MINUS_ONE_SQUARED",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::EDWARDS_D_MINUS_ONE_SQUARED",
@@ -34954,7 +34954,7 @@
       "can_fail": true
     },
     {
-      "def_id": 918,
+      "def_id": 920,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.SQRT_AD_MINUS_ONE",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::SQRT_AD_MINUS_ONE",
@@ -34980,7 +34980,7 @@
       "can_fail": true
     },
     {
-      "def_id": 919,
+      "def_id": 921,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.SQRT_M1",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::SQRT_M1",
@@ -35006,7 +35006,7 @@
       "can_fail": true
     },
     {
-      "def_id": 920,
+      "def_id": 922,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.L",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::L",
@@ -35019,7 +35019,7 @@
       "can_fail": false
     },
     {
-      "def_id": 921,
+      "def_id": 923,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.LFACTOR",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::LFACTOR",
@@ -35032,7 +35032,7 @@
       "can_fail": false
     },
     {
-      "def_id": 922,
+      "def_id": 924,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.R",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::R",
@@ -35045,7 +35045,7 @@
       "can_fail": false
     },
     {
-      "def_id": 923,
+      "def_id": 925,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.RR",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::RR",
@@ -35071,7 +35071,7 @@
       "can_fail": true
     },
     {
-      "def_id": 924,
+      "def_id": 926,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.ED25519_BASEPOINT_128_POINT.«i686-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::ED25519_BASEPOINT_128_POINT::i686-tables",
@@ -35084,7 +35084,7 @@
       "can_fail": true
     },
     {
-      "def_id": 925,
+      "def_id": 927,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.EIGHT_TORSION_INNER_DOC_HIDDEN.«i686-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::EIGHT_TORSION_INNER_DOC_HIDDEN::i686-tables",
@@ -35097,7 +35097,7 @@
       "can_fail": true
     },
     {
-      "def_id": 1230,
+      "def_id": 1232,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.EIGHT_TORSION_INNER_DOC_HIDDEN.«i686-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::EIGHT_TORSION_INNER_DOC_HIDDEN::i686-no-tables",
@@ -35136,7 +35136,7 @@
       "can_fail": true
     },
     {
-      "def_id": 926,
+      "def_id": 928,
       "lean_name": "Curve25519Dalek.backend.serial.u32.constants.ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u32::constants::ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN",
@@ -35214,7 +35214,7 @@
       "can_fail": true
     },
     {
-      "def_id": 271,
+      "def_id": 273,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.ONE_MINUS_EDWARDS_D_SQUARED",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::ONE_MINUS_EDWARDS_D_SQUARED",
@@ -35227,7 +35227,7 @@
       "can_fail": true
     },
     {
-      "def_id": 272,
+      "def_id": 274,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.EDWARDS_D_MINUS_ONE_SQUARED",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::EDWARDS_D_MINUS_ONE_SQUARED",
@@ -35240,7 +35240,7 @@
       "can_fail": true
     },
     {
-      "def_id": 273,
+      "def_id": 275,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.SQRT_AD_MINUS_ONE",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::SQRT_AD_MINUS_ONE",
@@ -35266,7 +35266,7 @@
       "can_fail": true
     },
     {
-      "def_id": 274,
+      "def_id": 276,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.SQRT_M1",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::SQRT_M1",
@@ -35292,7 +35292,7 @@
       "can_fail": true
     },
     {
-      "def_id": 275,
+      "def_id": 277,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.L",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::L",
@@ -35305,7 +35305,7 @@
       "can_fail": false
     },
     {
-      "def_id": 276,
+      "def_id": 278,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.LFACTOR",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::LFACTOR",
@@ -35318,7 +35318,7 @@
       "can_fail": false
     },
     {
-      "def_id": 277,
+      "def_id": 279,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.R",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::R",
@@ -35331,7 +35331,7 @@
       "can_fail": false
     },
     {
-      "def_id": 278,
+      "def_id": 280,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.RR",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::RR",
@@ -35357,7 +35357,7 @@
       "can_fail": true
     },
     {
-      "def_id": 279,
+      "def_id": 281,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.ED25519_BASEPOINT_128_POINT.«x86_64-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::ED25519_BASEPOINT_128_POINT::x86_64-tables",
@@ -35370,7 +35370,7 @@
       "can_fail": true
     },
     {
-      "def_id": 280,
+      "def_id": 282,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.EIGHT_TORSION_INNER_DOC_HIDDEN.«x86_64-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::EIGHT_TORSION_INNER_DOC_HIDDEN::x86_64-tables",
@@ -35383,7 +35383,7 @@
       "can_fail": true
     },
     {
-      "def_id": 588,
+      "def_id": 590,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.EIGHT_TORSION_INNER_DOC_HIDDEN.«x86_64-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::EIGHT_TORSION_INNER_DOC_HIDDEN::x86_64-no-tables",
@@ -35422,7 +35422,7 @@
       "can_fail": true
     },
     {
-      "def_id": 281,
+      "def_id": 283,
       "lean_name": "Curve25519Dalek.backend.serial.u64.constants.ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::u64::constants::ED25519_BASEPOINT_TABLE_INNER_DOC_HIDDEN",
@@ -36153,7 +36153,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 399,
+      "def_id": 401,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«x86_64-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::x86_64-tables}::x86_64-tables",
@@ -36168,7 +36168,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 397,
+      "def_id": 399,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«x86_64-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::x86_64-tables}::x86_64-tables",
@@ -36183,7 +36183,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 800,
+      "def_id": 802,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«x86_64-no-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36198,7 +36198,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 798,
+      "def_id": 800,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«x86_64-no-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36213,7 +36213,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1293,
+      "def_id": 1295,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«i686-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::i686-tables}::i686-tables",
@@ -36228,7 +36228,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1291,
+      "def_id": 1293,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«i686-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::i686-tables}::i686-tables",
@@ -36243,7 +36243,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1689,
+      "def_id": 1691,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«i686-no-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::i686-no-tables}::i686-no-tables",
@@ -36258,7 +36258,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1687,
+      "def_id": 1689,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«i686-no-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::i686-no-tables}::i686-no-tables",
@@ -36273,7 +36273,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 402,
+      "def_id": 404,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«x86_64-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::CompletedPoint::x86_64-tables}::x86_64-tables",
@@ -36288,7 +36288,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 400,
+      "def_id": 402,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«x86_64-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::CompletedPoint::x86_64-tables}::x86_64-tables",
@@ -36303,7 +36303,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 803,
+      "def_id": 805,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«x86_64-no-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::CompletedPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36318,7 +36318,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 801,
+      "def_id": 803,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«x86_64-no-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::CompletedPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36333,7 +36333,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1296,
+      "def_id": 1298,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«i686-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::CompletedPoint::i686-tables}::i686-tables",
@@ -36348,7 +36348,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1294,
+      "def_id": 1296,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«i686-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::CompletedPoint::i686-tables}::i686-tables",
@@ -36363,7 +36363,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1692,
+      "def_id": 1694,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«i686-no-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::CompletedPoint::i686-no-tables}::i686-no-tables",
@@ -36378,7 +36378,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1690,
+      "def_id": 1692,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.CompletedPoint.«i686-no-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::CompletedPoint::i686-no-tables}::i686-no-tables",
@@ -36423,7 +36423,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 806,
+      "def_id": 808,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36438,7 +36438,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 804,
+      "def_id": 806,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36483,7 +36483,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1695,
+      "def_id": 1697,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::i686-no-tables",
@@ -36498,7 +36498,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1693,
+      "def_id": 1695,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::i686-no-tables",
@@ -36513,7 +36513,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 406,
+      "def_id": 408,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-tables».Insts.«CoreCmpPartialEqAffineNielsPointx86_64-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::PartialEq<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-tables> for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-tables}::x86_64-tables",
@@ -36528,7 +36528,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 404,
+      "def_id": 406,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-tables».Insts.CoreCmpEq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::Eq for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-tables}::x86_64-tables",
@@ -36543,7 +36543,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 809,
+      "def_id": 811,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.«CoreCmpPartialEqAffineNielsPointx86_64-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::PartialEq<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36558,7 +36558,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 807,
+      "def_id": 809,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.CoreCmpEq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::Eq for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36573,7 +36573,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1300,
+      "def_id": 1302,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-tables».Insts.«CoreCmpPartialEqAffineNielsPointi686-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::PartialEq<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-tables> for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-tables}::i686-tables",
@@ -36588,7 +36588,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1298,
+      "def_id": 1300,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-tables».Insts.CoreCmpEq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::Eq for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-tables}::i686-tables",
@@ -36603,7 +36603,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1698,
+      "def_id": 1700,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.«CoreCmpPartialEqAffineNielsPointi686-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::PartialEq<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables> for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::i686-no-tables",
@@ -36618,7 +36618,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1696,
+      "def_id": 1698,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.CoreCmpEq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::cmp::Eq for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::i686-no-tables",
@@ -36633,7 +36633,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 405,
+      "def_id": 407,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-tables».Insts.CoreMarkerStructuralPartialEq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::StructuralPartialEq for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-tables}::x86_64-tables",
@@ -36648,7 +36648,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 808,
+      "def_id": 810,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.CoreMarkerStructuralPartialEq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::StructuralPartialEq for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36663,7 +36663,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1299,
+      "def_id": 1301,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-tables».Insts.CoreMarkerStructuralPartialEq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::StructuralPartialEq for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-tables}::i686-tables",
@@ -36678,7 +36678,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1697,
+      "def_id": 1699,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.CoreMarkerStructuralPartialEq",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::StructuralPartialEq for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::i686-no-tables",
@@ -36693,7 +36693,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 407,
+      "def_id": 409,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-tables».Insts.ZeroizeZeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-tables}::x86_64-tables",
@@ -36708,7 +36708,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 810,
+      "def_id": 812,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36723,7 +36723,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1301,
+      "def_id": 1303,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-tables».Insts.ZeroizeZeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-tables}::i686-tables",
@@ -36738,7 +36738,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1699,
+      "def_id": 1701,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.ZeroizeZeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::i686-no-tables",
@@ -36753,7 +36753,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 410,
+      "def_id": 412,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::x86_64-tables",
@@ -36768,7 +36768,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 408,
+      "def_id": 410,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::x86_64-tables",
@@ -36783,7 +36783,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 813,
+      "def_id": 815,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36798,7 +36798,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 811,
+      "def_id": 813,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36813,7 +36813,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1304,
+      "def_id": 1306,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::i686-tables",
@@ -36828,7 +36828,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1302,
+      "def_id": 1304,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::i686-tables",
@@ -36843,7 +36843,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1702,
+      "def_id": 1704,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.CoreCloneClone",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::clone::Clone for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::i686-no-tables",
@@ -36858,7 +36858,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1700,
+      "def_id": 1702,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.CoreMarkerCopy",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::marker::Copy for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::i686-no-tables",
@@ -36873,7 +36873,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 411,
+      "def_id": 413,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.ZeroizeZeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::x86_64-tables",
@@ -36888,7 +36888,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 814,
+      "def_id": 816,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36903,7 +36903,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1305,
+      "def_id": 1307,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.ZeroizeZeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::i686-tables",
@@ -36918,7 +36918,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1703,
+      "def_id": 1705,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.ZeroizeZeroize",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl zeroize::Zeroize for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::i686-no-tables",
@@ -36933,7 +36933,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 412,
+      "def_id": 414,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::x86_64-tables}::x86_64-tables",
@@ -36948,7 +36948,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 815,
+      "def_id": 817,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::x86_64-no-tables}::x86_64-no-tables",
@@ -36963,7 +36963,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1306,
+      "def_id": 1308,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::i686-tables}::i686-tables",
@@ -36978,7 +36978,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1704,
+      "def_id": 1706,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectivePoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectivePoint::i686-no-tables}::i686-no-tables",
@@ -36993,7 +36993,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 413,
+      "def_id": 415,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::x86_64-tables",
@@ -37008,7 +37008,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 816,
+      "def_id": 818,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -37023,7 +37023,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1307,
+      "def_id": 1309,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::i686-tables",
@@ -37038,7 +37038,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1705,
+      "def_id": 1707,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::i686-no-tables",
@@ -37053,7 +37053,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 414,
+      "def_id": 416,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.CoreDefaultDefault",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::x86_64-tables",
@@ -37068,7 +37068,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 817,
+      "def_id": 819,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.CoreDefaultDefault",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -37083,7 +37083,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1308,
+      "def_id": 1310,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.CoreDefaultDefault",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::i686-tables",
@@ -37098,7 +37098,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1706,
+      "def_id": 1708,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.CoreDefaultDefault",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::i686-no-tables",
@@ -37128,7 +37128,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 818,
+      "def_id": 820,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.Curve25519_dalekTraitsIdentity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -37158,7 +37158,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1707,
+      "def_id": 1709,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.Curve25519_dalekTraitsIdentity",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl curve25519_dalek::traits::Identity for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::i686-no-tables",
@@ -37188,7 +37188,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 819,
+      "def_id": 821,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.CoreDefaultDefault",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -37218,7 +37218,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1708,
+      "def_id": 1710,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.CoreDefaultDefault",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::default::Default for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::i686-no-tables",
@@ -37323,7 +37323,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 415,
+      "def_id": 417,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-tables».Insts.SubtleConditionallySelectable",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::x86_64-tables",
@@ -37338,7 +37338,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 820,
+      "def_id": 822,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -37353,7 +37353,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1309,
+      "def_id": 1311,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables».Insts.SubtleConditionallySelectable",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::i686-tables",
@@ -37368,7 +37368,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1709,
+      "def_id": 1711,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables».Insts.SubtleConditionallySelectable",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::i686-no-tables",
@@ -37398,7 +37398,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 821,
+      "def_id": 823,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables».Insts.SubtleConditionallySelectable",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -37428,7 +37428,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1710,
+      "def_id": 1712,
       "lean_name": "Curve25519Dalek.backend.serial.curve_models.AffineNielsPoint.«i686-no-tables».Insts.SubtleConditionallySelectable",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl subtle::ConditionallySelectable for curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::i686-no-tables",
@@ -37578,7 +37578,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 822,
+      "def_id": 824,
       "lean_name": "Curve25519Dalek.«Shared0EdwardsPointx86_64-no-tables».Insts.«CoreOpsArithAddSharedAAffineNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Add<&'a curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables, curve25519_dalek::backend::serial::curve_models::CompletedPoint::x86_64-no-tables> for &'_1 curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -37608,7 +37608,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1711,
+      "def_id": 1713,
       "lean_name": "Curve25519Dalek.«Shared0EdwardsPointi686-no-tables».Insts.«CoreOpsArithAddSharedAAffineNielsPointi686-no-tablesCompletedPointi686-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Add<&'a curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables, curve25519_dalek::backend::serial::curve_models::CompletedPoint::i686-no-tables> for &'_1 curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::i686-no-tables",
@@ -37623,7 +37623,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 416,
+      "def_id": 418,
       "lean_name": "Curve25519Dalek.«Shared0EdwardsPointx86_64-tables».Insts.«CoreOpsArithSubSharedAAffineNielsPointx86_64-tablesCompletedPointx86_64-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-tables, curve25519_dalek::backend::serial::curve_models::CompletedPoint::x86_64-tables> for &'_1 curve25519_dalek::edwards::EdwardsPoint::x86_64-tables}::x86_64-tables",
@@ -37638,7 +37638,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 823,
+      "def_id": 825,
       "lean_name": "Curve25519Dalek.«Shared0EdwardsPointx86_64-no-tables».Insts.«CoreOpsArithSubSharedAAffineNielsPointx86_64-no-tablesCompletedPointx86_64-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables, curve25519_dalek::backend::serial::curve_models::CompletedPoint::x86_64-no-tables> for &'_1 curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -37653,7 +37653,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1310,
+      "def_id": 1312,
       "lean_name": "Curve25519Dalek.«Shared0EdwardsPointi686-tables».Insts.«CoreOpsArithSubSharedAAffineNielsPointi686-tablesCompletedPointi686-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-tables, curve25519_dalek::backend::serial::curve_models::CompletedPoint::i686-tables> for &'_1 curve25519_dalek::edwards::EdwardsPoint::i686-tables}::i686-tables",
@@ -37668,7 +37668,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1712,
+      "def_id": 1714,
       "lean_name": "Curve25519Dalek.«Shared0EdwardsPointi686-no-tables».Insts.«CoreOpsArithSubSharedAAffineNielsPointi686-no-tablesCompletedPointi686-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Sub<&'a curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables, curve25519_dalek::backend::serial::curve_models::CompletedPoint::i686-no-tables> for &'_1 curve25519_dalek::edwards::EdwardsPoint::i686-no-tables}::i686-no-tables",
@@ -37713,7 +37713,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 417,
+      "def_id": 419,
       "lean_name": "Curve25519Dalek.«Shared0ProjectiveNielsPointx86_64-tables».Insts.«CoreOpsArithNegProjectiveNielsPointx86_64-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-tables}::x86_64-tables",
@@ -37728,7 +37728,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 824,
+      "def_id": 826,
       "lean_name": "Curve25519Dalek.«Shared0ProjectiveNielsPointx86_64-no-tables».Insts.«CoreOpsArithNegProjectiveNielsPointx86_64-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -37743,7 +37743,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1311,
+      "def_id": 1313,
       "lean_name": "Curve25519Dalek.«Shared0ProjectiveNielsPointi686-tables».Insts.«CoreOpsArithNegProjectiveNielsPointi686-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-tables}::i686-tables",
@@ -37758,7 +37758,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1713,
+      "def_id": 1715,
       "lean_name": "Curve25519Dalek.«Shared0ProjectiveNielsPointi686-no-tables».Insts.«CoreOpsArithNegProjectiveNielsPointi686-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::ProjectiveNielsPoint::i686-no-tables}::i686-no-tables",
@@ -37788,7 +37788,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 825,
+      "def_id": 827,
       "lean_name": "Curve25519Dalek.«Shared0AffineNielsPointx86_64-no-tables».Insts.«CoreOpsArithNegAffineNielsPointx86_64-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::x86_64-no-tables}::x86_64-no-tables",
@@ -37818,7 +37818,7 @@
       "impl_trait_is_builtin": false
     },
     {
-      "def_id": 1714,
+      "def_id": 1716,
       "lean_name": "Curve25519Dalek.«Shared0AffineNielsPointi686-no-tables».Insts.«CoreOpsArithNegAffineNielsPointi686-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::curve_models::{impl core::ops::arith::Neg<curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables> for &'_0 curve25519_dalek::backend::serial::curve_models::AffineNielsPoint::i686-no-tables}::i686-no-tables",
@@ -37908,7 +37908,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 424,
+      "def_id": 426,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::x86_64-tables",
@@ -37938,7 +37938,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 832,
+      "def_id": 834,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::x86_64-no-tables",
@@ -37968,7 +37968,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1318,
+      "def_id": 1320,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::i686-tables",
@@ -37998,7 +37998,7 @@
       "impl_trait_is_builtin": true
     },
     {
-      "def_id": 1721,
+      "def_id": 1723,
       "lean_name": "Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»",
       "lean_file": "Curve25519Dalek/Funs.lean",
       "rust_name": "curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::i686-no-tables",
