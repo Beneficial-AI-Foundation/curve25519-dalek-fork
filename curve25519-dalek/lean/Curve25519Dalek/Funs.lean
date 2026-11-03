@@ -12731,7 +12731,7 @@ def
 def window.LookupTable.select_loop.body
   {T : Type _} (subtleConditionallySelectableInst :
   subtle.ConditionallySelectable T) (xabs : Std.I16)
-  (iter : core.ops.range.Range Std.Usize) (self : window.LookupTable T)
+  (iter : core.ops.range.Range Std.Usize) (self : window.LookupTable T) 
   (t : T) :
   Result (ControlFlow ((core.ops.range.Range Std.Usize) × (window.LookupTable
     T) × T) T)
