@@ -8906,7 +8906,7 @@ def
   ok Ai1
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::lookup_tables]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 96:12-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 89:12-96:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.lookup_tables_loop.body
@@ -8937,7 +8937,7 @@ def
       ok (cont (points1, out1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::lookup_tables]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 96:12-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 89:12-96:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.lookup_tables_loop
@@ -8958,7 +8958,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::lookup_tables]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 91:8-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 84:8-96:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.lookup_tables
@@ -9066,7 +9066,7 @@ def scalar.Scalar.non_adjacent_form
     0#u64
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::nafs]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 85:12-87:13 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 78:12-80:13 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.nafs_loop.body
@@ -9088,7 +9088,7 @@ def
     ok (cont (scalars1, out1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::nafs]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 85:12-87:13 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 78:12-80:13 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.nafs_loop
@@ -9107,7 +9107,7 @@ def
     (scalars, out)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul::nafs]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 79:8-89:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 72:8-82:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul.nafs
@@ -9122,7 +9122,7 @@ def
     scalars w (alloc.vec.Vec.new (Array Std.I8 256#usize))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 125:12-131:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 118:12-124:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -9187,7 +9187,7 @@ def
       ok (cont (iter1, R1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 125:12-131:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 118:12-124:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -9207,7 +9207,7 @@ def
     (iter, R)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 134:12-140:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 127:12-133:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -9270,7 +9270,7 @@ def
       ok (cont (iter1, R1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 134:12-140:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 127:12-133:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -9289,7 +9289,7 @@ def
     (iter, R)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 122:8-143:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 115:8-136:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -9331,7 +9331,7 @@ def
     ok (cont (iter1, S1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 122:8-143:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 115:8-136:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -9354,7 +9354,7 @@ def
     (iter, S)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 66:4-146:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 59:4-139:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».optional_mixed_multiscalar_mul
@@ -9418,7 +9418,7 @@ def
     ok (some ep)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 62:4-64:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 55:4-57:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».is_empty
@@ -9430,7 +9430,7 @@ def
   alloc.vec.Vec.is_empty alloc.alloc.Global self.static_lookup_tables
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::len]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 58:4-60:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 51:4-53:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».len
@@ -9636,80 +9636,66 @@ def
       { start := 0#usize, «end» := 63#usize } Ai A2
   ok Ai1
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::new::static_lookup_tables]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 47:12-49:13 -/
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::new]: loop body 0:
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 42:8-44:9
+    Visibility: public -/
 @[rust_loop_body]
 def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
+  backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».new_loop.body
+  {I : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
   («coreborrowBorrowClause0_ItemEdwardsPointx86_64-tablesInst» :
   core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-tables»)
-  (static_points : It)
-  (out : alloc.vec.Vec (window.NafLookupTable8
+  (iter : Clause0_IntoIter)
+  (static_lookup_tables : alloc.vec.Vec (window.NafLookupTable8
   backend.serial.curve_models.AffineNielsPoint.«x86_64-tables»)) :
-  Result (ControlFlow (It × (alloc.vec.Vec (window.NafLookupTable8
+  Result (ControlFlow (Clause0_IntoIter × (alloc.vec.Vec
+    (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«x86_64-tables»)))
     (alloc.vec.Vec (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«x86_64-tables»)))
   := do
-  let (o, static_points1) ←
-    coreitertraitsiteratorIteratorInst.next static_points
+  let (o, iter1) ←
+    coreitertraitscollectIntoIteratorInst.iteratorInst.next iter
   match o with
-  | none => ok (done out)
+  | none => ok (done static_lookup_tables)
   | some P =>
     let ep ←
       «coreborrowBorrowClause0_ItemEdwardsPointx86_64-tablesInst».borrow P
     let nlt ←
       window.«NafLookupTable8AffineNielsPointx86_64-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-tables».from
         ep
-    let out1 ← alloc.vec.Vec.push out nlt
-    ok (cont (static_points1, out1))
+    let static_lookup_tables1 ← alloc.vec.Vec.push static_lookup_tables nlt
+    ok (cont (iter1, static_lookup_tables1))
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::new::static_lookup_tables]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 47:12-49:13 -/
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::new]: loop 0:
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 42:8-44:9
+    Visibility: public -/
 @[rust_loop]
 def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
+  backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».new_loop
+  {I : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
   («coreborrowBorrowClause0_ItemEdwardsPointx86_64-tablesInst» :
   core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-tables»)
-  (static_points : It)
-  (out : alloc.vec.Vec (window.NafLookupTable8
+  (iter : Clause0_IntoIter)
+  (static_lookup_tables : alloc.vec.Vec (window.NafLookupTable8
   backend.serial.curve_models.AffineNielsPoint.«x86_64-tables»)) :
   Result (alloc.vec.Vec (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«x86_64-tables»))
   := do
   loop
-    (fun (static_points1, out1) =>
-      backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables_loop.body
-      coreitertraitsiteratorIteratorInst
-      «coreborrowBorrowClause0_ItemEdwardsPointx86_64-tablesInst»
-      static_points1 out1)
-    (static_points, out)
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::new::static_lookup_tables]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 41:8-51:9 -/
-@[reducible]
-def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemEdwardsPointx86_64-tablesInst» :
-  core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-tables»)
-  (static_points : It) :
-  Result (alloc.vec.Vec (window.NafLookupTable8
-    backend.serial.curve_models.AffineNielsPoint.«x86_64-tables»))
-  := do
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables_loop
-    coreitertraitsiteratorIteratorInst
-    «coreborrowBorrowClause0_ItemEdwardsPointx86_64-tablesInst» static_points
-    (alloc.vec.Vec.new (window.NafLookupTable8
-    backend.serial.curve_models.AffineNielsPoint.«x86_64-tables»))
+    (fun (iter1, static_lookup_tables1) =>
+      backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».new_loop.body
+      coreitertraitscollectIntoIteratorInst
+      «coreborrowBorrowClause0_ItemEdwardsPointx86_64-tablesInst» iter1
+      static_lookup_tables1)
+    (iter, static_lookup_tables)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::new]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 36:4-56:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 36:4-49:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».new
@@ -9722,15 +9708,17 @@ def
   Result
     backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables»
   := do
-  let t ← coreitertraitscollectIntoIteratorInst.into_iter static_points
-  let v ←
-    backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables».new.static_lookup_tables
-      coreitertraitscollectIntoIteratorInst.iteratorInst
-      «coreborrowBorrowClause0_ItemEdwardsPointx86_64-tablesInst» t
-  ok { static_lookup_tables := v }
+  let iter ← coreitertraitscollectIntoIteratorInst.into_iter static_points
+  let static_lookup_tables ←
+    backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables».new_loop
+      coreitertraitscollectIntoIteratorInst
+      «coreborrowBorrowClause0_ItemEdwardsPointx86_64-tablesInst» iter
+      (alloc.vec.Vec.new (window.NafLookupTable8
+      backend.serial.curve_models.AffineNielsPoint.«x86_64-tables»))
+  ok { static_lookup_tables }
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-tables}::x86_64-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 33:0-147:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 33:0-140:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
@@ -9871,7 +9859,7 @@ def
   ok Ai1
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::lookup_tables]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 96:12-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 89:12-96:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.lookup_tables_loop.body
@@ -9902,7 +9890,7 @@ def
       ok (cont (points1, out1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::lookup_tables]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 96:12-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 89:12-96:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.lookup_tables_loop
@@ -9923,7 +9911,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::lookup_tables]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 91:8-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 84:8-96:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.lookup_tables
@@ -9940,7 +9928,7 @@ def
     backend.serial.curve_models.ProjectiveNielsPoint.«x86_64-no-tables»))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::nafs]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 85:12-87:13 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 78:12-80:13 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.nafs_loop.body
@@ -9962,7 +9950,7 @@ def
     ok (cont (scalars1, out1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::nafs]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 85:12-87:13 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 78:12-80:13 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.nafs_loop
@@ -9981,7 +9969,7 @@ def
     (scalars, out)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul::nafs]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 79:8-89:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 72:8-82:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul.nafs
@@ -9996,7 +9984,7 @@ def
     scalars w (alloc.vec.Vec.new (Array Std.I8 256#usize))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 125:12-131:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 118:12-124:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -10061,7 +10049,7 @@ def
       ok (cont (iter1, R1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 125:12-131:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 118:12-124:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -10081,7 +10069,7 @@ def
     (iter, R)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 134:12-140:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 127:12-133:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -10146,7 +10134,7 @@ def
       ok (cont (iter1, R1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 134:12-140:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 127:12-133:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -10165,7 +10153,7 @@ def
     (iter, R)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 122:8-143:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 115:8-136:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -10207,7 +10195,7 @@ def
     ok (cont (iter1, S1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 122:8-143:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 115:8-136:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -10230,7 +10218,7 @@ def
     (iter, S)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 66:4-146:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 59:4-139:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».optional_mixed_multiscalar_mul
@@ -10294,7 +10282,7 @@ def
     ok (some ep)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 62:4-64:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 55:4-57:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».is_empty
@@ -10306,7 +10294,7 @@ def
   alloc.vec.Vec.is_empty alloc.alloc.Global self.static_lookup_tables
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::len]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 58:4-60:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 51:4-53:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».len
@@ -10413,80 +10401,66 @@ def
       { start := 0#usize, «end» := 63#usize } Ai A2
   ok Ai1
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::new::static_lookup_tables]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 47:12-49:13 -/
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::new]: loop body 0:
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 42:8-44:9
+    Visibility: public -/
 @[rust_loop_body]
 def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
+  backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».new_loop.body
+  {I : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
   («coreborrowBorrowClause0_ItemEdwardsPointx86_64-no-tablesInst» :
   core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-no-tables»)
-  (static_points : It)
-  (out : alloc.vec.Vec (window.NafLookupTable8
+  (iter : Clause0_IntoIter)
+  (static_lookup_tables : alloc.vec.Vec (window.NafLookupTable8
   backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables»)) :
-  Result (ControlFlow (It × (alloc.vec.Vec (window.NafLookupTable8
+  Result (ControlFlow (Clause0_IntoIter × (alloc.vec.Vec
+    (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables»)))
     (alloc.vec.Vec (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables»)))
   := do
-  let (o, static_points1) ←
-    coreitertraitsiteratorIteratorInst.next static_points
+  let (o, iter1) ←
+    coreitertraitscollectIntoIteratorInst.iteratorInst.next iter
   match o with
-  | none => ok (done out)
+  | none => ok (done static_lookup_tables)
   | some P =>
     let ep ←
       «coreborrowBorrowClause0_ItemEdwardsPointx86_64-no-tablesInst».borrow P
     let nlt ←
       window.«NafLookupTable8AffineNielsPointx86_64-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointx86_64-no-tables».from
         ep
-    let out1 ← alloc.vec.Vec.push out nlt
-    ok (cont (static_points1, out1))
+    let static_lookup_tables1 ← alloc.vec.Vec.push static_lookup_tables nlt
+    ok (cont (iter1, static_lookup_tables1))
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::new::static_lookup_tables]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 47:12-49:13 -/
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::new]: loop 0:
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 42:8-44:9
+    Visibility: public -/
 @[rust_loop]
 def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
+  backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».new_loop
+  {I : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
   («coreborrowBorrowClause0_ItemEdwardsPointx86_64-no-tablesInst» :
   core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-no-tables»)
-  (static_points : It)
-  (out : alloc.vec.Vec (window.NafLookupTable8
+  (iter : Clause0_IntoIter)
+  (static_lookup_tables : alloc.vec.Vec (window.NafLookupTable8
   backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables»)) :
   Result (alloc.vec.Vec (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables»))
   := do
   loop
-    (fun (static_points1, out1) =>
-      backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables_loop.body
-      coreitertraitsiteratorIteratorInst
-      «coreborrowBorrowClause0_ItemEdwardsPointx86_64-no-tablesInst»
-      static_points1 out1)
-    (static_points, out)
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::new::static_lookup_tables]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 41:8-51:9 -/
-@[reducible]
-def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemEdwardsPointx86_64-no-tablesInst» :
-  core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-no-tables»)
-  (static_points : It) :
-  Result (alloc.vec.Vec (window.NafLookupTable8
-    backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables»))
-  := do
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables_loop
-    coreitertraitsiteratorIteratorInst
-    «coreborrowBorrowClause0_ItemEdwardsPointx86_64-no-tablesInst»
-    static_points (alloc.vec.Vec.new (window.NafLookupTable8
-    backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables»))
+    (fun (iter1, static_lookup_tables1) =>
+      backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».new_loop.body
+      coreitertraitscollectIntoIteratorInst
+      «coreborrowBorrowClause0_ItemEdwardsPointx86_64-no-tablesInst» iter1
+      static_lookup_tables1)
+    (iter, static_lookup_tables)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::new]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 36:4-56:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 36:4-49:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».new
@@ -10499,15 +10473,17 @@ def
   Result
     backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables»
   := do
-  let t ← coreitertraitscollectIntoIteratorInst.into_iter static_points
-  let v ←
-    backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables».new.static_lookup_tables
-      coreitertraitscollectIntoIteratorInst.iteratorInst
-      «coreborrowBorrowClause0_ItemEdwardsPointx86_64-no-tablesInst» t
-  ok { static_lookup_tables := v }
+  let iter ← coreitertraitscollectIntoIteratorInst.into_iter static_points
+  let static_lookup_tables ←
+    backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables».new_loop
+      coreitertraitscollectIntoIteratorInst
+      «coreborrowBorrowClause0_ItemEdwardsPointx86_64-no-tablesInst» iter
+      (alloc.vec.Vec.new (window.NafLookupTable8
+      backend.serial.curve_models.AffineNielsPoint.«x86_64-no-tables»))
+  ok { static_lookup_tables }
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::x86_64-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::x86_64-no-tables}::x86_64-no-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 33:0-147:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 33:0-140:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«x86_64-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -10642,7 +10618,7 @@ def
   ok Ai1
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::lookup_tables]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 96:12-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 89:12-96:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.lookup_tables_loop.body
@@ -10673,7 +10649,7 @@ def
       ok (cont (points1, out1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::lookup_tables]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 96:12-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 89:12-96:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.lookup_tables_loop
@@ -10694,7 +10670,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::lookup_tables]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 91:8-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 84:8-96:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.lookup_tables
@@ -10711,7 +10687,7 @@ def
     backend.serial.curve_models.ProjectiveNielsPoint.«i686-tables»))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::nafs]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 85:12-87:13 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 78:12-80:13 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.nafs_loop.body
@@ -10733,7 +10709,7 @@ def
     ok (cont (scalars1, out1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::nafs]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 85:12-87:13 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 78:12-80:13 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.nafs_loop
@@ -10752,7 +10728,7 @@ def
     (scalars, out)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul::nafs]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 79:8-89:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 72:8-82:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».optional_mixed_multiscalar_mul.nafs
@@ -10767,7 +10743,7 @@ def
     scalars w (alloc.vec.Vec.new (Array Std.I8 256#usize))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 125:12-131:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 118:12-124:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -10830,7 +10806,7 @@ def
       ok (cont (iter1, R1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 125:12-131:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 118:12-124:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -10850,7 +10826,7 @@ def
     (iter, R)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 134:12-140:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 127:12-133:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -10911,7 +10887,7 @@ def
       ok (cont (iter1, R1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 134:12-140:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 127:12-133:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -10930,7 +10906,7 @@ def
     (iter, R)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 122:8-143:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 115:8-136:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -10971,7 +10947,7 @@ def
     ok (cont (iter1, S1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 122:8-143:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 115:8-136:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -10994,7 +10970,7 @@ def
     (iter, S)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 66:4-146:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 59:4-139:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».optional_mixed_multiscalar_mul
@@ -11057,7 +11033,7 @@ def
     ok (some ep)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 62:4-64:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 55:4-57:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».is_empty
@@ -11069,7 +11045,7 @@ def
   alloc.vec.Vec.is_empty alloc.alloc.Global self.static_lookup_tables
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::len]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 58:4-60:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 51:4-53:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».len
@@ -11280,80 +11256,66 @@ def
       { start := 0#usize, «end» := 63#usize } Ai A2
   ok Ai1
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::new::static_lookup_tables]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 47:12-49:13 -/
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::new]: loop body 0:
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 42:8-44:9
+    Visibility: public -/
 @[rust_loop_body]
 def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
+  backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».new_loop.body
+  {I : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
   («coreborrowBorrowClause0_ItemEdwardsPointi686-tablesInst» :
   core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-tables»)
-  (static_points : It)
-  (out : alloc.vec.Vec (window.NafLookupTable8
+  (iter : Clause0_IntoIter)
+  (static_lookup_tables : alloc.vec.Vec (window.NafLookupTable8
   backend.serial.curve_models.AffineNielsPoint.«i686-tables»)) :
-  Result (ControlFlow (It × (alloc.vec.Vec (window.NafLookupTable8
+  Result (ControlFlow (Clause0_IntoIter × (alloc.vec.Vec
+    (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«i686-tables»)))
     (alloc.vec.Vec (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«i686-tables»)))
   := do
-  let (o, static_points1) ←
-    coreitertraitsiteratorIteratorInst.next static_points
+  let (o, iter1) ←
+    coreitertraitscollectIntoIteratorInst.iteratorInst.next iter
   match o with
-  | none => ok (done out)
+  | none => ok (done static_lookup_tables)
   | some P =>
     let ep ←
       «coreborrowBorrowClause0_ItemEdwardsPointi686-tablesInst».borrow P
     let nlt ←
       window.«NafLookupTable8AffineNielsPointi686-tables».Insts.«CoreConvertFromSharedAEdwardsPointi686-tables».from
         ep
-    let out1 ← alloc.vec.Vec.push out nlt
-    ok (cont (static_points1, out1))
+    let static_lookup_tables1 ← alloc.vec.Vec.push static_lookup_tables nlt
+    ok (cont (iter1, static_lookup_tables1))
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::new::static_lookup_tables]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 47:12-49:13 -/
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::new]: loop 0:
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 42:8-44:9
+    Visibility: public -/
 @[rust_loop]
 def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
+  backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».new_loop
+  {I : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
   («coreborrowBorrowClause0_ItemEdwardsPointi686-tablesInst» :
   core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-tables»)
-  (static_points : It)
-  (out : alloc.vec.Vec (window.NafLookupTable8
+  (iter : Clause0_IntoIter)
+  (static_lookup_tables : alloc.vec.Vec (window.NafLookupTable8
   backend.serial.curve_models.AffineNielsPoint.«i686-tables»)) :
   Result (alloc.vec.Vec (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«i686-tables»))
   := do
   loop
-    (fun (static_points1, out1) =>
-      backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables_loop.body
-      coreitertraitsiteratorIteratorInst
-      «coreborrowBorrowClause0_ItemEdwardsPointi686-tablesInst»
-      static_points1 out1)
-    (static_points, out)
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::new::static_lookup_tables]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 41:8-51:9 -/
-@[reducible]
-def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemEdwardsPointi686-tablesInst» :
-  core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-tables»)
-  (static_points : It) :
-  Result (alloc.vec.Vec (window.NafLookupTable8
-    backend.serial.curve_models.AffineNielsPoint.«i686-tables»))
-  := do
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables_loop
-    coreitertraitsiteratorIteratorInst
-    «coreborrowBorrowClause0_ItemEdwardsPointi686-tablesInst» static_points
-    (alloc.vec.Vec.new (window.NafLookupTable8
-    backend.serial.curve_models.AffineNielsPoint.«i686-tables»))
+    (fun (iter1, static_lookup_tables1) =>
+      backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».new_loop.body
+      coreitertraitscollectIntoIteratorInst
+      «coreborrowBorrowClause0_ItemEdwardsPointi686-tablesInst» iter1
+      static_lookup_tables1)
+    (iter, static_lookup_tables)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::new]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 36:4-56:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 36:4-49:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».new
@@ -11366,15 +11328,17 @@ def
   Result
     backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables»
   := do
-  let t ← coreitertraitscollectIntoIteratorInst.into_iter static_points
-  let v ←
-    backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables».new.static_lookup_tables
-      coreitertraitscollectIntoIteratorInst.iteratorInst
-      «coreborrowBorrowClause0_ItemEdwardsPointi686-tablesInst» t
-  ok { static_lookup_tables := v }
+  let iter ← coreitertraitscollectIntoIteratorInst.into_iter static_points
+  let static_lookup_tables ←
+    backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables».new_loop
+      coreitertraitscollectIntoIteratorInst
+      «coreborrowBorrowClause0_ItemEdwardsPointi686-tablesInst» iter
+      (alloc.vec.Vec.new (window.NafLookupTable8
+      backend.serial.curve_models.AffineNielsPoint.«i686-tables»))
+  ok { static_lookup_tables }
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-tables}::i686-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 33:0-147:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 33:0-140:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
@@ -11514,7 +11478,7 @@ def
   ok Ai1
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::lookup_tables]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 96:12-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 89:12-96:9 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.lookup_tables_loop.body
@@ -11545,7 +11509,7 @@ def
       ok (cont (points1, out1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::lookup_tables]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 96:12-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 89:12-96:9 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.lookup_tables_loop
@@ -11566,7 +11530,7 @@ def
     (points, out)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::lookup_tables]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 91:8-103:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 84:8-96:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.lookup_tables
@@ -11583,7 +11547,7 @@ def
     backend.serial.curve_models.ProjectiveNielsPoint.«i686-no-tables»))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::nafs]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 85:12-87:13 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 78:12-80:13 -/
 @[rust_loop_body]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.nafs_loop.body
@@ -11605,7 +11569,7 @@ def
     ok (cont (scalars1, out1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::nafs]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 85:12-87:13 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 78:12-80:13 -/
 @[rust_loop]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.nafs_loop
@@ -11624,7 +11588,7 @@ def
     (scalars, out)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul::nafs]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 79:8-89:9 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 72:8-82:9 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul.nafs
@@ -11639,7 +11603,7 @@ def
     scalars w (alloc.vec.Vec.new (Array Std.I8 256#usize))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul]: loop body 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 125:12-131:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 118:12-124:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -11704,7 +11668,7 @@ def
       ok (cont (iter1, R1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul]: loop 1:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 125:12-131:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 118:12-124:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -11724,7 +11688,7 @@ def
     (iter, R)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul]: loop body 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 134:12-140:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 127:12-133:13
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -11787,7 +11751,7 @@ def
       ok (cont (iter1, R1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul]: loop 2:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 134:12-140:13
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 127:12-133:13
     Visibility: public -/
 @[rust_loop]
 def
@@ -11806,7 +11770,7 @@ def
     (iter, R)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 122:8-143:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 115:8-136:9
     Visibility: public -/
 @[rust_loop_body]
 def
@@ -11848,7 +11812,7 @@ def
     ok (cont (iter1, S1))
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 122:8-143:9
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 115:8-136:9
     Visibility: public -/
 @[rust_loop]
 def
@@ -11871,7 +11835,7 @@ def
     (iter, S)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::optional_mixed_multiscalar_mul]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 66:4-146:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 59:4-139:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».optional_mixed_multiscalar_mul
@@ -11935,7 +11899,7 @@ def
     ok (some ep)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::is_empty]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 62:4-64:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 55:4-57:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».is_empty
@@ -11947,7 +11911,7 @@ def
   alloc.vec.Vec.is_empty alloc.alloc.Global self.static_lookup_tables
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::len]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 58:4-60:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 51:4-53:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».len
@@ -12053,80 +12017,66 @@ def
       { start := 0#usize, «end» := 63#usize } Ai A2
   ok Ai1
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::new::static_lookup_tables]: loop body 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 47:12-49:13 -/
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::new]: loop body 0:
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 42:8-44:9
+    Visibility: public -/
 @[rust_loop_body]
 def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables_loop.body
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
+  backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».new_loop.body
+  {I : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
   («coreborrowBorrowClause0_ItemEdwardsPointi686-no-tablesInst» :
   core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-no-tables»)
-  (static_points : It)
-  (out : alloc.vec.Vec (window.NafLookupTable8
+  (iter : Clause0_IntoIter)
+  (static_lookup_tables : alloc.vec.Vec (window.NafLookupTable8
   backend.serial.curve_models.AffineNielsPoint.«i686-no-tables»)) :
-  Result (ControlFlow (It × (alloc.vec.Vec (window.NafLookupTable8
+  Result (ControlFlow (Clause0_IntoIter × (alloc.vec.Vec
+    (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«i686-no-tables»)))
     (alloc.vec.Vec (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«i686-no-tables»)))
   := do
-  let (o, static_points1) ←
-    coreitertraitsiteratorIteratorInst.next static_points
+  let (o, iter1) ←
+    coreitertraitscollectIntoIteratorInst.iteratorInst.next iter
   match o with
-  | none => ok (done out)
+  | none => ok (done static_lookup_tables)
   | some P =>
     let ep ←
       «coreborrowBorrowClause0_ItemEdwardsPointi686-no-tablesInst».borrow P
     let nlt ←
       window.«NafLookupTable8AffineNielsPointi686-no-tables».Insts.«CoreConvertFromSharedAEdwardsPointi686-no-tables».from
         ep
-    let out1 ← alloc.vec.Vec.push out nlt
-    ok (cont (static_points1, out1))
+    let static_lookup_tables1 ← alloc.vec.Vec.push static_lookup_tables nlt
+    ok (cont (iter1, static_lookup_tables1))
 
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::new::static_lookup_tables]: loop 0:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 47:12-49:13 -/
+/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::new]: loop 0:
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 42:8-44:9
+    Visibility: public -/
 @[rust_loop]
 def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables_loop
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
+  backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».new_loop
+  {I : Type _} {Clause0_Item : Type _} {Clause0_IntoIter : Type _}
+  (coreitertraitscollectIntoIteratorInst :
+  core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
   («coreborrowBorrowClause0_ItemEdwardsPointi686-no-tablesInst» :
   core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-no-tables»)
-  (static_points : It)
-  (out : alloc.vec.Vec (window.NafLookupTable8
+  (iter : Clause0_IntoIter)
+  (static_lookup_tables : alloc.vec.Vec (window.NafLookupTable8
   backend.serial.curve_models.AffineNielsPoint.«i686-no-tables»)) :
   Result (alloc.vec.Vec (window.NafLookupTable8
     backend.serial.curve_models.AffineNielsPoint.«i686-no-tables»))
   := do
   loop
-    (fun (static_points1, out1) =>
-      backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables_loop.body
-      coreitertraitsiteratorIteratorInst
-      «coreborrowBorrowClause0_ItemEdwardsPointi686-no-tablesInst»
-      static_points1 out1)
-    (static_points, out)
-
-/-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::new::static_lookup_tables]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 41:8-51:9 -/
-@[reducible]
-def
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables
-  {It : Type _} {Clause0_Item : Type _} (coreitertraitsiteratorIteratorInst :
-  core.iter.traits.iterator.Iterator It Clause0_Item)
-  («coreborrowBorrowClause0_ItemEdwardsPointi686-no-tablesInst» :
-  core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-no-tables»)
-  (static_points : It) :
-  Result (alloc.vec.Vec (window.NafLookupTable8
-    backend.serial.curve_models.AffineNielsPoint.«i686-no-tables»))
-  := do
-  backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables_loop
-    coreitertraitsiteratorIteratorInst
-    «coreborrowBorrowClause0_ItemEdwardsPointi686-no-tablesInst»
-    static_points (alloc.vec.Vec.new (window.NafLookupTable8
-    backend.serial.curve_models.AffineNielsPoint.«i686-no-tables»))
+    (fun (iter1, static_lookup_tables1) =>
+      backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».new_loop.body
+      coreitertraitscollectIntoIteratorInst
+      «coreborrowBorrowClause0_ItemEdwardsPointi686-no-tablesInst» iter1
+      static_lookup_tables1)
+    (iter, static_lookup_tables)
 
 /-- [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::new]:
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 36:4-56:5
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 36:4-49:5
     Visibility: public -/
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».new
@@ -12139,15 +12089,17 @@ def
   Result
     backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables»
   := do
-  let t ← coreitertraitscollectIntoIteratorInst.into_iter static_points
-  let v ←
-    backend.serial.scalar_mul.precomputed_straus.«VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables».new.static_lookup_tables
-      coreitertraitscollectIntoIteratorInst.iteratorInst
-      «coreborrowBorrowClause0_ItemEdwardsPointi686-no-tablesInst» t
-  ok { static_lookup_tables := v }
+  let iter ← coreitertraitscollectIntoIteratorInst.into_iter static_points
+  let static_lookup_tables ←
+    backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables».new_loop
+      coreitertraitscollectIntoIteratorInst
+      «coreborrowBorrowClause0_ItemEdwardsPointi686-no-tablesInst» iter
+      (alloc.vec.Vec.new (window.NafLookupTable8
+      backend.serial.curve_models.AffineNielsPoint.«i686-no-tables»))
+  ok { static_lookup_tables }
 
 /-- Trait implementation: [curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::{impl curve25519_dalek::traits::VartimePrecomputedMultiscalarMul<curve25519_dalek::edwards::EdwardsPoint::i686-no-tables> for curve25519_dalek::backend::serial::scalar_mul::precomputed_straus::VartimePrecomputedStraus::i686-no-tables}::i686-no-tables]
-    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 33:0-147:1 -/
+    Source: 'curve25519-dalek/src/backend/serial/scalar_mul/precomputed_straus.rs', lines 33:0-140:1 -/
 @[reducible]
 def
   backend.serial.scalar_mul.precomputed_straus.VartimePrecomputedStraus.«i686-no-tables».Insts.«Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»
