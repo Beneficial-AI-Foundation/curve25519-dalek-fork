@@ -41,7 +41,8 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -67,7 +68,7 @@ theorem multiscalar_mul_spec
   exact backend.«x86_64-tables».straus_multiscalar_mul_spec _ _ _ _ _ _ xs ys ss ps
     (hvs ▸ core.iter.traits.collect.IntoIteratorVec_yields vs)
     (hvp ▸ core.iter.traits.collect.IntoIteratorVec_yields vp)
-    hborrow_scalars hborrow_points hss hps hxs hys
+    hborrow_scalars hborrow_points hss (fun P hP => ⟨hps P hP, hps_on P hP⟩) hxs hys
 
 end «Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -94,7 +95,8 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«i686-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 26)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -120,7 +122,7 @@ theorem multiscalar_mul_spec
   exact backend.«i686-tables».straus_multiscalar_mul_spec _ _ _ _ _ _ xs ys ss ps
     (hvs ▸ core.iter.traits.collect.IntoIteratorVec_yields vs)
     (hvp ▸ core.iter.traits.collect.IntoIteratorVec_yields vp)
-    hborrow_scalars hborrow_points hss hps hxs hys
+    hborrow_scalars hborrow_points hss (fun P hP => ⟨hps P hP, hps_on P hP⟩) hxs hys
 
 end «Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -148,7 +150,8 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -173,7 +176,7 @@ theorem multiscalar_mul_spec
   exact backend.«x86_64-no-tables».straus_multiscalar_mul_spec _ _ _ _ _ _ xs ys ss ps
     (hvs ▸ core.iter.traits.collect.IntoIteratorVec_yields vs)
     (hvp ▸ core.iter.traits.collect.IntoIteratorVec_yields vp)
-    hborrow_scalars hborrow_points hss hps hxs hys
+    hborrow_scalars hborrow_points hss (fun P hP => ⟨hps P hP, hps_on P hP⟩) hxs hys
 
 end «Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -201,7 +204,8 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«i686-no-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 26)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -226,7 +230,7 @@ theorem multiscalar_mul_spec
   exact backend.«i686-no-tables».straus_multiscalar_mul_spec _ _ _ _ _ _ xs ys ss ps
     (hvs ▸ core.iter.traits.collect.IntoIteratorVec_yields vs)
     (hvp ▸ core.iter.traits.collect.IntoIteratorVec_yields vp)
-    hborrow_scalars hborrow_points hss hps hxs hys
+    hborrow_scalars hborrow_points hss (fun P hP => ⟨hps P hP, hps_on P hP⟩) hxs hys
 
 end «Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts

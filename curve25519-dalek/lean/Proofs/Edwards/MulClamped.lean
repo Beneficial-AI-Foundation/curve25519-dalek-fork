@@ -16,7 +16,7 @@ namespace Curve25519Dalek.edwards
 
 namespace «EdwardsPointx86_64-tables»
 
-/-- `EdwardsPoint::mul_clamped`: `clamp bytes • P`, with RFC 7748's clamping of the
+/-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
 little-endian value of `bytes`; limbs `< 2^52`. -/
 @[step]
 theorem mul_clamped_spec (self : EdwardsPoint.«x86_64-tables») (bytes : Array U8 32#usize)
@@ -38,7 +38,7 @@ end «EdwardsPointx86_64-tables»
 
 namespace «EdwardsPointi686-tables»
 
-/-- `EdwardsPoint::mul_clamped`: `clamp bytes • P`, with RFC 7748's clamping of the
+/-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
 little-endian value of `bytes`; limbs `< 2^26`. -/
 @[step]
 theorem mul_clamped_spec (self : EdwardsPoint.«i686-tables») (bytes : Array U8 32#usize)
@@ -60,7 +60,7 @@ end «EdwardsPointi686-tables»
 
 namespace «EdwardsPointx86_64-no-tables»
 
-/-- `EdwardsPoint::mul_clamped`: `clamp bytes • P`, with RFC 7748's clamping of the
+/-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
 little-endian value of `bytes`; limbs `< 2^52`. -/
 @[step]
 theorem mul_clamped_spec (self : EdwardsPoint.«x86_64-no-tables») (bytes : Array U8 32#usize)
@@ -82,7 +82,7 @@ end «EdwardsPointx86_64-no-tables»
 
 namespace «EdwardsPointi686-no-tables»
 
-/-- `EdwardsPoint::mul_clamped`: `clamp bytes • P`, with RFC 7748's clamping of the
+/-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
 little-endian value of `bytes`; limbs `< 2^26`. -/
 @[step]
 theorem mul_clamped_spec (self : EdwardsPoint.«i686-no-tables») (bytes : Array U8 32#usize)

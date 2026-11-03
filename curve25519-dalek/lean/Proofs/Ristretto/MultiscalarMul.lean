@@ -43,7 +43,8 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«x86_64-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -64,7 +65,8 @@ theorem multiscalar_mul_spec
       (core.iter.traits.collect.IntoIteratorVec _) (core.borrow.Borrow.Blanket _) scalars v
       xs v.val ss ps hscalars (core.iter.traits.collect.IntoIteratorVec_yields v)
       hborrow_scalars (by rw [hv]; exact List.forall₂_same.mpr fun P _ =>
-        core.borrow.Borrow.Blanket.borrow_spec P) hss hps hxs (by rw [hv, ← hpsys]; exact hys)
+        core.borrow.Borrow.Blanket.borrow_spec P) hss hps hps_on hxs
+      (by rw [hv, ← hpsys]; exact hys)
       (by rw [hv, ← hpsys]; exact hlen) as ⟨r, h1, h2, h3⟩
   exact ⟨h1, h2, h3⟩
 
@@ -95,7 +97,8 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«i686-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 26)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -116,7 +119,8 @@ theorem multiscalar_mul_spec
       (core.iter.traits.collect.IntoIteratorVec _) (core.borrow.Borrow.Blanket _) scalars v
       xs v.val ss ps hscalars (core.iter.traits.collect.IntoIteratorVec_yields v)
       hborrow_scalars (by rw [hv]; exact List.forall₂_same.mpr fun P _ =>
-        core.borrow.Borrow.Blanket.borrow_spec P) hss hps hxs (by rw [hv, ← hpsys]; exact hys)
+        core.borrow.Borrow.Blanket.borrow_spec P) hss hps hps_on hxs
+      (by rw [hv, ← hpsys]; exact hys)
       (by rw [hv, ← hpsys]; exact hlen) as ⟨r, h1, h2, h3⟩
   exact ⟨h1, h2, h3⟩
 
@@ -147,7 +151,8 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«x86_64-no-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -168,7 +173,8 @@ theorem multiscalar_mul_spec
       (core.iter.traits.collect.IntoIteratorVec _) (core.borrow.Borrow.Blanket _) scalars v
       xs v.val ss ps hscalars (core.iter.traits.collect.IntoIteratorVec_yields v)
       hborrow_scalars (by rw [hv]; exact List.forall₂_same.mpr fun P _ =>
-        core.borrow.Borrow.Blanket.borrow_spec P) hss hps hxs (by rw [hv, ← hpsys]; exact hys)
+        core.borrow.Borrow.Blanket.borrow_spec P) hss hps hps_on hxs
+      (by rw [hv, ← hpsys]; exact hys)
       (by rw [hv, ← hpsys]; exact hlen) as ⟨r, h1, h2, h3⟩
   exact ⟨h1, h2, h3⟩
 
@@ -199,7 +205,8 @@ theorem multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«i686-no-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 26)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -220,7 +227,8 @@ theorem multiscalar_mul_spec
       (core.iter.traits.collect.IntoIteratorVec _) (core.borrow.Borrow.Blanket _) scalars v
       xs v.val ss ps hscalars (core.iter.traits.collect.IntoIteratorVec_yields v)
       hborrow_scalars (by rw [hv]; exact List.forall₂_same.mpr fun P _ =>
-        core.borrow.Borrow.Blanket.borrow_spec P) hss hps hxs (by rw [hv, ← hpsys]; exact hys)
+        core.borrow.Borrow.Blanket.borrow_spec P) hss hps hps_on hxs
+      (by rw [hv, ← hpsys]; exact hys)
       (by rw [hv, ← hpsys]; exact hlen) as ⟨r, h1, h2, h3⟩
   exact ⟨h1, h2, h3⟩
 

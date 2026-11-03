@@ -88,8 +88,8 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           omega))
     hz 0#usize (by decide) Q hQ hon
 
-/-- `BasepointTable::mul_base` (radix `2^4`): `s • self.point` for the table's point
-(unreduced, `s.asNat < 2^255`); limbs `< 2^52`. -/
+/-- `BasepointTable::mul_base` (radix `2^4`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^52`. -/
 @[step]
 theorem mul_base_spec (self : EdwardsBasepointTable.«x86_64-tables») (s : scalar.Scalar)
     (hself : self.LimbsLt 54) (hP : self.IsTable)
@@ -174,8 +174,8 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           omega))
     hz 0#usize (by decide) Q hQ hon
 
-/-- `BasepointTable::mul_base` (radix `2^4`): `s • self.point` for the table's point
-(unreduced, `s.asNat < 2^255`); limbs `< 2^26`. -/
+/-- `BasepointTable::mul_base` (radix `2^4`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^26`. -/
 @[step]
 theorem mul_base_spec (self : EdwardsBasepointTable.«i686-tables») (s : scalar.Scalar)
     (hself : self.LimbsLt 27) (hP : self.IsTable)
@@ -258,8 +258,8 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           omega))
     hz 0#usize (by decide) Q hQ hon
 
-/-- `BasepointTable::mul_base` (radix `2^5`): `s • self.point` for the table's point
-(unreduced, `s.asNat < 2^255`); limbs `< 2^52`. -/
+/-- `BasepointTable::mul_base` (radix `2^5`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^52`. -/
 @[step]
 theorem mul_base_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables»)
     (s : scalar.Scalar) (hself : self.LimbsLt 54) (hP : self.IsTable)
@@ -344,8 +344,8 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           omega))
     hz 0#usize (by decide) Q hQ hon
 
-/-- `BasepointTable::mul_base` (radix `2^5`): `s • self.point` for the table's point
-(unreduced, `s.asNat < 2^255`); limbs `< 2^26`. -/
+/-- `BasepointTable::mul_base` (radix `2^5`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^26`. -/
 @[step]
 theorem mul_base_spec (self : EdwardsBasepointTableRadix32.«i686-tables») (s : scalar.Scalar)
     (hself : self.LimbsLt 27) (hP : self.IsTable)
@@ -428,8 +428,8 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           omega))
     hz 0#usize (by decide) Q hQ hon
 
-/-- `BasepointTable::mul_base` (radix `2^6`): `s • self.point` for the table's point
-(unreduced, `s.asNat < 2^255`); limbs `< 2^52`. -/
+/-- `BasepointTable::mul_base` (radix `2^6`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^52`. -/
 @[step]
 theorem mul_base_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables»)
     (s : scalar.Scalar) (hself : self.LimbsLt 54) (hP : self.IsTable)
@@ -514,8 +514,8 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           omega))
     hz 0#usize (by decide) Q hQ hon
 
-/-- `BasepointTable::mul_base` (radix `2^6`): `s • self.point` for the table's point
-(unreduced, `s.asNat < 2^255`); limbs `< 2^26`. -/
+/-- `BasepointTable::mul_base` (radix `2^6`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^26`. -/
 @[step]
 theorem mul_base_spec (self : EdwardsBasepointTableRadix64.«i686-tables») (s : scalar.Scalar)
     (hself : self.LimbsLt 27) (hP : self.IsTable)
@@ -598,8 +598,8 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           omega))
     hz 0#usize (by decide) Q hQ hon
 
-/-- `BasepointTable::mul_base` (radix `2^7`): `s • self.point` for the table's point
-(unreduced, `s.asNat < 2^255`); limbs `< 2^52`. -/
+/-- `BasepointTable::mul_base` (radix `2^7`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^52`. -/
 @[step]
 theorem mul_base_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables»)
     (s : scalar.Scalar) (hself : self.LimbsLt 54) (hP : self.IsTable)
@@ -684,8 +684,8 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           omega))
     hz 0#usize (by decide) Q hQ hon
 
-/-- `BasepointTable::mul_base` (radix `2^7`): `s • self.point` for the table's point
-(unreduced, `s.asNat < 2^255`); limbs `< 2^26`. -/
+/-- `BasepointTable::mul_base` (radix `2^7`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^26`. -/
 @[step]
 theorem mul_base_spec (self : EdwardsBasepointTableRadix128.«i686-tables») (s : scalar.Scalar)
     (hself : self.LimbsLt 27) (hP : self.IsTable)
@@ -758,8 +758,8 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
         (hself (i / 2) (by scalar_tac)) h)
     hz 0#usize (by decide) Q hQ hon
 
-/-- `BasepointTable::mul_base` (radix `2^8`): `s • self.point` for the table's point
-(unreduced, `s.asNat < 2^255`); limbs `< 2^52`. -/
+/-- `BasepointTable::mul_base` (radix `2^8`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^52`. -/
 @[step]
 theorem mul_base_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables»)
     (s : scalar.Scalar) (hself : self.LimbsLt 54) (hP : self.IsTable)
@@ -834,8 +834,8 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
         (hself (i / 2) (by scalar_tac)) h)
     hz 0#usize (by decide) Q hQ hon
 
-/-- `BasepointTable::mul_base` (radix `2^8`): `s • self.point` for the table's point
-(unreduced, `s.asNat < 2^255`); limbs `< 2^26`. -/
+/-- `BasepointTable::mul_base` (radix `2^8`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^26`. -/
 @[step]
 theorem mul_base_spec (self : EdwardsBasepointTableRadix256.«i686-tables») (s : scalar.Scalar)
     (hself : self.LimbsLt 27) (hP : self.IsTable)

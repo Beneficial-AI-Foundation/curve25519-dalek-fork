@@ -44,7 +44,8 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -58,7 +59,8 @@ theorem optional_mixed_multiscalar_mul_spec
   unfold optional_mixed_multiscalar_mul
   exact backend.«VartimePrecomputedStrausx86_64-tables».optional_mixed_multiscalar_mul_spec
     _ _ _ _ _ self _ _ _ xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars
-    hdynamic_points hborrow_static hborrow_dynamic hss hds hqs hxs hys hqops hstatic hdynamic
+    hdynamic_points hborrow_static hborrow_dynamic hss hds
+    (fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩) hxs hys hqops hstatic hdynamic
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«x86_64-tables».Insts
@@ -93,7 +95,8 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -107,7 +110,8 @@ theorem optional_mixed_multiscalar_mul_spec
   unfold optional_mixed_multiscalar_mul
   exact backend.«VartimePrecomputedStrausi686-tables».optional_mixed_multiscalar_mul_spec
     _ _ _ _ _ self _ _ _ xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars
-    hdynamic_points hborrow_static hborrow_dynamic hss hds hqs hxs hys hqops hstatic hdynamic
+    hdynamic_points hborrow_static hborrow_dynamic hss hds
+    (fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩) hxs hys hqops hstatic hdynamic
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«i686-tables».Insts
@@ -143,7 +147,8 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -157,7 +162,8 @@ theorem optional_mixed_multiscalar_mul_spec
   unfold optional_mixed_multiscalar_mul
   exact backend.«VartimePrecomputedStrausx86_64-no-tables».optional_mixed_multiscalar_mul_spec
     _ _ _ _ _ self _ _ _ xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars
-    hdynamic_points hborrow_static hborrow_dynamic hss hds hqs hxs hys hqops hstatic hdynamic
+    hdynamic_points hborrow_static hborrow_dynamic hss hds
+    (fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩) hxs hys hqops hstatic hdynamic
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts
@@ -193,7 +199,8 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -207,7 +214,8 @@ theorem optional_mixed_multiscalar_mul_spec
   unfold optional_mixed_multiscalar_mul
   exact backend.«VartimePrecomputedStrausi686-no-tables».optional_mixed_multiscalar_mul_spec
     _ _ _ _ _ self _ _ _ xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars
-    hdynamic_points hborrow_static hborrow_dynamic hss hds hqs hxs hys hqops hstatic hdynamic
+    hdynamic_points hborrow_static hborrow_dynamic hss hds
+    (fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩) hxs hys hqops hstatic hdynamic
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«i686-no-tables».Insts

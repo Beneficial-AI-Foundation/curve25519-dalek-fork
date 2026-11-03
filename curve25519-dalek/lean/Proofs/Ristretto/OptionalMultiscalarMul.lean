@@ -85,7 +85,8 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
@@ -104,7 +105,8 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   step with edwards_spec _ _ (core.iter.traits.collect.IntoIteratorVec _) scalars v xs v.val ss
       hscalars
       (core.iter.traits.collect.IntoIteratorVec_yields v) hborrow_scalars hss
-      (by rw [hv]; exact hps) hxs (by rw [hv]; exact hops) (by rw [hv]; exact hlen)
+      (by rw [hv]; exact hps) (by rw [hv]; exact hps_on) hxs
+      (by rw [hv]; exact hops) (by rw [hv]; exact hlen)
     as ⟨o, hnone, hsome⟩
   rw [hv] at hnone hsome
   refine spec_mono (collect.optionMap_id_spec _ _ ?_ o) ?_
@@ -180,7 +182,8 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 26 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 26)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
@@ -199,7 +202,8 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   step with edwards_spec _ _ (core.iter.traits.collect.IntoIteratorVec _) scalars v xs v.val ss
       hscalars
       (core.iter.traits.collect.IntoIteratorVec_yields v) hborrow_scalars hss
-      (by rw [hv]; exact hps) hxs (by rw [hv]; exact hops) (by rw [hv]; exact hlen)
+      (by rw [hv]; exact hps) (by rw [hv]; exact hps_on) hxs
+      (by rw [hv]; exact hops) (by rw [hv]; exact hlen)
     as ⟨o, hnone, hsome⟩
   rw [hv] at hnone hsome
   refine spec_mono (collect.optionMap_id_spec _ _ ?_ o) ?_
@@ -275,7 +279,8 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
@@ -294,7 +299,8 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   step with edwards_spec _ _ (core.iter.traits.collect.IntoIteratorVec _) scalars v xs v.val ss
       hscalars
       (core.iter.traits.collect.IntoIteratorVec_yields v) hborrow_scalars hss
-      (by rw [hv]; exact hps) hxs (by rw [hv]; exact hops) (by rw [hv]; exact hlen)
+      (by rw [hv]; exact hps) (by rw [hv]; exact hps_on) hxs
+      (by rw [hv]; exact hops) (by rw [hv]; exact hlen)
     as ⟨o, hnone, hsome⟩
   rw [hv] at hnone hsome
   refine spec_mono (collect.optionMap_id_spec _ _ ?_ o) ?_
@@ -370,7 +376,8 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 26 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 26)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
@@ -389,7 +396,8 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   step with edwards_spec _ _ (core.iter.traits.collect.IntoIteratorVec _) scalars v xs v.val ss
       hscalars
       (core.iter.traits.collect.IntoIteratorVec_yields v) hborrow_scalars hss
-      (by rw [hv]; exact hps) hxs (by rw [hv]; exact hops) (by rw [hv]; exact hlen)
+      (by rw [hv]; exact hps) (by rw [hv]; exact hps_on) hxs
+      (by rw [hv]; exact hops) (by rw [hv]; exact hlen)
     as ⟨o, hnone, hsome⟩
   rw [hv] at hnone hsome
   refine spec_mono (collect.optionMap_id_spec _ _ ?_ o) ?_

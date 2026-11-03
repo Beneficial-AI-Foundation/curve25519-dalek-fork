@@ -28,13 +28,14 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (hborrow : List.Forall₂
       (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄) ys
           ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeEdwardsPrecomputation.«x86_64-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.LimbsLt 54 ⦄ := by
   unfold new
   step with backend.«VartimePrecomputedStrausx86_64-tables».new_spec _ _ _ ys ps hstatic_points
-    hborrow hps hys as ⟨v, hv, hpts, hvb⟩
+    hborrow (fun P hP => ⟨hps P hP, hps_on P hP⟩) hys as ⟨v, hv, hpts, hvb⟩
   exact ⟨hv, hpts, hvb⟩
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
@@ -54,13 +55,14 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (hborrow : List.Forall₂
       (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«i686-tables») => P' = P ⦄) ys
           ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 26)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeEdwardsPrecomputation.«i686-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.LimbsLt 27 ⦄ := by
   unfold new
   step with backend.«VartimePrecomputedStrausi686-tables».new_spec _ _ _ ys ps hstatic_points
-    hborrow hps hys as ⟨v, hv, hpts, hvb⟩
+    hborrow (fun P hP => ⟨hps P hP, hps_on P hP⟩) hys as ⟨v, hv, hpts, hvb⟩
   exact ⟨hv, hpts, hvb⟩
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
@@ -80,13 +82,14 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (hborrow : List.Forall₂
       (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
           ys ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeEdwardsPrecomputation.«x86_64-no-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.LimbsLt 54 ⦄ := by
   unfold new
   step with backend.«VartimePrecomputedStrausx86_64-no-tables».new_spec _ _ _ ys ps hstatic_points
-    hborrow hps hys as ⟨v, hv, hpts, hvb⟩
+    hborrow (fun P hP => ⟨hps P hP, hps_on P hP⟩) hys as ⟨v, hv, hpts, hvb⟩
   exact ⟨hv, hpts, hvb⟩
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
@@ -106,13 +109,14 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (hborrow : List.Forall₂
       (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«i686-no-tables») => P' = P ⦄)
           ys ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 26)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeEdwardsPrecomputation.«i686-no-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.LimbsLt 27 ⦄ := by
   unfold new
   step with backend.«VartimePrecomputedStrausi686-no-tables».new_spec _ _ _ ys ps hstatic_points
-    hborrow hps hys as ⟨v, hv, hpts, hvb⟩
+    hborrow (fun P hP => ⟨hps P hP, hps_on P hP⟩) hys as ⟨v, hv, hpts, hvb⟩
   exact ⟨hv, hpts, hvb⟩
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»

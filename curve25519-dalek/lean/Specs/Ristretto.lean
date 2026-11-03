@@ -128,7 +128,8 @@ recall as_bytes_spec (self : CompressedRistretto) :
 /-- `CompressedRistretto::from_slice`: the bytes of a slice of length `32`, an error otherwise. -/
 recall from_slice_spec (bytes : Slice U8) :
     from_slice bytes ⦃ (r : core.result.Result CompressedRistretto core.array.TryFromSliceError) =>
-      (bytes.length = 32 → ∃ a : CompressedRistretto, r = .Ok a ∧ a.val = bytes.val) ∧
+      (bytes.length = 32 →
+        ∃ a : CompressedRistretto, r = .Ok a ∧ ∀ i < 32, a[i]! = bytes[i]!) ∧
       (bytes.length ≠ 32 → r = .Err ()) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -224,7 +225,8 @@ namespace Insts.CoreConvertTryFromShared0SliceU8TryFromSliceError
 /-- `TryFrom<&[u8]> for CompressedRistretto`: as `from_slice`. -/
 recall try_from_spec (slice : Slice U8) :
     try_from slice ⦃ (r : core.result.Result CompressedRistretto core.array.TryFromSliceError) =>
-      (slice.length = 32 → ∃ a : CompressedRistretto, r = .Ok a ∧ a.val = slice.val) ∧
+      (slice.length = 32 →
+        ∃ a : CompressedRistretto, r = .Ok a ∧ ∀ i < 32, a[i]! = slice[i]!) ∧
       (slice.length ≠ 32 → r = .Err ()) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -299,7 +301,8 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       core.iter.traits.collect.IntoIterator I RistrettoPoint.«x86_64-tables» Clause0_IntoIter)
     (points : I) (ps : List RistrettoPoint.«x86_64-tables»)
     (hpoints : pointsInst.Yields points ps)
-    (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve) (hlen : ps.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
         ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
@@ -318,7 +321,8 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       core.iter.traits.collect.IntoIterator I RistrettoPoint.«i686-tables» Clause0_IntoIter)
     (points : I) (ps : List RistrettoPoint.«i686-tables»)
     (hpoints : pointsInst.Yields points ps)
-    (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve) (hlen : ps.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
         ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
@@ -339,7 +343,8 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       core.iter.traits.collect.IntoIterator I RistrettoPoint.«x86_64-no-tables» Clause0_IntoIter)
     (points : I) (ps : List RistrettoPoint.«x86_64-no-tables»)
     (hpoints : pointsInst.Yields points ps)
-    (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve) (hlen : ps.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
         ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
@@ -358,7 +363,8 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       core.iter.traits.collect.IntoIterator I RistrettoPoint.«i686-no-tables» Clause0_IntoIter)
     (points : I) (ps : List RistrettoPoint.«i686-no-tables»)
     (hpoints : pointsInst.Yields points ps)
-    (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve) (hlen : ps.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
         ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
@@ -2372,7 +2378,8 @@ recall multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«x86_64-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -2406,7 +2413,8 @@ recall multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«i686-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -2440,7 +2448,8 @@ recall multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«x86_64-no-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -2474,7 +2483,8 @@ recall multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«i686-no-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
@@ -2504,7 +2514,8 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
@@ -2536,7 +2547,8 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
@@ -2568,7 +2580,8 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
@@ -2600,7 +2613,8 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
@@ -2631,7 +2645,8 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
       (fun y P => borrowInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«x86_64-tables») => P' = P ⦄)
       ys ps)
-    (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeRistrettoPrecomputation.«x86_64-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.IsBounded ⦄
@@ -2684,7 +2699,8 @@ recall optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -2719,7 +2735,8 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
       (fun y P => borrowInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«i686-tables») => P' = P ⦄)
       ys ps)
-    (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeRistrettoPrecomputation.«i686-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.IsBounded ⦄
@@ -2772,7 +2789,8 @@ recall optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -2807,7 +2825,8 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
       (fun y P => borrowInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«x86_64-no-tables») => P' = P ⦄)
       ys ps)
-    (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeRistrettoPrecomputation.«x86_64-no-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.IsBounded ⦄
@@ -2860,7 +2879,8 @@ recall optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -2895,7 +2915,8 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
       (fun y P => borrowInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«i686-no-tables») => P' = P ⦄)
       ys ps)
-    (hps : ∀ P ∈ ps, P.IsBounded ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeRistrettoPrecomputation.«i686-no-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.IsBounded ⦄
@@ -2948,7 +2969,8 @@ recall optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :

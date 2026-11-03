@@ -44,10 +44,12 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
       (fun y P => borrowInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«x86_64-tables») => P' = P ⦄)
       ys ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeRistrettoPrecomputation.«x86_64-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.LimbsLt 54 ⦄ := by
+  have hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve := fun P hP => ⟨hps P hP, hps_on P hP⟩
   unfold new
   have h : pointsInst.into_iter static_points
       ⦃ (it : Clause0_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hstatic_points
@@ -154,7 +156,8 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -165,6 +168,7 @@ theorem optional_mixed_multiscalar_mul_spec
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄ := by
+  have hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve := fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩
   unfold optional_mixed_multiscalar_mul
   have h3 : dynamicPointsInst.into_iter dynamic_points
       ⦃ (it : Clause4_IntoIter) => dynamicPointsInst.iteratorInst.Yields it qops ⦄ :=
@@ -207,10 +211,12 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
       (fun y P => borrowInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«i686-tables») => P' = P ⦄)
       ys ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 26)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeRistrettoPrecomputation.«i686-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.LimbsLt 27 ⦄ := by
+  have hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve := fun P hP => ⟨hps P hP, hps_on P hP⟩
   unfold new
   have h : pointsInst.into_iter static_points
       ⦃ (it : Clause0_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hstatic_points
@@ -317,7 +323,8 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -328,6 +335,7 @@ theorem optional_mixed_multiscalar_mul_spec
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 26 ⦄ := by
+  have hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve := fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩
   unfold optional_mixed_multiscalar_mul
   have h3 : dynamicPointsInst.into_iter dynamic_points
       ⦃ (it : Clause4_IntoIter) => dynamicPointsInst.iteratorInst.Yields it qops ⦄ :=
@@ -370,10 +378,12 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
       (fun y P => borrowInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«x86_64-no-tables») => P' = P ⦄)
       ys ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 52)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeRistrettoPrecomputation.«x86_64-no-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.LimbsLt 54 ⦄ := by
+  have hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve := fun P hP => ⟨hps P hP, hps_on P hP⟩
   unfold new
   have h : pointsInst.into_iter static_points
       ⦃ (it : Clause0_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hstatic_points
@@ -480,7 +490,8 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -491,6 +502,7 @@ theorem optional_mixed_multiscalar_mul_spec
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 52 ⦄ := by
+  have hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve := fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩
   unfold optional_mixed_multiscalar_mul
   have h3 : dynamicPointsInst.into_iter dynamic_points
       ⦃ (it : Clause4_IntoIter) => dynamicPointsInst.iteratorInst.Yields it qops ⦄ :=
@@ -533,10 +545,12 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
       (fun y P => borrowInst.borrow y
           ⦃ (P' : ristretto.RistrettoPoint.«i686-no-tables») => P' = P ⦄)
       ys ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+    (hps : ∀ P ∈ ps, P.LimbsLt 26)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeRistrettoPrecomputation.«i686-no-tables») =>
         r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.LimbsLt 27 ⦄ := by
+  have hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve := fun P hP => ⟨hps P hP, hps_on P hP⟩
   unfold new
   have h : pointsInst.into_iter static_points
       ⦃ (it : Clause0_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hstatic_points
@@ -643,7 +657,8 @@ theorem optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
@@ -654,6 +669,7 @@ theorem optional_mixed_multiscalar_mul_spec
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
             (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
           R.LimbsLt 26 ⦄ := by
+  have hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve := fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩
   unfold optional_mixed_multiscalar_mul
   have h3 : dynamicPointsInst.into_iter dynamic_points
       ⦃ (it : Clause4_IntoIter) => dynamicPointsInst.iteratorInst.Yields it qops ⦄ :=

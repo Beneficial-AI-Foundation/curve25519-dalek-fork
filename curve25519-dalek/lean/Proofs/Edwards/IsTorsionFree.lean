@@ -16,7 +16,7 @@ namespace Curve25519Dalek.edwards
 
 namespace «EdwardsPointx86_64-tables»
 
-/-- `EdwardsPoint::is_torsion_free`: `L • P = 0` (multiplication by the unreduced
+/-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
 `BASEPOINT_ORDER`); limbs `< 2^52`. -/
 @[step]
 theorem is_torsion_free_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
@@ -33,7 +33,7 @@ end «EdwardsPointx86_64-tables»
 
 namespace «EdwardsPointi686-tables»
 
-/-- `EdwardsPoint::is_torsion_free`: `L • P = 0` (multiplication by the unreduced
+/-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
 `BASEPOINT_ORDER`); limbs `< 2^26`. -/
 @[step]
 theorem is_torsion_free_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
@@ -50,7 +50,7 @@ end «EdwardsPointi686-tables»
 
 namespace «EdwardsPointx86_64-no-tables»
 
-/-- `EdwardsPoint::is_torsion_free`: `L • P = 0` (multiplication by the unreduced
+/-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
 `BASEPOINT_ORDER`); limbs `< 2^52`. -/
 @[step]
 theorem is_torsion_free_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
@@ -67,7 +67,7 @@ end «EdwardsPointx86_64-no-tables»
 
 namespace «EdwardsPointi686-no-tables»
 
-/-- `EdwardsPoint::is_torsion_free`: `L • P = 0` (multiplication by the unreduced
+/-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
 `BASEPOINT_ORDER`); limbs `< 2^26`. -/
 @[step]
 theorem is_torsion_free_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)

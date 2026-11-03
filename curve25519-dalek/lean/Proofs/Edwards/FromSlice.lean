@@ -15,7 +15,8 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY
 @[step]
 theorem from_slice_spec (bytes : Slice U8) :
     from_slice bytes ⦃ (r : core.result.Result CompressedEdwardsY core.array.TryFromSliceError) =>
-      (bytes.length = 32 → ∃ a : CompressedEdwardsY, r = .Ok a ∧ a.val = bytes.val) ∧
+      (bytes.length = 32 →
+        ∃ a : CompressedEdwardsY, r = .Ok a ∧ ∀ i < 32, a[i]! = bytes[i]!) ∧
       (bytes.length ≠ 32 → r = .Err ()) ⦄ := by
   unfold from_slice
   step as ⟨r0, hr0⟩
@@ -28,9 +29,10 @@ theorem from_slice_spec (bytes : Slice U8) :
     simp only [P.Insts.CoreOpsFunctionFnOnceTupleArrayU832CompressedEdwardsY.call_once,
       CompressedEdwardsY.constructor] at hy
     have hay : a = y := Result.ok_injective hy
-    refine ⟨fun _ => ⟨a, by rw [hr, hay], hval⟩, fun hne => absurd ?_ hne⟩
-    rw [Slice.length, ← hval, Array.length_eq]
-    rfl
+    refine ⟨fun _ => ⟨a, by rw [hr, hay], fun i _ => ?_⟩, fun hne => absurd ?_ hne⟩
+    · rw [Array.getElem!_Nat_eq, Slice.getElem!_Nat_eq, hval]
+    · rw [Slice.length, ← hval, Array.length_eq]
+      rfl
   · exact ⟨fun h => absurd h hr0, fun _ => herr e rfl⟩
 
 namespace Insts.CoreConvertTryFromShared0SliceU8TryFromSliceError
@@ -39,7 +41,8 @@ namespace Insts.CoreConvertTryFromShared0SliceU8TryFromSliceError
 @[step]
 theorem try_from_spec (slice : Slice U8) :
     try_from slice ⦃ (r : core.result.Result CompressedEdwardsY core.array.TryFromSliceError) =>
-      (slice.length = 32 → ∃ a : CompressedEdwardsY, r = .Ok a ∧ a.val = slice.val) ∧
+      (slice.length = 32 →
+        ∃ a : CompressedEdwardsY, r = .Ok a ∧ ∀ i < 32, a[i]! = slice[i]!) ∧
       (slice.length ≠ 32 → r = .Err ()) ⦄ := by
   unfold try_from
   step*
