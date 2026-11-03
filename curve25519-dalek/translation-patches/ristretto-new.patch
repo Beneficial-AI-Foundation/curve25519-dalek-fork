@@ -1,7 +1,7 @@
 Translation patch: <VartimeRistrettoPrecomputation as VartimePrecomputedMultiscalarMul>::new
 
-Change: the lazy `static_points.map(|P| P.borrow().0)` becomes a `Vec` built by a helper.
-Why: Aeneas only models `Iterator::next` (aeneas#1057). Loops over a generic `IntoIterator` don't extract, hence the nested `It: Iterator` helper.
+Change: the lazy `static_points.map(|P| P.borrow().0)` becomes a `Vec` built by a `for` loop.
+Why: Aeneas only models `Iterator::next` (aeneas#1057).
 Behaviour: identical (the callee consumes its input immediately).
 
 diff --git a/curve25519-dalek/src/ristretto.rs b/curve25519-dalek/src/ristretto.rs

@@ -1,6 +1,6 @@
 Translation patch: read_le_u64_into
 
-Change: `src.chunks(8).zip(dst.iter_mut())` becomes an index loop with `bytes = &src[8 * i..8 * i + 8]`.
+Change: `src.chunks(8).zip(dst.iter_mut())` becomes a range loop with indexed borrows and `bytes = &src[8 * i..8 * i + 8]`.
 Why: Aeneas only models `Iterator::next` (aeneas#1057).
 Behaviour: identical.
 Relies on: after the `assert!`, `src.len() == 8 * dst.len()`, so the slicing is in bounds and cannot overflow.

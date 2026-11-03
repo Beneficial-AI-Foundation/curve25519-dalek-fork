@@ -1,7 +1,7 @@
 Translation patch: <RistrettoPoint as VartimeMultiscalarMul>::optional_multiscalar_mul
 
-Change: the lazy `points.map(|o| o.map(|P| P.0))` becomes a `Vec` built by a helper.
-Why: Aeneas only models `Iterator::next` (aeneas#1057). Loops over a generic `IntoIterator` don't extract, hence the nested `It: Iterator` helper.
+Change: the lazy `points.map(|o| o.map(|P| P.0))` becomes a `Vec` built by a `for` loop.
+Why: Aeneas only models `Iterator::next` (aeneas#1057).
 Behaviour: same result for valid inputs. Alone, not identical: as ristretto-multiscalar_mul, and all
 points are read even after a `None`. With edwards-optional_multiscalar_mul.patch applied, the
 behaviour is as declared there.

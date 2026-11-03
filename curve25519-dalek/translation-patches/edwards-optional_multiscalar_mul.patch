@@ -1,7 +1,7 @@
 Translation patch: <EdwardsPoint as VartimeMultiscalarMul>::optional_multiscalar_mul
 
 Change: as edwards-multiscalar_mul; `size = scalars.len()` picks Straus (< 190) or Pippenger.
-Why: Aeneas only models `Iterator::next` (aeneas#1057). Loops over a generic `IntoIterator` don't extract, hence the nested `It: Iterator` helper. `size_hint` cannot be called at all.
+Why: Aeneas only models `Iterator::next` (aeneas#1057). `size_hint` cannot be called at all.
 Behaviour: same result for valid inputs, not identical: as edwards-multiscalar_mul, and all points are
 read even after a `None`.
 

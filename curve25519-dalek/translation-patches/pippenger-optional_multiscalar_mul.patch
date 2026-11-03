@@ -1,13 +1,13 @@
 Translation patch: <Pippenger as VartimeMultiscalarMul>::optional_multiscalar_mul
 
 Change: scalars are collected first and `size = scalars.len()` replaces `size_hint().0`; the
-scalar/point `zip` becomes a `for` loop; the lazy column iterator + `fold` becomes a reversed
+scalar/point `zip` becomes a helper with an explicit `next` loop; the lazy column iterator + `fold` becomes a reversed
 range loop accumulating `total` (highest column first, as `fold` did).
 Why: Aeneas only models `Iterator::next` (aeneas#1057).
 Behaviour: same result, not identical: the window width uses the exact length (equal for exact-size
 inputs; any width gives the same result); scalars are read before points; an unbounded scalar
-iterator with finite points no longer terminates (unreachable: the only caller requires equal
-exact-size inputs).
+iterator with finite points no longer terminates (with edwards-optional_multiscalar_mul.patch
+applied, the caller collects both inputs and checks their actual lengths first).
 
 diff --git a/curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs b/curve25519-dalek/src/backend/serial/scalar_mul/pippenger.rs
 index a5469b8..5bdd137 100644

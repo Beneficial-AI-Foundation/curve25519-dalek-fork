@@ -1,7 +1,7 @@
 Translation patch: <VartimeRistrettoPrecomputation as VartimePrecomputedMultiscalarMul>::optional_mixed_multiscalar_mul
 
-Change: the lazy `dynamic_points.map(..)` becomes a `Vec` built by a helper.
-Why: Aeneas only models `Iterator::next` (aeneas#1057). Loops over a generic `IntoIterator` don't extract, hence the nested `It: Iterator` helper.
+Change: the lazy `dynamic_points.map(..)` becomes a `Vec` built by a `for` loop.
+Why: Aeneas only models `Iterator::next` (aeneas#1057).
 Behaviour: same result for finite inputs, not identical: all dynamic points are read, even after a
 `None`, before the scalars (so input infinite after a `None` no longer terminates).
 

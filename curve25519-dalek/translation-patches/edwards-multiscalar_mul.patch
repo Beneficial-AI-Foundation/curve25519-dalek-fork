@@ -1,7 +1,7 @@
 Translation patch: <EdwardsPoint as MultiscalarMul>::multiscalar_mul
 
-Change: the `size_hint` asserts become: collect both inputs into `Vec`s, `assert_eq!(scalars.len(), points.len())`.
-Why: Aeneas only models `Iterator::next` (aeneas#1057). Loops over a generic `IntoIterator` don't extract, hence the nested `It: Iterator` helper. `size_hint` cannot be called at all.
+Change: collect both inputs with `Vec::from_iter` and replace the `size_hint` asserts with `assert_eq!(scalars.len(), points.len())`.
+Why: Aeneas only models `Iterator::next` (aeneas#1057). `size_hint` cannot be called at all.
 Behaviour: same result for valid inputs, not identical: panics iff the actual lengths differ (after
 consuming both) instead of unless both hints are exact and equal; unbounded inputs no longer
 terminate; scalars are read before points. Non-functional: owned scalars are buffered unzeroized.

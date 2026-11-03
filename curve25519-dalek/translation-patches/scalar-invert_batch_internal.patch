@@ -1,6 +1,6 @@
 Translation patch: Scalar::invert_batch_internal
 
-Change: both `zip` passes (the second reversed) become index loops.
+Change: both `zip` passes (the second reversed) become range loops with indexed borrows.
 Why: Aeneas fails on borrows through `iter_mut().rev().zip(..)` (InterpBorrowsCore).
 Behaviour: identical.
 Relies on: the only callers (`invert_batch`, `invert_batch_alloc`) pass `scratch.len() == inputs.len()`.
