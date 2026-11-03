@@ -5848,8 +5848,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 289,
-        "end_line": 298
+        "begin_line": 288,
+        "end_line": 297
       },
       "is_opaque": false,
       "can_fail": true,
@@ -6953,8 +6953,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 289,
-        "end_line": 298
+        "begin_line": 288,
+        "end_line": 297
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13944,8 +13944,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 303,
-        "end_line": 312
+        "begin_line": 302,
+        "end_line": 311
       },
       "is_opaque": false,
       "can_fail": true,
@@ -13961,8 +13961,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 326,
-        "end_line": 372
+        "begin_line": 325,
+        "end_line": 371
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14080,8 +14080,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 303,
-        "end_line": 312
+        "begin_line": 302,
+        "end_line": 311
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14097,8 +14097,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 326,
-        "end_line": 372
+        "begin_line": 325,
+        "end_line": 371
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14845,8 +14845,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 253,
-        "end_line": 258
+        "begin_line": 251,
+        "end_line": 257
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14864,8 +14864,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 253,
-        "end_line": 258
+        "begin_line": 251,
+        "end_line": 257
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14883,8 +14883,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 269,
-        "end_line": 278
+        "begin_line": 267,
+        "end_line": 277
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14902,8 +14902,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 269,
-        "end_line": 278
+        "begin_line": 267,
+        "end_line": 277
       },
       "is_opaque": false,
       "can_fail": true,
@@ -14922,7 +14922,7 @@
       "source": {
         "file": "curve25519-dalek/src/field.rs",
         "begin_line": 239,
-        "end_line": 279
+        "end_line": 278
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15158,8 +15158,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 253,
-        "end_line": 258
+        "begin_line": 251,
+        "end_line": 257
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15177,8 +15177,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 253,
-        "end_line": 258
+        "begin_line": 251,
+        "end_line": 257
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15196,8 +15196,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 269,
-        "end_line": 278
+        "begin_line": 267,
+        "end_line": 277
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15215,8 +15215,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 269,
-        "end_line": 278
+        "begin_line": 267,
+        "end_line": 277
       },
       "is_opaque": false,
       "can_fail": true,
@@ -15235,7 +15235,7 @@
       "source": {
         "file": "curve25519-dalek/src/field.rs",
         "begin_line": 239,
-        "end_line": 279
+        "end_line": 278
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22512,8 +22512,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 386,
-        "end_line": 388
+        "begin_line": 385,
+        "end_line": 387
       },
       "is_opaque": false,
       "can_fail": true,
@@ -22529,8 +22529,8 @@
       "is_local": true,
       "source": {
         "file": "curve25519-dalek/src/field.rs",
-        "begin_line": 386,
-        "end_line": 388
+        "begin_line": 385,
+        "end_line": 387
       },
       "is_opaque": false,
       "can_fail": true,

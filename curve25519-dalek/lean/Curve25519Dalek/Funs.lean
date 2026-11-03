@@ -9531,7 +9531,7 @@ def field.FieldElement51.pow22501
   ok (t19, t3)
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u64::field::FieldElement51}::invert]:
-    Source: 'curve25519-dalek/src/field.rs', lines 289:4-298:5 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 288:4-297:5 -/
 def field.FieldElement51.invert
   (self : backend.serial.u64.field.FieldElement51) :
   Result backend.serial.u64.field.FieldElement51
@@ -11176,7 +11176,7 @@ def field.FieldElement2625.pow22501
   ok (t19, t3)
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u32::field::FieldElement2625}::invert]:
-    Source: 'curve25519-dalek/src/field.rs', lines 289:4-298:5 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 288:4-297:5 -/
 def field.FieldElement2625.invert
   (self : backend.serial.u32.field.FieldElement2625) :
   Result backend.serial.u32.field.FieldElement2625
@@ -36565,7 +36565,7 @@ def edwards.decompress.step_2.«x86_64-tables»
   ok { X := X1, Y, Z, T := fe }
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u64::field::FieldElement51}::pow_p58]:
-    Source: 'curve25519-dalek/src/field.rs', lines 303:4-312:5 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 302:4-311:5 -/
 def field.FieldElement51.pow_p58
   (self : backend.serial.u64.field.FieldElement51) :
   Result backend.serial.u64.field.FieldElement51
@@ -36576,7 +36576,7 @@ def field.FieldElement51.pow_p58
     self t20
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u64::field::FieldElement51}::sqrt_ratio_i]:
-    Source: 'curve25519-dalek/src/field.rs', lines 326:4-372:5 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 325:4-371:5 -/
 def field.FieldElement51.sqrt_ratio_i
   (u : backend.serial.u64.field.FieldElement51)
   (v : backend.serial.u64.field.FieldElement51) :
@@ -36771,7 +36771,7 @@ def edwards.decompress.step_2.«i686-tables»
   ok { X := X1, Y, Z, T := fe }
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u32::field::FieldElement2625}::pow_p58]:
-    Source: 'curve25519-dalek/src/field.rs', lines 303:4-312:5 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 302:4-311:5 -/
 def field.FieldElement2625.pow_p58
   (self : backend.serial.u32.field.FieldElement2625) :
   Result backend.serial.u32.field.FieldElement2625
@@ -36782,7 +36782,7 @@ def field.FieldElement2625.pow_p58
     self t20
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u32::field::FieldElement2625}::sqrt_ratio_i]:
-    Source: 'curve25519-dalek/src/field.rs', lines 326:4-372:5 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 325:4-371:5 -/
 def field.FieldElement2625.sqrt_ratio_i
   (u : backend.serial.u32.field.FieldElement2625)
   (v : backend.serial.u32.field.FieldElement2625) :
@@ -37970,102 +37970,115 @@ def field.FieldElement51.is_zero
   Slice.Insts.SubtleConstantTimeEq.ct_eq U8.Insts.SubtleConstantTimeEq s s1
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u64::field::FieldElement51}::internal_invert_batch]: loop body 0:
-    Source: 'curve25519-dalek/src/field.rs', lines 253:8-258:9 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 251:8-257:9 -/
 @[rust_loop_body]
 def field.FieldElement51.internal_invert_batch_loop0.body
-  (inputs : Slice backend.serial.u64.field.FieldElement51) (n : Std.Usize)
+  (inputs : Slice backend.serial.u64.field.FieldElement51)
+  (iter : core.ops.range.Range Std.Usize)
   (scratch : Slice backend.serial.u64.field.FieldElement51)
-  (acc : backend.serial.u64.field.FieldElement51) (i : Std.Usize) :
-  Result (ControlFlow ((Slice backend.serial.u64.field.FieldElement51) ×
-    backend.serial.u64.field.FieldElement51 × Std.Usize) ((Slice
+  (acc : backend.serial.u64.field.FieldElement51) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (Slice
+    backend.serial.u64.field.FieldElement51) ×
+    backend.serial.u64.field.FieldElement51) ((Slice
     backend.serial.u64.field.FieldElement51) ×
     backend.serial.u64.field.FieldElement51))
   := do
-  if i < n
-  then
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done (scratch, acc))
+  | some i =>
+    let input ← Slice.index_usize inputs i
     let s ← Slice.update scratch i acc
-    let fe ← Slice.index_usize inputs i
-    let fe1 ←
+    let fe ←
       Shared0FieldElement51.Insts.CoreOpsArithMulSharedAFieldElement51FieldElement51.mul
-        acc fe
-    let c ← field.FieldElement51.is_zero fe
+        acc input
+    let c ← field.FieldElement51.is_zero input
     let c1 ← subtle.Choice.Insts.CoreOpsBitNotChoice.not c
     let acc1 ←
       backend.serial.u64.field.FieldElement51.Insts.SubtleConditionallySelectable.conditional_assign
-        acc fe1 c1
-    let i1 ← i + 1#usize
-    ok (cont (s, acc1, i1))
-  else ok (done (scratch, acc))
+        acc fe c1
+    ok (cont (iter1, s, acc1))
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u64::field::FieldElement51}::internal_invert_batch]: loop 0:
-    Source: 'curve25519-dalek/src/field.rs', lines 253:8-258:9 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 251:8-257:9 -/
 @[rust_loop]
 def field.FieldElement51.internal_invert_batch_loop0
+  (iter : core.ops.range.Range Std.Usize)
   (inputs : Slice backend.serial.u64.field.FieldElement51)
   (scratch : Slice backend.serial.u64.field.FieldElement51)
-  (acc : backend.serial.u64.field.FieldElement51) (n : Std.Usize)
-  (i : Std.Usize) :
+  (acc : backend.serial.u64.field.FieldElement51) :
   Result ((Slice backend.serial.u64.field.FieldElement51) ×
     backend.serial.u64.field.FieldElement51)
   := do
   loop
-    (fun (scratch1, acc1, i1) =>
-      field.FieldElement51.internal_invert_batch_loop0.body inputs n scratch1
-      acc1 i1)
-    (scratch, acc, i)
+    (fun (iter1, scratch1, acc1) =>
+      field.FieldElement51.internal_invert_batch_loop0.body inputs iter1
+      scratch1 acc1)
+    (iter, scratch, acc)
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u64::field::FieldElement51}::internal_invert_batch]: loop body 1:
-    Source: 'curve25519-dalek/src/field.rs', lines 269:8-278:9 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 267:8-277:9 -/
 @[rust_loop_body]
 def field.FieldElement51.internal_invert_batch_loop1.body
-  (scratch : Slice backend.serial.u64.field.FieldElement51)
+  (iter : core.ops.range.Range Std.Usize)
   (inputs : Slice backend.serial.u64.field.FieldElement51)
-  (acc : backend.serial.u64.field.FieldElement51) (k : Std.Usize) :
-  Result (ControlFlow ((Slice backend.serial.u64.field.FieldElement51) ×
-    backend.serial.u64.field.FieldElement51 × Std.Usize) (Slice
-    backend.serial.u64.field.FieldElement51))
+  (scratch : Slice backend.serial.u64.field.FieldElement51)
+  (acc : backend.serial.u64.field.FieldElement51) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (Slice
+    backend.serial.u64.field.FieldElement51) × (Slice
+    backend.serial.u64.field.FieldElement51) ×
+    backend.serial.u64.field.FieldElement51) ((Slice
+    backend.serial.u64.field.FieldElement51) × (Slice
+    backend.serial.u64.field.FieldElement51)))
   := do
-  if k > 0#usize
-  then
-    let k1 ← k - 1#usize
-    let fe ← Slice.index_usize inputs k1
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done (inputs, scratch))
+  | some i =>
+    let i1 := Slice.len inputs
+    let i2 ← i1 - 1#usize
+    let k ← i2 - i
+    let (input, index_mut_back) ← Slice.index_mut_usize inputs k
+    let (scratch1, index_mut_back1) ← Slice.index_mut_usize scratch k
     let tmp ←
       Shared0FieldElement51.Insts.CoreOpsArithMulSharedAFieldElement51FieldElement51.mul
-        acc fe
-    let c ← field.FieldElement51.is_zero fe
+        acc input
+    let c ← field.FieldElement51.is_zero input
     let nz ← subtle.Choice.Insts.CoreOpsBitNotChoice.not c
-    let fe1 ← Slice.index_usize scratch k1
-    let prod ←
+    let fe ←
       Shared0FieldElement51.Insts.CoreOpsArithMulSharedAFieldElement51FieldElement51.mul
-        acc fe1
-    let (fe2, index_mut_back) ← Slice.index_mut_usize inputs k1
-    let fe3 ←
+        acc scratch1
+    let input1 ←
       backend.serial.u64.field.FieldElement51.Insts.SubtleConditionallySelectable.conditional_assign
-        fe2 prod nz
+        input fe nz
     let acc1 ←
       backend.serial.u64.field.FieldElement51.Insts.SubtleConditionallySelectable.conditional_assign
         acc tmp nz
-    let s := index_mut_back fe3
-    ok (cont (s, acc1, k1))
-  else ok (done inputs)
+    let s := index_mut_back1 scratch1
+    let s1 := index_mut_back input1
+    ok (cont (iter1, s1, s, acc1))
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u64::field::FieldElement51}::internal_invert_batch]: loop 1:
-    Source: 'curve25519-dalek/src/field.rs', lines 269:8-278:9 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 267:8-277:9 -/
 @[rust_loop]
 def field.FieldElement51.internal_invert_batch_loop1
+  (iter : core.ops.range.Range Std.Usize)
   (inputs : Slice backend.serial.u64.field.FieldElement51)
   (scratch : Slice backend.serial.u64.field.FieldElement51)
-  (acc : backend.serial.u64.field.FieldElement51) (k : Std.Usize) :
-  Result (Slice backend.serial.u64.field.FieldElement51)
+  (acc : backend.serial.u64.field.FieldElement51) :
+  Result ((Slice backend.serial.u64.field.FieldElement51) × (Slice
+    backend.serial.u64.field.FieldElement51))
   := do
   loop
-    (fun (inputs1, acc1, k1) =>
-      field.FieldElement51.internal_invert_batch_loop1.body scratch inputs1
-      acc1 k1)
-    (inputs, acc, k)
+    (fun (iter1, inputs1, scratch1, acc1) =>
+      field.FieldElement51.internal_invert_batch_loop1.body iter1 inputs1
+      scratch1 acc1)
+    (iter, inputs, scratch, acc)
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u64::field::FieldElement51}::internal_invert_batch]:
-    Source: 'curve25519-dalek/src/field.rs', lines 239:4-279:5 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 239:4-278:5 -/
 def field.FieldElement51.internal_invert_batch
   (inputs : Slice backend.serial.u64.field.FieldElement51)
   (scratch : Slice backend.serial.u64.field.FieldElement51) :
@@ -38076,18 +38089,18 @@ def field.FieldElement51.internal_invert_batch
   let right_val := Slice.len scratch
   massert (left_val = right_val)
   let acc ← backend.serial.u64.field.FieldElement51.ONE
-  let n := Slice.len inputs
+  let i := Slice.len inputs
   let (scratch1, acc1) ←
-    field.FieldElement51.internal_invert_batch_loop0 inputs scratch acc n
-      0#usize
+    field.FieldElement51.internal_invert_batch_loop0
+      { start := 0#usize, «end» := i } inputs scratch acc
   let c ← field.FieldElement51.is_zero acc1
   let c1 ← subtle.Choice.Insts.CoreOpsBitNotChoice.not c
   let b ← Bool.Insts.CoreConvertFromChoice.from c1
   massert b
   let acc2 ← field.FieldElement51.invert acc1
-  let inputs1 ←
-    field.FieldElement51.internal_invert_batch_loop1 inputs scratch1 acc2 n
-  ok (inputs1, scratch1)
+  let i1 := Slice.len inputs
+  field.FieldElement51.internal_invert_batch_loop1
+    { start := 0#usize, «end» := i1 } inputs scratch1 acc2
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u64::field::FieldElement51}::invert_batch_alloc]:
     Source: 'curve25519-dalek/src/field.rs', lines 225:4-230:5 -/
@@ -38335,102 +38348,115 @@ def field.FieldElement2625.is_zero
   Slice.Insts.SubtleConstantTimeEq.ct_eq U8.Insts.SubtleConstantTimeEq s s1
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u32::field::FieldElement2625}::internal_invert_batch]: loop body 0:
-    Source: 'curve25519-dalek/src/field.rs', lines 253:8-258:9 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 251:8-257:9 -/
 @[rust_loop_body]
 def field.FieldElement2625.internal_invert_batch_loop0.body
-  (inputs : Slice backend.serial.u32.field.FieldElement2625) (n : Std.Usize)
+  (inputs : Slice backend.serial.u32.field.FieldElement2625)
+  (iter : core.ops.range.Range Std.Usize)
   (scratch : Slice backend.serial.u32.field.FieldElement2625)
-  (acc : backend.serial.u32.field.FieldElement2625) (i : Std.Usize) :
-  Result (ControlFlow ((Slice backend.serial.u32.field.FieldElement2625) ×
-    backend.serial.u32.field.FieldElement2625 × Std.Usize) ((Slice
+  (acc : backend.serial.u32.field.FieldElement2625) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (Slice
+    backend.serial.u32.field.FieldElement2625) ×
+    backend.serial.u32.field.FieldElement2625) ((Slice
     backend.serial.u32.field.FieldElement2625) ×
     backend.serial.u32.field.FieldElement2625))
   := do
-  if i < n
-  then
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done (scratch, acc))
+  | some i =>
+    let input ← Slice.index_usize inputs i
     let s ← Slice.update scratch i acc
-    let fe ← Slice.index_usize inputs i
-    let fe1 ←
+    let fe ←
       SharedAFieldElement2625.Insts.CoreOpsArithMulSharedBFieldElement2625FieldElement2625.mul
-        acc fe
-    let c ← field.FieldElement2625.is_zero fe
+        acc input
+    let c ← field.FieldElement2625.is_zero input
     let c1 ← subtle.Choice.Insts.CoreOpsBitNotChoice.not c
     let acc1 ←
       backend.serial.u32.field.FieldElement2625.Insts.SubtleConditionallySelectable.conditional_assign
-        acc fe1 c1
-    let i1 ← i + 1#usize
-    ok (cont (s, acc1, i1))
-  else ok (done (scratch, acc))
+        acc fe c1
+    ok (cont (iter1, s, acc1))
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u32::field::FieldElement2625}::internal_invert_batch]: loop 0:
-    Source: 'curve25519-dalek/src/field.rs', lines 253:8-258:9 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 251:8-257:9 -/
 @[rust_loop]
 def field.FieldElement2625.internal_invert_batch_loop0
+  (iter : core.ops.range.Range Std.Usize)
   (inputs : Slice backend.serial.u32.field.FieldElement2625)
   (scratch : Slice backend.serial.u32.field.FieldElement2625)
-  (acc : backend.serial.u32.field.FieldElement2625) (n : Std.Usize)
-  (i : Std.Usize) :
+  (acc : backend.serial.u32.field.FieldElement2625) :
   Result ((Slice backend.serial.u32.field.FieldElement2625) ×
     backend.serial.u32.field.FieldElement2625)
   := do
   loop
-    (fun (scratch1, acc1, i1) =>
-      field.FieldElement2625.internal_invert_batch_loop0.body inputs n scratch1
-      acc1 i1)
-    (scratch, acc, i)
+    (fun (iter1, scratch1, acc1) =>
+      field.FieldElement2625.internal_invert_batch_loop0.body inputs iter1
+      scratch1 acc1)
+    (iter, scratch, acc)
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u32::field::FieldElement2625}::internal_invert_batch]: loop body 1:
-    Source: 'curve25519-dalek/src/field.rs', lines 269:8-278:9 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 267:8-277:9 -/
 @[rust_loop_body]
 def field.FieldElement2625.internal_invert_batch_loop1.body
-  (scratch : Slice backend.serial.u32.field.FieldElement2625)
+  (iter : core.ops.range.Range Std.Usize)
   (inputs : Slice backend.serial.u32.field.FieldElement2625)
-  (acc : backend.serial.u32.field.FieldElement2625) (k : Std.Usize) :
-  Result (ControlFlow ((Slice backend.serial.u32.field.FieldElement2625) ×
-    backend.serial.u32.field.FieldElement2625 × Std.Usize) (Slice
-    backend.serial.u32.field.FieldElement2625))
+  (scratch : Slice backend.serial.u32.field.FieldElement2625)
+  (acc : backend.serial.u32.field.FieldElement2625) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (Slice
+    backend.serial.u32.field.FieldElement2625) × (Slice
+    backend.serial.u32.field.FieldElement2625) ×
+    backend.serial.u32.field.FieldElement2625) ((Slice
+    backend.serial.u32.field.FieldElement2625) × (Slice
+    backend.serial.u32.field.FieldElement2625)))
   := do
-  if k > 0#usize
-  then
-    let k1 ← k - 1#usize
-    let fe ← Slice.index_usize inputs k1
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done (inputs, scratch))
+  | some i =>
+    let i1 := Slice.len inputs
+    let i2 ← i1 - 1#usize
+    let k ← i2 - i
+    let (input, index_mut_back) ← Slice.index_mut_usize inputs k
+    let (scratch1, index_mut_back1) ← Slice.index_mut_usize scratch k
     let tmp ←
       SharedAFieldElement2625.Insts.CoreOpsArithMulSharedBFieldElement2625FieldElement2625.mul
-        acc fe
-    let c ← field.FieldElement2625.is_zero fe
+        acc input
+    let c ← field.FieldElement2625.is_zero input
     let nz ← subtle.Choice.Insts.CoreOpsBitNotChoice.not c
-    let fe1 ← Slice.index_usize scratch k1
-    let prod ←
+    let fe ←
       SharedAFieldElement2625.Insts.CoreOpsArithMulSharedBFieldElement2625FieldElement2625.mul
-        acc fe1
-    let (fe2, index_mut_back) ← Slice.index_mut_usize inputs k1
-    let fe3 ←
+        acc scratch1
+    let input1 ←
       backend.serial.u32.field.FieldElement2625.Insts.SubtleConditionallySelectable.conditional_assign
-        fe2 prod nz
+        input fe nz
     let acc1 ←
       backend.serial.u32.field.FieldElement2625.Insts.SubtleConditionallySelectable.conditional_assign
         acc tmp nz
-    let s := index_mut_back fe3
-    ok (cont (s, acc1, k1))
-  else ok (done inputs)
+    let s := index_mut_back1 scratch1
+    let s1 := index_mut_back input1
+    ok (cont (iter1, s1, s, acc1))
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u32::field::FieldElement2625}::internal_invert_batch]: loop 1:
-    Source: 'curve25519-dalek/src/field.rs', lines 269:8-278:9 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 267:8-277:9 -/
 @[rust_loop]
 def field.FieldElement2625.internal_invert_batch_loop1
+  (iter : core.ops.range.Range Std.Usize)
   (inputs : Slice backend.serial.u32.field.FieldElement2625)
   (scratch : Slice backend.serial.u32.field.FieldElement2625)
-  (acc : backend.serial.u32.field.FieldElement2625) (k : Std.Usize) :
-  Result (Slice backend.serial.u32.field.FieldElement2625)
+  (acc : backend.serial.u32.field.FieldElement2625) :
+  Result ((Slice backend.serial.u32.field.FieldElement2625) × (Slice
+    backend.serial.u32.field.FieldElement2625))
   := do
   loop
-    (fun (inputs1, acc1, k1) =>
-      field.FieldElement2625.internal_invert_batch_loop1.body scratch inputs1
-      acc1 k1)
-    (inputs, acc, k)
+    (fun (iter1, inputs1, scratch1, acc1) =>
+      field.FieldElement2625.internal_invert_batch_loop1.body iter1 inputs1
+      scratch1 acc1)
+    (iter, inputs, scratch, acc)
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u32::field::FieldElement2625}::internal_invert_batch]:
-    Source: 'curve25519-dalek/src/field.rs', lines 239:4-279:5 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 239:4-278:5 -/
 def field.FieldElement2625.internal_invert_batch
   (inputs : Slice backend.serial.u32.field.FieldElement2625)
   (scratch : Slice backend.serial.u32.field.FieldElement2625) :
@@ -38441,18 +38467,18 @@ def field.FieldElement2625.internal_invert_batch
   let right_val := Slice.len scratch
   massert (left_val = right_val)
   let acc ← backend.serial.u32.field.FieldElement2625.ONE
-  let n := Slice.len inputs
+  let i := Slice.len inputs
   let (scratch1, acc1) ←
-    field.FieldElement2625.internal_invert_batch_loop0 inputs scratch acc n
-      0#usize
+    field.FieldElement2625.internal_invert_batch_loop0
+      { start := 0#usize, «end» := i } inputs scratch acc
   let c ← field.FieldElement2625.is_zero acc1
   let c1 ← subtle.Choice.Insts.CoreOpsBitNotChoice.not c
   let b ← Bool.Insts.CoreConvertFromChoice.from c1
   massert b
   let acc2 ← field.FieldElement2625.invert acc1
-  let inputs1 ←
-    field.FieldElement2625.internal_invert_batch_loop1 inputs scratch1 acc2 n
-  ok (inputs1, scratch1)
+  let i1 := Slice.len inputs
+  field.FieldElement2625.internal_invert_batch_loop1
+    { start := 0#usize, «end» := i1 } inputs scratch1 acc2
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u32::field::FieldElement2625}::invert_batch_alloc]:
     Source: 'curve25519-dalek/src/field.rs', lines 225:4-230:5 -/
@@ -48462,7 +48488,7 @@ def backend.serial.u32.field.FieldElement2625.Insts.CoreDefaultDefault :
 }
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u64::field::FieldElement51}::invsqrt]:
-    Source: 'curve25519-dalek/src/field.rs', lines 386:4-388:5 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 385:4-387:5 -/
 def field.FieldElement51.invsqrt
   (self : backend.serial.u64.field.FieldElement51) :
   Result (subtle.Choice × backend.serial.u64.field.FieldElement51)
@@ -48471,7 +48497,7 @@ def field.FieldElement51.invsqrt
   field.FieldElement51.sqrt_ratio_i fe self
 
 /-- [curve25519_dalek::field::{curve25519_dalek::backend::serial::u32::field::FieldElement2625}::invsqrt]:
-    Source: 'curve25519-dalek/src/field.rs', lines 386:4-388:5 -/
+    Source: 'curve25519-dalek/src/field.rs', lines 385:4-387:5 -/
 def field.FieldElement2625.invsqrt
   (self : backend.serial.u32.field.FieldElement2625) :
   Result (subtle.Choice × backend.serial.u32.field.FieldElement2625)
