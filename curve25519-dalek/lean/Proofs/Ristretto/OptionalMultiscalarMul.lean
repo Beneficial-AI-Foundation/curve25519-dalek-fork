@@ -90,9 +90,9 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.LimbsLt 52 ⦄ := by
   unfold optional_multiscalar_mul
   have hpoints' : pointsInst.into_iter points
@@ -187,9 +187,9 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option ristretto.RistrettoPoint.«i686-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option ristretto.RistrettoPoint.«i686-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.LimbsLt 26 ⦄ := by
   unfold optional_multiscalar_mul
   have hpoints' : pointsInst.into_iter points
@@ -284,9 +284,9 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-no-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-no-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.LimbsLt 52 ⦄ := by
   unfold optional_multiscalar_mul
   have hpoints' : pointsInst.into_iter points
@@ -381,9 +381,9 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option ristretto.RistrettoPoint.«i686-no-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option ristretto.RistrettoPoint.«i686-no-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.LimbsLt 26 ⦄ := by
   unfold optional_multiscalar_mul
   have hpoints' : pointsInst.into_iter points

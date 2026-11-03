@@ -3,6 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Curve25519.Edwards.Encoding
 public import Curve25519.X25519
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
@@ -103,12 +104,12 @@ theorem toEdwardsTail_spec (hadd : B.AddSpec) (hsub : B.SubSpec) (hmul : B.MulSp
     (toPt : E → edwards.Point) (Good : E → Prop) (minusOne : Result B.F)
     (hm1 : minusOne ⦃ (r : B.F) => B.toField r = -1 ⦄)
     (hdec : ∀ s, decompress s ⦃ (r : Option E) =>
-      r.map toPt = edwards.decodeLenient (edwards.CompressedEdwardsY.asNat s) ∧
+      r.map toPt = curve25519.decodeLenient (edwards.CompressedEdwardsY.asNat s) ∧
       ∀ q, r = some q → Good q ⦄)
     (u : B.F) (sign : U8) (hu : B.Red u) :
     B.toEdwardsTail decompress minusOne u sign ⦃ (r : Option E) =>
       (B.toField u = -1 → r = none) ∧
-      (B.toField u ≠ -1 → r.map toPt = edwards.decodeLenient
+      (B.toField u ≠ -1 → r.map toPt = curve25519.decodeLenient
         (encodeU ((B.toField u - 1) / (B.toField u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → Good q ⦄ := by
   unfold toEdwardsTail
@@ -169,7 +170,7 @@ theorem to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-tables»)) =>
       (self.u = -1 → r = none) ∧
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
-        Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
+        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
   unfold to_edwards.«x86_64-tables»
@@ -205,7 +206,7 @@ theorem to_edwards.«i686-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-tables»)) =>
       (self.u = -1 → r = none) ∧
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-tables».toPoint =
-        Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
+        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
   unfold to_edwards.«i686-tables»
@@ -243,7 +244,7 @@ theorem to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8
         =>
       (self.u = -1 → r = none) ∧
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
-        Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
+        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
   unfold to_edwards.«x86_64-no-tables»
@@ -280,7 +281,7 @@ theorem to_edwards.«i686-no-tables_spec» (self : MontgomeryPoint) (sign : U8) 
         =>
       (self.u = -1 → r = none) ∧
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
-        Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
+        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
   unfold to_edwards.«i686-no-tables»

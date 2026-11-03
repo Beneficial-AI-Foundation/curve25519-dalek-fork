@@ -21,9 +21,11 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 there are no static points. -/
 @[step]
 theorem is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausx86_64-tables».is_empty_spec self
+  refine spec_mono (backend.«VartimePrecomputedStrausx86_64-tables».is_empty_spec self) ?_
+  intro r h
+  rw [h, decide_eq_true_iff]
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«x86_64-tables».Insts
@@ -35,9 +37,11 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 there are no static points. -/
 @[step]
 theorem is_empty_spec (self : VartimeEdwardsPrecomputation.«i686-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausi686-tables».is_empty_spec self
+  refine spec_mono (backend.«VartimePrecomputedStrausi686-tables».is_empty_spec self) ?_
+  intro r h
+  rw [h, decide_eq_true_iff]
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«i686-tables».Insts
@@ -49,9 +53,11 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 there are no static points. -/
 @[step]
 theorem is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-no-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausx86_64-no-tables».is_empty_spec self
+  refine spec_mono (backend.«VartimePrecomputedStrausx86_64-no-tables».is_empty_spec self) ?_
+  intro r h
+  rw [h, decide_eq_true_iff]
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«x86_64-no-tables».Insts
@@ -63,9 +69,11 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 there are no static points. -/
 @[step]
 theorem is_empty_spec (self : VartimeEdwardsPrecomputation.«i686-no-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausi686-no-tables».is_empty_spec self
+  refine spec_mono (backend.«VartimePrecomputedStrausi686-no-tables».is_empty_spec self) ?_
+  intro r h
+  rw [h, decide_eq_true_iff]
 
 end «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.VartimeEdwardsPrecomputation.«i686-no-tables».Insts

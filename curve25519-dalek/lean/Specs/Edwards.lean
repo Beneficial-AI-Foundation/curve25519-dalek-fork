@@ -62,64 +62,27 @@ public section
 
 /-! # Specs of `src/edwards.rs`
 
-Spec summary: the items of `edwards.rs` in the crate's public API, with their spec statements, each
-restated with `recall` from the theorem proved in `Proofs/Edwards/`, and the axioms that proof
-depends on. Items appear in the order of `edwards.rs`; the four configurations (`x86_64-tables`,
-`x86_64-no-tables` on the u64 backend, `i686-tables`, `i686-no-tables` on the u32 backend) are
-distinct types, so each `EdwardsPoint` item has four statements. Items outside the public API
-(`is_valid`, `as_projective`, `as_projective_niels`, `as_affine_niels`, `to_affine`, `double`,
-`mul_by_pow_2`, the `edwards/affine.rs` module) are proved in `Proofs/` but not restated here.
+The public items of `edwards.rs`, in its order, restated with `recall` from `Proofs/Edwards/`,
+with the axioms each proof uses; one statement per configuration (`x86_64`/`i686`, with or
+without precomputed tables; the basepoint tables exist only with tables).
 
-**Complete.** `vartime_triple_scalar_mul_basepoint` takes `a1, a2 < 2^128`, the invariant of
-`HalfWidthScalar` (a `Scalar` wrapper whose bound the Lean structure does not carry).
+Points are specified through `toPoint` under the invariants `OnCurve` and `IsBounded`, tables
+through `point` under `IsTable` and `IsBounded`, precomputations through `points` under `IsValid`
+and `IsBounded`. Scalars act by their unreduced value `asNat`, which must be `< 2^255` (dalek's
+`debug_assert!`). Iterator inputs are given by the lists they yield.
 
-The basepoint tables (`impl_basepoint_table!`) exist only in the `tables` configurations. A table
-`t` represents the point `t.point` (its entry `(0, 0)`); the specs assume or ensure `t.IsTable`,
-the invariant of the Rust type (entry `(i, j)` is on the curve and is
-`(j + 1) • 2^(2 w i) • t.point`, for the radix `2^w`), and `t.IsBounded` (limbs `< 2^54` on x86_64,
-`< 2^27` on i686).
+Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, `CompressedEdwardsY.asNat`, the
+tables' `point`, `IsTable`, `IsBounded` (`Defs/Edwards.lean`), the precomputations' `points`,
+`IsValid`, `IsBounded` (`Defs/ScalarMul.lean`), `Scalar.asNat`, `HalfWidthScalar.asNat`
+(`Defs/Scalar.lean`), `Array.asNat` (`Defs/Array.lean`), `MontgomeryPoint.asNat`
+(`Defs/Montgomery.lean`), `Iterator.Yields`, `IntoIterator.Yields` (`Defs/Iterator.lean`),
+`curve25519.encode`, `decodeLenient` (`Curve25519/Edwards/Encoding.lean`), `curve25519.basepoint`
+(`Curve25519/Edwards/Basepoint.lean`), `curve25519.clamp`, `encodeU` (`Curve25519/X25519.lean`),
+`curve25519.L` (`Curve25519/Basic.lean`), `edwardsToMontgomery` (`Curve25519/Montgomery.lean`),
+`subtle.Choice.IsValid` (`Subtle/`).
 
-Statements are given at the point level (`toPoint`, the represented point of `curve25519.edwards`),
-under the representation invariants `OnCurve` (`Z ≠ 0`, `X Y = Z T`, on the curve) and `IsBounded`
-(limbs `< 2^52` on x86_64, `< 2^26` on i686); the coordinate-level forms (`toExtended`, `ProjEq`)
-are the `@[step]` theorems of the proof files, with descriptive names (`add_toExtended`, …).
-`is_identity`, the blanket implementation of `IsIdentity`, is stated generically in
-`Specs/Traits.lean`.
-
-Scalar multiplication is by the unreduced value `s.asNat` of the scalar's bytes, not by
-`s.asNat % L`: `mul_clamped` and `is_torsion_free` build scalars `≥ L` (`clamp`, `BASEPOINT_ORDER =
-L`). The precondition `s.asNat < 2^255` is the `debug_assert!(self[31] <= 127)` of `as_radix_16`
-(constant-time multiplications) and of `non_adjacent_form` (variable-time ones).
-
-The iterator-taking items (`Sum`, the multiscalar traits) are stated for an input that yields a
-given list (`Iterator.Yields`, `IntoIterator.Yields`, `Defs/Iterator.lean`), each element borrowed
-to a given scalar or point, with list lengths `≤ Usize.max`. The sums are over these lists:
-`List.zipWith` pairs the scalars with the points. `multiscalar_mul` and `optional_multiscalar_mul`
-require as many scalars as points (the patched `assert_eq!`). In `optional_mixed_multiscalar_mul`,
-missing static scalars count as `0`. A precomputation `pre` holds the static points `pre.points`;
-`pre.IsValid` is the invariant of the Rust type (each table holds the odd multiples of its point)
-and `pre.IsBounded` bounds its limbs (`Defs/ScalarMul.lean`).
-
-`CompressedEdwardsY::decompress` is dalek's lenient decoding `decodeLenient`
-(`Defs/Edwards.lean`): a `y ≥ p` is reduced and `x = 0` is accepted with either sign bit, unlike
-RFC 8032's strict decoder `curve25519.decode`.
-
-Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, `CompressedEdwardsY.asNat`,
-`decodeLenient` (`Defs/Edwards.lean`), `Scalar.asNat`, `HalfWidthScalar.asNat` (`Defs/Scalar.lean`),
-`Array.asNat` (`Defs/Array.lean`), `curve25519.encode`
-(`Curve25519/Edwards/Encoding.lean`), `curve25519.basepoint` (`Curve25519/Edwards/Basepoint.lean`),
-`curve25519.clamp` (`Curve25519/X25519.lean`), `curve25519.L` (`Curve25519/Basic.lean`),
-`curve25519.encodeU` (`Curve25519/X25519.lean`), `edwardsToMontgomery`
-(`Curve25519/Montgomery.lean`), `MontgomeryPoint.asNat` (`Defs/Montgomery.lean`), the tables'
-`point`, `IsTable`, `IsBounded`, the precomputations' `points`, `IsValid`, `IsBounded`
-(`Defs/Edwards.lean`, `Defs/ScalarMul.lean`), `subtle.Choice.IsValid` (`Subtle/`).
-
-Not specified: derived `Clone`/`Copy` impls. Not translated: `Debug`, `Hash`, `map_to_curve`,
-`encode_to_curve`, `hash_to_curve`, `random`, the `group` and `serde` impls, and the provided
-methods of the traits (`BasepointTable::mul_base_clamped`,
-`VartimeMultiscalarMul::vartime_multiscalar_mul`, `VartimePrecomputedMultiscalarMul::
-vartime_multiscalar_mul`, `vartime_mixed_multiscalar_mul`, `optional_multiscalar_mul`), which
-the translation does not contain (`Specs/Traits.lean`). -/
+Not translated: `Debug`, `Hash`, the `group` and `serde` impls, `random`, hash-to-curve, and the
+provided methods of the traits. -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519 TwistedEdwardsModel
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
@@ -243,9 +206,9 @@ namespace CoreConvertTryFromShared0SliceU8TryFromSliceError
 /-- `TryFrom<&[u8]> for CompressedEdwardsY`: as `from_slice`. -/
 recall try_from_spec (slice : Slice U8) :
     try_from slice ⦃ (r : core.result.Result CompressedEdwardsY core.array.TryFromSliceError) =>
-      (slice.length = 32 →
-        ∃ a : CompressedEdwardsY, r = .Ok a ∧ ∀ i < 32, a[i]! = slice[i]!) ∧
-      (slice.length ≠ 32 → r = .Err ()) ⦄
+      match r with
+      | .Ok c => slice.length = 32 ∧ ∀ i < 32, c[i]! = slice[i]!
+      | .Err _ => slice.length ≠ 32 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms try_from_spec
@@ -280,9 +243,9 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY
 /-- `CompressedEdwardsY::from_slice`: the bytes of a slice of length `32`, an error otherwise. -/
 recall from_slice_spec (bytes : Slice U8) :
     from_slice bytes ⦃ (r : core.result.Result CompressedEdwardsY core.array.TryFromSliceError) =>
-      (bytes.length = 32 →
-        ∃ a : CompressedEdwardsY, r = .Ok a ∧ ∀ i < 32, a[i]! = bytes[i]!) ∧
-      (bytes.length ≠ 32 → r = .Err ()) ⦄
+      match r with
+      | .Ok c => bytes.length = 32 ∧ ∀ i < 32, c[i]! = bytes[i]!
+      | .Err _ => bytes.length ≠ 32 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_slice_spec
@@ -3180,9 +3143,9 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -3217,9 +3180,9 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -3254,9 +3217,9 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -3291,9 +3254,9 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -3491,7 +3454,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeEdwardsPrecomputation`: whether
 there are no static points. -/
 recall is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -3508,7 +3471,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeEdwardsPrecomputation`: whether
 there are no static points. -/
 recall is_empty_spec (self : VartimeEdwardsPrecomputation.«i686-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -3525,7 +3488,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeEdwardsPrecomputation`: whether
 there are no static points. -/
 recall is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-no-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -3542,7 +3505,7 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeEdwardsPrecomputation`: whether
 there are no static points. -/
 recall is_empty_spec (self : VartimeEdwardsPrecomputation.«i686-no-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -3589,10 +3552,10 @@ recall optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -3641,10 +3604,10 @@ recall optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -3693,10 +3656,10 @@ recall optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -3745,10 +3708,10 @@ recall optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/

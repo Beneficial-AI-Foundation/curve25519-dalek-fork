@@ -10,6 +10,7 @@ public import Defs.Iterator
 public import Defs.Scalar
 public import Defs.ScalarMul
 import Proofs.Backend.VartimePrecomputedStrausOptionalMixedMultiscalarMul
+import Proofs.Helpers.Optional
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
@@ -51,11 +52,12 @@ theorem optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.LimbsLt 52 ⦄ := by
+  apply spec_some_of_filterMap
   unfold optional_mixed_multiscalar_mul
   exact backend.«VartimePrecomputedStrausx86_64-tables».optional_mixed_multiscalar_mul_spec
     _ _ _ _ _ self _ _ _ xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars
@@ -102,11 +104,12 @@ theorem optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.LimbsLt 26 ⦄ := by
+  apply spec_some_of_filterMap
   unfold optional_mixed_multiscalar_mul
   exact backend.«VartimePrecomputedStrausi686-tables».optional_mixed_multiscalar_mul_spec
     _ _ _ _ _ self _ _ _ xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars
@@ -154,11 +157,12 @@ theorem optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.LimbsLt 52 ⦄ := by
+  apply spec_some_of_filterMap
   unfold optional_mixed_multiscalar_mul
   exact backend.«VartimePrecomputedStrausx86_64-no-tables».optional_mixed_multiscalar_mul_spec
     _ _ _ _ _ self _ _ _ xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars
@@ -206,11 +210,12 @@ theorem optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.LimbsLt 26 ⦄ := by
+  apply spec_some_of_filterMap
   unfold optional_mixed_multiscalar_mul
   exact backend.«VartimePrecomputedStrausi686-no-tables».optional_mixed_multiscalar_mul_spec
     _ _ _ _ _ self _ _ _ xs ss ys ds qops hself hself_b hstatic_scalars hdynamic_scalars

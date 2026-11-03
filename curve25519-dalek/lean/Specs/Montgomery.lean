@@ -3,6 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Curve25519.Edwards.Encoding
 public import Curve25519.Montgomery
 public import Curve25519.X25519
 public import Curve25519Dalek.Funs
@@ -46,7 +47,7 @@ stated for all four targets.
 
 Definitions used: `MontgomeryPoint.asNat`, `MontgomeryPoint.u` (`Defs/Montgomery.lean`),
 `curve25519.decodeU`, `encodeU`, `x25519`, `montgomeryBasepoint`, `MontgomeryModel.ladder`,
-`MontgomeryModel.ladderBits` (`Curve25519/`, `EllipticCurve/`), `decodeLenient`,
+`MontgomeryModel.ladderBits`, `curve25519.decodeLenient` (`Curve25519/`, `EllipticCurve/`),
 `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded` (`Defs/Edwards.lean`), `Iterator.Yields`
 (`Defs/Iterator.lean`), `subtle.Choice.IsValid`. -/
 
@@ -187,7 +188,7 @@ recall to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-tables»)) =>
       (self.u = -1 → r = none) ∧
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
-        Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
+        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
@@ -201,7 +202,7 @@ recall to_edwards.«i686-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-tables»)) =>
       (self.u = -1 → r = none) ∧
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-tables».toPoint =
-        Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
+        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
@@ -217,7 +218,7 @@ recall to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8)
         =>
       (self.u = -1 → r = none) ∧
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
-        Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
+        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
@@ -233,7 +234,7 @@ recall to_edwards.«i686-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
         =>
       (self.u = -1 → r = none) ∧
       (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
-        Curve25519Dalek.edwards.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
+        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
             (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 

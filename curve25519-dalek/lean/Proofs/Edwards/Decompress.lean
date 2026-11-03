@@ -3,6 +3,7 @@ Copyright 2026 The Beneficial AI Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
+public import Curve25519.Edwards.Encoding
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
 public import Proofs.Field.SqrtRatioI

@@ -16,6 +16,7 @@ import Proofs.Backend.VartimePrecomputedStrausOptionalMixedMultiscalarMul
 import Proofs.Helpers.Collect
 import Proofs.Helpers.Iterator
 import Proofs.Helpers.Vec
+import Proofs.Helpers.Optional
 public section
 
 /-! # `VartimePrecomputedMultiscalarMul for VartimeRistrettoPrecomputation`
@@ -79,9 +80,11 @@ theorem len_spec (self : VartimeRistrettoPrecomputation.«x86_64-tables») :
 there are no static points. -/
 @[step]
 theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausx86_64-tables».is_empty_spec self
+  refine spec_mono (backend.«VartimePrecomputedStrausx86_64-tables».is_empty_spec self) ?_
+  intro r h
+  rw [h, decide_eq_true_iff]
 
 set_option linter.style.longLine false
 open «VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-tablesRistrettoPointx86_64-tables»
@@ -163,11 +166,12 @@ theorem optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.LimbsLt 52 ⦄ := by
+  apply spec_some_of_filterMap
   have hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve := fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩
   unfold optional_mixed_multiscalar_mul
   have h3 : dynamicPointsInst.into_iter dynamic_points
@@ -246,9 +250,11 @@ theorem len_spec (self : VartimeRistrettoPrecomputation.«i686-tables») :
 there are no static points. -/
 @[step]
 theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«i686-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausi686-tables».is_empty_spec self
+  refine spec_mono (backend.«VartimePrecomputedStrausi686-tables».is_empty_spec self) ?_
+  intro r h
+  rw [h, decide_eq_true_iff]
 
 set_option linter.style.longLine false
 open «VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-tablesRistrettoPointi686-tables»
@@ -330,11 +336,12 @@ theorem optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option ristretto.RistrettoPoint.«i686-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option ristretto.RistrettoPoint.«i686-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.LimbsLt 26 ⦄ := by
+  apply spec_some_of_filterMap
   have hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve := fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩
   unfold optional_mixed_multiscalar_mul
   have h3 : dynamicPointsInst.into_iter dynamic_points
@@ -413,9 +420,11 @@ theorem len_spec (self : VartimeRistrettoPrecomputation.«x86_64-no-tables») :
 there are no static points. -/
 @[step]
 theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-no-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausx86_64-no-tables».is_empty_spec self
+  refine spec_mono (backend.«VartimePrecomputedStrausx86_64-no-tables».is_empty_spec self) ?_
+  intro r h
+  rw [h, decide_eq_true_iff]
 
 set_option linter.style.longLine false
 open «VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationx86_64-no-tablesRistrettoPointx86_64-no-tables»
@@ -497,11 +506,12 @@ theorem optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-no-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-no-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.LimbsLt 52 ⦄ := by
+  apply spec_some_of_filterMap
   have hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve := fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩
   unfold optional_mixed_multiscalar_mul
   have h3 : dynamicPointsInst.into_iter dynamic_points
@@ -580,9 +590,11 @@ theorem len_spec (self : VartimeRistrettoPrecomputation.«i686-no-tables») :
 there are no static points. -/
 @[step]
 theorem is_empty_spec (self : VartimeRistrettoPrecomputation.«i686-no-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄ := by
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄ := by
   unfold is_empty
-  exact backend.«VartimePrecomputedStrausi686-no-tables».is_empty_spec self
+  refine spec_mono (backend.«VartimePrecomputedStrausi686-no-tables».is_empty_spec self) ?_
+  intro r h
+  rw [h, decide_eq_true_iff]
 
 set_option linter.style.longLine false
 open «VartimePrecomputedMultiscalarMulVartimeRistrettoPrecomputationi686-no-tablesRistrettoPointi686-no-tables»
@@ -664,11 +676,12 @@ theorem optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option ristretto.RistrettoPoint.«i686-no-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option ristretto.RistrettoPoint.«i686-no-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.LimbsLt 26 ⦄ := by
+  apply spec_some_of_filterMap
   have hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve := fun Q hQ => ⟨hqs Q hQ, hqs_on Q hQ⟩
   unfold optional_mixed_multiscalar_mul
   have h3 : dynamicPointsInst.into_iter dynamic_points

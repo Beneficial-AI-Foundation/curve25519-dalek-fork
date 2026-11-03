@@ -128,9 +128,9 @@ recall as_bytes_spec (self : CompressedRistretto) :
 /-- `CompressedRistretto::from_slice`: the bytes of a slice of length `32`, an error otherwise. -/
 recall from_slice_spec (bytes : Slice U8) :
     from_slice bytes ⦃ (r : core.result.Result CompressedRistretto core.array.TryFromSliceError) =>
-      (bytes.length = 32 →
-        ∃ a : CompressedRistretto, r = .Ok a ∧ ∀ i < 32, a[i]! = bytes[i]!) ∧
-      (bytes.length ≠ 32 → r = .Err ()) ⦄
+      match r with
+      | .Ok c => bytes.length = 32 ∧ ∀ i < 32, c[i]! = bytes[i]!
+      | .Err _ => bytes.length ≠ 32 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_slice_spec
@@ -225,9 +225,9 @@ namespace Insts.CoreConvertTryFromShared0SliceU8TryFromSliceError
 /-- `TryFrom<&[u8]> for CompressedRistretto`: as `from_slice`. -/
 recall try_from_spec (slice : Slice U8) :
     try_from slice ⦃ (r : core.result.Result CompressedRistretto core.array.TryFromSliceError) =>
-      (slice.length = 32 →
-        ∃ a : CompressedRistretto, r = .Ok a ∧ ∀ i < 32, a[i]! = slice[i]!) ∧
-      (slice.length ≠ 32 → r = .Err ()) ⦄
+      match r with
+      | .Ok c => slice.length = 32 ∧ ∀ i < 32, c[i]! = slice[i]!
+      | .Err _ => slice.length ≠ 32 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms try_from_spec
@@ -1691,7 +1691,8 @@ namespace Curve25519Dalek
 namespace ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignSharedAScalar
 
 /-- `MulAssign<&Scalar> for RistrettoPoint`: as `Mul`. -/
-recall mul_assign_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (scalar : scalar.Scalar)
+recall mul_assign_spec (self : ristretto.RistrettoPoint.«x86_64-tables»)
+    (scalar : scalar.Scalar)
     (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_assign self scalar ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.IsBounded ⦄
@@ -1704,7 +1705,8 @@ end ristretto.RistrettoPoint.«x86_64-tables».Insts.CoreOpsArithMulAssignShared
 namespace ristretto.RistrettoPoint.«i686-tables».Insts.CoreOpsArithMulAssignSharedAScalar
 
 /-- `MulAssign<&Scalar> for RistrettoPoint`: as `Mul`. -/
-recall mul_assign_spec (self : ristretto.RistrettoPoint.«i686-tables») (scalar : scalar.Scalar)
+recall mul_assign_spec (self : ristretto.RistrettoPoint.«i686-tables»)
+    (scalar : scalar.Scalar)
     (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_assign self scalar ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.IsBounded ⦄
@@ -2519,9 +2521,9 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -2552,9 +2554,9 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option ristretto.RistrettoPoint.«i686-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option ristretto.RistrettoPoint.«i686-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -2585,9 +2587,9 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-no-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-no-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -2618,9 +2620,9 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option ristretto.RistrettoPoint.«i686-no-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
+      ⦃ (r : Option ristretto.RistrettoPoint.«i686-no-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -2667,7 +2669,7 @@ recall len_spec (self : VartimeRistrettoPrecomputation.«x86_64-tables») :
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeRistrettoPrecomputation`: whether
 there are no static points. -/
 recall is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -2706,10 +2708,10 @@ recall optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -2757,7 +2759,7 @@ recall len_spec (self : VartimeRistrettoPrecomputation.«i686-tables») :
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeRistrettoPrecomputation`: whether
 there are no static points. -/
 recall is_empty_spec (self : VartimeRistrettoPrecomputation.«i686-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -2796,10 +2798,10 @@ recall optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option ristretto.RistrettoPoint.«i686-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option ristretto.RistrettoPoint.«i686-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -2847,7 +2849,7 @@ recall len_spec (self : VartimeRistrettoPrecomputation.«x86_64-no-tables») :
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeRistrettoPrecomputation`: whether
 there are no static points. -/
 recall is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-no-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -2886,10 +2888,10 @@ recall optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-no-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-no-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
@@ -2937,7 +2939,7 @@ recall len_spec (self : VartimeRistrettoPrecomputation.«i686-no-tables») :
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeRistrettoPrecomputation`: whether
 there are no static points. -/
 recall is_empty_spec (self : VartimeRistrettoPrecomputation.«i686-no-tables») :
-    is_empty self ⦃ (r : Bool) => r = decide (self.points = []) ⦄
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -2976,10 +2978,10 @@ recall optional_mixed_multiscalar_mul_spec
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option ristretto.RistrettoPoint.«i686-no-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
+      ⦃ (r : Option ristretto.RistrettoPoint.«i686-no-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
           R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/

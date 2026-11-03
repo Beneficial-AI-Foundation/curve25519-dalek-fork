@@ -20,12 +20,6 @@ public section
   equation, `toPoint` the point (`0` off the curve), `LimbsLt n` as for `EdwardsPoint`.
 - `CompressedEdwardsY` is 32 bytes; `asNat` is their little-endian value, RFC 8032's encoding
   `curve25519.encode` of a point.
-- `decodeLenient` is dalek's `CompressedEdwardsY::decompress` on the value `n` of the bytes:
-  `y := n % 2^255` reduced modulo `p` (a non-canonical `y ≥ p` is accepted), sign `n / 2^255`;
-  `none` iff no point has this `y`; otherwise the point `(x, y)` whose `x` has the given sign,
-  where `x = 0` is accepted with either sign (`-0 = 0`). It differs from the strict RFC 8032
-  decoder `curve25519.decode` exactly on these two leniencies
-  (`Proofs/Helpers/Edwards.lean`).
 - The basepoint tables `EdwardsBasepointTable{,Radix32,Radix64,Radix128,Radix256}` (radix
   `2^w`, `w = 4, 5, 6, 7, 8`) hold `32` rows of `2^(w-1)` affine Niels points. `t.point` is the
   point of entry `0` of row `0`, and `t.IsTable`, the invariant of the Rust type (whose tables
@@ -349,29 +343,6 @@ theorem CompressedEdwardsY.asNat_def (self : CompressedEdwardsY) :
 observed for in-range indices. -/
 instance CompressedEdwardsY.instInhabited : Inhabited CompressedEdwardsY :=
   inferInstanceAs (Inhabited (Array U8 32#usize))
-
-/-! ### The lenient decoder -/
-
-open scoped Classical in
-/-- Dalek's `CompressedEdwardsY::decompress` on the value `n` of the bytes: `y := n % 2^255`
-reduced modulo `p`, sign `s := n / 2^255`; `none` if no point has this `y`, otherwise the point
-`(x, y)` with `x = 0` or `x` of sign `s`. Unlike RFC 8032's `curve25519.decode`, it accepts
-`y ≥ p` (reduced) and `x = 0` with `s = 1`. -/
-noncomputable def decodeLenient (n : ℕ) : Option curve25519.edwards.Point :=
-  if h : ∃ x : ZMod p, curve25519.edwards.Equation x ((n % 2 ^ 255 : ℕ) : ZMod p) ∧
-      (x = 0 ∨ (x.IsNeg ↔ n / 2 ^ 255 = 1)) then
-    some ⟨Classical.choose h, ((n % 2 ^ 255 : ℕ) : ZMod p), (Classical.choose_spec h).1⟩
-  else none
-
-open scoped Classical in
-theorem decodeLenient_def (n : ℕ) :
-    decodeLenient n =
-      if h : ∃ x : ZMod p, curve25519.edwards.Equation x ((n % 2 ^ 255 : ℕ) : ZMod p) ∧
-          (x = 0 ∨ (x.IsNeg ↔ n / 2 ^ 255 = 1)) then
-        some ⟨Classical.choose h, ((n % 2 ^ 255 : ℕ) : ZMod p), (Classical.choose_spec h).1⟩
-      else none := by
-  unfold decodeLenient
-  rfl
 
 /-! ### The basepoint tables (`tables` configurations only) -/
 
