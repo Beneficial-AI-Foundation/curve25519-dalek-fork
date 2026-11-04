@@ -8,11 +8,23 @@ TAG=$(awk -F'"' '/^\[/{name=""} /^name = /{name=$2} /^rev = / && name=="aeneas"{
 # Linux x86_64 -> linux-x86_64, Linux aarch64 -> linux-aarch64, Darwin arm64 -> macos-aarch64
 ASSET=aeneas-$(uname -sm | tr 'A-Z ' 'a-z-' | sed 's/darwin/macos/; s/arm64/aarch64/').tar.gz
 
-if [[ "$(.aeneas/aeneas -version 2>/dev/null)" != "aeneas $TAG" ]]; then
-    rm -rf .aeneas && mkdir .aeneas
+valid_install() {
+    local version
+    version=$("$1/aeneas" -version 2>/dev/null) || return 1
+    [[ "$version" == "aeneas $TAG" \
+        && -x "$1/charon" && -x "$1/charon-driver" \
+        && -s "$1/rust-toolchain" && -s "$1/backends/lean/lean-toolchain" ]]
+}
+
+if ! valid_install .aeneas; then
+    tmp=$(mktemp -d .aeneas.XXXXXX)
+    trap 'rm -rf "$tmp"' EXIT
     curl -fsSL --proto '=https' \
         "https://github.com/AeneasVerif/aeneas/releases/download/$TAG/$ASSET" \
-        | tar -xz -C .aeneas
+        | tar -xz -C "$tmp"
+    valid_install "$tmp"
+    rm -rf .aeneas
+    mv "$tmp" .aeneas
 fi
 # The nightly (with rustc-dev) that charon-driver was built against, per the bundle's rust-toolchain.
 (cd .aeneas && rustup toolchain install --no-self-update)
