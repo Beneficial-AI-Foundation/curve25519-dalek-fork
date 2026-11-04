@@ -58,10 +58,13 @@ private theorem lookup_tables_spec {It Clause0_Item : Type}
       (fun x P => borrowInst.borrow x ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄) ys
           ps)
     (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hlen : ys.length ≤ Usize.max) :
-    lookup_tables iterInst borrowInst points
+    loop (fun ((it, out) : It × alloc.vec.Vec
+        (window.LookupTable ProjectiveNielsPoint.«x86_64-tables»)) =>
+      collect.collectMapBody iterInst borrowInst.borrow
+        «CoreConvertFromSharedAEdwardsPointx86_64-tables».«from» it out)
+      (points, alloc.vec.Vec.new _)
       ⦃ (r : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«x86_64-tables»)) =>
         List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) ps r.val ⦄ := by
-  unfold lookup_tables lookup_tables_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     «CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
     (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) points ys hit ps hborrow
@@ -81,11 +84,12 @@ private theorem scalar_digits_spec {It Clause0_Item : Type}
     (hborrow : List.Forall₂
       (fun x s => borrowInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hlen : xs.length ≤ Usize.max) :
-    scalar_digits iterInst borrowInst scalars
+    loop (fun ((it, out) : It × alloc.vec.Vec (Array I8 64#usize)) =>
+      collect.collectMapBody iterInst borrowInst.borrow scalar.Scalar.as_radix_16 it out)
+      (scalars, alloc.vec.Vec.new _)
       ⦃ (r : alloc.vec.Vec (Array I8 64#usize)) =>
         List.Forall₂ (fun s d => d.asInt 4 = s.asNat ∧
           ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
-  unfold scalar_digits scalar_digits_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow scalar.Scalar.as_radix_16
     (fun s d => d.asInt 4 = s.asNat ∧ ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
     scalars xs hit ss hborrow (fun s hs => spec_mono (scalar.Scalar.as_radix_16_spec s (hss s hs))
@@ -100,29 +104,29 @@ end «MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul
 
 namespace Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables»
 
-private theorem multiscalar_mul_loop0_loop0_eq
+private theorem multiscalar_mul_loop2_loop0_eq
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«x86_64-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize))
-    (Q : edwards.EdwardsPoint.«x86_64-tables») (j n i : Usize) :
-    multiscalar_mul_loop0_loop0 lookup_tables scalar_digits Q j n i =
-      EdwardsOps.X86Tables.strausMsLoop00 lookup_tables scalar_digits Q j n i := by
-  unfold multiscalar_mul_loop0_loop0 EdwardsOps.strausMsLoop00
+    (Q : edwards.EdwardsPoint.«x86_64-tables») (j : Usize) (it : core.ops.range.Range Usize) :
+    multiscalar_mul_loop2_loop0 it lookup_tables scalar_digits Q j =
+      EdwardsOps.X86Tables.strausMsLoop00 it lookup_tables scalar_digits Q j := by
+  unfold multiscalar_mul_loop2_loop0 EdwardsOps.strausMsLoop00
   congr 1
 
-private theorem multiscalar_mul_loop0_eq
+private theorem multiscalar_mul_loop2_eq
     (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«x86_64-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize))
     (Q : edwards.EdwardsPoint.«x86_64-tables») :
-    multiscalar_mul_loop0 iter lookup_tables scalar_digits Q =
+    multiscalar_mul_loop2 iter lookup_tables scalar_digits Q =
       EdwardsOps.X86Tables.strausMsLoop0 iter lookup_tables scalar_digits Q := by
-  unfold multiscalar_mul_loop0 EdwardsOps.strausMsLoop0
+  unfold multiscalar_mul_loop2 EdwardsOps.strausMsLoop0
   congr 1
 
 /-- The outer loop: after the digit positions `e, …, 63`, the accumulator represents
 `∑_{k < n} radix16Tail d_k e • P_k`. -/
 @[local step]
-private theorem multiscalar_mul_loop0_spec
+private theorem multiscalar_mul_loop2_spec
     (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«x86_64-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize)) (Q : edwards.EdwardsPoint.«x86_64-tables»)
@@ -135,10 +139,10 @@ private theorem multiscalar_mul_loop0_spec
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve)
     (hQp : Q.toPoint = ∑ k ∈ Finset.range n,
       radix16Tail scalar_digits.val[k]! iter.iter.end.val • P k) :
-    multiscalar_mul_loop0 iter lookup_tables scalar_digits Q
+    multiscalar_mul_loop2 iter lookup_tables scalar_digits Q
       ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧ r.LimbsLt 52 ∧
         r.toPoint = ∑ k ∈ Finset.range n, radix16Tail scalar_digits.val[k]! 0 • P k ⦄ := by
-  rw [multiscalar_mul_loop0_eq]
+  rw [multiscalar_mul_loop2_eq]
   exact EdwardsOps.X86Tables.strausMsLoop0_spec
     EdwardsOps.X86Tables.addN_spec EdwardsOps.X86Tables.asExtended_spec
     EdwardsOps.X86Tables.ltSelect_spec EdwardsOps.X86Tables.mulByPow2_spec iter lookup_tables
@@ -173,13 +177,17 @@ theorem multiscalar_mul_spec
   have hscalars' : scalarsInst.into_iter scalars
       ⦃ (it : Clause0_IntoIter) => scalarsInst.iteratorInst.Yields it xs ⦄ := hscalars
   step with hpoints' as ⟨it, hit⟩
-  step with «MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.lookup_tables_spec _ _
-      it ys
-    hit ps hborrow_points hps hys as ⟨tables, htables⟩
+  unfold multiscalar_mul_loop0
+  apply spec_bind
+    («MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.lookup_tables_spec
+      _ _ it ys hit ps hborrow_points hps hys)
+  intro tables htables
   step with hscalars' as ⟨it1, hit1⟩
-  step with «MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.scalar_digits_spec _ _
-      it1
-    xs hit1 ss hborrow_scalars hss hxs as ⟨digits, hdigits⟩
+  unfold multiscalar_mul_loop1
+  apply spec_bind
+    («MultiscalarMulStrausEdwardsPointx86_64-tables».multiscalar_mul.scalar_digits_spec
+      _ _ it1 xs hit1 ss hborrow_scalars hss hxs)
+  intro digits hdigits
   step with
       edwards.EdwardsPoint.«x86_64-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec
     as ⟨Q, hQon, hQ, hQb⟩
@@ -188,7 +196,7 @@ theorem multiscalar_mul_spec
   obtain ⟨hDlen, hD⟩ := forall₂_getElem! hdigits
   have hn : min ss.length ps.length = min digits.length tables.length := by
     rw [hTlen, hDlen]
-  step with multiscalar_mul_loop0_spec iter tables digits Q (fun k => ps[k]!.toPoint)
+  step with multiscalar_mul_loop2_spec iter tables digits Q (fun k => ps[k]!.toPoint)
     (min ss.length ps.length) hn
     (fun k hk => hT k (by have := min_le_right ss.length ps.length; omega))
     (fun k hk => (hD k (by have := min_le_left ss.length ps.length; omega)).2)
@@ -235,10 +243,13 @@ private theorem lookup_tables_spec {It Clause0_Item : Type}
       (fun x P => borrowInst.borrow x ⦃ (P' : edwards.EdwardsPoint.«i686-tables») => P' = P ⦄) ys
           ps)
     (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hlen : ys.length ≤ Usize.max) :
-    lookup_tables iterInst borrowInst points
+    loop (fun ((it, out) : It × alloc.vec.Vec
+        (window.LookupTable ProjectiveNielsPoint.«i686-tables»)) =>
+      collect.collectMapBody iterInst borrowInst.borrow
+        «CoreConvertFromSharedAEdwardsPointi686-tables».«from» it out)
+      (points, alloc.vec.Vec.new _)
       ⦃ (r : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«i686-tables»)) =>
         List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 27) ps r.val ⦄ := by
-  unfold lookup_tables lookup_tables_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     «CoreConvertFromSharedAEdwardsPointi686-tables».«from»
     (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 27) points ys hit ps hborrow
@@ -258,11 +269,12 @@ private theorem scalar_digits_spec {It Clause0_Item : Type}
     (hborrow : List.Forall₂
       (fun x s => borrowInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hlen : xs.length ≤ Usize.max) :
-    scalar_digits iterInst borrowInst scalars
+    loop (fun ((it, out) : It × alloc.vec.Vec (Array I8 64#usize)) =>
+      collect.collectMapBody iterInst borrowInst.borrow scalar.Scalar.as_radix_16 it out)
+      (scalars, alloc.vec.Vec.new _)
       ⦃ (r : alloc.vec.Vec (Array I8 64#usize)) =>
         List.Forall₂ (fun s d => d.asInt 4 = s.asNat ∧
           ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
-  unfold scalar_digits scalar_digits_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow scalar.Scalar.as_radix_16
     (fun s d => d.asInt 4 = s.asNat ∧ ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
     scalars xs hit ss hborrow (fun s hs => spec_mono (scalar.Scalar.as_radix_16_spec s (hss s hs))
@@ -277,29 +289,29 @@ end «MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul
 
 namespace Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-tables»
 
-private theorem multiscalar_mul_loop0_loop0_eq
+private theorem multiscalar_mul_loop2_loop0_eq
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«i686-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize))
-    (Q : edwards.EdwardsPoint.«i686-tables») (j n i : Usize) :
-    multiscalar_mul_loop0_loop0 lookup_tables scalar_digits Q j n i =
-      EdwardsOps.I686Tables.strausMsLoop00 lookup_tables scalar_digits Q j n i := by
-  unfold multiscalar_mul_loop0_loop0 EdwardsOps.strausMsLoop00
+    (Q : edwards.EdwardsPoint.«i686-tables») (j : Usize) (it : core.ops.range.Range Usize) :
+    multiscalar_mul_loop2_loop0 it lookup_tables scalar_digits Q j =
+      EdwardsOps.I686Tables.strausMsLoop00 it lookup_tables scalar_digits Q j := by
+  unfold multiscalar_mul_loop2_loop0 EdwardsOps.strausMsLoop00
   congr 1
 
-private theorem multiscalar_mul_loop0_eq
+private theorem multiscalar_mul_loop2_eq
     (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«i686-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize))
     (Q : edwards.EdwardsPoint.«i686-tables») :
-    multiscalar_mul_loop0 iter lookup_tables scalar_digits Q =
+    multiscalar_mul_loop2 iter lookup_tables scalar_digits Q =
       EdwardsOps.I686Tables.strausMsLoop0 iter lookup_tables scalar_digits Q := by
-  unfold multiscalar_mul_loop0 EdwardsOps.strausMsLoop0
+  unfold multiscalar_mul_loop2 EdwardsOps.strausMsLoop0
   congr 1
 
 /-- The outer loop: after the digit positions `e, …, 63`, the accumulator represents
 `∑_{k < n} radix16Tail d_k e • P_k`. -/
 @[local step]
-private theorem multiscalar_mul_loop0_spec
+private theorem multiscalar_mul_loop2_spec
     (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«i686-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize)) (Q : edwards.EdwardsPoint.«i686-tables»)
@@ -312,10 +324,10 @@ private theorem multiscalar_mul_loop0_spec
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve)
     (hQp : Q.toPoint = ∑ k ∈ Finset.range n,
       radix16Tail scalar_digits.val[k]! iter.iter.end.val • P k) :
-    multiscalar_mul_loop0 iter lookup_tables scalar_digits Q
+    multiscalar_mul_loop2 iter lookup_tables scalar_digits Q
       ⦃ (r : edwards.EdwardsPoint.«i686-tables») => r.OnCurve ∧ r.LimbsLt 26 ∧
         r.toPoint = ∑ k ∈ Finset.range n, radix16Tail scalar_digits.val[k]! 0 • P k ⦄ := by
-  rw [multiscalar_mul_loop0_eq]
+  rw [multiscalar_mul_loop2_eq]
   exact EdwardsOps.I686Tables.strausMsLoop0_spec
     EdwardsOps.I686Tables.addN_spec EdwardsOps.I686Tables.asExtended_spec
     EdwardsOps.I686Tables.ltSelect_spec EdwardsOps.I686Tables.mulByPow2_spec iter lookup_tables
@@ -350,13 +362,17 @@ theorem multiscalar_mul_spec
   have hscalars' : scalarsInst.into_iter scalars
       ⦃ (it : Clause0_IntoIter) => scalarsInst.iteratorInst.Yields it xs ⦄ := hscalars
   step with hpoints' as ⟨it, hit⟩
-  step with «MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.lookup_tables_spec _ _
-      it ys
-    hit ps hborrow_points hps hys as ⟨tables, htables⟩
+  unfold multiscalar_mul_loop0
+  apply spec_bind
+    («MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.lookup_tables_spec
+      _ _ it ys hit ps hborrow_points hps hys)
+  intro tables htables
   step with hscalars' as ⟨it1, hit1⟩
-  step with «MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.scalar_digits_spec _ _
-      it1
-    xs hit1 ss hborrow_scalars hss hxs as ⟨digits, hdigits⟩
+  unfold multiscalar_mul_loop1
+  apply spec_bind
+    («MultiscalarMulStrausEdwardsPointi686-tables».multiscalar_mul.scalar_digits_spec
+      _ _ it1 xs hit1 ss hborrow_scalars hss hxs)
+  intro digits hdigits
   step with
       edwards.EdwardsPoint.«i686-tables».Insts.Curve25519_dalekTraitsIdentity.identity_spec
     as ⟨Q, hQon, hQ, hQb⟩
@@ -365,7 +381,7 @@ theorem multiscalar_mul_spec
   obtain ⟨hDlen, hD⟩ := forall₂_getElem! hdigits
   have hn : min ss.length ps.length = min digits.length tables.length := by
     rw [hTlen, hDlen]
-  step with multiscalar_mul_loop0_spec iter tables digits Q (fun k => ps[k]!.toPoint)
+  step with multiscalar_mul_loop2_spec iter tables digits Q (fun k => ps[k]!.toPoint)
     (min ss.length ps.length) hn
     (fun k hk => hT k (by have := min_le_right ss.length ps.length; omega))
     (fun k hk => (hD k (by have := min_le_left ss.length ps.length; omega)).2)
@@ -412,10 +428,13 @@ private theorem lookup_tables_spec {It Clause0_Item : Type}
       (fun x P => borrowInst.borrow x ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
           ys ps)
     (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hlen : ys.length ≤ Usize.max) :
-    lookup_tables iterInst borrowInst points
+    loop (fun ((it, out) : It × alloc.vec.Vec
+        (window.LookupTable ProjectiveNielsPoint.«x86_64-no-tables»)) =>
+      collect.collectMapBody iterInst borrowInst.borrow
+        «CoreConvertFromSharedAEdwardsPointx86_64-no-tables».«from» it out)
+      (points, alloc.vec.Vec.new _)
       ⦃ (r : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«x86_64-no-tables»)) =>
         List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) ps r.val ⦄ := by
-  unfold lookup_tables lookup_tables_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     «CoreConvertFromSharedAEdwardsPointx86_64-no-tables».«from»
     (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) points ys hit ps hborrow
@@ -435,11 +454,12 @@ private theorem scalar_digits_spec {It Clause0_Item : Type}
     (hborrow : List.Forall₂
       (fun x s => borrowInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hlen : xs.length ≤ Usize.max) :
-    scalar_digits iterInst borrowInst scalars
+    loop (fun ((it, out) : It × alloc.vec.Vec (Array I8 64#usize)) =>
+      collect.collectMapBody iterInst borrowInst.borrow scalar.Scalar.as_radix_16 it out)
+      (scalars, alloc.vec.Vec.new _)
       ⦃ (r : alloc.vec.Vec (Array I8 64#usize)) =>
         List.Forall₂ (fun s d => d.asInt 4 = s.asNat ∧
           ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
-  unfold scalar_digits scalar_digits_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow scalar.Scalar.as_radix_16
     (fun s d => d.asInt 4 = s.asNat ∧ ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
     scalars xs hit ss hborrow (fun s hs => spec_mono (scalar.Scalar.as_radix_16_spec s (hss s hs))
@@ -454,29 +474,29 @@ end «MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul
 
 namespace Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables»
 
-private theorem multiscalar_mul_loop0_loop0_eq
+private theorem multiscalar_mul_loop2_loop0_eq
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«x86_64-no-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize))
-    (Q : edwards.EdwardsPoint.«x86_64-no-tables») (j n i : Usize) :
-    multiscalar_mul_loop0_loop0 lookup_tables scalar_digits Q j n i =
-      EdwardsOps.X86NoTables.strausMsLoop00 lookup_tables scalar_digits Q j n i := by
-  unfold multiscalar_mul_loop0_loop0 EdwardsOps.strausMsLoop00
+    (Q : edwards.EdwardsPoint.«x86_64-no-tables») (j : Usize) (it : core.ops.range.Range Usize) :
+    multiscalar_mul_loop2_loop0 it lookup_tables scalar_digits Q j =
+      EdwardsOps.X86NoTables.strausMsLoop00 it lookup_tables scalar_digits Q j := by
+  unfold multiscalar_mul_loop2_loop0 EdwardsOps.strausMsLoop00
   congr 1
 
-private theorem multiscalar_mul_loop0_eq
+private theorem multiscalar_mul_loop2_eq
     (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«x86_64-no-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize))
     (Q : edwards.EdwardsPoint.«x86_64-no-tables») :
-    multiscalar_mul_loop0 iter lookup_tables scalar_digits Q =
+    multiscalar_mul_loop2 iter lookup_tables scalar_digits Q =
       EdwardsOps.X86NoTables.strausMsLoop0 iter lookup_tables scalar_digits Q := by
-  unfold multiscalar_mul_loop0 EdwardsOps.strausMsLoop0
+  unfold multiscalar_mul_loop2 EdwardsOps.strausMsLoop0
   congr 1
 
 /-- The outer loop: after the digit positions `e, …, 63`, the accumulator represents
 `∑_{k < n} radix16Tail d_k e • P_k`. -/
 @[local step]
-private theorem multiscalar_mul_loop0_spec
+private theorem multiscalar_mul_loop2_spec
     (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«x86_64-no-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize))
@@ -490,10 +510,10 @@ private theorem multiscalar_mul_loop0_spec
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve)
     (hQp : Q.toPoint = ∑ k ∈ Finset.range n,
       radix16Tail scalar_digits.val[k]! iter.iter.end.val • P k) :
-    multiscalar_mul_loop0 iter lookup_tables scalar_digits Q
+    multiscalar_mul_loop2 iter lookup_tables scalar_digits Q
       ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧ r.LimbsLt 52 ∧
         r.toPoint = ∑ k ∈ Finset.range n, radix16Tail scalar_digits.val[k]! 0 • P k ⦄ := by
-  rw [multiscalar_mul_loop0_eq]
+  rw [multiscalar_mul_loop2_eq]
   exact EdwardsOps.X86NoTables.strausMsLoop0_spec
     EdwardsOps.X86NoTables.addN_spec EdwardsOps.X86NoTables.asExtended_spec
     EdwardsOps.X86NoTables.ltSelect_spec EdwardsOps.X86NoTables.mulByPow2_spec iter lookup_tables
@@ -529,13 +549,17 @@ theorem multiscalar_mul_spec
   have hscalars' : scalarsInst.into_iter scalars
       ⦃ (it : Clause0_IntoIter) => scalarsInst.iteratorInst.Yields it xs ⦄ := hscalars
   step with hpoints' as ⟨it, hit⟩
-  step with «MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.lookup_tables_spec _
-      _ it ys
-    hit ps hborrow_points hps hys as ⟨tables, htables⟩
+  unfold multiscalar_mul_loop0
+  apply spec_bind
+    («MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.lookup_tables_spec
+      _ _ it ys hit ps hborrow_points hps hys)
+  intro tables htables
   step with hscalars' as ⟨it1, hit1⟩
-  step with «MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.scalar_digits_spec _
-      _ it1
-    xs hit1 ss hborrow_scalars hss hxs as ⟨digits, hdigits⟩
+  unfold multiscalar_mul_loop1
+  apply spec_bind
+    («MultiscalarMulStrausEdwardsPointx86_64-no-tables».multiscalar_mul.scalar_digits_spec
+      _ _ it1 xs hit1 ss hborrow_scalars hss hxs)
+  intro digits hdigits
   step with Curve25519_dalekTraitsIdentity.identity_spec
     as ⟨Q, hQon, hQ, hQb⟩
   step as ⟨iter, hiter⟩
@@ -543,7 +567,7 @@ theorem multiscalar_mul_spec
   obtain ⟨hDlen, hD⟩ := forall₂_getElem! hdigits
   have hn : min ss.length ps.length = min digits.length tables.length := by
     rw [hTlen, hDlen]
-  step with multiscalar_mul_loop0_spec iter tables digits Q (fun k => ps[k]!.toPoint)
+  step with multiscalar_mul_loop2_spec iter tables digits Q (fun k => ps[k]!.toPoint)
     (min ss.length ps.length) hn
     (fun k hk => hT k (by have := min_le_right ss.length ps.length; omega))
     (fun k hk => (hD k (by have := min_le_left ss.length ps.length; omega)).2)
@@ -590,10 +614,13 @@ private theorem lookup_tables_spec {It Clause0_Item : Type}
       (fun x P => borrowInst.borrow x ⦃ (P' : edwards.EdwardsPoint.«i686-no-tables») => P' = P ⦄)
           ys ps)
     (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hlen : ys.length ≤ Usize.max) :
-    lookup_tables iterInst borrowInst points
+    loop (fun ((it, out) : It × alloc.vec.Vec
+        (window.LookupTable ProjectiveNielsPoint.«i686-no-tables»)) =>
+      collect.collectMapBody iterInst borrowInst.borrow
+        «CoreConvertFromSharedAEdwardsPointi686-no-tables».«from» it out)
+      (points, alloc.vec.Vec.new _)
       ⦃ (r : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«i686-no-tables»)) =>
         List.Forall₂ (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 27) ps r.val ⦄ := by
-  unfold lookup_tables lookup_tables_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow
     «CoreConvertFromSharedAEdwardsPointi686-no-tables».«from»
     (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 27) points ys hit ps hborrow
@@ -613,11 +640,12 @@ private theorem scalar_digits_spec {It Clause0_Item : Type}
     (hborrow : List.Forall₂
       (fun x s => borrowInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hlen : xs.length ≤ Usize.max) :
-    scalar_digits iterInst borrowInst scalars
+    loop (fun ((it, out) : It × alloc.vec.Vec (Array I8 64#usize)) =>
+      collect.collectMapBody iterInst borrowInst.borrow scalar.Scalar.as_radix_16 it out)
+      (scalars, alloc.vec.Vec.new _)
       ⦃ (r : alloc.vec.Vec (Array I8 64#usize)) =>
         List.Forall₂ (fun s d => d.asInt 4 = s.asNat ∧
           ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8) ss r.val ⦄ := by
-  unfold scalar_digits scalar_digits_loop
   apply spec_mono (collect.collectMapLoop_spec iterInst borrowInst.borrow scalar.Scalar.as_radix_16
     (fun s d => d.asInt 4 = s.asNat ∧ ∀ i : ℕ, i < 64 → -8 ≤ d[i]!.val ∧ d[i]!.val ≤ 8)
     scalars xs hit ss hborrow (fun s hs => spec_mono (scalar.Scalar.as_radix_16_spec s (hss s hs))
@@ -632,29 +660,29 @@ end «MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul
 
 namespace Straus.Insts.«Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-no-tables»
 
-private theorem multiscalar_mul_loop0_loop0_eq
+private theorem multiscalar_mul_loop2_loop0_eq
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«i686-no-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize))
-    (Q : edwards.EdwardsPoint.«i686-no-tables») (j n i : Usize) :
-    multiscalar_mul_loop0_loop0 lookup_tables scalar_digits Q j n i =
-      EdwardsOps.I686NoTables.strausMsLoop00 lookup_tables scalar_digits Q j n i := by
-  unfold multiscalar_mul_loop0_loop0 EdwardsOps.strausMsLoop00
+    (Q : edwards.EdwardsPoint.«i686-no-tables») (j : Usize) (it : core.ops.range.Range Usize) :
+    multiscalar_mul_loop2_loop0 it lookup_tables scalar_digits Q j =
+      EdwardsOps.I686NoTables.strausMsLoop00 it lookup_tables scalar_digits Q j := by
+  unfold multiscalar_mul_loop2_loop0 EdwardsOps.strausMsLoop00
   congr 1
 
-private theorem multiscalar_mul_loop0_eq
+private theorem multiscalar_mul_loop2_eq
     (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«i686-no-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize))
     (Q : edwards.EdwardsPoint.«i686-no-tables») :
-    multiscalar_mul_loop0 iter lookup_tables scalar_digits Q =
+    multiscalar_mul_loop2 iter lookup_tables scalar_digits Q =
       EdwardsOps.I686NoTables.strausMsLoop0 iter lookup_tables scalar_digits Q := by
-  unfold multiscalar_mul_loop0 EdwardsOps.strausMsLoop0
+  unfold multiscalar_mul_loop2 EdwardsOps.strausMsLoop0
   congr 1
 
 /-- The outer loop: after the digit positions `e, …, 63`, the accumulator represents
 `∑_{k < n} radix16Tail d_k e • P_k`. -/
 @[local step]
-private theorem multiscalar_mul_loop0_spec
+private theorem multiscalar_mul_loop2_spec
     (iter : core.iter.adapters.rev.Rev (core.ops.range.Range Usize))
     (lookup_tables : alloc.vec.Vec (window.LookupTable ProjectiveNielsPoint.«i686-no-tables»))
     (scalar_digits : alloc.vec.Vec (Array I8 64#usize))
@@ -668,10 +696,10 @@ private theorem multiscalar_mul_loop0_spec
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve)
     (hQp : Q.toPoint = ∑ k ∈ Finset.range n,
       radix16Tail scalar_digits.val[k]! iter.iter.end.val • P k) :
-    multiscalar_mul_loop0 iter lookup_tables scalar_digits Q
+    multiscalar_mul_loop2 iter lookup_tables scalar_digits Q
       ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») => r.OnCurve ∧ r.LimbsLt 26 ∧
         r.toPoint = ∑ k ∈ Finset.range n, radix16Tail scalar_digits.val[k]! 0 • P k ⦄ := by
-  rw [multiscalar_mul_loop0_eq]
+  rw [multiscalar_mul_loop2_eq]
   exact EdwardsOps.I686NoTables.strausMsLoop0_spec
     EdwardsOps.I686NoTables.addN_spec EdwardsOps.I686NoTables.asExtended_spec
     EdwardsOps.I686NoTables.ltSelect_spec EdwardsOps.I686NoTables.mulByPow2_spec iter lookup_tables
@@ -707,13 +735,17 @@ theorem multiscalar_mul_spec
   have hscalars' : scalarsInst.into_iter scalars
       ⦃ (it : Clause0_IntoIter) => scalarsInst.iteratorInst.Yields it xs ⦄ := hscalars
   step with hpoints' as ⟨it, hit⟩
-  step with «MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.lookup_tables_spec _
-      _ it ys
-    hit ps hborrow_points hps hys as ⟨tables, htables⟩
+  unfold multiscalar_mul_loop0
+  apply spec_bind
+    («MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.lookup_tables_spec
+      _ _ it ys hit ps hborrow_points hps hys)
+  intro tables htables
   step with hscalars' as ⟨it1, hit1⟩
-  step with «MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.scalar_digits_spec _
-      _ it1
-    xs hit1 ss hborrow_scalars hss hxs as ⟨digits, hdigits⟩
+  unfold multiscalar_mul_loop1
+  apply spec_bind
+    («MultiscalarMulStrausEdwardsPointi686-no-tables».multiscalar_mul.scalar_digits_spec
+      _ _ it1 xs hit1 ss hborrow_scalars hss hxs)
+  intro digits hdigits
   step with Curve25519_dalekTraitsIdentity.identity_spec
     as ⟨Q, hQon, hQ, hQb⟩
   step as ⟨iter, hiter⟩
@@ -721,7 +753,7 @@ theorem multiscalar_mul_spec
   obtain ⟨hDlen, hD⟩ := forall₂_getElem! hdigits
   have hn : min ss.length ps.length = min digits.length tables.length := by
     rw [hTlen, hDlen]
-  step with multiscalar_mul_loop0_spec iter tables digits Q (fun k => ps[k]!.toPoint)
+  step with multiscalar_mul_loop2_spec iter tables digits Q (fun k => ps[k]!.toPoint)
     (min ss.length ps.length) hn
     (fun k hk => hT k (by have := min_le_right ss.length ps.length; omega))
     (fun k hk => (hD k (by have := min_le_left ss.length ps.length; omega)).2)

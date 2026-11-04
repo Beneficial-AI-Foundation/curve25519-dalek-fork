@@ -40,7 +40,9 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
     (hz : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
-    mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
+    mul_base_loop0
+      { iter := { start := 1#usize, «end» := 64#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[1 + 2 * k]!.val * 2 ^ (2 * 4 * k)) • self.point ∧ r.LimbsLt
             52 ⦄ := by
@@ -58,7 +60,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 4 = 16 by norm_num] at this
           omega))
-    hz 1#usize (by decide) Q hQ hon
+    hz 1#usize (by decide) (by decide) Q hQ hon
 
 /-- Loop 1 of `mul_base`: the digits `0 + 2 k`. -/
 @[local step]
@@ -68,7 +70,9 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
     (hz : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
-    mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
+    mul_base_loop1
+      { iter := { start := 0#usize, «end» := 64#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[0 + 2 * k]!.val * 2 ^ (2 * 4 * k)) • self.point ∧ r.LimbsLt
             52 ⦄ := by
@@ -86,7 +90,7 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 4 = 16 by norm_num] at this
           omega))
-    hz 0#usize (by decide) Q hQ hon
+    hz 0#usize (by decide) (by decide) Q hQ hon
 
 /-- `BasepointTable::mul_base` (radix `2^4`): `s • self.point` (unreduced,
 `s.asNat < 2^255`); limbs `< 2^52`. -/
@@ -97,6 +101,9 @@ theorem mul_base_spec (self : EdwardsBasepointTable.«x86_64-tables») (s : scal
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_base
+  simp only [core.iter.traits.iterator.Iterator.step_by.trait_default,
+    core.iter.traits.iterator.Iterator.step_by.default,
+    show ¬(2#usize).val = 0 by decide, ite_false, bind_ok]
   step with scalar.Scalar.as_radix_2w_spec s 4#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
   have hz' : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
@@ -126,7 +133,9 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
     (hz : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
-    mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
+    mul_base_loop0
+      { iter := { start := 1#usize, «end» := 64#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[1 + 2 * k]!.val * 2 ^ (2 * 4 * k)) • self.point ∧ r.LimbsLt
             26 ⦄ := by
@@ -144,7 +153,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 4 = 16 by norm_num] at this
           omega))
-    hz 1#usize (by decide) Q hQ hon
+    hz 1#usize (by decide) (by decide) Q hQ hon
 
 /-- Loop 1 of `mul_base`: the digits `0 + 2 k`. -/
 @[local step]
@@ -154,7 +163,9 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 4 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 4)
     (hz : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
-    mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
+    mul_base_loop1
+      { iter := { start := 0#usize, «end» := 64#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[0 + 2 * k]!.val * 2 ^ (2 * 4 * k)) • self.point ∧ r.LimbsLt
             26 ⦄ := by
@@ -172,7 +183,7 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 4 = 16 by norm_num] at this
           omega))
-    hz 0#usize (by decide) Q hQ hon
+    hz 0#usize (by decide) (by decide) Q hQ hon
 
 /-- `BasepointTable::mul_base` (radix `2^4`): `s • self.point` (unreduced,
 `s.asNat < 2^255`); limbs `< 2^26`. -/
@@ -183,6 +194,9 @@ theorem mul_base_spec (self : EdwardsBasepointTable.«i686-tables») (s : scalar
     mul_base self s ⦃ (r : EdwardsPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_base
+  simp only [core.iter.traits.iterator.Iterator.step_by.trait_default,
+    core.iter.traits.iterator.Iterator.step_by.default,
+    show ¬(2#usize).val = 0 by decide, ite_false, bind_ok]
   step with scalar.Scalar.as_radix_2w_spec s 4#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
   have hz' : ∀ j : ℕ, j < 64 → 64 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
@@ -210,7 +224,9 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
     (hz : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
-    mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
+    mul_base_loop0
+      { iter := { start := 1#usize, «end» := 52#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[1 + 2 * k]!.val * 2 ^ (2 * 5 * k)) • self.point ∧ r.LimbsLt
             52 ⦄ := by
@@ -228,7 +244,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 5 = 32 by norm_num] at this
           omega))
-    hz 1#usize (by decide) Q hQ hon
+    hz 1#usize (by decide) (by decide) Q hQ hon
 
 /-- Loop 1 of `mul_base`: the digits `0 + 2 k`. -/
 @[local step]
@@ -238,7 +254,9 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
     (hz : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
-    mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
+    mul_base_loop1
+      { iter := { start := 0#usize, «end» := 52#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[0 + 2 * k]!.val * 2 ^ (2 * 5 * k)) • self.point ∧ r.LimbsLt
             52 ⦄ := by
@@ -256,7 +274,7 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 5 = 32 by norm_num] at this
           omega))
-    hz 0#usize (by decide) Q hQ hon
+    hz 0#usize (by decide) (by decide) Q hQ hon
 
 /-- `BasepointTable::mul_base` (radix `2^5`): `s • self.point` (unreduced,
 `s.asNat < 2^255`); limbs `< 2^52`. -/
@@ -267,6 +285,9 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables»)
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_base
+  simp only [core.iter.traits.iterator.Iterator.step_by.trait_default,
+    core.iter.traits.iterator.Iterator.step_by.default,
+    show ¬(2#usize).val = 0 by decide, ite_false, bind_ok]
   step with scalar.Scalar.as_radix_2w_spec s 5#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
   have hz' : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
@@ -296,7 +317,9 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
     (hz : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
-    mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
+    mul_base_loop0
+      { iter := { start := 1#usize, «end» := 52#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[1 + 2 * k]!.val * 2 ^ (2 * 5 * k)) • self.point ∧ r.LimbsLt
             26 ⦄ := by
@@ -314,7 +337,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 5 = 32 by norm_num] at this
           omega))
-    hz 1#usize (by decide) Q hQ hon
+    hz 1#usize (by decide) (by decide) Q hQ hon
 
 /-- Loop 1 of `mul_base`: the digits `0 + 2 k`. -/
 @[local step]
@@ -324,7 +347,9 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 5 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 5)
     (hz : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
-    mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
+    mul_base_loop1
+      { iter := { start := 0#usize, «end» := 52#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[0 + 2 * k]!.val * 2 ^ (2 * 5 * k)) • self.point ∧ r.LimbsLt
             26 ⦄ := by
@@ -342,7 +367,7 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 5 = 32 by norm_num] at this
           omega))
-    hz 0#usize (by decide) Q hQ hon
+    hz 0#usize (by decide) (by decide) Q hQ hon
 
 /-- `BasepointTable::mul_base` (radix `2^5`): `s • self.point` (unreduced,
 `s.asNat < 2^255`); limbs `< 2^26`. -/
@@ -353,6 +378,9 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix32.«i686-tables») (s :
     mul_base self s ⦃ (r : EdwardsPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_base
+  simp only [core.iter.traits.iterator.Iterator.step_by.trait_default,
+    core.iter.traits.iterator.Iterator.step_by.default,
+    show ¬(2#usize).val = 0 by decide, ite_false, bind_ok]
   step with scalar.Scalar.as_radix_2w_spec s 5#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
   have hz' : ∀ j : ℕ, j < 64 → 52 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
@@ -380,7 +408,9 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
     (hz : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
-    mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
+    mul_base_loop0
+      { iter := { start := 1#usize, «end» := 43#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[1 + 2 * k]!.val * 2 ^ (2 * 6 * k)) • self.point ∧ r.LimbsLt
             52 ⦄ := by
@@ -398,7 +428,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 6 = 64 by norm_num] at this
           omega))
-    hz 1#usize (by decide) Q hQ hon
+    hz 1#usize (by decide) (by decide) Q hQ hon
 
 /-- Loop 1 of `mul_base`: the digits `0 + 2 k`. -/
 @[local step]
@@ -408,7 +438,9 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
     (hz : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
-    mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
+    mul_base_loop1
+      { iter := { start := 0#usize, «end» := 43#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[0 + 2 * k]!.val * 2 ^ (2 * 6 * k)) • self.point ∧ r.LimbsLt
             52 ⦄ := by
@@ -426,7 +458,7 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 6 = 64 by norm_num] at this
           omega))
-    hz 0#usize (by decide) Q hQ hon
+    hz 0#usize (by decide) (by decide) Q hQ hon
 
 /-- `BasepointTable::mul_base` (radix `2^6`): `s • self.point` (unreduced,
 `s.asNat < 2^255`); limbs `< 2^52`. -/
@@ -437,6 +469,9 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables»)
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_base
+  simp only [core.iter.traits.iterator.Iterator.step_by.trait_default,
+    core.iter.traits.iterator.Iterator.step_by.default,
+    show ¬(2#usize).val = 0 by decide, ite_false, bind_ok]
   step with scalar.Scalar.as_radix_2w_spec s 6#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
   have hz' : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
@@ -466,7 +501,9 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
     (hz : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
-    mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
+    mul_base_loop0
+      { iter := { start := 1#usize, «end» := 43#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[1 + 2 * k]!.val * 2 ^ (2 * 6 * k)) • self.point ∧ r.LimbsLt
             26 ⦄ := by
@@ -484,7 +521,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 6 = 64 by norm_num] at this
           omega))
-    hz 1#usize (by decide) Q hQ hon
+    hz 1#usize (by decide) (by decide) Q hQ hon
 
 /-- Loop 1 of `mul_base`: the digits `0 + 2 k`. -/
 @[local step]
@@ -494,7 +531,9 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 6 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 6)
     (hz : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
-    mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
+    mul_base_loop1
+      { iter := { start := 0#usize, «end» := 43#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[0 + 2 * k]!.val * 2 ^ (2 * 6 * k)) • self.point ∧ r.LimbsLt
             26 ⦄ := by
@@ -512,7 +551,7 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 6 = 64 by norm_num] at this
           omega))
-    hz 0#usize (by decide) Q hQ hon
+    hz 0#usize (by decide) (by decide) Q hQ hon
 
 /-- `BasepointTable::mul_base` (radix `2^6`): `s • self.point` (unreduced,
 `s.asNat < 2^255`); limbs `< 2^26`. -/
@@ -523,6 +562,9 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix64.«i686-tables») (s :
     mul_base self s ⦃ (r : EdwardsPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_base
+  simp only [core.iter.traits.iterator.Iterator.step_by.trait_default,
+    core.iter.traits.iterator.Iterator.step_by.default,
+    show ¬(2#usize).val = 0 by decide, ite_false, bind_ok]
   step with scalar.Scalar.as_radix_2w_spec s 6#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
   have hz' : ∀ j : ℕ, j < 64 → 43 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
@@ -550,7 +592,9 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
     (hz : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
-    mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
+    mul_base_loop0
+      { iter := { start := 1#usize, «end» := 37#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[1 + 2 * k]!.val * 2 ^ (2 * 7 * k)) • self.point ∧ r.LimbsLt
             52 ⦄ := by
@@ -568,7 +612,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 7 = 128 by norm_num] at this
           omega))
-    hz 1#usize (by decide) Q hQ hon
+    hz 1#usize (by decide) (by decide) Q hQ hon
 
 /-- Loop 1 of `mul_base`: the digits `0 + 2 k`. -/
 @[local step]
@@ -578,7 +622,9 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
     (hz : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
-    mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
+    mul_base_loop1
+      { iter := { start := 0#usize, «end» := 37#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[0 + 2 * k]!.val * 2 ^ (2 * 7 * k)) • self.point ∧ r.LimbsLt
             52 ⦄ := by
@@ -596,7 +642,7 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 7 = 128 by norm_num] at this
           omega))
-    hz 0#usize (by decide) Q hQ hon
+    hz 0#usize (by decide) (by decide) Q hQ hon
 
 /-- `BasepointTable::mul_base` (radix `2^7`): `s • self.point` (unreduced,
 `s.asNat < 2^255`); limbs `< 2^52`. -/
@@ -607,6 +653,9 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables»)
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_base
+  simp only [core.iter.traits.iterator.Iterator.step_by.trait_default,
+    core.iter.traits.iterator.Iterator.step_by.default,
+    show ¬(2#usize).val = 0 by decide, ite_false, bind_ok]
   step with scalar.Scalar.as_radix_2w_spec s 7#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
   have hz' : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
@@ -636,7 +685,9 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
     (hz : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
-    mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
+    mul_base_loop0
+      { iter := { start := 1#usize, «end» := 37#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[1 + 2 * k]!.val * 2 ^ (2 * 7 * k)) • self.point ∧ r.LimbsLt
             26 ⦄ := by
@@ -654,7 +705,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 7 = 128 by norm_num] at this
           omega))
-    hz 1#usize (by decide) Q hQ hon
+    hz 1#usize (by decide) (by decide) Q hQ hon
 
 /-- Loop 1 of `mul_base`: the digits `0 + 2 k`. -/
 @[local step]
@@ -664,7 +715,9 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (ha : ∀ i : ℕ, i < 64 → -2 ^ 7 ≤ 2 * a[i]!.val ∧ 2 * a[i]!.val ≤ 2 ^ 7)
     (hz : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
-    mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
+    mul_base_loop1
+      { iter := { start := 0#usize, «end» := 37#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[0 + 2 * k]!.val * 2 ^ (2 * 7 * k)) • self.point ∧ r.LimbsLt
             26 ⦄ := by
@@ -682,7 +735,7 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
           have := ha i (by scalar_tac)
           rw [show (2 : ℤ) ^ 7 = 128 by norm_num] at this
           omega))
-    hz 0#usize (by decide) Q hQ hon
+    hz 0#usize (by decide) (by decide) Q hQ hon
 
 /-- `BasepointTable::mul_base` (radix `2^7`): `s • self.point` (unreduced,
 `s.asNat < 2^255`); limbs `< 2^26`. -/
@@ -693,6 +746,9 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix128.«i686-tables») (s 
     mul_base self s ⦃ (r : EdwardsPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_base
+  simp only [core.iter.traits.iterator.Iterator.step_by.trait_default,
+    core.iter.traits.iterator.Iterator.step_by.default,
+    show ¬(2#usize).val = 0 by decide, ite_false, bind_ok]
   step with scalar.Scalar.as_radix_2w_spec s 7#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
   have hz' : ∀ j : ℕ, j < 64 → 37 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
@@ -719,7 +775,9 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (hself : self.LimbsLt 54) (hP : self.IsTable)
     (hz : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
-    mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
+    mul_base_loop0
+      { iter := { start := 1#usize, «end» := 33#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[1 + 2 * k]!.val * 2 ^ (2 * 8 * k)) • self.point ∧ r.LimbsLt
             52 ⦄ := by
@@ -733,7 +791,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
       rw [show 16 * (i / 2) = 2 * 8 * (i / 2) by ring] at h
       exact window.«LookupTableRadix256AffineNielsPointx86_64-tables».select_spec _ _ _
         (hself (i / 2) (by scalar_tac)) h)
-    hz 1#usize (by decide) Q hQ hon
+    hz 1#usize (by decide) (by decide) Q hQ hon
 
 /-- Loop 1 of `mul_base`: the digits `0 + 2 k`. -/
 @[local step]
@@ -742,7 +800,9 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (hself : self.LimbsLt 54) (hP : self.IsTable)
     (hz : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«x86_64-tables»)
     (hQ : Q.LimbsLt 52) (hon : Q.OnCurve) :
-    mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
+    mul_base_loop1
+      { iter := { start := 0#usize, «end» := 33#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[0 + 2 * k]!.val * 2 ^ (2 * 8 * k)) • self.point ∧ r.LimbsLt
             52 ⦄ := by
@@ -756,7 +816,7 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
       rw [show 16 * (i / 2) = 2 * 8 * (i / 2) by ring] at h
       exact window.«LookupTableRadix256AffineNielsPointx86_64-tables».select_spec _ _ _
         (hself (i / 2) (by scalar_tac)) h)
-    hz 0#usize (by decide) Q hQ hon
+    hz 0#usize (by decide) (by decide) Q hQ hon
 
 /-- `BasepointTable::mul_base` (radix `2^8`): `s • self.point` (unreduced,
 `s.asNat < 2^255`); limbs `< 2^52`. -/
@@ -767,6 +827,9 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables»)
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.LimbsLt 52 ⦄ := by
   unfold mul_base
+  simp only [core.iter.traits.iterator.Iterator.step_by.trait_default,
+    core.iter.traits.iterator.Iterator.step_by.default,
+    show ¬(2#usize).val = 0 by decide, ite_false, bind_ok]
   step with scalar.Scalar.as_radix_2w_spec s 8#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
   have hz' : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)
@@ -795,7 +858,9 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
     (hself : self.LimbsLt 27) (hP : self.IsTable)
     (hz : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
-    mul_base_loop0 a self Q 1#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
+    mul_base_loop0
+      { iter := { start := 1#usize, «end» := 33#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[1 + 2 * k]!.val * 2 ^ (2 * 8 * k)) • self.point ∧ r.LimbsLt
             26 ⦄ := by
@@ -809,7 +874,7 @@ private theorem mul_base_loop0_spec (a : Array I8 64#usize)
       rw [show 16 * (i / 2) = 2 * 8 * (i / 2) by ring] at h
       exact window.«LookupTableRadix256AffineNielsPointi686-tables».select_spec _ _ _
         (hself (i / 2) (by scalar_tac)) h)
-    hz 1#usize (by decide) Q hQ hon
+    hz 1#usize (by decide) (by decide) Q hQ hon
 
 /-- Loop 1 of `mul_base`: the digits `0 + 2 k`. -/
 @[local step]
@@ -818,7 +883,9 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
     (hself : self.LimbsLt 27) (hP : self.IsTable)
     (hz : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0) (Q : EdwardsPoint.«i686-tables»)
     (hQ : Q.LimbsLt 26) (hon : Q.OnCurve) :
-    mul_base_loop1 a self Q 0#usize ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
+    mul_base_loop1
+      { iter := { start := 0#usize, «end» := 33#usize }, step_by := 2#usize } a self Q
+      ⦃ (r : EdwardsPoint.«i686-tables») => r.OnCurve ∧
       r.toPoint = Q.toPoint +
         (∑ k ∈ Finset.range 32, a[0 + 2 * k]!.val * 2 ^ (2 * 8 * k)) • self.point ∧ r.LimbsLt
             26 ⦄ := by
@@ -832,7 +899,7 @@ private theorem mul_base_loop1_spec (a : Array I8 64#usize)
       rw [show 16 * (i / 2) = 2 * 8 * (i / 2) by ring] at h
       exact window.«LookupTableRadix256AffineNielsPointi686-tables».select_spec _ _ _
         (hself (i / 2) (by scalar_tac)) h)
-    hz 0#usize (by decide) Q hQ hon
+    hz 0#usize (by decide) (by decide) Q hQ hon
 
 /-- `BasepointTable::mul_base` (radix `2^8`): `s • self.point` (unreduced,
 `s.asNat < 2^255`); limbs `< 2^26`. -/
@@ -843,6 +910,9 @@ theorem mul_base_spec (self : EdwardsBasepointTableRadix256.«i686-tables») (s 
     mul_base self s ⦃ (r : EdwardsPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.LimbsLt 26 ⦄ := by
   unfold mul_base
+  simp only [core.iter.traits.iterator.Iterator.step_by.trait_default,
+    core.iter.traits.iterator.Iterator.step_by.default,
+    show ¬(2#usize).val = 0 by decide, ite_false, bind_ok]
   step with scalar.Scalar.as_radix_2w_spec s 8#usize (by decide) hs as ⟨a, haval, hlow, ha, hz⟩
   have hz' : ∀ j : ℕ, j < 64 → 33 ≤ j → a[j]!.val = 0 := fun j hj hj' =>
     hz j hj (by omega)

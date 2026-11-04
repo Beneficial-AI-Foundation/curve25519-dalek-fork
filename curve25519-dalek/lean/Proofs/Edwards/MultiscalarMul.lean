@@ -54,16 +54,9 @@ theorem multiscalar_mul_spec
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  unfold «MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect
-    «MultiscalarMulEdwardsPointx86_64-tablesEdwardsPointx86_64-tables».multiscalar_mul.collect_loop
-  apply spec_bind (collect.collectLoop_spec _ it xs hit (alloc.vec.Vec.new _) (by simpa using hxs))
-  intro vs hvs
+  step with collect.fromIter_spec _ it xs hit hxs as ⟨vs, hvs⟩
   step with hpoints' as ⟨it1, hit1⟩
-  apply spec_bind
-      (collect.collectLoop_spec _ it1 ys hit1 (alloc.vec.Vec.new _) (by simpa using hys))
-  intro vp hvp
-  replace hvs : vs.val = xs := by rw [hvs]; rfl
-  replace hvp : vp.val = ys := by rw [hvp]; rfl
+  step with collect.fromIter_spec _ it1 ys hit1 hys as ⟨vp, hvp⟩
   step
   exact backend.«x86_64-tables».straus_multiscalar_mul_spec _ _ _ _ _ _ xs ys ss ps
     (hvs ▸ core.iter.traits.collect.IntoIteratorVec_yields vs)
@@ -108,16 +101,9 @@ theorem multiscalar_mul_spec
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  unfold «MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect
-    «MultiscalarMulEdwardsPointi686-tablesEdwardsPointi686-tables».multiscalar_mul.collect_loop
-  apply spec_bind (collect.collectLoop_spec _ it xs hit (alloc.vec.Vec.new _) (by simpa using hxs))
-  intro vs hvs
+  step with collect.fromIter_spec _ it xs hit hxs as ⟨vs, hvs⟩
   step with hpoints' as ⟨it1, hit1⟩
-  apply spec_bind
-      (collect.collectLoop_spec _ it1 ys hit1 (alloc.vec.Vec.new _) (by simpa using hys))
-  intro vp hvp
-  replace hvs : vs.val = xs := by rw [hvs]; rfl
-  replace hvp : vp.val = ys := by rw [hvp]; rfl
+  step with collect.fromIter_spec _ it1 ys hit1 hys as ⟨vp, hvp⟩
   step
   exact backend.«i686-tables».straus_multiscalar_mul_spec _ _ _ _ _ _ xs ys ss ps
     (hvs ▸ core.iter.traits.collect.IntoIteratorVec_yields vs)
@@ -130,7 +116,6 @@ end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
 namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
 namespace «Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables»
 
-open «MultiscalarMulEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables» in
 /-- `MultiscalarMul::multiscalar_mul` for `EdwardsPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
 scalars `< 2^255`); limbs `< 2^52`. -/
@@ -163,15 +148,9 @@ theorem multiscalar_mul_spec
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  unfold multiscalar_mul.collect multiscalar_mul.collect_loop
-  apply spec_bind (collect.collectLoop_spec _ it xs hit (alloc.vec.Vec.new _) (by simpa using hxs))
-  intro vs hvs
+  step with collect.fromIter_spec _ it xs hit hxs as ⟨vs, hvs⟩
   step with hpoints' as ⟨it1, hit1⟩
-  apply spec_bind
-      (collect.collectLoop_spec _ it1 ys hit1 (alloc.vec.Vec.new _) (by simpa using hys))
-  intro vp hvp
-  replace hvs : vs.val = xs := by rw [hvs]; rfl
-  replace hvp : vp.val = ys := by rw [hvp]; rfl
+  step with collect.fromIter_spec _ it1 ys hit1 hys as ⟨vp, hvp⟩
   step
   exact backend.«x86_64-no-tables».straus_multiscalar_mul_spec _ _ _ _ _ _ xs ys ss ps
     (hvs ▸ core.iter.traits.collect.IntoIteratorVec_yields vs)
@@ -184,7 +163,6 @@ end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
 namespace Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
 namespace «Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-no-tables»
 
-open «MultiscalarMulEdwardsPointi686-no-tablesEdwardsPointi686-no-tables» in
 /-- `MultiscalarMul::multiscalar_mul` for `EdwardsPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
 scalars `< 2^255`); limbs `< 2^26`. -/
@@ -217,15 +195,9 @@ theorem multiscalar_mul_spec
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints
   step with hscalars' as ⟨it, hit⟩
-  unfold multiscalar_mul.collect multiscalar_mul.collect_loop
-  apply spec_bind (collect.collectLoop_spec _ it xs hit (alloc.vec.Vec.new _) (by simpa using hxs))
-  intro vs hvs
+  step with collect.fromIter_spec _ it xs hit hxs as ⟨vs, hvs⟩
   step with hpoints' as ⟨it1, hit1⟩
-  apply spec_bind
-      (collect.collectLoop_spec _ it1 ys hit1 (alloc.vec.Vec.new _) (by simpa using hys))
-  intro vp hvp
-  replace hvs : vs.val = xs := by rw [hvs]; rfl
-  replace hvp : vp.val = ys := by rw [hvp]; rfl
+  step with collect.fromIter_spec _ it1 ys hit1 hys as ⟨vp, hvp⟩
   step
   exact backend.«i686-no-tables».straus_multiscalar_mul_spec _ _ _ _ _ _ xs ys ss ps
     (hvs ▸ core.iter.traits.collect.IntoIteratorVec_yields vs)

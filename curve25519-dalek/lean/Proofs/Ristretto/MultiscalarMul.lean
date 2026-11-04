@@ -22,7 +22,6 @@ open Aeneas Aeneas.Std Result Aeneas.Std.WP
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-tables».Insts
 namespace «Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables»
 
-open ristretto.«MultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables» in
 open edwards.EdwardsPoint.«x86_64-tables».Insts in
 /-- `MultiscalarMul::multiscalar_mul` for `RistrettoPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
@@ -54,7 +53,7 @@ theorem multiscalar_mul_spec
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints
   step with hpoints' as ⟨it, hit⟩
-  unfold multiscalar_mul.extended_points multiscalar_mul.extended_points_loop
+  unfold multiscalar_mul_loop
   have hpsys := hborrow_points.length_eq
   apply spec_bind (collect.collectApplyLoop_spec _ borrowPointInst.borrow it ys hit ps
     hborrow_points (alloc.vec.Vec.new _) (by simpa using hys))
@@ -76,7 +75,6 @@ end Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-tables».Insts
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«i686-tables».Insts
 namespace «Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-tables»
 
-open ristretto.«MultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables» in
 open edwards.EdwardsPoint.«i686-tables».Insts in
 /-- `MultiscalarMul::multiscalar_mul` for `RistrettoPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
@@ -108,7 +106,7 @@ theorem multiscalar_mul_spec
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints
   step with hpoints' as ⟨it, hit⟩
-  unfold multiscalar_mul.extended_points multiscalar_mul.extended_points_loop
+  unfold multiscalar_mul_loop
   have hpsys := hborrow_points.length_eq
   apply spec_bind (collect.collectApplyLoop_spec _ borrowPointInst.borrow it ys hit ps
     hborrow_points (alloc.vec.Vec.new _) (by simpa using hys))
@@ -130,7 +128,6 @@ end Curve25519Dalek.ristretto.RistrettoPoint.«i686-tables».Insts
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-no-tables».Insts
 namespace «Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables»
 
-open ristretto.«MultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables» in
 open edwards.EdwardsPoint.«x86_64-no-tables».Insts in
 /-- `MultiscalarMul::multiscalar_mul` for `RistrettoPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
@@ -162,7 +159,7 @@ theorem multiscalar_mul_spec
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints
   step with hpoints' as ⟨it, hit⟩
-  unfold multiscalar_mul.extended_points multiscalar_mul.extended_points_loop
+  unfold multiscalar_mul_loop
   have hpsys := hborrow_points.length_eq
   apply spec_bind (collect.collectApplyLoop_spec _ borrowPointInst.borrow it ys hit ps
     hborrow_points (alloc.vec.Vec.new _) (by simpa using hys))
@@ -184,7 +181,6 @@ end Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-no-tables».Insts
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«i686-no-tables».Insts
 namespace «Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-no-tables»
 
-open ristretto.«MultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables» in
 open edwards.EdwardsPoint.«i686-no-tables».Insts in
 /-- `MultiscalarMul::multiscalar_mul` for `RistrettoPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
@@ -216,7 +212,7 @@ theorem multiscalar_mul_spec
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hpoints
   step with hpoints' as ⟨it, hit⟩
-  unfold multiscalar_mul.extended_points multiscalar_mul.extended_points_loop
+  unfold multiscalar_mul_loop
   have hpsys := hborrow_points.length_eq
   apply spec_bind (collect.collectApplyLoop_spec _ borrowPointInst.borrow it ys hit ps
     hborrow_points (alloc.vec.Vec.new _) (by simpa using hys))

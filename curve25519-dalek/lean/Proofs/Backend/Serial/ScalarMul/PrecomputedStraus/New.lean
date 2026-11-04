@@ -15,7 +15,7 @@ public section
 /-! # `VartimePrecomputedStraus::new`
 
 The tables of odd multiples (`NafLookupTable8` of affine Niels points) of the static points, in
-order (the patched collecting helper). -/
+order (the patched collecting loop). -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP
 open Curve25519Dalek.backend.serial.curve_models
@@ -24,10 +24,6 @@ namespace Curve25519Dalek.backend.serial.scalar_mul.precomputed_straus
 
 namespace VartimePrecomputedStraus.«x86_64-tables».Insts
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
-
-set_option linter.style.longLine false
-open «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-tablesEdwardsPointx86_64-tables»
-set_option linter.style.longLine true
 
 open window.«NafLookupTable8AffineNielsPointx86_64-tables».Insts in
 /-- `VartimePrecomputedStraus::new`: a precomputation of the points the input yields (through
@@ -48,7 +44,7 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
   have h : pointsInst.into_iter static_points
       ⦃ (it : Clause0_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hstatic_points
   step with h as ⟨it, hit⟩
-  unfold new.static_lookup_tables new.static_lookup_tables_loop
+  unfold new_loop
   apply spec_bind (collect.collectMapLoop_spec _ borrowInst.borrow
     «CoreConvertFromSharedAEdwardsPointx86_64-tables».«from»
     (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) it ys hit ps hborrow
@@ -72,10 +68,6 @@ end VartimePrecomputedStraus.«x86_64-tables».Insts
 namespace VartimePrecomputedStraus.«i686-tables».Insts
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
 
-set_option linter.style.longLine false
-open «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-tablesEdwardsPointi686-tables»
-set_option linter.style.longLine true
-
 open window.«NafLookupTable8AffineNielsPointi686-tables».Insts in
 /-- `VartimePrecomputedStraus::new`: a precomputation of the points the input yields (through
 `borrow`); limbs `< 2^26` in, `< 2^27` out. -/
@@ -95,7 +87,7 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
   have h : pointsInst.into_iter static_points
       ⦃ (it : Clause0_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hstatic_points
   step with h as ⟨it, hit⟩
-  unfold new.static_lookup_tables new.static_lookup_tables_loop
+  unfold new_loop
   apply spec_bind (collect.collectMapLoop_spec _ borrowInst.borrow
     «CoreConvertFromSharedAEdwardsPointi686-tables».«from»
     (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 27) it ys hit ps hborrow
@@ -119,10 +111,6 @@ end VartimePrecomputedStraus.«i686-tables».Insts
 namespace VartimePrecomputedStraus.«x86_64-no-tables».Insts
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
 
-set_option linter.style.longLine false
-open «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausx86_64-no-tablesEdwardsPointx86_64-no-tables»
-set_option linter.style.longLine true
-
 open window.«NafLookupTable8AffineNielsPointx86_64-no-tables».Insts in
 /-- `VartimePrecomputedStraus::new`: a precomputation of the points the input yields (through
 `borrow`); limbs `< 2^52` in, `< 2^54` out. -/
@@ -142,7 +130,7 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
   have h : pointsInst.into_iter static_points
       ⦃ (it : Clause0_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hstatic_points
   step with h as ⟨it, hit⟩
-  unfold new.static_lookup_tables new.static_lookup_tables_loop
+  unfold new_loop
   apply spec_bind (collect.collectMapLoop_spec _ borrowInst.borrow
     «CoreConvertFromSharedAEdwardsPointx86_64-no-tables».«from»
     (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 54) it ys hit ps hborrow
@@ -166,10 +154,6 @@ end VartimePrecomputedStraus.«x86_64-no-tables».Insts
 namespace VartimePrecomputedStraus.«i686-no-tables».Insts
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»
 
-set_option linter.style.longLine false
-open «VartimePrecomputedMultiscalarMulVartimePrecomputedStrausi686-no-tablesEdwardsPointi686-no-tables»
-set_option linter.style.longLine true
-
 open window.«NafLookupTable8AffineNielsPointi686-no-tables».Insts in
 /-- `VartimePrecomputedStraus::new`: a precomputation of the points the input yields (through
 `borrow`); limbs `< 2^26` in, `< 2^27` out. -/
@@ -189,7 +173,7 @@ theorem new_spec {I Clause0_Item Clause0_IntoIter : Type}
   have h : pointsInst.into_iter static_points
       ⦃ (it : Clause0_IntoIter) => pointsInst.iteratorInst.Yields it ys ⦄ := hstatic_points
   step with h as ⟨it, hit⟩
-  unfold new.static_lookup_tables new.static_lookup_tables_loop
+  unfold new_loop
   apply spec_bind (collect.collectMapLoop_spec _ borrowInst.borrow
     «CoreConvertFromSharedAEdwardsPointi686-no-tables».«from»
     (fun P t => t.Represents P.toPoint ∧ t.LimbsLt 27) it ys hit ps hborrow

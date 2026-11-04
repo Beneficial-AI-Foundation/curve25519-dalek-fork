@@ -24,29 +24,31 @@ open Aeneas Aeneas.Std Result Aeneas.Std.WP
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-tables».Insts
 namespace «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-tables»
 
-open «VartimeMultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables» in
 /-- The collecting loop pushes the optional points unchanged. -/
-private theorem extended_points_loop_spec {It : Type}
-    (iterInst : core.iter.traits.iterator.Iterator It (Option RistrettoPoint.«x86_64-tables»))
+private theorem extended_points_loop_spec {I J Item SI It : Type}
+    (scalarsInst : core.iter.traits.collect.IntoIterator I Item SI)
+    (borrowInst : core.borrow.Borrow Item scalar.Scalar)
+    (pointsInst : core.iter.traits.collect.IntoIterator J
+      (Option RistrettoPoint.«x86_64-tables») It)
     (it : It) (ops : List (Option RistrettoPoint.«x86_64-tables»))
-    (hit : iterInst.Yields it ops)
+    (hit : pointsInst.iteratorInst.Yields it ops)
     (out : alloc.vec.Vec (Option edwards.EdwardsPoint.«x86_64-tables»))
     (hlen : out.length + ops.length ≤ Usize.max) :
-    optional_multiscalar_mul.extended_points_loop iterInst it out
+    optional_multiscalar_mul_loop scalarsInst borrowInst pointsInst it out
       ⦃ (r : alloc.vec.Vec (Option edwards.EdwardsPoint.«x86_64-tables»)) =>
         r.val = out.val ++ ops ⦄ := by
   induction hit generalizing out with
   | nil hnext =>
-    unfold optional_multiscalar_mul.extended_points_loop loop
-      optional_multiscalar_mul.extended_points_loop.body
+    unfold optional_multiscalar_mul_loop loop
+      optional_multiscalar_mul_loop.body
     step with hnext as ⟨q, hq⟩
     obtain ⟨o, it1⟩ := q
     simp only at hq
     subst hq
     simp
   | cons hnext _ ih =>
-    unfold optional_multiscalar_mul.extended_points_loop loop
-      optional_multiscalar_mul.extended_points_loop.body
+    unfold optional_multiscalar_mul_loop loop
+      optional_multiscalar_mul_loop.body
     step with hnext as ⟨q, ho, hit⟩
     obtain ⟨o, it1⟩ := q
     simp only at ho hit
@@ -68,8 +70,6 @@ private theorem extended_points_loop_spec {It : Type}
 open edwards.EdwardsPoint.«x86_64-tables».Insts in
 open «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables» renaming
   optional_multiscalar_mul_spec → edwards_spec in
-open «VartimeMultiscalarMulRistrettoPointx86_64-tablesRistrettoPointx86_64-tables» renaming
-  optional_multiscalar_mul.extended_points → extended_points in
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `RistrettoPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
 patched `assert_eq!`; unreduced scalars `< 2^255`); limbs `< 2^52`. -/
@@ -98,8 +98,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hpoints' as ⟨it, hit⟩
-  unfold extended_points
-  step with extended_points_loop_spec _ it ops hit (alloc.vec.Vec.new _) (by simpa using hops)
+  step with extended_points_loop_spec _ _ _ it ops hit (alloc.vec.Vec.new _) (by simpa using hops)
     as ⟨v, hv⟩
   replace hv : v.val = ops := by rw [hv]; rfl
   step with edwards_spec _ _ (core.iter.traits.collect.IntoIteratorVec _) scalars v xs v.val ss
@@ -121,29 +120,31 @@ end Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-tables».Insts
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«i686-tables».Insts
 namespace «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-tables»
 
-open «VartimeMultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables» in
 /-- The collecting loop pushes the optional points unchanged. -/
-private theorem extended_points_loop_spec {It : Type}
-    (iterInst : core.iter.traits.iterator.Iterator It (Option RistrettoPoint.«i686-tables»))
+private theorem extended_points_loop_spec {I J Item SI It : Type}
+    (scalarsInst : core.iter.traits.collect.IntoIterator I Item SI)
+    (borrowInst : core.borrow.Borrow Item scalar.Scalar)
+    (pointsInst : core.iter.traits.collect.IntoIterator J
+      (Option RistrettoPoint.«i686-tables») It)
     (it : It) (ops : List (Option RistrettoPoint.«i686-tables»))
-    (hit : iterInst.Yields it ops)
+    (hit : pointsInst.iteratorInst.Yields it ops)
     (out : alloc.vec.Vec (Option edwards.EdwardsPoint.«i686-tables»))
     (hlen : out.length + ops.length ≤ Usize.max) :
-    optional_multiscalar_mul.extended_points_loop iterInst it out
+    optional_multiscalar_mul_loop scalarsInst borrowInst pointsInst it out
       ⦃ (r : alloc.vec.Vec (Option edwards.EdwardsPoint.«i686-tables»)) =>
         r.val = out.val ++ ops ⦄ := by
   induction hit generalizing out with
   | nil hnext =>
-    unfold optional_multiscalar_mul.extended_points_loop loop
-      optional_multiscalar_mul.extended_points_loop.body
+    unfold optional_multiscalar_mul_loop loop
+      optional_multiscalar_mul_loop.body
     step with hnext as ⟨q, hq⟩
     obtain ⟨o, it1⟩ := q
     simp only at hq
     subst hq
     simp
   | cons hnext _ ih =>
-    unfold optional_multiscalar_mul.extended_points_loop loop
-      optional_multiscalar_mul.extended_points_loop.body
+    unfold optional_multiscalar_mul_loop loop
+      optional_multiscalar_mul_loop.body
     step with hnext as ⟨q, ho, hit⟩
     obtain ⟨o, it1⟩ := q
     simp only at ho hit
@@ -165,8 +166,6 @@ private theorem extended_points_loop_spec {It : Type}
 open edwards.EdwardsPoint.«i686-tables».Insts in
 open «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables» renaming
   optional_multiscalar_mul_spec → edwards_spec in
-open «VartimeMultiscalarMulRistrettoPointi686-tablesRistrettoPointi686-tables» renaming
-  optional_multiscalar_mul.extended_points → extended_points in
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `RistrettoPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
 patched `assert_eq!`; unreduced scalars `< 2^255`); limbs `< 2^26`. -/
@@ -195,8 +194,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hpoints' as ⟨it, hit⟩
-  unfold extended_points
-  step with extended_points_loop_spec _ it ops hit (alloc.vec.Vec.new _) (by simpa using hops)
+  step with extended_points_loop_spec _ _ _ it ops hit (alloc.vec.Vec.new _) (by simpa using hops)
     as ⟨v, hv⟩
   replace hv : v.val = ops := by rw [hv]; rfl
   step with edwards_spec _ _ (core.iter.traits.collect.IntoIteratorVec _) scalars v xs v.val ss
@@ -218,29 +216,31 @@ end Curve25519Dalek.ristretto.RistrettoPoint.«i686-tables».Insts
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-no-tables».Insts
 namespace «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-no-tables»
 
-open «VartimeMultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables» in
 /-- The collecting loop pushes the optional points unchanged. -/
-private theorem extended_points_loop_spec {It : Type}
-    (iterInst : core.iter.traits.iterator.Iterator It (Option RistrettoPoint.«x86_64-no-tables»))
+private theorem extended_points_loop_spec {I J Item SI It : Type}
+    (scalarsInst : core.iter.traits.collect.IntoIterator I Item SI)
+    (borrowInst : core.borrow.Borrow Item scalar.Scalar)
+    (pointsInst : core.iter.traits.collect.IntoIterator J
+      (Option RistrettoPoint.«x86_64-no-tables») It)
     (it : It) (ops : List (Option RistrettoPoint.«x86_64-no-tables»))
-    (hit : iterInst.Yields it ops)
+    (hit : pointsInst.iteratorInst.Yields it ops)
     (out : alloc.vec.Vec (Option edwards.EdwardsPoint.«x86_64-no-tables»))
     (hlen : out.length + ops.length ≤ Usize.max) :
-    optional_multiscalar_mul.extended_points_loop iterInst it out
+    optional_multiscalar_mul_loop scalarsInst borrowInst pointsInst it out
       ⦃ (r : alloc.vec.Vec (Option edwards.EdwardsPoint.«x86_64-no-tables»)) =>
         r.val = out.val ++ ops ⦄ := by
   induction hit generalizing out with
   | nil hnext =>
-    unfold optional_multiscalar_mul.extended_points_loop loop
-      optional_multiscalar_mul.extended_points_loop.body
+    unfold optional_multiscalar_mul_loop loop
+      optional_multiscalar_mul_loop.body
     step with hnext as ⟨q, hq⟩
     obtain ⟨o, it1⟩ := q
     simp only at hq
     subst hq
     simp
   | cons hnext _ ih =>
-    unfold optional_multiscalar_mul.extended_points_loop loop
-      optional_multiscalar_mul.extended_points_loop.body
+    unfold optional_multiscalar_mul_loop loop
+      optional_multiscalar_mul_loop.body
     step with hnext as ⟨q, ho, hit⟩
     obtain ⟨o, it1⟩ := q
     simp only at ho hit
@@ -262,8 +262,6 @@ private theorem extended_points_loop_spec {It : Type}
 open edwards.EdwardsPoint.«x86_64-no-tables».Insts in
 open «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tables» renaming
   optional_multiscalar_mul_spec → edwards_spec in
-open «VartimeMultiscalarMulRistrettoPointx86_64-no-tablesRistrettoPointx86_64-no-tables» renaming
-  optional_multiscalar_mul.extended_points → extended_points in
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `RistrettoPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
 patched `assert_eq!`; unreduced scalars `< 2^255`); limbs `< 2^52`. -/
@@ -292,8 +290,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hpoints' as ⟨it, hit⟩
-  unfold extended_points
-  step with extended_points_loop_spec _ it ops hit (alloc.vec.Vec.new _) (by simpa using hops)
+  step with extended_points_loop_spec _ _ _ it ops hit (alloc.vec.Vec.new _) (by simpa using hops)
     as ⟨v, hv⟩
   replace hv : v.val = ops := by rw [hv]; rfl
   step with edwards_spec _ _ (core.iter.traits.collect.IntoIteratorVec _) scalars v xs v.val ss
@@ -315,29 +312,31 @@ end Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-no-tables».Insts
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«i686-no-tables».Insts
 namespace «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-no-tables»
 
-open «VartimeMultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables» in
 /-- The collecting loop pushes the optional points unchanged. -/
-private theorem extended_points_loop_spec {It : Type}
-    (iterInst : core.iter.traits.iterator.Iterator It (Option RistrettoPoint.«i686-no-tables»))
+private theorem extended_points_loop_spec {I J Item SI It : Type}
+    (scalarsInst : core.iter.traits.collect.IntoIterator I Item SI)
+    (borrowInst : core.borrow.Borrow Item scalar.Scalar)
+    (pointsInst : core.iter.traits.collect.IntoIterator J
+      (Option RistrettoPoint.«i686-no-tables») It)
     (it : It) (ops : List (Option RistrettoPoint.«i686-no-tables»))
-    (hit : iterInst.Yields it ops)
+    (hit : pointsInst.iteratorInst.Yields it ops)
     (out : alloc.vec.Vec (Option edwards.EdwardsPoint.«i686-no-tables»))
     (hlen : out.length + ops.length ≤ Usize.max) :
-    optional_multiscalar_mul.extended_points_loop iterInst it out
+    optional_multiscalar_mul_loop scalarsInst borrowInst pointsInst it out
       ⦃ (r : alloc.vec.Vec (Option edwards.EdwardsPoint.«i686-no-tables»)) =>
         r.val = out.val ++ ops ⦄ := by
   induction hit generalizing out with
   | nil hnext =>
-    unfold optional_multiscalar_mul.extended_points_loop loop
-      optional_multiscalar_mul.extended_points_loop.body
+    unfold optional_multiscalar_mul_loop loop
+      optional_multiscalar_mul_loop.body
     step with hnext as ⟨q, hq⟩
     obtain ⟨o, it1⟩ := q
     simp only at hq
     subst hq
     simp
   | cons hnext _ ih =>
-    unfold optional_multiscalar_mul.extended_points_loop loop
-      optional_multiscalar_mul.extended_points_loop.body
+    unfold optional_multiscalar_mul_loop loop
+      optional_multiscalar_mul_loop.body
     step with hnext as ⟨q, ho, hit⟩
     obtain ⟨o, it1⟩ := q
     simp only at ho hit
@@ -359,8 +358,6 @@ private theorem extended_points_loop_spec {It : Type}
 open edwards.EdwardsPoint.«i686-no-tables».Insts in
 open «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-tables» renaming
   optional_multiscalar_mul_spec → edwards_spec in
-open «VartimeMultiscalarMulRistrettoPointi686-no-tablesRistrettoPointi686-no-tables» renaming
-  optional_multiscalar_mul.extended_points → extended_points in
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `RistrettoPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
 patched `assert_eq!`; unreduced scalars `< 2^255`); limbs `< 2^26`. -/
@@ -389,8 +386,7 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
   have hpoints' : pointsInst.into_iter points
       ⦃ (it : Clause2_IntoIter) => pointsInst.iteratorInst.Yields it ops ⦄ := hpoints
   step with hpoints' as ⟨it, hit⟩
-  unfold extended_points
-  step with extended_points_loop_spec _ it ops hit (alloc.vec.Vec.new _) (by simpa using hops)
+  step with extended_points_loop_spec _ _ _ it ops hit (alloc.vec.Vec.new _) (by simpa using hops)
     as ⟨v, hv⟩
   replace hv : v.val = ops := by rw [hv]; rfl
   step with edwards_spec _ _ (core.iter.traits.collect.IntoIteratorVec _) scalars v xs v.val ss
