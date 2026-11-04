@@ -307,7 +307,7 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       r.length = ps.length ∧
         ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.alloc, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms double_and_compress_batch_spec
 
 end «RistrettoPointx86_64-tables»
@@ -327,7 +327,7 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       r.length = ps.length ∧
         ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.alloc, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms double_and_compress_batch_spec
 
 end «RistrettoPointi686-tables»
@@ -349,7 +349,7 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       r.length = ps.length ∧
         ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.alloc, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms double_and_compress_batch_spec
 
 end «RistrettoPointx86_64-no-tables»
@@ -369,7 +369,7 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       r.length = ps.length ∧
         ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
 
-/-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
+/-- [propext, Classical.choice, Quot.sound, RustAx.alloc, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms double_and_compress_batch_spec
 
 end «RistrettoPointi686-no-tables»

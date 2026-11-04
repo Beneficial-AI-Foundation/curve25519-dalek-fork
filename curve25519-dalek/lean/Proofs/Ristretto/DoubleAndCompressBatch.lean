@@ -637,8 +637,9 @@ theorem double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       have h := forall₂_getElem! hsts k (hpslen ▸ hk)
       rw [alloc.vec.Vec.getElem!_Nat_eq]
       exact ⟨h.2.2.2.2.2.2.2.2.2.2.1, h.2.2.2.2.2.2.2.2.2.2.2⟩
-  simp only [SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter,
-    core.slice.Slice.iter, bind_ok]
+  step with SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter_spec
+    as ⟨it2, hit2⟩
+  subst hit2
   step with loop0_spec states hst (alloc.vec.Vec.with_capacity FieldElement51 states.len) 0
     (by simp) (by rfl) (fun k hk => absurd hk (by simp)) as ⟨invs1, hinvs1len, hinvs1⟩
   simp only [alloc.vec.Vec.index_mut, pure]
@@ -850,8 +851,9 @@ theorem double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       have h := forall₂_getElem! hsts k (hpslen ▸ hk)
       rw [alloc.vec.Vec.getElem!_Nat_eq]
       exact ⟨h.2.2.2.2.2.2.2.2.2.2.1, h.2.2.2.2.2.2.2.2.2.2.2⟩
-  simp only [SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter,
-    core.slice.Slice.iter, bind_ok]
+  step with SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter_spec
+    as ⟨it2, hit2⟩
+  subst hit2
   step with loop0_spec states hst (alloc.vec.Vec.with_capacity FieldElement2625 states.len) 0
     (by simp) (by rfl) (fun k hk => absurd hk (by simp)) as ⟨invs1, hinvs1len, hinvs1⟩
   simp only [alloc.vec.Vec.index_mut, pure]
@@ -1281,8 +1283,9 @@ theorem double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       have h := forall₂_getElem! hsts k (hpslen ▸ hk)
       rw [alloc.vec.Vec.getElem!_Nat_eq]
       exact ⟨h.2.2.2.2.2.2.2.2.2.2.1, h.2.2.2.2.2.2.2.2.2.2.2⟩
-  simp only [SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter,
-    core.slice.Slice.iter, bind_ok]
+  step with SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter_spec
+    as ⟨it2, hit2⟩
+  subst hit2
   step with loop0_spec states hst (alloc.vec.Vec.with_capacity FieldElement51 states.len) 0
     (by simp) (by rfl) (fun k hk => absurd hk (by simp)) as ⟨invs1, hinvs1len, hinvs1⟩
   simp only [alloc.vec.Vec.index_mut, pure]
@@ -1494,8 +1497,9 @@ theorem double_and_compress_batch_spec {I Clause0_IntoIter : Type}
       have h := forall₂_getElem! hsts k (hpslen ▸ hk)
       rw [alloc.vec.Vec.getElem!_Nat_eq]
       exact ⟨h.2.2.2.2.2.2.2.2.2.2.1, h.2.2.2.2.2.2.2.2.2.2.2⟩
-  simp only [SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter,
-    core.slice.Slice.iter, bind_ok]
+  step with SharedAVec.Insts.CoreIterTraitsCollectIntoIteratorSharedATIter.into_iter_spec
+    as ⟨it2, hit2⟩
+  subst hit2
   step with loop0_spec states hst (alloc.vec.Vec.with_capacity FieldElement2625 states.len) 0
     (by simp) (by rfl) (fun k hk => absurd hk (by simp)) as ⟨invs1, hinvs1len, hinvs1⟩
   simp only [alloc.vec.Vec.index_mut, pure]
