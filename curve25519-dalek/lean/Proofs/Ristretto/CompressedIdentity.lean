@@ -27,16 +27,16 @@ namespace Insts.Curve25519_dalekTraitsIdentity
 
 /-- `Identity for CompressedRistretto`: thirty-two zero bytes, value `0`. -/
 @[step]
-theorem identity_spec :
+theorem identity_asNat :
     identity ⦃ (r : CompressedRistretto) => r.asNat = 0 ⦄ := by
   unfold identity
   step*
   exact asNat_repeat_zero
 
 /-- `Identity for CompressedRistretto` is the encoding of the neutral element. -/
-theorem identity_spec_point :
+theorem identity_spec :
     identity ⦃ (r : CompressedRistretto) => r.asNat = Ristretto.encodeRep 0 ⦄ :=
-  spec_mono identity_spec fun r hr => by rw [hr, Ristretto.encodeRep_zero]
+  spec_mono identity_asNat fun r hr => by rw [hr, Ristretto.encodeRep_zero]
 
 end Insts.Curve25519_dalekTraitsIdentity
 
@@ -44,15 +44,15 @@ namespace Insts.CoreDefaultDefault
 
 /-- `Default for CompressedRistretto`: the identity, value `0`. -/
 @[step]
-theorem default_spec :
+theorem default_asNat :
     default ⦃ (r : CompressedRistretto) => r.asNat = 0 ⦄ := by
   unfold default
   step*
 
 /-- `Default for CompressedRistretto` is the encoding of the neutral element. -/
-theorem default_spec_point :
+theorem default_spec :
     default ⦃ (r : CompressedRistretto) => r.asNat = Ristretto.encodeRep 0 ⦄ :=
-  spec_mono default_spec fun r hr => by rw [hr, Ristretto.encodeRep_zero]
+  spec_mono default_asNat fun r hr => by rw [hr, Ristretto.encodeRep_zero]
 
 end Insts.CoreDefaultDefault
 

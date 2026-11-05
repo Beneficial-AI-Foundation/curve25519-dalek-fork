@@ -62,54 +62,27 @@ public section
 
 /-! # Specs of `src/edwards.rs`
 
-Spec summary: the items of `edwards.rs` in the crate's public API, with their spec statements, each
-restated with `recall` from the theorem proved in `Proofs/Edwards/`, and the axioms that proof
-depends on. Items appear in the order of `edwards.rs`; the four configurations (`x86_64-tables`,
-`x86_64-no-tables` on the u64 backend, `i686-tables`, `i686-no-tables` on the u32 backend) are
-distinct types, so each `EdwardsPoint` item has four statements. Items outside the public API
-(`is_valid`, `as_projective`, `as_projective_niels`, `as_affine_niels`, `to_affine`, `double`,
-`mul_by_pow_2`, the `edwards/affine.rs` module) are proved in `Proofs/` but not restated here.
+The public items of `edwards.rs`, in its order, restated with `recall` from `Proofs/Edwards/`,
+with the axioms each proof uses; one statement per configuration (`x86_64`/`i686`, with or
+without precomputed tables; the basepoint tables exist only with tables).
 
-**Complete.** `vartime_triple_scalar_mul_basepoint` takes `a1, a2 < 2^128`, the invariant of
-`HalfWidthScalar` (a `Scalar` wrapper whose bound the Lean structure does not carry).
+Points are specified through `toPoint` under the invariants `OnCurve` and `IsBounded`, tables
+through `point` under `IsTable` and `IsBounded`, precomputations through `points` under `IsValid`
+and `IsBounded`. Scalars act by their unreduced value `asNat`, which must be `< 2^255` (dalek's
+`debug_assert!`). Iterator inputs are given by the lists they yield.
 
-The basepoint tables (`impl_basepoint_table!`) exist only in the `tables` configurations. They are
-stated for a table `Represents P` (row `i` holds the multiples of `2^(w i) • P`) and `LimbsLt 54`
-(x86_64) or `LimbsLt 27` (i686).
+Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, `CompressedEdwardsY.asNat`, the
+tables' `point`, `IsTable`, `IsBounded` (`Defs/Edwards.lean`), the precomputations' `points`,
+`IsValid`, `IsBounded` (`Defs/ScalarMul.lean`), `Scalar.asNat`, `HalfWidthScalar.asNat`
+(`Defs/Scalar.lean`), `Array.asNat` (`Defs/Array.lean`), `MontgomeryPoint.asNat`
+(`Defs/Montgomery.lean`), `Iterator.Yields`, `IntoIterator.Yields` (`Defs/Iterator.lean`),
+`curve25519.encode`, `decodeLenient` (`Curve25519/Edwards/Encoding.lean`), `curve25519.basepoint`
+(`Curve25519/Edwards/Basepoint.lean`), `curve25519.clamp`, `encodeU` (`Curve25519/X25519.lean`),
+`curve25519.L` (`Curve25519/Basic.lean`), `edwardsToMontgomery` (`Curve25519/Montgomery.lean`),
+`subtle.Choice.IsValid` (`Subtle/`).
 
-Statements are given at the point level (`toPoint`, the represented point of `curve25519.edwards`),
-under the representation invariants `OnCurve` (`Z ≠ 0`, `X Y = Z T`, on the curve) and `LimbsLt 52`
-(limbs `< 2^52`, x86_64) or `LimbsLt 26` (i686); the coordinate-level forms (`toExtended`, `ProjEq`)
-are the `@[step]` theorems of the proof files. `is_identity`, the blanket implementation of
-`IsIdentity`, is stated generically in `Specs/Traits.lean`.
-
-Scalar multiplication is by the unreduced value `s.asNat` of the scalar's bytes, not by
-`s.asNat % L`: `mul_clamped` and `is_torsion_free` build scalars `≥ L` (`clamp`, `BASEPOINT_ORDER =
-L`). The precondition `s.asNat < 2^255` is the `debug_assert!(self[31] <= 127)` of `as_radix_16`.
-
-The iterator-taking items (`Sum`, the multiscalar traits) are stated for an input that yields a
-given list (`Iterator.Yields`, `IntoIterator.Yields`, `Defs/Iterator.lean`), each element borrowed
-to a given scalar or point, with list lengths `≤ Usize.max`. The sums are over these lists:
-`List.zipWith` pairs the scalars with the points. `multiscalar_mul` and `optional_multiscalar_mul`
-require as many scalars as points (the patched `assert_eq!`). In `optional_mixed_multiscalar_mul`,
-missing static scalars count as `0`. A precomputation `Represents` its static points
-(`Defs/ScalarMul.lean`).
-
-`CompressedEdwardsY::decompress` is dalek's lenient decoding `decodeLenient`
-(`Defs/Edwards.lean`): a `y ≥ p` is reduced and `x = 0` is accepted with either sign bit, unlike
-RFC 8032's strict decoder `curve25519.decode`.
-
-Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `LimbsLt`, `CompressedEdwardsY.asNat`,
-`decodeLenient` (`Defs/Edwards.lean`), `Scalar.asNat` (`Defs/Scalar.lean`), `curve25519.encode`
-(`Curve25519/Edwards/Encoding.lean`), `curve25519.basepoint` (`Curve25519/Edwards/Basepoint.lean`),
-`curve25519.clamp` (`Curve25519/X25519.lean`), `curve25519.L` (`Curve25519/Basic.lean`),
-`curve25519.encodeU` (`Curve25519/X25519.lean`), `edwardsToMontgomery`
-(`Curve25519/Montgomery.lean`), `MontgomeryPoint.asNat` (`Defs/Montgomery.lean`), the tables'
-`Represents`, `LimbsLt` (`Defs/Edwards.lean`, `Defs/Window.lean`), `subtle.Choice.IsValid`
-(`Subtle/`), `core.result.Result.map_spec` (`Curve25519Dalek/FunsExternal.lean`).
-
-Not specified: derived `Clone`/`Copy` impls. Not translated: `Debug`, `Hash`, `map_to_curve`,
-`encode_to_curve`, `hash_to_curve`, `random`, the `group` and `serde` impls. -/
+Not translated: `Debug`, `Hash`, the `group` and `serde` impls, `random`, hash-to-curve, and the
+provided methods of the traits. -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519 TwistedEdwardsModel
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
@@ -121,7 +94,7 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.Insts.SubtleConstantTimeEq
 /-- `ConstantTimeEq for CompressedEdwardsY`: byte equality (two encodings of one point can
 differ). -/
 recall ct_eq_spec (self other : CompressedEdwardsY) :
-    ct_eq self other ⦃ (c : subtle.Choice) => c.IsValid ∧ (c = 1#u8 ↔ self = other) ⦄
+    ct_eq self other ⦃ (r : subtle.Choice) => r.IsValid ∧ (r = 1#u8 ↔ self = other) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
@@ -133,7 +106,7 @@ namespace CoreCmpPartialEqCompressedEdwardsY
 
 /-- `PartialEq for CompressedEdwardsY`: byte equality (two encodings of one point can differ). -/
 recall eq_spec (self other : CompressedEdwardsY) :
-    eq self other ⦃ (b : Bool) => b = true ↔ self = other ⦄
+    eq self other ⦃ (r : Bool) => r = true ↔ self = other ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
@@ -169,7 +142,7 @@ limbs `< 2^52`. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-tables»)) =>
       r.map EdwardsPoint.«x86_64-tables».toPoint = decodeLenient self.asNat ∧
-      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄
+      ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms decompress_spec
@@ -186,7 +159,7 @@ limbs `< 2^26`. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«i686-tables» self ⦃ (r : Option (EdwardsPoint.«i686-tables»)) =>
       r.map EdwardsPoint.«i686-tables».toPoint = decodeLenient self.asNat ∧
-      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄
+      ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms decompress_spec
@@ -203,7 +176,7 @@ limbs `< 2^52`. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-no-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-no-tables»)) =>
       r.map EdwardsPoint.«x86_64-no-tables».toPoint = decodeLenient self.asNat ∧
-      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄
+      ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms decompress_spec
@@ -220,7 +193,7 @@ limbs `< 2^26`. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«i686-no-tables» self ⦃ (r : Option (EdwardsPoint.«i686-no-tables»)) =>
       r.map EdwardsPoint.«i686-no-tables».toPoint = decodeLenient self.asNat ∧
-      ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄
+      ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms decompress_spec
@@ -233,8 +206,9 @@ namespace CoreConvertTryFromShared0SliceU8TryFromSliceError
 /-- `TryFrom<&[u8]> for CompressedEdwardsY`: as `from_slice`. -/
 recall try_from_spec (slice : Slice U8) :
     try_from slice ⦃ (r : core.result.Result CompressedEdwardsY core.array.TryFromSliceError) =>
-      (slice.length = 32 → ∃ a : CompressedEdwardsY, r = .Ok a ∧ a.val = slice.val) ∧
-      (slice.length ≠ 32 → r = .Err ()) ⦄
+      match r with
+      | .Ok c => slice.length = 32 ∧ ∀ i < 32, c[i]! = slice[i]!
+      | .Err _ => slice.length ≠ 32 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms try_from_spec
@@ -245,22 +219,22 @@ end Curve25519Dalek.edwards.CompressedEdwardsY.Insts
 namespace Curve25519Dalek.edwards.CompressedEdwardsY.Insts.Curve25519_dalekTraitsIdentity
 
 /-- `Identity for CompressedEdwardsY` is the encoding of the neutral element. -/
-recall identity_spec_point :
+recall identity_spec :
     identity ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec
 
 end Curve25519Dalek.edwards.CompressedEdwardsY.Insts.Curve25519_dalekTraitsIdentity
 
 namespace Curve25519Dalek.edwards.CompressedEdwardsY.Insts.CoreDefaultDefault
 
 /-- `Default for CompressedEdwardsY` is the encoding of the neutral element. -/
-recall default_spec_point :
+recall default_spec :
     default ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec
 
 end Curve25519Dalek.edwards.CompressedEdwardsY.Insts.CoreDefaultDefault
 
@@ -269,24 +243,14 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY
 /-- `CompressedEdwardsY::from_slice`: the bytes of a slice of length `32`, an error otherwise. -/
 recall from_slice_spec (bytes : Slice U8) :
     from_slice bytes ⦃ (r : core.result.Result CompressedEdwardsY core.array.TryFromSliceError) =>
-      (bytes.length = 32 → ∃ a : CompressedEdwardsY, r = .Ok a ∧ a.val = bytes.val) ∧
-      (bytes.length ≠ 32 → r = .Err ()) ⦄
+      match r with
+      | .Ok c => bytes.length = 32 ∧ ∀ i < 32, c[i]! = bytes[i]!
+      | .Err _ => bytes.length ≠ 32 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_slice_spec
 
 end Curve25519Dalek.edwards.CompressedEdwardsY
-
-namespace Curve25519Dalek.edwards.CompressedEdwardsY.Insts.ZeroizeZeroize
-
-/-- `Zeroize for CompressedEdwardsY` leaves the encoding of the neutral element. -/
-recall zeroize_spec_point (self : CompressedEdwardsY) :
-    zeroize self ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄
-
-/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
-
-end Curve25519Dalek.edwards.CompressedEdwardsY.Insts.ZeroizeZeroize
 
 namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
 
@@ -295,12 +259,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace Curve25519_dalekTraitsIdentity
 
 /-- `Identity for EdwardsPoint` represents the neutral element. -/
-recall identity_spec_point :
+recall identity_spec :
     identity ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec
 
 end Curve25519_dalekTraitsIdentity
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -312,12 +276,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace Curve25519_dalekTraitsIdentity
 
 /-- `Identity for EdwardsPoint` represents the neutral element. -/
-recall identity_spec_point :
+recall identity_spec :
     identity ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec
 
 end Curve25519_dalekTraitsIdentity
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -329,12 +293,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace Curve25519_dalekTraitsIdentity
 
 /-- `Identity for EdwardsPoint` represents the neutral element. -/
-recall identity_spec_point :
+recall identity_spec :
     identity ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec
 
 end Curve25519_dalekTraitsIdentity
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -346,12 +310,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace Curve25519_dalekTraitsIdentity
 
 /-- `Identity for EdwardsPoint` represents the neutral element. -/
-recall identity_spec_point :
+recall identity_spec :
     identity ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec
 
 end Curve25519_dalekTraitsIdentity
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -361,12 +325,12 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts.CoreDefau
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Default for EdwardsPoint` represents the neutral element. -/
-recall default_spec_point :
+recall default_spec :
     default ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec
 
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts.CoreDefaultDefault
 
@@ -375,12 +339,12 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts.CoreDefault
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Default for EdwardsPoint` represents the neutral element. -/
-recall default_spec_point :
+recall default_spec :
     default ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec
 
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts.CoreDefaultDefault
 
@@ -389,12 +353,12 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts.CoreDe
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Default for EdwardsPoint` represents the neutral element. -/
-recall default_spec_point :
+recall default_spec :
     default ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec
 
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts.CoreDefaultDefault
 
@@ -403,26 +367,37 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts.CoreDefa
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Default for EdwardsPoint` represents the neutral element. -/
-recall default_spec_point :
+recall default_spec :
     default ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec
 
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts.CoreDefaultDefault
+
+namespace Curve25519Dalek.edwards.CompressedEdwardsY.Insts.ZeroizeZeroize
+
+/-- `Zeroize for CompressedEdwardsY` leaves the encoding of the neutral element. -/
+recall zeroize_spec (self : CompressedEdwardsY) :
+    zeroize self ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄
+
+/-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
+#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
+
+end Curve25519Dalek.edwards.CompressedEdwardsY.Insts.ZeroizeZeroize
 
 namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts.ZeroizeZeroize
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Zeroize for EdwardsPoint` leaves the neutral element. -/
-recall zeroize_spec_point (self : EdwardsPoint.«x86_64-tables») :
+recall zeroize_spec (self : EdwardsPoint.«x86_64-tables») :
     zeroize self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts.ZeroizeZeroize
 
@@ -431,12 +406,12 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts.ZeroizeZero
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Zeroize for EdwardsPoint` leaves the neutral element. -/
-recall zeroize_spec_point (self : EdwardsPoint.«i686-tables») :
+recall zeroize_spec (self : EdwardsPoint.«i686-tables») :
     zeroize self ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts.ZeroizeZeroize
 
@@ -445,12 +420,12 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts.Zeroiz
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Zeroize for EdwardsPoint` leaves the neutral element. -/
-recall zeroize_spec_point (self : EdwardsPoint.«x86_64-no-tables») :
+recall zeroize_spec (self : EdwardsPoint.«x86_64-no-tables») :
     zeroize self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts.ZeroizeZeroize
 
@@ -459,12 +434,12 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts.ZeroizeZ
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Zeroize for EdwardsPoint` leaves the neutral element. -/
-recall zeroize_spec_point (self : EdwardsPoint.«i686-no-tables») :
+recall zeroize_spec (self : EdwardsPoint.«i686-no-tables») :
     zeroize self ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 0 ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = 0 ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
 
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts.ZeroizeZeroize
 
@@ -549,13 +524,13 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts.SubtleCon
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `ConstantTimeEq for EdwardsPoint` on points: equality of the represented points. -/
-recall ct_eq_spec_point (self other : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hother : other.LimbsLt 52) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
-    ct_eq self other ⦃ (c : subtle.Choice) =>
-      c.IsValid ∧ (c = 1#u8 ↔ self.toPoint = other.toPoint) ⦄
+recall ct_eq_spec (self other : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+    ct_eq self other ⦃ (r : subtle.Choice) =>
+      r.IsValid ∧ (r = 1#u8 ↔ self.toPoint = other.toPoint) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts.SubtleConstantTimeEq
 
@@ -564,13 +539,13 @@ namespace Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts.SubtleConst
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `ConstantTimeEq for EdwardsPoint` on points: equality of the represented points. -/
-recall ct_eq_spec_point (self other : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hother : other.LimbsLt 26) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
-    ct_eq self other ⦃ (c : subtle.Choice) =>
-      c.IsValid ∧ (c = 1#u8 ↔ self.toPoint = other.toPoint) ⦄
+recall ct_eq_spec (self other : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+    ct_eq self other ⦃ (r : subtle.Choice) =>
+      r.IsValid ∧ (r = 1#u8 ↔ self.toPoint = other.toPoint) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts.SubtleConstantTimeEq
 
@@ -581,13 +556,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace SubtleConstantTimeEq
 
 /-- `ConstantTimeEq for EdwardsPoint` on points: equality of the represented points. -/
-recall ct_eq_spec_point (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hother : other.LimbsLt 52) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
-    ct_eq self other ⦃ (c : subtle.Choice) =>
-      c.IsValid ∧ (c = 1#u8 ↔ self.toPoint = other.toPoint) ⦄
+recall ct_eq_spec (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+    ct_eq self other ⦃ (r : subtle.Choice) =>
+      r.IsValid ∧ (r = 1#u8 ↔ self.toPoint = other.toPoint) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end SubtleConstantTimeEq
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -599,13 +574,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace SubtleConstantTimeEq
 
 /-- `ConstantTimeEq for EdwardsPoint` on points: equality of the represented points. -/
-recall ct_eq_spec_point (self other : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hother : other.LimbsLt 26) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
-    ct_eq self other ⦃ (c : subtle.Choice) =>
-      c.IsValid ∧ (c = 1#u8 ↔ self.toPoint = other.toPoint) ⦄
+recall ct_eq_spec (self other : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+    ct_eq self other ⦃ (r : subtle.Choice) =>
+      r.IsValid ∧ (r = 1#u8 ↔ self.toPoint = other.toPoint) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms ct_eq_spec
 
 end SubtleConstantTimeEq
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -617,12 +592,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreCmpPartialEqEdwardsPointx86_64-tables»
 
 /-- `PartialEq for EdwardsPoint` on points: equality of the represented points. -/
-recall eq_spec_point (self other : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hother : other.LimbsLt 52) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
-    eq self other ⦃ (b : Bool) => b = true ↔ self.toPoint = other.toPoint ⦄
+recall eq_spec (self other : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+    eq self other ⦃ (r : Bool) => r = true ↔ self.toPoint = other.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end «CoreCmpPartialEqEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -634,12 +609,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreCmpPartialEqEdwardsPointi686-tables»
 
 /-- `PartialEq for EdwardsPoint` on points: equality of the represented points. -/
-recall eq_spec_point (self other : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hother : other.LimbsLt 26) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
-    eq self other ⦃ (b : Bool) => b = true ↔ self.toPoint = other.toPoint ⦄
+recall eq_spec (self other : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+    eq self other ⦃ (r : Bool) => r = true ↔ self.toPoint = other.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end «CoreCmpPartialEqEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -651,12 +626,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreCmpPartialEqEdwardsPointx86_64-no-tables»
 
 /-- `PartialEq for EdwardsPoint` on points: equality of the represented points. -/
-recall eq_spec_point (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hother : other.LimbsLt 52) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
-    eq self other ⦃ (b : Bool) => b = true ↔ self.toPoint = other.toPoint ⦄
+recall eq_spec (self other : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+    eq self other ⦃ (r : Bool) => r = true ↔ self.toPoint = other.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end «CoreCmpPartialEqEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -668,12 +643,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreCmpPartialEqEdwardsPointi686-no-tables»
 
 /-- `PartialEq for EdwardsPoint` on points: equality of the represented points. -/
-recall eq_spec_point (self other : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hother : other.LimbsLt 26) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
-    eq self other ⦃ (b : Bool) => b = true ↔ self.toPoint = other.toPoint ⦄
+recall eq_spec (self other : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
+    eq self other ⦃ (r : Bool) => r = true ↔ self.toPoint = other.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms eq_spec
 
 end «CoreCmpPartialEqEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -685,13 +660,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::to_montgomery`: RFC 7748's encoding of the `u`-coordinate of the
 Montgomery image of the represented point (`0` for the identity). -/
-recall to_montgomery_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+recall to_montgomery_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec
 
 end «EdwardsPointx86_64-tables»
 
@@ -701,13 +676,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::to_montgomery`: RFC 7748's encoding of the `u`-coordinate of the
 Montgomery image of the represented point (`0` for the identity). -/
-recall to_montgomery_spec_point (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
+recall to_montgomery_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec
 
 end «EdwardsPointi686-tables»
 end Curve25519Dalek.edwards
@@ -719,13 +694,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::to_montgomery`: RFC 7748's encoding of the `u`-coordinate of the
 Montgomery image of the represented point (`0` for the identity). -/
-recall to_montgomery_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+recall to_montgomery_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec
 
 end «EdwardsPointx86_64-no-tables»
 
@@ -735,13 +710,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::to_montgomery`: RFC 7748's encoding of the `u`-coordinate of the
 Montgomery image of the represented point (`0` for the identity). -/
-recall to_montgomery_spec_point (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
+recall to_montgomery_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
       r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec
 
 end «EdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards
@@ -753,14 +728,14 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is RFC 7748's encoding of the
 `u`-coordinate of the Montgomery image of point `i` (`0` for the identity). -/
-recall to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«x86_64-tables»)
-    (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
+recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
+    (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
 
 end «EdwardsPointx86_64-tables»
 
@@ -770,14 +745,14 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is RFC 7748's encoding of the
 `u`-coordinate of the Montgomery image of point `i` (`0` for the identity). -/
-recall to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«i686-tables»)
-    (heds : ∀ i < eds.length, eds[i]!.LimbsLt 26) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
+recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-tables»)
+    (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
 
 end «EdwardsPointi686-tables»
 end Curve25519Dalek.edwards
@@ -789,14 +764,14 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is RFC 7748's encoding of the
 `u`-coordinate of the Montgomery image of point `i` (`0` for the identity). -/
-recall to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«x86_64-no-tables»)
-    (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
+recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
+    (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
 
 end «EdwardsPointx86_64-no-tables»
 
@@ -806,14 +781,14 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is RFC 7748's encoding of the
 `u`-coordinate of the Montgomery image of point `i` (`0` for the identity). -/
-recall to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«i686-no-tables»)
-    (heds : ∀ i < eds.length, eds[i]!.LimbsLt 26) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
+recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-no-tables»)
+    (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
 
 end «EdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards
@@ -823,12 +798,12 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
-recall compress_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+recall compress_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 
@@ -837,12 +812,12 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
-recall compress_spec_point (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
+recall compress_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 
@@ -851,12 +826,12 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
-recall compress_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+recall compress_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 
@@ -865,12 +840,12 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
-recall compress_spec_point (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
+recall compress_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
 
 end Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 
@@ -880,13 +855,13 @@ namespace «EdwardsPointx86_64-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::compress_batch`: entry `i` is RFC 8032's encoding of point `i`. -/
-recall compress_batch_spec_point {N : Usize} (inputs : Array EdwardsPoint.«x86_64-tables» N)
-    (hinputs : ∀ i < N.val, inputs[i]!.LimbsLt 52) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
+recall compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«x86_64-tables» N)
+    (hinputs : ∀ i < N.val, inputs[i]!.IsBounded) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
       ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec
 
 end «EdwardsPointx86_64-tables»
 
@@ -895,13 +870,13 @@ namespace «EdwardsPointi686-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::compress_batch`: entry `i` is RFC 8032's encoding of point `i`. -/
-recall compress_batch_spec_point {N : Usize} (inputs : Array EdwardsPoint.«i686-tables» N)
-    (hinputs : ∀ i < N.val, inputs[i]!.LimbsLt 26) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
+recall compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«i686-tables» N)
+    (hinputs : ∀ i < N.val, inputs[i]!.IsBounded) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
       ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec
 
 end «EdwardsPointi686-tables»
 end Curve25519Dalek.edwards
@@ -912,13 +887,13 @@ namespace «EdwardsPointx86_64-no-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::compress_batch`: entry `i` is RFC 8032's encoding of point `i`. -/
-recall compress_batch_spec_point {N : Usize} (inputs : Array EdwardsPoint.«x86_64-no-tables» N)
-    (hinputs : ∀ i < N.val, inputs[i]!.LimbsLt 52) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
+recall compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«x86_64-no-tables» N)
+    (hinputs : ∀ i < N.val, inputs[i]!.IsBounded) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
       ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec
 
 end «EdwardsPointx86_64-no-tables»
 
@@ -927,13 +902,13 @@ namespace «EdwardsPointi686-no-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::compress_batch`: entry `i` is RFC 8032's encoding of point `i`. -/
-recall compress_batch_spec_point {N : Usize} (inputs : Array EdwardsPoint.«i686-no-tables» N)
-    (hinputs : ∀ i < N.val, inputs[i]!.LimbsLt 26) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
+recall compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«i686-no-tables» N)
+    (hinputs : ∀ i < N.val, inputs[i]!.IsBounded) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
       ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec
 
 end «EdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards
@@ -944,15 +919,15 @@ namespace «EdwardsPointx86_64-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is RFC 8032's encoding of point `i`. -/
-recall compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«x86_64-tables»)
-    (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 52)
+recall compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»)
+    (hinputs : ∀ i < inputs.length, inputs[i]!.IsBounded)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec
 
 end «EdwardsPointx86_64-tables»
 
@@ -961,15 +936,15 @@ namespace «EdwardsPointi686-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is RFC 8032's encoding of point `i`. -/
-recall compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«i686-tables»)
-    (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 26)
+recall compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-tables»)
+    (hinputs : ∀ i < inputs.length, inputs[i]!.IsBounded)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec
 
 end «EdwardsPointi686-tables»
 end Curve25519Dalek.edwards
@@ -980,15 +955,15 @@ namespace «EdwardsPointx86_64-no-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is RFC 8032's encoding of point `i`. -/
-recall compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«x86_64-no-tables»)
-    (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 52)
+recall compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-tables»)
+    (hinputs : ∀ i < inputs.length, inputs[i]!.IsBounded)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec
 
 end «EdwardsPointx86_64-no-tables»
 
@@ -997,15 +972,15 @@ namespace «EdwardsPointi686-no-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is RFC 8032's encoding of point `i`. -/
-recall compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«i686-no-tables»)
-    (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 26)
+recall compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-no-tables»)
+    (hinputs : ∀ i < inputs.length, inputs[i]!.IsBounded)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec
 
 end «EdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards
@@ -1017,14 +992,14 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddSharedAEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 
 /-- `Add<&EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall add_spec_point (self other : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.LimbsLt 52) (hother : other.LimbsLt 52) (hself_on : self.OnCurve)
+recall add_spec (self other : edwards.EdwardsPoint.«x86_64-tables»)
+    (hself : self.IsBounded) (hother : other.IsBounded) (hself_on : self.OnCurve)
     (hother_on : other.OnCurve) :
     add self other ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedAEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 end Curve25519Dalek.«Shared0EdwardsPointx86_64-tables».Insts
@@ -1036,14 +1011,14 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddSharedAEdwardsPointi686-tablesEdwardsPointi686-tables»
 
 /-- `Add<&EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall add_spec_point (self other : edwards.EdwardsPoint.«i686-tables»)
-    (hself : self.LimbsLt 26) (hother : other.LimbsLt 26) (hself_on : self.OnCurve)
+recall add_spec (self other : edwards.EdwardsPoint.«i686-tables»)
+    (hself : self.IsBounded) (hother : other.IsBounded) (hself_on : self.OnCurve)
     (hother_on : other.OnCurve) :
     add self other ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedAEdwardsPointi686-tablesEdwardsPointi686-tables»
 end Curve25519Dalek.«Shared0EdwardsPointi686-tables».Insts
@@ -1055,13 +1030,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 
 /-- `Add<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -1073,13 +1048,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddEdwardsPointi686-tablesEdwardsPointi686-tables»
 
 /-- `Add<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddEdwardsPointi686-tablesEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -1091,13 +1066,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddSharedBEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 
 /-- `Add<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedBEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -1109,13 +1084,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddSharedBEdwardsPointi686-tablesEdwardsPointi686-tables»
 
 /-- `Add<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedBEdwardsPointi686-tablesEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -1127,13 +1102,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 
 /-- `Add<EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : edwards.EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 end Curve25519Dalek.«SharedAEdwardsPointx86_64-tables».Insts
@@ -1145,13 +1120,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddEdwardsPointi686-tablesEdwardsPointi686-tables»
 
 /-- `Add<EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : edwards.EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : edwards.EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddEdwardsPointi686-tablesEdwardsPointi686-tables»
 end Curve25519Dalek.«SharedAEdwardsPointi686-tables».Insts
@@ -1163,14 +1138,14 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 
 /-- `Add<&EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall add_spec_point (self other : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.LimbsLt 52) (hother : other.LimbsLt 52) (hself_on : self.OnCurve)
+recall add_spec (self other : edwards.EdwardsPoint.«x86_64-no-tables»)
+    (hself : self.IsBounded) (hother : other.IsBounded) (hself_on : self.OnCurve)
     (hother_on : other.OnCurve) :
     add self other ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.«Shared0EdwardsPointx86_64-no-tables».Insts
@@ -1182,14 +1157,14 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddSharedAEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 
 /-- `Add<&EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall add_spec_point (self other : edwards.EdwardsPoint.«i686-no-tables»)
-    (hself : self.LimbsLt 26) (hother : other.LimbsLt 26) (hself_on : self.OnCurve)
+recall add_spec (self other : edwards.EdwardsPoint.«i686-no-tables»)
+    (hself : self.IsBounded) (hother : other.IsBounded) (hself_on : self.OnCurve)
     (hother_on : other.OnCurve) :
     add self other ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + other.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedAEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 end Curve25519Dalek.«Shared0EdwardsPointi686-no-tables».Insts
@@ -1201,13 +1176,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 
 /-- `Add<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -1219,13 +1194,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 
 /-- `Add<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -1237,13 +1212,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddSharedBEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 
 /-- `Add<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedBEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -1255,13 +1230,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddSharedBEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 
 /-- `Add<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddSharedBEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -1273,13 +1248,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 
 /-- `Add<EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.«SharedAEdwardsPointx86_64-no-tables».Insts
@@ -1291,13 +1266,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 
 /-- `Add<EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall add_spec_point (self rhs : edwards.EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_spec (self rhs : edwards.EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add self rhs ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_spec
 
 end «CoreOpsArithAddEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 end Curve25519Dalek.«SharedAEdwardsPointi686-no-tables».Insts
@@ -1309,13 +1284,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddAssignSharedAEdwardsPointx86_64-tables»
 
 /-- `AddAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_assign_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_assign_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignSharedAEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -1327,13 +1302,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddAssignSharedAEdwardsPointi686-tables»
 
 /-- `AddAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_assign_spec_point (self rhs : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_assign_spec (self rhs : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add_assign self rhs ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignSharedAEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -1345,13 +1320,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddAssignEdwardsPointx86_64-tables»
 
 /-- `AddAssign<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_assign_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_assign_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -1363,13 +1338,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddAssignEdwardsPointi686-tables»
 
 /-- `AddAssign<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_assign_spec_point (self rhs : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_assign_spec (self rhs : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add_assign self rhs ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -1381,13 +1356,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddAssignSharedAEdwardsPointx86_64-no-tables»
 
 /-- `AddAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_assign_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_assign_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignSharedAEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -1399,13 +1374,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddAssignSharedAEdwardsPointi686-no-tables»
 
 /-- `AddAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_assign_spec_point (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_assign_spec (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add_assign self rhs ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignSharedAEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -1417,13 +1392,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithAddAssignEdwardsPointx86_64-no-tables»
 
 /-- `AddAssign<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_assign_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_assign_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -1435,13 +1410,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithAddAssignEdwardsPointi686-no-tables»
 
 /-- `AddAssign<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall add_assign_spec_point (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall add_assign_spec (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     add_assign self rhs ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint + rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms add_assign_spec
 
 end «CoreOpsArithAddAssignEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -1453,14 +1428,14 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubSharedAEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 
 /-- `Sub<&EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self other : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.LimbsLt 52) (hother : other.LimbsLt 52) (hself_on : self.OnCurve)
+recall sub_spec (self other : edwards.EdwardsPoint.«x86_64-tables»)
+    (hself : self.IsBounded) (hother : other.IsBounded) (hself_on : self.OnCurve)
     (hother_on : other.OnCurve) :
     sub self other ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedAEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 end Curve25519Dalek.«Shared0EdwardsPointx86_64-tables».Insts
@@ -1472,14 +1447,14 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubSharedAEdwardsPointi686-tablesEdwardsPointi686-tables»
 
 /-- `Sub<&EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self other : edwards.EdwardsPoint.«i686-tables»)
-    (hself : self.LimbsLt 26) (hother : other.LimbsLt 26) (hself_on : self.OnCurve)
+recall sub_spec (self other : edwards.EdwardsPoint.«i686-tables»)
+    (hself : self.IsBounded) (hother : other.IsBounded) (hself_on : self.OnCurve)
     (hother_on : other.OnCurve) :
     sub self other ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedAEdwardsPointi686-tablesEdwardsPointi686-tables»
 end Curve25519Dalek.«Shared0EdwardsPointi686-tables».Insts
@@ -1491,13 +1466,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 
 /-- `Sub<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -1509,13 +1484,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubEdwardsPointi686-tablesEdwardsPointi686-tables»
 
 /-- `Sub<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubEdwardsPointi686-tablesEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -1527,13 +1502,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubSharedBEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 
 /-- `Sub<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedBEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -1545,13 +1520,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubSharedBEdwardsPointi686-tablesEdwardsPointi686-tables»
 
 /-- `Sub<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedBEdwardsPointi686-tablesEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -1563,13 +1538,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 
 /-- `Sub<EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : edwards.EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubEdwardsPointx86_64-tablesEdwardsPointx86_64-tables»
 end Curve25519Dalek.«SharedAEdwardsPointx86_64-tables».Insts
@@ -1581,13 +1556,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubEdwardsPointi686-tablesEdwardsPointi686-tables»
 
 /-- `Sub<EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : edwards.EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : edwards.EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubEdwardsPointi686-tablesEdwardsPointi686-tables»
 end Curve25519Dalek.«SharedAEdwardsPointi686-tables».Insts
@@ -1599,14 +1574,14 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 
 /-- `Sub<&EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self other : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.LimbsLt 52) (hother : other.LimbsLt 52) (hself_on : self.OnCurve)
+recall sub_spec (self other : edwards.EdwardsPoint.«x86_64-no-tables»)
+    (hself : self.IsBounded) (hother : other.IsBounded) (hself_on : self.OnCurve)
     (hother_on : other.OnCurve) :
     sub self other ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedAEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.«Shared0EdwardsPointx86_64-no-tables».Insts
@@ -1618,14 +1593,14 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubSharedAEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 
 /-- `Sub<&EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self other : edwards.EdwardsPoint.«i686-no-tables»)
-    (hself : self.LimbsLt 26) (hother : other.LimbsLt 26) (hself_on : self.OnCurve)
+recall sub_spec (self other : edwards.EdwardsPoint.«i686-no-tables»)
+    (hself : self.IsBounded) (hother : other.IsBounded) (hself_on : self.OnCurve)
     (hother_on : other.OnCurve) :
     sub self other ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - other.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedAEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 end Curve25519Dalek.«Shared0EdwardsPointi686-no-tables».Insts
@@ -1637,13 +1612,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 
 /-- `Sub<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -1655,13 +1630,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 
 /-- `Sub<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -1673,13 +1648,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubSharedBEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 
 /-- `Sub<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedBEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -1691,13 +1666,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubSharedBEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 
 /-- `Sub<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubSharedBEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -1709,13 +1684,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 
 /-- `Sub<EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubEdwardsPointx86_64-no-tablesEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.«SharedAEdwardsPointx86_64-no-tables».Insts
@@ -1727,13 +1702,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 
 /-- `Sub<EdwardsPoint> for &EdwardsPoint` on the represented points. -/
-recall sub_spec_point (self rhs : edwards.EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_spec (self rhs : edwards.EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub self rhs ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_spec
 
 end «CoreOpsArithSubEdwardsPointi686-no-tablesEdwardsPointi686-no-tables»
 end Curve25519Dalek.«SharedAEdwardsPointi686-no-tables».Insts
@@ -1745,13 +1720,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubAssignSharedAEdwardsPointx86_64-tables»
 
 /-- `SubAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_assign_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_assign_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignSharedAEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -1763,13 +1738,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubAssignSharedAEdwardsPointi686-tables»
 
 /-- `SubAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_assign_spec_point (self rhs : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_assign_spec (self rhs : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub_assign self rhs ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignSharedAEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -1781,13 +1756,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubAssignEdwardsPointx86_64-tables»
 
 /-- `SubAssign<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_assign_spec_point (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_assign_spec (self rhs : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -1799,13 +1774,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubAssignEdwardsPointi686-tables»
 
 /-- `SubAssign<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_assign_spec_point (self rhs : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_assign_spec (self rhs : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub_assign self rhs ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -1817,13 +1792,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubAssignSharedAEdwardsPointx86_64-no-tables»
 
 /-- `SubAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_assign_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_assign_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignSharedAEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -1835,13 +1810,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubAssignSharedAEdwardsPointi686-no-tables»
 
 /-- `SubAssign<&EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_assign_spec_point (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_assign_spec (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub_assign self rhs ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignSharedAEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -1853,13 +1828,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithSubAssignEdwardsPointx86_64-no-tables»
 
 /-- `SubAssign<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_assign_spec_point (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
-    (hrhs : rhs.LimbsLt 52) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_assign_spec (self rhs : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub_assign self rhs ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -1871,13 +1846,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithSubAssignEdwardsPointi686-no-tables»
 
 /-- `SubAssign<EdwardsPoint> for EdwardsPoint` on the represented points. -/
-recall sub_assign_spec_point (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
-    (hrhs : rhs.LimbsLt 26) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
+recall sub_assign_spec (self rhs : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
+    (hrhs : rhs.IsBounded) (hself_on : self.OnCurve) (hrhs_on : rhs.OnCurve) :
     sub_assign self rhs ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.toPoint - rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms sub_assign_spec
 
 end «CoreOpsArithSubAssignEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -1895,9 +1870,9 @@ recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«x
     (ps : List EdwardsPoint.«x86_64-tables») (hiter : iterInst.Yields iter xs)
     (hborrow : List.Forall₂
       (fun x P => borrowInst.borrow x ⦃ (P' : EdwardsPoint.«x86_64-tables») => P' = P ⦄) xs ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 52) (hps_on : ∀ P ∈ ps, P.OnCurve) :
+    (hps : ∀ P ∈ ps, P.IsBounded) (hps_on : ∀ P ∈ ps, P.OnCurve) :
     sum borrowInst iterInst iter ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec
@@ -1918,9 +1893,9 @@ recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«i
     (ps : List EdwardsPoint.«i686-tables») (hiter : iterInst.Yields iter xs)
     (hborrow : List.Forall₂
       (fun x P => borrowInst.borrow x ⦃ (P' : EdwardsPoint.«i686-tables») => P' = P ⦄) xs ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 26) (hps_on : ∀ P ∈ ps, P.OnCurve) :
+    (hps : ∀ P ∈ ps, P.IsBounded) (hps_on : ∀ P ∈ ps, P.OnCurve) :
     sum borrowInst iterInst iter ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec
@@ -1941,9 +1916,9 @@ recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«x
     (ps : List EdwardsPoint.«x86_64-no-tables») (hiter : iterInst.Yields iter xs)
     (hborrow : List.Forall₂
       (fun x P => borrowInst.borrow x ⦃ (P' : EdwardsPoint.«x86_64-no-tables») => P' = P ⦄) xs ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 52) (hps_on : ∀ P ∈ ps, P.OnCurve) :
+    (hps : ∀ P ∈ ps, P.IsBounded) (hps_on : ∀ P ∈ ps, P.OnCurve) :
     sum borrowInst iterInst iter ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec
@@ -1964,9 +1939,9 @@ recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«i
     (ps : List EdwardsPoint.«i686-no-tables») (hiter : iterInst.Yields iter xs)
     (hborrow : List.Forall₂
       (fun x P => borrowInst.borrow x ⦃ (P' : EdwardsPoint.«i686-no-tables») => P' = P ⦄) xs ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 26) (hps_on : ∀ P ∈ ps, P.OnCurve) :
+    (hps : ∀ P ∈ ps, P.IsBounded) (hps_on : ∀ P ∈ ps, P.OnCurve) :
     sum borrowInst iterInst iter ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = (ps.map (·.toPoint)).sum ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms sum_spec
@@ -1981,13 +1956,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithNegEdwardsPointx86_64-tables»
 
 /-- `Neg for &EdwardsPoint` negates the represented point. -/
-recall neg_spec_point (self : edwards.EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+recall neg_spec (self : edwards.EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     neg self ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegEdwardsPointx86_64-tables»
 end Curve25519Dalek.«Shared0EdwardsPointx86_64-tables».Insts
@@ -1999,13 +1974,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithNegEdwardsPointi686-tables»
 
 /-- `Neg for &EdwardsPoint` negates the represented point. -/
-recall neg_spec_point (self : edwards.EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
+recall neg_spec (self : edwards.EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     neg self ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegEdwardsPointi686-tables»
 end Curve25519Dalek.«Shared0EdwardsPointi686-tables».Insts
@@ -2017,13 +1992,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithNegEdwardsPointx86_64-tables»
 
 /-- `Neg for EdwardsPoint` (by value) negates the represented point. -/
-recall neg_spec_point (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+recall neg_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     neg self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegEdwardsPointx86_64-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-tables».Insts
@@ -2035,13 +2010,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithNegEdwardsPointi686-tables»
 
 /-- `Neg for EdwardsPoint` (by value) negates the represented point. -/
-recall neg_spec_point (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
+recall neg_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     neg self ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegEdwardsPointi686-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-tables».Insts
@@ -2053,13 +2028,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithNegEdwardsPointx86_64-no-tables»
 
 /-- `Neg for &EdwardsPoint` negates the represented point. -/
-recall neg_spec_point (self : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+recall neg_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     neg self ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.«Shared0EdwardsPointx86_64-no-tables».Insts
@@ -2071,13 +2046,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithNegEdwardsPointi686-no-tables»
 
 /-- `Neg for &EdwardsPoint` negates the represented point. -/
-recall neg_spec_point (self : edwards.EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
+recall neg_spec (self : edwards.EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     neg self ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegEdwardsPointi686-no-tables»
 end Curve25519Dalek.«Shared0EdwardsPointi686-no-tables».Insts
@@ -2089,13 +2064,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreOpsArithNegEdwardsPointx86_64-no-tables»
 
 /-- `Neg for EdwardsPoint` (by value) negates the represented point. -/
-recall neg_spec_point (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+recall neg_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     neg self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegEdwardsPointx86_64-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«x86_64-no-tables».Insts
@@ -2107,13 +2082,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreOpsArithNegEdwardsPointi686-no-tables»
 
 /-- `Neg for EdwardsPoint` (by value) negates the represented point. -/
-recall neg_spec_point (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
+recall neg_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     neg self ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = -self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec_point
+#guard_msgs (whitespace := lax, substring := true) in #print axioms neg_spec
 
 end «CoreOpsArithNegEdwardsPointi686-no-tables»
 end Curve25519Dalek.edwards.EdwardsPoint.«i686-no-tables».Insts
@@ -2124,11 +2099,11 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace CoreOpsArithMulAssignSharedAScalar
 
-/-- `MulAssign<&Scalar> for EdwardsPoint`: as `Mul`, `scalar • P` (unreduced, `< 2^255`). -/
+/-- `MulAssign<&Scalar> for EdwardsPoint`: as `Mul`, `scalar • self` (unreduced, `< 2^255`). -/
 recall mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-tables») (scalar : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_assign self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
@@ -2142,11 +2117,11 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace CoreOpsArithMulAssignSharedAScalar
 
-/-- `MulAssign<&Scalar> for EdwardsPoint`: as `Mul`, `scalar • P` (unreduced, `< 2^255`). -/
+/-- `MulAssign<&Scalar> for EdwardsPoint`: as `Mul`, `scalar • self` (unreduced, `< 2^255`). -/
 recall mul_assign_spec (self : edwards.EdwardsPoint.«i686-tables») (scalar : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_assign self scalar ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
@@ -2162,9 +2137,9 @@ namespace CoreOpsArithMulAssignScalar
 
 /-- `MulAssign<Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul_assign self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
@@ -2180,9 +2155,9 @@ namespace CoreOpsArithMulAssignScalar
 
 /-- `MulAssign<Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_assign_spec (self : edwards.EdwardsPoint.«i686-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul_assign self rhs ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
@@ -2196,11 +2171,11 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace CoreOpsArithMulAssignSharedAScalar
 
-/-- `MulAssign<&Scalar> for EdwardsPoint`: as `Mul`, `scalar • P` (unreduced, `< 2^255`). -/
+/-- `MulAssign<&Scalar> for EdwardsPoint`: as `Mul`, `scalar • self` (unreduced, `< 2^255`). -/
 recall mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (scalar : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_assign self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
@@ -2214,11 +2189,11 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace CoreOpsArithMulAssignSharedAScalar
 
-/-- `MulAssign<&Scalar> for EdwardsPoint`: as `Mul`, `scalar • P` (unreduced, `< 2^255`). -/
+/-- `MulAssign<&Scalar> for EdwardsPoint`: as `Mul`, `scalar • self` (unreduced, `< 2^255`). -/
 recall mul_assign_spec (self : edwards.EdwardsPoint.«i686-no-tables») (scalar : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_assign self scalar ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
@@ -2234,9 +2209,9 @@ namespace CoreOpsArithMulAssignScalar
 
 /-- `MulAssign<Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_assign_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul_assign self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
@@ -2252,9 +2227,9 @@ namespace CoreOpsArithMulAssignScalar
 
 /-- `MulAssign<Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_assign_spec (self : edwards.EdwardsPoint.«i686-no-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul_assign self rhs ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_assign_spec
@@ -2270,9 +2245,9 @@ namespace «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
 
 /-- `Mul<&Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2288,9 +2263,9 @@ namespace «CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
 
 /-- `Mul<&Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«i686-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2306,9 +2281,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointx86_64-tables»
 
 /-- `Mul<Scalar> for &EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2324,9 +2299,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointi686-tables»
 
 /-- `Mul<Scalar> for &EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«i686-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2342,9 +2317,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointx86_64-tables»
 
 /-- `Mul<Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2360,9 +2335,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointi686-tables»
 
 /-- `Mul<Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«i686-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2377,9 +2352,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Mul<&EdwardsPoint> for Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2392,9 +2367,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Mul<&EdwardsPoint> for Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«i686-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 26) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2409,9 +2384,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Mul<EdwardsPoint> for &Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2424,9 +2399,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Mul<EdwardsPoint> for &Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«i686-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 26) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2441,9 +2416,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Mul<EdwardsPoint> for Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2456,9 +2431,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Mul<EdwardsPoint> for Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«i686-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 26) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2472,11 +2447,11 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «CoreOpsArithMulSharedAScalarEdwardsPointx86_64-tables»
 
-/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • P` (unreduced, `< 2^255`); limbs `< 2^52`. -/
+/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`); limbs `< 2^52`. -/
 recall mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (scalar : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2490,11 +2465,11 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «CoreOpsArithMulSharedAScalarEdwardsPointi686-tables»
 
-/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • P` (unreduced, `< 2^255`); limbs `< 2^26`. -/
+/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`); limbs `< 2^26`. -/
 recall mul_spec (self : edwards.EdwardsPoint.«i686-tables») (scalar : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2509,9 +2484,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Mul<&EdwardsPoint> for &Scalar`: as `&EdwardsPoint * &Scalar`. -/
 recall mul_spec (self : scalar.Scalar) (point : edwards.EdwardsPoint.«x86_64-tables»)
-    (hself : self.asNat < 2 ^ 255) (hpoint : point.LimbsLt 52) (hpoint_on : point.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hpoint : point.IsBounded) (hpoint_on : point.OnCurve) :
     mul self point ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2524,9 +2499,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Mul<&EdwardsPoint> for &Scalar`: as `&EdwardsPoint * &Scalar`. -/
 recall mul_spec (self : scalar.Scalar) (point : edwards.EdwardsPoint.«i686-tables»)
-    (hself : self.asNat < 2 ^ 255) (hpoint : point.LimbsLt 26) (hpoint_on : point.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hpoint : point.IsBounded) (hpoint_on : point.OnCurve) :
     mul self point ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2542,9 +2517,9 @@ namespace «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-no-tables»
 
 /-- `Mul<&Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2560,9 +2535,9 @@ namespace «CoreOpsArithMulSharedBScalarEdwardsPointi686-no-tables»
 
 /-- `Mul<&Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«i686-no-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2578,9 +2553,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointx86_64-no-tables»
 
 /-- `Mul<Scalar> for &EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2596,9 +2571,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointi686-no-tables»
 
 /-- `Mul<Scalar> for &EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«i686-no-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2614,9 +2589,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointx86_64-no-tables»
 
 /-- `Mul<Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2632,9 +2607,9 @@ namespace «CoreOpsArithMulScalarEdwardsPointi686-no-tables»
 
 /-- `Mul<Scalar> for EdwardsPoint`: as the borrowed form. -/
 recall mul_spec (self : edwards.EdwardsPoint.«i686-no-tables») (rhs : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hrhs : rhs.asNat < 2 ^ 255) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = rhs.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2649,9 +2624,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Mul<&EdwardsPoint> for Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2664,9 +2639,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Mul<&EdwardsPoint> for Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«i686-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 26) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2681,9 +2656,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Mul<EdwardsPoint> for &Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2696,9 +2671,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Mul<EdwardsPoint> for &Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«i686-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 26) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2713,9 +2688,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Mul<EdwardsPoint> for Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 52) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2728,9 +2703,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Mul<EdwardsPoint> for Scalar`: as the borrowed form. -/
 recall mul_spec (self : scalar.Scalar) (rhs : edwards.EdwardsPoint.«i686-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.LimbsLt 26) (hrhs_on : rhs.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hrhs : rhs.IsBounded) (hrhs_on : rhs.OnCurve) :
     mul self rhs ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • rhs.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2744,11 +2719,11 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «CoreOpsArithMulSharedAScalarEdwardsPointx86_64-no-tables»
 
-/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • P` (unreduced, `< 2^255`); limbs `< 2^52`. -/
+/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`); limbs `< 2^52`. -/
 recall mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (scalar : scalar.Scalar)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2762,11 +2737,11 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «CoreOpsArithMulSharedAScalarEdwardsPointi686-no-tables»
 
-/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • P` (unreduced, `< 2^255`); limbs `< 2^26`. -/
+/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`); limbs `< 2^26`. -/
 recall mul_spec (self : edwards.EdwardsPoint.«i686-no-tables») (scalar : scalar.Scalar)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
+    (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2781,9 +2756,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Mul<&EdwardsPoint> for &Scalar`: as `&EdwardsPoint * &Scalar`. -/
 recall mul_spec (self : scalar.Scalar) (point : edwards.EdwardsPoint.«x86_64-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hpoint : point.LimbsLt 52) (hpoint_on : point.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hpoint : point.IsBounded) (hpoint_on : point.OnCurve) :
     mul self point ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2796,9 +2771,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Mul<&EdwardsPoint> for &Scalar`: as `&EdwardsPoint * &Scalar`. -/
 recall mul_spec (self : scalar.Scalar) (point : edwards.EdwardsPoint.«i686-no-tables»)
-    (hself : self.asNat < 2 ^ 255) (hpoint : point.LimbsLt 26) (hpoint_on : point.OnCurve) :
+    (hself : self.asNat < 2 ^ 255) (hpoint : point.IsBounded) (hpoint_on : point.OnCurve) :
     mul self point ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • point.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -2814,7 +2789,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 limbs `< 2^52`. -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -2829,7 +2804,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 limbs `< 2^26`. -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -2844,7 +2819,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 limbs `< 2^52`. -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -2859,7 +2834,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 limbs `< 2^26`. -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -2870,12 +2845,12 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::mul_clamped`: `clamp bytes • P`, with RFC 7748's clamping of the
+/-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
 little-endian value of `bytes`; limbs `< 2^52`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«x86_64-tables») (bytes : Array U8 32#usize)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) :
+    (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
@@ -2886,12 +2861,12 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::mul_clamped`: `clamp bytes • P`, with RFC 7748's clamping of the
+/-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
 little-endian value of `bytes`; limbs `< 2^26`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«i686-tables») (bytes : Array U8 32#usize)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) :
+    (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
@@ -2902,12 +2877,12 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::mul_clamped`: `clamp bytes • P`, with RFC 7748's clamping of the
+/-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
 little-endian value of `bytes`; limbs `< 2^52`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«x86_64-no-tables») (bytes : Array U8 32#usize)
-    (hself : self.LimbsLt 52) (hon : self.OnCurve) :
+    (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
@@ -2918,12 +2893,12 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::mul_clamped`: `clamp bytes • P`, with RFC 7748's clamping of the
+/-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
 little-endian value of `bytes`; limbs `< 2^26`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«i686-no-tables») (bytes : Array U8 32#usize)
-    (hself : self.LimbsLt 26) (hon : self.OnCurve) :
+    (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
@@ -2938,7 +2913,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 little-endian value of `bytes`; limbs `< 2^52`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
@@ -2953,7 +2928,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 little-endian value of `bytes`; limbs `< 2^26`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
@@ -2968,7 +2943,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 little-endian value of `bytes`; limbs `< 2^52`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
@@ -2983,7 +2958,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 little-endian value of `bytes`; limbs `< 2^26`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
@@ -3014,12 +2989,13 @@ recall multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
-        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄
+        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms multiscalar_mul_spec
@@ -3051,12 +3027,13 @@ recall multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«i686-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«i686-tables») => r.OnCurve ∧
-        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 26 ⦄
+        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms multiscalar_mul_spec
@@ -3088,12 +3065,13 @@ recall multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧
-        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 52 ⦄
+        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms multiscalar_mul_spec
@@ -3125,12 +3103,13 @@ recall multiscalar_mul_spec
       (fun y P => borrowPointInst.borrow y
           ⦃ (P' : edwards.EdwardsPoint.«i686-no-tables») => P' = P ⦄)
       ys ps)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») => r.OnCurve ∧
-        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.LimbsLt 26 ⦄
+        r.toPoint = (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms multiscalar_mul_spec
@@ -3159,14 +3138,15 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
-          R.LimbsLt 52 ⦄
+      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
+          R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
@@ -3195,14 +3175,15 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 26 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
-          R.LimbsLt 26 ⦄
+      ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
+          R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
@@ -3231,14 +3212,15 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
-          R.LimbsLt 52 ⦄
+      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
+          R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
@@ -3267,14 +3249,15 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
     (hscalars : scalarsInst.Yields scalars xs) (hpoints : pointsInst.Yields points ops)
     (hborrow_scalars : List.Forall₂
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
-    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 26 ∧ P.OnCurve)
+    (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
+    (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
-      ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (r = none ↔ none ∈ ops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P.toPoint) ss (ops.filterMap id)).sum ∧
-          R.LimbsLt 26 ⦄
+      ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (none ∈ ops → r = none) ∧
+        ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
+          R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms optional_multiscalar_mul_spec
@@ -3296,12 +3279,13 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (static_points : I) (ys : List Clause0_Item) (ps : List edwards.EdwardsPoint.«x86_64-tables»)
     (hstatic_points : pointsInst.Yields static_points ys)
     (hborrow : List.Forall₂
-      (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄) ys
-          ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+      (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-tables») => P' = P ⦄)
+      ys ps)
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeEdwardsPrecomputation.«x86_64-tables») =>
-        r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄
+        r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms new_spec
@@ -3323,12 +3307,13 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (static_points : I) (ys : List Clause0_Item) (ps : List edwards.EdwardsPoint.«i686-tables»)
     (hstatic_points : pointsInst.Yields static_points ys)
     (hborrow : List.Forall₂
-      (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«i686-tables») => P' = P ⦄) ys
-          ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+      (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«i686-tables») => P' = P ⦄)
+      ys ps)
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeEdwardsPrecomputation.«i686-tables») =>
-        r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 27 ⦄
+        r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms new_spec
@@ -3351,11 +3336,12 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (hstatic_points : pointsInst.Yields static_points ys)
     (hborrow : List.Forall₂
       (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«x86_64-no-tables») => P' = P ⦄)
-          ys ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+      ys ps)
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeEdwardsPrecomputation.«x86_64-no-tables») =>
-        r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 54 ⦄
+        r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms new_spec
@@ -3378,11 +3364,12 @@ recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (hstatic_points : pointsInst.Yields static_points ys)
     (hborrow : List.Forall₂
       (fun y P => borrowInst.borrow y ⦃ (P' : edwards.EdwardsPoint.«i686-no-tables») => P' = P ⦄)
-          ys ps)
-    (hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve) (hys : ys.length ≤ Usize.max) :
+      ys ps)
+    (hps : ∀ P ∈ ps, P.IsBounded)
+    (hps_on : ∀ P ∈ ps, P.OnCurve) (hys : ys.length ≤ Usize.max) :
     new pointsInst borrowInst static_points
       ⦃ (r : VartimeEdwardsPrecomputation.«i686-no-tables») =>
-        r.Represents (ps.map (·.toPoint)) ∧ r.LimbsLt 27 ⦄
+        r.IsValid ∧ r.points = ps.map (·.toPoint) ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms new_spec
@@ -3398,9 +3385,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 
 /-- `VartimePrecomputedMultiscalarMul::len` for `VartimeEdwardsPrecomputation`: the number of
 static points. -/
-recall len_spec (self : VartimeEdwardsPrecomputation.«x86_64-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    len self ⦃ (r : Usize) => r.val = ps.length ⦄
+recall len_spec (self : VartimeEdwardsPrecomputation.«x86_64-tables») :
+    len self ⦃ (r : Usize) => r.val = self.points.length ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms len_spec
@@ -3416,9 +3402,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 
 /-- `VartimePrecomputedMultiscalarMul::len` for `VartimeEdwardsPrecomputation`: the number of
 static points. -/
-recall len_spec (self : VartimeEdwardsPrecomputation.«i686-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    len self ⦃ (r : Usize) => r.val = ps.length ⦄
+recall len_spec (self : VartimeEdwardsPrecomputation.«i686-tables») :
+    len self ⦃ (r : Usize) => r.val = self.points.length ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms len_spec
@@ -3434,9 +3419,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 
 /-- `VartimePrecomputedMultiscalarMul::len` for `VartimeEdwardsPrecomputation`: the number of
 static points. -/
-recall len_spec (self : VartimeEdwardsPrecomputation.«x86_64-no-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    len self ⦃ (r : Usize) => r.val = ps.length ⦄
+recall len_spec (self : VartimeEdwardsPrecomputation.«x86_64-no-tables») :
+    len self ⦃ (r : Usize) => r.val = self.points.length ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms len_spec
@@ -3452,9 +3436,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 
 /-- `VartimePrecomputedMultiscalarMul::len` for `VartimeEdwardsPrecomputation`: the number of
 static points. -/
-recall len_spec (self : VartimeEdwardsPrecomputation.«i686-no-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    len self ⦃ (r : Usize) => r.val = ps.length ⦄
+recall len_spec (self : VartimeEdwardsPrecomputation.«i686-no-tables») :
+    len self ⦃ (r : Usize) => r.val = self.points.length ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms len_spec
@@ -3470,9 +3453,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeEdwardsPrecomputation`: whether
 there are no static points. -/
-recall is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄
+recall is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-tables») :
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -3488,9 +3470,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeEdwardsPrecomputation`: whether
 there are no static points. -/
-recall is_empty_spec (self : VartimeEdwardsPrecomputation.«i686-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄
+recall is_empty_spec (self : VartimeEdwardsPrecomputation.«i686-tables») :
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -3506,9 +3487,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeEdwardsPrecomputation`: whether
 there are no static points. -/
-recall is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-no-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄
+recall is_empty_spec (self : VartimeEdwardsPrecomputation.«x86_64-no-tables») :
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -3524,9 +3504,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 
 /-- `VartimePrecomputedMultiscalarMul::is_empty` for `VartimeEdwardsPrecomputation`: whether
 there are no static points. -/
-recall is_empty_spec (self : VartimeEdwardsPrecomputation.«i686-no-tables»)
-    (ps : List curve25519.edwards.Point) (hself : self.Represents ps) :
-    is_empty self ⦃ (r : Bool) => r = decide (ps = []) ⦄
+recall is_empty_spec (self : VartimeEdwardsPrecomputation.«i686-no-tables») :
+    is_empty self ⦃ (r : Bool) => r = true ↔ self.points = [] ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_empty_spec
@@ -3541,9 +3520,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
-`VartimeEdwardsPrecomputation` (static points `ps`): `none` iff some dynamic point is `none`;
-otherwise `∑ s_i • ps_i + ∑ d_i • Q_i` (at most `|ps|` static scalars, the missing ones count
-as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
+`VartimeEdwardsPrecomputation` (static points `self.points`): `none` iff some dynamic point is
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
+ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
 `< 2^52`. -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
@@ -3553,11 +3532,11 @@ recall optional_mixed_multiscalar_mul_spec
     (borrowDynamicInst : core.borrow.Borrow Clause2_Item scalar.Scalar)
     (dynamicPointsInst : core.iter.traits.collect.IntoIterator K
       (Option edwards.EdwardsPoint.«x86_64-tables») Clause4_IntoIter)
-    (self : VartimeEdwardsPrecomputation.«x86_64-tables») (static_scalars : I) (dynamic_scalars : J)
-    (dynamic_points : K) (ps : List curve25519.edwards.Point) (xs : List Clause0_Item)
+    (self : VartimeEdwardsPrecomputation.«x86_64-tables»)
+    (static_scalars : I) (dynamic_scalars : J) (dynamic_points : K) (xs : List Clause0_Item)
     (ss : List scalar.Scalar) (ys : List Clause2_Item) (ds : List scalar.Scalar)
     (qops : List (Option edwards.EdwardsPoint.«x86_64-tables»))
-    (hself : self.Represents ps) (hself_b : self.LimbsLt 54)
+    (hself : self.IsValid) (hself_b : self.IsBounded)
     (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
     (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
     (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
@@ -3566,17 +3545,18 @@ recall optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ ps.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P) ss ps).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
-          R.LimbsLt 52 ⦄
+      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
+          R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3592,9 +3572,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
-`VartimeEdwardsPrecomputation` (static points `ps`): `none` iff some dynamic point is `none`;
-otherwise `∑ s_i • ps_i + ∑ d_i • Q_i` (at most `|ps|` static scalars, the missing ones count
-as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
+`VartimeEdwardsPrecomputation` (static points `self.points`): `none` iff some dynamic point is
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
+ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
 `< 2^26`. -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
@@ -3604,11 +3584,11 @@ recall optional_mixed_multiscalar_mul_spec
     (borrowDynamicInst : core.borrow.Borrow Clause2_Item scalar.Scalar)
     (dynamicPointsInst : core.iter.traits.collect.IntoIterator K
       (Option edwards.EdwardsPoint.«i686-tables») Clause4_IntoIter)
-    (self : VartimeEdwardsPrecomputation.«i686-tables») (static_scalars : I) (dynamic_scalars : J)
-    (dynamic_points : K) (ps : List curve25519.edwards.Point) (xs : List Clause0_Item)
+    (self : VartimeEdwardsPrecomputation.«i686-tables»)
+    (static_scalars : I) (dynamic_scalars : J) (dynamic_points : K) (xs : List Clause0_Item)
     (ss : List scalar.Scalar) (ys : List Clause2_Item) (ds : List scalar.Scalar)
     (qops : List (Option edwards.EdwardsPoint.«i686-tables»))
-    (hself : self.Represents ps) (hself_b : self.LimbsLt 27)
+    (hself : self.IsValid) (hself_b : self.IsBounded)
     (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
     (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
     (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
@@ -3617,17 +3597,18 @@ recall optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ ps.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P) ss ps).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
-          R.LimbsLt 26 ⦄
+      ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
+          R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3643,9 +3624,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
-`VartimeEdwardsPrecomputation` (static points `ps`): `none` iff some dynamic point is `none`;
-otherwise `∑ s_i • ps_i + ∑ d_i • Q_i` (at most `|ps|` static scalars, the missing ones count
-as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
+`VartimeEdwardsPrecomputation` (static points `self.points`): `none` iff some dynamic point is
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
+ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
 `< 2^52`. -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
@@ -3655,12 +3636,11 @@ recall optional_mixed_multiscalar_mul_spec
     (borrowDynamicInst : core.borrow.Borrow Clause2_Item scalar.Scalar)
     (dynamicPointsInst : core.iter.traits.collect.IntoIterator K
       (Option edwards.EdwardsPoint.«x86_64-no-tables») Clause4_IntoIter)
-    (self : VartimeEdwardsPrecomputation.«x86_64-no-tables») (static_scalars : I)
-        (dynamic_scalars : J)
-    (dynamic_points : K) (ps : List curve25519.edwards.Point) (xs : List Clause0_Item)
+    (self : VartimeEdwardsPrecomputation.«x86_64-no-tables»)
+    (static_scalars : I) (dynamic_scalars : J) (dynamic_points : K) (xs : List Clause0_Item)
     (ss : List scalar.Scalar) (ys : List Clause2_Item) (ds : List scalar.Scalar)
     (qops : List (Option edwards.EdwardsPoint.«x86_64-no-tables»))
-    (hself : self.Represents ps) (hself_b : self.LimbsLt 54)
+    (hself : self.IsValid) (hself_b : self.IsBounded)
     (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
     (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
     (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
@@ -3669,17 +3649,18 @@ recall optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ ps.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P) ss ps).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
-          R.LimbsLt 52 ⦄
+      ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
+          R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3695,9 +3676,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
-`VartimeEdwardsPrecomputation` (static points `ps`): `none` iff some dynamic point is `none`;
-otherwise `∑ s_i • ps_i + ∑ d_i • Q_i` (at most `|ps|` static scalars, the missing ones count
-as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
+`VartimeEdwardsPrecomputation` (static points `self.points`): `none` iff some dynamic point is
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
+ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
 `< 2^26`. -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
@@ -3707,12 +3688,11 @@ recall optional_mixed_multiscalar_mul_spec
     (borrowDynamicInst : core.borrow.Borrow Clause2_Item scalar.Scalar)
     (dynamicPointsInst : core.iter.traits.collect.IntoIterator K
       (Option edwards.EdwardsPoint.«i686-no-tables») Clause4_IntoIter)
-    (self : VartimeEdwardsPrecomputation.«i686-no-tables») (static_scalars : I)
-        (dynamic_scalars : J)
-    (dynamic_points : K) (ps : List curve25519.edwards.Point) (xs : List Clause0_Item)
+    (self : VartimeEdwardsPrecomputation.«i686-no-tables»)
+    (static_scalars : I) (dynamic_scalars : J) (dynamic_points : K) (xs : List Clause0_Item)
     (ss : List scalar.Scalar) (ys : List Clause2_Item) (ds : List scalar.Scalar)
     (qops : List (Option edwards.EdwardsPoint.«i686-no-tables»))
-    (hself : self.Represents ps) (hself_b : self.LimbsLt 27)
+    (hself : self.IsValid) (hself_b : self.IsBounded)
     (hstatic_scalars : staticScalarsInst.Yields static_scalars xs)
     (hdynamic_scalars : dynamicScalarsInst.Yields dynamic_scalars ys)
     (hdynamic_points : dynamicPointsInst.Yields dynamic_points qops)
@@ -3721,17 +3701,18 @@ recall optional_mixed_multiscalar_mul_spec
     (hborrow_dynamic : List.Forall₂
       (fun y s => borrowDynamicInst.borrow y ⦃ (s' : scalar.Scalar) => s' = s ⦄) ys ds)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
-    (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve)
+    (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
+    (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ ps.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
-      ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (r = none ↔ none ∈ qops) ∧
-        ∀ R, r = some R → R.OnCurve ∧ R.toPoint =
-          (List.zipWith (fun s P => s.asNat • P) ss ps).sum +
-            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds (qops.filterMap id)).sum ∧
-          R.LimbsLt 26 ⦄
+      ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (none ∈ qops → r = none) ∧
+        ∀ qs, qops = qs.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
+          (List.zipWith (fun s P => s.asNat • P) ss self.points).sum +
+            (List.zipWith (fun s Q => s.asNat • Q.toPoint) ds qs).sum ∧
+          R.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3749,9 +3730,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 (unreduced scalars `< 2^255`); limbs `< 2^52`. -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : EdwardsPoint.«x86_64-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
-    (hA : A.LimbsLt 52) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
+    (hA : A.IsBounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3767,9 +3748,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 (unreduced scalars `< 2^255`); limbs `< 2^26`. -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : EdwardsPoint.«i686-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
-    (hA : A.LimbsLt 26) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
+    (hA : A.IsBounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3787,9 +3768,9 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 (unreduced scalars `< 2^255`); limbs `< 2^52`. -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : EdwardsPoint.«x86_64-no-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
-    (hA : A.LimbsLt 52) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
+    (hA : A.IsBounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3805,9 +3786,9 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 (unreduced scalars `< 2^255`); limbs `< 2^26`. -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : EdwardsPoint.«i686-no-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
-    (hA : A.LimbsLt 26) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
+    (hA : A.IsBounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
     vartime_double_scalar_mul_basepoint a A b ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = a.asNat • A.toPoint + b.asNat • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3822,16 +3803,17 @@ namespace «EdwardsPointx86_64-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::vartime_triple_scalar_mul_basepoint`: `a1 • A1 + a2 • A2 + b • B` for the
-basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant); limbs `< 2^52`. -/
+basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant; any `b`, which the code splits
+into two `128`-bit halves); limbs `< 2^52`. -/
 recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
     (A1 : EdwardsPoint.«x86_64-tables») (a2 : scalar.HalfWidthScalar)
     (A2 : EdwardsPoint.«x86_64-tables»)
-    (b : scalar.Scalar) (ha1 : a1.asNat < 2 ^ 128) (hA1 : A1.LimbsLt 52) (hA1_on : A1.OnCurve)
-    (ha2 : a2.asNat < 2 ^ 128) (hA2 : A2.LimbsLt 52) (hA2_on : A2.OnCurve) :
+    (b : scalar.Scalar) (ha1 : a1.asNat < 2 ^ 128) (hA1 : A1.IsBounded) (hA1_on : A1.OnCurve)
+    (ha2 : a2.asNat < 2 ^ 128) (hA2 : A2.IsBounded) (hA2_on : A2.OnCurve) :
     vartime_triple_scalar_mul_basepoint a1 A1 a2 A2 b ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧
         r.toPoint = a1.asNat • A1.toPoint + a2.asNat • A2.toPoint + b.asNat • basepoint ∧
-        r.LimbsLt 52 ⦄
+        r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3844,16 +3826,17 @@ namespace «EdwardsPointi686-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::vartime_triple_scalar_mul_basepoint`: `a1 • A1 + a2 • A2 + b • B` for the
-basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant); limbs `< 2^26`. -/
+basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant; any `b`, which the code splits
+into two `128`-bit halves); limbs `< 2^26`. -/
 recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
     (A1 : EdwardsPoint.«i686-tables») (a2 : scalar.HalfWidthScalar)
     (A2 : EdwardsPoint.«i686-tables»)
-    (b : scalar.Scalar) (ha1 : a1.asNat < 2 ^ 128) (hA1 : A1.LimbsLt 26) (hA1_on : A1.OnCurve)
-    (ha2 : a2.asNat < 2 ^ 128) (hA2 : A2.LimbsLt 26) (hA2_on : A2.OnCurve) :
+    (b : scalar.Scalar) (ha1 : a1.asNat < 2 ^ 128) (hA1 : A1.IsBounded) (hA1_on : A1.OnCurve)
+    (ha2 : a2.asNat < 2 ^ 128) (hA2 : A2.IsBounded) (hA2_on : A2.OnCurve) :
     vartime_triple_scalar_mul_basepoint a1 A1 a2 A2 b ⦃ (r : EdwardsPoint.«i686-tables») =>
       r.OnCurve ∧
         r.toPoint = a1.asNat • A1.toPoint + a2.asNat • A2.toPoint + b.asNat • basepoint ∧
-        r.LimbsLt 26 ⦄
+        r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3868,16 +3851,17 @@ namespace «EdwardsPointx86_64-no-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::vartime_triple_scalar_mul_basepoint`: `a1 • A1 + a2 • A2 + b • B` for the
-basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant); limbs `< 2^52`. -/
+basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant; any `b`, which the code splits
+into two `128`-bit halves); limbs `< 2^52`. -/
 recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
     (A1 : EdwardsPoint.«x86_64-no-tables») (a2 : scalar.HalfWidthScalar)
     (A2 : EdwardsPoint.«x86_64-no-tables»)
-    (b : scalar.Scalar) (ha1 : a1.asNat < 2 ^ 128) (hA1 : A1.LimbsLt 52) (hA1_on : A1.OnCurve)
-    (ha2 : a2.asNat < 2 ^ 128) (hA2 : A2.LimbsLt 52) (hA2_on : A2.OnCurve) :
+    (b : scalar.Scalar) (ha1 : a1.asNat < 2 ^ 128) (hA1 : A1.IsBounded) (hA1_on : A1.OnCurve)
+    (ha2 : a2.asNat < 2 ^ 128) (hA2 : A2.IsBounded) (hA2_on : A2.OnCurve) :
     vartime_triple_scalar_mul_basepoint a1 A1 a2 A2 b ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧
         r.toPoint = a1.asNat • A1.toPoint + a2.asNat • A2.toPoint + b.asNat • basepoint ∧
-        r.LimbsLt 52 ⦄
+        r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3890,16 +3874,17 @@ namespace «EdwardsPointi686-no-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::vartime_triple_scalar_mul_basepoint`: `a1 • A1 + a2 • A2 + b • B` for the
-basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant); limbs `< 2^26`. -/
+basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant; any `b`, which the code splits
+into two `128`-bit halves); limbs `< 2^26`. -/
 recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
     (A1 : EdwardsPoint.«i686-no-tables») (a2 : scalar.HalfWidthScalar)
     (A2 : EdwardsPoint.«i686-no-tables»)
-    (b : scalar.Scalar) (ha1 : a1.asNat < 2 ^ 128) (hA1 : A1.LimbsLt 26) (hA1_on : A1.OnCurve)
-    (ha2 : a2.asNat < 2 ^ 128) (hA2 : A2.LimbsLt 26) (hA2_on : A2.OnCurve) :
+    (b : scalar.Scalar) (ha1 : a1.asNat < 2 ^ 128) (hA1 : A1.IsBounded) (hA1_on : A1.OnCurve)
+    (ha2 : a2.asNat < 2 ^ 128) (hA2 : A2.IsBounded) (hA2_on : A2.OnCurve) :
     vartime_triple_scalar_mul_basepoint a1 A1 a2 A2 b ⦃ (r : EdwardsPoint.«i686-no-tables») =>
       r.OnCurve ∧
         r.toPoint = a1.asNat • A1.toPoint + a2.asNat • A2.toPoint + b.asNat • basepoint ∧
-        r.LimbsLt 26 ⦄
+        r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -3917,10 +3902,10 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 open window.«LookupTableAffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^4`): row `i` is the lookup table of
 `2^(8 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
-recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.LimbsLt 52)
+recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = basepoint.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
@@ -3937,10 +3922,10 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 open window.«LookupTableAffineNielsPointi686-tables».Insts in
 /-- `BasepointTable::create` (radix `2^4`): row `i` is the lookup table of
 `2^(8 i) • basepoint`; limbs `< 2^26` in, `< 2^27` out. -/
-recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.LimbsLt 26)
+recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTable.«i686-tables») =>
-      r.Represents basepoint.toPoint ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = basepoint.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
@@ -3954,12 +3939,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^4`): the point `P` the table represents;
+/-- `BasepointTable::basepoint` (radix `2^4`): the table's point `self.point`;
 limbs `< 2^52`. -/
-recall basepoint_spec (self : EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P) :
+recall basepoint_spec (self : EdwardsBasepointTable.«x86_64-tables») (hself : self.IsBounded)
+    (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
@@ -3973,12 +3958,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^4`): the point `P` the table represents;
+/-- `BasepointTable::basepoint` (radix `2^4`): the table's point `self.point`;
 limbs `< 2^26`. -/
-recall basepoint_spec (self : EdwardsBasepointTable.«i686-tables»)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P) :
+recall basepoint_spec (self : EdwardsBasepointTable.«i686-tables») (hself : self.IsBounded)
+    (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
@@ -3992,13 +3977,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::mul_base` (radix `2^4`): `s • P` for the point `P` the table represents
-(unreduced, `s.asNat < 2^255`); limbs `< 2^52`. -/
+/-- `BasepointTable::mul_base` (radix `2^4`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^52`. -/
 recall mul_base_spec (self : EdwardsBasepointTable.«x86_64-tables») (s : scalar.Scalar)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
+    (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -4012,13 +3997,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::mul_base` (radix `2^4`): `s • P` for the point `P` the table represents
-(unreduced, `s.asNat < 2^255`); limbs `< 2^26`. -/
+/-- `BasepointTable::mul_base` (radix `2^4`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^26`. -/
 recall mul_base_spec (self : EdwardsBasepointTable.«i686-tables») (s : scalar.Scalar)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P)
+    (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
     mul_base self s ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -4032,12 +4017,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
 
-/-- `Mul<&Scalar> for &EdwardsBasepointTable`: `mul_base`, i.e. `scalar • P`. -/
+/-- `Mul<&Scalar> for &EdwardsBasepointTable`: `mul_base`, i.e. `scalar • self.point`. -/
 recall mul_spec (self : edwards.EdwardsBasepointTable.«x86_64-tables»)
-    (scalar : scalar.Scalar) (P : curve25519.edwards.Point) (hself : self.LimbsLt 54)
-    (hP : self.Represents P) (hscalar : scalar.asNat < 2 ^ 255) :
+    (scalar : scalar.Scalar) (hself : self.IsBounded)
+    (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4051,12 +4036,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
 
-/-- `Mul<&Scalar> for &EdwardsBasepointTable`: `mul_base`, i.e. `scalar • P`. -/
+/-- `Mul<&Scalar> for &EdwardsBasepointTable`: `mul_base`, i.e. `scalar • self.point`. -/
 recall mul_spec (self : edwards.EdwardsBasepointTable.«i686-tables»)
-    (scalar : scalar.Scalar) (P : curve25519.edwards.Point) (hself : self.LimbsLt 27)
-    (hP : self.Represents P) (hscalar : scalar.asNat < 2 ^ 255) :
+    (scalar : scalar.Scalar) (hself : self.IsBounded)
+    (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4072,10 +4057,10 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 /-- `Mul<&EdwardsBasepointTable> for &Scalar`: as the other order. -/
 recall mul_spec
     (self : scalar.Scalar) (basepoint_table : edwards.EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.asNat < 2 ^ 255)
-    (hbasepoint_table : basepoint_table.LimbsLt 54) (hP : basepoint_table.Represents P) :
+    (hself : self.asNat < 2 ^ 255)
+    (hbasepoint_table : basepoint_table.IsBounded) (hP : basepoint_table.IsTable) :
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • basepoint_table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4089,10 +4074,10 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 /-- `Mul<&EdwardsBasepointTable> for &Scalar`: as the other order. -/
 recall mul_spec
     (self : scalar.Scalar) (basepoint_table : edwards.EdwardsBasepointTable.«i686-tables»)
-    (P : curve25519.edwards.Point) (hself : self.asNat < 2 ^ 255)
-    (hbasepoint_table : basepoint_table.LimbsLt 27) (hP : basepoint_table.Represents P) :
+    (hself : self.asNat < 2 ^ 255)
+    (hbasepoint_table : basepoint_table.IsBounded) (hP : basepoint_table.IsTable) :
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • basepoint_table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4109,10 +4094,10 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 open window.«LookupTableRadix32AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^5`): row `i` is the lookup table of
 `2^(10 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
-recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.LimbsLt 52)
+recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
-      r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = basepoint.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
@@ -4129,10 +4114,10 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 open window.«LookupTableRadix32AffineNielsPointi686-tables».Insts in
 /-- `BasepointTable::create` (radix `2^5`): row `i` is the lookup table of
 `2^(10 i) • basepoint`; limbs `< 2^26` in, `< 2^27` out. -/
-recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.LimbsLt 26)
+recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix32.«i686-tables») =>
-      r.Represents basepoint.toPoint ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = basepoint.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
@@ -4146,12 +4131,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^5`): the point `P` the table represents;
+/-- `BasepointTable::basepoint` (radix `2^5`): the table's point `self.point`;
 limbs `< 2^52`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P) :
+    (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
@@ -4165,12 +4150,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^5`): the point `P` the table represents;
+/-- `BasepointTable::basepoint` (radix `2^5`): the table's point `self.point`;
 limbs `< 2^26`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix32.«i686-tables»)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P) :
+    (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
@@ -4184,13 +4169,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::mul_base` (radix `2^5`): `s • P` for the point `P` the table represents
-(unreduced, `s.asNat < 2^255`); limbs `< 2^52`. -/
+/-- `BasepointTable::mul_base` (radix `2^5`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^52`. -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables») (s : scalar.Scalar)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
+    (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -4204,13 +4189,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::mul_base` (radix `2^5`): `s • P` for the point `P` the table represents
-(unreduced, `s.asNat < 2^255`); limbs `< 2^26`. -/
+/-- `BasepointTable::mul_base` (radix `2^5`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^26`. -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix32.«i686-tables») (s : scalar.Scalar)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P)
+    (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
     mul_base self s ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -4224,12 +4209,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
 
-/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix32`: `mul_base`, i.e. `scalar • P`. -/
+/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix32`: `mul_base`, i.e. `scalar • self.point`. -/
 recall mul_spec (self : edwards.EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (scalar : scalar.Scalar) (P : curve25519.edwards.Point) (hself : self.LimbsLt 54)
-    (hP : self.Represents P) (hscalar : scalar.asNat < 2 ^ 255) :
+    (scalar : scalar.Scalar) (hself : self.IsBounded)
+    (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4243,12 +4228,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
 
-/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix32`: `mul_base`, i.e. `scalar • P`. -/
+/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix32`: `mul_base`, i.e. `scalar • self.point`. -/
 recall mul_spec (self : edwards.EdwardsBasepointTableRadix32.«i686-tables»)
-    (scalar : scalar.Scalar) (P : curve25519.edwards.Point) (hself : self.LimbsLt 27)
-    (hP : self.Represents P) (hscalar : scalar.asNat < 2 ^ 255) :
+    (scalar : scalar.Scalar) (hself : self.IsBounded)
+    (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4263,11 +4248,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Mul<&EdwardsBasepointTableRadix32> for &Scalar`: as the other order. -/
 recall mul_spec
-    (self : scalar.Scalar) (basepoint_table : edwards.EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.asNat < 2 ^ 255)
-    (hbasepoint_table : basepoint_table.LimbsLt 54) (hP : basepoint_table.Represents P) :
+    (self : scalar.Scalar)
+    (basepoint_table : edwards.EdwardsBasepointTableRadix32.«x86_64-tables»)
+    (hself : self.asNat < 2 ^ 255)
+    (hbasepoint_table : basepoint_table.IsBounded) (hP : basepoint_table.IsTable) :
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • basepoint_table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4280,11 +4266,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Mul<&EdwardsBasepointTableRadix32> for &Scalar`: as the other order. -/
 recall mul_spec
-    (self : scalar.Scalar) (basepoint_table : edwards.EdwardsBasepointTableRadix32.«i686-tables»)
-    (P : curve25519.edwards.Point) (hself : self.asNat < 2 ^ 255)
-    (hbasepoint_table : basepoint_table.LimbsLt 27) (hP : basepoint_table.Represents P) :
+    (self : scalar.Scalar)
+    (basepoint_table : edwards.EdwardsBasepointTableRadix32.«i686-tables»)
+    (hself : self.asNat < 2 ^ 255)
+    (hbasepoint_table : basepoint_table.IsBounded) (hP : basepoint_table.IsTable) :
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • basepoint_table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4301,10 +4288,10 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 open window.«LookupTableRadix64AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^6`): row `i` is the lookup table of
 `2^(12 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
-recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.LimbsLt 52)
+recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
-      r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = basepoint.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
@@ -4321,10 +4308,10 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 open window.«LookupTableRadix64AffineNielsPointi686-tables».Insts in
 /-- `BasepointTable::create` (radix `2^6`): row `i` is the lookup table of
 `2^(12 i) • basepoint`; limbs `< 2^26` in, `< 2^27` out. -/
-recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.LimbsLt 26)
+recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix64.«i686-tables») =>
-      r.Represents basepoint.toPoint ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = basepoint.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
@@ -4338,12 +4325,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^6`): the point `P` the table represents;
+/-- `BasepointTable::basepoint` (radix `2^6`): the table's point `self.point`;
 limbs `< 2^52`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P) :
+    (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
@@ -4357,12 +4344,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^6`): the point `P` the table represents;
+/-- `BasepointTable::basepoint` (radix `2^6`): the table's point `self.point`;
 limbs `< 2^26`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix64.«i686-tables»)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P) :
+    (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
@@ -4376,13 +4363,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::mul_base` (radix `2^6`): `s • P` for the point `P` the table represents
-(unreduced, `s.asNat < 2^255`); limbs `< 2^52`. -/
+/-- `BasepointTable::mul_base` (radix `2^6`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^52`. -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables») (s : scalar.Scalar)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
+    (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -4396,13 +4383,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::mul_base` (radix `2^6`): `s • P` for the point `P` the table represents
-(unreduced, `s.asNat < 2^255`); limbs `< 2^26`. -/
+/-- `BasepointTable::mul_base` (radix `2^6`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^26`. -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix64.«i686-tables») (s : scalar.Scalar)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P)
+    (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
     mul_base self s ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -4416,12 +4403,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
 
-/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix64`: `mul_base`, i.e. `scalar • P`. -/
+/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix64`: `mul_base`, i.e. `scalar • self.point`. -/
 recall mul_spec (self : edwards.EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (scalar : scalar.Scalar) (P : curve25519.edwards.Point) (hself : self.LimbsLt 54)
-    (hP : self.Represents P) (hscalar : scalar.asNat < 2 ^ 255) :
+    (scalar : scalar.Scalar) (hself : self.IsBounded)
+    (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4435,12 +4422,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
 
-/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix64`: `mul_base`, i.e. `scalar • P`. -/
+/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix64`: `mul_base`, i.e. `scalar • self.point`. -/
 recall mul_spec (self : edwards.EdwardsBasepointTableRadix64.«i686-tables»)
-    (scalar : scalar.Scalar) (P : curve25519.edwards.Point) (hself : self.LimbsLt 27)
-    (hP : self.Represents P) (hscalar : scalar.asNat < 2 ^ 255) :
+    (scalar : scalar.Scalar) (hself : self.IsBounded)
+    (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4455,11 +4442,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `Mul<&EdwardsBasepointTableRadix64> for &Scalar`: as the other order. -/
 recall mul_spec
-    (self : scalar.Scalar) (basepoint_table : edwards.EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.asNat < 2 ^ 255)
-    (hbasepoint_table : basepoint_table.LimbsLt 54) (hP : basepoint_table.Represents P) :
+    (self : scalar.Scalar)
+    (basepoint_table : edwards.EdwardsBasepointTableRadix64.«x86_64-tables»)
+    (hself : self.asNat < 2 ^ 255)
+    (hbasepoint_table : basepoint_table.IsBounded) (hP : basepoint_table.IsTable) :
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • basepoint_table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4472,11 +4460,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `Mul<&EdwardsBasepointTableRadix64> for &Scalar`: as the other order. -/
 recall mul_spec
-    (self : scalar.Scalar) (basepoint_table : edwards.EdwardsBasepointTableRadix64.«i686-tables»)
-    (P : curve25519.edwards.Point) (hself : self.asNat < 2 ^ 255)
-    (hbasepoint_table : basepoint_table.LimbsLt 27) (hP : basepoint_table.Represents P) :
+    (self : scalar.Scalar)
+    (basepoint_table : edwards.EdwardsBasepointTableRadix64.«i686-tables»)
+    (hself : self.asNat < 2 ^ 255)
+    (hbasepoint_table : basepoint_table.IsBounded) (hP : basepoint_table.IsTable) :
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • basepoint_table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4493,10 +4482,10 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 open window.«LookupTableRadix128AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^7`): row `i` is the lookup table of
 `2^(14 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
-recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.LimbsLt 52)
+recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
-      r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = basepoint.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
@@ -4513,10 +4502,10 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 open window.«LookupTableRadix128AffineNielsPointi686-tables».Insts in
 /-- `BasepointTable::create` (radix `2^7`): row `i` is the lookup table of
 `2^(14 i) • basepoint`; limbs `< 2^26` in, `< 2^27` out. -/
-recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.LimbsLt 26)
+recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix128.«i686-tables») =>
-      r.Represents basepoint.toPoint ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = basepoint.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
@@ -4530,12 +4519,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^7`): the point `P` the table represents;
+/-- `BasepointTable::basepoint` (radix `2^7`): the table's point `self.point`;
 limbs `< 2^52`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P) :
+    (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
@@ -4549,12 +4538,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^7`): the point `P` the table represents;
+/-- `BasepointTable::basepoint` (radix `2^7`): the table's point `self.point`;
 limbs `< 2^26`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix128.«i686-tables»)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P) :
+    (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
@@ -4568,13 +4557,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::mul_base` (radix `2^7`): `s • P` for the point `P` the table represents
-(unreduced, `s.asNat < 2^255`); limbs `< 2^52`. -/
+/-- `BasepointTable::mul_base` (radix `2^7`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^52`. -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables») (s : scalar.Scalar)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
+    (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -4588,13 +4577,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::mul_base` (radix `2^7`): `s • P` for the point `P` the table represents
-(unreduced, `s.asNat < 2^255`); limbs `< 2^26`. -/
+/-- `BasepointTable::mul_base` (radix `2^7`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^26`. -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix128.«i686-tables») (s : scalar.Scalar)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P)
+    (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
     mul_base self s ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -4608,12 +4597,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
 
-/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix128`: `mul_base`, i.e. `scalar • P`. -/
+/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix128`: `mul_base`, i.e. `scalar • self.point`. -/
 recall mul_spec (self : edwards.EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (scalar : scalar.Scalar) (P : curve25519.edwards.Point) (hself : self.LimbsLt 54)
-    (hP : self.Represents P) (hscalar : scalar.asNat < 2 ^ 255) :
+    (scalar : scalar.Scalar) (hself : self.IsBounded)
+    (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4627,12 +4616,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
 
-/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix128`: `mul_base`, i.e. `scalar • P`. -/
+/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix128`: `mul_base`, i.e. `scalar • self.point`. -/
 recall mul_spec (self : edwards.EdwardsBasepointTableRadix128.«i686-tables»)
-    (scalar : scalar.Scalar) (P : curve25519.edwards.Point) (hself : self.LimbsLt 27)
-    (hP : self.Represents P) (hscalar : scalar.asNat < 2 ^ 255) :
+    (scalar : scalar.Scalar) (hself : self.IsBounded)
+    (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4650,11 +4639,12 @@ set_option linter.style.longLine true
 
 /-- `Mul<&EdwardsBasepointTableRadix128> for &Scalar`: as the other order. -/
 recall mul_spec
-    (self : scalar.Scalar) (basepoint_table : edwards.EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.asNat < 2 ^ 255)
-    (hbasepoint_table : basepoint_table.LimbsLt 54) (hP : basepoint_table.Represents P) :
+    (self : scalar.Scalar)
+    (basepoint_table : edwards.EdwardsBasepointTableRadix128.«x86_64-tables»)
+    (hself : self.asNat < 2 ^ 255)
+    (hbasepoint_table : basepoint_table.IsBounded) (hP : basepoint_table.IsTable) :
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • basepoint_table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4669,11 +4659,12 @@ set_option linter.style.longLine true
 
 /-- `Mul<&EdwardsBasepointTableRadix128> for &Scalar`: as the other order. -/
 recall mul_spec
-    (self : scalar.Scalar) (basepoint_table : edwards.EdwardsBasepointTableRadix128.«i686-tables»)
-    (P : curve25519.edwards.Point) (hself : self.asNat < 2 ^ 255)
-    (hbasepoint_table : basepoint_table.LimbsLt 27) (hP : basepoint_table.Represents P) :
+    (self : scalar.Scalar)
+    (basepoint_table : edwards.EdwardsBasepointTableRadix128.«i686-tables»)
+    (hself : self.asNat < 2 ^ 255)
+    (hbasepoint_table : basepoint_table.IsBounded) (hP : basepoint_table.IsTable) :
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • basepoint_table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4690,10 +4681,10 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 open window.«LookupTableRadix256AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^8`): row `i` is the lookup table of
 `2^(16 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
-recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.LimbsLt 52)
+recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
-      r.Represents basepoint.toPoint ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = basepoint.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
@@ -4710,10 +4701,10 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 open window.«LookupTableRadix256AffineNielsPointi686-tables».Insts in
 /-- `BasepointTable::create` (radix `2^8`): row `i` is the lookup table of
 `2^(16 i) • basepoint`; limbs `< 2^26` in, `< 2^27` out. -/
-recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.LimbsLt 26)
+recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix256.«i686-tables») =>
-      r.Represents basepoint.toPoint ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = basepoint.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms create_spec
@@ -4727,12 +4718,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^8`): the point `P` the table represents;
+/-- `BasepointTable::basepoint` (radix `2^8`): the table's point `self.point`;
 limbs `< 2^52`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P) :
+    (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
@@ -4746,12 +4737,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^8`): the point `P` the table represents;
+/-- `BasepointTable::basepoint` (radix `2^8`): the table's point `self.point`;
 limbs `< 2^26`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix256.«i686-tables»)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P) :
+    (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms basepoint_spec
@@ -4765,13 +4756,13 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::mul_base` (radix `2^8`): `s • P` for the point `P` the table represents
-(unreduced, `s.asNat < 2^255`); limbs `< 2^52`. -/
+/-- `BasepointTable::mul_base` (radix `2^8`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^52`. -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables») (s : scalar.Scalar)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 54) (hP : self.Represents P)
+    (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
     mul_base self s ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -4785,13 +4776,13 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::mul_base` (radix `2^8`): `s • P` for the point `P` the table represents
-(unreduced, `s.asNat < 2^255`); limbs `< 2^26`. -/
+/-- `BasepointTable::mul_base` (radix `2^8`): `s • self.point` (unreduced,
+`s.asNat < 2^255`); limbs `< 2^26`. -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix256.«i686-tables») (s : scalar.Scalar)
-    (P : curve25519.edwards.Point) (hself : self.LimbsLt 27) (hP : self.Represents P)
+    (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
     mul_base self s ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = s.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = s.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
@@ -4805,12 +4796,12 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «CoreOpsArithMulSharedBScalarEdwardsPointx86_64-tables»
 
-/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix256`: `mul_base`, i.e. `scalar • P`. -/
+/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix256`: `mul_base`, i.e. `scalar • self.point`. -/
 recall mul_spec (self : edwards.EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (scalar : scalar.Scalar) (P : curve25519.edwards.Point) (hself : self.LimbsLt 54)
-    (hP : self.Represents P) (hscalar : scalar.asNat < 2 ^ 255) :
+    (scalar : scalar.Scalar) (hself : self.IsBounded)
+    (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4824,12 +4815,12 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «CoreOpsArithMulSharedBScalarEdwardsPointi686-tables»
 
-/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix256`: `mul_base`, i.e. `scalar • P`. -/
+/-- `Mul<&Scalar> for &EdwardsBasepointTableRadix256`: `mul_base`, i.e. `scalar • self.point`. -/
 recall mul_spec (self : edwards.EdwardsBasepointTableRadix256.«i686-tables»)
-    (scalar : scalar.Scalar) (P : curve25519.edwards.Point) (hself : self.LimbsLt 27)
-    (hP : self.Represents P) (hscalar : scalar.asNat < 2 ^ 255) :
+    (scalar : scalar.Scalar) (hself : self.IsBounded)
+    (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = scalar.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = scalar.asNat • self.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4847,11 +4838,12 @@ set_option linter.style.longLine true
 
 /-- `Mul<&EdwardsBasepointTableRadix256> for &Scalar`: as the other order. -/
 recall mul_spec
-    (self : scalar.Scalar) (basepoint_table : edwards.EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (hself : self.asNat < 2 ^ 255)
-    (hbasepoint_table : basepoint_table.LimbsLt 54) (hP : basepoint_table.Represents P) :
+    (self : scalar.Scalar)
+    (basepoint_table : edwards.EdwardsBasepointTableRadix256.«x86_64-tables»)
+    (hself : self.asNat < 2 ^ 255)
+    (hbasepoint_table : basepoint_table.IsBounded) (hP : basepoint_table.IsTable) :
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • basepoint_table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4866,11 +4858,12 @@ set_option linter.style.longLine true
 
 /-- `Mul<&EdwardsBasepointTableRadix256> for &Scalar`: as the other order. -/
 recall mul_spec
-    (self : scalar.Scalar) (basepoint_table : edwards.EdwardsBasepointTableRadix256.«i686-tables»)
-    (P : curve25519.edwards.Point) (hself : self.asNat < 2 ^ 255)
-    (hbasepoint_table : basepoint_table.LimbsLt 27) (hP : basepoint_table.Represents P) :
+    (self : scalar.Scalar)
+    (basepoint_table : edwards.EdwardsBasepointTableRadix256.«i686-tables»)
+    (hself : self.asNat < 2 ^ 255)
+    (hbasepoint_table : basepoint_table.IsBounded) (hP : basepoint_table.IsTable) :
     mul self basepoint_table ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = self.asNat • P ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = self.asNat • basepoint_table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec
@@ -4886,10 +4879,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTable`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -4905,10 +4898,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTable`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -4924,10 +4917,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTable`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -4943,10 +4936,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTable`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -4963,9 +4956,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTable`: a table of the same
 point; limbs `< 2^54`. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -4982,9 +4975,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTable`: a table of the same
 point; limbs `< 2^27`. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5001,9 +4994,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTable`: a table of the same
 point; limbs `< 2^54`. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5020,9 +5013,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTable`: a table of the same
 point; limbs `< 2^27`. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5038,10 +5031,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix32`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTable.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5057,10 +5050,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix32`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTable.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTable.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5076,10 +5069,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix32`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5095,10 +5088,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix32`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5115,9 +5108,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix32`: a table of the same
 point; limbs `< 2^54`. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5134,9 +5127,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix32`: a table of the same
 point; limbs `< 2^27`. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5153,9 +5146,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix32`: a table of the same
 point; limbs `< 2^54`. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5172,9 +5165,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix32`: a table of the same
 point; limbs `< 2^27`. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5190,10 +5183,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix64`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTable.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5209,10 +5202,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix64`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTable.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTable.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5228,10 +5221,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix64`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5247,10 +5240,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix64`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5267,9 +5260,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix64`: a table of the same
 point; limbs `< 2^54`. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5286,9 +5279,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix64`: a table of the same
 point; limbs `< 2^27`. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5305,9 +5298,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix64`: a table of the same
 point; limbs `< 2^54`. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5324,9 +5317,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix64`: a table of the same
 point; limbs `< 2^27`. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5342,10 +5335,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix128`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTable.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5361,10 +5354,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix128`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTable.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTable.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5380,10 +5373,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix128`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5399,10 +5392,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix128`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5418,10 +5411,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix128`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5437,10 +5430,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix128`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5457,9 +5450,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix128`: a table of the same
 point; limbs `< 2^54`. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5476,9 +5469,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix128`: a table of the same
 point; limbs `< 2^27`. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5494,10 +5487,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix256`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTable.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTable.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5513,10 +5506,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix256`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTable.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTable.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5532,10 +5525,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix256`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5551,10 +5544,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix256`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5570,10 +5563,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix256`: a table of the same
 point; limbs `< 2^54`. -/
-recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5589,10 +5582,10 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix256`: a table of the same
 point; limbs `< 2^27`. -/
-recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables») (htable : table.IsBounded)
+    (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5609,9 +5602,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix256`: a table of the same
 point; limbs `< 2^54`. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 54) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
-      r.Represents P ∧ r.LimbsLt 54 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5628,9 +5621,9 @@ namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix256`: a table of the same
 point; limbs `< 2^27`. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«i686-tables»)
-    (P : curve25519.edwards.Point) (htable : table.LimbsLt 27) (hP : table.Represents P) :
+    (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«i686-tables») =>
-      r.Represents P ∧ r.LimbsLt 27 ⦄
+      r.IsTable ∧ r.point = table.point ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms from_spec
@@ -5642,11 +5635,11 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::mul_by_cofactor`: `8 • P`; limbs `< 2^52`. -/
-recall mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`; limbs `< 2^52`. -/
+recall mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_by_cofactor_spec
@@ -5657,11 +5650,11 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::mul_by_cofactor`: `8 • P`; limbs `< 2^26`. -/
-recall mul_by_cofactor_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
+/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`; limbs `< 2^26`. -/
+recall mul_by_cofactor_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_by_cofactor_spec
@@ -5672,11 +5665,11 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::mul_by_cofactor`: `8 • P`; limbs `< 2^52`. -/
-recall mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`; limbs `< 2^52`. -/
+recall mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.LimbsLt 52 ⦄
+      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_by_cofactor_spec
@@ -5687,11 +5680,11 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::mul_by_cofactor`: `8 • P`; limbs `< 2^26`. -/
-recall mul_by_cofactor_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
+/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`; limbs `< 2^26`. -/
+recall mul_by_cofactor_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.LimbsLt 26 ⦄
+      r.OnCurve ∧ r.toPoint = 8 • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_by_cofactor_spec
@@ -5702,10 +5695,10 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::is_small_order`: `8 • P = 0`; limbs `< 2^52`. -/
-recall is_small_order_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+/-- `EdwardsPoint::is_small_order`: `8 • self = 0`; limbs `< 2^52`. -/
+recall is_small_order_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    is_small_order self ⦃ (b : Bool) => b = true ↔ 8 • self.toPoint = 0 ⦄
+    is_small_order self ⦃ (r : Bool) => r = true ↔ 8 • self.toPoint = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_small_order_spec
@@ -5716,10 +5709,10 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::is_small_order`: `8 • P = 0`; limbs `< 2^26`. -/
-recall is_small_order_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
+/-- `EdwardsPoint::is_small_order`: `8 • self = 0`; limbs `< 2^26`. -/
+recall is_small_order_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    is_small_order self ⦃ (b : Bool) => b = true ↔ 8 • self.toPoint = 0 ⦄
+    is_small_order self ⦃ (r : Bool) => r = true ↔ 8 • self.toPoint = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_small_order_spec
@@ -5730,10 +5723,10 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::is_small_order`: `8 • P = 0`; limbs `< 2^52`. -/
-recall is_small_order_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+/-- `EdwardsPoint::is_small_order`: `8 • self = 0`; limbs `< 2^52`. -/
+recall is_small_order_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    is_small_order self ⦃ (b : Bool) => b = true ↔ 8 • self.toPoint = 0 ⦄
+    is_small_order self ⦃ (r : Bool) => r = true ↔ 8 • self.toPoint = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_small_order_spec
@@ -5744,10 +5737,10 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::is_small_order`: `8 • P = 0`; limbs `< 2^26`. -/
-recall is_small_order_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
+/-- `EdwardsPoint::is_small_order`: `8 • self = 0`; limbs `< 2^26`. -/
+recall is_small_order_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    is_small_order self ⦃ (b : Bool) => b = true ↔ 8 • self.toPoint = 0 ⦄
+    is_small_order self ⦃ (r : Bool) => r = true ↔ 8 • self.toPoint = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_small_order_spec
@@ -5758,11 +5751,11 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::is_torsion_free`: `L • P = 0` (multiplication by the unreduced
+/-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
 `BASEPOINT_ORDER`); limbs `< 2^52`. -/
-recall is_torsion_free_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
+recall is_torsion_free_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄
+    is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_torsion_free_spec
@@ -5773,11 +5766,11 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::is_torsion_free`: `L • P = 0` (multiplication by the unreduced
+/-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
 `BASEPOINT_ORDER`); limbs `< 2^26`. -/
-recall is_torsion_free_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
+recall is_torsion_free_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄
+    is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_torsion_free_spec
@@ -5788,11 +5781,11 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::is_torsion_free`: `L • P = 0` (multiplication by the unreduced
+/-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
 `BASEPOINT_ORDER`); limbs `< 2^52`. -/
-recall is_torsion_free_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
+recall is_torsion_free_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄
+    is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_torsion_free_spec
@@ -5803,11 +5796,11 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::is_torsion_free`: `L • P = 0` (multiplication by the unreduced
+/-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
 `BASEPOINT_ORDER`); limbs `< 2^26`. -/
-recall is_torsion_free_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
+recall is_torsion_free_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    is_torsion_free self ⦃ (b : Bool) => b = true ↔ L • self.toPoint = 0 ⦄
+    is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms is_torsion_free_spec

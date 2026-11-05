@@ -260,7 +260,7 @@ private theorem compress_batch_alloc_eq (inputs : Slice EdwardsPoint.«x86_64-ta
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is the canonical `y = Y / Z` of point `i`
 with the sign of `x = X / Z` in bit `255`; limbs `< 2^52`. -/
 @[step]
-theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»)
+theorem compress_batch_alloc_asNat (inputs : Slice EdwardsPoint.«x86_64-tables»)
     (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 52) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧ ∀ i < inputs.length,
@@ -269,17 +269,17 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»
   rw [compress_batch_alloc_eq]
   exact Backend.compressBatchAlloc_spec Backend.U64 Backend.U64.mul_spec
     Backend.U64.invertBatchAlloc_spec _ _ _ _
-    (fun x y => affine.«AffinePointx86_64-tables».compress_spec { x, y }) inputs
+    (fun x y => affine.«AffinePointx86_64-tables».compress_asNat { x, y }) inputs
     fun i hi => by obtain ⟨hX, hY, hZ, -⟩ := hinputs i hi; exact ⟨hX, hY, hZ⟩
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is RFC 8032's encoding of point `i`. -/
-theorem compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«x86_64-tables»)
+theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»)
     (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 52)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄ :=
-  spec_mono (compress_batch_alloc_spec inputs hinputs) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+  spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
     rw [hr i hi, encode_eq, EdwardsPoint.«x86_64-tables».toPoint_x (hinputs_on i hi),
       EdwardsPoint.«x86_64-tables».toPoint_y (hinputs_on i hi)]⟩
 
@@ -312,7 +312,7 @@ private theorem compress_batch_alloc_eq (inputs : Slice EdwardsPoint.«i686-tabl
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is the canonical `y = Y / Z` of point `i`
 with the sign of `x = X / Z` in bit `255`; limbs `< 2^26`. -/
 @[step]
-theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-tables»)
+theorem compress_batch_alloc_asNat (inputs : Slice EdwardsPoint.«i686-tables»)
     (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 26) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧ ∀ i < inputs.length,
@@ -321,17 +321,17 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-tables»)
   rw [compress_batch_alloc_eq]
   exact Backend.compressBatchAlloc_spec Backend.U32 Backend.U32.mul_spec
     Backend.U32.invertBatchAlloc_spec _ _ _ _
-    (fun x y => affine.«AffinePointi686-tables».compress_spec { x, y }) inputs
+    (fun x y => affine.«AffinePointi686-tables».compress_asNat { x, y }) inputs
     fun i hi => by obtain ⟨hX, hY, hZ, -⟩ := hinputs i hi; exact ⟨hX, hY, hZ⟩
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is RFC 8032's encoding of point `i`. -/
-theorem compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«i686-tables»)
+theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-tables»)
     (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 26)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄ :=
-  spec_mono (compress_batch_alloc_spec inputs hinputs) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+  spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
     rw [hr i hi, encode_eq, EdwardsPoint.«i686-tables».toPoint_x (hinputs_on i hi),
       EdwardsPoint.«i686-tables».toPoint_y (hinputs_on i hi)]⟩
 
@@ -364,7 +364,7 @@ private theorem compress_batch_alloc_eq (inputs : Slice EdwardsPoint.«x86_64-no
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is the canonical `y = Y / Z` of point `i`
 with the sign of `x = X / Z` in bit `255`; limbs `< 2^52`. -/
 @[step]
-theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-tables»)
+theorem compress_batch_alloc_asNat (inputs : Slice EdwardsPoint.«x86_64-no-tables»)
     (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 52) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧ ∀ i < inputs.length,
@@ -373,17 +373,17 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-table
   rw [compress_batch_alloc_eq]
   exact Backend.compressBatchAlloc_spec Backend.U64 Backend.U64.mul_spec
     Backend.U64.invertBatchAlloc_spec _ _ _ _
-    (fun x y => affine.«AffinePointx86_64-no-tables».compress_spec { x, y }) inputs
+    (fun x y => affine.«AffinePointx86_64-no-tables».compress_asNat { x, y }) inputs
     fun i hi => by obtain ⟨hX, hY, hZ, -⟩ := hinputs i hi; exact ⟨hX, hY, hZ⟩
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is RFC 8032's encoding of point `i`. -/
-theorem compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«x86_64-no-tables»)
+theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-tables»)
     (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 52)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄ :=
-  spec_mono (compress_batch_alloc_spec inputs hinputs) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+  spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
     rw [hr i hi, encode_eq, EdwardsPoint.«x86_64-no-tables».toPoint_x (hinputs_on i hi),
       EdwardsPoint.«x86_64-no-tables».toPoint_y (hinputs_on i hi)]⟩
 
@@ -416,7 +416,7 @@ private theorem compress_batch_alloc_eq (inputs : Slice EdwardsPoint.«i686-no-t
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is the canonical `y = Y / Z` of point `i`
 with the sign of `x = X / Z` in bit `255`; limbs `< 2^26`. -/
 @[step]
-theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-no-tables»)
+theorem compress_batch_alloc_asNat (inputs : Slice EdwardsPoint.«i686-no-tables»)
     (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 26) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧ ∀ i < inputs.length,
@@ -425,17 +425,17 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-no-tables�
   rw [compress_batch_alloc_eq]
   exact Backend.compressBatchAlloc_spec Backend.U32 Backend.U32.mul_spec
     Backend.U32.invertBatchAlloc_spec _ _ _ _
-    (fun x y => affine.«AffinePointi686-no-tables».compress_spec { x, y }) inputs
+    (fun x y => affine.«AffinePointi686-no-tables».compress_asNat { x, y }) inputs
     fun i hi => by obtain ⟨hX, hY, hZ, -⟩ := hinputs i hi; exact ⟨hX, hY, hZ⟩
 
 /-- `EdwardsPoint::compress_batch_alloc`: entry `i` is RFC 8032's encoding of point `i`. -/
-theorem compress_batch_alloc_spec_point (inputs : Slice EdwardsPoint.«i686-no-tables»)
+theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-no-tables»)
     (hinputs : ∀ i < inputs.length, inputs[i]!.LimbsLt 26)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄ :=
-  spec_mono (compress_batch_alloc_spec inputs hinputs) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+  spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
     rw [hr i hi, encode_eq, EdwardsPoint.«i686-no-tables».toPoint_x (hinputs_on i hi),
       EdwardsPoint.«i686-no-tables».toPoint_y (hinputs_on i hi)]⟩
 

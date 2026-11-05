@@ -12,6 +12,7 @@ public import Curve25519.Ristretto.Encoding.Defs
 public import Curve25519.Ristretto.Encoding
 public import Curve25519.Ristretto.Map
 public import Curve25519.X25519
+public import Curve25519.X25519.LowOrder
 public import Curve25519.Montgomery
 public import Curve25519.Models
 public import Curve25519.ToEllipticCurve

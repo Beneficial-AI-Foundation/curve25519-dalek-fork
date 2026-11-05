@@ -267,7 +267,7 @@ private theorem to_montgomery_batch_eq (eds : Slice EdwardsPoint.«x86_64-tables
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is the canonical bytes of
 `(Z + Y) / (Z - Y)` of point `i` (`0` if `Z = Y`); limbs `< 2^52`. -/
 @[step]
-theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
+theorem to_montgomery_batch_asNat (eds : Slice EdwardsPoint.«x86_64-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧ ∀ i < eds.length, r[i]!.asNat =
@@ -280,12 +280,12 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
 
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is RFC 7748's encoding of the
 `u`-coordinate of the Montgomery image of point `i` (`0` for the identity). -/
-theorem to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«x86_64-tables»)
+theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_batch_spec eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+  spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
     rw [hr i hi, EdwardsPoint.«x86_64-tables».u_edwardsToMontgomery (heds_on i hi)]
     rfl⟩
 
@@ -317,7 +317,7 @@ private theorem to_montgomery_batch_eq (eds : Slice EdwardsPoint.«i686-tables»
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is the canonical bytes of
 `(Z + Y) / (Z - Y)` of point `i` (`0` if `Z = Y`); limbs `< 2^26`. -/
 @[step]
-theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-tables»)
+theorem to_montgomery_batch_asNat (eds : Slice EdwardsPoint.«i686-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 26) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧ ∀ i < eds.length, r[i]!.asNat =
@@ -330,12 +330,12 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-tables»)
 
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is RFC 7748's encoding of the
 `u`-coordinate of the Montgomery image of point `i` (`0` for the identity). -/
-theorem to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«i686-tables»)
+theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 26) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_batch_spec eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+  spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
     rw [hr i hi, EdwardsPoint.«i686-tables».u_edwardsToMontgomery (heds_on i hi)]
     rfl⟩
 
@@ -367,7 +367,7 @@ private theorem to_montgomery_batch_eq (eds : Slice EdwardsPoint.«x86_64-no-tab
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is the canonical bytes of
 `(Z + Y) / (Z - Y)` of point `i` (`0` if `Z = Y`); limbs `< 2^52`. -/
 @[step]
-theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
+theorem to_montgomery_batch_asNat (eds : Slice EdwardsPoint.«x86_64-no-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧ ∀ i < eds.length, r[i]!.asNat =
@@ -380,12 +380,12 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
 
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is RFC 7748's encoding of the
 `u`-coordinate of the Montgomery image of point `i` (`0` for the identity). -/
-theorem to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«x86_64-no-tables»)
+theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_batch_spec eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+  spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
     rw [hr i hi, EdwardsPoint.«x86_64-no-tables».u_edwardsToMontgomery (heds_on i hi)]
     rfl⟩
 
@@ -417,7 +417,7 @@ private theorem to_montgomery_batch_eq (eds : Slice EdwardsPoint.«i686-no-table
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is the canonical bytes of
 `(Z + Y) / (Z - Y)` of point `i` (`0` if `Z = Y`); limbs `< 2^26`. -/
 @[step]
-theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-no-tables»)
+theorem to_montgomery_batch_asNat (eds : Slice EdwardsPoint.«i686-no-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 26) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧ ∀ i < eds.length, r[i]!.asNat =
@@ -430,12 +430,12 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-no-tables»)
 
 /-- `EdwardsPoint::to_montgomery_batch`: entry `i` is RFC 7748's encoding of the
 `u`-coordinate of the Montgomery image of point `i` (`0` for the identity). -/
-theorem to_montgomery_batch_spec_point (eds : Slice EdwardsPoint.«i686-no-tables»)
+theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-no-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 26) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_batch_spec eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+  spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
     rw [hr i hi, EdwardsPoint.«i686-no-tables».u_edwardsToMontgomery (heds_on i hi)]
     rfl⟩
 

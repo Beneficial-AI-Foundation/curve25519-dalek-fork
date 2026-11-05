@@ -14,15 +14,15 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.Insts.Curve25519_dalekTrait
 
 /-- `Identity for CompressedEdwardsY`: the bytes `[1, 0, …, 0]`, value `1`. -/
 @[step]
-theorem identity_spec :
+theorem identity_asNat :
     identity ⦃ (r : CompressedEdwardsY) => r.asNat = 1 ⦄ := by
   unfold identity
   step*
   simp [CompressedEdwardsY.asNat_def, Array.asNat_def, Array.make_val, Nat.ofDigits]
 
 /-- `Identity for CompressedEdwardsY` is the encoding of the neutral element. -/
-theorem identity_spec_point :
+theorem identity_spec :
     identity ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄ :=
-  spec_mono identity_spec fun r hr => by rw [hr, encode_zero]
+  spec_mono identity_asNat fun r hr => by rw [hr, encode_zero]
 
 end Curve25519Dalek.edwards.CompressedEdwardsY.Insts.Curve25519_dalekTraitsIdentity

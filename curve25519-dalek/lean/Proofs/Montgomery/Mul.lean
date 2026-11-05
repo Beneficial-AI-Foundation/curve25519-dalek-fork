@@ -249,7 +249,8 @@ private theorem mul.«i686-tables_loop_spec» (bytes : Array U8 32#usize)
 open scoped Helpers.IndexStep in
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 /-- `Mul<&Scalar> for &MontgomeryPoint`: the RFC 7748 ladder on the low `255` bits of the
-scalar, encoded canonically. -/
+scalar, encoded canonically. The ladder computes `u(n • Q)` on the curve or its twist
+(`MontgomeryModel.ladder_eq_xMul`). -/
 @[step]
 theorem mul.«x86_64-tables_spec» (self : MontgomeryPoint) (s : scalar.Scalar) :
     mul.«x86_64-tables» self s ⦃ (r : MontgomeryPoint) =>
@@ -297,7 +298,8 @@ theorem mul.«x86_64-tables_spec» (self : MontgomeryPoint) (s : scalar.Scalar) 
 open scoped Helpers.IndexStep in
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 /-- `Mul<&Scalar> for &MontgomeryPoint`: the RFC 7748 ladder on the low `255` bits of the
-scalar, encoded canonically. -/
+scalar, encoded canonically. The ladder computes `u(n • Q)` on the curve or its twist
+(`MontgomeryModel.ladder_eq_xMul`). -/
 @[step]
 theorem mul.«i686-tables_spec» (self : MontgomeryPoint) (s : scalar.Scalar) :
     mul.«i686-tables» self s ⦃ (r : MontgomeryPoint) =>
@@ -392,7 +394,8 @@ private theorem mul.«i686-no-tables_loop_spec» (bytes : Array U8 32#usize)
 open scoped Helpers.IndexStep in
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 /-- `Mul<&Scalar> for &MontgomeryPoint`: the RFC 7748 ladder on the low `255` bits of the
-scalar, encoded canonically. -/
+scalar, encoded canonically. The ladder computes `u(n • Q)` on the curve or its twist
+(`MontgomeryModel.ladder_eq_xMul`). -/
 @[step]
 theorem mul.«x86_64-no-tables_spec» (self : MontgomeryPoint) (s : scalar.Scalar) :
     mul.«x86_64-no-tables» self s ⦃ (r : MontgomeryPoint) =>
@@ -440,7 +443,8 @@ theorem mul.«x86_64-no-tables_spec» (self : MontgomeryPoint) (s : scalar.Scala
 open scoped Helpers.IndexStep in
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 /-- `Mul<&Scalar> for &MontgomeryPoint`: the RFC 7748 ladder on the low `255` bits of the
-scalar, encoded canonically. -/
+scalar, encoded canonically. The ladder computes `u(n • Q)` on the curve or its twist
+(`MontgomeryModel.ladder_eq_xMul`). -/
 @[step]
 theorem mul.«i686-no-tables_spec» (self : MontgomeryPoint) (s : scalar.Scalar) :
     mul.«i686-no-tables» self s ⦃ (r : MontgomeryPoint) =>
@@ -496,21 +500,22 @@ namespace Shared1MontgomeryPoint.Insts.CoreOpsArithMulShared0ScalarMontgomeryPoi
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 /-- `Mul<&Scalar> for &MontgomeryPoint`: the RFC 7748 ladder on the low `255` bits of the
-scalar, encoded canonically (x86_64 targets). -/
+scalar, encoded canonically. The ladder computes `u(n • Q)` on the curve or its twist
+(`MontgomeryModel.ladder_eq_xMul`). -/
 @[step]
-theorem mul_spec (self : montgomery.MontgomeryPoint) (s : scalar.Scalar) :
-    mul self s ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.asNat = encodeU (montgomery.ladder 255 (s.asNat % 2 ^ 255) self.u) ⦄ := by
+theorem mul_spec (self : montgomery.MontgomeryPoint) (scalar : scalar.Scalar) :
+    mul self scalar ⦃ (r : montgomery.MontgomeryPoint) =>
+      r.asNat = encodeU (montgomery.ladder 255 (scalar.asNat % 2 ^ 255) self.u) ⦄ := by
   unfold mul
   exact dispatch_all_spec
     (montgomery.MulShared1MontgomeryPointShared0ScalarMontgomeryPoint.mul.«x86_64-tables_spec» self
-        s)
+        scalar)
     (montgomery.MulShared1MontgomeryPointShared0ScalarMontgomeryPoint.mul.«x86_64-no-tables_spec»
-        self s)
+        self scalar)
     (montgomery.MulShared1MontgomeryPointShared0ScalarMontgomeryPoint.mul.«i686-tables_spec» self
-        s)
+        scalar)
     (montgomery.MulShared1MontgomeryPointShared0ScalarMontgomeryPoint.mul.«i686-no-tables_spec»
-        self s)
+        self scalar)
 
 end Shared1MontgomeryPoint.Insts.CoreOpsArithMulShared0ScalarMontgomeryPoint
 

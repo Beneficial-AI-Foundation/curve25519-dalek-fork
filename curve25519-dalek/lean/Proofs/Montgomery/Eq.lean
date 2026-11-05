@@ -17,10 +17,10 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreCmpPartialEqMontgomeryPoint
 
-/-- `PartialEq for MontgomeryPoint`: equality of the encoded `u`-coordinates (x86_64 targets). -/
+/-- `PartialEq for MontgomeryPoint`: equality of the encoded `u`-coordinates. -/
 @[step]
 theorem eq_spec (self other : MontgomeryPoint) :
-    eq self other ⦃ (b : Bool) => b = true ↔ self.u = other.u ⦄ := by
+    eq self other ⦃ (r : Bool) => r = true ↔ self.u = other.u ⦄ := by
   unfold eq
   step with SubtleConstantTimeEq.ct_eq_spec self other as ⟨c, hcv, hc⟩
   step as ⟨b, hb⟩

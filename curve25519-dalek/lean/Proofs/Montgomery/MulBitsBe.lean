@@ -221,7 +221,8 @@ private theorem mul_bits_be.«i686-tables_loop_spec» {T0 : Type}
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 /-- `MontgomeryPoint::mul_bits_be`: the RFC 7748 ladder over the bits `bs` the iterator yields,
-most significant first, encoded canonically. -/
+most significant first, encoded canonically. The ladder computes `u(n • Q)` on the curve or
+its twist (`MontgomeryModel.ladderBits_eq_xMul`). -/
 @[step]
 theorem mul_bits_be.«x86_64-tables_spec» {T0 : Type} (inst : core.iter.traits.iterator.Iterator T0
     Bool)
@@ -269,7 +270,8 @@ theorem mul_bits_be.«x86_64-tables_spec» {T0 : Type} (inst : core.iter.traits.
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 /-- `MontgomeryPoint::mul_bits_be`: the RFC 7748 ladder over the bits `bs` the iterator yields,
-most significant first, encoded canonically. -/
+most significant first, encoded canonically. The ladder computes `u(n • Q)` on the curve or
+its twist (`MontgomeryModel.ladderBits_eq_xMul`). -/
 @[step]
 theorem mul_bits_be.«i686-tables_spec» {T0 : Type} (inst : core.iter.traits.iterator.Iterator T0
     Bool)
@@ -508,7 +510,8 @@ private theorem mul_bits_be.«i686-no-tables_loop_spec» {T0 : Type}
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 /-- `MontgomeryPoint::mul_bits_be`: the RFC 7748 ladder over the bits `bs` the iterator yields,
-most significant first, encoded canonically. -/
+most significant first, encoded canonically. The ladder computes `u(n • Q)` on the curve or
+its twist (`MontgomeryModel.ladderBits_eq_xMul`). -/
 @[step]
 theorem mul_bits_be.«x86_64-no-tables_spec» {T0 : Type} (inst : core.iter.traits.iterator.Iterator
     T0 Bool)
@@ -556,7 +559,8 @@ theorem mul_bits_be.«x86_64-no-tables_spec» {T0 : Type} (inst : core.iter.trai
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 /-- `MontgomeryPoint::mul_bits_be`: the RFC 7748 ladder over the bits `bs` the iterator yields,
-most significant first, encoded canonically. -/
+most significant first, encoded canonically. The ladder computes `u(n • Q)` on the curve or
+its twist (`MontgomeryModel.ladderBits_eq_xMul`). -/
 @[step]
 theorem mul_bits_be.«i686-no-tables_spec» {T0 : Type} (inst : core.iter.traits.iterator.Iterator
     T0 Bool)
@@ -605,7 +609,8 @@ theorem mul_bits_be.«i686-no-tables_spec» {T0 : Type} (inst : core.iter.traits
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 /-- `MontgomeryPoint::mul_bits_be`: the RFC 7748 ladder over the bits `bs` the iterator yields,
-most significant first, encoded canonically (x86_64 targets). -/
+most significant first, encoded canonically. The ladder computes `u(n • Q)` on the curve or
+its twist (`MontgomeryModel.ladderBits_eq_xMul`). -/
 @[step]
 theorem mul_bits_be_spec {T0 : Type} (inst : core.iter.traits.iterator.Iterator T0 Bool)
     (self : MontgomeryPoint) (bits : T0) (bs : List Bool) (hbits : inst.Yields bits bs) :
