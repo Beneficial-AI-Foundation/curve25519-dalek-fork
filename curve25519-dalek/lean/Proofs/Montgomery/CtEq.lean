@@ -107,7 +107,7 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.SubtleConstantTimeEq
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 /-- `ConstantTimeEq for MontgomeryPoint`: equality of the encoded `u`-coordinates (bit `255`
-masked, reduced modulo `p`; x86_64 targets). -/
+masked, reduced modulo `p`). -/
 @[step]
 theorem ct_eq_spec (self other : MontgomeryPoint) :
     ct_eq self other ⦃ (r : subtle.Choice) => r.IsValid ∧ (r = 1#u8 ↔ self.u = other.u) ⦄ := by

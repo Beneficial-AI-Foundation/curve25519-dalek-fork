@@ -49,7 +49,10 @@ Definitions used: `MontgomeryPoint.asNat`, `MontgomeryPoint.u` (`Defs/Montgomery
 `curve25519.decodeU`, `encodeU`, `x25519`, `montgomeryBasepoint`, `MontgomeryModel.ladder`,
 `MontgomeryModel.ladderBits`, `curve25519.decodeLenient` (`Curve25519/`, `EllipticCurve/`),
 `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded` (`Defs/Edwards.lean`), `Iterator.Yields`
-(`Defs/Iterator.lean`), `subtle.Choice.IsValid`. -/
+(`Defs/Iterator.lean`), `subtle.Choice.IsValid`.
+
+Not specified: derived `Clone`/`Copy` impls. Not translated: `Debug`, `Hash`, the `serde` impls,
+`elligator_encode` (`pub(crate)`). -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
 open Curve25519Dalek.backend.serial.u64.field (FieldElement51)
@@ -70,7 +73,7 @@ end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreDefaultDefault
 namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.SubtleConstantTimeEq
 
 /-- `ConstantTimeEq for MontgomeryPoint`: equality of the encoded `u`-coordinates (bit `255`
-masked, reduced modulo `p`; x86_64 targets). -/
+masked, reduced modulo `p`). -/
 recall ct_eq_spec (self other : MontgomeryPoint) :
     ct_eq self other ⦃ (r : subtle.Choice) => r.IsValid ∧ (r = 1#u8 ↔ self.u = other.u) ⦄
 
@@ -94,7 +97,7 @@ end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.SubtleConditionallySelectab
 
 namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreCmpPartialEqMontgomeryPoint
 
-/-- `PartialEq for MontgomeryPoint`: equality of the encoded `u`-coordinates (x86_64 targets). -/
+/-- `PartialEq for MontgomeryPoint`: equality of the encoded `u`-coordinates. -/
 recall eq_spec (self other : MontgomeryPoint) :
     eq self other ⦃ (r : Bool) => r = true ↔ self.u = other.u ⦄
 
@@ -105,7 +108,9 @@ end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreCmpPartialEqMontgomeryP
 
 namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.Curve25519_dalekTraitsIdentity
 
-/-- `Identity for MontgomeryPoint`: thirty-two zero bytes, the encoding of `u = 0`. -/
+/-- `Identity for MontgomeryPoint`: thirty-two zero bytes, the encoding of `u = 0`. This is the
+point `(0, 0)` of order `2`, not the neutral element; dalek calls it the identity because
+`ProjectivePoint::as_affine` also maps the point at infinity (`W = 0`) to `u = 0`. -/
 recall identity_spec :
     identity ⦃ (r : MontgomeryPoint) => r.asNat = 0 ⦄
 
@@ -128,14 +133,13 @@ end Curve25519Dalek.montgomery.MontgomeryPoint.Insts.ZeroizeZeroize
 namespace Curve25519Dalek.montgomery.MontgomeryPoint
 
 /-- `MontgomeryPoint::mul_base`: the `u`-coordinate of `scalar • B` on the Montgomery model
-(unreduced, `< 2^255`), encoded canonically (x86_64 targets). -/
+(unreduced, `< 2^255`), encoded canonically. -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : MontgomeryPoint) =>
       r.asNat = encodeU (scalar.asNat • montgomeryBasepoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
-
 
 /-- `MontgomeryPoint::mul_clamped`: RFC 7748 `X25519(bytes, self)`. -/
 recall mul_clamped_spec (self : MontgomeryPoint) (bytes : Array U8 32#usize) :
@@ -145,7 +149,6 @@ recall mul_clamped_spec (self : MontgomeryPoint) (bytes : Array U8 32#usize) :
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
 
-
 /-- `MontgomeryPoint::mul_base_clamped`: RFC 7748 `X25519(bytes, 9)`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : MontgomeryPoint) =>
@@ -154,9 +157,9 @@ recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
 
-
 /-- `MontgomeryPoint::mul_bits_be`: the RFC 7748 ladder over the bits `bs` the iterator yields,
-most significant first, encoded canonically (x86_64 targets). -/
+most significant first, encoded canonically. The ladder computes `u(n • Q)` on the curve or
+its twist (`MontgomeryModel.ladderBits_eq_xMul`). -/
 recall mul_bits_be_spec {T0 : Type} (inst : core.iter.traits.iterator.Iterator T0 Bool)
     (self : MontgomeryPoint) (bits : T0) (bs : List Bool) (hbits : inst.Yields bits bs) :
     mul_bits_be inst self bits ⦃ (r : MontgomeryPoint) =>
@@ -165,14 +168,12 @@ recall mul_bits_be_spec {T0 : Type} (inst : core.iter.traits.iterator.Iterator T
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_bits_be_spec
 
-
 /-- `MontgomeryPoint::as_bytes`: the 32 bytes themselves. -/
 recall as_bytes_spec (self : MontgomeryPoint) :
     as_bytes self ⦃ (r : Array U8 32#usize) => r = self ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms as_bytes_spec
-
 
 /-- `MontgomeryPoint::to_bytes`: the 32 bytes themselves. -/
 recall to_bytes_spec (self : MontgomeryPoint) :
@@ -181,7 +182,6 @@ recall to_bytes_spec (self : MontgomeryPoint) :
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_bytes_spec
 
-
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
 recall to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
@@ -189,12 +189,12 @@ recall to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
       r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
         (if self.u = -1 then none
         else curve25519.decodeLenient
-          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
+          (((self.u - 1) / (self.u + 1)).val + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
-#guard_msgs (whitespace := lax, substring := true) in #print axioms to_edwards.«x86_64-tables_spec»
-
+#guard_msgs (whitespace := lax, substring := true) in
+#print axioms to_edwards.«x86_64-tables_spec»
 
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
@@ -203,39 +203,37 @@ recall to_edwards.«i686-tables_spec» (self : MontgomeryPoint) (sign : U8) :
       r.map edwards.EdwardsPoint.«i686-tables».toPoint =
         (if self.u = -1 then none
         else curve25519.decodeLenient
-          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
+          (((self.u - 1) / (self.u + 1)).val + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms to_edwards.«i686-tables_spec»
 
-
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
 recall to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
-    to_edwards.«x86_64-no-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-no-tables»))
-        =>
+    to_edwards.«x86_64-no-tables» self sign
+      ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-no-tables»)) =>
       r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
         (if self.u = -1 then none
         else curve25519.decodeLenient
-          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
+          (((self.u - 1) / (self.u + 1)).val + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in
 #print axioms to_edwards.«x86_64-no-tables_spec»
 
-
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
 recall to_edwards.«i686-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
-    to_edwards.«i686-no-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-no-tables»))
-        =>
+    to_edwards.«i686-no-tables» self sign
+      ⦃ (r : Option (edwards.EdwardsPoint.«i686-no-tables»)) =>
       r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
         (if self.u = -1 then none
         else curve25519.decodeLenient
-          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
+          (((self.u - 1) / (self.u + 1)).val + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -247,10 +245,11 @@ end Curve25519Dalek.montgomery.MontgomeryPoint
 namespace Curve25519Dalek.Shared1MontgomeryPoint.Insts.CoreOpsArithMulShared0ScalarMontgomeryPoint
 
 /-- `Mul<&Scalar> for &MontgomeryPoint`: the RFC 7748 ladder on the low `255` bits of the
-scalar, encoded canonically (x86_64 targets). -/
-recall mul_spec (self : montgomery.MontgomeryPoint) (s : scalar.Scalar) :
-    mul self s ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.asNat = encodeU (montgomery.ladder 255 (s.asNat % 2 ^ 255) self.u) ⦄
+scalar, encoded canonically. The ladder computes `u(n • Q)` on the curve or its twist
+(`MontgomeryModel.ladder_eq_xMul`). -/
+recall mul_spec (self : montgomery.MontgomeryPoint) (scalar : scalar.Scalar) :
+    mul self scalar ⦃ (r : montgomery.MontgomeryPoint) =>
+      r.asNat = encodeU (montgomery.ladder 255 (scalar.asNat % 2 ^ 255) self.u) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_spec

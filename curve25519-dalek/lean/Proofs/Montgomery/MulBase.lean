@@ -77,7 +77,7 @@ theorem mul_base.«i686-no-tables_spec» (scalar : scalar.Scalar) (hscalar : sca
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 /-- `MontgomeryPoint::mul_base`: the `u`-coordinate of `scalar • B` on the Montgomery model
-(unreduced, `< 2^255`), encoded canonically (x86_64 targets). -/
+(unreduced, `< 2^255`), encoded canonically. -/
 @[step]
 theorem mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : MontgomeryPoint) =>

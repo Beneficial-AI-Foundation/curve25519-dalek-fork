@@ -24,7 +24,9 @@ private theorem asNat_repeat_zero : (Array.repeat 32#usize 0#u8).asNat 8 = 0 := 
     rw [Array.getElem!_repeat 0#u8 (by simpa using Finset.mem_range.mp hi)]
     rfl
 
-/-- `Identity for MontgomeryPoint`: thirty-two zero bytes, the encoding of `u = 0`. -/
+/-- `Identity for MontgomeryPoint`: thirty-two zero bytes, the encoding of `u = 0`. This is the
+point `(0, 0)` of order `2`, not the neutral element; dalek calls it the identity because
+`ProjectivePoint::as_affine` also maps the point at infinity (`W = 0`) to `u = 0`. -/
 @[step]
 theorem identity_spec :
     identity ⦃ (r : MontgomeryPoint) => r.asNat = 0 ⦄ := by
