@@ -95,7 +95,7 @@ variable (B : Backend)
     decompress y_bytes1
 
 open scoped Helpers.IndexStep Helpers.UpdateStep in
-/-- `toEdwardsTail`: `none` for `u = -1`; otherwise the lenient decoding of `y = (u - 1) / (u + 1)`
+/-- `toEdwardsTail`: `none` for `u = -1`, otherwise the lenient decoding of `y = (u - 1) / (u + 1)`
 with sign bit `sign mod 2`, for a `decompress` with the spec of `CompressedEdwardsY::decompress`
 (model `toPt`, invariant `Good`). -/
 theorem toEdwardsTail_spec (hadd : B.AddSpec) (hsub : B.SubSpec) (hmul : B.MulSpec)
@@ -108,9 +108,10 @@ theorem toEdwardsTail_spec (hadd : B.AddSpec) (hsub : B.SubSpec) (hmul : B.MulSp
       ∀ q, r = some q → Good q ⦄)
     (u : B.F) (sign : U8) (hu : B.Red u) :
     B.toEdwardsTail decompress minusOne u sign ⦃ (r : Option E) =>
-      (B.toField u = -1 → r = none) ∧
-      (B.toField u ≠ -1 → r.map toPt = curve25519.decodeLenient
-        (encodeU ((B.toField u - 1) / (B.toField u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
+      r.map toPt =
+        (if B.toField u = -1 then none
+        else curve25519.decodeLenient
+          (encodeU ((B.toField u - 1) / (B.toField u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → Good q ⦄ := by
   unfold toEdwardsTail
   apply spec_bind hm1
@@ -120,7 +121,7 @@ theorem toEdwardsTail_spec (hadd : B.AddSpec) (hsub : B.SubSpec) (hmul : B.MulSp
   · next hbt =>
     have hu1 : B.toField u = -1 := by rw [← hm1f]; exact hb.mp hbt
     rw [WP.spec_ok]
-    exact ⟨fun _ => rfl, fun h => absurd hu1 h, fun q hq => by cases hq⟩
+    exact ⟨by rw [ite_eq_left hu1]; rfl, fun q hq => by cases hq⟩
   · next hbf =>
     have hu1 : B.toField u ≠ -1 := fun h => hbf (hb.mpr (by rw [h, hm1f]))
     apply spec_bind hone
@@ -135,8 +136,8 @@ theorem toEdwardsTail_spec (hadd : B.AddSpec) (hsub : B.SubSpec) (hmul : B.MulSp
     step as ⟨i2, i2_val, i2_bv⟩
     step as ⟨y_bytes1, y31, y_rest⟩
     step with hdec y_bytes1 as ⟨r, r_post, r_post1⟩
-    refine ⟨fun h => absurd h hu1, fun _ => ?_, r_post1⟩
-    rw [r_post]
+    refine ⟨?_, r_post1⟩
+    rw [ite_eq_right hu1, r_post]
     congr 1
     -- the value of the bytes: the canonical `y` with the sign in bit `255`
     have hy : B.toField y = (B.toField u - 1) / (B.toField u + 1) := by
@@ -168,10 +169,10 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 @[step]
 theorem to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-tables»)) =>
-      (self.u = -1 → r = none) ∧
-      (self.u ≠ -1 → r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
-        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
-            (sign.val % 2))) ∧
+      r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
+        (if self.u = -1 then none
+        else curve25519.decodeLenient
+          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
   unfold to_edwards.«x86_64-tables»
   step as ⟨u, hu, hu_lt⟩
@@ -204,10 +205,10 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 @[step]
 theorem to_edwards.«i686-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-tables»)) =>
-      (self.u = -1 → r = none) ∧
-      (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-tables».toPoint =
-        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
-            (sign.val % 2))) ∧
+      r.map edwards.EdwardsPoint.«i686-tables».toPoint =
+        (if self.u = -1 then none
+        else curve25519.decodeLenient
+          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
   unfold to_edwards.«i686-tables»
   step as ⟨u, hu, hu_lt⟩
@@ -242,10 +243,10 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 theorem to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-no-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-no-tables»))
         =>
-      (self.u = -1 → r = none) ∧
-      (self.u ≠ -1 → r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
-        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
-            (sign.val % 2))) ∧
+      r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
+        (if self.u = -1 then none
+        else curve25519.decodeLenient
+          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
   unfold to_edwards.«x86_64-no-tables»
   step as ⟨u, hu, hu_lt⟩
@@ -279,10 +280,10 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 theorem to_edwards.«i686-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-no-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-no-tables»))
         =>
-      (self.u = -1 → r = none) ∧
-      (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
-        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
-            (sign.val % 2))) ∧
+      r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
+        (if self.u = -1 then none
+        else curve25519.decodeLenient
+          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
   unfold to_edwards.«i686-no-tables»
   step as ⟨u, hu, hu_lt⟩

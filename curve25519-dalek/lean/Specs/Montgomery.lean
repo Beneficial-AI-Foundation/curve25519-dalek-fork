@@ -186,10 +186,10 @@ recall to_bytes_spec (self : MontgomeryPoint) :
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
 recall to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-tables»)) =>
-      (self.u = -1 → r = none) ∧
-      (self.u ≠ -1 → r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
-        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
-            (sign.val % 2))) ∧
+      r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
+        (if self.u = -1 then none
+        else curve25519.decodeLenient
+          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -200,10 +200,10 @@ recall to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
 recall to_edwards.«i686-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-tables»)) =>
-      (self.u = -1 → r = none) ∧
-      (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-tables».toPoint =
-        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
-            (sign.val % 2))) ∧
+      r.map edwards.EdwardsPoint.«i686-tables».toPoint =
+        (if self.u = -1 then none
+        else curve25519.decodeLenient
+          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -216,10 +216,10 @@ recall to_edwards.«i686-tables_spec» (self : MontgomeryPoint) (sign : U8) :
 recall to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-no-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-no-tables»))
         =>
-      (self.u = -1 → r = none) ∧
-      (self.u ≠ -1 → r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
-        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
-            (sign.val % 2))) ∧
+      r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
+        (if self.u = -1 then none
+        else curve25519.decodeLenient
+          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -232,10 +232,10 @@ recall to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8)
 recall to_edwards.«i686-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-no-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-no-tables»))
         =>
-      (self.u = -1 → r = none) ∧
-      (self.u ≠ -1 → r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
-        curve25519.decodeLenient (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 *
-            (sign.val % 2))) ∧
+      r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
+        (if self.u = -1 then none
+        else curve25519.decodeLenient
+          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
