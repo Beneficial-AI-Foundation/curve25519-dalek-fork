@@ -44,5 +44,5 @@ done
     --dest-file "$root/.llbc/curve25519_dalek.llbc" \
     -- --locked --no-default-features --features alloc,zeroize \
     -Zjson-target-spec -Zbuild-std=core,alloc)
-.aeneas/aeneas -backend lean -split-files -emit-json -namespace Curve25519Dalek \
+.aeneas/aeneas -backend lean -split-files -emit-json -max-heartbeats 200000 -namespace Curve25519Dalek \
     -dest curve25519-dalek/lean -subdir Curve25519Dalek .llbc/curve25519_dalek.llbc
