@@ -167,7 +167,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
 @[step]
-theorem to_edwards.«x86_64-tables_spec» (self : MontgomeryPoint) (sign : U8) :
+theorem «x86_64-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-tables»)) =>
       r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
         (if self.u = -1 then none
@@ -203,7 +203,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
 @[step]
-theorem to_edwards.«i686-tables_spec» (self : MontgomeryPoint) (sign : U8) :
+theorem «i686-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-tables»)) =>
       r.map edwards.EdwardsPoint.«i686-tables».toPoint =
         (if self.u = -1 then none
@@ -240,7 +240,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
 @[step]
-theorem to_edwards.«x86_64-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
+theorem «x86_64-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-no-tables» self sign
       ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-no-tables»)) =>
       r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
@@ -277,7 +277,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
 `CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
 @[step]
-theorem to_edwards.«i686-no-tables_spec» (self : MontgomeryPoint) (sign : U8) :
+theorem «i686-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-no-tables» self sign
       ⦃ (r : Option (edwards.EdwardsPoint.«i686-no-tables»)) =>
       r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
