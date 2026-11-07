@@ -9,6 +9,7 @@ public import Defs.Edwards
 import Proofs.Edwards.Affine.Compress
 import Proofs.Edwards.ToAffine
 import Proofs.Helpers.Coords
+public import Proofs.Helpers.ByteValues
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519 TwistedEdwardsModel
@@ -38,9 +39,7 @@ theorem compress_asNat (self : EdwardsPoint.«x86_64-tables») (hself : self.Lim
 theorem compress_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄ := by
-  simp only
-      [curve25519.eq_encode_iff,
-      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
   exact spec_mono (compress_asNat self hself) fun r hr => by
       rw [hr, encodeNat_eq, EdwardsPoint.«x86_64-tables».toPoint_x hon,
         EdwardsPoint.«x86_64-tables».toPoint_y hon]
@@ -67,9 +66,7 @@ theorem compress_asNat (self : EdwardsPoint.«i686-tables») (hself : self.Limbs
 theorem compress_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄ := by
-  simp only
-      [curve25519.eq_encode_iff,
-      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
   exact spec_mono (compress_asNat self hself) fun r hr => by
       rw [hr, encodeNat_eq, EdwardsPoint.«i686-tables».toPoint_x hon,
         EdwardsPoint.«i686-tables».toPoint_y hon]
@@ -96,9 +93,7 @@ theorem compress_asNat (self : EdwardsPoint.«x86_64-no-tables») (hself : self.
 theorem compress_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄ := by
-  simp only
-      [curve25519.eq_encode_iff,
-      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
   exact spec_mono (compress_asNat self hself) fun r hr => by
       rw [hr, encodeNat_eq, EdwardsPoint.«x86_64-no-tables».toPoint_x hon,
         EdwardsPoint.«x86_64-no-tables».toPoint_y hon]
@@ -125,9 +120,7 @@ theorem compress_asNat (self : EdwardsPoint.«i686-no-tables») (hself : self.Li
 theorem compress_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄ := by
-  simp only
-      [curve25519.eq_encode_iff,
-      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
   exact spec_mono (compress_asNat self hself) fun r hr => by
       rw [hr, encodeNat_eq, EdwardsPoint.«i686-no-tables».toPoint_x hon,
         EdwardsPoint.«i686-no-tables».toPoint_y hon]

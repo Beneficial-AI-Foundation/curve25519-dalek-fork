@@ -9,6 +9,7 @@ public import Curve25519Dalek.Funs
 public import Defs.Edwards
 import Proofs.Edwards.MulBase
 import Proofs.Scalar.ClampInteger
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `EdwardsPoint::mul_base_clamped` -/
@@ -25,7 +26,7 @@ little-endian value of `bytes`; limbs `< 2^52`. -/
 theorem mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.LimbsLt 52 ⦄ := by
-  simp only [curve25519.decodeScalar25519, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.decodeScalar25519_toVector]
   unfold mul_base_clamped
   step as ⟨a, ha⟩
   have hca : ({ bytes := a } : scalar.Scalar).asNat = clamp (bytes.asNat 8) := by
@@ -46,7 +47,7 @@ little-endian value of `bytes`; limbs `< 2^26`. -/
 theorem mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.LimbsLt 26 ⦄ := by
-  simp only [curve25519.decodeScalar25519, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.decodeScalar25519_toVector]
   unfold mul_base_clamped
   step as ⟨a, ha⟩
   have hca : ({ bytes := a } : scalar.Scalar).asNat = clamp (bytes.asNat 8) := by
@@ -67,7 +68,7 @@ little-endian value of `bytes`; limbs `< 2^52`. -/
 theorem mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.LimbsLt 52 ⦄ := by
-  simp only [curve25519.decodeScalar25519, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.decodeScalar25519_toVector]
   unfold mul_base_clamped
   step as ⟨a, ha⟩
   have hca : ({ bytes := a } : scalar.Scalar).asNat = clamp (bytes.asNat 8) := by
@@ -88,7 +89,7 @@ little-endian value of `bytes`; limbs `< 2^26`. -/
 theorem mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«i686-no-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.LimbsLt 26 ⦄ := by
-  simp only [curve25519.decodeScalar25519, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.decodeScalar25519_toVector]
   unfold mul_base_clamped
   step as ⟨a, ha⟩
   have hca : ({ bytes := a } : scalar.Scalar).asNat = clamp (bytes.asNat 8) := by

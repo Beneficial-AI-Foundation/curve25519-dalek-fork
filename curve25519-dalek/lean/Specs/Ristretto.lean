@@ -62,11 +62,11 @@ Ristretto group); `compress` is RFC 9496's encoding `Ristretto.encodeRep` of the
 as 32 bytes (for any representative; on even points it is constant exactly on the classes of `Rel`,
 `Ristretto.encodeRepNat_eq_iff`); `decompress` is RFC 9496's decoding `Ristretto.decodeRep` of the
 bytes; `double_and_compress_batch` encodes the doubled points; `from_uniform_bytes` is RFC 9496's
-one-way map `Ristretto.fromUniformRep` on 64 bytes, and `map_to_curve` its `MAP`
-(`Ristretto.mapRep`) of the field element the 32 bytes encode (`decodeUCoordinate`: the low 255 bits
-modulo `p`). Scalars are unreduced (`s.asNat < 2^255`, the `Scalar` invariant). Functions with
-per-target variants are stated for all four configurations (`«x86_64-tables»`, `«x86_64-no-tables»`,
-`«i686-tables»`, `«i686-no-tables»`); `RistrettoBasepointTable` exists only with tables.
+one-way map `Ristretto.fromUniformRep` on 64 bytes, and `map_to_curve` its `MAP` on 32 bytes
+(`Ristretto.mapRep`: the low 255 bits modulo `p`). Scalars are unreduced (`s.asNat < 2^255`, the
+`Scalar` invariant). Functions with per-target variants are stated for all four configurations
+(`«x86_64-tables»`, `«x86_64-no-tables»`, `«i686-tables»`, `«i686-no-tables»`);
+`RistrettoBasepointTable` exists only with tables.
 
 Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, the tables' `point`, `IsTable` and
 `IsBounded`, the precomputations' `points`, `IsValid` and `IsBounded` (`Defs/Edwards.lean`,
@@ -74,7 +74,7 @@ Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, the tables' `p
 (`ToAeneas/Array.lean`), `Scalar.asNat` (`Defs/Scalar.lean`), `Iterator.Yields`
 (`Defs/Iterator.lean`), Mathlib's `Even`, `curve25519.edwards.Rel`, `Ristretto.encodeRep`,
 `Ristretto.decodeRep`, `Ristretto.mapRep`, `Ristretto.fromUniformRep` (`Curve25519/Ristretto/`),
-`curve25519.basepoint`, `decodeUCoordinate` (`Curve25519/`), `subtle.Choice.IsValid` (`Subtle/`).
+`curve25519.basepoint` (`Curve25519/`), `subtle.Choice.IsValid` (`Subtle/`).
 
 Not specified: derived `Clone`/`Copy` impls. Not translated: `Debug`, `random`, `try_random`,
 `hash_from_bytes`, `from_hash`, the `group` and `serde` impls. `elligator_ristretto_flavor`
@@ -3311,11 +3311,11 @@ end Curve25519Dalek
 namespace Curve25519Dalek.ristretto.elligator
 namespace «RistrettoPointx86_64-tables»
 
-/-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the low `255` bits of the bytes, reduced
-modulo `p` (`decodeUCoordinate`): an even point (a ristretto255 representative); limbs `< 2^52`. -/
+/-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the 32 bytes (`Ristretto.mapRep`): an even
+point (a ristretto255 representative); limbs `< 2^52`. -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«x86_64-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeUCoordinate bytes.toVector) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep bytes.toVector ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -3325,11 +3325,11 @@ end «RistrettoPointx86_64-tables»
 
 namespace «RistrettoPointi686-tables»
 
-/-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the low `255` bits of the bytes, reduced
-modulo `p` (`decodeUCoordinate`): an even point (a ristretto255 representative); limbs `< 2^26`. -/
+/-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the 32 bytes (`Ristretto.mapRep`): an even
+point (a ristretto255 representative); limbs `< 2^26`. -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«i686-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeUCoordinate bytes.toVector) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep bytes.toVector ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -3341,11 +3341,11 @@ end Curve25519Dalek.ristretto.elligator
 namespace Curve25519Dalek.ristretto.elligator
 namespace «RistrettoPointx86_64-no-tables»
 
-/-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the low `255` bits of the bytes, reduced
-modulo `p` (`decodeUCoordinate`): an even point (a ristretto255 representative); limbs `< 2^52`. -/
+/-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the 32 bytes (`Ristretto.mapRep`): an even
+point (a ristretto255 representative); limbs `< 2^52`. -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeUCoordinate bytes.toVector) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep bytes.toVector ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -3355,11 +3355,11 @@ end «RistrettoPointx86_64-no-tables»
 
 namespace «RistrettoPointi686-no-tables»
 
-/-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the low `255` bits of the bytes, reduced
-modulo `p` (`decodeUCoordinate`): an even point (a ristretto255 representative); limbs `< 2^26`. -/
+/-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the 32 bytes (`Ristretto.mapRep`): an even
+point (a ristretto255 representative); limbs `< 2^26`. -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«i686-no-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeUCoordinate bytes.toVector) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep bytes.toVector ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/

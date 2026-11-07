@@ -7,6 +7,7 @@ public import Curve25519Dalek.Funs
 public import Defs.Montgomery
 import Proofs.Helpers.Array
 import Proofs.Helpers.AsNat
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `Identity for MontgomeryPoint` -/
@@ -31,8 +32,8 @@ point `(0, 0)` of order `2`, not the neutral element; dalek calls it the identit
 theorem identity_spec :
     identity ⦃ (r : MontgomeryPoint) => r.bytes = encodeUCoordinate 0 ⦄ := by
   simp only
-      [curve25519.eq_encodeUCoordinate_iff,
-      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes, curve25519.encodeU_zero]
+      [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff,
+      curve25519.encodeU_zero]
   unfold identity
   step*
   rw [MontgomeryPoint.asNat_def]

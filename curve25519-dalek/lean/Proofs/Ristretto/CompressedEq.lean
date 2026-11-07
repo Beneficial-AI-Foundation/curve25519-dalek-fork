@@ -6,6 +6,7 @@ module
 public import Curve25519Dalek.Funs
 public import Defs.Ristretto
 import Proofs.Ristretto.CompressedCtEq
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `PartialEq for CompressedRistretto` -/

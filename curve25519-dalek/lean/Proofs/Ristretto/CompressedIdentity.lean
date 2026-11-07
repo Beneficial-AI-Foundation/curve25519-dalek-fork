@@ -8,6 +8,7 @@ public import Defs.Ristretto
 public import Curve25519.Ristretto.Encoding
 import Proofs.Helpers.Array
 import Proofs.Helpers.AsNat
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `Identity` and `Default` for `CompressedRistretto` -/
@@ -36,9 +37,7 @@ theorem identity_asNat :
 /-- `Identity for CompressedRistretto` is the encoding of the neutral element. -/
 theorem identity_spec :
     identity ⦃ (r : CompressedRistretto) => r.bytes = Ristretto.encodeRep 0 ⦄ := by
-  simp only
-      [curve25519.Ristretto.eq_encodeRep_iff,
-      Curve25519Dalek.ristretto.CompressedRistretto.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
   exact spec_mono identity_asNat fun r hr => by rw [hr, Ristretto.encodeRepNat_zero]
 
 end Insts.Curve25519_dalekTraitsIdentity
@@ -55,9 +54,7 @@ theorem default_asNat :
 /-- `Default for CompressedRistretto` is the encoding of the neutral element. -/
 theorem default_spec :
     default ⦃ (r : CompressedRistretto) => r.bytes = Ristretto.encodeRep 0 ⦄ := by
-  simp only
-      [curve25519.Ristretto.eq_encodeRep_iff,
-      Curve25519Dalek.ristretto.CompressedRistretto.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
   exact spec_mono default_asNat fun r hr => by rw [hr, Ristretto.encodeRepNat_zero]
 
 end Insts.CoreDefaultDefault

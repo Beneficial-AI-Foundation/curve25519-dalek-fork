@@ -9,6 +9,7 @@ public import Subtle.Contract
 import Proofs.Edwards.AsBytes
 import Proofs.Helpers.Array
 import Subtle.Instances
+public import Proofs.Helpers.ByteValues
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP

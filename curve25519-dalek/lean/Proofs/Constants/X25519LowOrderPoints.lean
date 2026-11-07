@@ -8,6 +8,7 @@ public import Curve25519Dalek.Funs
 public import Defs.Montgomery
 import all Curve25519.Basic
 import Curve25519.X25519.LowOrder
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `X25519_LOW_ORDER_POINTS`

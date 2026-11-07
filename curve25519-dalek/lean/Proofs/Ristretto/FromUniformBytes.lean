@@ -36,7 +36,7 @@ theorem from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
         r.LimbsLt 52 ⦄ := by
-  simp only [curve25519.Ristretto.fromUniformRep, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.fromUniformRep_toVector]
   unfold from_uniform_bytes
   step*
   have hlen : bytes.val.length = 64 := bytes.property
@@ -71,7 +71,7 @@ theorem from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«i686-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
         r.LimbsLt 26 ⦄ := by
-  simp only [curve25519.Ristretto.fromUniformRep, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.fromUniformRep_toVector]
   unfold from_uniform_bytes
   step*
   have hlen : bytes.val.length = 64 := bytes.property
@@ -106,7 +106,7 @@ theorem from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
         r.LimbsLt 52 ⦄ := by
-  simp only [curve25519.Ristretto.fromUniformRep, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.fromUniformRep_toVector]
   unfold from_uniform_bytes
   step*
   have hlen : bytes.val.length = 64 := bytes.property
@@ -141,7 +141,7 @@ theorem from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«i686-no-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
         r.LimbsLt 26 ⦄ := by
-  simp only [curve25519.Ristretto.fromUniformRep, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.fromUniformRep_toVector]
   unfold from_uniform_bytes
   step*
   have hlen : bytes.val.length = 64 := bytes.property

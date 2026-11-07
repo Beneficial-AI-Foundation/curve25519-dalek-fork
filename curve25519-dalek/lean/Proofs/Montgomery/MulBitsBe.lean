@@ -19,6 +19,7 @@ import Zeroize.Instances
 import Proofs.Backend.Serial.U32.Field.FromBytes
 import Proofs.Backend.Serial.U32.Field.One
 import Proofs.Helpers.ToField2625
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `MontgomeryPoint::mul_bits_be`
@@ -616,9 +617,7 @@ theorem mul_bits_be_spec {T0 : Type} (inst : core.iter.traits.iterator.Iterator 
     (self : MontgomeryPoint) (bits : T0) (bs : List Bool) (hbits : inst.Yields bits bs) :
     mul_bits_be inst self bits ⦃ (r : MontgomeryPoint) =>
       r.bytes = encodeUCoordinate (montgomery.ladderBits bs self.u) ⦄ := by
-  simp only
-      [curve25519.eq_encodeUCoordinate_iff,
-      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff]
   unfold mul_bits_be
   exact dispatch_all_spec
     (mul_bits_be.«x86_64-tables_spec» inst self bits bs hbits)

@@ -11,6 +11,7 @@ import Proofs.Backend.Serial.U64.Field.FromBytes
 import Proofs.Field.CtEq
 import Proofs.Helpers.Target
 import Proofs.Backend.Serial.U32.Field.FromBytes
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `ConstantTimeEq for MontgomeryPoint` -/

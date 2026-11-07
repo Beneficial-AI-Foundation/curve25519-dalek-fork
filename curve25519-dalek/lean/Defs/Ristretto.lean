@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519Dalek.Types
 public import Defs.Array
+public import ToAeneas.Array
 public section
 
 /-! # `ristretto.rs`: the compressed form (audited)
@@ -17,25 +18,12 @@ self.bytes`, `compress` reads `r.bytes = Ristretto.encodeRep self.toPoint`, `ct_
 `c = 1 ↔ curve25519.edwards.Rel self.toPoint other.toPoint`.
 
 `CompressedRistretto` is 32 bytes: `bytes` is them as a `Vector UInt8 32` (`Array.toVector`), the
-byte string of RFC 9496; `asNat` is their little-endian value, for the proofs. -/
+byte string of RFC 9496. -/
 
 namespace Curve25519Dalek.ristretto
-
-/-- The little-endian value of the 32 bytes. -/
-def CompressedRistretto.asNat (self : CompressedRistretto) : ℕ :=
-  Aeneas.Std.Array.asNat 8 self
-
-theorem CompressedRistretto.asNat_def (self : CompressedRistretto) :
-    self.asNat = Aeneas.Std.Array.asNat 8 self := by
-  unfold CompressedRistretto.asNat
-  rfl
 
 /-- The 32 bytes as a `Vector UInt8 32`, the byte string of RFC 9496. -/
 @[expose] def CompressedRistretto.bytes (self : CompressedRistretto) : Vector UInt8 32 :=
   Aeneas.Std.Array.toVector self
-
-theorem CompressedRistretto.decodeLittleEndian_bytes (self : CompressedRistretto) :
-    curve25519.decodeLittleEndian self.bytes = self.asNat :=
-  Aeneas.Std.Array.decodeLittleEndian_toVector self
 
 end Curve25519Dalek.ristretto

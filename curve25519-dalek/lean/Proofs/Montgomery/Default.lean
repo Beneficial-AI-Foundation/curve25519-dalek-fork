@@ -7,6 +7,7 @@ public import Curve25519Dalek.Funs
 public import Defs.Montgomery
 import Proofs.Helpers.Array
 import Proofs.Helpers.AsNat
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `Default for MontgomeryPoint` -/
@@ -29,8 +30,8 @@ private theorem asNat_repeat_zero : (Array.repeat 32#usize 0#u8).asNat 8 = 0 := 
 theorem default_spec :
     default ⦃ (r : MontgomeryPoint) => r.bytes = encodeUCoordinate 0 ⦄ := by
   simp only
-      [curve25519.eq_encodeUCoordinate_iff,
-      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes, curve25519.encodeU_zero]
+      [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff,
+      curve25519.encodeU_zero]
   unfold default core.default.DefaultArray.default
   step*
   rw [MontgomeryPoint.asNat_def]

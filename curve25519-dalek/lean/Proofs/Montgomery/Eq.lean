@@ -7,6 +7,7 @@ public import Curve25519.X25519
 public import Curve25519Dalek.Funs
 public import Defs.Montgomery
 import Proofs.Montgomery.CtEq
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `PartialEq for MontgomeryPoint` -/

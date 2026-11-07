@@ -12,7 +12,7 @@ public section
 /-! # X25519 (RFC 7748 §5)
 
 RFC 7748 on 32-byte strings (`Vector UInt8 32`): `decodeScalar25519` (the clamped value of the
-bytes), `decodeUCoordinate` (bit `255` masked, reduced modulo `p`), `encodeUCoordinate` (the 32
+bytes), `decodeUCoordinate` (their value with bit `255` masked), `encodeUCoordinate` (the 32
 bytes of the canonical representative) and `X25519 k u`, the Montgomery ladder of `montgomery`
 over `255` bits (`MontgomeryModel.ladder`, `a24 = 121665`) on the decoded scalar and coordinate,
 encoded. The RFC's final `x_2 * z_2^(p - 2)` is `x_2 / z_2` with `x / 0 = 0`
@@ -129,18 +129,24 @@ theorem x25519Nat_lt (k u : ℕ) : x25519Nat k u < p :=
   clamp (decodeLittleEndian k)
 
 /-- RFC 7748 `decodeUCoordinate`: the little-endian value of the 32 bytes with bit `255`
-masked, modulo `p`. -/
-@[expose] def decodeUCoordinate (u : Vector UInt8 32) : ZMod p :=
-  decodeU (decodeLittleEndian u)
+masked. -/
+@[expose] def decodeUCoordinate (u : Vector UInt8 32) : ℕ :=
+  decodeLittleEndian u % 2 ^ 255
 
-/-- RFC 7748 `encodeUCoordinate`: the 32 little-endian bytes of the canonical representative. -/
+/-- RFC 7748 `encodeUCoordinate`: the 32 little-endian bytes of the canonical representative
+(the RFC reduces its integer argument modulo `p`; here the argument is the field element). -/
 @[expose] def encodeUCoordinate (u : ZMod p) : Vector UInt8 32 :=
   encodeLittleEndian 32 (encodeU u)
 
 /-- RFC 7748 §5 `X25519(k, u)` on 32-byte strings: the Montgomery ladder of `montgomery` over
-`255` bits on the clamped scalar and the decoded coordinate, encoded. -/
+`255` bits on the clamped scalar and the decoded coordinate (as a field element), encoded. -/
 @[expose] noncomputable def X25519 (k u : Vector UInt8 32) : Vector UInt8 32 :=
   encodeUCoordinate (montgomery.ladder 255 (decodeScalar25519 k) (decodeUCoordinate u))
+
+/-- The decoded coordinate as a field element is `decodeU` of the value of the bytes. -/
+theorem decodeUCoordinate_cast (u : Vector UInt8 32) :
+    (decodeUCoordinate u : ZMod p) = decodeU (decodeLittleEndian u) :=
+  rfl
 
 /-- `X25519` is `x25519Nat` on the values of the bytes. -/
 theorem X25519_eq_x25519Nat (k u : Vector UInt8 32) :
@@ -189,8 +195,8 @@ theorem forall_X25519_eq_zero_iff (u : Vector UInt8 32) :
   · exact fun h k => h _
 
 theorem decodeUCoordinate_encodeUCoordinate (u : ZMod p) :
-    decodeUCoordinate (encodeUCoordinate u) = u := by
-  rw [decodeUCoordinate, encodeUCoordinate, decodeLittleEndian_encodeLittleEndian,
+    (decodeUCoordinate (encodeUCoordinate u) : ZMod p) = u := by
+  rw [decodeUCoordinate_cast, encodeUCoordinate, decodeLittleEndian_encodeLittleEndian,
     Nat.mod_eq_of_lt (encodeU_lt_two_pow_256 u), decodeU_encodeU]
 
 /-- The ladder constant of curve25519 is `121665`. -/

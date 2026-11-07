@@ -183,14 +183,17 @@ recall to_bytes_spec (self : MontgomeryPoint) :
 namespace «x86_64-tables»
 
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
-`CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
+`CompressedEdwardsY::decompress`) of the bytes of `y = (u - 1) / (u + 1)` with
+`y_bytes[31] ^= sign << 7`. -/
 recall to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-tables» self sign
       ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-tables»)) =>
         r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
           (if self.u = -1 then none
-          else curve25519.decodeLenient (encodeLittleEndian 32
-            (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2)))) ∧
+          else curve25519.decodeLenient
+            ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
+              ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+                (UInt8.ofNat sign.val <<< 7)))) ∧
         ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -201,14 +204,17 @@ end «x86_64-tables»
 namespace «i686-tables»
 
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
-`CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
+`CompressedEdwardsY::decompress`) of the bytes of `y = (u - 1) / (u + 1)` with
+`y_bytes[31] ^= sign << 7`. -/
 recall to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-tables» self sign
       ⦃ (r : Option (edwards.EdwardsPoint.«i686-tables»)) =>
         r.map edwards.EdwardsPoint.«i686-tables».toPoint =
           (if self.u = -1 then none
-          else curve25519.decodeLenient (encodeLittleEndian 32
-            (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2)))) ∧
+          else curve25519.decodeLenient
+            ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
+              ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+                (UInt8.ofNat sign.val <<< 7)))) ∧
         ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -219,14 +225,17 @@ end «i686-tables»
 namespace «x86_64-no-tables»
 
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
-`CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
+`CompressedEdwardsY::decompress`) of the bytes of `y = (u - 1) / (u + 1)` with
+`y_bytes[31] ^= sign << 7`. -/
 recall to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-no-tables» self sign
       ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-no-tables»)) =>
         r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
           (if self.u = -1 then none
-          else curve25519.decodeLenient (encodeLittleEndian 32
-            (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2)))) ∧
+          else curve25519.decodeLenient
+            ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
+              ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+                (UInt8.ofNat sign.val <<< 7)))) ∧
         ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -237,14 +246,17 @@ end «x86_64-no-tables»
 namespace «i686-no-tables»
 
 /-- `MontgomeryPoint::to_edwards`: `none` for `u = -1`; otherwise the lenient decoding (as
-`CompressedEdwardsY::decompress`) of `y = (u - 1) / (u + 1)` with sign bit `sign mod 2`. -/
+`CompressedEdwardsY::decompress`) of the bytes of `y = (u - 1) / (u + 1)` with
+`y_bytes[31] ^= sign << 7`. -/
 recall to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-no-tables» self sign
       ⦃ (r : Option (edwards.EdwardsPoint.«i686-no-tables»)) =>
         r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
           (if self.u = -1 then none
-          else curve25519.decodeLenient (encodeLittleEndian 32
-            (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2)))) ∧
+          else curve25519.decodeLenient
+            ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
+              ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+                (UInt8.ofNat sign.val <<< 7)))) ∧
         ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/

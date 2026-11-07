@@ -13,6 +13,7 @@ import Proofs.Helpers.StepSpecs
 import Proofs.Helpers.Vec
 import Proofs.Helpers.Backend.U32.Bytes
 import Proofs.Helpers.Backend.U64.Bytes
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `EdwardsPoint::to_montgomery_batch`
@@ -286,9 +287,7 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate
             (edwardsToMontgomery eds[i]!.toPoint).u ⦄ := by
-  simp only
-      [curve25519.eq_encodeUCoordinate_iff,
-      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff]
   exact spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
       rw [hr i hi, EdwardsPoint.«x86_64-tables».u_edwardsToMontgomery (heds_on i hi)]
       rfl⟩
@@ -340,9 +339,7 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-tables»)
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate
             (edwardsToMontgomery eds[i]!.toPoint).u ⦄ := by
-  simp only
-      [curve25519.eq_encodeUCoordinate_iff,
-      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff]
   exact spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
       rw [hr i hi, EdwardsPoint.«i686-tables».u_edwardsToMontgomery (heds_on i hi)]
       rfl⟩
@@ -394,9 +391,7 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate
             (edwardsToMontgomery eds[i]!.toPoint).u ⦄ := by
-  simp only
-      [curve25519.eq_encodeUCoordinate_iff,
-      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff]
   exact spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
       rw [hr i hi, EdwardsPoint.«x86_64-no-tables».u_edwardsToMontgomery (heds_on i hi)]
       rfl⟩
@@ -448,9 +443,7 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-no-tables»)
       r.length = eds.length ∧
         ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate
             (edwardsToMontgomery eds[i]!.toPoint).u ⦄ := by
-  simp only
-      [curve25519.eq_encodeUCoordinate_iff,
-      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff]
   exact spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
       rw [hr i hi, EdwardsPoint.«i686-no-tables».u_edwardsToMontgomery (heds_on i hi)]
       rfl⟩

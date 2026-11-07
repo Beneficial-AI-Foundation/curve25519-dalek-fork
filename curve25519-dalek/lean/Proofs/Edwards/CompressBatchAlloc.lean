@@ -11,6 +11,7 @@ import Proofs.Edwards.Affine.Compress
 import Proofs.Helpers.Coords
 import Proofs.Helpers.StepSpecs
 import Proofs.Helpers.Vec
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `EdwardsPoint::compress_batch_alloc`
@@ -279,9 +280,7 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄ := by
-  simp only
-      [curve25519.eq_encode_iff,
-      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
   exact spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ =>
       ⟨hlen, fun i hi => by
       rw [hr i hi, encodeNat_eq, EdwardsPoint.«x86_64-tables».toPoint_x (hinputs_on i hi),
@@ -335,9 +334,7 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-tables»)
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄ := by
-  simp only
-      [curve25519.eq_encode_iff,
-      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
   exact spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ =>
       ⟨hlen, fun i hi => by
       rw [hr i hi, encodeNat_eq, EdwardsPoint.«i686-tables».toPoint_x (hinputs_on i hi),
@@ -391,9 +388,7 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-table
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄ := by
-  simp only
-      [curve25519.eq_encode_iff,
-      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
   exact spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ =>
       ⟨hlen, fun i hi => by
       rw [hr i hi, encodeNat_eq, EdwardsPoint.«x86_64-no-tables».toPoint_x (hinputs_on i hi),
@@ -447,9 +442,7 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-no-tables�
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
         ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄ := by
-  simp only
-      [curve25519.eq_encode_iff,
-      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
   exact spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ =>
       ⟨hlen, fun i hi => by
       rw [hr i hi, encodeNat_eq, EdwardsPoint.«i686-no-tables».toPoint_x (hinputs_on i hi),

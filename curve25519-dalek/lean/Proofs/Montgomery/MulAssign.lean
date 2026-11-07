@@ -8,6 +8,7 @@ public import Curve25519Dalek.Funs
 public import Defs.Montgomery
 public import Defs.Scalar
 import Proofs.Montgomery.Mul
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `MulAssign<&Scalar> for MontgomeryPoint` -/

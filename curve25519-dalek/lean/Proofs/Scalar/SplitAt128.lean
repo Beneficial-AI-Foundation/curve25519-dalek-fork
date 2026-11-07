@@ -7,6 +7,7 @@ public import Curve25519Dalek.Funs
 public import Defs.Scalar
 import Proofs.Helpers.AsNat
 import Proofs.Scalar.HalfWidthFromBytes
+public import Proofs.Helpers.ByteValues
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519

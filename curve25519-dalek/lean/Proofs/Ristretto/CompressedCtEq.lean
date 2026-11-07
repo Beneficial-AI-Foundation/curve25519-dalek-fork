@@ -9,6 +9,7 @@ public import Subtle.Contract
 import Proofs.Ristretto.AsBytes
 import Proofs.Helpers.Array
 import Subtle.Instances
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `ConstantTimeEq for CompressedRistretto` -/

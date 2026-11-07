@@ -7,6 +7,7 @@ public import Curve25519.Edwards.Encoding
 public import Defs.Edwards
 import Proofs.Helpers.AsNat
 import Proofs.Helpers.Array
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # The bytes of a `CompressedEdwardsY`

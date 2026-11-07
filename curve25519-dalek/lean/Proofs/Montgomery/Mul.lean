@@ -24,6 +24,7 @@ import Zeroize.Instances
 import Proofs.Backend.Serial.U32.Field.FromBytes
 import Proofs.Backend.Serial.U32.Field.One
 import Proofs.Helpers.ToField2625
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `Mul<&Scalar> for &MontgomeryPoint`
@@ -506,9 +507,7 @@ scalar, encoded canonically. The ladder computes `u(n • Q)` on the curve or it
 theorem mul_spec (self : montgomery.MontgomeryPoint) (scalar : scalar.Scalar) :
     mul self scalar ⦃ (r : montgomery.MontgomeryPoint) =>
       r.bytes = encodeUCoordinate (montgomery.ladder 255 (scalar.asNat % 2 ^ 255) self.u) ⦄ := by
-  simp only
-      [curve25519.eq_encodeUCoordinate_iff,
-      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  simp only [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff]
   unfold mul
   exact dispatch_all_spec
     (montgomery.MulShared1MontgomeryPointShared0ScalarMontgomeryPoint.mul.«x86_64-tables_spec» self

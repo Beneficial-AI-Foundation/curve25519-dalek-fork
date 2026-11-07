@@ -24,5 +24,7 @@ import Curve25519.Proofs.Ristretto.MapVector
 
 /-! # Curve25519
 
-Definitions about curve25519 in general (RFC 7748, RFC 8032), independent of any
-implementation. Audited: everything here is part of the meaning of the spec statements. -/
+Definitions about curve25519 in general (RFC 7748, RFC 8032, RFC 9496), independent of any
+implementation. The RFC functions are stated on byte strings (`Vector UInt8 n`) as the RFCs write
+them, and computed by arithmetic cores on the little-endian values (`…Nat`). Audited: everything
+here is part of the meaning of the spec statements. -/

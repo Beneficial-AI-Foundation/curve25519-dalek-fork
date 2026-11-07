@@ -8,6 +8,7 @@ public import Curve25519Dalek.Funs
 public import Defs.Edwards
 import Proofs.Edwards.Mul
 import Proofs.Scalar.ClampInteger
+public import Proofs.Helpers.ByteValues
 public section
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
@@ -23,7 +24,7 @@ theorem mul_clamped_spec (self : EdwardsPoint.«x86_64-tables») (bytes : Array 
     (hself : self.LimbsLt 52) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
-  simp only [curve25519.decodeScalar25519, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.decodeScalar25519_toVector]
   unfold mul_clamped
   step as ⟨a, ha⟩
   have hca : ({ bytes := a } : scalar.Scalar).asNat = clamp (bytes.asNat 8) := by
@@ -46,7 +47,7 @@ theorem mul_clamped_spec (self : EdwardsPoint.«i686-tables») (bytes : Array U8
     (hself : self.LimbsLt 26) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • self.toPoint ∧ r.LimbsLt 26 ⦄ := by
-  simp only [curve25519.decodeScalar25519, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.decodeScalar25519_toVector]
   unfold mul_clamped
   step as ⟨a, ha⟩
   have hca : ({ bytes := a } : scalar.Scalar).asNat = clamp (bytes.asNat 8) := by
@@ -69,7 +70,7 @@ theorem mul_clamped_spec (self : EdwardsPoint.«x86_64-no-tables») (bytes : Arr
     (hself : self.LimbsLt 52) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • self.toPoint ∧ r.LimbsLt 52 ⦄ := by
-  simp only [curve25519.decodeScalar25519, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.decodeScalar25519_toVector]
   unfold mul_clamped
   step as ⟨a, ha⟩
   have hca : ({ bytes := a } : scalar.Scalar).asNat = clamp (bytes.asNat 8) := by
@@ -92,7 +93,7 @@ theorem mul_clamped_spec (self : EdwardsPoint.«i686-no-tables») (bytes : Array
     (hself : self.LimbsLt 26) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«i686-no-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • self.toPoint ∧ r.LimbsLt 26 ⦄ := by
-  simp only [curve25519.decodeScalar25519, Aeneas.Std.Array.decodeLittleEndian_toVector]
+  simp only [Aeneas.Std.Array.decodeScalar25519_toVector]
   unfold mul_clamped
   step as ⟨a, ha⟩
   have hca : ({ bytes := a } : scalar.Scalar).asNat = clamp (bytes.asNat 8) := by

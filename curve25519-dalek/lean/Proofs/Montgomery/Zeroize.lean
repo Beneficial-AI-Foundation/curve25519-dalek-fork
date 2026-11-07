@@ -8,6 +8,7 @@ public import Defs.Montgomery
 import Proofs.Helpers.Array
 import Proofs.Helpers.AsNat
 import Zeroize.Instances
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `Zeroize for MontgomeryPoint` -/
@@ -20,8 +21,8 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.ZeroizeZeroize
 theorem zeroize_spec (self : MontgomeryPoint) :
     zeroize self ⦃ (r : MontgomeryPoint) => r.bytes = encodeUCoordinate 0 ⦄ := by
   simp only
-      [curve25519.eq_encodeUCoordinate_iff,
-      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes, curve25519.encodeU_zero]
+      [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff,
+      curve25519.encodeU_zero]
   exact spec_mono (zeroize_eq self) fun r hr => by
     rw [hr, MontgomeryPoint.asNat_def, Array.asNat_eq_sum]
     exact Finset.sum_eq_zero fun i hi => by

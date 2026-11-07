@@ -20,6 +20,8 @@ import Proofs.Backend.Serial.U32.Field.FromBytes
 import Proofs.Helpers.ToField2625
 import Proofs.Helpers.Backend.U32.Bytes
 import Proofs.Helpers.Backend.U64.Bytes
+public import Proofs.Helpers.ByteValues
+import Mathlib.Tactic.IntervalCases
 public section
 
 /-! # `MontgomeryPoint::to_edwards`
@@ -162,6 +164,44 @@ end Curve25519Dalek.Backend
 
 namespace Curve25519Dalek.montgomery.MontgomeryPoint
 
+/-- Setting bit `7` of a byte below `128`. -/
+private theorem xor_128_of_lt {x : ℕ} (hx : x < 128) : x ^^^ 128 = x + 128 := by
+  revert x
+  decide
+
+/-- The bytes `to_edwards` decompresses (`y.to_bytes()` with `y_bytes[31] ^= sign << 7`) are those
+of `encodeU y + 2 ^ 255 (sign mod 2)`. -/
+private theorem toEdwards_bytes (y : ZMod p) (s : ℕ) :
+    (encodeUCoordinate y).set 31 ((encodeUCoordinate y)[31] ^^^ (UInt8.ofNat s <<< 7)) =
+      encodeLittleEndian 32 (encodeU y + 2 ^ 255 * (s % 2)) := by
+  have hv : encodeU y < 2 ^ 255 := (encodeU_lt y).trans p_lt_two_pow_255
+  apply Vector.ext
+  intro i hi
+  apply UInt8.toNat_inj.mp
+  simp only [encodeUCoordinate, encodeLittleEndian, Vector.getElem_set, Vector.getElem_ofFn]
+  split_ifs with h
+  · subst h
+    simp only [UInt8.toNat_xor, UInt8.toNat_shiftLeft, UInt8.toNat_ofNat']
+    have ha : encodeU y / 256 ^ 31 < 128 := by
+      rw [Nat.div_lt_iff_lt_mul (by positivity)]
+      exact hv.trans_eq (by norm_num)
+    have hshift : (s % 2 ^ 8) <<< (UInt8.toNat 7 % 8) % 2 ^ 8 = 128 * (s % 2) := by
+      rw [Nat.shiftLeft_eq, show UInt8.toNat 7 % 8 = 7 from rfl]
+      omega
+    have hdiv : (encodeU y + 2 ^ 255 * (s % 2)) / 256 ^ 31 =
+        encodeU y / 256 ^ 31 + 128 * (s % 2) := by
+      rw [show 2 ^ 255 * (s % 2) = 128 * (s % 2) * 256 ^ 31 by ring,
+        Nat.add_mul_div_right _ _ (by positivity)]
+    rw [hshift, hdiv]
+    rcases Nat.mod_two_eq_zero_or_one s with h0 | h1
+    · rw [h0]
+      norm_num
+    · rw [h1, mul_one, Nat.mod_eq_of_lt (ha.trans (by norm_num)), xor_128_of_lt ha]
+      omega
+  · simp only [UInt8.toNat_ofNat']
+    have hi' : i ≤ 30 := by omega
+    interval_cases i <;> norm_num <;> omega
+
 /-- The value of the bytes `to_edwards` decompresses is below `256 ^ 32`. -/
 private theorem toEdwards_bytes_lt (y : ZMod p) (sign : U8) :
     encodeU y + 2 ^ 255 * (sign.val % 2) < 256 ^ 32 := by
@@ -180,10 +220,12 @@ theorem «x86_64-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-tables»)) =>
       r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
         (if self.u = -1 then none
-        else curve25519.decodeLenient (encodeLittleEndian 32
-          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2)))) ∧
+        else curve25519.decodeLenient
+          ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
+            ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+              (UInt8.ofNat sign.val <<< 7)))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
-  rw [curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
+  rw [toEdwards_bytes, curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
     Nat.mod_eq_of_lt (toEdwards_bytes_lt _ _)]
   unfold curve25519.encodeU
   unfold to_edwards.«x86_64-tables»
@@ -205,8 +247,7 @@ theorem «x86_64-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     edwards.EdwardsPoint.«x86_64-tables».toPoint
     (fun q => q.OnCurve ∧ q.LimbsLt 52) _ hm1
     (fun s => by
-      simpa only [curve25519.decodeLenient,
-        edwards.CompressedEdwardsY.decodeLittleEndian_bytes] using
+      simpa only [edwards.CompressedEdwardsY.decodeLenient_bytes] using
         edwards.CompressedEdwardsY.«x86_64-tables».decompress_spec s) u sign
     (limbs_lt_of_le (by decide) hu_lt))
   intro r hr
@@ -222,10 +263,12 @@ theorem «i686-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-tables»)) =>
       r.map edwards.EdwardsPoint.«i686-tables».toPoint =
         (if self.u = -1 then none
-        else curve25519.decodeLenient (encodeLittleEndian 32
-          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2)))) ∧
+        else curve25519.decodeLenient
+          ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
+            ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+              (UInt8.ofNat sign.val <<< 7)))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
-  rw [curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
+  rw [toEdwards_bytes, curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
     Nat.mod_eq_of_lt (toEdwards_bytes_lt _ _)]
   unfold curve25519.encodeU
   unfold to_edwards.«i686-tables»
@@ -248,8 +291,7 @@ theorem «i686-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     edwards.EdwardsPoint.«i686-tables».toPoint
     (fun q => q.OnCurve ∧ q.LimbsLt 26) _ hm1
     (fun s => by
-      simpa only [curve25519.decodeLenient,
-        edwards.CompressedEdwardsY.decodeLittleEndian_bytes] using
+      simpa only [edwards.CompressedEdwardsY.decodeLenient_bytes] using
         edwards.CompressedEdwardsY.«i686-tables».decompress_spec s) u sign
     (limbs_lt_of_le (by decide) hu_lt))
   intro r hr
@@ -266,10 +308,12 @@ theorem «x86_64-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8
       ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-no-tables»)) =>
       r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
         (if self.u = -1 then none
-        else curve25519.decodeLenient (encodeLittleEndian 32
-          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2)))) ∧
+        else curve25519.decodeLenient
+          ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
+            ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+              (UInt8.ofNat sign.val <<< 7)))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
-  rw [curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
+  rw [toEdwards_bytes, curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
     Nat.mod_eq_of_lt (toEdwards_bytes_lt _ _)]
   unfold curve25519.encodeU
   unfold to_edwards.«x86_64-no-tables»
@@ -291,8 +335,7 @@ theorem «x86_64-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8
     edwards.EdwardsPoint.«x86_64-no-tables».toPoint
     (fun q => q.OnCurve ∧ q.LimbsLt 52) _ hm1
     (fun s => by
-      simpa only [curve25519.decodeLenient,
-        edwards.CompressedEdwardsY.decodeLittleEndian_bytes] using
+      simpa only [edwards.CompressedEdwardsY.decodeLenient_bytes] using
         edwards.CompressedEdwardsY.«x86_64-no-tables».decompress_spec s) u sign
     (limbs_lt_of_le (by decide) hu_lt))
   intro r hr
@@ -309,10 +352,12 @@ theorem «i686-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) 
       ⦃ (r : Option (edwards.EdwardsPoint.«i686-no-tables»)) =>
       r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
         (if self.u = -1 then none
-        else curve25519.decodeLenient (encodeLittleEndian 32
-          (encodeU ((self.u - 1) / (self.u + 1)) + 2 ^ 255 * (sign.val % 2)))) ∧
+        else curve25519.decodeLenient
+          ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
+            ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+              (UInt8.ofNat sign.val <<< 7)))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
-  rw [curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
+  rw [toEdwards_bytes, curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
     Nat.mod_eq_of_lt (toEdwards_bytes_lt _ _)]
   unfold curve25519.encodeU
   unfold to_edwards.«i686-no-tables»
@@ -335,8 +380,7 @@ theorem «i686-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) 
     edwards.EdwardsPoint.«i686-no-tables».toPoint
     (fun q => q.OnCurve ∧ q.LimbsLt 26) _ hm1
     (fun s => by
-      simpa only [curve25519.decodeLenient,
-        edwards.CompressedEdwardsY.decodeLittleEndian_bytes] using
+      simpa only [edwards.CompressedEdwardsY.decodeLenient_bytes] using
         edwards.CompressedEdwardsY.«i686-no-tables».decompress_spec s) u sign
     (limbs_lt_of_le (by decide) hu_lt))
   intro r hr

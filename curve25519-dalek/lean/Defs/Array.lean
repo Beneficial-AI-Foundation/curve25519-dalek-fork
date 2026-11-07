@@ -6,8 +6,6 @@ Authors: Alessandro D'Angelo, Oliver Butterley
 module
 public import Mathlib.Data.Nat.Digits.Defs
 public import Aeneas.Std.Array.Array
-public import Curve25519.Bytes
-public import ToAeneas.Array
 public section
 
 /-! # The value of an array of digits (audited) -/
@@ -34,11 +32,4 @@ theorem Aeneas.Std.Array.asInt_def {ty : IScalarTy} {n : Usize} (bits : ℕ)
     (a : Array (IScalar ty) n) :
     a.asInt bits = (a.val.map (·.val)).foldr (fun d acc => d + 2 ^ bits * acc) 0 := by
   unfold Aeneas.Std.Array.asInt
-  rfl
-
-/-- The value of the bytes of `a.toVector` (RFC 7748 `decodeLittleEndian`) is `a.asNat 8`. -/
-theorem Aeneas.Std.Array.decodeLittleEndian_toVector {n : Usize} (a : Array U8 n) :
-    curve25519.decodeLittleEndian a.toVector = a.asNat 8 := by
-  rw [curve25519.decodeLittleEndian, Array.toList_toVector, List.map_map, Array.asNat_def]
-  norm_num
   rfl

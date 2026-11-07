@@ -9,6 +9,7 @@ public import Defs.Edwards
 import Proofs.Backend.Serial.U64.Field.FromLimbs
 import Proofs.Helpers.Coords
 import Proofs.Helpers.ToField
+public import Proofs.Helpers.ByteValues
 public section
 
 /-! # `EIGHT_TORSION`
