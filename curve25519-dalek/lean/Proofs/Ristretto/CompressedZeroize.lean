@@ -19,8 +19,11 @@ namespace Curve25519Dalek.ristretto.CompressedRistretto.Insts.ZeroizeZeroize
 /-- `Zeroize for CompressedRistretto`: thirty-two zero bytes, the encoding of the neutral
 element. -/
 theorem zeroize_spec (self : CompressedRistretto) :
-    zeroize self ⦃ (r : CompressedRistretto) => r.asNat = Ristretto.encodeRep 0 ⦄ :=
-  spec_mono (zeroize_eq self) fun r hr => by
-    rw [hr, CompressedRistretto.asNat_repeat_zero, Ristretto.encodeRep_zero]
+    zeroize self ⦃ (r : CompressedRistretto) => r.bytes = Ristretto.encodeRep 0 ⦄ := by
+  simp only
+      [curve25519.Ristretto.eq_encodeRep_iff,
+      Curve25519Dalek.ristretto.CompressedRistretto.decodeLittleEndian_bytes]
+  exact spec_mono (zeroize_eq self) fun r hr => by
+    rw [hr, CompressedRistretto.asNat_repeat_zero, Ristretto.encodeRepNat_zero]
 
 end Curve25519Dalek.ristretto.CompressedRistretto.Insts.ZeroizeZeroize

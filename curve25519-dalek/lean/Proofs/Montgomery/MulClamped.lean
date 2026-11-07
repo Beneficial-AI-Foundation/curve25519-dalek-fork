@@ -25,7 +25,11 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint
 @[step]
 theorem mul_clamped_spec (self : MontgomeryPoint) (bytes : Array U8 32#usize) :
     mul_clamped self bytes ⦃ (r : MontgomeryPoint) =>
-      r.asNat = x25519 (bytes.asNat 8) self.asNat ⦄ := by
+      r.bytes = X25519 bytes.toVector self.bytes ⦄ := by
+  simp only
+      [curve25519.eq_X25519_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes,
+      Aeneas.Std.Array.decodeLittleEndian_toVector]
   unfold mul_clamped
   step as ⟨a, ha⟩
   step with scalar.Scalar.Insts.CoreOpsArithMulMontgomeryPointMontgomeryPoint.mul_spec
@@ -35,6 +39,7 @@ theorem mul_clamped_spec (self : MontgomeryPoint) (bytes : Array U8 32#usize) :
     rw [scalar.Scalar.asNat_def]
     change a.asNat 8 = _
     omega
-  rw [hr, hca, Nat.mod_eq_of_lt (clamp_lt _), x25519, MontgomeryPoint.u_def]
+  rw [curve25519.eq_encodeUCoordinate_iff, MontgomeryPoint.decodeLittleEndian_bytes] at hr
+  rw [hr, hca, Nat.mod_eq_of_lt (clamp_lt _), x25519Nat, MontgomeryPoint.u_def]
 
 end Curve25519Dalek.montgomery.MontgomeryPoint

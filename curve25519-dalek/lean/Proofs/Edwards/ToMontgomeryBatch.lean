@@ -284,10 +284,14 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
-    rw [hr i hi, EdwardsPoint.«x86_64-tables».u_edwardsToMontgomery (heds_on i hi)]
-    rfl⟩
+        ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate
+            (edwardsToMontgomery eds[i]!.toPoint).u ⦄ := by
+  simp only
+      [curve25519.eq_encodeUCoordinate_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  exact spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+      rw [hr i hi, EdwardsPoint.«x86_64-tables».u_edwardsToMontgomery (heds_on i hi)]
+      rfl⟩
 
 end «EdwardsPointx86_64-tables»
 
@@ -334,10 +338,14 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 26) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
-    rw [hr i hi, EdwardsPoint.«i686-tables».u_edwardsToMontgomery (heds_on i hi)]
-    rfl⟩
+        ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate
+            (edwardsToMontgomery eds[i]!.toPoint).u ⦄ := by
+  simp only
+      [curve25519.eq_encodeUCoordinate_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  exact spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+      rw [hr i hi, EdwardsPoint.«i686-tables».u_edwardsToMontgomery (heds_on i hi)]
+      rfl⟩
 
 end «EdwardsPointi686-tables»
 
@@ -384,10 +392,14 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 52) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
-    rw [hr i hi, EdwardsPoint.«x86_64-no-tables».u_edwardsToMontgomery (heds_on i hi)]
-    rfl⟩
+        ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate
+            (edwardsToMontgomery eds[i]!.toPoint).u ⦄ := by
+  simp only
+      [curve25519.eq_encodeUCoordinate_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  exact spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+      rw [hr i hi, EdwardsPoint.«x86_64-no-tables».u_edwardsToMontgomery (heds_on i hi)]
+      rfl⟩
 
 end «EdwardsPointx86_64-no-tables»
 
@@ -434,10 +446,14 @@ theorem to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-no-tables»)
     (heds : ∀ i < eds.length, eds[i]!.LimbsLt 26) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
-    rw [hr i hi, EdwardsPoint.«i686-no-tables».u_edwardsToMontgomery (heds_on i hi)]
-    rfl⟩
+        ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate
+            (edwardsToMontgomery eds[i]!.toPoint).u ⦄ := by
+  simp only
+      [curve25519.eq_encodeUCoordinate_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  exact spec_mono (to_montgomery_batch_asNat eds heds) fun r ⟨hlen, hr⟩ => ⟨hlen, fun i hi => by
+      rw [hr i hi, EdwardsPoint.«i686-no-tables».u_edwardsToMontgomery (heds_on i hi)]
+      rfl⟩
 
 end «EdwardsPointi686-no-tables»
 

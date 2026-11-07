@@ -289,14 +289,17 @@ namespace CompressedEdwardsY.«x86_64-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenient` of the bytes'
+/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenientNat` of the bytes'
 value (`y` reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with
 limbs `< 2^52`. -/
 @[step]
 theorem decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-tables»)) =>
-      r.map EdwardsPoint.«x86_64-tables».toPoint = decodeLenient self.asNat ∧
+      r.map EdwardsPoint.«x86_64-tables».toPoint = decodeLenient self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
+  simp only
+      [curve25519.decodeLenient,
+      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
   unfold decompress.«x86_64-tables»
   step with decompress.«x86_64-tables».step_1_spec
     as ⟨c, X, Y, Z, hcv, hYf, hZf, hc, hX, hXneg, hX_lt, hY_lt, hZ_lt⟩
@@ -304,7 +307,7 @@ theorem decompress_spec (self : CompressedEdwardsY) :
   rcases hcv with rfl | rfl
   · simp only [hb, bne_self_eq_false, Bool.false_eq_true, ite_false, WP.spec_ok]
     refine ⟨?_, fun q hq => by cases hq⟩
-    rw [Option.map_none, eq_comm, decodeLenient_eq_none_iff, ← hYf]
+    rw [Option.map_none, eq_comm, decodeLenientNat_eq_none_iff, ← hYf]
     exact fun hs => absurd (hc.mpr hs) (by decide)
   · simp only [hb, show (1#u8 != 0#u8) = true from by decide, ite_true]
     step with decompress.«x86_64-tables».step_2_spec as ⟨ep, hep0, hep1, hepb⟩
@@ -316,14 +319,14 @@ theorem decompress_spec (self : CompressedEdwardsY) :
         edwards.decompress.«x86_64-tables».onCurve_and_toPoint_of_toExtended hsq (hep0 h0)
       refine ⟨?_, fun q hq => Option.some.inj hq ▸ ⟨hon, hepb⟩⟩
       rw [Option.map_some, eq_comm]
-      exact decodeLenient_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf]) (fun _ => hpx)
+      exact decodeLenientNat_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf]) (fun _ => hpx)
         (fun h => absurd (h0.symm.trans h) (by decide)) hle
     · obtain ⟨hon, hpx, hpy⟩ :=
         edwards.decompress.«x86_64-tables».onCurve_and_toPoint_of_toExtended
           (by rw [neg_sq]; exact hsq) (hep1 h1)
       refine ⟨?_, fun q hq => Option.some.inj hq ▸ ⟨hon, hepb⟩⟩
       rw [Option.map_some, eq_comm]
-      exact decodeLenient_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf])
+      exact decodeLenientNat_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf])
         (fun h => absurd (h1.symm.trans h) (by decide)) (fun _ => hpx) hle
 
 end CompressedEdwardsY.«x86_64-tables»
@@ -332,14 +335,17 @@ namespace CompressedEdwardsY.«i686-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenient` of the bytes'
+/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenientNat` of the bytes'
 value (`y` reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with
 limbs `< 2^26`. -/
 @[step]
 theorem decompress_spec (self : CompressedEdwardsY) :
     decompress.«i686-tables» self ⦃ (r : Option (EdwardsPoint.«i686-tables»)) =>
-      r.map EdwardsPoint.«i686-tables».toPoint = decodeLenient self.asNat ∧
+      r.map EdwardsPoint.«i686-tables».toPoint = decodeLenient self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
+  simp only
+      [curve25519.decodeLenient,
+      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
   unfold decompress.«i686-tables»
   step with decompress.«i686-tables».step_1_spec
     as ⟨c, X, Y, Z, hcv, hYf, hZf, hc, hX, hXneg, hX_lt, hY_lt, hZ_lt⟩
@@ -347,7 +353,7 @@ theorem decompress_spec (self : CompressedEdwardsY) :
   rcases hcv with rfl | rfl
   · simp only [hb, bne_self_eq_false, Bool.false_eq_true, ite_false, WP.spec_ok]
     refine ⟨?_, fun q hq => by cases hq⟩
-    rw [Option.map_none, eq_comm, decodeLenient_eq_none_iff, ← hYf]
+    rw [Option.map_none, eq_comm, decodeLenientNat_eq_none_iff, ← hYf]
     exact fun hs => absurd (hc.mpr hs) (by decide)
   · simp only [hb, show (1#u8 != 0#u8) = true from by decide, ite_true]
     step with decompress.«i686-tables».step_2_spec as ⟨ep, hep0, hep1, hepb⟩
@@ -359,14 +365,14 @@ theorem decompress_spec (self : CompressedEdwardsY) :
         edwards.decompress.«i686-tables».onCurve_and_toPoint_of_toExtended hsq (hep0 h0)
       refine ⟨?_, fun q hq => Option.some.inj hq ▸ ⟨hon, hepb⟩⟩
       rw [Option.map_some, eq_comm]
-      exact decodeLenient_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf]) (fun _ => hpx)
+      exact decodeLenientNat_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf]) (fun _ => hpx)
         (fun h => absurd (h0.symm.trans h) (by decide)) hle
     · obtain ⟨hon, hpx, hpy⟩ :=
         edwards.decompress.«i686-tables».onCurve_and_toPoint_of_toExtended
           (by rw [neg_sq]; exact hsq) (hep1 h1)
       refine ⟨?_, fun q hq => Option.some.inj hq ▸ ⟨hon, hepb⟩⟩
       rw [Option.map_some, eq_comm]
-      exact decodeLenient_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf])
+      exact decodeLenientNat_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf])
         (fun h => absurd (h1.symm.trans h) (by decide)) (fun _ => hpx) hle
 
 end CompressedEdwardsY.«i686-tables»
@@ -514,14 +520,17 @@ namespace CompressedEdwardsY.«x86_64-no-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenient` of the bytes'
+/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenientNat` of the bytes'
 value (`y` reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with
 limbs `< 2^52`. -/
 @[step]
 theorem decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-no-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-no-tables»)) =>
-      r.map EdwardsPoint.«x86_64-no-tables».toPoint = decodeLenient self.asNat ∧
+      r.map EdwardsPoint.«x86_64-no-tables».toPoint = decodeLenient self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
+  simp only
+      [curve25519.decodeLenient,
+      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
   unfold decompress.«x86_64-no-tables»
   step with decompress.«x86_64-no-tables».step_1_spec
     as ⟨c, X, Y, Z, hcv, hYf, hZf, hc, hX, hXneg, hX_lt, hY_lt, hZ_lt⟩
@@ -529,7 +538,7 @@ theorem decompress_spec (self : CompressedEdwardsY) :
   rcases hcv with rfl | rfl
   · simp only [hb, bne_self_eq_false, Bool.false_eq_true, ite_false, WP.spec_ok]
     refine ⟨?_, fun q hq => by cases hq⟩
-    rw [Option.map_none, eq_comm, decodeLenient_eq_none_iff, ← hYf]
+    rw [Option.map_none, eq_comm, decodeLenientNat_eq_none_iff, ← hYf]
     exact fun hs => absurd (hc.mpr hs) (by decide)
   · simp only [hb, show (1#u8 != 0#u8) = true from by decide, ite_true]
     step with decompress.«x86_64-no-tables».step_2_spec as ⟨ep, hep0, hep1, hepb⟩
@@ -541,14 +550,14 @@ theorem decompress_spec (self : CompressedEdwardsY) :
         edwards.decompress.«x86_64-no-tables».onCurve_and_toPoint_of_toExtended hsq (hep0 h0)
       refine ⟨?_, fun q hq => Option.some.inj hq ▸ ⟨hon, hepb⟩⟩
       rw [Option.map_some, eq_comm]
-      exact decodeLenient_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf]) (fun _ => hpx)
+      exact decodeLenientNat_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf]) (fun _ => hpx)
         (fun h => absurd (h0.symm.trans h) (by decide)) hle
     · obtain ⟨hon, hpx, hpy⟩ :=
         edwards.decompress.«x86_64-no-tables».onCurve_and_toPoint_of_toExtended
           (by rw [neg_sq]; exact hsq) (hep1 h1)
       refine ⟨?_, fun q hq => Option.some.inj hq ▸ ⟨hon, hepb⟩⟩
       rw [Option.map_some, eq_comm]
-      exact decodeLenient_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf])
+      exact decodeLenientNat_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf])
         (fun h => absurd (h1.symm.trans h) (by decide)) (fun _ => hpx) hle
 
 end CompressedEdwardsY.«x86_64-no-tables»
@@ -557,14 +566,17 @@ namespace CompressedEdwardsY.«i686-no-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenient` of the bytes'
+/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenientNat` of the bytes'
 value (`y` reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with
 limbs `< 2^26`. -/
 @[step]
 theorem decompress_spec (self : CompressedEdwardsY) :
     decompress.«i686-no-tables» self ⦃ (r : Option (EdwardsPoint.«i686-no-tables»)) =>
-      r.map EdwardsPoint.«i686-no-tables».toPoint = decodeLenient self.asNat ∧
+      r.map EdwardsPoint.«i686-no-tables».toPoint = decodeLenient self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
+  simp only
+      [curve25519.decodeLenient,
+      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
   unfold decompress.«i686-no-tables»
   step with decompress.«i686-no-tables».step_1_spec
     as ⟨c, X, Y, Z, hcv, hYf, hZf, hc, hX, hXneg, hX_lt, hY_lt, hZ_lt⟩
@@ -572,7 +584,7 @@ theorem decompress_spec (self : CompressedEdwardsY) :
   rcases hcv with rfl | rfl
   · simp only [hb, bne_self_eq_false, Bool.false_eq_true, ite_false, WP.spec_ok]
     refine ⟨?_, fun q hq => by cases hq⟩
-    rw [Option.map_none, eq_comm, decodeLenient_eq_none_iff, ← hYf]
+    rw [Option.map_none, eq_comm, decodeLenientNat_eq_none_iff, ← hYf]
     exact fun hs => absurd (hc.mpr hs) (by decide)
   · simp only [hb, show (1#u8 != 0#u8) = true from by decide, ite_true]
     step with decompress.«i686-no-tables».step_2_spec as ⟨ep, hep0, hep1, hepb⟩
@@ -584,14 +596,14 @@ theorem decompress_spec (self : CompressedEdwardsY) :
         edwards.decompress.«i686-no-tables».onCurve_and_toPoint_of_toExtended hsq (hep0 h0)
       refine ⟨?_, fun q hq => Option.some.inj hq ▸ ⟨hon, hepb⟩⟩
       rw [Option.map_some, eq_comm]
-      exact decodeLenient_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf]) (fun _ => hpx)
+      exact decodeLenientNat_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf]) (fun _ => hpx)
         (fun h => absurd (h0.symm.trans h) (by decide)) hle
     · obtain ⟨hon, hpx, hpy⟩ :=
         edwards.decompress.«i686-no-tables».onCurve_and_toPoint_of_toExtended
           (by rw [neg_sq]; exact hsq) (hep1 h1)
       refine ⟨?_, fun q hq => Option.some.inj hq ▸ ⟨hon, hepb⟩⟩
       rw [Option.map_some, eq_comm]
-      exact decodeLenient_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf])
+      exact decodeLenientNat_eq_some_of_sign hXneg ep.toPoint (by rw [hpy, hYf])
         (fun h => absurd (h1.symm.trans h) (by decide)) (fun _ => hpx) hle
 
 end CompressedEdwardsY.«i686-no-tables»

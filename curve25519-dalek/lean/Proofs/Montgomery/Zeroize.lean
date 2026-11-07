@@ -18,8 +18,11 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.ZeroizeZeroize
 
 /-- `Zeroize for MontgomeryPoint`: thirty-two zero bytes, the encoding of `u = 0`. -/
 theorem zeroize_spec (self : MontgomeryPoint) :
-    zeroize self ⦃ (r : MontgomeryPoint) => r.asNat = 0 ⦄ :=
-  spec_mono (zeroize_eq self) fun r hr => by
+    zeroize self ⦃ (r : MontgomeryPoint) => r.bytes = encodeUCoordinate 0 ⦄ := by
+  simp only
+      [curve25519.eq_encodeUCoordinate_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes, curve25519.encodeU_zero]
+  exact spec_mono (zeroize_eq self) fun r hr => by
     rw [hr, MontgomeryPoint.asNat_def, Array.asNat_eq_sum]
     exact Finset.sum_eq_zero fun i hi => by
       rw [Array.getElem!_repeat 0#u8 (by simpa using Finset.mem_range.mp hi)]

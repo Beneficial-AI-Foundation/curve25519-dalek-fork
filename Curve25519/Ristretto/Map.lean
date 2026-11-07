@@ -15,9 +15,9 @@ public section
 
 `Ristretto.mapRep r₀` is RFC 9496's `MAP(r₀)`, the Elligator-style map of a field element to an
 even point of `edwards` (hidden; coordinates `mapRep_x`, `mapRep_y`, with the `sqrtRatioM1` case
-split, and `even_mapRep`), and `Ristretto.fromUniformRep n` the one-way map of §4.3.4 on the
+split, and `even_mapRep`), and `Ristretto.fromUniformRepNat n` the one-way map of §4.3.4 on the
 little-endian value `n` of 64 uniform bytes: `MAP(r₀) + MAP(r₁)` for the two 32-byte halves
-masked to 255 bits (`decodeU`), an even point (`even_fromUniformRep`). The field identities
+masked to 255 bits (`decodeU`), an even point (`even_fromUniformRepNat`). The field identities
 behind the on-curve proof of `mapRep` are in `Curve25519.Proofs.Ristretto.Elligator` (not
 audited). -/
 
@@ -187,16 +187,24 @@ theorem even_mapRep (r₀ : ZMod p) : Even (mapRep r₀) :=
 representative: `MAP(r₀) + MAP(r₁)` for the two 32-byte halves `r₀ = n % 2^256`,
 `r₁ = n / 2^256`, each masked to 255 bits and reduced (`decodeU`). Meant for `n < 2^512` (64
 bytes); for larger `n` the high half `n / 2^256` keeps all the upper bits before masking. -/
-noncomputable def fromUniformRep (n : ℕ) : edwards.Point :=
+noncomputable def fromUniformRepNat (n : ℕ) : edwards.Point :=
   mapRep (decodeU (n % 2 ^ 256)) + mapRep (decodeU (n / 2 ^ 256))
 
-theorem fromUniformRep_def (n : ℕ) :
-    fromUniformRep n = mapRep (decodeU (n % 2 ^ 256)) + mapRep (decodeU (n / 2 ^ 256)) := by
-  unfold fromUniformRep
+theorem fromUniformRepNat_def (n : ℕ) :
+    fromUniformRepNat n = mapRep (decodeU (n % 2 ^ 256)) + mapRep (decodeU (n / 2 ^ 256)) := by
+  unfold fromUniformRepNat
   rfl
 
-theorem even_fromUniformRep (n : ℕ) : Even (fromUniformRep n) := by
-  rw [fromUniformRep_def]
+theorem even_fromUniformRepNat (n : ℕ) : Even (fromUniformRepNat n) := by
+  rw [fromUniformRepNat_def]
   exact (even_mapRep _).add (even_mapRep _)
+
+/-- RFC 9496 §4.3.4, the one-way map on 64 uniform bytes, as a representative:
+`fromUniformRepNat` of their little-endian value. -/
+@[expose] noncomputable def fromUniformRep (b : Vector UInt8 64) : edwards.Point :=
+  fromUniformRepNat (decodeLittleEndian b)
+
+theorem even_fromUniformRep (b : Vector UInt8 64) : Even (fromUniformRep b) :=
+  even_fromUniformRepNat _
 
 end curve25519.Ristretto

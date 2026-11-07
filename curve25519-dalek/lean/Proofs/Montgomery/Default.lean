@@ -27,7 +27,10 @@ private theorem asNat_repeat_zero : (Array.repeat 32#usize 0#u8).asNat 8 = 0 := 
 /-- `Default for MontgomeryPoint`: thirty-two zero bytes, the encoding of `u = 0`. -/
 @[step]
 theorem default_spec :
-    default ⦃ (r : MontgomeryPoint) => r.asNat = 0 ⦄ := by
+    default ⦃ (r : MontgomeryPoint) => r.bytes = encodeUCoordinate 0 ⦄ := by
+  simp only
+      [curve25519.eq_encodeUCoordinate_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes, curve25519.encodeU_zero]
   unfold default core.default.DefaultArray.default
   step*
   rw [MontgomeryPoint.asNat_def]

@@ -18,8 +18,9 @@ public section
   computes.
 - `AffinePoint` (`edwards/affine.rs`) is the affine point itself: `OnCurve` is the curve
   equation, `toPoint` the point (`0` off the curve), `LimbsLt n` as for `EdwardsPoint`.
-- `CompressedEdwardsY` is 32 bytes; `asNat` is their little-endian value, RFC 8032's encoding
-  `curve25519.encode` of a point.
+- `CompressedEdwardsY` is 32 bytes: `bytes` is them as a `Vector UInt8 32` (`Array.toVector`),
+  the byte string of RFC 8032 (`curve25519.encode`, `decodeLenient`); `asNat` is their
+  little-endian value, for the proofs.
 - The basepoint tables `EdwardsBasepointTable{,Radix32,Radix64,Radix128,Radix256}` (radix
   `2^w`, `w = 4, 5, 6, 7, 8`) hold `32` rows of `2^(w-1)` affine Niels points. `t.point` is the
   point of entry `0` of row `0`, and `t.IsTable`, the invariant of the Rust type (whose tables
@@ -338,6 +339,14 @@ theorem CompressedEdwardsY.asNat_def (self : CompressedEdwardsY) :
     self.asNat = Aeneas.Std.Array.asNat 8 self := by
   unfold CompressedEdwardsY.asNat
   rfl
+
+/-- The 32 bytes as a `Vector UInt8 32`, the byte string of RFC 8032. -/
+@[expose] def CompressedEdwardsY.bytes (self : CompressedEdwardsY) : Vector UInt8 32 :=
+  Aeneas.Std.Array.toVector self
+
+theorem CompressedEdwardsY.decodeLittleEndian_bytes (self : CompressedEdwardsY) :
+    curve25519.decodeLittleEndian self.bytes = self.asNat :=
+  Aeneas.Std.Array.decodeLittleEndian_toVector self
 
 /-- Needed for `v[i]!` on vectors and arrays of compressed points; the default is never
 observed for in-range indices. -/

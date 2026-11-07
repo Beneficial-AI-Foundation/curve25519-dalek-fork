@@ -12,6 +12,7 @@ public import Defs.Scalar29
 public import Defs.Scalar52
 public import Defs.ScalarMul
 public import Defs.Window
+public import ToAeneas.Array
 
 /-! # Definitions for the specs of curve25519-dalek
 

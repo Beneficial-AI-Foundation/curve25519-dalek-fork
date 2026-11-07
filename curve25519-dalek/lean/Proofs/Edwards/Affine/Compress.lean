@@ -84,9 +84,9 @@ theorem compress_asNat (self : AffinePoint.«x86_64-tables») :
 
 /-- `AffinePoint::compress` is RFC 8032's encoding of the represented point. -/
 theorem compress_spec (self : AffinePoint.«x86_64-tables») (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
+    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encodeNat self.toPoint ⦄ :=
   spec_mono (compress_asNat self) fun r hr => by
-    rw [hr, encode_eq, AffinePoint.«x86_64-tables».toPoint_x hon,
+    rw [hr, encodeNat_eq, AffinePoint.«x86_64-tables».toPoint_x hon,
       AffinePoint.«x86_64-tables».toPoint_y hon]
 
 end «AffinePointx86_64-tables»
@@ -135,9 +135,9 @@ theorem compress_asNat (self : AffinePoint.«i686-tables») :
 
 /-- `AffinePoint::compress` is RFC 8032's encoding of the represented point. -/
 theorem compress_spec (self : AffinePoint.«i686-tables») (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
+    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encodeNat self.toPoint ⦄ :=
   spec_mono (compress_asNat self) fun r hr => by
-    rw [hr, encode_eq, AffinePoint.«i686-tables».toPoint_x hon,
+    rw [hr, encodeNat_eq, AffinePoint.«i686-tables».toPoint_x hon,
       AffinePoint.«i686-tables».toPoint_y hon]
 
 end «AffinePointi686-tables»
@@ -186,9 +186,9 @@ theorem compress_asNat (self : AffinePoint.«x86_64-no-tables») :
 
 /-- `AffinePoint::compress` is RFC 8032's encoding of the represented point. -/
 theorem compress_spec (self : AffinePoint.«x86_64-no-tables») (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
+    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encodeNat self.toPoint ⦄ :=
   spec_mono (compress_asNat self) fun r hr => by
-    rw [hr, encode_eq, AffinePoint.«x86_64-no-tables».toPoint_x hon,
+    rw [hr, encodeNat_eq, AffinePoint.«x86_64-no-tables».toPoint_x hon,
       AffinePoint.«x86_64-no-tables».toPoint_y hon]
 
 end «AffinePointx86_64-no-tables»
@@ -237,9 +237,9 @@ theorem compress_asNat (self : AffinePoint.«i686-no-tables») :
 
 /-- `AffinePoint::compress` is RFC 8032's encoding of the represented point. -/
 theorem compress_spec (self : AffinePoint.«i686-no-tables») (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄ :=
+    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encodeNat self.toPoint ⦄ :=
   spec_mono (compress_asNat self) fun r hr => by
-    rw [hr, encode_eq, AffinePoint.«i686-no-tables».toPoint_x hon,
+    rw [hr, encodeNat_eq, AffinePoint.«i686-no-tables».toPoint_x hon,
       AffinePoint.«i686-no-tables».toPoint_y hon]
 
 end «AffinePointi686-no-tables»

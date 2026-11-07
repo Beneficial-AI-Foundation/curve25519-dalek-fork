@@ -24,7 +24,12 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint
 @[step]
 theorem mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : MontgomeryPoint) =>
-      r.asNat = x25519 (bytes.asNat 8) 9 ⦄ := by
+      r.bytes = X25519 bytes.toVector (encodeUCoordinate 9) ⦄ := by
+  simp only
+      [curve25519.eq_X25519_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes,
+      Aeneas.Std.Array.decodeLittleEndian_toVector,
+      curve25519.decodeLittleEndian_encodeUCoordinate, curve25519.encodeU_nine]
   unfold mul_base_clamped
   step as ⟨a, ha⟩
   have hca : ({ bytes := a } : scalar.Scalar).asNat = clamp (bytes.asNat 8) := by
@@ -33,6 +38,7 @@ theorem mul_base_clamped_spec (bytes : Array U8 32#usize) :
     change a.asNat 8 = _
     omega
   step with mul_base_spec { bytes := a } (hca ▸ clamp_lt _) as ⟨r, hr⟩
-  rw [hr, hca, x25519_basepoint]
+  rw [curve25519.eq_encodeUCoordinate_iff, MontgomeryPoint.decodeLittleEndian_bytes] at hr
+  rw [hr, hca, x25519Nat_basepoint]
 
 end Curve25519Dalek.montgomery.MontgomeryPoint

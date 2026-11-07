@@ -14,10 +14,13 @@ namespace Curve25519Dalek.constants
 
 /-- `ED25519_BASEPOINT_COMPRESSED`: RFC 8032's encoding of the basepoint. -/
 theorem ED25519_BASEPOINT_COMPRESSED_spec :
-    ED25519_BASEPOINT_COMPRESSED.asNat = curve25519.encode curve25519.basepoint := by
+    ED25519_BASEPOINT_COMPRESSED.bytes = curve25519.encode curve25519.basepoint := by
+  simp only
+      [curve25519.eq_encode_iff,
+      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
   unfold ED25519_BASEPOINT_COMPRESSED
   rw [edwards.CompressedEdwardsY.asNat_def, Array.asNat_def, Array.make_val,
-    curve25519.encode_basepoint]
+    curve25519.encodeNat_basepoint]
   decide
 
 end Curve25519Dalek.constants

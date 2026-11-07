@@ -71,15 +71,15 @@ through `point` under `IsTable` and `IsBounded`, precomputations through `points
 and `IsBounded`. Scalars act by their unreduced value `asNat`, which must be `< 2^255` (dalek's
 `debug_assert!`). Iterator inputs are given by the lists they yield.
 
-Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, `CompressedEdwardsY.asNat`, the
+Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, `CompressedEdwardsY.bytes`, the
 tables' `point`, `IsTable`, `IsBounded` (`Defs/Edwards.lean`), the precomputations' `points`,
 `IsValid`, `IsBounded` (`Defs/ScalarMul.lean`), `Scalar.asNat`, `HalfWidthScalar.asNat`
-(`Defs/Scalar.lean`), `Array.asNat` (`Defs/Array.lean`), `MontgomeryPoint.asNat`
-(`Defs/Montgomery.lean`), `Iterator.Yields`, `IntoIterator.Yields` (`Defs/Iterator.lean`),
+(`Defs/Scalar.lean`), `MontgomeryPoint.bytes` (`Defs/Montgomery.lean`), `Array.toVector`
+(`ToAeneas/Array.lean`), `Iterator.Yields`, `IntoIterator.Yields` (`Defs/Iterator.lean`),
 `curve25519.encode`, `decodeLenient` (`Curve25519/Edwards/Encoding.lean`), `curve25519.basepoint`
-(`Curve25519/Edwards/Basepoint.lean`), `curve25519.clamp`, `encodeU` (`Curve25519/X25519.lean`),
-`curve25519.L` (`Curve25519/Basic.lean`), `edwardsToMontgomery` (`Curve25519/Montgomery.lean`),
-`subtle.Choice.IsValid` (`Subtle/`).
+(`Curve25519/Edwards/Basepoint.lean`), `decodeScalar25519`, `encodeUCoordinate`
+(`Curve25519/X25519.lean`), `curve25519.L` (`Curve25519/Basic.lean`), `edwardsToMontgomery`
+(`Curve25519/Montgomery.lean`), `subtle.Choice.IsValid` (`Subtle/`).
 
 Not translated: `Debug`, `Hash`, the `group` and `serde` impls, `random`, hash-to-curve, and the
 provided methods of the traits. -/
@@ -136,12 +136,12 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.«x86_64-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenient` of the bytes'
-value (`y` reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with
-limbs `< 2^52`. -/
+/-- `CompressedEdwardsY::decompress`: the lenient decoding `decodeLenient` of the bytes (`y`
+reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with limbs
+`< 2^52`. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-tables»)) =>
-      r.map EdwardsPoint.«x86_64-tables».toPoint = decodeLenient self.asNat ∧
+      r.map EdwardsPoint.«x86_64-tables».toPoint = decodeLenient self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -153,12 +153,12 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.«i686-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenient` of the bytes'
-value (`y` reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with
-limbs `< 2^26`. -/
+/-- `CompressedEdwardsY::decompress`: the lenient decoding `decodeLenient` of the bytes (`y`
+reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with limbs
+`< 2^26`. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«i686-tables» self ⦃ (r : Option (EdwardsPoint.«i686-tables»)) =>
-      r.map EdwardsPoint.«i686-tables».toPoint = decodeLenient self.asNat ∧
+      r.map EdwardsPoint.«i686-tables».toPoint = decodeLenient self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -170,12 +170,12 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.«x86_64-no-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenient` of the bytes'
-value (`y` reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with
-limbs `< 2^52`. -/
+/-- `CompressedEdwardsY::decompress`: the lenient decoding `decodeLenient` of the bytes (`y`
+reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with limbs
+`< 2^52`. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-no-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-no-tables»)) =>
-      r.map EdwardsPoint.«x86_64-no-tables».toPoint = decodeLenient self.asNat ∧
+      r.map EdwardsPoint.«x86_64-no-tables».toPoint = decodeLenient self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -187,12 +187,12 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.«i686-no-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `CompressedEdwardsY::decompress`: dalek's lenient decoding `decodeLenient` of the bytes'
-value (`y` reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with
-limbs `< 2^26`. -/
+/-- `CompressedEdwardsY::decompress`: the lenient decoding `decodeLenient` of the bytes (`y`
+reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with limbs
+`< 2^26`. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«i686-no-tables» self ⦃ (r : Option (EdwardsPoint.«i686-no-tables»)) =>
-      r.map EdwardsPoint.«i686-no-tables».toPoint = decodeLenient self.asNat ∧
+      r.map EdwardsPoint.«i686-no-tables».toPoint = decodeLenient self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -220,7 +220,7 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.Insts.Curve25519_dalekTrait
 
 /-- `Identity for CompressedEdwardsY` is the encoding of the neutral element. -/
 recall identity_spec :
-    identity ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄
+    identity ⦃ (r : CompressedEdwardsY) => r.bytes = encode 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec
@@ -231,7 +231,7 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.Insts.CoreDefaultDefault
 
 /-- `Default for CompressedEdwardsY` is the encoding of the neutral element. -/
 recall default_spec :
-    default ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄
+    default ⦃ (r : CompressedEdwardsY) => r.bytes = encode 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec
@@ -380,7 +380,7 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.Insts.ZeroizeZeroize
 
 /-- `Zeroize for CompressedEdwardsY` leaves the encoding of the neutral element. -/
 recall zeroize_spec (self : CompressedEdwardsY) :
-    zeroize self ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄
+    zeroize self ⦃ (r : CompressedEdwardsY) => r.bytes = encode 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
@@ -663,7 +663,7 @@ Montgomery image of the represented point (`0` for the identity). -/
 recall to_montgomery_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄
+      r.bytes = encodeUCoordinate (edwardsToMontgomery self.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec
@@ -679,7 +679,7 @@ Montgomery image of the represented point (`0` for the identity). -/
 recall to_montgomery_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄
+      r.bytes = encodeUCoordinate (edwardsToMontgomery self.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec
@@ -697,7 +697,7 @@ Montgomery image of the represented point (`0` for the identity). -/
 recall to_montgomery_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄
+      r.bytes = encodeUCoordinate (edwardsToMontgomery self.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec
@@ -713,7 +713,7 @@ Montgomery image of the represented point (`0` for the identity). -/
 recall to_montgomery_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄
+      r.bytes = encodeUCoordinate (edwardsToMontgomery self.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_spec
@@ -732,7 +732,7 @@ recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
     (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄
+        ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
@@ -749,7 +749,7 @@ recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-tables»)
     (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄
+        ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
@@ -768,7 +768,7 @@ recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
     (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄
+        ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
@@ -785,7 +785,7 @@ recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-no-tables»)
     (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.asNat = encodeU (edwardsToMontgomery eds[i]!.toPoint).u ⦄
+        ∀ i < eds.length, r[i]!.bytes = encodeUCoordinate (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
@@ -800,7 +800,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
 recall compress_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄
+    compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
@@ -814,7 +814,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
 recall compress_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄
+    compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
@@ -828,7 +828,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
 recall compress_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄
+    compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
@@ -842,7 +842,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
 recall compress_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.asNat = curve25519.encode self.toPoint ⦄
+    compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
@@ -858,7 +858,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 recall compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«x86_64-tables» N)
     (hinputs : ∀ i < N.val, inputs[i]!.IsBounded) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
-      ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
+      ∀ i < N.val, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec
@@ -873,7 +873,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 recall compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«i686-tables» N)
     (hinputs : ∀ i < N.val, inputs[i]!.IsBounded) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
-      ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
+      ∀ i < N.val, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec
@@ -890,7 +890,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 recall compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«x86_64-no-tables» N)
     (hinputs : ∀ i < N.val, inputs[i]!.IsBounded) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
-      ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
+      ∀ i < N.val, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec
@@ -905,7 +905,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 recall compress_batch_spec {N : Usize} (inputs : Array EdwardsPoint.«i686-no-tables» N)
     (hinputs : ∀ i < N.val, inputs[i]!.IsBounded) (hinputs_on : ∀ i < N.val, inputs[i]!.OnCurve) :
     compress_batch inputs ⦃ (r : Array CompressedEdwardsY N) =>
-      ∀ i < N.val, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
+      ∀ i < N.val, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_spec
@@ -924,7 +924,7 @@ recall compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
-        ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
+        ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec
@@ -941,7 +941,7 @@ recall compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-tables»)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
-        ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
+        ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec
@@ -960,7 +960,7 @@ recall compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-tables
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
-        ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
+        ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec
@@ -977,7 +977,7 @@ recall compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-no-tables»
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
-        ∀ i < inputs.length, r[i]!.asNat = curve25519.encode inputs[i]!.toPoint ⦄
+        ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_batch_alloc_spec
@@ -2850,7 +2850,7 @@ little-endian value of `bytes`; limbs `< 2^52`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«x86_64-tables») (bytes : Array U8 32#usize)
     (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.IsBounded ⦄
+      r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
@@ -2866,7 +2866,7 @@ little-endian value of `bytes`; limbs `< 2^26`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«i686-tables») (bytes : Array U8 32#usize)
     (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.IsBounded ⦄
+      r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
@@ -2882,7 +2882,7 @@ little-endian value of `bytes`; limbs `< 2^52`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«x86_64-no-tables») (bytes : Array U8 32#usize)
     (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.IsBounded ⦄
+      r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
@@ -2898,7 +2898,7 @@ little-endian value of `bytes`; limbs `< 2^26`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«i686-no-tables») (bytes : Array U8 32#usize)
     (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • self.toPoint ∧ r.IsBounded ⦄
+      r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • self.toPoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
@@ -2913,7 +2913,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 little-endian value of `bytes`; limbs `< 2^52`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.IsBounded ⦄
+      r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
@@ -2928,7 +2928,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 little-endian value of `bytes`; limbs `< 2^26`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«i686-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.IsBounded ⦄
+      r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
@@ -2943,7 +2943,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 little-endian value of `bytes`; limbs `< 2^52`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.IsBounded ⦄
+      r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
@@ -2958,7 +2958,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 little-endian value of `bytes`; limbs `< 2^26`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«i686-no-tables») =>
-      r.OnCurve ∧ r.toPoint = clamp (bytes.asNat 8) • basepoint ∧ r.IsBounded ⦄
+      r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec

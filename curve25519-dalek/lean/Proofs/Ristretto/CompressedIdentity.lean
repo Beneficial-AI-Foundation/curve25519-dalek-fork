@@ -35,8 +35,11 @@ theorem identity_asNat :
 
 /-- `Identity for CompressedRistretto` is the encoding of the neutral element. -/
 theorem identity_spec :
-    identity ⦃ (r : CompressedRistretto) => r.asNat = Ristretto.encodeRep 0 ⦄ :=
-  spec_mono identity_asNat fun r hr => by rw [hr, Ristretto.encodeRep_zero]
+    identity ⦃ (r : CompressedRistretto) => r.bytes = Ristretto.encodeRep 0 ⦄ := by
+  simp only
+      [curve25519.Ristretto.eq_encodeRep_iff,
+      Curve25519Dalek.ristretto.CompressedRistretto.decodeLittleEndian_bytes]
+  exact spec_mono identity_asNat fun r hr => by rw [hr, Ristretto.encodeRepNat_zero]
 
 end Insts.Curve25519_dalekTraitsIdentity
 
@@ -51,8 +54,11 @@ theorem default_asNat :
 
 /-- `Default for CompressedRistretto` is the encoding of the neutral element. -/
 theorem default_spec :
-    default ⦃ (r : CompressedRistretto) => r.asNat = Ristretto.encodeRep 0 ⦄ :=
-  spec_mono default_asNat fun r hr => by rw [hr, Ristretto.encodeRep_zero]
+    default ⦃ (r : CompressedRistretto) => r.bytes = Ristretto.encodeRep 0 ⦄ := by
+  simp only
+      [curve25519.Ristretto.eq_encodeRep_iff,
+      Curve25519Dalek.ristretto.CompressedRistretto.decodeLittleEndian_bytes]
+  exact spec_mono default_asNat fun r hr => by rw [hr, Ristretto.encodeRepNat_zero]
 
 end Insts.CoreDefaultDefault
 

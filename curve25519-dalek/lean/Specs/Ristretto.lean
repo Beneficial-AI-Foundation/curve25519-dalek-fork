@@ -55,27 +55,26 @@ API with their spec statements, restated with `recall` from the theorems proved 
 A `RistrettoPoint` is an `EdwardsPoint` (`Defs/Ristretto.lean`): the statements are about the
 represented Edwards point, which stands for an element of ristretto255 when it is even (Mathlib's
 `Even`). The functions that create points (`decompress`, `from_uniform_bytes`, `map_to_curve`,
-`identity`, `default`, `mul_base`, `RISTRETTO_BASEPOINT_POINT`) state that the point is even.
-Group operations are stated exactly on representatives (as for `EdwardsPoint`), so they keep
-points even and also hold for the elements; `ct_eq`/`eq` decide `curve25519.edwards.Rel`
-(equality in the Ristretto group); `compress` is RFC 9496's encoding `Ristretto.encodeRep` of the
-represented point (for any representative; on even points it is constant exactly on the classes
-of `Rel`, `Ristretto.encodeRep_eq_iff`); `decompress` is RFC 9496's decoding
-`Ristretto.decodeRep` of the bytes' value;
-`double_and_compress_batch` encodes the doubled points; `from_uniform_bytes` is RFC 9496's one-way
-map `Ristretto.fromUniformRep`, and `map_to_curve` its `MAP` (`Ristretto.mapRep`) of the low 255
-bits. Scalars are unreduced (`s.asNat < 2^255`, the `Scalar` invariant). Functions with
-per-target variants are stated for all four configurations (`«x86_64-tables»`,
-`«x86_64-no-tables»`, `«i686-tables»`, `«i686-no-tables»`); `RistrettoBasepointTable` exists only
-with tables.
+`identity`, `default`, `mul_base`, `RISTRETTO_BASEPOINT_POINT`) state that the point is even. Group
+operations are stated exactly on representatives (as for `EdwardsPoint`), so they keep points even
+and also hold for the elements; `ct_eq`/`eq` decide `curve25519.edwards.Rel` (equality in the
+Ristretto group); `compress` is RFC 9496's encoding `Ristretto.encodeRep` of the represented point,
+as 32 bytes (for any representative; on even points it is constant exactly on the classes of `Rel`,
+`Ristretto.encodeRepNat_eq_iff`); `decompress` is RFC 9496's decoding `Ristretto.decodeRep` of the
+bytes; `double_and_compress_batch` encodes the doubled points; `from_uniform_bytes` is RFC 9496's
+one-way map `Ristretto.fromUniformRep` on 64 bytes, and `map_to_curve` its `MAP`
+(`Ristretto.mapRep`) of the field element the 32 bytes encode (`decodeUCoordinate`: the low 255 bits
+modulo `p`). Scalars are unreduced (`s.asNat < 2^255`, the `Scalar` invariant). Functions with
+per-target variants are stated for all four configurations (`«x86_64-tables»`, `«x86_64-no-tables»`,
+`«i686-tables»`, `«i686-no-tables»`); `RistrettoBasepointTable` exists only with tables.
 
-Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, the tables' `point`,
-`IsTable` and `IsBounded`, the precomputations' `points`, `IsValid` and `IsBounded`
-(`Defs/Edwards.lean`, `Defs/ScalarMul.lean`), `CompressedRistretto.asNat` (`Defs/Ristretto.lean`),
-`Scalar.asNat` (`Defs/Scalar.lean`), `Iterator.Yields` (`Defs/Iterator.lean`), Mathlib's
-`Even`, `curve25519.edwards.Rel`, `Ristretto.encodeRep`, `Ristretto.decodeRep`, `Ristretto.mapRep`,
-`Ristretto.fromUniformRep` (`Curve25519/Ristretto/`), `curve25519.basepoint`, `decodeU`
-(`Curve25519/`), `subtle.Choice.IsValid` (`Subtle/`).
+Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, the tables' `point`, `IsTable` and
+`IsBounded`, the precomputations' `points`, `IsValid` and `IsBounded` (`Defs/Edwards.lean`,
+`Defs/ScalarMul.lean`), `CompressedRistretto.bytes` (`Defs/Ristretto.lean`), `Array.toVector`
+(`ToAeneas/Array.lean`), `Scalar.asNat` (`Defs/Scalar.lean`), `Iterator.Yields`
+(`Defs/Iterator.lean`), Mathlib's `Even`, `curve25519.edwards.Rel`, `Ristretto.encodeRep`,
+`Ristretto.decodeRep`, `Ristretto.mapRep`, `Ristretto.fromUniformRep` (`Curve25519/Ristretto/`),
+`curve25519.basepoint`, `decodeUCoordinate` (`Curve25519/`), `subtle.Choice.IsValid` (`Subtle/`).
 
 Not specified: derived `Clone`/`Copy` impls. Not translated: `Debug`, `random`, `try_random`,
 `hash_from_bytes`, `from_hash`, the `group` and `serde` impls. `elligator_ristretto_flavor`
@@ -145,7 +144,7 @@ is the canonical, non-negative encoding of a point of the class); the point is o
 even (a ristretto255 representative) and has limbs `< 2^52`. -/
 recall «x86_64-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«x86_64-tables» self ⦃ (r : Option RistrettoPoint.«x86_64-tables») =>
-      r.map edwards.EdwardsPoint.«x86_64-tables».toPoint = Ristretto.decodeRep self.asNat ∧
+      r.map edwards.EdwardsPoint.«x86_64-tables».toPoint = Ristretto.decodeRep self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ Even q.toPoint ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -157,7 +156,7 @@ is the canonical, non-negative encoding of a point of the class); the point is o
 even (a ristretto255 representative) and has limbs `< 2^26`. -/
 recall «i686-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«i686-tables» self ⦃ (r : Option RistrettoPoint.«i686-tables») =>
-      r.map edwards.EdwardsPoint.«i686-tables».toPoint = Ristretto.decodeRep self.asNat ∧
+      r.map edwards.EdwardsPoint.«i686-tables».toPoint = Ristretto.decodeRep self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ Even q.toPoint ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -170,7 +169,7 @@ is the canonical, non-negative encoding of a point of the class); the point is o
 even (a ristretto255 representative) and has limbs `< 2^52`. -/
 recall «x86_64-no-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«x86_64-no-tables» self ⦃ (r : Option RistrettoPoint.«x86_64-no-tables») =>
-      r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint = Ristretto.decodeRep self.asNat ∧
+      r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint = Ristretto.decodeRep self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ Even q.toPoint ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -183,7 +182,7 @@ is the canonical, non-negative encoding of a point of the class); the point is o
 even (a ristretto255 representative) and has limbs `< 2^26`. -/
 recall «i686-no-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«i686-no-tables» self ⦃ (r : Option RistrettoPoint.«i686-no-tables») =>
-      r.map edwards.EdwardsPoint.«i686-no-tables».toPoint = Ristretto.decodeRep self.asNat ∧
+      r.map edwards.EdwardsPoint.«i686-no-tables».toPoint = Ristretto.decodeRep self.bytes ∧
       ∀ q, r = some q → q.OnCurve ∧ Even q.toPoint ∧ q.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -198,7 +197,7 @@ namespace Insts.Curve25519_dalekTraitsIdentity
 
 /-- `Identity for CompressedRistretto` is the encoding of the neutral element. -/
 recall identity_spec :
-    identity ⦃ (r : CompressedRistretto) => r.asNat = Ristretto.encodeRep 0 ⦄
+    identity ⦃ (r : CompressedRistretto) => r.bytes = Ristretto.encodeRep 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms identity_spec
@@ -211,7 +210,7 @@ namespace Insts.CoreDefaultDefault
 
 /-- `Default for CompressedRistretto` is the encoding of the neutral element. -/
 recall default_spec :
-    default ⦃ (r : CompressedRistretto) => r.asNat = Ristretto.encodeRep 0 ⦄
+    default ⦃ (r : CompressedRistretto) => r.bytes = Ristretto.encodeRep 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms default_spec
@@ -242,7 +241,7 @@ namespace «RistrettoPointx86_64-tables»
 recall compress_spec (self : RistrettoPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
-      r.asNat = Ristretto.encodeRep self.toPoint ⦄
+      r.bytes = Ristretto.encodeRep self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
@@ -255,7 +254,7 @@ namespace «RistrettoPointi686-tables»
 recall compress_spec (self : RistrettoPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
-      r.asNat = Ristretto.encodeRep self.toPoint ⦄
+      r.bytes = Ristretto.encodeRep self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
@@ -270,7 +269,7 @@ namespace «RistrettoPointx86_64-no-tables»
 recall compress_spec (self : RistrettoPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
-      r.asNat = Ristretto.encodeRep self.toPoint ⦄
+      r.bytes = Ristretto.encodeRep self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
@@ -283,7 +282,7 @@ namespace «RistrettoPointi686-no-tables»
 recall compress_spec (self : RistrettoPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
-      r.asNat = Ristretto.encodeRep self.toPoint ⦄
+      r.bytes = Ristretto.encodeRep self.toPoint ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms compress_spec
@@ -305,7 +304,7 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
-        ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
+        ∀ i < ps.length, r[i]!.bytes = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms double_and_compress_batch_spec
@@ -325,7 +324,7 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
-        ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
+        ∀ i < ps.length, r[i]!.bytes = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms double_and_compress_batch_spec
@@ -347,7 +346,7 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
-        ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
+        ∀ i < ps.length, r[i]!.bytes = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms double_and_compress_batch_spec
@@ -367,7 +366,7 @@ recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
-        ∀ i < ps.length, r[i]!.asNat = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
+        ∀ i < ps.length, r[i]!.bytes = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.alloc, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms double_and_compress_batch_spec
@@ -383,7 +382,7 @@ value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255
 limbs `< 2^52`. -/
 recall from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«x86_64-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep (bytes.asNat 8) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -398,7 +397,7 @@ value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255
 limbs `< 2^26`. -/
 recall from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«i686-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep (bytes.asNat 8) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -415,7 +414,7 @@ value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255
 limbs `< 2^52`. -/
 recall from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep (bytes.asNat 8) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -430,7 +429,7 @@ value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255
 limbs `< 2^26`. -/
 recall from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«i686-no-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep (bytes.asNat 8) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -3248,7 +3247,7 @@ namespace Curve25519Dalek.ristretto.CompressedRistretto.Insts.ZeroizeZeroize
 /-- `Zeroize for CompressedRistretto`: thirty-two zero bytes, the encoding of the neutral
 element. -/
 recall zeroize_spec (self : CompressedRistretto) :
-    zeroize self ⦃ (r : CompressedRistretto) => r.asNat = Ristretto.encodeRep 0 ⦄
+    zeroize self ⦃ (r : CompressedRistretto) => r.bytes = Ristretto.encodeRep 0 ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms zeroize_spec
@@ -3313,10 +3312,10 @@ namespace Curve25519Dalek.ristretto.elligator
 namespace «RistrettoPointx86_64-tables»
 
 /-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the low `255` bits of the bytes, reduced
-modulo `p` (`decodeU`): an even point (a ristretto255 representative); limbs `< 2^52`. -/
+modulo `p` (`decodeUCoordinate`): an even point (a ristretto255 representative); limbs `< 2^52`. -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«x86_64-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeU (bytes.asNat 8)) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeUCoordinate bytes.toVector) ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -3327,10 +3326,10 @@ end «RistrettoPointx86_64-tables»
 namespace «RistrettoPointi686-tables»
 
 /-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the low `255` bits of the bytes, reduced
-modulo `p` (`decodeU`): an even point (a ristretto255 representative); limbs `< 2^26`. -/
+modulo `p` (`decodeUCoordinate`): an even point (a ristretto255 representative); limbs `< 2^26`. -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«i686-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeU (bytes.asNat 8)) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeUCoordinate bytes.toVector) ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
@@ -3343,10 +3342,10 @@ namespace Curve25519Dalek.ristretto.elligator
 namespace «RistrettoPointx86_64-no-tables»
 
 /-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the low `255` bits of the bytes, reduced
-modulo `p` (`decodeU`): an even point (a ristretto255 representative); limbs `< 2^52`. -/
+modulo `p` (`decodeUCoordinate`): an even point (a ristretto255 representative); limbs `< 2^52`. -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeU (bytes.asNat 8)) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeUCoordinate bytes.toVector) ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
@@ -3357,10 +3356,10 @@ end «RistrettoPointx86_64-no-tables»
 namespace «RistrettoPointi686-no-tables»
 
 /-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the low `255` bits of the bytes, reduced
-modulo `p` (`decodeU`): an even point (a ristretto255 representative); limbs `< 2^26`. -/
+modulo `p` (`decodeUCoordinate`): an even point (a ristretto255 representative); limbs `< 2^26`. -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«i686-no-tables») =>
-      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeU (bytes.asNat 8)) ∧
+      r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep (decodeUCoordinate bytes.toVector) ∧
         r.IsBounded ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/

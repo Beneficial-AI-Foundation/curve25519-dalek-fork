@@ -10,20 +10,19 @@ public section
 
 /-! # The RFC 9496 §A.3 test vectors for the one-way map (not audited)
 
-Kernel checks (`decide +kernel`) of `Ristretto.fromUniformRep` on the seven 64-byte inputs of
-RFC 9496 §A.3, as little-endian numbers `lo + 2^256 hi`: a regression test of `Ristretto.mapRep`
-(both branches of `sqrtRatioM1` occur) and of `Ristretto.encodeRep`.
+Kernel checks (`decide +kernel`) of `Ristretto.fromUniformRepNat` on the seven 64-byte inputs of RFC
+9496 §A.3, as little-endian numbers `lo + 2^256 hi`: a regression test of `Ristretto.mapRep` (both
+branches of `sqrtRatioM1` occur) and of `Ristretto.encodeRepNat`.
 
 Each vector is one certificate (`FromUniformCert`), checked by the kernel in a single
-`decide +kernel`: the two halves `r₀`, `r₁` after `decodeU`; for each half the branch and the
-root `ρ` of `SQRT_RATIO_M1(u, v)` (`MapCert`, with the conditions of
-`sqrtRatioM1_eq_of_mul_sq_eq` or `sqrtRatioM1_eq_of_mul_sq_eq_sqrtM1_mul`) and the coordinates of
-`MAP(r)`; and the coordinates of the sum (`AddCert`, the addition formula with its denominators).
-`fromUniformRep_xy_of_cert` turns a certificate into the coordinates of `fromUniformRep n`, and
-the encoding is checked as in `Curve25519.Proofs.Ristretto.TestVector` (`encodeRep_of_coords`).
-Every condition is a polynomial identity or a non-vanishing: the kernel never meets a field
-inverse. `Curve25519.Basic` is imported with `import all` so that the kernel can unfold `p`,
-`sqrtM1` and the ristretto255 constants. -/
+`decide +kernel`: the two halves `r₀`, `r₁` after `decodeU`; for each half the branch and the root
+`ρ` of `SQRT_RATIO_M1(u, v)` (`MapCert`, with the conditions of `sqrtRatioM1_eq_of_mul_sq_eq` or
+`sqrtRatioM1_eq_of_mul_sq_eq_sqrtM1_mul`) and the coordinates of `MAP(r)`; and the coordinates of
+the sum (`AddCert`, the addition formula with its denominators). `fromUniformRepNat_xy_of_cert`
+turns a certificate into the coordinates of `fromUniformRepNat n`, and the encoding is checked as in
+`Curve25519.Proofs.Ristretto.TestVector` (`encodeRepNat_of_coords`). Every condition is a polynomial
+identity or a non-vanishing: the kernel never meets a field inverse. `Curve25519.Basic` is imported
+with `import all` so that the kernel can unfold `p`, `sqrtM1` and the ristretto255 constants. -/
 
 namespace curve25519.Proofs
 
@@ -108,27 +107,27 @@ private theorem add_xy_of_cert {P Q : edwards.Point} {x₀ y₀ x₁ y₁ x y : 
     unfold addY addDen₂
     rw [hx₀, hy₀, hx₁, hy₁, edwards_a_eq_neg_one, hd, div_eq_iff hd₂, hn₂]
 
-/-- A `FromUniformCert` gives the coordinates of `fromUniformRep n`. -/
-private theorem fromUniformRep_xy_of_cert {n : ℕ} {r₀ r₁ : ZMod p} {b₀ b₁ : Bool}
+/-- A `FromUniformCert` gives the coordinates of `fromUniformRepNat n`. -/
+private theorem fromUniformRepNat_xy_of_cert {n : ℕ} {r₀ r₁ : ZMod p} {b₀ b₁ : Bool}
     {ρ₀ ρ₁ x₀ y₀ x₁ y₁ x y : ZMod p} (h : FromUniformCert n r₀ r₁ b₀ b₁ ρ₀ ρ₁ x₀ y₀ x₁ y₁ x y) :
-    (fromUniformRep n).x = x ∧ (fromUniformRep n).y = y := by
+    (fromUniformRepNat n).x = x ∧ (fromUniformRepNat n).y = y := by
   obtain ⟨hr₀, hr₁, h₀, h₁, hs⟩ := h
   obtain ⟨hx₀, hy₀⟩ := mapRep_xy_of_cert h₀
   obtain ⟨hx₁, hy₁⟩ := mapRep_xy_of_cert h₁
-  rw [fromUniformRep_def, hr₀, hr₁]
+  rw [fromUniformRepNat_def, hr₀, hr₁]
   exact add_xy_of_cert hx₀ hy₀ hx₁ hy₁ hs
 
 /-! ### The vectors -/
 
 /-- RFC 9496 §A.3, vector 1: input `5d1be09e3d0c82fc538112490e357019…`, output
 `3066f82a1a747d45120d1740f14358531a8f04bbffe6a819f86dfe50f44a0a46`. -/
-theorem fromUniformRep_vector₁ :
-    encodeRep (fromUniformRep
+theorem fromUniformRepNat_vector₁ :
+    encodeRepNat (fromUniformRepNat
       (87499175880137258998414822893360750755424224056161319623553458875923924261725 +
         2 ^ 256 *
         82483480588224025169569562118639141110780197061465840709495365165001842530381)) =
       31680085187462729902376606230845618866830056053850568863738022364209707771440 := by
-  obtain ⟨hx, hy⟩ := fromUniformRep_xy_of_cert
+  obtain ⟨hx, hy⟩ := fromUniformRepNat_xy_of_cert
     (n := 87499175880137258998414822893360750755424224056161319623553458875923924261725 +
       2 ^ 256 * 82483480588224025169569562118639141110780197061465840709495365165001842530381)
     (r₀ := 29603131261479161286629330389016796828789231723341037603824666871967359441757)
@@ -143,19 +142,19 @@ theorem fromUniformRep_vector₁ :
     (x := 43123130933603720118456132319826212419290038918687748397341757543086113937161)
     (y := 7807687545033837880223306372164802830037177291922390193675188163361710429134)
     (by decide +kernel)
-  exact encodeRep_of_coords
+  exact encodeRepNat_of_coords
     (r := 29239299646152913398821779146647893351014742973850178649900625749722781627822) _ hx hy
     (by decide +kernel) (by decide +kernel) (by decide +kernel)
 
 /-- RFC 9496 §A.3, vector 2: input `f116b34b8f17ceb56e8732a60d913dd1…`, output
 `f26e5b6f7d362d2d2a94c5d0e7602cb4773c95a2e5c31a64f133189fa76ed61b`. -/
-theorem fromUniformRep_vector₂ :
-    encodeRep (fromUniformRep
+theorem fromUniformRepNat_vector₂ :
+    encodeRepNat (fromUniformRepNat
       (17886510355990906579267560464485446403587976405970313434132635039714212255473 +
         2 ^ 256 *
         25578691604894911506658859699777905190263993550452968031351916343058162319873)) =
       12591315894774617980504893345159544623752570257311593035175980067567372562162 := by
-  obtain ⟨hx, hy⟩ := fromUniformRep_xy_of_cert
+  obtain ⟨hx, hy⟩ := fromUniformRepNat_xy_of_cert
     (n := 17886510355990906579267560464485446403587976405970313434132635039714212255473 +
       2 ^ 256 * 25578691604894911506658859699777905190263993550452968031351916343058162319873)
     (r₀ := 17886510355990906579267560464485446403587976405970313434132635039714212255473)
@@ -170,19 +169,19 @@ theorem fromUniformRep_vector₂ :
     (x := 52273580312577175737457209046160270220124467087124535546283536665682142235660)
     (y := 34874070204349079360043913306468422929150503655068655784988654951203758701709)
     (by decide +kernel)
-  exact encodeRep_of_coords
+  exact encodeRepNat_of_coords
     (r := 29923396084785416307379371165574158378494368212689144511817816258695584780408) _ hx hy
     (by decide +kernel) (by decide +kernel) (by decide +kernel)
 
 /-- RFC 9496 §A.3, vector 3: input `8422e1bbdaab52938b81fd602effb6f8…`, output
 `006ccd2a9e6867e6a2c5cea83d3302cc9de128dd2a9a57dd8ee7b9d7ffe02826`. -/
-theorem fromUniformRep_vector₃ :
-    encodeRep (fromUniformRep
+theorem fromUniformRepNat_vector₃ :
+    encodeRepNat (fromUniformRepNat
       (5571125413336794228515549131784564245641762771506154721169345934743809630852 +
         2 ^ 256 *
         41702335215228153457353050202710500438501035198908535261838564090875841287207)) =
       17260115017441958735051049041714646060274741218065493258847689150981160659968 := by
-  obtain ⟨hx, hy⟩ := fromUniformRep_xy_of_cert
+  obtain ⟨hx, hy⟩ := fromUniformRepNat_xy_of_cert
     (n := 5571125413336794228515549131784564245641762771506154721169345934743809630852 +
       2 ^ 256 * 41702335215228153457353050202710500438501035198908535261838564090875841287207)
     (r₀ := 5571125413336794228515549131784564245641762771506154721169345934743809630852)
@@ -197,19 +196,19 @@ theorem fromUniformRep_vector₃ :
     (x := 52339150320946288243065591346430106830768638747707544219675242294881744497576)
     (y := 52177649068252566057104519507065908996464071505282691939354472800854691280677)
     (by decide +kernel)
-  exact encodeRep_of_coords
+  exact encodeRepNat_of_coords
     (r := 22543647343768848339892380032568337541767055412989416494300821856030944313822) _ hx hy
     (by decide +kernel) (by decide +kernel) (by decide +kernel)
 
 /-- RFC 9496 §A.3, vector 4: input `ac22415129b61427bf464e17baee8db6…`, output
 `f8f0c87cf237953c5890aec3998169005dae3eca1fbb04548c635953c817f92a`. -/
-theorem fromUniformRep_vector₄ :
-    encodeRep (fromUniformRep
+theorem fromUniformRepNat_vector₄ :
+    encodeRepNat (fromUniformRepNat
       (87958015143991936062462724769133685135884029854916830060098924001334476743340 +
         2 ^ 256 *
         79485797552217833716597537377469844826100710372681224592285845197016987405589)) =
       19437248700560008275452320805274944452627882662443898453973705475946061558008 := by
-  obtain ⟨hx, hy⟩ := fromUniformRep_xy_of_cert
+  obtain ⟨hx, hy⟩ := fromUniformRepNat_xy_of_cert
     (n := 87958015143991936062462724769133685135884029854916830060098924001334476743340 +
       2 ^ 256 * 79485797552217833716597537377469844826100710372681224592285845197016987405589)
     (r₀ := 30061970525333838350677232264789731209249037522096548040370131997377911923372)
@@ -224,19 +223,19 @@ theorem fromUniformRep_vector₄ :
     (x := 42974799176289028225852631770594409465225725550690902062199697462217028403171)
     (y := 44212667807268941103987837418470793548535614963508001847537784123604845055642)
     (by decide +kernel)
-  exact encodeRep_of_coords
+  exact encodeRepNat_of_coords
     (r := 50570876586495568680150866721332906941273544960135035317759358182592759469866) _ hx hy
     (by decide +kernel) (by decide +kernel) (by decide +kernel)
 
 /-- RFC 9496 §A.3, vector 5: input `165d697a1ef3d5cf3c38565beefcf88c…`, output
 `ae81e7dedf20a497e10c304a765c1767a42d6e06029758d2d7e8ef7cc4c41179`. -/
-theorem fromUniformRep_vector₅ :
-    encodeRep (fromUniformRep
+theorem fromUniformRepNat_vector₅ :
+    encodeRepNat (fromUniformRepNat
       (46941254232349044444819396469397358049143126820442373211518371485869643750678 +
         2 ^ 256 *
         8941545681938061962481069917592138123103445813802295163960510132887321504605)) =
       54761249118267400467364721054401277608653602435298448423981548629218235482542 := by
-  obtain ⟨hx, hy⟩ := fromUniformRep_xy_of_cert
+  obtain ⟨hx, hy⟩ := fromUniformRepNat_xy_of_cert
     (n := 46941254232349044444819396469397358049143126820442373211518371485869643750678 +
       2 ^ 256 * 8941545681938061962481069917592138123103445813802295163960510132887321504605)
     (r₀ := 46941254232349044444819396469397358049143126820442373211518371485869643750678)
@@ -251,19 +250,19 @@ theorem fromUniformRep_vector₅ :
     (x := 45300682549104187980243240736529939337005885140088369383222005460098475331582)
     (y := 55249401592368152403860022212426180484253482102670690039190850750166676619813)
     (by decide +kernel)
-  exact encodeRep_of_coords
+  exact encodeRepNat_of_coords
     (r := 14818382800204178201871218693803810451690074344213252556911398314459539676438) _ hx hy
     (by decide +kernel) (by decide +kernel) (by decide +kernel)
 
 /-- RFC 9496 §A.3, vector 6: input `a836e6c9a9ca9f1e8d486273ad56a78c…`, output
 `e2705652ff9f5e44d3e841bf1c251cf7dddb77d140870d1ab2ed64f1a9ce8628`. -/
-theorem fromUniformRep_vector₆ :
-    encodeRep (fromUniformRep
+theorem fromUniformRepNat_vector₆ :
+    encodeRepNat (fromUniformRepNat
       (95210732253570494535244481476378183474505559882255783073909106206650992572072 +
         2 ^ 256 *
         42026383410458354297369621365737434533783068482897044100133690355266069239959)) =
       18330697791411166508030189457772520023729440463668422267029398889313655484642 := by
-  obtain ⟨hx, hy⟩ := fromUniformRep_xy_of_cert
+  obtain ⟨hx, hy⟩ := fromUniformRepNat_xy_of_cert
     (n := 95210732253570494535244481476378183474505559882255783073909106206650992572072 +
       2 ^ 256 * 42026383410458354297369621365737434533783068482897044100133690355266069239959)
     (r₀ := 37314687634912396823458988972034229547870567549435501054180314202694427752104)
@@ -278,19 +277,19 @@ theorem fromUniformRep_vector₆ :
     (x := 41066466250762021531823292840049961150238310936003197806195662482168212642322)
     (y := 37339002982191838980626041959225931149088796533694428670464177061683131814968)
     (by decide +kernel)
-  exact encodeRep_of_coords
+  exact encodeRepNat_of_coords
     (r := 37328188772940969056905895561721630198107783347456614843588824055537931963066) _ hx hy
     (by decide +kernel) (by decide +kernel) (by decide +kernel)
 
 /-- RFC 9496 §A.3, vector 7: input `2cdc11eaeb95daf01189417cdddbf959…`, output
 `80bd07262511cdde4863f8a7434cef696750681cb9510eea557088f76d9e5065`. -/
-theorem fromUniformRep_vector₇ :
-    encodeRep (fromUniformRep
+theorem fromUniformRepNat_vector₇ :
+    encodeRepNat (fromUniformRepNat
       (44531920118033507980356872696360687059603462351796757847160156717238503726124 +
         2 ^ 256 *
         59156934336572785065121178987691935821338223278264997104560224432572328155436)) =
       45826038912717419314006741738835044459053993966913575321465019055886937079168 := by
-  obtain ⟨hx, hy⟩ := fromUniformRep_xy_of_cert
+  obtain ⟨hx, hy⟩ := fromUniformRepNat_xy_of_cert
     (n := 44531920118033507980356872696360687059603462351796757847160156717238503726124 +
       2 ^ 256 * 59156934336572785065121178987691935821338223278264997104560224432572328155436)
     (r₀ := 44531920118033507980356872696360687059603462351796757847160156717238503726124)
@@ -305,7 +304,7 @@ theorem fromUniformRep_vector₇ :
     (x := 33362194118192094025501732080357478163528764107113422320396025087238194043520)
     (y := 1481775127003541630722482109530043655253888446865222646791923987437201995291)
     (by decide +kernel)
-  exact encodeRep_of_coords
+  exact encodeRepNat_of_coords
     (r := 38859598079419181375699844779637875629277005664033100587208366682595124454624) _ hx hy
     (by decide +kernel) (by decide +kernel) (by decide +kernel)
 

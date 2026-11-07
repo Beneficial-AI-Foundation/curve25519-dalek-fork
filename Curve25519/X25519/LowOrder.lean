@@ -12,8 +12,8 @@ public section
 
 /-! # The coordinates sent to `0` by X25519
 
-`x25519 k u = 0` for every scalar `k` exactly when `decodeU u` is one of the five field elements
-`0`, `1`, `-1`, `u₈` and `u₈⁻¹` (`x25519_eq_zero_iff`), where `u₈` is the `u`-coordinate of a
+`x25519Nat k u = 0` for every scalar `k` exactly when `decodeU u` is one of the five field elements
+`0`, `1`, `-1`, `u₈` and `u₈⁻¹` (`x25519Nat_eq_zero_iff`), where `u₈` is the `u`-coordinate of a
 point of order `8` of `montgomery` (`u8`).
 
 The proof is x-only. On `u`-coordinates, doubling is `dblU u = (u² - 1)² / (4 u (u² + A u + 1))`
@@ -23,7 +23,7 @@ by `dblU` (`isLowOrderU_of_isLowOrderU_dblU`): `dblU w = 0` only for `w = 0, ±1
 `dblU w = 1` only for `w = u₈, u₈⁻¹`, and `dblU w = c` has no solution `w` when
 `c² + A c + 1` is not a square, which is the case for `c = -1, u₈, u₈⁻¹`
 (`Curve25519.Proofs.X25519.LowOrderCerts`). The scalar `0` clamps to `2 ^ 254`, so
-`x25519 0 u = 0` already puts `decodeU u` in `S`; conversely `dblU` sends `S` to `0` in three
+`x25519Nat 0 u = 0` already puts `decodeU u` in `S`; conversely `dblU` sends `S` to `0` in three
 steps, and every clamped scalar is a multiple of `8`. -/
 
 namespace curve25519
@@ -35,7 +35,7 @@ open MontgomeryModel Proofs
 @[expose] def u8 : ZMod p :=
   325606250916557431795983626356110631294008115727848805560023387167927233504
 
-/-- The five coordinates sent to `0` by `x25519` (`x25519_eq_zero_iff`). -/
+/-- The five coordinates sent to `0` by `x25519Nat` (`x25519Nat_eq_zero_iff`). -/
 @[expose] def IsLowOrderU (v : ZMod p) : Prop :=
   v = 0 ∨ v = 1 ∨ v = -1 ∨ v = u8 ∨ v = u8⁻¹
 
@@ -175,17 +175,17 @@ theorem dblU_iterate_three_of_isLowOrderU {v : ZMod p} (h : IsLowOrderU v) :
   · rw [dblU_u8_of (inv_ne_zero u8_ne_zero) (u8'_dbl _ u8_inv), h1,
       dblU_zero]
 
-/-- **The coordinates sent to `0` by X25519**: `x25519 k u = 0` for every scalar `k` iff
+/-- **The coordinates sent to `0` by X25519**: `x25519Nat k u = 0` for every scalar `k` iff
 `decodeU u` is `0`, `1`, `-1`, `u₈` or `u₈⁻¹`. The scalar `k = 0` already decides it. -/
-theorem x25519_eq_zero_iff (u : ℕ) : (∀ k, x25519 k u = 0) ↔ IsLowOrderU (decodeU u) := by
+theorem x25519Nat_eq_zero_iff (u : ℕ) : (∀ k, x25519Nat k u = 0) ↔ IsLowOrderU (decodeU u) := by
   constructor
   · intro h
     have h0 := h 0
-    rw [x25519_eq_xMul, show clamp 0 = 2 ^ 254 by rfl, xMul_two_pow not_isSquare_two, encodeU,
+    rw [x25519Nat_eq_xMul, show clamp 0 = 2 ^ 254 by rfl, xMul_two_pow not_isSquare_two, encodeU,
       ZMod.val_eq_zero] at h0
     exact isLowOrderU_of_iterate (n := 254) (h0 ▸ Or.inl rfl)
   · intro h k
-    refine x25519_eq_zero_of_xMul_eight ?_ k
+    refine x25519Nat_eq_zero_of_xMul_eight ?_ k
     rw [show (8 : ℕ) = 2 ^ 3 by rfl, xMul_two_pow not_isSquare_two]
     exact dblU_iterate_three_of_isLowOrderU h
 

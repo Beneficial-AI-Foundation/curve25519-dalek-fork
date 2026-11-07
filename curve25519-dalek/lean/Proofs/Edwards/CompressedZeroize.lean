@@ -34,7 +34,10 @@ theorem zeroize_asNat (self : CompressedEdwardsY) :
 
 /-- `Zeroize for CompressedEdwardsY` leaves the encoding of the neutral element. -/
 theorem zeroize_spec (self : CompressedEdwardsY) :
-    zeroize self ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄ :=
-  spec_mono (zeroize_asNat self) fun r hr => by rw [hr, encode_zero]
+    zeroize self ⦃ (r : CompressedEdwardsY) => r.bytes = encode 0 ⦄ := by
+  simp only
+      [curve25519.eq_encode_iff,
+      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
+  exact spec_mono (zeroize_asNat self) fun r hr => by rw [hr, encodeNat_zero]
 
 end Curve25519Dalek.edwards.CompressedEdwardsY.Insts.ZeroizeZeroize

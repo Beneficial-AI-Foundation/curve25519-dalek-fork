@@ -58,10 +58,13 @@ Montgomery image of the represented point (`0` for the identity). -/
 theorem to_montgomery_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_asNat self hself) fun r hr => by
-    rw [hr, EdwardsPoint.«x86_64-tables».u_edwardsToMontgomery hon]
-    rfl
+      r.bytes = encodeUCoordinate (edwardsToMontgomery self.toPoint).u ⦄ := by
+  simp only
+      [curve25519.eq_encodeUCoordinate_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  exact spec_mono (to_montgomery_asNat self hself) fun r hr => by
+      rw [hr, EdwardsPoint.«x86_64-tables».u_edwardsToMontgomery hon]
+      rfl
 
 end «EdwardsPointx86_64-tables»
 
@@ -90,10 +93,13 @@ Montgomery image of the represented point (`0` for the identity). -/
 theorem to_montgomery_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_asNat self hself) fun r hr => by
-    rw [hr, EdwardsPoint.«i686-tables».u_edwardsToMontgomery hon]
-    rfl
+      r.bytes = encodeUCoordinate (edwardsToMontgomery self.toPoint).u ⦄ := by
+  simp only
+      [curve25519.eq_encodeUCoordinate_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  exact spec_mono (to_montgomery_asNat self hself) fun r hr => by
+      rw [hr, EdwardsPoint.«i686-tables».u_edwardsToMontgomery hon]
+      rfl
 
 end «EdwardsPointi686-tables»
 
@@ -122,10 +128,13 @@ Montgomery image of the represented point (`0` for the identity). -/
 theorem to_montgomery_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_asNat self hself) fun r hr => by
-    rw [hr, EdwardsPoint.«x86_64-no-tables».u_edwardsToMontgomery hon]
-    rfl
+      r.bytes = encodeUCoordinate (edwardsToMontgomery self.toPoint).u ⦄ := by
+  simp only
+      [curve25519.eq_encodeUCoordinate_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  exact spec_mono (to_montgomery_asNat self hself) fun r hr => by
+      rw [hr, EdwardsPoint.«x86_64-no-tables».u_edwardsToMontgomery hon]
+      rfl
 
 end «EdwardsPointx86_64-no-tables»
 
@@ -154,10 +163,13 @@ Montgomery image of the represented point (`0` for the identity). -/
 theorem to_montgomery_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
     to_montgomery self ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.asNat = encodeU (edwardsToMontgomery self.toPoint).u ⦄ :=
-  spec_mono (to_montgomery_asNat self hself) fun r hr => by
-    rw [hr, EdwardsPoint.«i686-no-tables».u_edwardsToMontgomery hon]
-    rfl
+      r.bytes = encodeUCoordinate (edwardsToMontgomery self.toPoint).u ⦄ := by
+  simp only
+      [curve25519.eq_encodeUCoordinate_iff,
+      Curve25519Dalek.montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  exact spec_mono (to_montgomery_asNat self hself) fun r hr => by
+      rw [hr, EdwardsPoint.«i686-no-tables».u_edwardsToMontgomery hon]
+      rfl
 
 end «EdwardsPointi686-no-tables»
 

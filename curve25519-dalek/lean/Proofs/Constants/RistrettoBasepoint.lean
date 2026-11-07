@@ -27,10 +27,13 @@ namespace Curve25519Dalek.constants
 
 /-- `RISTRETTO_BASEPOINT_COMPRESSED`: RFC 9496's encoding of the basepoint. -/
 theorem RISTRETTO_BASEPOINT_COMPRESSED_spec :
-    RISTRETTO_BASEPOINT_COMPRESSED.asNat = Ristretto.encodeRep basepoint := by
+    RISTRETTO_BASEPOINT_COMPRESSED.bytes = Ristretto.encodeRep basepoint := by
+  simp only
+      [curve25519.Ristretto.eq_encodeRep_iff,
+      Curve25519Dalek.ristretto.CompressedRistretto.decodeLittleEndian_bytes]
   unfold RISTRETTO_BASEPOINT_COMPRESSED
   rw [ristretto.CompressedRistretto.asNat_def, Array.asNat_def, Array.make_val,
-    Ristretto.encodeRep_basepoint]
+    Ristretto.encodeRepNat_basepoint]
   decide
 
 namespace «x86_64-tables»

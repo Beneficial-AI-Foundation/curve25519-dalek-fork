@@ -10,9 +10,9 @@ public section
 
 /-! # `montgomery.rs`: the `u`-coordinate bytes and the ladder's projective points (audited)
 
-`MontgomeryPoint` is 32 bytes: `asNat` is their little-endian value and `u` the `u`-coordinate
-they encode, RFC 7748 `decodeUCoordinate` (`curve25519.decodeU`: bit `255` masked, reduced
-modulo `p`). A canonical output has `asNat < p` (`to_bytes`).
+`MontgomeryPoint` is 32 bytes: `bytes` is them as a `Vector UInt8 32` (`Array.toVector`), the
+byte string of RFC 7748, and `u` the `u`-coordinate they encode, RFC 7748 `decodeUCoordinate`
+(bit `255` masked, reduced modulo `p`). `asNat` is their little-endian value, for the proofs.
 
 `ProjectivePoint (U : W)` is the `x`-only projective point of the Montgomery ladder: `toXZ` maps
 it to `MontgomeryModel.XZ (ZMod p)`, whose `toU` is `U / W` (`0` at `W = 0`, as `as_affine`).
@@ -42,14 +42,21 @@ indices. -/
 instance MontgomeryPoint.instInhabited : Inhabited MontgomeryPoint :=
   inferInstanceAs (Inhabited (Array U8 32#usize))
 
+/-- The 32 bytes as a `Vector UInt8 32`, the byte string of RFC 7748. -/
+@[expose] def MontgomeryPoint.bytes (self : MontgomeryPoint) : Vector UInt8 32 :=
+  Aeneas.Std.Array.toVector self
+
+theorem MontgomeryPoint.decodeLittleEndian_bytes (self : MontgomeryPoint) :
+    decodeLittleEndian self.bytes = self.asNat :=
+  Aeneas.Std.Array.decodeLittleEndian_toVector self
+
 /-- The `u`-coordinate encoded by the bytes: RFC 7748 `decodeUCoordinate`, i.e. the value of
 the low `255` bits modulo `p`. -/
-def MontgomeryPoint.u (self : MontgomeryPoint) : ZMod p :=
-  decodeU self.asNat
+@[expose] def MontgomeryPoint.u (self : MontgomeryPoint) : ZMod p :=
+  decodeUCoordinate self.bytes
 
 theorem MontgomeryPoint.u_def (self : MontgomeryPoint) : self.u = decodeU self.asNat := by
-  unfold MontgomeryPoint.u
-  rfl
+  rw [MontgomeryPoint.u, decodeUCoordinate, MontgomeryPoint.decodeLittleEndian_bytes]
 
 /-! ### `ProjectivePoint` -/
 

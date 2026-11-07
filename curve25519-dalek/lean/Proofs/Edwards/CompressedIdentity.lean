@@ -22,7 +22,10 @@ theorem identity_asNat :
 
 /-- `Identity for CompressedEdwardsY` is the encoding of the neutral element. -/
 theorem identity_spec :
-    identity ⦃ (r : CompressedEdwardsY) => r.asNat = encode 0 ⦄ :=
-  spec_mono identity_asNat fun r hr => by rw [hr, encode_zero]
+    identity ⦃ (r : CompressedEdwardsY) => r.bytes = encode 0 ⦄ := by
+  simp only
+      [curve25519.eq_encode_iff,
+      Curve25519Dalek.edwards.CompressedEdwardsY.decodeLittleEndian_bytes]
+  exact spec_mono identity_asNat fun r hr => by rw [hr, encodeNat_zero]
 
 end Curve25519Dalek.edwards.CompressedEdwardsY.Insts.Curve25519_dalekTraitsIdentity

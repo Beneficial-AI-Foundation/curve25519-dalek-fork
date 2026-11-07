@@ -23,9 +23,9 @@ directions by `u_edwardsToMontgomery`, `v_edwardsToMontgomery`, `edwardsToMontgo
 
 The Montgomery basepoint `montgomeryBasepoint = edwardsToMontgomery basepoint` is RFC 7748's
 base point `(9, V(P))` (`u_montgomeryBasepoint`, `v_montgomeryBasepoint`) and has order `L`, and
-`x25519 k 9` is the `u`-coordinate of `clamp k • montgomeryBasepoint` (`x25519_basepoint`), i.e.
-of `edwardsToMontgomery (clamp k • basepoint)` (`x25519_basepoint_edwards`); more generally
-`x25519_edwards`.
+`x25519Nat k 9` is the `u`-coordinate of `clamp k • montgomeryBasepoint` (`x25519Nat_basepoint`),
+i.e. of `edwardsToMontgomery (clamp k • basepoint)` (`x25519Nat_basepoint_edwards`); more
+generally `x25519Nat_edwards`.
 
 The quadratic twist `montgomeryTwist = montgomery.twist 2` has `4 L'` points with
 `L' = twistL = 2^253 - 55484635554744707071703875581767296995` (`card_twist`, from the generic
@@ -148,25 +148,26 @@ theorem v_montgomeryBasepoint : montgomeryBasepoint.v =
 theorem addOrderOf_montgomeryBasepoint : addOrderOf montgomeryBasepoint = L := by
   rw [montgomeryBasepoint_def, AddEquiv.addOrderOf_eq, addOrderOf_basepoint]
 
-/-! ### `x25519` on the basepoint and on Edwards points -/
+/-! ### `x25519Nat` on the basepoint and on Edwards points -/
 
-/-- `x25519 k 9` is the `u`-coordinate of `clamp k • montgomeryBasepoint`. -/
-theorem x25519_basepoint (k : ℕ) : x25519 k 9 = encodeU (clamp k • montgomeryBasepoint).u := by
-  have h := x25519_eq_u_nsmul k montgomeryBasepoint
+/-- `x25519Nat k 9` is the `u`-coordinate of `clamp k • montgomeryBasepoint`. -/
+theorem x25519Nat_basepoint (k : ℕ) : x25519Nat k 9 = encodeU
+    (clamp k • montgomeryBasepoint).u := by
+  have h := x25519Nat_eq_u_nsmul k montgomeryBasepoint
   rwa [u_montgomeryBasepoint, encodeU_nine] at h
 
-/-- `x25519 k 9` is the `u`-coordinate of the image in `montgomery` of `clamp k • basepoint`:
+/-- `x25519Nat k 9` is the `u`-coordinate of the image in `montgomery` of `clamp k • basepoint`:
 the meaning of dalek's `mul_base_clamped` followed by `to_montgomery`. -/
-theorem x25519_basepoint_edwards (k : ℕ) :
-    x25519 k 9 = encodeU (edwardsToMontgomery (clamp k • basepoint)).u := by
-  rw [x25519_basepoint, montgomeryBasepoint_def, map_nsmul]
+theorem x25519Nat_basepoint_edwards (k : ℕ) :
+    x25519Nat k 9 = encodeU (edwardsToMontgomery (clamp k • basepoint)).u := by
+  rw [x25519Nat_basepoint, montgomeryBasepoint_def, map_nsmul]
 
-/-- `x25519` on the `u`-coordinate of the image of an Edwards point `P` is the `u`-coordinate
+/-- `x25519Nat` on the `u`-coordinate of the image of an Edwards point `P` is the `u`-coordinate
 of the image of `clamp k • P`. -/
-theorem x25519_edwards (k : ℕ) (P : edwards.Point) :
-    x25519 k (encodeU (edwardsToMontgomery P).u) =
+theorem x25519Nat_edwards (k : ℕ) (P : edwards.Point) :
+    x25519Nat k (encodeU (edwardsToMontgomery P).u) =
       encodeU (edwardsToMontgomery (clamp k • P)).u := by
-  rw [x25519_eq_u_nsmul, map_nsmul]
+  rw [x25519Nat_eq_u_nsmul, map_nsmul]
 
 /-! ### The twist -/
 
