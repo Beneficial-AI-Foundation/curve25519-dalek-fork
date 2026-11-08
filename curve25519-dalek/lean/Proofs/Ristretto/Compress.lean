@@ -170,8 +170,8 @@ open edwards.EdwardsPoint.«x86_64-tables» in
 theorem compress_spec (self : RistrettoPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
-      r.bytes = Ristretto.encodeRep self.toPoint ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
+      r.toVector = Ristretto.encodeRep self.toPoint ⦄ := by
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.toVector_eq_encodeRep_iff]
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   rw [edwards.EdwardsPoint.«x86_64-tables».onCurve_iff,
     edwards.EdwardsPoint.«x86_64-tables».toExtended_def] at hon
@@ -199,8 +199,8 @@ open edwards.EdwardsPoint.«i686-tables» in
 theorem compress_spec (self : RistrettoPoint.«i686-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
-      r.bytes = Ristretto.encodeRep self.toPoint ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
+      r.toVector = Ristretto.encodeRep self.toPoint ⦄ := by
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.toVector_eq_encodeRep_iff]
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   rw [edwards.EdwardsPoint.«i686-tables».onCurve_iff,
     edwards.EdwardsPoint.«i686-tables».toExtended_def] at hon
@@ -228,8 +228,8 @@ open edwards.EdwardsPoint.«x86_64-no-tables» in
 theorem compress_spec (self : RistrettoPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
-      r.bytes = Ristretto.encodeRep self.toPoint ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
+      r.toVector = Ristretto.encodeRep self.toPoint ⦄ := by
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.toVector_eq_encodeRep_iff]
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   rw [edwards.EdwardsPoint.«x86_64-no-tables».onCurve_iff,
     edwards.EdwardsPoint.«x86_64-no-tables».toExtended_def] at hon
@@ -257,8 +257,8 @@ open edwards.EdwardsPoint.«i686-no-tables» in
 theorem compress_spec (self : RistrettoPoint.«i686-no-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
-      r.bytes = Ristretto.encodeRep self.toPoint ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
+      r.toVector = Ristretto.encodeRep self.toPoint ⦄ := by
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.toVector_eq_encodeRep_iff]
   obtain ⟨hX, hY, hZ, hT⟩ := hself
   rw [edwards.EdwardsPoint.«i686-no-tables».onCurve_iff,
     edwards.EdwardsPoint.«i686-no-tables».toExtended_def] at hon

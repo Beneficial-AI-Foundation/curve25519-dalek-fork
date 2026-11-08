@@ -279,8 +279,8 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-tables»
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
-        ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
+        ∀ i < inputs.length, r[i]!.toVector = curve25519.encode inputs[i]!.toPoint ⦄ := by
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.toVector_eq_encode_iff]
   exact spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ =>
       ⟨hlen, fun i hi => by
       rw [hr i hi, encodeNat_eq, EdwardsPoint.«x86_64-tables».toPoint_x (hinputs_on i hi),
@@ -333,8 +333,8 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-tables»)
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
-        ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
+        ∀ i < inputs.length, r[i]!.toVector = curve25519.encode inputs[i]!.toPoint ⦄ := by
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.toVector_eq_encode_iff]
   exact spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ =>
       ⟨hlen, fun i hi => by
       rw [hr i hi, encodeNat_eq, EdwardsPoint.«i686-tables».toPoint_x (hinputs_on i hi),
@@ -387,8 +387,8 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«x86_64-no-table
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
-        ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
+        ∀ i < inputs.length, r[i]!.toVector = curve25519.encode inputs[i]!.toPoint ⦄ := by
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.toVector_eq_encode_iff]
   exact spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ =>
       ⟨hlen, fun i hi => by
       rw [hr i hi, encodeNat_eq, EdwardsPoint.«x86_64-no-tables».toPoint_x (hinputs_on i hi),
@@ -441,8 +441,8 @@ theorem compress_batch_alloc_spec (inputs : Slice EdwardsPoint.«i686-no-tables�
     (hinputs_on : ∀ i < inputs.length, inputs[i]!.OnCurve) :
     compress_batch_alloc inputs ⦃ (r : alloc.vec.Vec CompressedEdwardsY) =>
       r.length = inputs.length ∧
-        ∀ i < inputs.length, r[i]!.bytes = curve25519.encode inputs[i]!.toPoint ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
+        ∀ i < inputs.length, r[i]!.toVector = curve25519.encode inputs[i]!.toPoint ⦄ := by
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.toVector_eq_encode_iff]
   exact spec_mono (compress_batch_alloc_asNat inputs hinputs) fun r ⟨hlen, hr⟩ =>
       ⟨hlen, fun i hi => by
       rw [hr i hi, encodeNat_eq, EdwardsPoint.«i686-no-tables».toPoint_x (hinputs_on i hi),

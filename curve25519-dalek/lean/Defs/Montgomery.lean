@@ -11,8 +11,8 @@ public section
 
 /-! # `montgomery.rs`: the `u`-coordinate bytes and the ladder's projective points (audited)
 
-`MontgomeryPoint` is 32 bytes: `bytes` is them as a `Vector UInt8 32` (`Array.toVector`), the
-byte string of RFC 7748, and `u` the `u`-coordinate they encode, RFC 7748 `decodeUCoordinate`
+`MontgomeryPoint` is 32 bytes; `toVector` gives them as a `Vector UInt8 32`, the byte string
+of RFC 7748, and `u` is the `u`-coordinate they encode, RFC 7748 `decodeUCoordinate`
 (bit `255` masked, reduced modulo `p`).
 
 `ProjectivePoint (U : W)` is the `x`-only projective point of the Montgomery ladder: `toXZ` maps
@@ -34,14 +34,10 @@ indices. -/
 instance MontgomeryPoint.instInhabited : Inhabited MontgomeryPoint :=
   inferInstanceAs (Inhabited (Array U8 32#usize))
 
-/-- The 32 bytes as a `Vector UInt8 32`, the byte string of RFC 7748. -/
-@[expose] def MontgomeryPoint.bytes (self : MontgomeryPoint) : Vector UInt8 32 :=
-  Aeneas.Std.Array.toVector self
-
 /-- The `u`-coordinate encoded by the bytes: RFC 7748 `decodeUCoordinate` (the value of the low
 `255` bits) as a field element. -/
 @[expose] def MontgomeryPoint.u (self : MontgomeryPoint) : ZMod p :=
-  (decodeUCoordinate self.bytes : ZMod p)
+  (decodeUCoordinate self.toVector : ZMod p)
 
 /-! ### `ProjectivePoint` -/
 

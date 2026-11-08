@@ -14,10 +14,10 @@ public section
 /-! # The values of byte strings (proof helper, not audited)
 
 The specs state the 32-byte types (`MontgomeryPoint`, `CompressedEdwardsY`, `CompressedRistretto`)
-through their bytes (`bytes`, a `Vector UInt8 32`) and the RFC functions on byte strings. The
+through their bytes (`toVector`, a `Vector UInt8 32`) and the RFC functions on byte strings. The
 proofs work with the little-endian values: `asNat` of each type, `Array.asNat 8` of a byte array,
 and the arithmetic cores (`encodeNat`, `x25519Nat`, …). `Array.decodeLittleEndian_toVector` and
-`decodeLittleEndian_bytes` relate the two, and the bridging lemmas below turn each byte-level
+`decodeLittleEndian_toVector` relate the two, and the bridging lemmas below turn each byte-level
 statement into the value-level one, for use as a first `simp only` step. -/
 
 open Aeneas Aeneas.Std curve25519
@@ -54,26 +54,26 @@ theorem MontgomeryPoint.asNat_def (self : MontgomeryPoint) :
   unfold MontgomeryPoint.asNat
   rfl
 
-theorem MontgomeryPoint.decodeLittleEndian_bytes (self : MontgomeryPoint) :
-    decodeLittleEndian self.bytes = self.asNat :=
+theorem MontgomeryPoint.decodeLittleEndian_toVector (self : MontgomeryPoint) :
+    decodeLittleEndian self.toVector = self.asNat :=
   Aeneas.Std.Array.decodeLittleEndian_toVector self
 
 theorem MontgomeryPoint.u_def (self : MontgomeryPoint) : self.u = decodeU self.asNat := by
-  rw [MontgomeryPoint.u, decodeUCoordinate_cast, MontgomeryPoint.decodeLittleEndian_bytes]
+  rw [MontgomeryPoint.u, decodeUCoordinate_cast, MontgomeryPoint.decodeLittleEndian_toVector]
 
-theorem MontgomeryPoint.bytes_eq_encodeUCoordinate_iff (r : MontgomeryPoint) (u : ZMod p) :
-    r.bytes = encodeUCoordinate u ↔ r.asNat = encodeU u := by
-  rw [eq_encodeUCoordinate_iff, MontgomeryPoint.decodeLittleEndian_bytes]
+theorem MontgomeryPoint.toVector_eq_encodeUCoordinate_iff (r : MontgomeryPoint) (u : ZMod p) :
+    r.toVector = encodeUCoordinate u ↔ r.asNat = encodeU u := by
+  rw [eq_encodeUCoordinate_iff, MontgomeryPoint.decodeLittleEndian_toVector]
 
-theorem MontgomeryPoint.bytes_eq_X25519_iff (r : MontgomeryPoint) (k : Array U8 32#usize)
+theorem MontgomeryPoint.toVector_eq_X25519_iff (r : MontgomeryPoint) (k : Array U8 32#usize)
     (s : MontgomeryPoint) :
-    r.bytes = X25519 k.toVector s.bytes ↔ r.asNat = x25519Nat (k.asNat 8) s.asNat := by
-  rw [eq_X25519_iff, MontgomeryPoint.decodeLittleEndian_bytes,
-    Aeneas.Std.Array.decodeLittleEndian_toVector, MontgomeryPoint.decodeLittleEndian_bytes]
+    r.toVector = X25519 k.toVector s.toVector ↔ r.asNat = x25519Nat (k.asNat 8) s.asNat := by
+  rw [eq_X25519_iff, MontgomeryPoint.decodeLittleEndian_toVector,
+    Aeneas.Std.Array.decodeLittleEndian_toVector, MontgomeryPoint.decodeLittleEndian_toVector]
 
-theorem MontgomeryPoint.bytes_eq_X25519_nine_iff (r : MontgomeryPoint) (k : Array U8 32#usize) :
-    r.bytes = X25519 k.toVector (encodeUCoordinate 9) ↔ r.asNat = x25519Nat (k.asNat 8) 9 := by
-  rw [eq_X25519_iff, MontgomeryPoint.decodeLittleEndian_bytes,
+theorem MontgomeryPoint.toVector_eq_X25519_nine_iff (r : MontgomeryPoint) (k : Array U8 32#usize) :
+    r.toVector = X25519 k.toVector (encodeUCoordinate 9) ↔ r.asNat = x25519Nat (k.asNat 8) 9 := by
+  rw [eq_X25519_iff, MontgomeryPoint.decodeLittleEndian_toVector,
     Aeneas.Std.Array.decodeLittleEndian_toVector, decodeLittleEndian_encodeUCoordinate,
     encodeU_nine]
 
@@ -90,18 +90,18 @@ theorem CompressedEdwardsY.asNat_def (self : CompressedEdwardsY) :
   unfold CompressedEdwardsY.asNat
   rfl
 
-theorem CompressedEdwardsY.decodeLittleEndian_bytes (self : CompressedEdwardsY) :
-    decodeLittleEndian self.bytes = self.asNat :=
+theorem CompressedEdwardsY.decodeLittleEndian_toVector (self : CompressedEdwardsY) :
+    decodeLittleEndian self.toVector = self.asNat :=
   Aeneas.Std.Array.decodeLittleEndian_toVector self
 
-theorem CompressedEdwardsY.bytes_eq_encode_iff (r : CompressedEdwardsY)
+theorem CompressedEdwardsY.toVector_eq_encode_iff (r : CompressedEdwardsY)
     (P : curve25519.edwards.Point) :
-    r.bytes = encode P ↔ r.asNat = encodeNat P := by
-  rw [eq_encode_iff, CompressedEdwardsY.decodeLittleEndian_bytes]
+    r.toVector = encode P ↔ r.asNat = encodeNat P := by
+  rw [eq_encode_iff, CompressedEdwardsY.decodeLittleEndian_toVector]
 
-theorem CompressedEdwardsY.decodeLenient_bytes (self : CompressedEdwardsY) :
-    decodeLenient self.bytes = decodeLenientNat self.asNat := by
-  rw [decodeLenient, CompressedEdwardsY.decodeLittleEndian_bytes]
+theorem CompressedEdwardsY.decodeLenient_toVector (self : CompressedEdwardsY) :
+    decodeLenient self.toVector = decodeLenientNat self.asNat := by
+  rw [decodeLenient, CompressedEdwardsY.decodeLittleEndian_toVector]
 
 end edwards
 
@@ -116,18 +116,18 @@ theorem CompressedRistretto.asNat_def (self : CompressedRistretto) :
   unfold CompressedRistretto.asNat
   rfl
 
-theorem CompressedRistretto.decodeLittleEndian_bytes (self : CompressedRistretto) :
-    decodeLittleEndian self.bytes = self.asNat :=
+theorem CompressedRistretto.decodeLittleEndian_toVector (self : CompressedRistretto) :
+    decodeLittleEndian self.toVector = self.asNat :=
   Aeneas.Std.Array.decodeLittleEndian_toVector self
 
-theorem CompressedRistretto.bytes_eq_encodeRep_iff (r : CompressedRistretto)
+theorem CompressedRistretto.toVector_eq_encodeRep_iff (r : CompressedRistretto)
     (P : curve25519.edwards.Point) :
-    r.bytes = Ristretto.encodeRep P ↔ r.asNat = Ristretto.encodeRepNat P := by
-  rw [Ristretto.eq_encodeRep_iff, CompressedRistretto.decodeLittleEndian_bytes]
+    r.toVector = Ristretto.encodeRep P ↔ r.asNat = Ristretto.encodeRepNat P := by
+  rw [Ristretto.eq_encodeRep_iff, CompressedRistretto.decodeLittleEndian_toVector]
 
-theorem CompressedRistretto.decodeRep_bytes (self : CompressedRistretto) :
-    Ristretto.decodeRep self.bytes = Ristretto.decodeRepNat self.asNat := by
-  rw [Ristretto.decodeRep, CompressedRistretto.decodeLittleEndian_bytes]
+theorem CompressedRistretto.decodeRep_toVector (self : CompressedRistretto) :
+    Ristretto.decodeRep self.toVector = Ristretto.decodeRepNat self.asNat := by
+  rw [Ristretto.decodeRep, CompressedRistretto.decodeLittleEndian_toVector]
 
 end ristretto
 

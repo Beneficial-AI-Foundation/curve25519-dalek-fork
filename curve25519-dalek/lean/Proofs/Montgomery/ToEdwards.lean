@@ -247,7 +247,7 @@ theorem «x86_64-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     edwards.EdwardsPoint.«x86_64-tables».toPoint
     (fun q => q.OnCurve ∧ q.LimbsLt 52) _ hm1
     (fun s => by
-      simpa only [edwards.CompressedEdwardsY.decodeLenient_bytes] using
+      simpa only [edwards.CompressedEdwardsY.decodeLenient_toVector] using
         edwards.CompressedEdwardsY.«x86_64-tables».decompress_spec s) u sign
     (limbs_lt_of_le (by decide) hu_lt))
   intro r hr
@@ -291,7 +291,7 @@ theorem «i686-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     edwards.EdwardsPoint.«i686-tables».toPoint
     (fun q => q.OnCurve ∧ q.LimbsLt 26) _ hm1
     (fun s => by
-      simpa only [edwards.CompressedEdwardsY.decodeLenient_bytes] using
+      simpa only [edwards.CompressedEdwardsY.decodeLenient_toVector] using
         edwards.CompressedEdwardsY.«i686-tables».decompress_spec s) u sign
     (limbs_lt_of_le (by decide) hu_lt))
   intro r hr
@@ -335,7 +335,7 @@ theorem «x86_64-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8
     edwards.EdwardsPoint.«x86_64-no-tables».toPoint
     (fun q => q.OnCurve ∧ q.LimbsLt 52) _ hm1
     (fun s => by
-      simpa only [edwards.CompressedEdwardsY.decodeLenient_bytes] using
+      simpa only [edwards.CompressedEdwardsY.decodeLenient_toVector] using
         edwards.CompressedEdwardsY.«x86_64-no-tables».decompress_spec s) u sign
     (limbs_lt_of_le (by decide) hu_lt))
   intro r hr
@@ -380,7 +380,7 @@ theorem «i686-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) 
     edwards.EdwardsPoint.«i686-no-tables».toPoint
     (fun q => q.OnCurve ∧ q.LimbsLt 26) _ hm1
     (fun s => by
-      simpa only [edwards.CompressedEdwardsY.decodeLenient_bytes] using
+      simpa only [edwards.CompressedEdwardsY.decodeLenient_toVector] using
         edwards.CompressedEdwardsY.«i686-no-tables».decompress_spec s) u sign
     (limbs_lt_of_le (by decide) hu_lt))
   intro r hr

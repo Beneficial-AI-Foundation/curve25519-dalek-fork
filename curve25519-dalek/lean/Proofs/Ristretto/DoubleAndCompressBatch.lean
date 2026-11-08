@@ -625,8 +625,8 @@ theorem double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
-        ∀ i < ps.length, r[i]!.bytes = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
+        ∀ i < ps.length, r[i]!.toVector = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄ := by
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.toVector_eq_encodeRep_iff]
   have hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve := fun P hP => ⟨hps P hP, hps_on P hP⟩
   unfold double_and_compress_batch
   have hpoints' : pointsInst.into_iter points
@@ -840,8 +840,8 @@ theorem double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
-        ∀ i < ps.length, r[i]!.bytes = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
+        ∀ i < ps.length, r[i]!.toVector = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄ := by
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.toVector_eq_encodeRep_iff]
   have hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve := fun P hP => ⟨hps P hP, hps_on P hP⟩
   unfold double_and_compress_batch
   have hpoints' : pointsInst.into_iter points
@@ -1273,8 +1273,8 @@ theorem double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
-        ∀ i < ps.length, r[i]!.bytes = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
+        ∀ i < ps.length, r[i]!.toVector = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄ := by
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.toVector_eq_encodeRep_iff]
   have hps : ∀ P ∈ ps, P.LimbsLt 52 ∧ P.OnCurve := fun P hP => ⟨hps P hP, hps_on P hP⟩
   unfold double_and_compress_batch
   have hpoints' : pointsInst.into_iter points
@@ -1488,8 +1488,8 @@ theorem double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (hps_on : ∀ P ∈ ps, P.OnCurve) (hlen : ps.length ≤ Usize.max) :
     double_and_compress_batch pointsInst points ⦃ (r : alloc.vec.Vec CompressedRistretto) =>
       r.length = ps.length ∧
-        ∀ i < ps.length, r[i]!.bytes = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
+        ∀ i < ps.length, r[i]!.toVector = Ristretto.encodeRep (2 • (ps[i]!).toPoint) ⦄ := by
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.toVector_eq_encodeRep_iff]
   have hps : ∀ P ∈ ps, P.LimbsLt 26 ∧ P.OnCurve := fun P hP => ⟨hps P hP, hps_on P hP⟩
   unfold double_and_compress_batch
   have hpoints' : pointsInst.into_iter points

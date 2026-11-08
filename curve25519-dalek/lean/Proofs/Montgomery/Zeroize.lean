@@ -19,9 +19,9 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.ZeroizeZeroize
 
 /-- `Zeroize for MontgomeryPoint`: thirty-two zero bytes, the encoding of `u = 0`. -/
 theorem zeroize_spec (self : MontgomeryPoint) :
-    zeroize self ⦃ (r : MontgomeryPoint) => r.bytes = encodeUCoordinate 0 ⦄ := by
+    zeroize self ⦃ (r : MontgomeryPoint) => r.toVector = encodeUCoordinate 0 ⦄ := by
   simp only
-      [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff,
+      [Curve25519Dalek.montgomery.MontgomeryPoint.toVector_eq_encodeUCoordinate_iff,
       curve25519.encodeU_zero]
   exact spec_mono (zeroize_eq self) fun r hr => by
     rw [hr, MontgomeryPoint.asNat_def, Array.asNat_eq_sum]

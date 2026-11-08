@@ -506,8 +506,8 @@ scalar, encoded canonically. The ladder computes `u(n • Q)` on the curve or it
 @[step]
 theorem mul_spec (self : montgomery.MontgomeryPoint) (scalar : scalar.Scalar) :
     mul self scalar ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.bytes = encodeUCoordinate (montgomery.ladder 255 (scalar.asNat % 2 ^ 255) self.u) ⦄ := by
-  simp only [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff]
+      r.toVector = encodeUCoordinate (montgomery.ladder 255 (scalar.asNat % 2 ^ 255) self.u) ⦄ := by
+  simp only [Curve25519Dalek.montgomery.MontgomeryPoint.toVector_eq_encodeUCoordinate_iff]
   unfold mul
   exact dispatch_all_spec
     (montgomery.MulShared1MontgomeryPointShared0ScalarMontgomeryPoint.mul.«x86_64-tables_spec» self
@@ -528,7 +528,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 @[step]
 theorem mul_spec (self : montgomery.MontgomeryPoint) (rhs : scalar.Scalar) :
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.bytes = encodeUCoordinate (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄ := by
+      r.toVector = encodeUCoordinate (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄ := by
   unfold mul
   exact Shared1MontgomeryPoint.Insts.CoreOpsArithMulShared0ScalarMontgomeryPoint.mul_spec self rhs
      
@@ -542,7 +542,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 @[step]
 theorem mul_spec (self : montgomery.MontgomeryPoint) (rhs : scalar.Scalar) :
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.bytes = encodeUCoordinate (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄ := by
+      r.toVector = encodeUCoordinate (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄ := by
   unfold mul
   exact Shared1MontgomeryPoint.Insts.CoreOpsArithMulShared0ScalarMontgomeryPoint.mul_spec self rhs
      
@@ -556,7 +556,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 @[step]
 theorem mul_spec (self : montgomery.MontgomeryPoint) (rhs : scalar.Scalar) :
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.bytes = encodeUCoordinate (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄ := by
+      r.toVector = encodeUCoordinate (montgomery.ladder 255 (rhs.asNat % 2 ^ 255) self.u) ⦄ := by
   unfold mul
   exact Shared1MontgomeryPoint.Insts.CoreOpsArithMulShared0ScalarMontgomeryPoint.mul_spec self rhs
      
@@ -570,7 +570,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 @[step]
 theorem mul_spec (self : scalar.Scalar) (point : montgomery.MontgomeryPoint) :
     mul self point ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.bytes = encodeUCoordinate (montgomery.ladder 255 (self.asNat % 2 ^ 255) point.u) ⦄ := by
+      r.toVector = encodeUCoordinate (montgomery.ladder 255 (self.asNat % 2 ^ 255) point.u) ⦄ := by
   unfold mul
   exact Shared1MontgomeryPoint.Insts.CoreOpsArithMulShared0ScalarMontgomeryPoint.mul_spec point self
      
@@ -584,7 +584,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 @[step]
 theorem mul_spec (self : scalar.Scalar) (rhs : montgomery.MontgomeryPoint) :
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.bytes = encodeUCoordinate (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄ := by
+      r.toVector = encodeUCoordinate (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄ := by
   unfold mul
   exact Shared1Scalar.Insts.CoreOpsArithMulShared0MontgomeryPointMontgomeryPoint.mul_spec self rhs
      
@@ -598,7 +598,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 @[step]
 theorem mul_spec (self : scalar.Scalar) (rhs : montgomery.MontgomeryPoint) :
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.bytes = encodeUCoordinate (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄ := by
+      r.toVector = encodeUCoordinate (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄ := by
   unfold mul
   exact Shared1Scalar.Insts.CoreOpsArithMulShared0MontgomeryPointMontgomeryPoint.mul_spec self rhs
      
@@ -612,7 +612,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 @[step]
 theorem mul_spec (self : scalar.Scalar) (rhs : montgomery.MontgomeryPoint) :
     mul self rhs ⦃ (r : montgomery.MontgomeryPoint) =>
-      r.bytes = encodeUCoordinate (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄ := by
+      r.toVector = encodeUCoordinate (montgomery.ladder 255 (self.asNat % 2 ^ 255) rhs.u) ⦄ := by
   unfold mul
   exact Shared1Scalar.Insts.CoreOpsArithMulShared0MontgomeryPointMontgomeryPoint.mul_spec self rhs
      

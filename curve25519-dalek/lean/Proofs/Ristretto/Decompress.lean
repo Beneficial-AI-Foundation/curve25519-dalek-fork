@@ -536,9 +536,9 @@ even (a ristretto255 representative) and has limbs `< 2^52`. -/
 @[step]
 theorem «x86_64-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«x86_64-tables» self ⦃ (r : Option RistrettoPoint.«x86_64-tables») =>
-      r.map edwards.EdwardsPoint.«x86_64-tables».toPoint = Ristretto.decodeRep self.bytes ∧
+      r.map edwards.EdwardsPoint.«x86_64-tables».toPoint = Ristretto.decodeRep self.toVector ∧
       ∀ q, r = some q → q.OnCurve ∧ Even q.toPoint ∧ q.LimbsLt 52 ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.decodeRep_bytes]
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.decodeRep_toVector]
   unfold decompress.«x86_64-tables»
   step with decompress.«x86_64-tables».step_1_spec
     as ⟨c1, c2, s, hc1v, hc1, hc2v, hc2, hsf, hsb⟩
@@ -623,9 +623,9 @@ even (a ristretto255 representative) and has limbs `< 2^26`. -/
 @[step]
 theorem «i686-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«i686-tables» self ⦃ (r : Option RistrettoPoint.«i686-tables») =>
-      r.map edwards.EdwardsPoint.«i686-tables».toPoint = Ristretto.decodeRep self.bytes ∧
+      r.map edwards.EdwardsPoint.«i686-tables».toPoint = Ristretto.decodeRep self.toVector ∧
       ∀ q, r = some q → q.OnCurve ∧ Even q.toPoint ∧ q.LimbsLt 26 ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.decodeRep_bytes]
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.decodeRep_toVector]
   unfold decompress.«i686-tables»
   step with decompress.«i686-tables».step_1_spec
     as ⟨c1, c2, s, hc1v, hc1, hc2v, hc2, hsf, hsb⟩
@@ -711,9 +711,9 @@ even (a ristretto255 representative) and has limbs `< 2^52`. -/
 @[step]
 theorem «x86_64-no-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«x86_64-no-tables» self ⦃ (r : Option RistrettoPoint.«x86_64-no-tables») =>
-      r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint = Ristretto.decodeRep self.bytes ∧
+      r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint = Ristretto.decodeRep self.toVector ∧
       ∀ q, r = some q → q.OnCurve ∧ Even q.toPoint ∧ q.LimbsLt 52 ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.decodeRep_bytes]
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.decodeRep_toVector]
   unfold decompress.«x86_64-no-tables»
   step with decompress.«x86_64-no-tables».step_1_spec
     as ⟨c1, c2, s, hc1v, hc1, hc2v, hc2, hsf, hsb⟩
@@ -798,9 +798,9 @@ even (a ristretto255 representative) and has limbs `< 2^26`. -/
 @[step]
 theorem «i686-no-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«i686-no-tables» self ⦃ (r : Option RistrettoPoint.«i686-no-tables») =>
-      r.map edwards.EdwardsPoint.«i686-no-tables».toPoint = Ristretto.decodeRep self.bytes ∧
+      r.map edwards.EdwardsPoint.«i686-no-tables».toPoint = Ristretto.decodeRep self.toVector ∧
       ∀ q, r = some q → q.OnCurve ∧ Even q.toPoint ∧ q.LimbsLt 26 ⦄ := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.decodeRep_bytes]
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.decodeRep_toVector]
   unfold decompress.«i686-no-tables»
   step with decompress.«i686-no-tables».step_1_spec
     as ⟨c1, c2, s, hc1v, hc1, hc2v, hc2, hsf, hsb⟩

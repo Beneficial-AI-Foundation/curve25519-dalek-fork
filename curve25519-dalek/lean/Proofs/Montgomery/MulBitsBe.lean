@@ -616,8 +616,8 @@ its twist (`MontgomeryModel.ladderBits_eq_xMul`). -/
 theorem mul_bits_be_spec {T0 : Type} (inst : core.iter.traits.iterator.Iterator T0 Bool)
     (self : MontgomeryPoint) (bits : T0) (bs : List Bool) (hbits : inst.Yields bits bs) :
     mul_bits_be inst self bits ⦃ (r : MontgomeryPoint) =>
-      r.bytes = encodeUCoordinate (montgomery.ladderBits bs self.u) ⦄ := by
-  simp only [Curve25519Dalek.montgomery.MontgomeryPoint.bytes_eq_encodeUCoordinate_iff]
+      r.toVector = encodeUCoordinate (montgomery.ladderBits bs self.u) ⦄ := by
+  simp only [Curve25519Dalek.montgomery.MontgomeryPoint.toVector_eq_encodeUCoordinate_iff]
   unfold mul_bits_be
   exact dispatch_all_spec
     (mul_bits_be.«x86_64-tables_spec» inst self bits bs hbits)

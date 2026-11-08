@@ -63,9 +63,9 @@ to one of the seven points as a `MontgomeryPoint`, that is with `==`, which comp
 coordinates `u` (not the bytes: other encodings of the same `u` count). In particular each of the
 seven points is sent to `0`. -/
 theorem X25519_LOW_ORDER_POINTS_spec (Q : montgomery.MontgomeryPoint) :
-    (∀ k : Vector UInt8 32, X25519 k Q.bytes = encodeUCoordinate 0) ↔
+    (∀ k : Vector UInt8 32, X25519 k Q.toVector = encodeUCoordinate 0) ↔
       ∃ i : Fin 7, Q.u = X25519_LOW_ORDER_POINTS[i.val]!.u := by
-  rw [forall_X25519_eq_zero_iff, montgomery.MontgomeryPoint.decodeLittleEndian_bytes]
+  rw [forall_X25519_eq_zero_iff, montgomery.MontgomeryPoint.decodeLittleEndian_toVector]
   constructor
   · intro h
     obtain ⟨h0, h1, h2, h3, h4⟩ := u_entries

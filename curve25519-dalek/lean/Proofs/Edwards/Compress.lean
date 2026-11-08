@@ -38,8 +38,8 @@ theorem compress_asNat (self : EdwardsPoint.«x86_64-tables») (hself : self.Lim
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
 theorem compress_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
+    compress self ⦃ (r : CompressedEdwardsY) => r.toVector = curve25519.encode self.toPoint ⦄ := by
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.toVector_eq_encode_iff]
   exact spec_mono (compress_asNat self hself) fun r hr => by
       rw [hr, encodeNat_eq, EdwardsPoint.«x86_64-tables».toPoint_x hon,
         EdwardsPoint.«x86_64-tables».toPoint_y hon]
@@ -65,8 +65,8 @@ theorem compress_asNat (self : EdwardsPoint.«i686-tables») (hself : self.Limbs
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
 theorem compress_spec (self : EdwardsPoint.«i686-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
+    compress self ⦃ (r : CompressedEdwardsY) => r.toVector = curve25519.encode self.toPoint ⦄ := by
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.toVector_eq_encode_iff]
   exact spec_mono (compress_asNat self hself) fun r hr => by
       rw [hr, encodeNat_eq, EdwardsPoint.«i686-tables».toPoint_x hon,
         EdwardsPoint.«i686-tables».toPoint_y hon]
@@ -92,8 +92,8 @@ theorem compress_asNat (self : EdwardsPoint.«x86_64-no-tables») (hself : self.
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
 theorem compress_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.LimbsLt 52)
     (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
+    compress self ⦃ (r : CompressedEdwardsY) => r.toVector = curve25519.encode self.toPoint ⦄ := by
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.toVector_eq_encode_iff]
   exact spec_mono (compress_asNat self hself) fun r hr => by
       rw [hr, encodeNat_eq, EdwardsPoint.«x86_64-no-tables».toPoint_x hon,
         EdwardsPoint.«x86_64-no-tables».toPoint_y hon]
@@ -119,8 +119,8 @@ theorem compress_asNat (self : EdwardsPoint.«i686-no-tables») (hself : self.Li
 /-- `EdwardsPoint::compress` is RFC 8032's encoding of the represented point. -/
 theorem compress_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.LimbsLt 26)
     (hon : self.OnCurve) :
-    compress self ⦃ (r : CompressedEdwardsY) => r.bytes = curve25519.encode self.toPoint ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
+    compress self ⦃ (r : CompressedEdwardsY) => r.toVector = curve25519.encode self.toPoint ⦄ := by
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.toVector_eq_encode_iff]
   exact spec_mono (compress_asNat self hself) fun r hr => by
       rw [hr, encodeNat_eq, EdwardsPoint.«i686-no-tables».toPoint_x hon,
         EdwardsPoint.«i686-no-tables».toPoint_y hon]

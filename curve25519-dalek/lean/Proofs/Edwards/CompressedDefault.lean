@@ -23,8 +23,8 @@ theorem default_asNat :
 
 /-- `Default for CompressedEdwardsY` is the encoding of the neutral element. -/
 theorem default_spec :
-    default ⦃ (r : CompressedEdwardsY) => r.bytes = encode 0 ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.bytes_eq_encode_iff]
+    default ⦃ (r : CompressedEdwardsY) => r.toVector = encode 0 ⦄ := by
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.toVector_eq_encode_iff]
   exact spec_mono default_asNat fun r hr => by rw [hr, encodeNat_zero]
 
 end Curve25519Dalek.edwards.CompressedEdwardsY.Insts.CoreDefaultDefault

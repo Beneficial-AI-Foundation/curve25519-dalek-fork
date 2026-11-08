@@ -296,9 +296,9 @@ limbs `< 2^52`. -/
 @[step]
 theorem decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-tables»)) =>
-      r.map EdwardsPoint.«x86_64-tables».toPoint = decodeLenient self.bytes ∧
+      r.map EdwardsPoint.«x86_64-tables».toPoint = decodeLenient self.toVector ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.decodeLenient_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.decodeLenient_toVector]
   unfold decompress.«x86_64-tables»
   step with decompress.«x86_64-tables».step_1_spec
     as ⟨c, X, Y, Z, hcv, hYf, hZf, hc, hX, hXneg, hX_lt, hY_lt, hZ_lt⟩
@@ -340,9 +340,9 @@ limbs `< 2^26`. -/
 @[step]
 theorem decompress_spec (self : CompressedEdwardsY) :
     decompress.«i686-tables» self ⦃ (r : Option (EdwardsPoint.«i686-tables»)) =>
-      r.map EdwardsPoint.«i686-tables».toPoint = decodeLenient self.bytes ∧
+      r.map EdwardsPoint.«i686-tables».toPoint = decodeLenient self.toVector ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.decodeLenient_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.decodeLenient_toVector]
   unfold decompress.«i686-tables»
   step with decompress.«i686-tables».step_1_spec
     as ⟨c, X, Y, Z, hcv, hYf, hZf, hc, hX, hXneg, hX_lt, hY_lt, hZ_lt⟩
@@ -523,9 +523,9 @@ limbs `< 2^52`. -/
 @[step]
 theorem decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-no-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-no-tables»)) =>
-      r.map EdwardsPoint.«x86_64-no-tables».toPoint = decodeLenient self.bytes ∧
+      r.map EdwardsPoint.«x86_64-no-tables».toPoint = decodeLenient self.toVector ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.decodeLenient_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.decodeLenient_toVector]
   unfold decompress.«x86_64-no-tables»
   step with decompress.«x86_64-no-tables».step_1_spec
     as ⟨c, X, Y, Z, hcv, hYf, hZf, hc, hX, hXneg, hX_lt, hY_lt, hZ_lt⟩
@@ -567,9 +567,9 @@ limbs `< 2^26`. -/
 @[step]
 theorem decompress_spec (self : CompressedEdwardsY) :
     decompress.«i686-no-tables» self ⦃ (r : Option (EdwardsPoint.«i686-no-tables»)) =>
-      r.map EdwardsPoint.«i686-no-tables».toPoint = decodeLenient self.bytes ∧
+      r.map EdwardsPoint.«i686-no-tables».toPoint = decodeLenient self.toVector ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
-  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.decodeLenient_bytes]
+  simp only [Curve25519Dalek.edwards.CompressedEdwardsY.decodeLenient_toVector]
   unfold decompress.«i686-no-tables»
   step with decompress.«i686-no-tables».step_1_spec
     as ⟨c, X, Y, Z, hcv, hYf, hZf, hc, hX, hXneg, hX_lt, hY_lt, hZ_lt⟩

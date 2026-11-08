@@ -28,8 +28,8 @@ namespace Curve25519Dalek.constants
 
 /-- `RISTRETTO_BASEPOINT_COMPRESSED`: RFC 9496's encoding of the basepoint. -/
 theorem RISTRETTO_BASEPOINT_COMPRESSED_spec :
-    RISTRETTO_BASEPOINT_COMPRESSED.bytes = Ristretto.encodeRep basepoint := by
-  simp only [Curve25519Dalek.ristretto.CompressedRistretto.bytes_eq_encodeRep_iff]
+    RISTRETTO_BASEPOINT_COMPRESSED.toVector = Ristretto.encodeRep basepoint := by
+  simp only [Curve25519Dalek.ristretto.CompressedRistretto.toVector_eq_encodeRep_iff]
   unfold RISTRETTO_BASEPOINT_COMPRESSED
   rw [ristretto.CompressedRistretto.asNat_def, Array.asNat_def, Array.make_val,
     Ristretto.encodeRepNat_basepoint]

@@ -44,12 +44,12 @@ The tables are stated with `IsTable` (entry `(i, j)` is on the curve and is
 `(j + 1) • 2^(8 i) • t.point`, the invariant of the Rust type) and `t.point = basepoint`.
 
 Definitions used: Mathlib's `Even`, `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`,
-`CompressedEdwardsY.bytes`, the tables' `point`, `IsTable` and `IsBounded` (`Defs/Edwards.lean`),
-`MontgomeryPoint.bytes`, `MontgomeryPoint.u` (`Defs/Montgomery.lean`), `curve25519.basepoint`
+the tables' `point`, `IsTable` and `IsBounded` (`Defs/Edwards.lean`),
+`MontgomeryPoint.u` (`Defs/Montgomery.lean`), `curve25519.basepoint`
 (`Curve25519/Edwards/Basepoint.lean`), `curve25519.encode` (`Curve25519/Edwards/Encoding.lean`),
 `curve25519.torsion8` (`Curve25519/Edwards/Torsion.lean`), `curve25519.montgomeryBasepoint`
 (`Curve25519/Montgomery.lean`), `curve25519.encodeUCoordinate`, `curve25519.X25519`
-(`Curve25519/X25519.lean`), `CompressedRistretto.bytes` (`Defs/Ristretto.lean`),
+(`Curve25519/X25519.lean`), `Array.toVector` (`ToAeneas/Array.lean`),
 `Ristretto.encodeRep` (`Curve25519/Ristretto/`). -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519 TwistedEdwardsModel
@@ -278,7 +278,7 @@ namespace Curve25519Dalek.constants
 
 /-- `ED25519_BASEPOINT_COMPRESSED`: RFC 8032's encoding of the basepoint. -/
 recall ED25519_BASEPOINT_COMPRESSED_spec :
-    ED25519_BASEPOINT_COMPRESSED.bytes = curve25519.encode curve25519.basepoint
+    ED25519_BASEPOINT_COMPRESSED.toVector = curve25519.encode curve25519.basepoint
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -291,7 +291,7 @@ namespace Curve25519Dalek.constants
 /-- `X25519_BASEPOINT`: RFC 7748's encoding of the `u`-coordinate `9` of the Montgomery
 basepoint. -/
 recall X25519_BASEPOINT_spec :
-    X25519_BASEPOINT.bytes = curve25519.encodeUCoordinate curve25519.montgomeryBasepoint.u
+    X25519_BASEPOINT.toVector = curve25519.encodeUCoordinate curve25519.montgomeryBasepoint.u
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms X25519_BASEPOINT_spec
@@ -302,7 +302,7 @@ namespace Curve25519Dalek.constants
 
 /-- `RISTRETTO_BASEPOINT_COMPRESSED`: RFC 9496's encoding of the basepoint. -/
 recall RISTRETTO_BASEPOINT_COMPRESSED_spec :
-    RISTRETTO_BASEPOINT_COMPRESSED.bytes = Ristretto.encodeRep basepoint
+    RISTRETTO_BASEPOINT_COMPRESSED.toVector = Ristretto.encodeRep basepoint
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in
@@ -395,7 +395,7 @@ property). This is equality with `==` (`PartialEq`, which compares the decoded c
 not equality of the bytes: other encodings of the same coordinates are sent to `0` too. In
 particular each of the seven points is sent to `0` (take `Q` to be the point). -/
 recall X25519_LOW_ORDER_POINTS_spec (Q : montgomery.MontgomeryPoint) :
-    (∀ k : Vector UInt8 32, X25519 k Q.bytes = encodeUCoordinate 0) ↔
+    (∀ k : Vector UInt8 32, X25519 k Q.toVector = encodeUCoordinate 0) ↔
       ∃ i : Fin 7, Q.u = X25519_LOW_ORDER_POINTS[i.val]!.u
 
 /-- [propext, Classical.choice, Quot.sound] -/
