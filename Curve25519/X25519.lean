@@ -27,6 +27,9 @@ The meaning: `x25519Nat k u` is the `u`-coordinate of `clamp k • Q` for any po
 `montgomery` or of its quadratic twist `montgomeryTwist = montgomery.twist 2` with
 `u`-coordinate `decodeU u` (`x25519Nat_eq_xMul` with `MontgomeryModel.xMul_eq_u_nsmul`,
 `MontgomeryModel.xMul_eq_u_nsmul_twist`; `2` is not a square modulo `p`, `not_isSquare_two`).
+On bytes, `X25519 k u` is the encoded `u`-coordinate of `decodeScalar25519 k • Q`
+(`X25519_eq_u_nsmul`, `X25519_eq_u_nsmul_twist`), and Diffie–Hellman agreement holds:
+`X25519 a (X25519 b u) = X25519 b (X25519 a u)` (`X25519_X25519_comm`).
 
 The definitions are exposed, so that they unfold (the kernel evaluates `x25519Nat` only where `p`
 unfolds too: the test vectors import `Curve25519.Basic` with `import all`); `montgomeryTwist` is
@@ -259,5 +262,48 @@ theorem x25519Nat_eq_zero_of_xMul_eight {u : ℕ} (h : montgomery.xMul 2 8 (deco
   obtain ⟨m, hm⟩ := Nat.dvd_of_mod_eq_zero (clamp_mod_eight k)
   rw [x25519Nat_eq_xMul, hm, Nat.mul_comm, MontgomeryModel.xMul_mul not_isSquare_two, h,
     MontgomeryModel.xMul_zero_right, encodeU, ZMod.val_zero]
+
+/-! ### The meaning of `X25519` -/
+
+/-- The decoded scalar is below `2 ^ 255`, so the ladder over `255` bits sees all of it. -/
+theorem decodeScalar25519_lt (k : Vector UInt8 32) : decodeScalar25519 k < 2 ^ 255 :=
+  clamp_lt _
+
+/-- The decoded scalar is a multiple of the cofactor `8`. -/
+theorem decodeScalar25519_mod_eight (k : Vector UInt8 32) : decodeScalar25519 k % 8 = 0 :=
+  clamp_mod_eight _
+
+/-- `X25519 k u` is the x-only multiplication `xMul` of the decoded coordinate by the decoded
+scalar. -/
+theorem X25519_eq_xMul (k u : Vector UInt8 32) :
+    X25519 k u =
+      encodeUCoordinate (montgomery.xMul 2 (decodeScalar25519 k) (decodeUCoordinate u)) := by
+  rw [X25519, MontgomeryModel.ladder_eq_xMul not_isSquare_two (decodeScalar25519_lt k)]
+
+/-- On the coordinate of a point `Q` of `montgomery`, `X25519 k` gives the coordinate of
+`decodeScalar25519 k • Q`. -/
+theorem X25519_eq_u_nsmul (k u : Vector UInt8 32) (Q : montgomery.Point)
+    (hQ : Q.u = decodeUCoordinate u) :
+    X25519 k u = encodeUCoordinate (decodeScalar25519 k • Q).u := by
+  rw [X25519_eq_xMul, ← hQ, MontgomeryModel.xMul_eq_u_nsmul]
+
+/-- On the coordinate of a point `Q` of the twist, `X25519 k` gives the coordinate of
+`decodeScalar25519 k • Q`. -/
+theorem X25519_eq_u_nsmul_twist (k u : Vector UInt8 32) (Q : montgomeryTwist.Point)
+    (hQ : Q.u = decodeUCoordinate u) :
+    X25519 k u = encodeUCoordinate (decodeScalar25519 k • Q).u := by
+  rw [X25519_eq_xMul, ← hQ]
+  have : (montgomery.twist 2).IsNonsingular := instIsNonsingularMontgomeryTwist
+  exact congrArg encodeUCoordinate
+    (MontgomeryModel.xMul_eq_u_nsmul_twist (M := montgomery) not_isSquare_two _ Q)
+
+/-- **Diffie–Hellman agreement**: applying X25519 with `a` then `b`, or `b` then `a`, gives the
+same bytes, for every coordinate `u` (with `u = 9`, both parties compute the same shared
+secret). -/
+theorem X25519_X25519_comm (a b u : Vector UInt8 32) :
+    X25519 a (X25519 b u) = X25519 b (X25519 a u) := by
+  simp only [X25519_eq_xMul, decodeUCoordinate_encodeUCoordinate,
+    ← MontgomeryModel.xMul_mul not_isSquare_two]
+  rw [Nat.mul_comm]
 
 end curve25519

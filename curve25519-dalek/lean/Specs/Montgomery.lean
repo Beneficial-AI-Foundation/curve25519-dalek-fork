@@ -140,7 +140,10 @@ recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255)
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_spec
 
-/-- `MontgomeryPoint::mul_clamped`: RFC 7748 `X25519(bytes, self)`. -/
+/-- `MontgomeryPoint::mul_clamped`: RFC 7748 `X25519(bytes, self)`. The properties of `X25519`
+(Diffie–Hellman agreement, meaning on the curve, small-subgroup safety) are proved in
+`Curve25519/X25519.lean` and `Curve25519/Montgomery.lean`; on `X25519_BASEPOINT` it agrees with
+`mul_base_clamped` (`mul_clamped_basepoint`, `Proofs/Montgomery/MulClamped.lean`). -/
 recall mul_clamped_spec (self : MontgomeryPoint) (bytes : Array U8 32#usize) :
     mul_clamped self bytes ⦃ (r : MontgomeryPoint) =>
       r.toVector = X25519 bytes.toVector self.toVector ⦄
@@ -148,7 +151,8 @@ recall mul_clamped_spec (self : MontgomeryPoint) (bytes : Array U8 32#usize) :
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle, RustAx.zeroize] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_clamped_spec
 
-/-- `MontgomeryPoint::mul_base_clamped`: RFC 7748 `X25519(bytes, 9)`. -/
+/-- `MontgomeryPoint::mul_base_clamped`: RFC 7748 `X25519(bytes, 9)`. The properties of `X25519`
+are proved in `Curve25519/X25519.lean` and `Curve25519/Montgomery.lean`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : MontgomeryPoint) =>
       r.toVector = X25519 bytes.toVector (encodeUCoordinate 9) ⦄
