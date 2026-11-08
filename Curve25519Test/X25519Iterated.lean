@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519.X25519
 public import Curve25519Test.X25519Fast
-public meta import Curve25519Fast.X25519
+meta import Curve25519Fast.X25519
 public section
 
 /-! # RFC 7748's iterated X25519 test (not audited)

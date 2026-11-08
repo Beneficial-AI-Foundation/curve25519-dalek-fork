@@ -251,7 +251,7 @@ base coordinate `x1` (RFC 7748 §5). -/
 /-- RFC 7748 `X25519(k, u)` on the values of the bytes, as a value below `p`. -/
 @[expose] def x25519 (k u : Nat) : Nat :=
   let k := clamp k
-  let x1 := ofNat (u % 2 ^ 255 % (2 ^ 255 - 19))
+  let x1 := ofNat u
   let r := loop x1 (k % 2 ^ 64).toUInt64 (k / 2 ^ 64 % 2 ^ 64).toUInt64
     (k / 2 ^ 128 % 2 ^ 64).toUInt64 (k / 2 ^ 192 % 2 ^ 64).toUInt64 255
     ⟨ofNat 1, ofNat 0, x1, ofNat 1⟩ false
@@ -259,8 +259,7 @@ base coordinate `x1` (RFC 7748 §5). -/
   let z2 := if r.2 then r.1.z3 else r.1.z2
   (mul x2 (invert z2)).val % (2 ^ 255 - 19)
 
-/-- RFC 7748 §5.2's iterated test on values: `k, u ← X25519(k, u), k`, `n` times; the final `k`.
--/
+/-- RFC 7748 §5.2's iterated test on values: `k, u ← x25519 k u, k`, `n` times; the final `k`. -/
 @[expose] def iterate : Nat → Nat → Nat → Nat
   | 0, k, _ => k
   | n + 1, k, u => iterate n (x25519 k u) k

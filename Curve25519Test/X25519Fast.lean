@@ -1006,13 +1006,8 @@ theorem bit_eq (k t : ℕ) (ht : t < 256) :
   unfold bit
   split_ifs with h0 h1 h2
   · rw [testBit_word _ _ (by omega), Nat.mod_eq_of_lt (a := t) (by omega)]
-  · rw [testBit_word _ _ (by omega), Nat.testBit_div_two_pow]
-    congr 1
-    omega
-  · rw [testBit_word _ _ (by omega), Nat.testBit_div_two_pow]
-    congr 1
-    omega
-  · rw [testBit_word _ _ (by omega), Nat.testBit_div_two_pow]
+  all_goals
+    rw [testBit_word _ _ (by omega), Nat.testBit_div_two_pow]
     congr 1
     omega
 
@@ -1036,15 +1031,12 @@ theorem loop_spec {x1 : Fe} {u : ZMod p} (h1 : x1.R 26 u) (k : ℕ) (w0 w1 w2 w3
 
 /-- **The fast X25519 is `x25519Nat`.** -/
 theorem x25519_eq (k u : ℕ) : x25519 k u = x25519Nat k u := by
-  have hu : (ofNat (u % 2 ^ 255 % (2 ^ 255 - 19))).R 26 (decodeU u) := by
-    refine (ofNat_spec _).of_eq ?_
-    rw [Nat.mod_eq_of_lt (a := u % 2 ^ 255 % (2 ^ 255 - 19)) (by omega), ← p_eq_sub,
-      ZMod.natCast_mod, decodeU]
+  have hu : (ofNat u).R 26 (decodeU u) := ofNat_spec u
   have h1 : (ofNat 1).R 26 1 := (ofNat_spec 1).of_eq (by norm_num)
   have h0 : (ofNat 0).R 26 0 := (ofNat_spec 0).of_eq (by norm_num)
   have hbit := fun t (ht : t < 255) => bit_eq (clamp k) t (by omega)
   obtain ⟨hR, hsw⟩ := loop_spec hu (clamp k) _ _ _ _ hbit 255 le_rfl
-    ⟨ofNat 1, ofNat 0, ofNat (u % 2 ^ 255 % (2 ^ 255 - 19)), ofNat 1⟩ false ⟨1, 0⟩
+    ⟨ofNat 1, ofNat 0, ofNat u, ofNat 1⟩ false ⟨1, 0⟩
     ⟨decodeU u, 1⟩ ⟨h1, h0, hu, h1⟩
   simp only [x25519, x25519Nat, MontgomeryModel.ladder, montgomery_a24_eq, XZ.ladder,
     XZ.ladderXZ, toU_eq_mul_pow_sub_two, encodeU]
