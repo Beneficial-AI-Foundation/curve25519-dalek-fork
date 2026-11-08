@@ -161,8 +161,10 @@ recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
 #guard_msgs (whitespace := lax, substring := true) in #print axioms mul_base_clamped_spec
 
 /-- `MontgomeryPoint::mul_bits_be`: the RFC 7748 ladder over the bits `bs` the iterator yields,
-most significant first, encoded canonically. The ladder computes `u(n • Q)` on the curve or
-its twist (`MontgomeryModel.ladderBits_eq_xMul`). -/
+most significant first, encoded canonically. This is scalar multiplication: on the coordinate of
+a point `Q` of the curve or of its twist, the result is the coordinate of `n • Q` for the integer
+`n` with the bits `bs` (`mul_bits_be_nsmul`, `mul_bits_be_nsmul_twist`,
+`Proofs/Montgomery/MulBitsBe.lean`). -/
 recall mul_bits_be_spec {T0 : Type} (inst : core.iter.traits.iterator.Iterator T0 Bool)
     (self : MontgomeryPoint) (bits : T0) (bs : List Bool) (hbits : inst.Yields bits bs) :
     mul_bits_be inst self bits ⦃ (r : MontgomeryPoint) =>

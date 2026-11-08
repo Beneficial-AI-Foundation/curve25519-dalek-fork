@@ -306,4 +306,28 @@ theorem X25519_X25519_comm (a b u : Vector UInt8 32) :
     ← MontgomeryModel.xMul_mul not_isSquare_two]
   rw [Nat.mul_comm]
 
+/-! ### The ladder over a sequence of bits -/
+
+/-- The ladder over the bits `bs`, most significant first, is the x-only multiplication `xMul`
+by the integer `n = Nat.ofDigits 2 (bs.reverse.map Bool.toNat)` with these bits: only `n`
+matters, not leading zeros or the number of bits. -/
+theorem montgomery_ladderBits_eq_xMul (bs : List Bool) (u : ZMod p) :
+    montgomery.ladderBits bs u =
+      montgomery.xMul 2 (Nat.ofDigits 2 (bs.reverse.map Bool.toNat)) u :=
+  MontgomeryModel.ladderBits_eq_xMul not_isSquare_two bs u
+
+/-- On the coordinate of a point `Q` of `montgomery`, the ladder over the bits `bs` gives the
+coordinate of `n • Q`, for the integer `n` with the big-endian bits `bs`. -/
+theorem montgomery_ladderBits_eq_u_nsmul (bs : List Bool) (Q : montgomery.Point) :
+    montgomery.ladderBits bs Q.u = (Nat.ofDigits 2 (bs.reverse.map Bool.toNat) • Q).u := by
+  rw [montgomery_ladderBits_eq_xMul, MontgomeryModel.xMul_eq_u_nsmul]
+
+/-- On the coordinate of a point `Q` of the twist, the ladder over the bits `bs` gives the
+coordinate of `n • Q`, for the integer `n` with the big-endian bits `bs`. -/
+theorem montgomery_ladderBits_eq_u_nsmul_twist (bs : List Bool) (Q : montgomeryTwist.Point) :
+    montgomery.ladderBits bs Q.u = (Nat.ofDigits 2 (bs.reverse.map Bool.toNat) • Q).u := by
+  rw [montgomery_ladderBits_eq_xMul]
+  have : (montgomery.twist 2).IsNonsingular := instIsNonsingularMontgomeryTwist
+  exact MontgomeryModel.xMul_eq_u_nsmul_twist (M := montgomery) not_isSquare_two _ Q
+
 end curve25519
