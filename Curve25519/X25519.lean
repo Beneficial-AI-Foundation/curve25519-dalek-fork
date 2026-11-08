@@ -119,7 +119,7 @@ theorem toU_eq_mul_pow_sub_two (P : MontgomeryModel.XZ (ZMod p)) :
 /-- RFC 7748 §5 `X25519(k, u)` on the little-endian values of the two 32-byte strings: the
 Montgomery ladder of curve25519 over 255 bits on the clamped scalar and the decoded
 coordinate, encoded. -/
-@[expose] noncomputable def x25519Nat (k u : ℕ) : ℕ :=
+@[expose] def x25519Nat (k u : ℕ) : ℕ :=
   encodeU (montgomery.ladder 255 (clamp k) (decodeU u))
 
 theorem x25519Nat_lt (k u : ℕ) : x25519Nat k u < p :=
@@ -143,7 +143,7 @@ masked, as a field element (the RFC processes non-canonical values as reduced mo
 
 /-- RFC 7748 §5 `X25519(k, u)` on 32-byte strings: the Montgomery ladder of `montgomery` over
 `255` bits on the clamped scalar and the decoded coordinate, encoded. -/
-@[expose] noncomputable def X25519 (k u : Vector UInt8 32) : Vector UInt8 32 :=
+@[expose] def X25519 (k u : Vector UInt8 32) : Vector UInt8 32 :=
   encodeUCoordinate (montgomery.ladder 255 (decodeScalar25519 k) (decodeUCoordinate u))
 
 /-- The decoded coordinate is `decodeU` of the value of the bytes. -/

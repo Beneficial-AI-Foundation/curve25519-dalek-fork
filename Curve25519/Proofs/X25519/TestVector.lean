@@ -15,7 +15,8 @@ same vectors on byte strings, as the RFC writes them, for `X25519`. The ladder i
 run in projective form (`XZ.ladderXZ`, no field inversion) and its result `(U : W)` is checked
 against the expected coordinate `e` as `U = e W ∧ W ≠ 0`, since the kernel cannot evaluate the
 inverse in `ZMod p`; `Curve25519.Basic` is imported with `import all` so that the kernel can
-unfold `p`. -/
+unfold `p`. The iterated test after 1,000 and 1,000,000 iterations, too slow for the kernel, is in
+`Curve25519Test.X25519Iterated`. -/
 
 namespace curve25519.Proofs
 
