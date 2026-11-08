@@ -732,7 +732,8 @@ recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-tables»)
     (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.toVector = encodeUCoordinate (edwardsToMontgomery eds[i]!.toPoint).u ⦄
+        ∀ i < eds.length, r[i]!.toVector = encodeUCoordinate
+            (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
@@ -749,7 +750,8 @@ recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-tables»)
     (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.toVector = encodeUCoordinate (edwardsToMontgomery eds[i]!.toPoint).u ⦄
+        ∀ i < eds.length, r[i]!.toVector = encodeUCoordinate
+            (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
@@ -768,7 +770,8 @@ recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«x86_64-no-tables»)
     (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.toVector = encodeUCoordinate (edwardsToMontgomery eds[i]!.toPoint).u ⦄
+        ∀ i < eds.length, r[i]!.toVector = encodeUCoordinate
+            (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.core, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
@@ -785,7 +788,8 @@ recall to_montgomery_batch_spec (eds : Slice EdwardsPoint.«i686-no-tables»)
     (heds : ∀ i < eds.length, eds[i]!.IsBounded) (heds_on : ∀ i < eds.length, eds[i]!.OnCurve) :
     to_montgomery_batch eds ⦃ (r : alloc.vec.Vec montgomery.MontgomeryPoint) =>
       r.length = eds.length ∧
-        ∀ i < eds.length, r[i]!.toVector = encodeUCoordinate (edwardsToMontgomery eds[i]!.toPoint).u ⦄
+        ∀ i < eds.length, r[i]!.toVector = encodeUCoordinate
+            (edwardsToMontgomery eds[i]!.toPoint).u ⦄
 
 /-- [propext, Classical.choice, Quot.sound, RustAx.subtle] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms to_montgomery_batch_spec
