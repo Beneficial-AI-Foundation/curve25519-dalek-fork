@@ -21,7 +21,8 @@ namespace Curve25519Dalek.montgomery.MontgomeryPoint.Insts.CoreCmpPartialEqMontg
 /-- `PartialEq for MontgomeryPoint`: equality of the encoded `u`-coordinates. -/
 @[step]
 theorem eq_spec (self other : MontgomeryPoint) :
-    eq self other ⦃ (r : Bool) => r = true ↔ self.u = other.u ⦄ := by
+    eq self other ⦃ (r : Bool) =>
+      r = true ↔ decodeUCoordinate self.toVector = decodeUCoordinate other.toVector ⦄ := by
   unfold eq
   step with SubtleConstantTimeEq.ct_eq_spec self other as ⟨c, hcv, hc⟩
   step as ⟨b, hb⟩

@@ -38,6 +38,6 @@ theorem mul_clamped_spec (self : MontgomeryPoint) (bytes : Array U8 32#usize) :
     change a.asNat 8 = _
     omega
   rw [MontgomeryPoint.toVector_eq_encodeUCoordinate_iff] at hr
-  rw [hr, hca, Nat.mod_eq_of_lt (clamp_lt _), x25519Nat, MontgomeryPoint.u_def]
+  rw [hr, hca, Nat.mod_eq_of_lt (clamp_lt _), x25519Nat, MontgomeryPoint.decodeUCoordinate_toVector]
 
 end Curve25519Dalek.montgomery.MontgomeryPoint

@@ -50,27 +50,30 @@ private theorem x25519Nat_entry_eq_zero :
 /-- The `u`-coordinates of the entries `0` to `4`: `0`, `1`, `u₈`, `u₈⁻¹` and `-1` (the entries
 `5` and `6` are the non-canonical encodings `p` and `p + 1` of `0` and `1`). -/
 private theorem u_entries :
-    X25519_LOW_ORDER_POINTS[0]!.u = 0 ∧ X25519_LOW_ORDER_POINTS[1]!.u = 1 ∧
-      X25519_LOW_ORDER_POINTS[2]!.u = u8 ∧ X25519_LOW_ORDER_POINTS[3]!.u = u8⁻¹ ∧
-      X25519_LOW_ORDER_POINTS[4]!.u = -1 := by
-  simp only [montgomery.MontgomeryPoint.u_def, montgomery.MontgomeryPoint.asNat_def,
-    Array.asNat_def, u8_inv]
+    decodeUCoordinate X25519_LOW_ORDER_POINTS[0]!.toVector = 0 ∧
+      decodeUCoordinate X25519_LOW_ORDER_POINTS[1]!.toVector = 1 ∧
+      decodeUCoordinate X25519_LOW_ORDER_POINTS[2]!.toVector = u8 ∧
+      decodeUCoordinate X25519_LOW_ORDER_POINTS[3]!.toVector = u8⁻¹ ∧
+      decodeUCoordinate X25519_LOW_ORDER_POINTS[4]!.toVector = -1 := by
+  simp only [montgomery.MontgomeryPoint.decodeUCoordinate_toVector,
+    montgomery.MontgomeryPoint.asNat_def, Array.asNat_def, u8_inv]
   unfold X25519_LOW_ORDER_POINTS
   decide +kernel
 
 /-- `X25519_LOW_ORDER_POINTS`: a point is sent to `0` by X25519 for every scalar iff it is equal
 to one of the seven points as a `MontgomeryPoint`, that is with `==`, which compares the decoded
-coordinates `u` (not the bytes: other encodings of the same `u` count). In particular each of the
-seven points is sent to `0`. -/
+coordinates (`decodeUCoordinate`; not the bytes: other encodings of the same coordinate count). In
+particular each of the seven points is sent to `0`. -/
 theorem X25519_LOW_ORDER_POINTS_spec (Q : montgomery.MontgomeryPoint) :
     (∀ k : Vector UInt8 32, X25519 k Q.toVector = encodeUCoordinate 0) ↔
-      ∃ i : Fin 7, Q.u = X25519_LOW_ORDER_POINTS[i.val]!.u := by
+      ∃ i : Fin 7, decodeUCoordinate Q.toVector =
+        decodeUCoordinate X25519_LOW_ORDER_POINTS[i.val]!.toVector := by
   rw [forall_X25519_eq_zero_iff, montgomery.MontgomeryPoint.decodeLittleEndian_toVector]
   constructor
   · intro h
     obtain ⟨h0, h1, h2, h3, h4⟩ := u_entries
     rcases (x25519Nat_eq_zero_iff Q.asNat).mp h with h | h | h | h | h <;>
-      rw [← montgomery.MontgomeryPoint.u_def] at h
+      rw [← montgomery.MontgomeryPoint.decodeUCoordinate_toVector] at h
     · exact ⟨0, h.trans h0.symm⟩
     · exact ⟨1, h.trans h1.symm⟩
     · exact ⟨4, h.trans h4.symm⟩
@@ -79,6 +82,7 @@ theorem X25519_LOW_ORDER_POINTS_spec (Q : montgomery.MontgomeryPoint) :
   · rintro ⟨i, hi⟩ k
     have hk := x25519Nat_entry_eq_zero i k
     rw [x25519Nat_eq_xMul] at hk ⊢
-    rwa [← montgomery.MontgomeryPoint.u_def, hi, montgomery.MontgomeryPoint.u_def]
+    rwa [← montgomery.MontgomeryPoint.decodeUCoordinate_toVector, hi,
+      montgomery.MontgomeryPoint.decodeUCoordinate_toVector]
 
 end Curve25519Dalek.constants

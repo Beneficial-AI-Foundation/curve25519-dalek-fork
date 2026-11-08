@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519.X25519
 public import Curve25519Dalek.Funs
-public import Defs.Iterator
+public import ToAeneas.Iterator
 public import Defs.Montgomery
 import Proofs.Backend.Serial.U64.Field.FromBytes
 import Proofs.Backend.Serial.U64.Field.One
@@ -229,7 +229,7 @@ theorem mul_bits_be.«x86_64-tables_spec» {T0 : Type} (inst : core.iter.traits.
     Bool)
     (self : MontgomeryPoint) (bits : T0) (bs : List Bool) (hbits : inst.Yields bits bs) :
     mul_bits_be.«x86_64-tables» inst self bits ⦃ (r : MontgomeryPoint) =>
-      r.asNat = encodeU (montgomery.ladderBits bs self.u) ⦄ := by
+      r.asNat = encodeU (montgomery.ladderBits bs (decodeUCoordinate self.toVector)) ⦄ := by
   unfold mul_bits_be.«x86_64-tables»
   step as ⟨u, hu, hu_lt⟩
   step as ⟨x0, hx0, hx0_lt⟩
@@ -259,7 +259,8 @@ theorem mul_bits_be.«x86_64-tables_spec» {T0 : Type} (inst : core.iter.traits.
     · exact ⟨limbs_lt_of_le (by decide) hy0.1, limbs_lt_of_le (by decide) hy0.2⟩
     · exact ⟨limbs_lt_of_le (by decide) hy1.1, limbs_lt_of_le (by decide) hy1.2⟩
   step with «ProjectivePointx86_64-tables».as_affine_spec z0 hz_lt as ⟨r, hr⟩
-  rw [hr, MontgomeryModel.ladderBits, MontgomeryModel.XZ.ladderBits, MontgomeryPoint.u_def, decodeU]
+  rw [hr, MontgomeryModel.ladderBits, MontgomeryModel.XZ.ladderBits,
+    MontgomeryPoint.decodeUCoordinate_toVector, decodeU]
   congr 2
   have hu' : u.toField = ((self.asNat % 2 ^ 255 : ℕ) : ZMod p) := by
     rw [toField_def, hu, MontgomeryPoint.asNat_def]
@@ -278,7 +279,7 @@ theorem mul_bits_be.«i686-tables_spec» {T0 : Type} (inst : core.iter.traits.it
     Bool)
     (self : MontgomeryPoint) (bits : T0) (bs : List Bool) (hbits : inst.Yields bits bs) :
     mul_bits_be.«i686-tables» inst self bits ⦃ (r : MontgomeryPoint) =>
-      r.asNat = encodeU (montgomery.ladderBits bs self.u) ⦄ := by
+      r.asNat = encodeU (montgomery.ladderBits bs (decodeUCoordinate self.toVector)) ⦄ := by
   unfold mul_bits_be.«i686-tables»
   step as ⟨u, hu, hu_lt⟩
   step as ⟨x0, hx0, hx0_lt⟩
@@ -308,7 +309,8 @@ theorem mul_bits_be.«i686-tables_spec» {T0 : Type} (inst : core.iter.traits.it
     · exact ⟨limbs_lt_of_le (by decide) hy0.1, limbs_lt_of_le (by decide) hy0.2⟩
     · exact ⟨limbs_lt_of_le (by decide) hy1.1, limbs_lt_of_le (by decide) hy1.2⟩
   step with «ProjectivePointi686-tables».as_affine_spec z0 hz_lt as ⟨r, hr⟩
-  rw [hr, MontgomeryModel.ladderBits, MontgomeryModel.XZ.ladderBits, MontgomeryPoint.u_def, decodeU]
+  rw [hr, MontgomeryModel.ladderBits, MontgomeryModel.XZ.ladderBits,
+    MontgomeryPoint.decodeUCoordinate_toVector, decodeU]
   congr 2
   have hu' : u.toField = ((self.asNat % 2 ^ 255 : ℕ) : ZMod p) := by
     rw [toField_def, MontgomeryPoint.asNat_def]
@@ -518,7 +520,7 @@ theorem mul_bits_be.«x86_64-no-tables_spec» {T0 : Type} (inst : core.iter.trai
     T0 Bool)
     (self : MontgomeryPoint) (bits : T0) (bs : List Bool) (hbits : inst.Yields bits bs) :
     mul_bits_be.«x86_64-no-tables» inst self bits ⦃ (r : MontgomeryPoint) =>
-      r.asNat = encodeU (montgomery.ladderBits bs self.u) ⦄ := by
+      r.asNat = encodeU (montgomery.ladderBits bs (decodeUCoordinate self.toVector)) ⦄ := by
   unfold mul_bits_be.«x86_64-no-tables»
   step as ⟨u, hu, hu_lt⟩
   step as ⟨x0, hx0, hx0_lt⟩
@@ -548,7 +550,8 @@ theorem mul_bits_be.«x86_64-no-tables_spec» {T0 : Type} (inst : core.iter.trai
     · exact ⟨limbs_lt_of_le (by decide) hy0.1, limbs_lt_of_le (by decide) hy0.2⟩
     · exact ⟨limbs_lt_of_le (by decide) hy1.1, limbs_lt_of_le (by decide) hy1.2⟩
   step with «ProjectivePointx86_64-no-tables».as_affine_spec z0 hz_lt as ⟨r, hr⟩
-  rw [hr, MontgomeryModel.ladderBits, MontgomeryModel.XZ.ladderBits, MontgomeryPoint.u_def, decodeU]
+  rw [hr, MontgomeryModel.ladderBits, MontgomeryModel.XZ.ladderBits,
+    MontgomeryPoint.decodeUCoordinate_toVector, decodeU]
   congr 2
   have hu' : u.toField = ((self.asNat % 2 ^ 255 : ℕ) : ZMod p) := by
     rw [toField_def, hu, MontgomeryPoint.asNat_def]
@@ -567,7 +570,7 @@ theorem mul_bits_be.«i686-no-tables_spec» {T0 : Type} (inst : core.iter.traits
     T0 Bool)
     (self : MontgomeryPoint) (bits : T0) (bs : List Bool) (hbits : inst.Yields bits bs) :
     mul_bits_be.«i686-no-tables» inst self bits ⦃ (r : MontgomeryPoint) =>
-      r.asNat = encodeU (montgomery.ladderBits bs self.u) ⦄ := by
+      r.asNat = encodeU (montgomery.ladderBits bs (decodeUCoordinate self.toVector)) ⦄ := by
   unfold mul_bits_be.«i686-no-tables»
   step as ⟨u, hu, hu_lt⟩
   step as ⟨x0, hx0, hx0_lt⟩
@@ -597,7 +600,8 @@ theorem mul_bits_be.«i686-no-tables_spec» {T0 : Type} (inst : core.iter.traits
     · exact ⟨limbs_lt_of_le (by decide) hy0.1, limbs_lt_of_le (by decide) hy0.2⟩
     · exact ⟨limbs_lt_of_le (by decide) hy1.1, limbs_lt_of_le (by decide) hy1.2⟩
   step with «ProjectivePointi686-no-tables».as_affine_spec z0 hz_lt as ⟨r, hr⟩
-  rw [hr, MontgomeryModel.ladderBits, MontgomeryModel.XZ.ladderBits, MontgomeryPoint.u_def, decodeU]
+  rw [hr, MontgomeryModel.ladderBits, MontgomeryModel.XZ.ladderBits,
+    MontgomeryPoint.decodeUCoordinate_toVector, decodeU]
   congr 2
   have hu' : u.toField = ((self.asNat % 2 ^ 255 : ℕ) : ZMod p) := by
     rw [toField_def, MontgomeryPoint.asNat_def]
@@ -616,7 +620,8 @@ its twist (`MontgomeryModel.ladderBits_eq_xMul`). -/
 theorem mul_bits_be_spec {T0 : Type} (inst : core.iter.traits.iterator.Iterator T0 Bool)
     (self : MontgomeryPoint) (bits : T0) (bs : List Bool) (hbits : inst.Yields bits bs) :
     mul_bits_be inst self bits ⦃ (r : MontgomeryPoint) =>
-      r.toVector = encodeUCoordinate (montgomery.ladderBits bs self.u) ⦄ := by
+      r.toVector = encodeUCoordinate
+          (montgomery.ladderBits bs (decodeUCoordinate self.toVector)) ⦄ := by
   simp only [Curve25519Dalek.montgomery.MontgomeryPoint.toVector_eq_encodeUCoordinate_iff]
   unfold mul_bits_be
   exact dispatch_all_spec

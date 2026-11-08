@@ -6,7 +6,7 @@ module
 public import Curve25519Dalek.Funs
 public import Curve25519.Ristretto.Encoding
 public import Defs.Edwards
-public import Defs.Iterator
+public import ToAeneas.Iterator
 public import Defs.Ristretto
 import Proofs.Backend.Serial.U64.Constants.EdwardsD
 import Proofs.Backend.Serial.U64.Constants.InvsqrtAMinusD

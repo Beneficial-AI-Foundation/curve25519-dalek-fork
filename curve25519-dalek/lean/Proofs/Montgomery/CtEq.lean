@@ -27,15 +27,17 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 masked, reduced modulo `p`). -/
 @[step]
 theorem ct_eq.«x86_64-tables_spec» (self other : MontgomeryPoint) :
-    ct_eq.«x86_64-tables» self other ⦃ (r : subtle.Choice) =>
-      r.IsValid ∧ (r = 1#u8 ↔ self.u = other.u) ⦄ := by
+    ct_eq.«x86_64-tables» self other ⦃ (r : subtle.Choice) => r.IsValid ∧
+      (r = 1#u8 ↔ decodeUCoordinate self.toVector = decodeUCoordinate other.toVector) ⦄ := by
   unfold ct_eq.«x86_64-tables»
   step as ⟨a, ha, ha_lt⟩
   step as ⟨b, hb, hb_lt⟩
   step as ⟨c, hcv, hc1, hc0⟩
-  have hu : self.u = other.u ↔ a.asNat % p = b.asNat % p := by
-    rw [MontgomeryPoint.u_def, MontgomeryPoint.u_def, decodeU, decodeU, ha, hb,
-      ZMod.natCast_eq_natCast_iff', MontgomeryPoint.asNat_def, MontgomeryPoint.asNat_def]
+  have hu : decodeUCoordinate self.toVector = decodeUCoordinate other.toVector ↔
+      a.asNat % p = b.asNat % p := by
+    rw [MontgomeryPoint.decodeUCoordinate_toVector, MontgomeryPoint.decodeUCoordinate_toVector,
+      decodeU, decodeU, ha, hb, ZMod.natCast_eq_natCast_iff', MontgomeryPoint.asNat_def,
+      MontgomeryPoint.asNat_def]
   rw [hu]
   refine ⟨hcv, fun h => ?_, hc1⟩
   by_contra hne
@@ -47,15 +49,17 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 masked, reduced modulo `p`). -/
 @[step]
 theorem ct_eq.«i686-tables_spec» (self other : MontgomeryPoint) :
-    ct_eq.«i686-tables» self other ⦃ (r : subtle.Choice) =>
-      r.IsValid ∧ (r = 1#u8 ↔ self.u = other.u) ⦄ := by
+    ct_eq.«i686-tables» self other ⦃ (r : subtle.Choice) => r.IsValid ∧
+      (r = 1#u8 ↔ decodeUCoordinate self.toVector = decodeUCoordinate other.toVector) ⦄ := by
   unfold ct_eq.«i686-tables»
   step as ⟨a, ha, ha_lt⟩
   step as ⟨b, hb, hb_lt⟩
   step as ⟨c, hcv, hc1, hc0⟩
-  have hu : self.u = other.u ↔ a.asNat % p = b.asNat % p := by
-    rw [MontgomeryPoint.u_def, MontgomeryPoint.u_def, decodeU, decodeU, ha, hb,
-      ZMod.natCast_eq_natCast_iff', MontgomeryPoint.asNat_def, MontgomeryPoint.asNat_def]
+  have hu : decodeUCoordinate self.toVector = decodeUCoordinate other.toVector ↔
+      a.asNat % p = b.asNat % p := by
+    rw [MontgomeryPoint.decodeUCoordinate_toVector, MontgomeryPoint.decodeUCoordinate_toVector,
+      decodeU, decodeU, ha, hb, ZMod.natCast_eq_natCast_iff', MontgomeryPoint.asNat_def,
+      MontgomeryPoint.asNat_def]
   rw [hu]
   refine ⟨hcv, fun h => ?_, hc1⟩
   by_contra hne
@@ -67,15 +71,17 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 masked, reduced modulo `p`). -/
 @[step]
 theorem ct_eq.«x86_64-no-tables_spec» (self other : MontgomeryPoint) :
-    ct_eq.«x86_64-no-tables» self other ⦃ (r : subtle.Choice) =>
-      r.IsValid ∧ (r = 1#u8 ↔ self.u = other.u) ⦄ := by
+    ct_eq.«x86_64-no-tables» self other ⦃ (r : subtle.Choice) => r.IsValid ∧
+      (r = 1#u8 ↔ decodeUCoordinate self.toVector = decodeUCoordinate other.toVector) ⦄ := by
   unfold ct_eq.«x86_64-no-tables»
   step as ⟨a, ha, ha_lt⟩
   step as ⟨b, hb, hb_lt⟩
   step as ⟨c, hcv, hc1, hc0⟩
-  have hu : self.u = other.u ↔ a.asNat % p = b.asNat % p := by
-    rw [MontgomeryPoint.u_def, MontgomeryPoint.u_def, decodeU, decodeU, ha, hb,
-      ZMod.natCast_eq_natCast_iff', MontgomeryPoint.asNat_def, MontgomeryPoint.asNat_def]
+  have hu : decodeUCoordinate self.toVector = decodeUCoordinate other.toVector ↔
+      a.asNat % p = b.asNat % p := by
+    rw [MontgomeryPoint.decodeUCoordinate_toVector, MontgomeryPoint.decodeUCoordinate_toVector,
+      decodeU, decodeU, ha, hb, ZMod.natCast_eq_natCast_iff', MontgomeryPoint.asNat_def,
+      MontgomeryPoint.asNat_def]
   rw [hu]
   refine ⟨hcv, fun h => ?_, hc1⟩
   by_contra hne
@@ -87,15 +93,17 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 masked, reduced modulo `p`). -/
 @[step]
 theorem ct_eq.«i686-no-tables_spec» (self other : MontgomeryPoint) :
-    ct_eq.«i686-no-tables» self other ⦃ (r : subtle.Choice) =>
-      r.IsValid ∧ (r = 1#u8 ↔ self.u = other.u) ⦄ := by
+    ct_eq.«i686-no-tables» self other ⦃ (r : subtle.Choice) => r.IsValid ∧
+      (r = 1#u8 ↔ decodeUCoordinate self.toVector = decodeUCoordinate other.toVector) ⦄ := by
   unfold ct_eq.«i686-no-tables»
   step as ⟨a, ha, ha_lt⟩
   step as ⟨b, hb, hb_lt⟩
   step as ⟨c, hcv, hc1, hc0⟩
-  have hu : self.u = other.u ↔ a.asNat % p = b.asNat % p := by
-    rw [MontgomeryPoint.u_def, MontgomeryPoint.u_def, decodeU, decodeU, ha, hb,
-      ZMod.natCast_eq_natCast_iff', MontgomeryPoint.asNat_def, MontgomeryPoint.asNat_def]
+  have hu : decodeUCoordinate self.toVector = decodeUCoordinate other.toVector ↔
+      a.asNat % p = b.asNat % p := by
+    rw [MontgomeryPoint.decodeUCoordinate_toVector, MontgomeryPoint.decodeUCoordinate_toVector,
+      decodeU, decodeU, ha, hb, ZMod.natCast_eq_natCast_iff', MontgomeryPoint.asNat_def,
+      MontgomeryPoint.asNat_def]
   rw [hu]
   refine ⟨hcv, fun h => ?_, hc1⟩
   by_contra hne
@@ -111,7 +119,8 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 masked, reduced modulo `p`). -/
 @[step]
 theorem ct_eq_spec (self other : MontgomeryPoint) :
-    ct_eq self other ⦃ (r : subtle.Choice) => r.IsValid ∧ (r = 1#u8 ↔ self.u = other.u) ⦄ := by
+    ct_eq self other ⦃ (r : subtle.Choice) => r.IsValid ∧
+      (r = 1#u8 ↔ decodeUCoordinate self.toVector = decodeUCoordinate other.toVector) ⦄ := by
   unfold ct_eq
   exact dispatch_all_spec
     (ConstantTimeEqMontgomeryPoint.ct_eq.«x86_64-tables_spec» self other)

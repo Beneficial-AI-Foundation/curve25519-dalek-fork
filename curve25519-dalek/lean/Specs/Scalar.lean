@@ -5,7 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 public import Curve25519.Basic
 public import Curve25519Dalek.Funs
-public import Defs.Iterator
+public import ToAeneas.Iterator
 public import Defs.Scalar
 public import Subtle
 import Proofs.Scalar.Add
@@ -58,7 +58,7 @@ depends on. Items appear in the order of `scalar.rs`. Items outside the public A
 `Proofs/` but not restated here.
 
 Definitions used: `Scalar.asNat`, `HalfWidthScalar.asNat` (`Defs/Scalar.lean`), `Array.asNat`
-(`Defs/Array.lean`), `Iterator.Yields` (`Defs/Iterator.lean`), `L` (`Curve25519/Basic.lean`),
+(`Defs/Array.lean`), `Iterator.Yields` (`ToAeneas/Iterator.lean`), `L` (`Curve25519/Basic.lean`),
 `subtle.Choice.IsValid`, `subtle.CtOption` (`Subtle/`).
 
 Not specified: derived `Clone`/`Copy` impls. Not translated: `Debug`, `Hash`, `from_bits`, `random`,

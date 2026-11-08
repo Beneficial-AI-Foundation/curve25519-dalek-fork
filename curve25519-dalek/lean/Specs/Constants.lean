@@ -44,11 +44,10 @@ The tables are stated with `IsTable` (entry `(i, j)` is on the curve and is
 `(j + 1) • 2^(8 i) • t.point`, the invariant of the Rust type) and `t.point = basepoint`.
 
 Definitions used: Mathlib's `Even`, `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`,
-the tables' `point`, `IsTable` and `IsBounded` (`Defs/Edwards.lean`),
-`MontgomeryPoint.u` (`Defs/Montgomery.lean`), `curve25519.basepoint`
+the tables' `point`, `IsTable` and `IsBounded` (`Defs/Edwards.lean`), `curve25519.basepoint`
 (`Curve25519/Edwards/Basepoint.lean`), `curve25519.encode` (`Curve25519/Edwards/Encoding.lean`),
 `curve25519.torsion8` (`Curve25519/Edwards/Torsion.lean`), `curve25519.montgomeryBasepoint`
-(`Curve25519/Montgomery.lean`), `curve25519.encodeUCoordinate`, `curve25519.X25519`
+(`Curve25519/Montgomery.lean`), `curve25519.decodeUCoordinate`, `encodeUCoordinate`, `X25519`
 (`Curve25519/X25519.lean`), `Array.toVector` (`ToAeneas/Array.lean`),
 `Ristretto.encodeRep` (`Curve25519/Ristretto/`). -/
 
@@ -391,12 +390,13 @@ end «i686-tables»
 /-- `X25519_LOW_ORDER_POINTS`: a point is sent to `0` by X25519 for every scalar iff it is equal
 to one of the seven points as a `MontgomeryPoint` ("The output of any scalar multiplied by these
 points is zero"; true for clamped scalars, which is what X25519 uses; and no other point has this
-property). This is equality with `==` (`PartialEq`, which compares the decoded coordinates `u`),
-not equality of the bytes: other encodings of the same coordinates are sent to `0` too. In
-particular each of the seven points is sent to `0` (take `Q` to be the point). -/
+property). This is equality with `==` (`PartialEq`, which compares the decoded coordinates,
+`decodeUCoordinate`), not equality of the bytes: other encodings of the same coordinates are sent
+to `0` too. In particular each of the seven points is sent to `0` (take `Q` to be the point). -/
 recall X25519_LOW_ORDER_POINTS_spec (Q : montgomery.MontgomeryPoint) :
     (∀ k : Vector UInt8 32, X25519 k Q.toVector = encodeUCoordinate 0) ↔
-      ∃ i : Fin 7, Q.u = X25519_LOW_ORDER_POINTS[i.val]!.u
+      ∃ i : Fin 7, decodeUCoordinate Q.toVector =
+        decodeUCoordinate X25519_LOW_ORDER_POINTS[i.val]!.toVector
 
 /-- [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax, substring := true) in #print axioms X25519_LOW_ORDER_POINTS_spec

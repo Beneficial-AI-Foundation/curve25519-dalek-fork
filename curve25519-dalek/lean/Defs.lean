@@ -4,7 +4,7 @@ public import Defs.CurveModels
 public import Defs.Edwards
 public import Defs.FieldElement2625
 public import Defs.FieldElement51
-public import Defs.Iterator
+public import ToAeneas.Iterator
 public import Defs.Montgomery
 public import Defs.Ristretto
 public import Defs.Scalar

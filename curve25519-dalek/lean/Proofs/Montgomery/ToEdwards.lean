@@ -218,20 +218,23 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 @[step]
 theorem «x86_64-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-tables»)) =>
+      let u := decodeUCoordinate self.toVector
       r.map edwards.EdwardsPoint.«x86_64-tables».toPoint =
-        (if self.u = -1 then none
+        (if u = -1 then none
         else curve25519.decodeLenient
-          ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
-            ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+          ((encodeUCoordinate ((u - 1) / (u + 1))).set 31
+            ((encodeUCoordinate ((u - 1) / (u + 1)))[31] ^^^
               (UInt8.ofNat sign.val <<< 7)))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
+  dsimp only
   rw [toEdwards_bytes, curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
     Nat.mod_eq_of_lt (toEdwards_bytes_lt _ _)]
   unfold curve25519.encodeU
   unfold to_edwards.«x86_64-tables»
   step as ⟨u, hu, hu_lt⟩
-  have hU : u.toField = self.u := by
-    rw [MontgomeryPoint.u_def, decodeU, toField_def, hu, MontgomeryPoint.asNat_def]
+  have hU : u.toField = decodeUCoordinate self.toVector := by
+    rw [MontgomeryPoint.decodeUCoordinate_toVector, decodeU, toField_def, hu,
+        MontgomeryPoint.asNat_def]
   have hm1 : backend.serial.u64.field.FieldElement51.MINUS_ONE
       ⦃ (r : Backend.U64.F) => Backend.U64.toField r = -1 ⦄ :=
     spec_mono backend.serial.u64.field.FieldElement51.MINUS_ONE_spec fun m1 ⟨hm1, _⟩ => by
@@ -240,7 +243,7 @@ theorem «x86_64-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
       simp only [Nat.cast_add, Nat.cast_one, ZMod.natCast_self] at h
       rw [toField_def]
       exact eq_neg_of_add_eq_zero_left h
-  have hU' : Backend.U64.toField u = self.u := hU
+  have hU' : Backend.U64.toField u = decodeUCoordinate self.toVector := hU
   apply spec_mono (Backend.toEdwardsTail_spec Backend.U64 Backend.U64.add_spec Backend.U64.sub_spec
     Backend.U64.mul_spec Backend.U64.eq_spec Backend.U64.one_spec
     Backend.U64.invert_spec Backend.U64.to_bytes_spec _
@@ -261,20 +264,22 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 @[step]
 theorem «i686-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-tables» self sign ⦃ (r : Option (edwards.EdwardsPoint.«i686-tables»)) =>
+      let u := decodeUCoordinate self.toVector
       r.map edwards.EdwardsPoint.«i686-tables».toPoint =
-        (if self.u = -1 then none
+        (if u = -1 then none
         else curve25519.decodeLenient
-          ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
-            ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+          ((encodeUCoordinate ((u - 1) / (u + 1))).set 31
+            ((encodeUCoordinate ((u - 1) / (u + 1)))[31] ^^^
               (UInt8.ofNat sign.val <<< 7)))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
+  dsimp only
   rw [toEdwards_bytes, curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
     Nat.mod_eq_of_lt (toEdwards_bytes_lt _ _)]
   unfold curve25519.encodeU
   unfold to_edwards.«i686-tables»
   step as ⟨u, hu, hu_lt⟩
-  have hU : u.toField = self.u := by
-    rw [MontgomeryPoint.u_def, decodeU, toField_def, MontgomeryPoint.asNat_def]
+  have hU : u.toField = decodeUCoordinate self.toVector := by
+    rw [MontgomeryPoint.decodeUCoordinate_toVector, decodeU, toField_def, MontgomeryPoint.asNat_def]
     exact (ZMod.natCast_eq_natCast_iff' _ _ _).mpr hu
   have hm1 : backend.serial.u32.field.FieldElement2625.MINUS_ONE
       ⦃ (r : Backend.U32.F) => Backend.U32.toField r = -1 ⦄ :=
@@ -284,7 +289,7 @@ theorem «i686-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
       simp only [Nat.cast_add, Nat.cast_one, ZMod.natCast_self] at h
       rw [toField_def]
       exact eq_neg_of_add_eq_zero_left h
-  have hU' : Backend.U32.toField u = self.u := hU
+  have hU' : Backend.U32.toField u = decodeUCoordinate self.toVector := hU
   apply spec_mono (Backend.toEdwardsTail_spec Backend.U32 Backend.U32.add_spec Backend.U32.sub_spec
     Backend.U32.mul_spec Backend.U32.eq_spec Backend.U32.one_spec
     Backend.U32.invert_spec Backend.U32.to_bytes_spec _
@@ -306,20 +311,23 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51 in
 theorem «x86_64-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«x86_64-no-tables» self sign
       ⦃ (r : Option (edwards.EdwardsPoint.«x86_64-no-tables»)) =>
+      let u := decodeUCoordinate self.toVector
       r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint =
-        (if self.u = -1 then none
+        (if u = -1 then none
         else curve25519.decodeLenient
-          ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
-            ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+          ((encodeUCoordinate ((u - 1) / (u + 1))).set 31
+            ((encodeUCoordinate ((u - 1) / (u + 1)))[31] ^^^
               (UInt8.ofNat sign.val <<< 7)))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 52 ⦄ := by
+  dsimp only
   rw [toEdwards_bytes, curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
     Nat.mod_eq_of_lt (toEdwards_bytes_lt _ _)]
   unfold curve25519.encodeU
   unfold to_edwards.«x86_64-no-tables»
   step as ⟨u, hu, hu_lt⟩
-  have hU : u.toField = self.u := by
-    rw [MontgomeryPoint.u_def, decodeU, toField_def, hu, MontgomeryPoint.asNat_def]
+  have hU : u.toField = decodeUCoordinate self.toVector := by
+    rw [MontgomeryPoint.decodeUCoordinate_toVector, decodeU, toField_def, hu,
+        MontgomeryPoint.asNat_def]
   have hm1 : backend.serial.u64.field.FieldElement51.MINUS_ONE
       ⦃ (r : Backend.U64.F) => Backend.U64.toField r = -1 ⦄ :=
     spec_mono backend.serial.u64.field.FieldElement51.MINUS_ONE_spec fun m1 ⟨hm1, _⟩ => by
@@ -328,7 +336,7 @@ theorem «x86_64-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8
       simp only [Nat.cast_add, Nat.cast_one, ZMod.natCast_self] at h
       rw [toField_def]
       exact eq_neg_of_add_eq_zero_left h
-  have hU' : Backend.U64.toField u = self.u := hU
+  have hU' : Backend.U64.toField u = decodeUCoordinate self.toVector := hU
   apply spec_mono (Backend.toEdwardsTail_spec Backend.U64 Backend.U64.add_spec Backend.U64.sub_spec
     Backend.U64.mul_spec Backend.U64.eq_spec Backend.U64.one_spec
     Backend.U64.invert_spec Backend.U64.to_bytes_spec _
@@ -350,20 +358,22 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625 in
 theorem «i686-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) :
     to_edwards.«i686-no-tables» self sign
       ⦃ (r : Option (edwards.EdwardsPoint.«i686-no-tables»)) =>
+      let u := decodeUCoordinate self.toVector
       r.map edwards.EdwardsPoint.«i686-no-tables».toPoint =
-        (if self.u = -1 then none
+        (if u = -1 then none
         else curve25519.decodeLenient
-          ((encodeUCoordinate ((self.u - 1) / (self.u + 1))).set 31
-            ((encodeUCoordinate ((self.u - 1) / (self.u + 1)))[31] ^^^
+          ((encodeUCoordinate ((u - 1) / (u + 1))).set 31
+            ((encodeUCoordinate ((u - 1) / (u + 1)))[31] ^^^
               (UInt8.ofNat sign.val <<< 7)))) ∧
       ∀ q, r = some q → q.OnCurve ∧ q.LimbsLt 26 ⦄ := by
+  dsimp only
   rw [toEdwards_bytes, curve25519.decodeLenient, decodeLittleEndian_encodeLittleEndian,
     Nat.mod_eq_of_lt (toEdwards_bytes_lt _ _)]
   unfold curve25519.encodeU
   unfold to_edwards.«i686-no-tables»
   step as ⟨u, hu, hu_lt⟩
-  have hU : u.toField = self.u := by
-    rw [MontgomeryPoint.u_def, decodeU, toField_def, MontgomeryPoint.asNat_def]
+  have hU : u.toField = decodeUCoordinate self.toVector := by
+    rw [MontgomeryPoint.decodeUCoordinate_toVector, decodeU, toField_def, MontgomeryPoint.asNat_def]
     exact (ZMod.natCast_eq_natCast_iff' _ _ _).mpr hu
   have hm1 : backend.serial.u32.field.FieldElement2625.MINUS_ONE
       ⦃ (r : Backend.U32.F) => Backend.U32.toField r = -1 ⦄ :=
@@ -373,7 +383,7 @@ theorem «i686-no-tables».to_edwards_spec (self : MontgomeryPoint) (sign : U8) 
       simp only [Nat.cast_add, Nat.cast_one, ZMod.natCast_self] at h
       rw [toField_def]
       exact eq_neg_of_add_eq_zero_left h
-  have hU' : Backend.U32.toField u = self.u := hU
+  have hU' : Backend.U32.toField u = decodeUCoordinate self.toVector := hU
   apply spec_mono (Backend.toEdwardsTail_spec Backend.U32 Backend.U32.add_spec Backend.U32.sub_spec
     Backend.U32.mul_spec Backend.U32.eq_spec Backend.U32.one_spec
     Backend.U32.invert_spec Backend.U32.to_bytes_spec _

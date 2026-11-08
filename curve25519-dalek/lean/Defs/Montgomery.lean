@@ -11,9 +11,9 @@ public section
 
 /-! # `montgomery.rs`: the `u`-coordinate bytes and the ladder's projective points (audited)
 
-`MontgomeryPoint` is 32 bytes; `toVector` gives them as a `Vector UInt8 32`, the byte string
-of RFC 7748, and `u` is the `u`-coordinate they encode, RFC 7748 `decodeUCoordinate`
-(bit `255` masked, reduced modulo `p`).
+`MontgomeryPoint` is 32 bytes; `toVector` (`ToAeneas/Array.lean`) gives them as a
+`Vector UInt8 32`, the byte string of RFC 7748, whose `u`-coordinate is RFC 7748
+`decodeUCoordinate`.
 
 `ProjectivePoint (U : W)` is the `x`-only projective point of the Montgomery ladder: `toXZ` maps
 it to `MontgomeryModel.XZ (ZMod p)`, whose `toU` is `U / W` (`0` at `W = 0`, as `as_affine`).
@@ -33,11 +33,6 @@ namespace Curve25519Dalek.montgomery
 indices. -/
 instance MontgomeryPoint.instInhabited : Inhabited MontgomeryPoint :=
   inferInstanceAs (Inhabited (Array U8 32#usize))
-
-/-- The `u`-coordinate encoded by the bytes: RFC 7748 `decodeUCoordinate` (the value of the low
-`255` bits) as a field element. -/
-@[expose] def MontgomeryPoint.u (self : MontgomeryPoint) : ZMod p :=
-  (decodeUCoordinate self.toVector : ZMod p)
 
 /-! ### `ProjectivePoint` -/
 

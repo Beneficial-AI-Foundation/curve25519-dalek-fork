@@ -75,7 +75,7 @@ Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, the
 tables' `point`, `IsTable`, `IsBounded` (`Defs/Edwards.lean`), the precomputations' `points`,
 `IsValid`, `IsBounded` (`Defs/ScalarMul.lean`), `Scalar.asNat`, `HalfWidthScalar.asNat`
 (`Defs/Scalar.lean`), `Array.toVector`
-(`ToAeneas/Array.lean`), `Iterator.Yields`, `IntoIterator.Yields` (`Defs/Iterator.lean`),
+(`ToAeneas/Array.lean`), `Iterator.Yields`, `IntoIterator.Yields` (`ToAeneas/Iterator.lean`),
 `curve25519.encode`, `decodeLenient` (`Curve25519/Edwards/Encoding.lean`), `curve25519.basepoint`
 (`Curve25519/Edwards/Basepoint.lean`), `decodeScalar25519`, `encodeUCoordinate`
 (`Curve25519/X25519.lean`), `curve25519.L` (`Curve25519/Basic.lean`), `edwardsToMontgomery`

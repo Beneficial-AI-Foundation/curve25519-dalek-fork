@@ -58,8 +58,9 @@ theorem MontgomeryPoint.decodeLittleEndian_toVector (self : MontgomeryPoint) :
     decodeLittleEndian self.toVector = self.asNat :=
   Aeneas.Std.Array.decodeLittleEndian_toVector self
 
-theorem MontgomeryPoint.u_def (self : MontgomeryPoint) : self.u = decodeU self.asNat := by
-  rw [MontgomeryPoint.u, decodeUCoordinate_cast, MontgomeryPoint.decodeLittleEndian_toVector]
+theorem MontgomeryPoint.decodeUCoordinate_toVector (self : MontgomeryPoint) :
+    decodeUCoordinate self.toVector = decodeU self.asNat := by
+  rw [decodeUCoordinate_eq, MontgomeryPoint.decodeLittleEndian_toVector]
 
 theorem MontgomeryPoint.toVector_eq_encodeUCoordinate_iff (r : MontgomeryPoint) (u : ZMod p) :
     r.toVector = encodeUCoordinate u ↔ r.asNat = encodeU u := by

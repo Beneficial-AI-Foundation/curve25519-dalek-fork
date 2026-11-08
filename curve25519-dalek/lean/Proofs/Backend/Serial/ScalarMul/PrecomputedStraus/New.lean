@@ -6,7 +6,7 @@ module
 public import Proofs.Helpers.Represents
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
-public import Defs.Iterator
+public import ToAeneas.Iterator
 public import Defs.ScalarMul
 import Proofs.Helpers.Collect
 import Proofs.Window.NafLookupTable8From

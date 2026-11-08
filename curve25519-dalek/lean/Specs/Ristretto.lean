@@ -9,7 +9,7 @@ public import Curve25519.Ristretto.Map
 public import Curve25519.X25519
 public import Curve25519Dalek.Funs
 public import Defs.Edwards
-public import Defs.Iterator
+public import ToAeneas.Iterator
 public import Defs.Ristretto
 public import Defs.Scalar
 public import Defs.ScalarMul
@@ -72,7 +72,7 @@ Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, the tables' `p
 `IsBounded`, the precomputations' `points`, `IsValid` and `IsBounded` (`Defs/Edwards.lean`,
 `Defs/ScalarMul.lean`), `Array.toVector`
 (`ToAeneas/Array.lean`), `Scalar.asNat` (`Defs/Scalar.lean`), `Iterator.Yields`
-(`Defs/Iterator.lean`), Mathlib's `Even`, `curve25519.edwards.Rel`, `Ristretto.encodeRep`,
+(`ToAeneas/Iterator.lean`), Mathlib's `Even`, `curve25519.edwards.Rel`, `Ristretto.encodeRep`,
 `Ristretto.decodeRep`, `Ristretto.mapRep`, `Ristretto.fromUniformRep` (`Curve25519/Ristretto/`),
 `curve25519.basepoint` (`Curve25519/`), `subtle.Choice.IsValid` (`Subtle/`).
 
