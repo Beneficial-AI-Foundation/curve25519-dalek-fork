@@ -167,7 +167,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -191,7 +191,7 @@ theorem optional_mixed_multiscalar_mul_spec
       (core.iter.traits.collect.IntoIteratorVec _) self static_scalars dynamic_scalars v xs ss
       ys ds v.val hself hself_b hstatic_scalars hdynamic_scalars
       (core.iter.traits.collect.IntoIteratorVec_yields v) hborrow_static hborrow_dynamic hss hds
-      (by rw [hv]; exact hqs) hxs hys (by rw [hv]; exact hqops) hstatic
+      (by rw [hv]; exact hqs) hxs hys (by rw [hv]; exact hqops) (by rw [hv]; exact hstatic)
       (by rw [hv]; exact hdynamic) as ⟨o, hnone, hsome⟩
   rw [hv] at hnone hsome
   refine spec_mono (collect.optionMap_id_spec _ _ ?_ o) ?_
@@ -342,7 +342,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -366,7 +366,7 @@ theorem optional_mixed_multiscalar_mul_spec
       (core.iter.traits.collect.IntoIteratorVec _) self static_scalars dynamic_scalars v xs ss
       ys ds v.val hself hself_b hstatic_scalars hdynamic_scalars
       (core.iter.traits.collect.IntoIteratorVec_yields v) hborrow_static hborrow_dynamic hss hds
-      (by rw [hv]; exact hqs) hxs hys (by rw [hv]; exact hqops) hstatic
+      (by rw [hv]; exact hqs) hxs hys (by rw [hv]; exact hqops) (by rw [hv]; exact hstatic)
       (by rw [hv]; exact hdynamic) as ⟨o, hnone, hsome⟩
   rw [hv] at hnone hsome
   refine spec_mono (collect.optionMap_id_spec _ _ ?_ o) ?_
@@ -517,7 +517,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -541,7 +541,7 @@ theorem optional_mixed_multiscalar_mul_spec
       (core.iter.traits.collect.IntoIteratorVec _) self static_scalars dynamic_scalars v xs ss
       ys ds v.val hself hself_b hstatic_scalars hdynamic_scalars
       (core.iter.traits.collect.IntoIteratorVec_yields v) hborrow_static hborrow_dynamic hss hds
-      (by rw [hv]; exact hqs) hxs hys (by rw [hv]; exact hqops) hstatic
+      (by rw [hv]; exact hqs) hxs hys (by rw [hv]; exact hqops) (by rw [hv]; exact hstatic)
       (by rw [hv]; exact hdynamic) as ⟨o, hnone, hsome⟩
   rw [hv] at hnone hsome
   refine spec_mono (collect.optionMap_id_spec _ _ ?_ o) ?_
@@ -692,7 +692,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -716,7 +716,7 @@ theorem optional_mixed_multiscalar_mul_spec
       (core.iter.traits.collect.IntoIteratorVec _) self static_scalars dynamic_scalars v xs ss
       ys ds v.val hself hself_b hstatic_scalars hdynamic_scalars
       (core.iter.traits.collect.IntoIteratorVec_yields v) hborrow_static hborrow_dynamic hss hds
-      (by rw [hv]; exact hqs) hxs hys (by rw [hv]; exact hqops) hstatic
+      (by rw [hv]; exact hqs) hxs hys (by rw [hv]; exact hqops) (by rw [hv]; exact hstatic)
       (by rw [hv]; exact hdynamic) as ⟨o, hnone, hsome⟩
   rw [hv] at hnone hsome
   refine spec_mono (collect.optionMap_id_spec _ _ ?_ o) ?_

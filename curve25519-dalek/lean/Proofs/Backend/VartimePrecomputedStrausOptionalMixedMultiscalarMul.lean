@@ -46,7 +46,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
     (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -94,7 +94,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
     (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -142,7 +142,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
     (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 52 ∧ Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -190,7 +190,7 @@ theorem optional_mixed_multiscalar_mul_spec
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hds : ∀ s ∈ ds, s.asNat < 2 ^ 255)
     (hqs : ∀ Q, some Q ∈ qops → Q.LimbsLt 26 ∧ Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points

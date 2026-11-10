@@ -63,9 +63,12 @@ as 32 bytes (for any representative; on even points it is constant exactly on th
 `Ristretto.encodeRepNat_eq_iff`); `decompress` is RFC 9496's decoding `Ristretto.decodeRep` of the
 bytes; `double_and_compress_batch` encodes the doubled points; `from_uniform_bytes` is RFC 9496's
 one-way map `Ristretto.fromUniformRep` on 64 bytes, and `map_to_curve` its `MAP` on 32 bytes
-(`Ristretto.mapRep`: the low 255 bits modulo `p`). Scalars are unreduced (`s.asNat < 2^255`, the
-`Scalar` invariant). Functions with per-target variants are stated for all four configurations
-(`«x86_64-tables»`, `«x86_64-no-tables»`, `«i686-tables»`, `«i686-no-tables»`);
+(`Ristretto.mapRep`: the low 255 bits modulo `p`). Scalars are unreduced and must be `< 2^255`
+(invariant #1 of `Scalar` in `scalar.rs`). The multiscalar statements are about the patched code
+(`translation-patches/ristretto-{multiscalar,optional_multiscalar}_mul.patch` on top of the
+`EdwardsPoint` ones), which requires as many scalars as points; the original panics unless both
+inputs' `size_hint`s are exact and equal. Functions with per-target variants are stated for all four
+configurations (`«x86_64-tables»`, `«x86_64-no-tables»`, `«i686-tables»`, `«i686-no-tables»`);
 `RistrettoBasepointTable` exists only with tables.
 
 Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, the tables' `point`, `IsTable` and
@@ -76,8 +79,9 @@ Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, the tables' `p
 `Ristretto.decodeRep`, `Ristretto.mapRep`, `Ristretto.fromUniformRep` (`Curve25519/Ristretto/`),
 `curve25519.basepoint` (`Curve25519/`), `subtle.Choice.IsValid` (`Subtle/`).
 
-Not specified: derived `Clone`/`Copy` impls. Not translated: `Debug`, `random`, `try_random`,
-`hash_from_bytes`, `from_hash`, the `group` and `serde` impls. `elligator_ristretto_flavor`
+Not specified: derived `Clone`/`Copy` impls. Not translated: `Debug`, `Hash`, `random`,
+`try_random`, `hash_from_bytes`, `from_hash`, the `group` and `serde` impls.
+`elligator_ristretto_flavor`
 (`pub(crate)`) and the private `coset4` are specified in their proof files. -/
 
 open Aeneas Aeneas.Std Result Aeneas.Std.WP curve25519
@@ -139,9 +143,9 @@ end Curve25519Dalek.ristretto.CompressedRistretto
 namespace Curve25519Dalek.ristretto
 namespace CompressedRistretto
 
-/-- `CompressedRistretto::decompress`: RFC 9496's decoding of the bytes' value (`none` unless it
-is the canonical, non-negative encoding of a point of the class); the point is on the curve,
-even (a ristretto255 representative) and has limbs `< 2^52`. -/
+/-- `CompressedRistretto::decompress`: RFC 9496's decoding `decodeRep` of the bytes, `none` exactly
+when they are not a valid ristretto255 encoding; the point is even (a ristretto255
+representative). -/
 recall «x86_64-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«x86_64-tables» self ⦃ (r : Option RistrettoPoint.«x86_64-tables») =>
       r.map edwards.EdwardsPoint.«x86_64-tables».toPoint = Ristretto.decodeRep self.toVector ∧
@@ -151,9 +155,9 @@ recall «x86_64-tables».decompress_spec (self : CompressedRistretto) :
 #guard_msgs (whitespace := lax, substring := true) in #print axioms «x86_64-tables».decompress_spec
 
 
-/-- `CompressedRistretto::decompress`: RFC 9496's decoding of the bytes' value (`none` unless it
-is the canonical, non-negative encoding of a point of the class); the point is on the curve,
-even (a ristretto255 representative) and has limbs `< 2^26`. -/
+/-- `CompressedRistretto::decompress`: RFC 9496's decoding `decodeRep` of the bytes, `none` exactly
+when they are not a valid ristretto255 encoding; the point is even (a ristretto255
+representative). -/
 recall «i686-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«i686-tables» self ⦃ (r : Option RistrettoPoint.«i686-tables») =>
       r.map edwards.EdwardsPoint.«i686-tables».toPoint = Ristretto.decodeRep self.toVector ∧
@@ -164,9 +168,9 @@ recall «i686-tables».decompress_spec (self : CompressedRistretto) :
 #print axioms «i686-tables».decompress_spec
 
 
-/-- `CompressedRistretto::decompress`: RFC 9496's decoding of the bytes' value (`none` unless it
-is the canonical, non-negative encoding of a point of the class); the point is on the curve,
-even (a ristretto255 representative) and has limbs `< 2^52`. -/
+/-- `CompressedRistretto::decompress`: RFC 9496's decoding `decodeRep` of the bytes, `none` exactly
+when they are not a valid ristretto255 encoding; the point is even (a ristretto255
+representative). -/
 recall «x86_64-no-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«x86_64-no-tables» self ⦃ (r : Option RistrettoPoint.«x86_64-no-tables») =>
       r.map edwards.EdwardsPoint.«x86_64-no-tables».toPoint = Ristretto.decodeRep self.toVector ∧
@@ -177,9 +181,9 @@ recall «x86_64-no-tables».decompress_spec (self : CompressedRistretto) :
 #print axioms «x86_64-no-tables».decompress_spec
 
 
-/-- `CompressedRistretto::decompress`: RFC 9496's decoding of the bytes' value (`none` unless it
-is the canonical, non-negative encoding of a point of the class); the point is on the curve,
-even (a ristretto255 representative) and has limbs `< 2^26`. -/
+/-- `CompressedRistretto::decompress`: RFC 9496's decoding `decodeRep` of the bytes, `none` exactly
+when they are not a valid ristretto255 encoding; the point is even (a ristretto255
+representative). -/
 recall «i686-no-tables».decompress_spec (self : CompressedRistretto) :
     decompress.«i686-no-tables» self ⦃ (r : Option RistrettoPoint.«i686-no-tables») =>
       r.map edwards.EdwardsPoint.«i686-no-tables».toPoint = Ristretto.decodeRep self.toVector ∧
@@ -237,7 +241,7 @@ end Curve25519Dalek.ristretto.CompressedRistretto
 namespace Curve25519Dalek.ristretto
 namespace «RistrettoPointx86_64-tables»
 
-/-- `RistrettoPoint::compress`: RFC 9496's encoding of the represented point; limbs `< 2^52`. -/
+/-- `RistrettoPoint::compress`: RFC 9496's encoding of the represented point. -/
 recall compress_spec (self : RistrettoPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
@@ -250,7 +254,7 @@ end «RistrettoPointx86_64-tables»
 
 namespace «RistrettoPointi686-tables»
 
-/-- `RistrettoPoint::compress`: RFC 9496's encoding of the represented point; limbs `< 2^26`. -/
+/-- `RistrettoPoint::compress`: RFC 9496's encoding of the represented point. -/
 recall compress_spec (self : RistrettoPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
@@ -265,7 +269,7 @@ end Curve25519Dalek.ristretto
 namespace Curve25519Dalek.ristretto
 namespace «RistrettoPointx86_64-no-tables»
 
-/-- `RistrettoPoint::compress`: RFC 9496's encoding of the represented point; limbs `< 2^52`. -/
+/-- `RistrettoPoint::compress`: RFC 9496's encoding of the represented point. -/
 recall compress_spec (self : RistrettoPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
@@ -278,7 +282,7 @@ end «RistrettoPointx86_64-no-tables»
 
 namespace «RistrettoPointi686-no-tables»
 
-/-- `RistrettoPoint::compress`: RFC 9496's encoding of the represented point; limbs `< 2^26`. -/
+/-- `RistrettoPoint::compress`: RFC 9496's encoding of the represented point. -/
 recall compress_spec (self : RistrettoPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     compress self ⦃ (r : CompressedRistretto) =>
@@ -294,7 +298,7 @@ namespace Curve25519Dalek.ristretto
 namespace «RistrettoPointx86_64-tables»
 
 /-- `RistrettoPoint::double_and_compress_batch`: entry `i` is RFC 9496's encoding of `2 P_i` for
-the points `P_i` the input yields; limbs `< 2^52`. -/
+the points `P_i` the input yields. -/
 recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (pointsInst :
       core.iter.traits.collect.IntoIterator I RistrettoPoint.«x86_64-tables» Clause0_IntoIter)
@@ -314,7 +318,7 @@ end «RistrettoPointx86_64-tables»
 namespace «RistrettoPointi686-tables»
 
 /-- `RistrettoPoint::double_and_compress_batch`: entry `i` is RFC 9496's encoding of `2 P_i` for
-the points `P_i` the input yields; limbs `< 2^26`. -/
+the points `P_i` the input yields. -/
 recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (pointsInst :
       core.iter.traits.collect.IntoIterator I RistrettoPoint.«i686-tables» Clause0_IntoIter)
@@ -336,7 +340,7 @@ namespace Curve25519Dalek.ristretto
 namespace «RistrettoPointx86_64-no-tables»
 
 /-- `RistrettoPoint::double_and_compress_batch`: entry `i` is RFC 9496's encoding of `2 P_i` for
-the points `P_i` the input yields; limbs `< 2^52`. -/
+the points `P_i` the input yields. -/
 recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (pointsInst :
       core.iter.traits.collect.IntoIterator I RistrettoPoint.«x86_64-no-tables» Clause0_IntoIter)
@@ -356,7 +360,7 @@ end «RistrettoPointx86_64-no-tables»
 namespace «RistrettoPointi686-no-tables»
 
 /-- `RistrettoPoint::double_and_compress_batch`: entry `i` is RFC 9496's encoding of `2 P_i` for
-the points `P_i` the input yields; limbs `< 2^26`. -/
+the points `P_i` the input yields. -/
 recall double_and_compress_batch_spec {I Clause0_IntoIter : Type}
     (pointsInst :
       core.iter.traits.collect.IntoIterator I RistrettoPoint.«i686-no-tables» Clause0_IntoIter)
@@ -378,8 +382,7 @@ namespace Curve25519Dalek.ristretto
 namespace «RistrettoPointx86_64-tables»
 
 /-- `RistrettoPoint::from_uniform_bytes`: RFC 9496's one-way map of the 64 bytes' little-endian
-value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255 representative);
-limbs `< 2^52`. -/
+value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255 representative). -/
 recall from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
@@ -393,8 +396,7 @@ end «RistrettoPointx86_64-tables»
 namespace «RistrettoPointi686-tables»
 
 /-- `RistrettoPoint::from_uniform_bytes`: RFC 9496's one-way map of the 64 bytes' little-endian
-value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255 representative);
-limbs `< 2^26`. -/
+value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255 representative). -/
 recall from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«i686-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
@@ -410,8 +412,7 @@ namespace Curve25519Dalek.ristretto
 namespace «RistrettoPointx86_64-no-tables»
 
 /-- `RistrettoPoint::from_uniform_bytes`: RFC 9496's one-way map of the 64 bytes' little-endian
-value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255 representative);
-limbs `< 2^52`. -/
+value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255 representative). -/
 recall from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
@@ -425,8 +426,7 @@ end «RistrettoPointx86_64-no-tables»
 namespace «RistrettoPointi686-no-tables»
 
 /-- `RistrettoPoint::from_uniform_bytes`: RFC 9496's one-way map of the 64 bytes' little-endian
-value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255 representative);
-limbs `< 2^26`. -/
+value, `MAP(r₀) + MAP(r₁)` for the two halves: an even point (a ristretto255 representative). -/
 recall from_uniform_bytes_spec (bytes : Array U8 64#usize) :
     from_uniform_bytes bytes ⦃ (r : RistrettoPoint.«i686-no-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.fromUniformRep bytes.toVector ∧
@@ -546,7 +546,7 @@ namespace Curve25519Dalek.ristretto
 namespace RistrettoPoint.«x86_64-tables».Insts
 namespace «CoreCmpPartialEqRistrettoPointx86_64-tables»
 
-/-- `PartialEq for RistrettoPoint`: equality in the Ristretto group; limbs `< 2^52`. -/
+/-- `PartialEq for RistrettoPoint`: equality in the Ristretto group. -/
 recall eq_spec (self other : RistrettoPoint.«x86_64-tables») (hself : self.IsBounded)
     (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     eq self other ⦃ (r : Bool) =>
@@ -561,7 +561,7 @@ end RistrettoPoint.«x86_64-tables».Insts
 namespace RistrettoPoint.«i686-tables».Insts
 namespace «CoreCmpPartialEqRistrettoPointi686-tables»
 
-/-- `PartialEq for RistrettoPoint`: equality in the Ristretto group; limbs `< 2^26`. -/
+/-- `PartialEq for RistrettoPoint`: equality in the Ristretto group. -/
 recall eq_spec (self other : RistrettoPoint.«i686-tables») (hself : self.IsBounded)
     (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     eq self other ⦃ (r : Bool) =>
@@ -578,7 +578,7 @@ namespace Curve25519Dalek.ristretto
 namespace RistrettoPoint.«x86_64-no-tables».Insts
 namespace «CoreCmpPartialEqRistrettoPointx86_64-no-tables»
 
-/-- `PartialEq for RistrettoPoint`: equality in the Ristretto group; limbs `< 2^52`. -/
+/-- `PartialEq for RistrettoPoint`: equality in the Ristretto group. -/
 recall eq_spec (self other : RistrettoPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     eq self other ⦃ (r : Bool) =>
@@ -593,7 +593,7 @@ end RistrettoPoint.«x86_64-no-tables».Insts
 namespace RistrettoPoint.«i686-no-tables».Insts
 namespace «CoreCmpPartialEqRistrettoPointi686-no-tables»
 
-/-- `PartialEq for RistrettoPoint`: equality in the Ristretto group; limbs `< 2^26`. -/
+/-- `PartialEq for RistrettoPoint`: equality in the Ristretto group. -/
 recall eq_spec (self other : RistrettoPoint.«i686-no-tables») (hself : self.IsBounded)
     (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     eq self other ⦃ (r : Bool) =>
@@ -610,7 +610,7 @@ namespace Curve25519Dalek.ristretto
 namespace RistrettoPoint.«x86_64-tables».Insts.SubtleConstantTimeEq
 
 /-- `ConstantTimeEq for RistrettoPoint`: equality in the Ristretto group, i.e. of the classes of
-the represented points (`X₁ Y₂ = Y₁ X₂` or `X₁ X₂ = Y₁ Y₂`); limbs `< 2^52`. -/
+the represented points (`X₁ Y₂ = Y₁ X₂` or `X₁ X₂ = Y₁ Y₂`). -/
 recall ct_eq_spec (self other : RistrettoPoint.«x86_64-tables») (hself : self.IsBounded)
     (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     ct_eq self other ⦃ (r : subtle.Choice) =>
@@ -624,7 +624,7 @@ end RistrettoPoint.«x86_64-tables».Insts.SubtleConstantTimeEq
 namespace RistrettoPoint.«i686-tables».Insts.SubtleConstantTimeEq
 
 /-- `ConstantTimeEq for RistrettoPoint`: equality in the Ristretto group, i.e. of the classes of
-the represented points (`X₁ Y₂ = Y₁ X₂` or `X₁ X₂ = Y₁ Y₂`); limbs `< 2^26`. -/
+the represented points (`X₁ Y₂ = Y₁ X₂` or `X₁ X₂ = Y₁ Y₂`). -/
 recall ct_eq_spec (self other : RistrettoPoint.«i686-tables») (hself : self.IsBounded)
     (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     ct_eq self other ⦃ (r : subtle.Choice) =>
@@ -640,7 +640,7 @@ namespace Curve25519Dalek.ristretto
 namespace RistrettoPoint.«x86_64-no-tables».Insts.SubtleConstantTimeEq
 
 /-- `ConstantTimeEq for RistrettoPoint`: equality in the Ristretto group, i.e. of the classes of
-the represented points (`X₁ Y₂ = Y₁ X₂` or `X₁ X₂ = Y₁ Y₂`); limbs `< 2^52`. -/
+the represented points (`X₁ Y₂ = Y₁ X₂` or `X₁ X₂ = Y₁ Y₂`). -/
 recall ct_eq_spec (self other : RistrettoPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     ct_eq self other ⦃ (r : subtle.Choice) =>
@@ -654,7 +654,7 @@ end RistrettoPoint.«x86_64-no-tables».Insts.SubtleConstantTimeEq
 namespace RistrettoPoint.«i686-no-tables».Insts.SubtleConstantTimeEq
 
 /-- `ConstantTimeEq for RistrettoPoint`: equality in the Ristretto group, i.e. of the classes of
-the represented points (`X₁ Y₂ = Y₁ X₂` or `X₁ X₂ = Y₁ Y₂`); limbs `< 2^26`. -/
+the represented points (`X₁ Y₂ = Y₁ X₂` or `X₁ X₂ = Y₁ Y₂`). -/
 recall ct_eq_spec (self other : RistrettoPoint.«i686-no-tables») (hself : self.IsBounded)
     (hother : other.IsBounded) (hself_on : self.OnCurve) (hother_on : other.OnCurve) :
     ct_eq self other ⦃ (r : subtle.Choice) =>
@@ -1485,8 +1485,7 @@ end Curve25519Dalek
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-tables».Insts
 namespace CoreIterTraitsAccumSum
 
-/-- `Sum for RistrettoPoint`: the sum of the points yielded by the iterator (through `borrow`);
-limbs `< 2^52`. -/
+/-- `Sum for RistrettoPoint`: the sum of the points yielded by the iterator (through `borrow`). -/
 recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T RistrettoPoint.«x86_64-tables»)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (ps : List RistrettoPoint.«x86_64-tables») (hiter : iterInst.Yields iter xs)
@@ -1505,8 +1504,7 @@ end Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-tables».Insts
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«i686-tables».Insts
 namespace CoreIterTraitsAccumSum
 
-/-- `Sum for RistrettoPoint`: the sum of the points yielded by the iterator (through `borrow`);
-limbs `< 2^26`. -/
+/-- `Sum for RistrettoPoint`: the sum of the points yielded by the iterator (through `borrow`). -/
 recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T RistrettoPoint.«i686-tables»)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (ps : List RistrettoPoint.«i686-tables») (hiter : iterInst.Yields iter xs)
@@ -1525,8 +1523,7 @@ end Curve25519Dalek.ristretto.RistrettoPoint.«i686-tables».Insts
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-no-tables».Insts
 namespace CoreIterTraitsAccumSum
 
-/-- `Sum for RistrettoPoint`: the sum of the points yielded by the iterator (through `borrow`);
-limbs `< 2^52`. -/
+/-- `Sum for RistrettoPoint`: the sum of the points yielded by the iterator (through `borrow`). -/
 recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T RistrettoPoint.«x86_64-no-tables»)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (ps : List RistrettoPoint.«x86_64-no-tables») (hiter : iterInst.Yields iter xs)
@@ -1545,8 +1542,7 @@ end Curve25519Dalek.ristretto.RistrettoPoint.«x86_64-no-tables».Insts
 namespace Curve25519Dalek.ristretto.RistrettoPoint.«i686-no-tables».Insts
 namespace CoreIterTraitsAccumSum
 
-/-- `Sum for RistrettoPoint`: the sum of the points yielded by the iterator (through `borrow`);
-limbs `< 2^26`. -/
+/-- `Sum for RistrettoPoint`: the sum of the points yielded by the iterator (through `borrow`). -/
 recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T RistrettoPoint.«i686-no-tables»)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (ps : List RistrettoPoint.«i686-no-tables») (hiter : iterInst.Yields iter xs)
@@ -1750,7 +1746,7 @@ namespace Curve25519Dalek
 namespace «Shared0RistrettoPointx86_64-tables».Insts
 namespace «CoreOpsArithMulSharedAScalarRistrettoPointx86_64-tables»
 
-/-- `Mul<&Scalar> for &RistrettoPoint`: `scalar • P` (unreduced, `< 2^255`); limbs `< 2^52`. -/
+/-- `Mul<&Scalar> for &RistrettoPoint`: `scalar • P` (unreduced, `< 2^255`). -/
 recall mul_spec (self : ristretto.RistrettoPoint.«x86_64-tables») (scalar : scalar.Scalar)
     (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
@@ -1765,7 +1761,7 @@ end «Shared0RistrettoPointx86_64-tables».Insts
 namespace «Shared0RistrettoPointi686-tables».Insts
 namespace «CoreOpsArithMulSharedAScalarRistrettoPointi686-tables»
 
-/-- `Mul<&Scalar> for &RistrettoPoint`: `scalar • P` (unreduced, `< 2^255`); limbs `< 2^26`. -/
+/-- `Mul<&Scalar> for &RistrettoPoint`: `scalar • P` (unreduced, `< 2^255`). -/
 recall mul_spec (self : ristretto.RistrettoPoint.«i686-tables») (scalar : scalar.Scalar)
     (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
@@ -1998,7 +1994,7 @@ namespace Curve25519Dalek
 namespace «Shared0RistrettoPointx86_64-no-tables».Insts
 namespace «CoreOpsArithMulSharedAScalarRistrettoPointx86_64-no-tables»
 
-/-- `Mul<&Scalar> for &RistrettoPoint`: `scalar • P` (unreduced, `< 2^255`); limbs `< 2^52`. -/
+/-- `Mul<&Scalar> for &RistrettoPoint`: `scalar • P` (unreduced, `< 2^255`). -/
 recall mul_spec (self : ristretto.RistrettoPoint.«x86_64-no-tables») (scalar : scalar.Scalar)
     (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
@@ -2013,7 +2009,7 @@ end «Shared0RistrettoPointx86_64-no-tables».Insts
 namespace «Shared0RistrettoPointi686-no-tables».Insts
 namespace «CoreOpsArithMulSharedAScalarRistrettoPointi686-no-tables»
 
-/-- `Mul<&Scalar> for &RistrettoPoint`: `scalar • P` (unreduced, `< 2^255`); limbs `< 2^26`. -/
+/-- `Mul<&Scalar> for &RistrettoPoint`: `scalar • P` (unreduced, `< 2^255`). -/
 recall mul_spec (self : ristretto.RistrettoPoint.«i686-no-tables») (scalar : scalar.Scalar)
     (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : ristretto.RistrettoPoint.«i686-no-tables») =>
@@ -2245,8 +2241,7 @@ end Curve25519Dalek
 namespace Curve25519Dalek.ristretto
 namespace «RistrettoPointx86_64-tables»
 
-/-- `RistrettoPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
-limbs `< 2^52`. -/
+/-- `RistrettoPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`). -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = scalar.asNat • basepoint ∧
@@ -2259,8 +2254,7 @@ end «RistrettoPointx86_64-tables»
 
 namespace «RistrettoPointi686-tables»
 
-/-- `RistrettoPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
-limbs `< 2^26`. -/
+/-- `RistrettoPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`). -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : RistrettoPoint.«i686-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = scalar.asNat • basepoint ∧
@@ -2275,8 +2269,7 @@ end Curve25519Dalek.ristretto
 namespace Curve25519Dalek.ristretto
 namespace «RistrettoPointx86_64-no-tables»
 
-/-- `RistrettoPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
-limbs `< 2^52`. -/
+/-- `RistrettoPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`). -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = scalar.asNat • basepoint ∧
@@ -2289,8 +2282,7 @@ end «RistrettoPointx86_64-no-tables»
 
 namespace «RistrettoPointi686-no-tables»
 
-/-- `RistrettoPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
-limbs `< 2^26`. -/
+/-- `RistrettoPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`). -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : RistrettoPoint.«i686-no-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = scalar.asNat • basepoint ∧
@@ -2363,7 +2355,7 @@ namespace «Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-tables»
 
 /-- `MultiscalarMul::multiscalar_mul` for `RistrettoPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
-scalars `< 2^255`); limbs `< 2^52`. -/
+scalars `< 2^255`). -/
 recall multiscalar_mul_spec
     {I J Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -2381,7 +2373,7 @@ recall multiscalar_mul_spec
       ys ps)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
     (hps_on : ∀ P ∈ ps, P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») => r.OnCurve ∧
@@ -2398,7 +2390,7 @@ namespace «Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-tables»
 
 /-- `MultiscalarMul::multiscalar_mul` for `RistrettoPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
-scalars `< 2^255`); limbs `< 2^26`. -/
+scalars `< 2^255`). -/
 recall multiscalar_mul_spec
     {I J Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -2416,7 +2408,7 @@ recall multiscalar_mul_spec
       ys ps)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
     (hps_on : ∀ P ∈ ps, P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : ristretto.RistrettoPoint.«i686-tables») => r.OnCurve ∧
@@ -2433,7 +2425,7 @@ namespace «Curve25519_dalekTraitsMultiscalarMulRistrettoPointx86_64-no-tables»
 
 /-- `MultiscalarMul::multiscalar_mul` for `RistrettoPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
-scalars `< 2^255`); limbs `< 2^52`. -/
+scalars `< 2^255`). -/
 recall multiscalar_mul_spec
     {I J Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -2451,7 +2443,7 @@ recall multiscalar_mul_spec
       ys ps)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
     (hps_on : ∀ P ∈ ps, P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») => r.OnCurve ∧
@@ -2468,7 +2460,7 @@ namespace «Curve25519_dalekTraitsMultiscalarMulRistrettoPointi686-no-tables»
 
 /-- `MultiscalarMul::multiscalar_mul` for `RistrettoPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
-scalars `< 2^255`); limbs `< 2^26`. -/
+scalars `< 2^255`). -/
 recall multiscalar_mul_spec
     {I J Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -2486,7 +2478,7 @@ recall multiscalar_mul_spec
       ys ps)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
     (hps_on : ∀ P ∈ ps, P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : ristretto.RistrettoPoint.«i686-no-tables») => r.OnCurve ∧
@@ -2503,7 +2495,7 @@ namespace «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-tabl
 
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `RistrettoPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
-patched `assert_eq!`; unreduced scalars `< 2^255`); limbs `< 2^52`. -/
+patched `assert_eq!`; unreduced scalars `< 2^255`). -/
 recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowScalarInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -2517,7 +2509,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-tables») => (none ∈ ops → r = none) ∧
@@ -2536,7 +2528,7 @@ namespace «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-tables
 
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `RistrettoPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
-patched `assert_eq!`; unreduced scalars `< 2^255`); limbs `< 2^26`. -/
+patched `assert_eq!`; unreduced scalars `< 2^255`). -/
 recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowScalarInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -2550,7 +2542,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option ristretto.RistrettoPoint.«i686-tables») => (none ∈ ops → r = none) ∧
@@ -2569,7 +2561,7 @@ namespace «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointx86_64-no-t
 
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `RistrettoPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
-patched `assert_eq!`; unreduced scalars `< 2^255`); limbs `< 2^52`. -/
+patched `assert_eq!`; unreduced scalars `< 2^255`). -/
 recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowScalarInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -2583,7 +2575,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option ristretto.RistrettoPoint.«x86_64-no-tables») => (none ∈ ops → r = none) ∧
@@ -2602,7 +2594,7 @@ namespace «Curve25519_dalekTraitsVartimeMultiscalarMulRistrettoPointi686-no-tab
 
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `RistrettoPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
-patched `assert_eq!`; unreduced scalars `< 2^255`); limbs `< 2^26`. -/
+patched `assert_eq!`; unreduced scalars `< 2^255`). -/
 recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowScalarInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -2616,7 +2608,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option ristretto.RistrettoPoint.«i686-no-tables») => (none ∈ ops → r = none) ∧
@@ -2634,8 +2626,7 @@ namespace Curve25519Dalek.ristretto.VartimeRistrettoPrecomputation.«x86_64-tabl
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeRistrettoPrecomputation`: a
-precomputation of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54`
-out. -/
+precomputation of the points the input yields (through `borrow`). -/
 recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«x86_64-tables»)
@@ -2676,9 +2667,8 @@ recall is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-tables») :
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
 `VartimeRistrettoPrecomputation` (static points `self.points`): `none` iff some dynamic point is
-`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
-ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
-`< 2^52`. -/
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i`, missing static scalars counting as `0` (if no point
+is `none`, at most `|self.points|` static scalars and as many dynamic scalars as dynamic points). -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -2703,7 +2693,7 @@ recall optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -2724,8 +2714,7 @@ namespace Curve25519Dalek.ristretto.VartimeRistrettoPrecomputation.«i686-tables
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeRistrettoPrecomputation`: a
-precomputation of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27`
-out. -/
+precomputation of the points the input yields (through `borrow`). -/
 recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-tables»)
@@ -2766,9 +2755,8 @@ recall is_empty_spec (self : VartimeRistrettoPrecomputation.«i686-tables») :
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
 `VartimeRistrettoPrecomputation` (static points `self.points`): `none` iff some dynamic point is
-`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
-ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
-`< 2^26`. -/
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i`, missing static scalars counting as `0` (if no point
+is `none`, at most `|self.points|` static scalars and as many dynamic scalars as dynamic points). -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -2793,7 +2781,7 @@ recall optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -2814,8 +2802,7 @@ namespace Curve25519Dalek.ristretto.VartimeRistrettoPrecomputation.«x86_64-no-t
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointx86_64-no-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeRistrettoPrecomputation`: a
-precomputation of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54`
-out. -/
+precomputation of the points the input yields (through `borrow`). -/
 recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«x86_64-no-tables»)
@@ -2856,9 +2843,8 @@ recall is_empty_spec (self : VartimeRistrettoPrecomputation.«x86_64-no-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
 `VartimeRistrettoPrecomputation` (static points `self.points`): `none` iff some dynamic point is
-`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
-ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
-`< 2^52`. -/
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i`, missing static scalars counting as `0` (if no point
+is `none`, at most `|self.points|` static scalars and as many dynamic scalars as dynamic points). -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -2883,7 +2869,7 @@ recall optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -2904,8 +2890,7 @@ namespace Curve25519Dalek.ristretto.VartimeRistrettoPrecomputation.«i686-no-tab
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulRistrettoPointi686-no-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeRistrettoPrecomputation`: a
-precomputation of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27`
-out. -/
+precomputation of the points the input yields (through `borrow`). -/
 recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item ristretto.RistrettoPoint.«i686-no-tables»)
@@ -2946,9 +2931,8 @@ recall is_empty_spec (self : VartimeRistrettoPrecomputation.«i686-no-tables») 
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
 `VartimeRistrettoPrecomputation` (static points `self.points`): `none` iff some dynamic point is
-`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
-ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
-`< 2^26`. -/
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i`, missing static scalars counting as `0` (if no point
+is `none`, at most `|self.points|` static scalars and as many dynamic scalars as dynamic points). -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -2973,7 +2957,7 @@ recall optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -2994,7 +2978,7 @@ namespace Curve25519Dalek
 namespace ristretto.«RistrettoPointx86_64-tables»
 
 /-- `RistrettoPoint::vartime_double_scalar_mul_basepoint`: `a • A + b • B` for the basepoint `B`
-(unreduced scalars `< 2^255`); limbs `< 2^52`. -/
+(unreduced scalars `< 2^255`). -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : ristretto.RistrettoPoint.«x86_64-tables»)
     (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255) (hA : A.IsBounded) (hon : A.OnCurve)
@@ -3011,7 +2995,7 @@ end ristretto.«RistrettoPointx86_64-tables»
 namespace ristretto.«RistrettoPointi686-tables»
 
 /-- `RistrettoPoint::vartime_double_scalar_mul_basepoint`: `a • A + b • B` for the basepoint `B`
-(unreduced scalars `< 2^255`); limbs `< 2^26`. -/
+(unreduced scalars `< 2^255`). -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : ristretto.RistrettoPoint.«i686-tables»)
     (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255) (hA : A.IsBounded) (hon : A.OnCurve)
@@ -3030,7 +3014,7 @@ namespace Curve25519Dalek
 namespace ristretto.«RistrettoPointx86_64-no-tables»
 
 /-- `RistrettoPoint::vartime_double_scalar_mul_basepoint`: `a • A + b • B` for the basepoint `B`
-(unreduced scalars `< 2^255`); limbs `< 2^52`. -/
+(unreduced scalars `< 2^255`). -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : ristretto.RistrettoPoint.«x86_64-no-tables»)
     (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255) (hA : A.IsBounded) (hon : A.OnCurve)
@@ -3047,7 +3031,7 @@ end ristretto.«RistrettoPointx86_64-no-tables»
 namespace ristretto.«RistrettoPointi686-no-tables»
 
 /-- `RistrettoPoint::vartime_double_scalar_mul_basepoint`: `a • A + b • B` for the basepoint `B`
-(unreduced scalars `< 2^255`); limbs `< 2^26`. -/
+(unreduced scalars `< 2^255`). -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : ristretto.RistrettoPoint.«i686-no-tables»)
     (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255) (hA : A.IsBounded) (hon : A.OnCurve)
@@ -3067,7 +3051,7 @@ namespace «Shared0RistrettoBasepointTablex86_64-tables».Insts
 namespace «CoreOpsArithMulSharedBScalarRistrettoPointx86_64-tables»
 
 /-- `Mul<&Scalar> for &RistrettoBasepointTable`: `scalar • self.point` for the table's
-point (unreduced, `< 2^255`); limbs `< 2^52`. -/
+point (unreduced, `< 2^255`). -/
 recall mul_spec (self : ristretto.RistrettoBasepointTable.«x86_64-tables»)
     (scalar : scalar.Scalar) (hself : self.IsBounded)
     (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
@@ -3084,7 +3068,7 @@ namespace «Shared0RistrettoBasepointTablei686-tables».Insts
 namespace «CoreOpsArithMulSharedBScalarRistrettoPointi686-tables»
 
 /-- `Mul<&Scalar> for &RistrettoBasepointTable`: `scalar • self.point` for the table's
-point (unreduced, `< 2^255`); limbs `< 2^26`. -/
+point (unreduced, `< 2^255`). -/
 recall mul_spec (self : ristretto.RistrettoBasepointTable.«i686-tables»)
     (scalar : scalar.Scalar) (hself : self.IsBounded)
     (hP : self.IsTable) (hscalar : scalar.asNat < 2 ^ 255) :
@@ -3135,8 +3119,7 @@ end Curve25519Dalek
 namespace Curve25519Dalek
 namespace ristretto.«RistrettoBasepointTablex86_64-tables»
 
-/-- `RistrettoBasepointTable::create`: a table representing `basepoint`; limbs `< 2^52` in,
-`< 2^54` out. -/
+/-- `RistrettoBasepointTable::create`: a table representing `basepoint`. -/
 recall create_spec (basepoint : ristretto.RistrettoPoint.«x86_64-tables»)
     (hbasepoint : basepoint.IsBounded) (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : ristretto.RistrettoBasepointTable.«x86_64-tables») =>
@@ -3159,8 +3142,7 @@ end ristretto.«RistrettoBasepointTablex86_64-tables»
 
 namespace ristretto.«RistrettoBasepointTablei686-tables»
 
-/-- `RistrettoBasepointTable::create`: a table representing `basepoint`; limbs `< 2^26` in,
-`< 2^27` out. -/
+/-- `RistrettoBasepointTable::create`: a table representing `basepoint`. -/
 recall create_spec (basepoint : ristretto.RistrettoPoint.«i686-tables»)
     (hbasepoint : basepoint.IsBounded) (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : ristretto.RistrettoBasepointTable.«i686-tables») =>
@@ -3312,7 +3294,7 @@ namespace Curve25519Dalek.ristretto.elligator
 namespace «RistrettoPointx86_64-tables»
 
 /-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the 32 bytes (`Ristretto.mapRep`): an even
-point (a ristretto255 representative); limbs `< 2^52`. -/
+point (a ristretto255 representative). -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep bytes.toVector ∧
@@ -3326,7 +3308,7 @@ end «RistrettoPointx86_64-tables»
 namespace «RistrettoPointi686-tables»
 
 /-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the 32 bytes (`Ristretto.mapRep`): an even
-point (a ristretto255 representative); limbs `< 2^26`. -/
+point (a ristretto255 representative). -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«i686-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep bytes.toVector ∧
@@ -3342,7 +3324,7 @@ namespace Curve25519Dalek.ristretto.elligator
 namespace «RistrettoPointx86_64-no-tables»
 
 /-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the 32 bytes (`Ristretto.mapRep`): an even
-point (a ristretto255 representative); limbs `< 2^52`. -/
+point (a ristretto255 representative). -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep bytes.toVector ∧
@@ -3356,7 +3338,7 @@ end «RistrettoPointx86_64-no-tables»
 namespace «RistrettoPointi686-no-tables»
 
 /-- `RistrettoPoint::map_to_curve`: RFC 9496's `MAP` of the 32 bytes (`Ristretto.mapRep`): an even
-point (a ristretto255 representative); limbs `< 2^26`. -/
+point (a ristretto255 representative). -/
 recall map_to_curve_spec (bytes : Array U8 32#usize) :
     map_to_curve bytes ⦃ (r : RistrettoPoint.«i686-no-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = Ristretto.mapRep bytes.toVector ∧

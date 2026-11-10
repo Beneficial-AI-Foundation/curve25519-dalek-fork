@@ -251,7 +251,7 @@ end Curve25519Dalek.backend.serial.u32.constants
 
 namespace Curve25519Dalek.backend.serial.u64.constants
 
-/-- `ED25519_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^54`. -/
+/-- `ED25519_BASEPOINT_TABLE`: a table representing the basepoint. -/
 recall ED25519_BASEPOINT_TABLE_spec :
     ED25519_BASEPOINT_TABLE ⦃ (r : edwards.EdwardsBasepointTable.«x86_64-tables») =>
       r.IsTable ∧ r.point = basepoint ∧ r.IsBounded ⦄
@@ -263,7 +263,7 @@ end Curve25519Dalek.backend.serial.u64.constants
 
 namespace Curve25519Dalek.backend.serial.u32.constants
 
-/-- `ED25519_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^27`. -/
+/-- `ED25519_BASEPOINT_TABLE`: a table representing the basepoint. -/
 recall ED25519_BASEPOINT_TABLE_spec :
     ED25519_BASEPOINT_TABLE ⦃ (r : edwards.EdwardsBasepointTable.«i686-tables») =>
       r.IsTable ∧ r.point = basepoint ∧ r.IsBounded ⦄
@@ -309,8 +309,7 @@ recall RISTRETTO_BASEPOINT_COMPRESSED_spec :
 
 namespace «x86_64-tables»
 
-/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative);
-limbs `< 2^52`. -/
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative). -/
 recall RISTRETTO_BASEPOINT_POINT_spec :
     RISTRETTO_BASEPOINT_POINT.«x86_64-tables» ⦃ (r : ristretto.RistrettoPoint.«x86_64-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = basepoint ∧ r.IsBounded ⦄
@@ -322,8 +321,7 @@ end «x86_64-tables»
 
 namespace «i686-tables»
 
-/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative);
-limbs `< 2^26`. -/
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative). -/
 recall RISTRETTO_BASEPOINT_POINT_spec :
     RISTRETTO_BASEPOINT_POINT.«i686-tables» ⦃ (r : ristretto.RistrettoPoint.«i686-tables») =>
       r.OnCurve ∧ Even r.toPoint ∧ r.toPoint = basepoint ∧ r.IsBounded ⦄
@@ -335,8 +333,7 @@ end «i686-tables»
 
 namespace «x86_64-no-tables»
 
-/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative);
-limbs `< 2^52`. -/
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative). -/
 recall RISTRETTO_BASEPOINT_POINT_spec :
     RISTRETTO_BASEPOINT_POINT.«x86_64-no-tables»
       ⦃ (r : ristretto.RistrettoPoint.«x86_64-no-tables») =>
@@ -349,8 +346,7 @@ end «x86_64-no-tables»
 
 namespace «i686-no-tables»
 
-/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative);
-limbs `< 2^26`. -/
+/-- `RISTRETTO_BASEPOINT_POINT`: the basepoint, an even point (a ristretto255 representative). -/
 recall RISTRETTO_BASEPOINT_POINT_spec :
     RISTRETTO_BASEPOINT_POINT.«i686-no-tables»
       ⦃ (r : ristretto.RistrettoPoint.«i686-no-tables») =>
@@ -363,7 +359,7 @@ end «i686-no-tables»
 
 namespace «x86_64-tables»
 
-/-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^54`. -/
+/-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint. -/
 recall RISTRETTO_BASEPOINT_TABLE_spec :
     RISTRETTO_BASEPOINT_TABLE.«x86_64-tables»
       ⦃ (r : ristretto.RistrettoBasepointTable.«x86_64-tables») =>
@@ -376,7 +372,7 @@ end «x86_64-tables»
 
 namespace «i686-tables»
 
-/-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint; limbs `< 2^27`. -/
+/-- `RISTRETTO_BASEPOINT_TABLE`: a table representing the basepoint. -/
 recall RISTRETTO_BASEPOINT_TABLE_spec :
     RISTRETTO_BASEPOINT_TABLE.«i686-tables»
       ⦃ (r : ristretto.RistrettoBasepointTable.«i686-tables») =>

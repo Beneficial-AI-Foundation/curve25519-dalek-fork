@@ -68,8 +68,11 @@ without precomputed tables; the basepoint tables exist only with tables).
 
 Points are specified through `toPoint` under the invariants `OnCurve` and `IsBounded`, tables
 through `point` under `IsTable` and `IsBounded`, precomputations through `points` under `IsValid`
-and `IsBounded`. Scalars act by their unreduced value `asNat`, which must be `< 2^255` (dalek's
-`debug_assert!`). Iterator inputs are given by the lists they yield.
+and `IsBounded`. Scalars act by their unreduced value `asNat`, which must be `< 2^255` (invariant
+#1 of `Scalar` in `scalar.rs`). Iterator inputs are given by the lists they yield. The multiscalar
+statements are about the patched code
+(`translation-patches/edwards-{multiscalar,optional_multiscalar}_mul.patch`), which requires as many
+scalars as points; the original panics unless both inputs' `size_hint`s are exact and equal.
 
 Definitions used: `EdwardsPoint.toPoint`, `OnCurve`, `IsBounded`, the
 tables' `point`, `IsTable`, `IsBounded` (`Defs/Edwards.lean`), the precomputations' `points`,
@@ -137,8 +140,7 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.«x86_64-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `CompressedEdwardsY::decompress`: the lenient decoding `decodeLenient` of the bytes (`y`
-reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with limbs
-`< 2^52`. -/
+reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-tables»)) =>
       r.map EdwardsPoint.«x86_64-tables».toPoint = decodeLenient self.toVector ∧
@@ -154,8 +156,7 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.«i686-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `CompressedEdwardsY::decompress`: the lenient decoding `decodeLenient` of the bytes (`y`
-reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with limbs
-`< 2^26`. -/
+reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«i686-tables» self ⦃ (r : Option (EdwardsPoint.«i686-tables»)) =>
       r.map EdwardsPoint.«i686-tables».toPoint = decodeLenient self.toVector ∧
@@ -171,8 +172,7 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.«x86_64-no-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `CompressedEdwardsY::decompress`: the lenient decoding `decodeLenient` of the bytes (`y`
-reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with limbs
-`< 2^52`. -/
+reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«x86_64-no-tables» self ⦃ (r : Option (EdwardsPoint.«x86_64-no-tables»)) =>
       r.map EdwardsPoint.«x86_64-no-tables».toPoint = decodeLenient self.toVector ∧
@@ -188,8 +188,7 @@ namespace Curve25519Dalek.edwards.CompressedEdwardsY.«i686-no-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `CompressedEdwardsY::decompress`: the lenient decoding `decodeLenient` of the bytes (`y`
-reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve with limbs
-`< 2^26`. -/
+reduced modulo `p`, `x = 0` accepted with either sign); the point is on the curve. -/
 recall decompress_spec (self : CompressedEdwardsY) :
     decompress.«i686-no-tables» self ⦃ (r : Option (EdwardsPoint.«i686-no-tables»)) =>
       r.map EdwardsPoint.«i686-no-tables».toPoint = decodeLenient self.toVector ∧
@@ -1867,8 +1866,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace CoreIterTraitsAccumSum
 
-/-- `Sum for EdwardsPoint`: the sum of the points yielded by the iterator (through `borrow`);
-limbs `< 2^52`. -/
+/-- `Sum for EdwardsPoint`: the sum of the points yielded by the iterator (through `borrow`). -/
 recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«x86_64-tables»)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (ps : List EdwardsPoint.«x86_64-tables») (hiter : iterInst.Yields iter xs)
@@ -1890,8 +1888,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace CoreIterTraitsAccumSum
 
-/-- `Sum for EdwardsPoint`: the sum of the points yielded by the iterator (through `borrow`);
-limbs `< 2^26`. -/
+/-- `Sum for EdwardsPoint`: the sum of the points yielded by the iterator (through `borrow`). -/
 recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«i686-tables»)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (ps : List EdwardsPoint.«i686-tables») (hiter : iterInst.Yields iter xs)
@@ -1913,8 +1910,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace CoreIterTraitsAccumSum
 
-/-- `Sum for EdwardsPoint`: the sum of the points yielded by the iterator (through `borrow`);
-limbs `< 2^52`. -/
+/-- `Sum for EdwardsPoint`: the sum of the points yielded by the iterator (through `borrow`). -/
 recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«x86_64-no-tables»)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (ps : List EdwardsPoint.«x86_64-no-tables») (hiter : iterInst.Yields iter xs)
@@ -1936,8 +1932,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace CoreIterTraitsAccumSum
 
-/-- `Sum for EdwardsPoint`: the sum of the points yielded by the iterator (through `borrow`);
-limbs `< 2^26`. -/
+/-- `Sum for EdwardsPoint`: the sum of the points yielded by the iterator (through `borrow`). -/
 recall sum_spec {T I : Type} (borrowInst : core.borrow.Borrow T EdwardsPoint.«i686-no-tables»)
     (iterInst : core.iter.traits.iterator.Iterator I T) (iter : I) (xs : List T)
     (ps : List EdwardsPoint.«i686-no-tables») (hiter : iterInst.Yields iter xs)
@@ -2451,7 +2446,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «CoreOpsArithMulSharedAScalarEdwardsPointx86_64-tables»
 
-/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`); limbs `< 2^52`. -/
+/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`). -/
 recall mul_spec (self : edwards.EdwardsPoint.«x86_64-tables») (scalar : scalar.Scalar)
     (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») =>
@@ -2469,7 +2464,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «CoreOpsArithMulSharedAScalarEdwardsPointi686-tables»
 
-/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`); limbs `< 2^26`. -/
+/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`). -/
 recall mul_spec (self : edwards.EdwardsPoint.«i686-tables») (scalar : scalar.Scalar)
     (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«i686-tables») =>
@@ -2723,7 +2718,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «CoreOpsArithMulSharedAScalarEdwardsPointx86_64-no-tables»
 
-/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`); limbs `< 2^52`. -/
+/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`). -/
 recall mul_spec (self : edwards.EdwardsPoint.«x86_64-no-tables») (scalar : scalar.Scalar)
     (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») =>
@@ -2741,7 +2736,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «CoreOpsArithMulSharedAScalarEdwardsPointi686-no-tables»
 
-/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`); limbs `< 2^26`. -/
+/-- `Mul<&Scalar> for &EdwardsPoint`: `scalar • self` (unreduced, `< 2^255`). -/
 recall mul_spec (self : edwards.EdwardsPoint.«i686-no-tables») (scalar : scalar.Scalar)
     (hself : self.IsBounded) (hon : self.OnCurve) (hscalar : scalar.asNat < 2 ^ 255) :
     mul self scalar ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») =>
@@ -2789,8 +2784,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
-limbs `< 2^52`. -/
+/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`). -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.IsBounded ⦄
@@ -2804,8 +2798,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
-limbs `< 2^26`. -/
+/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`). -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : EdwardsPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.IsBounded ⦄
@@ -2819,8 +2812,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
-limbs `< 2^52`. -/
+/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`). -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.IsBounded ⦄
@@ -2834,8 +2826,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`);
-limbs `< 2^26`. -/
+/-- `EdwardsPoint::mul_base`: `scalar • B` for the basepoint `B` (unreduced, `< 2^255`). -/
 recall mul_base_spec (scalar : scalar.Scalar) (hscalar : scalar.asNat < 2 ^ 255) :
     mul_base scalar ⦃ (r : EdwardsPoint.«i686-no-tables») =>
       r.OnCurve ∧ r.toPoint = scalar.asNat • basepoint ∧ r.IsBounded ⦄
@@ -2850,7 +2841,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
-little-endian value of `bytes`; limbs `< 2^52`. -/
+little-endian value of `bytes`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«x86_64-tables») (bytes : Array U8 32#usize)
     (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
@@ -2866,7 +2857,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
-little-endian value of `bytes`; limbs `< 2^26`. -/
+little-endian value of `bytes`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«i686-tables») (bytes : Array U8 32#usize)
     (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«i686-tables») =>
@@ -2882,7 +2873,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
-little-endian value of `bytes`; limbs `< 2^52`. -/
+little-endian value of `bytes`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«x86_64-no-tables») (bytes : Array U8 32#usize)
     (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
@@ -2898,7 +2889,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::mul_clamped`: `clamp bytes • self`, with RFC 7748's clamping of the
-little-endian value of `bytes`; limbs `< 2^26`. -/
+little-endian value of `bytes`. -/
 recall mul_clamped_spec (self : EdwardsPoint.«i686-no-tables») (bytes : Array U8 32#usize)
     (hself : self.IsBounded) (hon : self.OnCurve) :
     mul_clamped self bytes ⦃ (r : EdwardsPoint.«i686-no-tables») =>
@@ -2914,7 +2905,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::mul_base_clamped`: `clamp bytes • B`, with RFC 7748's clamping of the
-little-endian value of `bytes`; limbs `< 2^52`. -/
+little-endian value of `bytes`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.IsBounded ⦄
@@ -2929,7 +2920,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::mul_base_clamped`: `clamp bytes • B`, with RFC 7748's clamping of the
-little-endian value of `bytes`; limbs `< 2^26`. -/
+little-endian value of `bytes`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«i686-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.IsBounded ⦄
@@ -2944,7 +2935,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::mul_base_clamped`: `clamp bytes • B`, with RFC 7748's clamping of the
-little-endian value of `bytes`; limbs `< 2^52`. -/
+little-endian value of `bytes`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.IsBounded ⦄
@@ -2959,7 +2950,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::mul_base_clamped`: `clamp bytes • B`, with RFC 7748's clamping of the
-little-endian value of `bytes`; limbs `< 2^26`. -/
+little-endian value of `bytes`. -/
 recall mul_base_clamped_spec (bytes : Array U8 32#usize) :
     mul_base_clamped bytes ⦃ (r : EdwardsPoint.«i686-no-tables») =>
       r.OnCurve ∧ r.toPoint = decodeScalar25519 bytes.toVector • basepoint ∧ r.IsBounded ⦄
@@ -2977,7 +2968,7 @@ namespace «Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-tables»
 
 /-- `MultiscalarMul::multiscalar_mul` for `EdwardsPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
-scalars `< 2^255`); limbs `< 2^52`. -/
+scalars `< 2^255`). -/
 recall multiscalar_mul_spec
     {I J Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -2995,7 +2986,7 @@ recall multiscalar_mul_spec
       ys ps)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
     (hps_on : ∀ P ∈ ps, P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«x86_64-tables») => r.OnCurve ∧
@@ -3015,7 +3006,7 @@ namespace «Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-tables»
 
 /-- `MultiscalarMul::multiscalar_mul` for `EdwardsPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
-scalars `< 2^255`); limbs `< 2^26`. -/
+scalars `< 2^255`). -/
 recall multiscalar_mul_spec
     {I J Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -3033,7 +3024,7 @@ recall multiscalar_mul_spec
       ys ps)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
     (hps_on : ∀ P ∈ ps, P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«i686-tables») => r.OnCurve ∧
@@ -3053,7 +3044,7 @@ namespace «Curve25519_dalekTraitsMultiscalarMulEdwardsPointx86_64-no-tables»
 
 /-- `MultiscalarMul::multiscalar_mul` for `EdwardsPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
-scalars `< 2^255`); limbs `< 2^52`. -/
+scalars `< 2^255`). -/
 recall multiscalar_mul_spec
     {I J Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -3071,7 +3062,7 @@ recall multiscalar_mul_spec
       ys ps)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
     (hps_on : ∀ P ∈ ps, P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«x86_64-no-tables») => r.OnCurve ∧
@@ -3091,7 +3082,7 @@ namespace «Curve25519_dalekTraitsMultiscalarMulEdwardsPointi686-no-tables»
 
 /-- `MultiscalarMul::multiscalar_mul` for `EdwardsPoint`: `∑ s_i • P_i` over the scalars and
 points the two inputs yield, which must be equally many (the patched `assert_eq!`; unreduced
-scalars `< 2^255`); limbs `< 2^26`. -/
+scalars `< 2^255`). -/
 recall multiscalar_mul_spec
     {I J Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -3109,7 +3100,7 @@ recall multiscalar_mul_spec
       ys ps)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P ∈ ps, P.IsBounded)
     (hps_on : ∀ P ∈ ps, P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ys.length) :
     multiscalar_mul scalarsInst borrowScalarInst pointsInst borrowPointInst scalars points
       ⦃ (r : edwards.EdwardsPoint.«i686-no-tables») => r.OnCurve ∧
@@ -3130,7 +3121,7 @@ namespace «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-tables
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `EdwardsPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
 patched `assert_eq!`; Straus below `190` points, Pippenger from `190` on; unreduced scalars
-`< 2^255`); limbs `< 2^52`. -/
+`< 2^255`). -/
 recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowScalarInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -3144,7 +3135,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (none ∈ ops → r = none) ∧
@@ -3167,7 +3158,7 @@ namespace «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-tables»
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `EdwardsPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
 patched `assert_eq!`; Straus below `190` points, Pippenger from `190` on; unreduced scalars
-`< 2^255`); limbs `< 2^26`. -/
+`< 2^255`). -/
 recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowScalarInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -3181,7 +3172,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (none ∈ ops → r = none) ∧
@@ -3204,7 +3195,7 @@ namespace «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointx86_64-no-tab
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `EdwardsPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
 patched `assert_eq!`; Straus below `190` points, Pippenger from `190` on; unreduced scalars
-`< 2^255`); limbs `< 2^52`. -/
+`< 2^255`). -/
 recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowScalarInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -3218,7 +3209,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (none ∈ ops → r = none) ∧
@@ -3241,7 +3232,7 @@ namespace «Curve25519_dalekTraitsVartimeMultiscalarMulEdwardsPointi686-no-table
 /-- `VartimeMultiscalarMul::optional_multiscalar_mul` for `EdwardsPoint`: `none` iff some point
 is `none`; otherwise `∑ s_i • P_i` over the scalars and points, which must be equally many (the
 patched `assert_eq!`; Straus below `190` points, Pippenger from `190` on; unreduced scalars
-`< 2^255`); limbs `< 2^26`. -/
+`< 2^255`). -/
 recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_IntoIter : Type}
     (scalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowScalarInst : core.borrow.Borrow Clause0_Item scalar.Scalar)
@@ -3255,7 +3246,7 @@ recall optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2_
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.IsBounded)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (none ∈ ops → r = none) ∧
@@ -3276,7 +3267,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
-of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54` out. -/
+of the points the input yields (through `borrow`). -/
 recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-tables»)
@@ -3304,7 +3295,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
-of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27` out. -/
+of the points the input yields (through `borrow`). -/
 recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-tables»)
@@ -3332,7 +3323,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx86_64-no-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
-of the points the input yields (through `borrow`); limbs `< 2^52` in, `< 2^54` out. -/
+of the points the input yields (through `borrow`). -/
 recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«x86_64-no-tables»)
@@ -3360,7 +3351,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi686-no-tables»
 
 /-- `VartimePrecomputedMultiscalarMul::new` for `VartimeEdwardsPrecomputation`: a precomputation
-of the points the input yields (through `borrow`); limbs `< 2^26` in, `< 2^27` out. -/
+of the points the input yields (through `borrow`). -/
 recall new_spec {I Clause0_Item Clause0_IntoIter : Type}
     (pointsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
     (borrowInst : core.borrow.Borrow Clause0_Item edwards.EdwardsPoint.«i686-no-tables»)
@@ -3525,9 +3516,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
 `VartimeEdwardsPrecomputation` (static points `self.points`): `none` iff some dynamic point is
-`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
-ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
-`< 2^52`. -/
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i`, missing static scalars counting as `0` (if no point
+is `none`, at most `|self.points|` static scalars and as many dynamic scalars as dynamic points). -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -3552,7 +3542,7 @@ recall optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -3577,9 +3567,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
 `VartimeEdwardsPrecomputation` (static points `self.points`): `none` iff some dynamic point is
-`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
-ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
-`< 2^26`. -/
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i`, missing static scalars counting as `0` (if no point
+is `none`, at most `|self.points|` static scalars and as many dynamic scalars as dynamic points). -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -3604,7 +3593,7 @@ recall optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -3629,9 +3618,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointx8
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
 `VartimeEdwardsPrecomputation` (static points `self.points`): `none` iff some dynamic point is
-`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
-ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
-`< 2^52`. -/
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i`, missing static scalars counting as `0` (if no point
+is `none`, at most `|self.points|` static scalars and as many dynamic scalars as dynamic points). -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -3656,7 +3644,7 @@ recall optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -3681,9 +3669,8 @@ namespace «Curve25519_dalekTraitsVartimePrecomputedMultiscalarMulEdwardsPointi6
 
 /-- `VartimePrecomputedMultiscalarMul::optional_mixed_multiscalar_mul` for
 `VartimeEdwardsPrecomputation` (static points `self.points`): `none` iff some dynamic point is
-`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i` (at most `|self.points|` static scalars, the missing
-ones count as `0`; as many dynamic scalars as dynamic points; unreduced scalars `< 2^255`); limbs
-`< 2^26`. -/
+`none`; otherwise `∑ s_i • P_i + ∑ d_i • Q_i`, missing static scalars counting as `0` (if no point
+is `none`, at most `|self.points|` static scalars and as many dynamic scalars as dynamic points). -/
 recall optional_mixed_multiscalar_mul_spec
     {I J K Clause0_Item Clause0_IntoIter Clause2_Item Clause2_IntoIter Clause4_IntoIter : Type}
     (staticScalarsInst : core.iter.traits.collect.IntoIterator I Clause0_Item Clause0_IntoIter)
@@ -3708,7 +3695,7 @@ recall optional_mixed_multiscalar_mul_spec
     (hqs : ∀ Q, some Q ∈ qops → Q.IsBounded)
     (hqs_on : ∀ Q, some Q ∈ qops → Q.OnCurve)
     (hxs : xs.length ≤ Usize.max) (hys : ys.length ≤ Usize.max)
-    (hqops : qops.length ≤ Usize.max) (hstatic : ss.length ≤ self.points.length)
+    (hqops : qops.length ≤ Usize.max) (hstatic : none ∉ qops → ss.length ≤ self.points.length)
     (hdynamic : none ∉ qops → ds.length = qops.length) :
     optional_mixed_multiscalar_mul staticScalarsInst borrowStaticInst dynamicScalarsInst
       borrowDynamicInst dynamicPointsInst self static_scalars dynamic_scalars dynamic_points
@@ -3731,7 +3718,7 @@ namespace «EdwardsPointx86_64-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::vartime_double_scalar_mul_basepoint`: `a • A + b • B` for the basepoint `B`
-(unreduced scalars `< 2^255`); limbs `< 2^52`. -/
+(unreduced scalars `< 2^255`). -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : EdwardsPoint.«x86_64-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
     (hA : A.IsBounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
@@ -3749,7 +3736,7 @@ namespace «EdwardsPointi686-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::vartime_double_scalar_mul_basepoint`: `a • A + b • B` for the basepoint `B`
-(unreduced scalars `< 2^255`); limbs `< 2^26`. -/
+(unreduced scalars `< 2^255`). -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : EdwardsPoint.«i686-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
     (hA : A.IsBounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
@@ -3769,7 +3756,7 @@ namespace «EdwardsPointx86_64-no-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::vartime_double_scalar_mul_basepoint`: `a • A + b • B` for the basepoint `B`
-(unreduced scalars `< 2^255`); limbs `< 2^52`. -/
+(unreduced scalars `< 2^255`). -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : EdwardsPoint.«x86_64-no-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
     (hA : A.IsBounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
@@ -3787,7 +3774,7 @@ namespace «EdwardsPointi686-no-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::vartime_double_scalar_mul_basepoint`: `a • A + b • B` for the basepoint `B`
-(unreduced scalars `< 2^255`); limbs `< 2^26`. -/
+(unreduced scalars `< 2^255`). -/
 recall vartime_double_scalar_mul_basepoint_spec (a : scalar.Scalar)
     (A : EdwardsPoint.«i686-no-tables») (b : scalar.Scalar) (ha : a.asNat < 2 ^ 255)
     (hA : A.IsBounded) (hon : A.OnCurve) (hb : b.asNat < 2 ^ 255) :
@@ -3807,8 +3794,8 @@ namespace «EdwardsPointx86_64-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::vartime_triple_scalar_mul_basepoint`: `a1 • A1 + a2 • A2 + b • B` for the
-basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant; any `b`, which the code splits
-into two `128`-bit halves); limbs `< 2^52`. -/
+basepoint `B` (any `b`, which the code splits
+into two `128`-bit halves). -/
 recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
     (A1 : EdwardsPoint.«x86_64-tables») (a2 : scalar.HalfWidthScalar)
     (A2 : EdwardsPoint.«x86_64-tables»)
@@ -3830,8 +3817,8 @@ namespace «EdwardsPointi686-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::vartime_triple_scalar_mul_basepoint`: `a1 • A1 + a2 • A2 + b • B` for the
-basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant; any `b`, which the code splits
-into two `128`-bit halves); limbs `< 2^26`. -/
+basepoint `B` (any `b`, which the code splits
+into two `128`-bit halves). -/
 recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
     (A1 : EdwardsPoint.«i686-tables») (a2 : scalar.HalfWidthScalar)
     (A2 : EdwardsPoint.«i686-tables»)
@@ -3855,8 +3842,8 @@ namespace «EdwardsPointx86_64-no-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::vartime_triple_scalar_mul_basepoint`: `a1 • A1 + a2 • A2 + b • B` for the
-basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant; any `b`, which the code splits
-into two `128`-bit halves); limbs `< 2^52`. -/
+basepoint `B` (any `b`, which the code splits
+into two `128`-bit halves). -/
 recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
     (A1 : EdwardsPoint.«x86_64-no-tables») (a2 : scalar.HalfWidthScalar)
     (A2 : EdwardsPoint.«x86_64-no-tables»)
@@ -3878,8 +3865,8 @@ namespace «EdwardsPointi686-no-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::vartime_triple_scalar_mul_basepoint`: `a1 • A1 + a2 • A2 + b • B` for the
-basepoint `B` (`a1, a2 < 2^128`, the `HalfWidthScalar` invariant; any `b`, which the code splits
-into two `128`-bit halves); limbs `< 2^26`. -/
+basepoint `B` (any `b`, which the code splits
+into two `128`-bit halves). -/
 recall vartime_triple_scalar_mul_basepoint_spec (a1 : scalar.HalfWidthScalar)
     (A1 : EdwardsPoint.«i686-no-tables») (a2 : scalar.HalfWidthScalar)
     (A2 : EdwardsPoint.«i686-no-tables»)
@@ -3905,7 +3892,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
 open window.«LookupTableAffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^4`): row `i` is the lookup table of
-`2^(8 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
+`2^(8 i) • basepoint`. -/
 recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
@@ -3925,7 +3912,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
 open window.«LookupTableAffineNielsPointi686-tables».Insts in
 /-- `BasepointTable::create` (radix `2^4`): row `i` is the lookup table of
-`2^(8 i) • basepoint`; limbs `< 2^26` in, `< 2^27` out. -/
+`2^(8 i) • basepoint`. -/
 recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTable.«i686-tables») =>
@@ -3943,8 +3930,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^4`): the table's point `self.point`;
-limbs `< 2^52`. -/
+/-- `BasepointTable::basepoint` (radix `2^4`): the table's point `self.point`. -/
 recall basepoint_spec (self : EdwardsBasepointTable.«x86_64-tables») (hself : self.IsBounded)
     (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
@@ -3962,8 +3948,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^4`): the table's point `self.point`;
-limbs `< 2^26`. -/
+/-- `BasepointTable::basepoint` (radix `2^4`): the table's point `self.point`. -/
 recall basepoint_spec (self : EdwardsBasepointTable.«i686-tables») (hself : self.IsBounded)
     (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«i686-tables») =>
@@ -3982,7 +3967,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
 /-- `BasepointTable::mul_base` (radix `2^4`): `s • self.point` (unreduced,
-`s.asNat < 2^255`); limbs `< 2^52`. -/
+`s.asNat < 2^255`). -/
 recall mul_base_spec (self : EdwardsBasepointTable.«x86_64-tables») (s : scalar.Scalar)
     (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
@@ -4002,7 +3987,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
 /-- `BasepointTable::mul_base` (radix `2^4`): `s • self.point` (unreduced,
-`s.asNat < 2^255`); limbs `< 2^26`. -/
+`s.asNat < 2^255`). -/
 recall mul_base_spec (self : EdwardsBasepointTable.«i686-tables») (s : scalar.Scalar)
     (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
@@ -4097,7 +4082,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
 open window.«LookupTableRadix32AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^5`): row `i` is the lookup table of
-`2^(10 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
+`2^(10 i) • basepoint`. -/
 recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
@@ -4117,7 +4102,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
 open window.«LookupTableRadix32AffineNielsPointi686-tables».Insts in
 /-- `BasepointTable::create` (radix `2^5`): row `i` is the lookup table of
-`2^(10 i) • basepoint`; limbs `< 2^26` in, `< 2^27` out. -/
+`2^(10 i) • basepoint`. -/
 recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix32.«i686-tables») =>
@@ -4135,8 +4120,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^5`): the table's point `self.point`;
-limbs `< 2^52`. -/
+/-- `BasepointTable::basepoint` (radix `2^5`): the table's point `self.point`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables»)
     (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
@@ -4154,8 +4138,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^5`): the table's point `self.point`;
-limbs `< 2^26`. -/
+/-- `BasepointTable::basepoint` (radix `2^5`): the table's point `self.point`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix32.«i686-tables»)
     (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«i686-tables») =>
@@ -4174,7 +4157,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
 /-- `BasepointTable::mul_base` (radix `2^5`): `s • self.point` (unreduced,
-`s.asNat < 2^255`); limbs `< 2^52`. -/
+`s.asNat < 2^255`). -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix32.«x86_64-tables») (s : scalar.Scalar)
     (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
@@ -4194,7 +4177,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
 /-- `BasepointTable::mul_base` (radix `2^5`): `s • self.point` (unreduced,
-`s.asNat < 2^255`); limbs `< 2^26`. -/
+`s.asNat < 2^255`). -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix32.«i686-tables») (s : scalar.Scalar)
     (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
@@ -4291,7 +4274,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
 open window.«LookupTableRadix64AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^6`): row `i` is the lookup table of
-`2^(12 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
+`2^(12 i) • basepoint`. -/
 recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
@@ -4311,7 +4294,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
 open window.«LookupTableRadix64AffineNielsPointi686-tables».Insts in
 /-- `BasepointTable::create` (radix `2^6`): row `i` is the lookup table of
-`2^(12 i) • basepoint`; limbs `< 2^26` in, `< 2^27` out. -/
+`2^(12 i) • basepoint`. -/
 recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix64.«i686-tables») =>
@@ -4329,8 +4312,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^6`): the table's point `self.point`;
-limbs `< 2^52`. -/
+/-- `BasepointTable::basepoint` (radix `2^6`): the table's point `self.point`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables»)
     (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
@@ -4348,8 +4330,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^6`): the table's point `self.point`;
-limbs `< 2^26`. -/
+/-- `BasepointTable::basepoint` (radix `2^6`): the table's point `self.point`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix64.«i686-tables»)
     (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«i686-tables») =>
@@ -4368,7 +4349,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
 /-- `BasepointTable::mul_base` (radix `2^6`): `s • self.point` (unreduced,
-`s.asNat < 2^255`); limbs `< 2^52`. -/
+`s.asNat < 2^255`). -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix64.«x86_64-tables») (s : scalar.Scalar)
     (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
@@ -4388,7 +4369,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
 /-- `BasepointTable::mul_base` (radix `2^6`): `s • self.point` (unreduced,
-`s.asNat < 2^255`); limbs `< 2^26`. -/
+`s.asNat < 2^255`). -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix64.«i686-tables») (s : scalar.Scalar)
     (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
@@ -4485,7 +4466,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
 open window.«LookupTableRadix128AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^7`): row `i` is the lookup table of
-`2^(14 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
+`2^(14 i) • basepoint`. -/
 recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
@@ -4505,7 +4486,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
 open window.«LookupTableRadix128AffineNielsPointi686-tables».Insts in
 /-- `BasepointTable::create` (radix `2^7`): row `i` is the lookup table of
-`2^(14 i) • basepoint`; limbs `< 2^26` in, `< 2^27` out. -/
+`2^(14 i) • basepoint`. -/
 recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix128.«i686-tables») =>
@@ -4523,8 +4504,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^7`): the table's point `self.point`;
-limbs `< 2^52`. -/
+/-- `BasepointTable::basepoint` (radix `2^7`): the table's point `self.point`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables»)
     (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
@@ -4542,8 +4522,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^7`): the table's point `self.point`;
-limbs `< 2^26`. -/
+/-- `BasepointTable::basepoint` (radix `2^7`): the table's point `self.point`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix128.«i686-tables»)
     (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«i686-tables») =>
@@ -4562,7 +4541,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
 /-- `BasepointTable::mul_base` (radix `2^7`): `s • self.point` (unreduced,
-`s.asNat < 2^255`); limbs `< 2^52`. -/
+`s.asNat < 2^255`). -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix128.«x86_64-tables») (s : scalar.Scalar)
     (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
@@ -4582,7 +4561,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
 /-- `BasepointTable::mul_base` (radix `2^7`): `s • self.point` (unreduced,
-`s.asNat < 2^255`); limbs `< 2^26`. -/
+`s.asNat < 2^255`). -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix128.«i686-tables») (s : scalar.Scalar)
     (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
@@ -4684,7 +4663,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
 open window.«LookupTableRadix256AffineNielsPointx86_64-tables».Insts in
 /-- `BasepointTable::create` (radix `2^8`): row `i` is the lookup table of
-`2^(16 i) • basepoint`; limbs `< 2^52` in, `< 2^54` out. -/
+`2^(16 i) • basepoint`. -/
 recall create_spec (basepoint : EdwardsPoint.«x86_64-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
@@ -4704,7 +4683,7 @@ namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
 open window.«LookupTableRadix256AffineNielsPointi686-tables».Insts in
 /-- `BasepointTable::create` (radix `2^8`): row `i` is the lookup table of
-`2^(16 i) • basepoint`; limbs `< 2^26` in, `< 2^27` out. -/
+`2^(16 i) • basepoint`. -/
 recall create_spec (basepoint : EdwardsPoint.«i686-tables») (hbasepoint : basepoint.IsBounded)
     (hon : basepoint.OnCurve) :
     create basepoint ⦃ (r : EdwardsBasepointTableRadix256.«i686-tables») =>
@@ -4722,8 +4701,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^8`): the table's point `self.point`;
-limbs `< 2^52`. -/
+/-- `BasepointTable::basepoint` (radix `2^8`): the table's point `self.point`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables»)
     (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
@@ -4741,8 +4719,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
-/-- `BasepointTable::basepoint` (radix `2^8`): the table's point `self.point`;
-limbs `< 2^26`. -/
+/-- `BasepointTable::basepoint` (radix `2^8`): the table's point `self.point`. -/
 recall basepoint_spec (self : EdwardsBasepointTableRadix256.«i686-tables»)
     (hself : self.IsBounded) (hP : self.IsTable) :
     basepoint self ⦃ (r : EdwardsPoint.«i686-tables») =>
@@ -4761,7 +4738,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointx86_64-tables»
 
 /-- `BasepointTable::mul_base` (radix `2^8`): `s • self.point` (unreduced,
-`s.asNat < 2^255`); limbs `< 2^52`. -/
+`s.asNat < 2^255`). -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix256.«x86_64-tables») (s : scalar.Scalar)
     (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
@@ -4781,7 +4758,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «Curve25519_dalekTraitsBasepointTableEdwardsPointi686-tables»
 
 /-- `BasepointTable::mul_base` (radix `2^8`): `s • self.point` (unreduced,
-`s.asNat < 2^255`); limbs `< 2^26`. -/
+`s.asNat < 2^255`). -/
 recall mul_base_spec (self : EdwardsBasepointTableRadix256.«i686-tables») (s : scalar.Scalar)
     (hself : self.IsBounded) (hP : self.IsTable)
     (hs : s.asNat < 2 ^ 255) :
@@ -4882,7 +4859,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTable`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
@@ -4901,7 +4878,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTable`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«i686-tables») =>
@@ -4920,7 +4897,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTable`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
@@ -4939,7 +4916,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTable`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«i686-tables») =>
@@ -4958,7 +4935,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTable`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
@@ -4977,7 +4954,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTable`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«i686-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«i686-tables») =>
@@ -4996,7 +4973,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTable`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«x86_64-tables») =>
@@ -5015,7 +4992,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTable`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«i686-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTable.«i686-tables») =>
@@ -5034,7 +5011,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix32`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTable.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
@@ -5053,7 +5030,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix32`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTable.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«i686-tables») =>
@@ -5072,7 +5049,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix32`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
@@ -5091,7 +5068,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix32`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«i686-tables») =>
@@ -5110,7 +5087,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix32`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
@@ -5129,7 +5106,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix32`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«i686-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«i686-tables») =>
@@ -5148,7 +5125,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix32`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«x86_64-tables») =>
@@ -5167,7 +5144,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix32`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«i686-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix32.«i686-tables») =>
@@ -5186,7 +5163,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix64`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTable.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
@@ -5205,7 +5182,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix64`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTable.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«i686-tables») =>
@@ -5224,7 +5201,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix64`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
@@ -5243,7 +5220,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix64`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«i686-tables») =>
@@ -5262,7 +5239,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix64`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
@@ -5281,7 +5258,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix64`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«i686-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«i686-tables») =>
@@ -5300,7 +5277,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix64`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«x86_64-tables») =>
@@ -5319,7 +5296,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix64`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«i686-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix64.«i686-tables») =>
@@ -5338,7 +5315,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix128`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTable.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
@@ -5357,7 +5334,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix128`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTable.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«i686-tables») =>
@@ -5376,7 +5353,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix128`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
@@ -5395,7 +5372,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix128`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«i686-tables») =>
@@ -5414,7 +5391,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix128`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
@@ -5433,7 +5410,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix128`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«i686-tables») =>
@@ -5452,7 +5429,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix128`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«x86_64-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«x86_64-tables») =>
@@ -5471,7 +5448,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix256i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix256> for EdwardsBasepointTableRadix128`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix256.«i686-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix128.«i686-tables») =>
@@ -5490,7 +5467,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTablex86_64-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix256`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTable.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
@@ -5509,7 +5486,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTablei686-tables»
 
 /-- `From<&EdwardsBasepointTable> for EdwardsBasepointTableRadix256`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTable.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«i686-tables») =>
@@ -5528,7 +5505,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix256`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix32.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
@@ -5547,7 +5524,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix32i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix32> for EdwardsBasepointTableRadix256`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix32.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«i686-tables») =>
@@ -5566,7 +5543,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix256`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix64.«x86_64-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
@@ -5585,7 +5562,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix64i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix64> for EdwardsBasepointTableRadix256`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix64.«i686-tables») (htable : table.IsBounded)
     (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«i686-tables») =>
@@ -5604,7 +5581,7 @@ open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128x86_64-tables»
 
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix256`: a table of the same
-point; limbs `< 2^54`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«x86_64-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«x86_64-tables») =>
@@ -5623,7 +5600,7 @@ open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 namespace «CoreConvertFromSharedAEdwardsBasepointTableRadix128i686-tables»
 
 /-- `From<&EdwardsBasepointTableRadix128> for EdwardsBasepointTableRadix256`: a table of the same
-point; limbs `< 2^27`. -/
+point. -/
 recall from_spec (table : EdwardsBasepointTableRadix128.«i686-tables»)
     (htable : table.IsBounded) (hP : table.IsTable) :
     «from» table ⦃ (r : EdwardsBasepointTableRadix256.«i686-tables») =>
@@ -5639,7 +5616,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`; limbs `< 2^52`. -/
+/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`. -/
 recall mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«x86_64-tables») =>
@@ -5654,7 +5631,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`; limbs `< 2^26`. -/
+/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`. -/
 recall mul_by_cofactor_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«i686-tables») =>
@@ -5669,7 +5646,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`; limbs `< 2^52`. -/
+/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`. -/
 recall mul_by_cofactor_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«x86_64-no-tables») =>
@@ -5684,7 +5661,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`; limbs `< 2^26`. -/
+/-- `EdwardsPoint::mul_by_cofactor`: `8 • self`. -/
 recall mul_by_cofactor_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     mul_by_cofactor self ⦃ (r : EdwardsPoint.«i686-no-tables») =>
@@ -5699,7 +5676,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::is_small_order`: `8 • self = 0`; limbs `< 2^52`. -/
+/-- `EdwardsPoint::is_small_order`: `8 • self = 0`. -/
 recall is_small_order_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     is_small_order self ⦃ (r : Bool) => r = true ↔ 8 • self.toPoint = 0 ⦄
@@ -5713,7 +5690,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::is_small_order`: `8 • self = 0`; limbs `< 2^26`. -/
+/-- `EdwardsPoint::is_small_order`: `8 • self = 0`. -/
 recall is_small_order_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     is_small_order self ⦃ (r : Bool) => r = true ↔ 8 • self.toPoint = 0 ⦄
@@ -5727,7 +5704,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
-/-- `EdwardsPoint::is_small_order`: `8 • self = 0`; limbs `< 2^52`. -/
+/-- `EdwardsPoint::is_small_order`: `8 • self = 0`. -/
 recall is_small_order_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     is_small_order self ⦃ (r : Bool) => r = true ↔ 8 • self.toPoint = 0 ⦄
@@ -5741,7 +5718,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
-/-- `EdwardsPoint::is_small_order`: `8 • self = 0`; limbs `< 2^26`. -/
+/-- `EdwardsPoint::is_small_order`: `8 • self = 0`. -/
 recall is_small_order_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     is_small_order self ⦃ (r : Bool) => r = true ↔ 8 • self.toPoint = 0 ⦄
@@ -5756,7 +5733,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
-`BASEPOINT_ORDER`); limbs `< 2^52`. -/
+`BASEPOINT_ORDER`). -/
 recall is_torsion_free_spec (self : EdwardsPoint.«x86_64-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄
@@ -5771,7 +5748,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
-`BASEPOINT_ORDER`); limbs `< 2^26`. -/
+`BASEPOINT_ORDER`). -/
 recall is_torsion_free_spec (self : EdwardsPoint.«i686-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄
@@ -5786,7 +5763,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointx86_64-no-tables»
 open Curve25519Dalek.backend.serial.u64.field.FieldElement51
 
 /-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
-`BASEPOINT_ORDER`); limbs `< 2^52`. -/
+`BASEPOINT_ORDER`). -/
 recall is_torsion_free_spec (self : EdwardsPoint.«x86_64-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄
@@ -5801,7 +5778,7 @@ namespace Curve25519Dalek.edwards.«EdwardsPointi686-no-tables»
 open Curve25519Dalek.backend.serial.u32.field.FieldElement2625
 
 /-- `EdwardsPoint::is_torsion_free`: `L • self = 0` (multiplication by the unreduced
-`BASEPOINT_ORDER`); limbs `< 2^26`. -/
+`BASEPOINT_ORDER`). -/
 recall is_torsion_free_spec (self : EdwardsPoint.«i686-no-tables») (hself : self.IsBounded)
     (hon : self.OnCurve) :
     is_torsion_free self ⦃ (r : Bool) => r = true ↔ L • self.toPoint = 0 ⦄

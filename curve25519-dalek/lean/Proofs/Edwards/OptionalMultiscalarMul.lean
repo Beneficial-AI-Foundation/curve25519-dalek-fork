@@ -43,13 +43,14 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option edwards.EdwardsPoint.«x86_64-tables») => (none ∈ ops → r = none) ∧
         ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.LimbsLt 52 ⦄ := by
+  have hops : ops.length ≤ Usize.max := hlen ▸ hxs
   apply spec_some_of_filterMap
   unfold optional_multiscalar_mul
   have hscalars' : scalarsInst.into_iter scalars
@@ -100,13 +101,14 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 26)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option edwards.EdwardsPoint.«i686-tables») => (none ∈ ops → r = none) ∧
         ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.LimbsLt 26 ⦄ := by
+  have hops : ops.length ≤ Usize.max := hlen ▸ hxs
   apply spec_some_of_filterMap
   unfold optional_multiscalar_mul
   have hscalars' : scalarsInst.into_iter scalars
@@ -157,13 +159,14 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 52)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option edwards.EdwardsPoint.«x86_64-no-tables») => (none ∈ ops → r = none) ∧
         ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.LimbsLt 52 ⦄ := by
+  have hops : ops.length ≤ Usize.max := hlen ▸ hxs
   apply spec_some_of_filterMap
   unfold optional_multiscalar_mul
   have hscalars' : scalarsInst.into_iter scalars
@@ -215,13 +218,14 @@ theorem optional_multiscalar_mul_spec {I J Clause0_Item Clause0_IntoIter Clause2
       (fun x s => borrowScalarInst.borrow x ⦃ (s' : scalar.Scalar) => s' = s ⦄) xs ss)
     (hss : ∀ s ∈ ss, s.asNat < 2 ^ 255) (hps : ∀ P, some P ∈ ops → P.LimbsLt 26)
     (hps_on : ∀ P, some P ∈ ops → P.OnCurve)
-    (hxs : xs.length ≤ Usize.max) (hops : ops.length ≤ Usize.max)
+    (hxs : xs.length ≤ Usize.max)
     (hlen : xs.length = ops.length) :
     optional_multiscalar_mul scalarsInst borrowScalarInst pointsInst scalars points
       ⦃ (r : Option edwards.EdwardsPoint.«i686-no-tables») => (none ∈ ops → r = none) ∧
         ∀ ps, ops = ps.map some → ∃ R, r = some R ∧ R.OnCurve ∧ R.toPoint =
           (List.zipWith (fun s P => s.asNat • P.toPoint) ss ps).sum ∧
           R.LimbsLt 26 ⦄ := by
+  have hops : ops.length ≤ Usize.max := hlen ▸ hxs
   apply spec_some_of_filterMap
   unfold optional_multiscalar_mul
   have hscalars' : scalarsInst.into_iter scalars
