@@ -161,7 +161,7 @@ private theorem to_bytes.pack_spec (limbs : Array U64 5#usize)
       List.map_cons, List.map_nil, Nat.ofDigits_cons, Nat.ofDigits_nil]
     simp only [*, UScalar.cast_val_eq, UScalar.val_or, UScalarTy.U8_numBits_eq]
     exact to_bytes.bytes_eq _ _ _ _ _ h0 h1 h2 h3 h4
-  · rw [Array.getElem!_Nat_set_eq _ _ _ _ ⟨by simp, by simp⟩]
+  · rw [Array.getElem!_Nat_set_eq _ _ _ _ ⟨by simp, by rw [Array.length, Array.length_eq]; decide⟩]
     simp only [*, UScalar.cast_val_eq, UScalarTy.U8_numBits_eq, Nat.shiftRight_eq_div_pow]
     exact (Nat.mod_le _ _).trans_lt (Nat.div_lt_of_lt_mul (h4.trans_eq (by norm_num)))
 
